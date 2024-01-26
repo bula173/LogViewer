@@ -19,6 +19,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../dist)
 
 file(GLOB SRCS
     ${CMAKE_SOURCE_DIR}/*.cpp
+    ${CMAKE_SOURCE_DIR}/GUI/*.cpp
+    ${CMAKE_SOURCE_DIR}/DB/*.cpp
 )
 
 include(${wxWidgets_USE_FILE})
@@ -36,5 +38,6 @@ else()
     add_executable(LogViewer WIN32 ${SRCS} main.exe.manifest)
 endif()
 
-target_include_directories(LogViewer PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(LogViewer PRIVATE 
+    ${CMAKE_SOURCE_DIR} )
 target_link_libraries(LogViewer PRIVATE ${wxWidgets_LIBRARIES})

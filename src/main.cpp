@@ -1,7 +1,8 @@
 
 #include <wx/wx.h>
 
-#include "main_windows.hpp"
+#include "GUI/main_window.hpp"
+
 class MyApp : public wxApp
 {
 public:
@@ -12,7 +13,7 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    MainWindows *frame = new MainWindows("LogViewer", wxPoint(50, 50), wxSize(600, 800));
+    gui::MainWindow *frame = new gui::MainWindow("LogViewer", wxPoint(50, 50), wxSize(600, 800));
     frame->Show(true);
     return true;
 }

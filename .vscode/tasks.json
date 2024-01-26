@@ -27,6 +27,14 @@
                 "-S.",
                 "-Bbuild"
             ]
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "open -n ${workspaceFolder}/dist/LogViewer.app",
+            "args": [
+                
+            ]
         }
     ]
 }

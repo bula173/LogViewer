@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/build/subprojects/Build/wxWidgets_external/lib/wx/include/osx_cocoa-unicode-static-3.1/**",
-                "${workspaceFolder}/build/subprojects/Source/wxWidgets_external/include"
+                "${workspaceFolder}/build/subprojects/Source/wxWidgets_external/include",
+                "${workspaceFolder}/build/_deps/googletest-src/googletest/include"
             ],
             "defines": [
                 "__WXOSX_COCOA__",
@@ -15,7 +16,7 @@
             "macFrameworkPath": [],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++17",
+            "cppStandard": "c++20",
             "intelliSenseMode": "clang-x64"
         },
         {
