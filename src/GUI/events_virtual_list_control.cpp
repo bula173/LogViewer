@@ -1,6 +1,7 @@
 #include "events_virtual_list_control.hpp"
 
 #include <string>
+#include <iostream>
 
 namespace gui
 {
@@ -19,6 +20,9 @@ namespace gui
 
   wxString EventsVirtualListControl::OnGetItemText(long index, long column) const
   {
+
+    std::cout << "index :" << index << std::endl;
+
     switch (column)
     {
     case 0:

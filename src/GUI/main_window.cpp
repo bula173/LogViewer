@@ -7,6 +7,16 @@ namespace gui
   MainWindow::MainWindow(const wxString &title, const wxPoint &pos, const wxSize &size)
       : wxFrame(NULL, wxID_ANY, title, pos, size)
   {
+
+    this->setupMenu();
+    this->setupLayout();
+
+    this->Layout();
+  }
+
+  void MainWindow::setupMenu()
+  {
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
                      "Help string shown in status bar for this menu item");
@@ -18,16 +28,58 @@ namespace gui
     menuBar->Append(menuFile, "&File");
     menuBar->Append(menuHelp, "&Help");
     SetMenuBar(menuBar);
-    CreateStatusBar();
-    SetStatusText("Welcome to wxWidgets!");
+  }
+
+  void MainWindow::OnSize(wxSizeEvent &event)
+  {
+
+    event.Skip();
+
+    if (m_progressGauge == nullptr)
+      return;
+    wxRect rect;
+    GetStatusBar()->GetFieldRect(1, rect);
+    m_progressGauge->SetSize(rect);
+  }
+  void MainWindow::setupLayout()
+  {
 
     m_eventsContainer = new gui::EventsVirtualListControl(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500), m_events);
-    m_eventsContainer->RefreshAfterUpdate();
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(m_eventsContainer, 1, wxALL | wxEXPAND, 0);
+
+    CreateToolBar();
+    SetToolBar(GetToolBar());
+    CreateStatusBar(2);
+
+    wxRect rect;
+    GetStatusBar()->GetFieldRect(1, rect);
+
+    m_progressGauge = new wxGauge(GetStatusBar(), wxID_ANY, m_eventsNum, rect.GetPosition(), rect.GetSize(), wxGA_SMOOTH);
+    m_progressGauge->SetValue(0);
+
     this->SetSizer(sizer);
-    this->Layout();
+  }
+
+  void MainWindow::populateData()
+  {
+
+    SetStatusText("Loading ..");
+    for (long i = 0; i < m_eventsNum; ++i)
+    {
+      m_events.push_back(i);
+      m_progressGauge->SetValue(i);
+
+      if (i % 1000)
+      {
+        wxYield();
+        m_eventsContainer->RefreshAfterUpdate();
+      }
+    }
+
+    m_eventsContainer->RefreshAfterUpdate();
+    SetStatusText("Data ready");
   }
   void MainWindow::OnExit(wxCommandEvent &event)
   {
@@ -40,13 +92,14 @@ namespace gui
   }
   void MainWindow::OnHello(wxCommandEvent &event)
   {
-    wxLogMessage("Hello world from wxWidgets!");
+    populateData();
   }
 
   wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
       EVT_MENU(ID_Hello, MainWindow::OnHello)
           EVT_MENU(wxID_EXIT, MainWindow::OnExit)
               EVT_MENU(wxID_ABOUT, MainWindow::OnAbout)
-                  wxEND_EVENT_TABLE()
+                  EVT_SIZE(MainWindow::OnSize)
+                      wxEND_EVENT_TABLE()
 
 } // namespace gui
