@@ -15,9 +15,9 @@
             ],
             "macFrameworkPath": [],
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++20",
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "macos-clang-x64"
         },
         {
             "name": "Win32",
@@ -31,8 +31,8 @@
                 "_DEBUG"
             ],
             "compilerPath": "cl.exe",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
+            "cStandard": "c20",
+            "cppStandard": "c++20",
             "intelliSenseMode": "msvc-x64"
         },
         {
@@ -47,7 +47,7 @@
             ],
             "compilerPath": "g++",
             "cStandard": "c11",
-            "cppStandard": "c++17",
+            "cppStandard": "c++20",
             "intelliSenseMode": "gcc-x64"
         }
     ],

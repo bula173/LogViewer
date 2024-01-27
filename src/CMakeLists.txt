@@ -21,6 +21,7 @@ file(GLOB SRCS
     ${CMAKE_SOURCE_DIR}/*.cpp
     ${CMAKE_SOURCE_DIR}/GUI/*.cpp
     ${CMAKE_SOURCE_DIR}/DB/*.cpp
+    ${CMAKE_SOURCE_DIR}/MVC/*.cpp
 )
 
 include(${wxWidgets_USE_FILE})

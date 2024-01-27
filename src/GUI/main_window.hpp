@@ -22,7 +22,7 @@ namespace gui
 		void OnHello(wxCommandEvent &event);
 		void OnExit(wxCommandEvent &event);
 		void OnAbout(wxCommandEvent &event);
-		void OnSize(wxSizeEvent& event);
+		void OnSize(wxSizeEvent &event);
 		wxDECLARE_EVENT_TABLE();
 
 		void setupMenu();
@@ -31,7 +31,7 @@ namespace gui
 		void populateData();
 
 	private:
-		gui::EventsVirtualListControl *m_eventsContainer;
+		gui::EventsVirtualListControl *m_eventsListCtrl{nullptr};
 		db::EventsContainer m_events;
 		wxGauge *m_progressGauge{nullptr};
 		const long m_eventsNum{10000};

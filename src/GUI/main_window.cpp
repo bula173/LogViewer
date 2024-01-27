@@ -11,6 +11,8 @@ namespace gui
     this->setupMenu();
     this->setupLayout();
 
+    m_events.RegisterOndDataUpdated(&(*m_eventsListCtrl));
+
     this->Layout();
   }
 
@@ -44,10 +46,10 @@ namespace gui
   void MainWindow::setupLayout()
   {
 
-    m_eventsContainer = new gui::EventsVirtualListControl(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500), m_events);
+    m_eventsListCtrl = new gui::EventsVirtualListControl(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500), m_events);
 
     auto sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(m_eventsContainer, 1, wxALL | wxEXPAND, 0);
+    sizer->Add(m_eventsListCtrl, 1, wxALL | wxEXPAND, 0);
 
     CreateToolBar();
     SetToolBar(GetToolBar());
@@ -68,17 +70,14 @@ namespace gui
     SetStatusText("Loading ..");
     for (long i = 0; i < m_eventsNum; ++i)
     {
-      m_events.push_back(i);
+      m_events.AddEvent(db::Event(i));
       m_progressGauge->SetValue(i);
 
       if (i % 1000)
       {
         wxYield();
-        m_eventsContainer->RefreshAfterUpdate();
       }
     }
-
-    m_eventsContainer->RefreshAfterUpdate();
     SetStatusText("Data ready");
   }
   void MainWindow::OnExit(wxCommandEvent &event)

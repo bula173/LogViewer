@@ -18,6 +18,12 @@ namespace gui
     this->SetColumnWidth(2, 100);
   }
 
+  void EventsVirtualListControl::OnDataUpdated()
+  {
+    this->SetItemCount(m_events.Size());
+    this->RefreshItem(m_events.Size() - 1);
+  }
+
   wxString EventsVirtualListControl::OnGetItemText(long index, long column) const
   {
 
@@ -26,7 +32,7 @@ namespace gui
     switch (column)
     {
     case 0:
-      return std::to_string(m_events[index].getId());
+      return std::to_string(m_events.GetEvent(index).getId());
     case 1:
       return "dummy";
     case 2:
@@ -40,7 +46,7 @@ namespace gui
 
   void EventsVirtualListControl::RefreshAfterUpdate()
   {
-    this->SetItemCount(m_events.size());
+    this->SetItemCount(m_events.Size());
     this->Refresh();
   }
 } // namespace gui
