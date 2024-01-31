@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <wx/wx.h>
+#include <wx/splitter.h>
 
 #include "events_virtual_list_control.hpp"
 #include "DB/events_container.hpp"
@@ -10,7 +11,10 @@ namespace gui
 {
 	enum
 	{
-		ID_Hello = 1
+		ID_Hello = 1,
+		ID_ViewLeftPanel = 2,
+		ID_ViewRightPanel = 3
+
 	};
 
 	class MainWindow : public wxFrame
@@ -23,6 +27,10 @@ namespace gui
 		void OnExit(wxCommandEvent &event);
 		void OnAbout(wxCommandEvent &event);
 		void OnSize(wxSizeEvent &event);
+		void OnHideSearchResult(wxCommandEvent &event);
+		void OnHideLeftPanel(wxCommandEvent &event);
+		void OnHideRightPanel(wxCommandEvent &event);
+
 		wxDECLARE_EVENT_TABLE();
 
 		void setupMenu();
@@ -33,9 +41,15 @@ namespace gui
 
 	private:
 		gui::EventsVirtualListControl *m_eventsListCtrl{nullptr};
+		wxPanel *m_rigthPanel{nullptr};
+		wxPanel *m_leftPanel{nullptr};
+		wxPanel *m_searchResultPanel{nullptr};
+		wxSplitterWindow *m_bottom_spliter{nullptr};
+		wxSplitterWindow *m_left_spliter{nullptr};
+		wxSplitterWindow *m_rigth_spliter{nullptr};
 		db::EventsContainer m_events;
 		wxGauge *m_progressGauge{nullptr};
-		const long m_eventsNum{10000};
+		const long m_eventsNum{100000};
 	};
 
 } // namespace gui

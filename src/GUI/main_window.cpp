@@ -1,8 +1,6 @@
 #include "main_window.hpp"
 #include "events_virtual_list_control.hpp"
 
-#include <wx/splitter.h>
-
 namespace gui
 {
 
@@ -18,15 +16,23 @@ namespace gui
   {
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H",
-                     "Populate dummy data");
+    menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H");
+    menuFile->Append(wxID_OPEN);
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
+
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
+
+    wxMenu *menuView = new wxMenu;
+    menuView->Append(wxID_VIEW_LIST, "Hide Search Result Panel", "Change view", wxITEM_CHECK);
+    menuView->Append(ID_ViewLeftPanel, "Hide Left Panel", "Change view", wxITEM_CHECK);
+    menuView->Append(ID_ViewRightPanel, "Hide Right Panel", "Change view", wxITEM_CHECK);
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
     menuBar->Append(menuHelp, "&Help");
+    menuBar->Append(menuView, "&View");
     SetMenuBar(menuBar);
   }
 
@@ -58,34 +64,31 @@ namespace gui
     | General message | Progresbar         |
     ________________________________________
     */
-    wxPanel *rigthPanel;
-    wxPanel *leftPanel;
-    wxPanel *searchResultPanel;
 
-    wxSplitterWindow *bottom_spliter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
-    bottom_spliter->SetMinimumPaneSize(100);
-    wxSplitterWindow *left_spliter = new wxSplitterWindow(bottom_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
-    left_spliter->SetMinimumPaneSize(200);
-    wxSplitterWindow *rigth_spliter = new wxSplitterWindow(left_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
-    rigth_spliter->SetMinimumPaneSize(200);
+    m_bottom_spliter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    m_bottom_spliter->SetMinimumPaneSize(100);
+    m_left_spliter = new wxSplitterWindow(m_bottom_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    m_left_spliter->SetMinimumPaneSize(200);
+    m_rigth_spliter = new wxSplitterWindow(m_left_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    m_rigth_spliter->SetMinimumPaneSize(200);
 
-    leftPanel = new wxPanel(left_spliter);
-    rigthPanel = new wxPanel(rigth_spliter);
-    searchResultPanel = new wxPanel(bottom_spliter);
-    m_eventsListCtrl = new gui::EventsVirtualListControl(rigth_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_events); //main panel
+    m_leftPanel = new wxPanel(m_left_spliter);
+    m_rigthPanel = new wxPanel(m_rigth_spliter);
+    m_searchResultPanel = new wxPanel(m_bottom_spliter);
+    m_eventsListCtrl = new gui::EventsVirtualListControl(m_events, m_rigth_spliter); // main panel
 
-    bottom_spliter->SplitHorizontally(left_spliter, searchResultPanel,-1);
-    bottom_spliter->SetSashGravity(0.2);
+    m_bottom_spliter->SplitHorizontally(m_left_spliter, m_searchResultPanel, -1);
+    m_bottom_spliter->SetSashGravity(0.2);
 
-    left_spliter->SplitVertically(leftPanel, rigth_spliter, 1);
-    left_spliter->SetSashGravity(0.2);
+    m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
+    m_left_spliter->SetSashGravity(0.2);
 
-    rigth_spliter->SplitVertically(m_eventsListCtrl, rigthPanel, -1);
-    rigth_spliter->SetSashGravity(0.8);
+    m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_rigthPanel, -1);
+    m_rigth_spliter->SetSashGravity(0.8);
 
-    leftPanel->SetBackgroundColour(wxColor(200, 100, 200));
-    rigthPanel->SetBackgroundColour(wxColor(100, 100, 200));
-    searchResultPanel->SetBackgroundColour(wxColor(100, 200, 200));
+    m_leftPanel->SetBackgroundColour(wxColor(200, 100, 200));
+    m_rigthPanel->SetBackgroundColour(wxColor(100, 100, 200));
+    m_searchResultPanel->SetBackgroundColour(wxColor(100, 200, 200));
 
     CreateToolBar();
     setupStatusBar();
@@ -109,7 +112,7 @@ namespace gui
     SetStatusText("Loading ..");
     for (long i = 0; i < m_eventsNum; ++i)
     {
-      m_events.AddEvent(db::Event(i));
+      m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
       m_progressGauge->SetValue(i);
 
       if (i % 1000)
@@ -133,11 +136,59 @@ namespace gui
     populateData();
   }
 
+  void MainWindow::OnHideSearchResult(wxCommandEvent &event)
+  {
+    if (event.IsChecked())
+    {
+      m_searchResultPanel->Hide();
+      m_bottom_spliter->Unsplit(m_searchResultPanel);
+    }
+    else
+    {
+      m_searchResultPanel->Show();
+      m_bottom_spliter->SplitHorizontally(m_left_spliter, m_searchResultPanel, -1);
+    }
+    this->Layout();
+  }
+
+  void MainWindow::OnHideLeftPanel(wxCommandEvent &event)
+  {
+    if (event.IsChecked())
+    {
+      m_leftPanel->Hide();
+      m_left_spliter->Unsplit(m_leftPanel);
+    }
+    else
+    {
+      m_leftPanel->Show();
+      m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
+    }
+    this->Layout();
+  }
+
+  void MainWindow::OnHideRightPanel(wxCommandEvent &event)
+  {
+    if (event.IsChecked())
+    {
+      m_rigthPanel->Hide();
+      m_rigth_spliter->Unsplit(m_rigthPanel);
+    }
+    else
+    {
+      m_rigthPanel->Show();
+      m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_rigthPanel, -1);
+    }
+    this->Layout();
+  }
+
   wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
       EVT_MENU(ID_Hello, MainWindow::OnHello)
-          EVT_MENU(wxID_EXIT, MainWindow::OnExit)
-              EVT_MENU(wxID_ABOUT, MainWindow::OnAbout)
-                  EVT_SIZE(MainWindow::OnSize)
-                      wxEND_EVENT_TABLE()
+          EVT_MENU(wxID_VIEW_LIST, MainWindow::OnHideSearchResult)
+              EVT_MENU(ID_ViewLeftPanel, MainWindow::OnHideLeftPanel)
+                  EVT_MENU(ID_ViewRightPanel, MainWindow::OnHideRightPanel)
+                      EVT_MENU(wxID_EXIT, MainWindow::OnExit)
+                          EVT_MENU(wxID_ABOUT, MainWindow::OnAbout)
+                              EVT_SIZE(MainWindow::OnSize)
+                                  wxEND_EVENT_TABLE()
 
 } // namespace gui

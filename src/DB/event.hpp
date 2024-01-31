@@ -10,10 +10,14 @@ namespace db
 	class Event
 	{
 	public:
+	  //(eventFieldName,data)
 		using EventItems = std::unordered_map<std::string, std::string>;
 
-		Event(const int id);
+		Event(const int id, EventItems&& eventItems);
 		int getId() const;
+		const EventItems& getEventItems() const;
+
+		
 
 	private:
 		int m_id;
