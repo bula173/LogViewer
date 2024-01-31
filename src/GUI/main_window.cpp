@@ -1,6 +1,8 @@
 #include "main_window.hpp"
 #include "events_virtual_list_control.hpp"
 
+#include <wx/splitter.h>
+
 namespace gui
 {
 
@@ -10,18 +12,14 @@ namespace gui
 
     this->setupMenu();
     this->setupLayout();
-
-    m_events.RegisterOndDataUpdated(&(*m_eventsListCtrl));
-
-    this->Layout();
   }
 
   void MainWindow::setupMenu()
   {
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
-                     "Help string shown in status bar for this menu item");
+    menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H",
+                     "Populate dummy data");
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
     wxMenu *menuHelp = new wxMenu;
@@ -45,23 +43,64 @@ namespace gui
   }
   void MainWindow::setupLayout()
   {
+    /*
+    ________________________________________
+    |              ToolBar                 |
+    |      Tools       |     Search        |
+    ________________________________________
+    |            |            |            |
+    | Left Panel | Main Panel | Right Panel|
+    |            |            |            |
+    ________________________________________
+    |          Search result Panel         |
+    _______________________________________
+    |              Status Bar              |
+    | General message | Progresbar         |
+    ________________________________________
+    */
+    wxPanel *rigthPanel;
+    wxPanel *leftPanel;
+    wxPanel *searchResultPanel;
 
-    m_eventsListCtrl = new gui::EventsVirtualListControl(this, wxID_ANY, wxDefaultPosition, wxSize(800, 500), m_events);
+    wxSplitterWindow *bottom_spliter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    bottom_spliter->SetMinimumPaneSize(100);
+    wxSplitterWindow *left_spliter = new wxSplitterWindow(bottom_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    left_spliter->SetMinimumPaneSize(200);
+    wxSplitterWindow *rigth_spliter = new wxSplitterWindow(left_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    rigth_spliter->SetMinimumPaneSize(200);
 
-    auto sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(m_eventsListCtrl, 1, wxALL | wxEXPAND, 0);
+    leftPanel = new wxPanel(left_spliter);
+    rigthPanel = new wxPanel(rigth_spliter);
+    searchResultPanel = new wxPanel(bottom_spliter);
+    m_eventsListCtrl = new gui::EventsVirtualListControl(rigth_spliter, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_events); //main panel
+
+    bottom_spliter->SplitHorizontally(left_spliter, searchResultPanel,-1);
+    bottom_spliter->SetSashGravity(0.2);
+
+    left_spliter->SplitVertically(leftPanel, rigth_spliter, 1);
+    left_spliter->SetSashGravity(0.2);
+
+    rigth_spliter->SplitVertically(m_eventsListCtrl, rigthPanel, -1);
+    rigth_spliter->SetSashGravity(0.8);
+
+    leftPanel->SetBackgroundColour(wxColor(200, 100, 200));
+    rigthPanel->SetBackgroundColour(wxColor(100, 100, 200));
+    searchResultPanel->SetBackgroundColour(wxColor(100, 200, 200));
 
     CreateToolBar();
-    SetToolBar(GetToolBar());
-    CreateStatusBar(2);
+    setupStatusBar();
+  }
+
+  void MainWindow::setupStatusBar()
+  {
+
+    CreateStatusBar(2); // 1 - Message, 2-Progressbar
 
     wxRect rect;
     GetStatusBar()->GetFieldRect(1, rect);
 
     m_progressGauge = new wxGauge(GetStatusBar(), wxID_ANY, m_eventsNum, rect.GetPosition(), rect.GetSize(), wxGA_SMOOTH);
     m_progressGauge->SetValue(0);
-
-    this->SetSizer(sizer);
   }
 
   void MainWindow::populateData()

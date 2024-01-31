@@ -27,6 +27,7 @@ namespace gui
 
 		void setupMenu();
 		void setupLayout();
+		void setupStatusBar();
 
 		void populateData();
 
