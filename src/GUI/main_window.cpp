@@ -18,8 +18,6 @@ namespace gui
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H");
     menuFile->Append(wxID_OPEN);
-    menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT);
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -73,9 +71,9 @@ namespace gui
     m_rigth_spliter->SetMinimumPaneSize(200);
 
     m_leftPanel = new wxPanel(m_left_spliter);
-    m_rigthPanel = new wxPanel(m_rigth_spliter);
     m_searchResultPanel = new wxPanel(m_bottom_spliter);
     m_eventsListCtrl = new gui::EventsVirtualListControl(m_events, m_rigth_spliter); // main panel
+    m_itemView = new gui::ItemVirtualListControl(m_events, m_rigth_spliter);
 
     m_bottom_spliter->SplitHorizontally(m_left_spliter, m_searchResultPanel, -1);
     m_bottom_spliter->SetSashGravity(0.2);
@@ -83,11 +81,10 @@ namespace gui
     m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
     m_left_spliter->SetSashGravity(0.2);
 
-    m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_rigthPanel, -1);
+    m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
     m_rigth_spliter->SetSashGravity(0.8);
 
     m_leftPanel->SetBackgroundColour(wxColor(200, 100, 200));
-    m_rigthPanel->SetBackgroundColour(wxColor(100, 100, 200));
     m_searchResultPanel->SetBackgroundColour(wxColor(100, 200, 200));
 
     CreateToolBar();
@@ -112,11 +109,18 @@ namespace gui
     SetStatusText("Loading ..");
     for (long i = 0; i < m_eventsNum; ++i)
     {
-      m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
-      m_progressGauge->SetValue(i);
-
-      if (i % 1000)
+      if (i % 10)
       {
+        m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}, {"dummy", "dummy"}}));
+      }
+      else
+      {
+        m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
+      }
+
+      if (i % 100)
+      {
+        m_progressGauge->SetValue(i);
         wxYield();
       }
     }
@@ -170,13 +174,13 @@ namespace gui
   {
     if (event.IsChecked())
     {
-      m_rigthPanel->Hide();
-      m_rigth_spliter->Unsplit(m_rigthPanel);
+      m_itemView->Hide();
+      m_rigth_spliter->Unsplit(m_itemView);
     }
     else
     {
-      m_rigthPanel->Show();
-      m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_rigthPanel, -1);
+      m_itemView->Show();
+      m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
     }
     this->Layout();
   }

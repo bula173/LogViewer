@@ -9,11 +9,11 @@
 namespace db
 {
 
-	class EventsContainer : public mvc::Model
+	class EventsContainer : public mvc::Model<std::vector<Event>>
 	{
 
 	public:
-		EventsContainer() {}
+		EventsContainer() : m_events(Model::m_data) {}
 
 		void AddEvent(Event &&event)
 		{
@@ -21,18 +21,18 @@ namespace db
 			this->NotifyDataChanged();
 		}
 
-		const Event &GetEvent(const int index) const
+		const Event &GetEvent(const int index)
 		{
 			return m_events.at(index);
 		}
 
-		const int Size() const
+		const int Size()
 		{
 			return m_events.size();
 		}
 
 	private:
-		std::vector<Event> m_events;
+		std::vector<Event> &m_events;
 	};
 
 } // namespace db

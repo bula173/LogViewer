@@ -4,14 +4,15 @@
 #include "view.hpp"
 
 #include <vector>
+#include <iostream>
 
 namespace mvc
 {
-
+	template <typename Container>
 	class Model
 	{
 	public:
-		Model() {};
+		Model(){};
 		virtual ~Model() {}
 		void RegisterOndDataUpdated(View *view)
 		{
@@ -26,8 +27,26 @@ namespace mvc
 			}
 		}
 
+		int GetCurrentItemIndex() const
+		{
+			return m_currentItem;
+		}
+
+		void SetCurrentItem(const int item)
+		{
+			m_currentItem = item;
+			for (auto v : m_views)
+			{
+				v->OnCurrentIndexUpdated(item);
+			}
+		}
+
+	protected:
+		Container m_data;
+		int m_currentItem;
+
 	private:
-		std::vector<View*> m_views;
+		std::vector<View *> m_views;
 	};
 
 } // namespace mvc

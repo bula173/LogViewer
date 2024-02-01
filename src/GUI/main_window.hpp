@@ -5,6 +5,7 @@
 #include <wx/splitter.h>
 
 #include "events_virtual_list_control.hpp"
+#include "item_list_view.hpp"
 #include "DB/events_container.hpp"
 
 namespace gui
@@ -41,7 +42,7 @@ namespace gui
 
 	private:
 		gui::EventsVirtualListControl *m_eventsListCtrl{nullptr};
-		wxPanel *m_rigthPanel{nullptr};
+		gui::ItemVirtualListControl *m_itemView{nullptr};
 		wxPanel *m_leftPanel{nullptr};
 		wxPanel *m_searchResultPanel{nullptr};
 		wxSplitterWindow *m_bottom_spliter{nullptr};
@@ -49,7 +50,7 @@ namespace gui
 		wxSplitterWindow *m_rigth_spliter{nullptr};
 		db::EventsContainer m_events;
 		wxGauge *m_progressGauge{nullptr};
-		const long m_eventsNum{100000};
+		const long m_eventsNum{1000000};
 	};
 
 } // namespace gui

@@ -1,7 +1,6 @@
 #include "events_virtual_list_control.hpp"
 
 #include <string>
-#include <iostream>
 
 namespace gui
 {
@@ -14,14 +13,19 @@ namespace gui
     this->AppendColumn("timestamp");
     this->AppendColumn("type");
     this->AppendColumn("info");
+    this->AppendColumn("dummy");
 
     m_events.RegisterOndDataUpdated(this);
+
+    this->Bind(wxEVT_LIST_ITEM_SELECTED, [this](wxListEvent &evt)
+               { this->m_events.SetCurrentItem(evt.GetIndex()); });
   }
 
   void EventsVirtualListControl::OnDataUpdated()
   {
     this->SetItemCount(m_events.Size());
     this->RefreshItem(m_events.Size() - 1);
+    this->Update();
   }
 
   const wxString EventsVirtualListControl::getColumnName(const int column) const
@@ -34,21 +38,12 @@ namespace gui
 
   wxString EventsVirtualListControl::OnGetItemText(long index, long column) const
   {
-
-    std::cout << "index :" << index << std::endl;
-
     switch (column)
     {
     case 0:
       return std::to_string(m_events.GetEvent(index).getId());
     default:
-      auto event = m_events.GetEvent(index).getEventItems();
-      auto it = event.find(getColumnName(column).ToStdString());
-      if (it != event.end()) {
-        return it->second;
-      } else {
-        return "";
-      }
+      return m_events.GetEvent(index).find(getColumnName(column).ToStdString());
     }
   }
 
@@ -56,5 +51,11 @@ namespace gui
   {
     this->SetItemCount(m_events.Size());
     this->Refresh();
+    this->Update();
+  }
+
+  void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
+  {
+    // do nothing
   }
 } // namespace gui

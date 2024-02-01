@@ -2,7 +2,7 @@
 #define DB_EVENT_HPP
 
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 namespace db
 {
@@ -10,14 +10,13 @@ namespace db
 	class Event
 	{
 	public:
-	  //(eventFieldName,data)
-		using EventItems = std::unordered_map<std::string, std::string>;
+		//(eventFieldName,data)
+		using EventItems = std::vector<std::pair<std::string, std::string>>;
 
-		Event(const int id, EventItems&& eventItems);
+		Event(const int id, EventItems &&eventItems);
 		int getId() const;
-		const EventItems& getEventItems() const;
-
-		
+		const EventItems &getEventItems() const;
+		const std::string find(const std::string& key) const;
 
 	private:
 		int m_id;
