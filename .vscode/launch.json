@@ -29,5 +29,19 @@
             "preLaunchTask": "Build release with CMake"
 
         },
+        {
+            "name": "Launch Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/hello_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build debug with CMake"
+
+        }
     ]
 }
