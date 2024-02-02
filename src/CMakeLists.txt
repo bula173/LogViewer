@@ -1,30 +1,16 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
-project(LogViewer_core LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-
-# hack for buggy CMake's FindwxWidgets script
-if(DEFINED ENV_WX_CONFIG)
-    set(ENV{WX_CONFIG} ${ENV_WX_CONFIG})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Debug)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Release)
+else()
+    message("----Unknown build type-------")
 endif()
 
-set(wxWidgets_USE_STATIC 1)
+message(STATUS "Building LogViewer....")
 
-find_package(wxWidgets REQUIRED)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../dist)
-
-file(GLOB SRCS
-    ${CMAKE_SOURCE_DIR}/*.cpp
-    ${CMAKE_SOURCE_DIR}/GUI/*.cpp
-    ${CMAKE_SOURCE_DIR}/DB/*.cpp
-    ${CMAKE_SOURCE_DIR}/MVC/*.cpp
-)
-
-include(${wxWidgets_USE_FILE})
+file(GLOB_RECURSE SRCS *.cpp)
+file(GLOB_RECURSE HDRS *.hpp)
 
 if(APPLE)
     # create bundle on apple compiles
@@ -36,9 +22,8 @@ else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
-    add_executable(LogViewer WIN32 ${SRCS} main.exe.manifest)
+    add_executable(LogViewer WIN32 ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/main.exe.manifest)
 endif()
 
-target_include_directories(LogViewer PRIVATE 
-    ${CMAKE_SOURCE_DIR} )
-target_link_libraries(LogViewer PRIVATE ${wxWidgets_LIBRARIES})
+target_include_directories(LogViewer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${HDRS} ${wxWidgets_SOURCE_DIR}/include)
+target_link_libraries(LogViewer PRIVATE wxcore wxnet)

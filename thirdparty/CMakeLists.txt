@@ -1,2 +1,2 @@
-add_subdirectory(wxwidgets)
 add_subdirectory(gtest)
+add_subdirectory(wxwidgets)

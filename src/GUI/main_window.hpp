@@ -4,8 +4,8 @@
 #include <wx/wx.h>
 #include <wx/splitter.h>
 
-#include "events_virtual_list_control.hpp"
-#include "item_list_view.hpp"
+#include "GUI/events_virtual_list_control.hpp"
+#include "GUI/item_list_view.hpp"
 #include "DB/events_container.hpp"
 
 namespace gui

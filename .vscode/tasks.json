@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build with CMake",
+            "label": "Build debug with CMake",
             "type": "shell",
             "command": "cmake",
             "args": [
                 "--build",
-                "build",
+                "build-debug",
                 "-j8"
             ],
             "group": {
@@ -15,23 +15,50 @@
                 "isDefault": true
             },
             "dependsOn": [
-                "Configure with CMake"
+                "Configure with CMake debug"
             ]
         },
         {
-            "label": "Configure with CMake",
+            "label": "Build release with CMake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build-release",
+                "-j8"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "Configure with CMake release"
+            ]
+        },
+        {
+            "label": "Configure with CMake debug",
             "type": "shell",
             "command": "cmake",
             "args": [
                 "-DCMAKE_BUILD_TYPE=Debug",
                 "-S.",
-                "-Bbuild"
+                "-Bbuild-debug"
+            ]
+        },
+        {
+            "label": "Configure with CMake release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-S.",
+                "-Bbuild-release"
             ]
         },
         {
             "label": "Run",
             "type": "shell",
-            "command": "open -n ${workspaceFolder}/dist/LogViewer.app",
+            "command": "open -n ${workspaceFolder}/dist/Debug/LogViewer.app",
             "args": [
                 
             ]

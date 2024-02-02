@@ -3,10 +3,9 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "${workspaceFolder}/build/subprojects/Build/wxWidgets_external/lib/wx/include/osx_cocoa-unicode-static-3.1/**",
-                "${workspaceFolder}/build/subprojects/Source/wxWidgets_external/include",
-                "${workspaceFolder}/build/_deps/googletest-src/googletest/include"
+                "${workspaceFolder}/src/**/**",
+                "${workspaceFolder}/build-debug/_deps/googletest-src/googletest/include",
+                "${workspaceFolder}/build-debug/_deps/wxwidgets-src/include"
             ],
             "defines": [
                 "__WXOSX_COCOA__",

@@ -3,8 +3,8 @@
 
 #include <wx/wx.h>
 #include <wx/listctrl.h>
-#include "MVC/view.hpp"
 
+#include "MVC/view.hpp"
 #include "DB/events_container.hpp"
 
 namespace gui
