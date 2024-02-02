@@ -5,29 +5,60 @@
             "name": "Launch Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/Debug/LogViewer.app",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb",
-            "preLaunchTask": "Build debug with CMake"
+            "preLaunchTask": "Build debug with CMake",
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
+
+              },
+              "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceFolder}/dist/Debug/LogViewer"
+              },
+              "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe"
+              }
 
         },
         {
             "name": "Launch Release",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dist/Release/LogViewer.app",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "Build release with CMake",
+            "linux": {
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
+              },
+              "osx": {
+                "program": "${workspaceFolder}/dist/Debug/LogViewer"
+              },
+              "windows": {
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe"
+              }
+
+        },
+        {
+            "name": "Launch Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/hello_test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "Build release with CMake"
-
-        },
+            "preLaunchTask": "Build debug with CMake",
+        }
     ]
 }
