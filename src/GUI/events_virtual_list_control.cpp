@@ -1,4 +1,5 @@
 #include "events_virtual_list_control.hpp"
+#include "MyApp.hpp"
 
 #include <string>
 
@@ -23,8 +24,11 @@ namespace gui
 
   void EventsVirtualListControl::OnDataUpdated()
   {
-    this->SetItemCount(m_events.Size());
-    this->RefreshItem(m_events.Size() - 1);
+
+    auto s = m_events.Size();
+
+    this->SetItemCount(s);
+    this->RefreshItem(s - 1);
     this->Update();
   }
 

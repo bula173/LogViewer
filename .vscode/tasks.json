@@ -58,7 +58,15 @@
         {
             "label": "Run",
             "type": "shell",
-            "command": "open -n ${workspaceFolder}/dist/Debug/LogViewer.app",
+            "linux": {
+                "command": "${workspaceFolder}/dist/Debug/LogViewer"
+              },
+              "osx": {
+                "command": "${workspaceFolder}/dist/Debug/LogViewer.app"
+              },
+              "windows": {
+                "command": "${workspaceFolder}/dist/Debug/LogViewer.exe"
+              },
             "args": [
                 
             ]

@@ -13,12 +13,12 @@
             "preLaunchTask": "Build debug with CMake",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer"
 
               },
               "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
               },
               "windows": {
                 "MIMode": "gdb",
@@ -37,14 +37,36 @@
             "externalConsole": false,
             "preLaunchTask": "Build release with CMake",
             "linux": {
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
+                "program": "${workspaceFolder}/dist/Release/LogViewer"
               },
               "osx": {
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
+                "MIMode": "lldb",
+                "program": "${workspaceFolder}/dist/Release/LogViewer.app"
               },
               "windows": {
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe"
+                "program": "${workspaceFolder}/dist/Release/LogViewer.exe"
               }
+
+        },
+        {
+          "name": "Run",
+          "type": "cppdbg",
+          "request": "launch",
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${workspaceFolder}",
+          "environment": [],
+          "externalConsole": false,
+          "linux": {
+              "program": "${workspaceFolder}/dist/Debug/LogViewer"
+            },
+            "osx": {
+              "MIMode": "lldb",
+              "program": "${workspaceFolder}/dist/Debug/LogViewer.app"
+            },
+            "windows": {
+              "program": "${workspaceFolder}/dist/Debug/LogViewer.exe"
+            }
 
         },
         {

@@ -1,6 +1,8 @@
 #include "main_window.hpp"
 #include "events_virtual_list_control.hpp"
 
+#include "MyApp.hpp"
+
 namespace gui
 {
 
@@ -10,6 +12,8 @@ namespace gui
 
     this->setupMenu();
     this->setupLayout();
+
+    this->Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnClose, this);
   }
 
   void MainWindow::setupMenu()
@@ -107,6 +111,9 @@ namespace gui
   {
 
     SetStatusText("Loading ..");
+    m_progressGauge->SetValue(0);
+
+    m_processing = true;
     for (long i = 0; i < m_eventsNum; ++i)
     {
       if (i % 10)
@@ -118,18 +125,42 @@ namespace gui
         m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
       }
 
-      if (i % 100)
+      if (i % 100 == 0)
       {
         m_progressGauge->SetValue(i);
         wxYield();
       }
+
+      if (m_closerequest)
+      {
+        m_processing = false;
+        this->Destroy();
+        return;
+      }
     }
+
     SetStatusText("Data ready");
+    m_processing = false;
   }
   void MainWindow::OnExit(wxCommandEvent &event)
   {
     Close(true);
   }
+
+  void MainWindow::OnClose(wxCloseEvent &event)
+  {
+
+    if (m_processing)
+    {
+      event.Veto();
+      m_closerequest = true;
+    }
+    else
+    {
+      this->Destroy();
+    }
+  }
+
   void MainWindow::OnAbout(wxCommandEvent &event)
   {
     wxMessageBox("This is a wxWidgets' Hello world sample",

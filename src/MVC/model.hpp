@@ -5,10 +5,12 @@
 
 #include <vector>
 #include <iostream>
+#include <mutex>
 
 namespace mvc
 {
 	template <typename Container>
+
 	class Model
 	{
 	public:
@@ -21,13 +23,14 @@ namespace mvc
 
 		void NotifyDataChanged()
 		{
+
 			for (auto v : m_views)
 			{
 				v->OnDataUpdated();
 			}
 		}
 
-		int GetCurrentItemIndex() const
+		int GetCurrentItemIndex()
 		{
 			return m_currentItem;
 		}
@@ -41,12 +44,29 @@ namespace mvc
 			}
 		}
 
+		void AddItem(auto &&item)
+		{
+			m_data.push_back(item);
+			this->NotifyDataChanged();
+		}
+
+		auto &GetItem(const int index)
+		{
+			return m_data.at(index);
+		}
+
+		auto Size()
+		{
+			return m_data.size();
+		}
+
 	protected:
 		Container m_data;
 		int m_currentItem;
 
 	private:
 		std::vector<View *> m_views;
+
 	};
 
 } // namespace mvc

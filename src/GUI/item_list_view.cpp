@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "MyApp.hpp"
+
 namespace gui
 {
   ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer &events, wxWindow *parent,
@@ -23,8 +25,10 @@ namespace gui
 
   void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
   {
-    this->SetItemCount(m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems().size());
-    this->RefreshItem(m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems().size() - 1);
+
+    auto s = m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems().size();
+    this->SetItemCount(s);
+    this->RefreshItem(s - 1);
     this->Update();
   }
 

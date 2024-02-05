@@ -26,6 +26,7 @@ namespace gui
 	private:
 		void OnHello(wxCommandEvent &event);
 		void OnExit(wxCommandEvent &event);
+		void OnClose(wxCloseEvent &event);
 		void OnAbout(wxCommandEvent &event);
 		void OnSize(wxSizeEvent &event);
 		void OnHideSearchResult(wxCommandEvent &event);
@@ -37,7 +38,6 @@ namespace gui
 		void setupMenu();
 		void setupLayout();
 		void setupStatusBar();
-
 		void populateData();
 
 	private:
@@ -50,7 +50,10 @@ namespace gui
 		wxSplitterWindow *m_rigth_spliter{nullptr};
 		db::EventsContainer m_events;
 		wxGauge *m_progressGauge{nullptr};
-		const long m_eventsNum{1000000};
+		const long m_eventsNum{100000};
+
+		std::atomic<bool> m_closerequest{false};
+		bool m_processing{false};
 	};
 
 } // namespace gui

@@ -1,13 +1,7 @@
 
-#include <wx/wx.h>
 
 #include "GUI/main_window.hpp"
-
-class MyApp : public wxApp
-{
-public:
-    virtual bool OnInit();
-};
+#include "MyApp.hpp"
 
 wxIMPLEMENT_APP(MyApp);
 
