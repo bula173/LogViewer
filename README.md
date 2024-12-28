@@ -19,13 +19,13 @@ Linux builds require the GTK3 library and headers installed in the system.
 To build the project, use:
 
 ```bash
-cmake -S. -Bbuild-rel -DCMAKE_BUILD_TYPE=Release
+cmake -S. -Bbuild-rel -DCMAKE_BUILD_TYPE=Release -G Ninja
 cmake --build build-rel -j
 ```
 
 To build debug version, use:
 ```bash
-cmake -DCMAKE_BUILD_TYPE=Debug -S. -Bbuild-debug
+cmake -DCMAKE_BUILD_TYPE=Debug -S. -Bbuild-debug -G Ninja
 cmake --build build-debug -j
 ```
 

@@ -16,8 +16,16 @@ find_program(
 
 
 file(GLOB_RECURSE SRCS *.cpp)
-file(GLOB_RECURSE HDRS *.hpp)
 
+# Find wxWidgets
+find_package(wxWidgets COMPONENTS core base REQUIRED)
+
+if(wxWidgets_FOUND)
+    message(STATUS "Using wxWidgets from ${wxWidgets_INCLUDE_DIRS}")
+    include(${wxWidgets_USE_FILE})
+else()
+    message(FATAL_ERROR "wxWidgets not found")
+endif()
 
 if(APPLE)
     # create bundle on apple compiles
@@ -44,5 +52,16 @@ else()
     message(STATUS "clang-tidy not found.")
 endif()
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${HDRS} ${wxWidgets_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE wxcore wxnet)
+# Check if GLOG_INCLUDE_DIR is set
+if(NOT GLOG_INCLUDE_DIR)
+    message(FATAL_ERROR "glog include directory not found! Fetching or configuring glog failed.")
+endif()
+
+# Include wxWidgets and glog headers
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS} ${GLOG_INCLUDE_DIR})
+
+# Link wxWidgets and glog libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} glog)
+
+# Add necessary preprocessor definitions for glog
+target_compile_definitions(${PROJECT_NAME} PRIVATE GLOG_NO_ABBREVIATED_SEVERITIES)
