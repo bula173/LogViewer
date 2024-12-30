@@ -47,7 +47,7 @@ namespace gui
     case 0:
       return std::to_string(m_events.GetEvent(index).getId());
     default:
-      return m_events.GetEvent(index).find(getColumnName(column).ToStdString());
+      return m_events.GetEvent(index).findByKey(getColumnName(column).ToStdString());
     }
   }
 

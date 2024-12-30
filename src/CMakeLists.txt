@@ -1,4 +1,3 @@
-
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Debug)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -8,6 +7,7 @@ else()
 endif()
 
 message(STATUS "Building LogViewer....")
+message (Status "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 find_program(
     CLANG_TIDY_EXE
@@ -15,7 +15,8 @@ find_program(
 )
 
 
-file(GLOB_RECURSE SRCS *.cpp)
+file(GLOB_RECURSE SRCS ./*/*.cpp)
+file(GLOB_RECURSE HEADERS .hpp)
 
 # Find wxWidgets
 find_package(wxWidgets COMPONENTS core base REQUIRED)
@@ -27,18 +28,21 @@ else()
     message(FATAL_ERROR "wxWidgets not found")
 endif()
 
+add_library(${PROJECT_NAME}_lib STATIC ${SRCS})
+
 if(APPLE)
     # create bundle on apple compiles
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SRCS})
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE MyApp.cpp)
     set(ADDITIONAL_LINKER_FLAGS "-framework Metal -framework MetalPerformanceShaders")
 
     # Set a custom plist file for the app bundle - needed for Mac OS Retina display
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+
 else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
-    add_executable(${PROJECT_NAME} WIN32 ${SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/main.exe.manifest)
+    add_executable(${PROJECT_NAME} WIN32 MyApp.cpp ${CMAKE_CURRENT_SOURCE_DIR}/main.exe.manifest)
 endif()
 
 if (CLANG_TIDY_EXE)
@@ -59,9 +63,10 @@ endif()
 
 # Include wxWidgets and glog headers
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS} ${GLOG_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME}_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS} ${GLOG_INCLUDE_DIR})
 
 # Link wxWidgets and glog libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} glog)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} glog ${PROJECT_NAME}_lib)
 
 # Add necessary preprocessor definitions for glog
 target_compile_definitions(${PROJECT_NAME} PRIVATE GLOG_NO_ABBREVIATED_SEVERITIES)

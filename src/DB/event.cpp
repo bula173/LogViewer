@@ -1,4 +1,5 @@
 #include "event.hpp"
+#include <regex>
 
 namespace db
 {
@@ -18,16 +19,19 @@ namespace db
     return m_events;
   }
 
-  const std::string Event::find(const std::string &key) const
+  const std::string Event::findByKey(const std::string &key) const
   {
-    for (auto &it : m_events)
-    {
-      if (it.first == key)
-      {
-        return it.second;
-      }
-    }
-    return "";
+
+    return std::ranges::find_if(m_events, [&key](const auto &item)
+                                { return item.first == key; })
+        ->second;
+  }
+
+  Event::EventItemsIterator Event::findInEvent(const std::string &search)
+  {
+    std::regex searchRegex(search);
+    return std::ranges::find_if(m_events, [&searchRegex](const auto &item)
+                                { return std::regex_search(item.first, searchRegex); });
   }
 
 } // namespace db
