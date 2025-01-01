@@ -1,9 +1,7 @@
-#include "item_list_view.hpp"
+#include "gui/item_list_view.hpp"
 
 #include <string>
 #include <iostream>
-
-#include "MyApp.hpp"
 
 namespace gui
 {

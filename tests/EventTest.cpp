@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "DB/event.hpp"
+#include "src/application/db/event.hpp"
 
 namespace db
 {
@@ -79,7 +79,7 @@ namespace db
     EXPECT_EQ(it->first, "key1");
     EXPECT_EQ(it->second, "value1");
 
-    it = event.findInEvent("");
+    it = event.findInEvent("value2");
     EXPECT_NE(it, event.getEventItems().end());
     EXPECT_EQ(it->first, "key2");
     EXPECT_EQ(it->second, "value2");

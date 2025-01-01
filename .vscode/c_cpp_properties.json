@@ -3,13 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/src/**/**",
-                "${workspaceFolder}/build-debug/_deps/googletest-src/googletest/include",
-                "${workspaceFolder}/build-debug/_deps/wxwidgets-src/include",
-                "${workspaceFolder}/src",
-                "${workspaceFolder}/build-debug/_deps/wxwidgets-src/include/msvc",
                 "${workspaceFolder}/build-debug/_deps/googletest-src/googlemock/include",
-                "${workspaceFolder}/build-debug/_deps/glog-src/src"
+                "${workspaceFolder}/build-debug/_deps/glog-src/src",
+                "${workspaceFolder}",
+                "${workspaceFolder}/build-debug/_deps/googletest-src/googletest/include",
+                "${workspaceFolder}/src/application"
             ],
             "defines": [
                 "__WXOSX_COCOA__",

@@ -4,8 +4,8 @@
 #include <vector>
 #include <ranges>
 
-#include "event.hpp"
-#include "MVC/model.hpp"
+#include "db/event.hpp"
+#include "mvc/model.hpp"
 
 namespace db
 {

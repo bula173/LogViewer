@@ -1,4 +1,4 @@
 #! /bin/bash
 
-cmake --build build-debug -j
+cmake --build build-debug -j 12
 

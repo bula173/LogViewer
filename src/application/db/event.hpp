@@ -21,6 +21,11 @@ namespace db
 		const std::string findByKey(const std::string &key) const;
 		EventItemsIterator findInEvent(const std::string &search);
 
+		bool operator==(const Event &other) const
+		{
+			return m_id == other.getId();
+		}
+
 	private:
 		int m_id;
 		EventItems m_events;

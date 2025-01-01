@@ -43,7 +43,7 @@
                 "-DCMAKE_BUILD_TYPE=Debug",
                 "-S.",
                 "-Bbuild-debug",
-                "-G Ninja"
+                ""
             ]
         },
         {
@@ -54,7 +54,7 @@
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-S.",
                 "-Bbuild-release",
-                "-G Ninja"
+                ""
             ]
         },
         {

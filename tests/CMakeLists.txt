@@ -1,29 +1,26 @@
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/bin)
+
+message(STATUS "Building LogViewer::tests")
 
 file(GLOB TEST_SOURCES "*.cpp")
 
 add_executable(
-  all_tests
+  ${PROJECT_NAME}_tests
   ${TEST_SOURCES}
 )
 
-target_include_directories(
-  all_tests PRIVATE ${CMAKE_SOURCE_DIR}/src ${GLOG_INCLUDE_DIR}
-)
+target_compile_definitions(${PROJECT_NAME}_tests PRIVATE TESTING)
 
-find_package(wxWidgets REQUIRED COMPONENTS core base)
-include(${wxWidgets_USE_FILE})
+target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
 
-target_compile_definitions(all_tests PRIVATE TESTING)
-
-target_link_libraries(
-  all_tests
+target_link_libraries(${PROJECT_NAME}_tests
   gtest_main
   gmock
-  ${wxWidgets_LIBRARIES}
-  glog
-  ${PROJECT_NAME}_lib
+  application
 )
 
 include(GoogleTest)
-gtest_discover_tests(all_tests)
+gtest_discover_tests(${PROJECT_NAME}_tests)
+
+# Enable testing
+enable_testing()

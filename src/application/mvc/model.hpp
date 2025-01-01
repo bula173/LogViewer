@@ -1,7 +1,7 @@
 #ifndef MVC_MODEL_HPP
 #define MVC_MODEL_HPP
 
-#include "view.hpp"
+#include "mvc/view.hpp"
 
 #include <vector>
 #include <iostream>
@@ -14,7 +14,7 @@ namespace mvc
 	class Model
 	{
 	public:
-		Model(){};
+		Model() {};
 		virtual ~Model() {}
 		void RegisterOndDataUpdated(View *view)
 		{
@@ -66,7 +66,6 @@ namespace mvc
 
 	private:
 		std::vector<View *> m_views;
-
 	};
 
 } // namespace mvc

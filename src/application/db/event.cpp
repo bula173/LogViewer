@@ -1,4 +1,4 @@
-#include "event.hpp"
+#include "db/event.hpp"
 #include <regex>
 
 namespace db
@@ -31,7 +31,7 @@ namespace db
   {
     std::regex searchRegex(search);
     return std::ranges::find_if(m_events, [&searchRegex](const auto &item)
-                                { return std::regex_search(item.first, searchRegex); });
+                                { return std::regex_search(item.second, searchRegex); });
   }
 
 } // namespace db
