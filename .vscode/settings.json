@@ -77,7 +77,7 @@
         "thread": "cpp",
         "*.inc": "cpp"
     },
-    "cmake.configureOnOpen": true,
+    "cmake.configureOnOpen": false,
     "editor.tokenColorCustomizations": {
         "textMateRules": [
             {
@@ -103,5 +103,6 @@
     "gtest-adapter.debugConfig": [
         "Launch Test"
     ],
-    "gtest-adapter.supportLocation": true
+    "gtest-adapter.supportLocation": true,
+    "cmake.configureOnEdit": false
 }

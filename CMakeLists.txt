@@ -23,12 +23,5 @@ add_subdirectory(src)
 
 add_subdirectory(tests)
 
-message(STATUS "wxWidgets include directories: ${wxWidgets_INCLUDE_DIRS}")
-message(STATUS "wxWidgets libraries: ${wxWidgets_LIBRARIES}")
+enable_testing()
 
-# #Display all CMake variables
-# message(STATUS "CMake variables:")
-# get_cmake_property(_variableNames VARIABLES)
-# foreach (_variableName ${_variableNames})
-#     message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()

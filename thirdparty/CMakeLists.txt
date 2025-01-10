@@ -1,76 +1,48 @@
-message(STATUS "Building LogViewer::application")
+message(STATUS "Building LogViewer::thirdparty")
 message (STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 # Ensure git submodules are checked out
 execute_process(COMMAND git submodule update --init --recursive
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Add wxWidgets as a subdirectory
-set(wxWidgets_BUILD_TESTS OFF CACHE BOOL "Disable wxWidgets tests" FORCE)
-set(wxBUILD_SHARED OFF CACHE BOOL "Build wxWidgets as static library" FORCE)
-set(wxBUILD_INSTALL ON CACHE BOOL "Install wxWidgets" FORCE)
+set(wxUSE_METAL OFF CACHE BOOL "Disable METAL build" FORCE)
+set(wxUSE_OPENGL ON CACHE BOOL "Enable OpenGL support" FORCE)
 
 
 find_package(wxWidgets QUIET COMPONENTS core base xml)
 
 if(wxWidgets_FOUND)
-    message(STATUS "wxWidgets Found!")
-    message(STATUS "wxWidgets include directories: ${wxWidgets_INCLUDE_DIRS}")
-    message(STATUS "wxWidgets libraries: ${wxWidgets_LIBRARIES}")
-    message(STATUS "wxWidgets use file: ${wxWidgets_USE_FILE}")
-    message(STATUS "wxWidgets root: ${wxWidgets_ROOT}")
+    message(STATUS "wxWidgets Found in system!")
+    set(WX_LOCAL_BUILD TRUE CACHE BOOL "WxLocal build")
 else()
     message(STATUS "wxWidgets not found! Try to build it from source.")
+    # Set wxWidgets to static mode
+    set(wxBUILD_SHARED OFF CACHE BOOL "Build static libraries" FORCE)
+    set(wxBUILD_PRECOMP OFF CACHE BOOL "Disable precompiled headers" FORCE)
+    set(wxBUILD_MONOLITHIC OFF CACHE BOOL "Disable monolithic build" FORCE)
+    set(wxBUILD_FEATURES "core;xml;base" CACHE STRING "Build only base, core, and xml libraries" FORCE)
+    set(wxUSE_XRC OFF CACHE BOOL "Disable XRC" FORCE)
+    set(wxUSE_AUI OFF CACHE BOOL "Disable AUI" FORCE)
+    set(wxUSE_SYS_LIBS OFF CACHE BOOL "Don't use system libraries" FORCE)
+    set(wxUSE_WEBVIEW OFF CACHE BOOL "Disable webview" FORCE)
+    add_subdirectory(wxWidgets)
 
-    add_subdirectory(wxwidgets)
+    set(WX_CONFIG_EXECUTABLE "${wxWidgets_BINARY_DIR}/wx-config")
+    set(ENV{WX_CONFIG} "${WX_CONFIG_EXECUTABLE}")
 
-    set(wxWidgets_ROOT ${wxWidgets_BINARY_DIR} CACHE STRING "wxWidgets root directory" FORCE)
-    set(WX_CONFIG_PATH ${wxWidgets_BINARY_DIR}/wx-config CACHE STRING "wx-config path" FORCE)
+    # Custom target to trigger the build and setup wxWidgets properly
+    add_custom_target(BuildWxWidgets ALL
+    COMMENT "Building wxWidgets locally"
+    )
 
-    # Check if wx-config exists
-    if(EXISTS ${WX_CONFIG_PATH})
-        message(STATUS "wx-config found at ${WX_CONFIG_PATH}")
+    add_dependencies(BuildWxWidgets wxcore wxbase)
 
-        # Get wxWidgets compilation flags using wx-config
-        execute_process(
-            COMMAND ${WX_CONFIG_PATH} --cxxflags
-            OUTPUT_VARIABLE wxWidgets_CXX_FLAGS
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
+    #Display all CMake variables
+    #include(${CMAKE_SOURCE_DIR}/displayVars.cmake)
+    set(WX_LOCAL_BUILD TRUE CACHE BOOL "WxLocal build")
 
-        execute_process(
-            COMMAND ${WX_CONFIG_PATH} --libs
-            OUTPUT_VARIABLE wxWidgets_LIBS
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-
-        # Extract include directories from wxWidgets_CXX_FLAGS
-        string(REGEX MATCHALL "-I[^ ]+" wxWidgets_INCLUDE_DIRS ${wxWidgets_CXX_FLAGS})
-        string(REPLACE "-I" ";" wxWidgets_INCLUDE_DIRS ${wxWidgets_INCLUDE_DIRS})
-
-        # Extract library directories from wxWidgets_LIBS
-        string(REGEX MATCHALL "-L[^ ]+" wxWidgets_LIBRARY_DIRS ${wxWidgets_LIBS})
-
-        # Extract library names from wxWidgets_LIBS
-        string(REGEX MATCHALL "-l[^ ]+" wxWidgets_LIBRARIES ${wxWidgets_LIBS})
-
-        # Extract frameworks from wxWidgets_LIBS
-        string(REGEX MATCHALL "-framework [^ ]+" wxWidgets_FRAMEWORKS ${wxWidgets_LIBS})
-
-        message(STATUS "wxWidgets include directories: ${wxWidgets_INCLUDE_DIRS}")
-        message(STATUS "wxWidgets library directories: ${wxWidgets_LIBRARY_DIRS}")
-        message(STATUS "wxWidgets libraries: ${wxWidgets_LIBRARIES}")
-        message(STATUS "wxWidgets frameworks: ${wxWidgets_FRAMEWORKS}")
-
-        # Set include and library directories for the project
-        set(wxWidgets_INCLUDE_DIRS ${wxWidgets_INCLUDE_DIRS} CACHE INTERNAL "wxWidgets_INCLUDE_DIRS")
-        set(wxWidgets_LIBRARIES ${wxWidgets_LIBRARY_DIRS} ${wxWidgets_LIBRARIES} ${wxWidgets_FRAMEWORKS} CACHE INTERNAL "wxWidgets_LIBRARIES")
-
-
-    else()
-        message(FATAL_ERROR "wx-config not found at ${WX_CONFIG_PATH}")
-    endif()
 endif()
 
 add_subdirectory(gflags)
 add_subdirectory(gtest)
+
+
