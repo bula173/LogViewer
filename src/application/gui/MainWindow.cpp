@@ -1,5 +1,5 @@
-#include "gui/main_window.hpp"
-#include "gui/events_virtual_list_control.hpp"
+#include "gui/MainWindow.hpp"
+#include "gui/EventsVirtualListControl.hpp"
 
 namespace gui
 {
@@ -12,6 +12,14 @@ namespace gui
     this->setupLayout();
 
     this->Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnClose, this);
+    this->Bind(wxEVT_MENU, &MainWindow::OnHello, this, ID_Hello);
+    this->Bind(wxEVT_MENU, &MainWindow::OnHideSearchResult, this, wxID_VIEW_LIST);
+    this->Bind(wxEVT_MENU, &MainWindow::OnHideLeftPanel, this, ID_ViewLeftPanel);
+    this->Bind(wxEVT_MENU, &MainWindow::OnHideRightPanel, this, ID_ViewRightPanel);
+    this->Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
+    this->Bind(wxEVT_MENU, &MainWindow::OnAbout, this, wxID_ABOUT);
+    this->Bind(wxEVT_SIZE, &MainWindow::OnSize, this);
+    this->Bind(wxEVT_MENU, &MainWindow::OnOpen, this, wxID_OPEN);
   }
 
   void MainWindow::setupMenu()
@@ -19,7 +27,7 @@ namespace gui
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H");
-    menuFile->Append(wxID_OPEN);
+    menuFile->Append(wxID_OPEN, "&Open...\tCtrl-O", "Open a file");
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -116,11 +124,11 @@ namespace gui
     {
       if (i % 10)
       {
-        m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}, {"dummy", "dummy"}}));
+        m_events.AddEvent(db::LogEvent(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}, {"dummy", "dummy"}}));
       }
       else
       {
-        m_events.AddEvent(db::Event(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
+        m_events.AddEvent(db::LogEvent(i, {{"timestamp", "dummyTimestamp"}, {"type", "dummyType"}, {"info", "dummyInfo"}}));
       }
 
       if (i % 100 == 0)
@@ -214,14 +222,61 @@ namespace gui
     this->Layout();
   }
 
-  wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
-      EVT_MENU(ID_Hello, MainWindow::OnHello)
-          EVT_MENU(wxID_VIEW_LIST, MainWindow::OnHideSearchResult)
-              EVT_MENU(ID_ViewLeftPanel, MainWindow::OnHideLeftPanel)
-                  EVT_MENU(ID_ViewRightPanel, MainWindow::OnHideRightPanel)
-                      EVT_MENU(wxID_EXIT, MainWindow::OnExit)
-                          EVT_MENU(wxID_ABOUT, MainWindow::OnAbout)
-                              EVT_SIZE(MainWindow::OnSize)
-                                  wxEND_EVENT_TABLE()
+  void MainWindow::OnOpen(wxCommandEvent &event)
+  {
+    wxFileDialog openFileDialog(this, _("Open XML file"), "", "",
+                                "XML files (*.xml)|*.xml|All files (*.*)|*.*",
+                                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+      // User canceled the operation
+      wxLogMessage("File dialog canceled.");
+      return;
+    }
+    else
+    {
+      wxString path = openFileDialog.GetPath();
+      wxLogMessage("Selected file: %s", path);
+    }
+
+    // Proceed loading the file chosen by the user
+    std::string filePath = openFileDialog.GetPath().ToStdString();
+
+    // Add your file processing code here
+    // For example, you can call your XML parser to parse the selected file
+    m_events.Clear();
+    m_parser = std::make_shared<parser::XmlParser>();
+
+    m_parser->RegisterObserver(this);
+
+    SetStatusText("Loading ..");
+    m_progressGauge->SetValue(0);
+
+    m_processing = true;
+
+    SetStatusText("Data ready");
+    m_parser->ParseData(filePath);
+    m_processing = false;
+  }
+
+  // Data Observer methods
+  void MainWindow::ProgressUpdated()
+  {
+    m_progressGauge->SetValue(m_parser->GetCurrentProgress());
+    wxYield();
+
+    if (m_closerequest)
+    {
+      m_processing = false;
+      this->Destroy();
+      return;
+    }
+  }
+
+  void MainWindow::NewEventFound(db::LogEvent &&event)
+  {
+    // m_events.AddEvent(*m_parser->GetLastEvent());
+  }
 
 } // namespace gui

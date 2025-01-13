@@ -1,7 +1,7 @@
 #ifndef MVC_MODEL_HPP
 #define MVC_MODEL_HPP
 
-#include "mvc/view.hpp"
+#include "mvc/View.hpp"
 
 #include <vector>
 #include <iostream>
@@ -46,13 +46,19 @@ namespace mvc
 
 		void AddItem(auto &&item)
 		{
-			m_data.push_back(item);
+			m_data.push_back(std::forward<decltype(item)>(item));
 			this->NotifyDataChanged();
 		}
 
 		auto &GetItem(const int index)
 		{
 			return m_data.at(index);
+		}
+
+		void Clear()
+		{
+			m_data.clear();
+			this->NotifyDataChanged();
 		}
 
 		auto Size()

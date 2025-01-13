@@ -1,4 +1,4 @@
-#include "gui/events_virtual_list_control.hpp"
+#include "gui/EventsVirtualListControl.hpp"
 
 #include <string>
 

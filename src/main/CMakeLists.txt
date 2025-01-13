@@ -16,6 +16,7 @@ else()
     add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${CMAKE_CURRENT_SOURCE_DIR}/main.exe.manifest)
 endif()
 
+
 # Link wxWidgets
 target_link_libraries(${PROJECT_NAME} PRIVATE application)
 

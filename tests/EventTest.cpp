@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "src/application/db/event.hpp"
+#include "src/application/db/LogEvent.hpp"
 
 namespace db
 {
@@ -7,13 +7,13 @@ namespace db
   {
   protected:
     using EventItems = std::vector<std::pair<std::string, std::string>>;
-    std::unique_ptr<Event> event;
+    std::unique_ptr<LogEvent> event;
     EventItems eventItems;
 
     void SetUp() override
     {
       eventItems = {{"key1", "value1"}, {"key2", "value2"}};
-      event = std::make_unique<Event>(1, std::move(eventItems));
+      event = std::make_unique<LogEvent>(1, std::move(eventItems));
     }
 
     void TearDown() override
@@ -55,7 +55,7 @@ namespace db
 
   TEST_F(EventTest, EmptyEventItemsTest)
   {
-    Event emptyEvent(2, {});
+    LogEvent emptyEvent(2, {});
     EXPECT_EQ(emptyEvent.getId(), 2);
     EXPECT_TRUE(emptyEvent.getEventItems().empty());
     EXPECT_EQ(emptyEvent.findByKey("key1"), "");
@@ -63,8 +63,8 @@ namespace db
 
   TEST_F(EventTest, DuplicateKeysTest)
   {
-    Event::EventItems duplicateItems = {{"key1", "value1"}, {"key1", "value2"}};
-    Event duplicateEvent(3, std::move(duplicateItems));
+    LogEvent::EventItems duplicateItems = {{"key1", "value1"}, {"key1", "value2"}};
+    LogEvent duplicateEvent(3, std::move(duplicateItems));
     EXPECT_EQ(duplicateEvent.getId(), 3);
     EXPECT_EQ(duplicateEvent.getEventItems().size(), 2);
     EXPECT_EQ(duplicateEvent.findByKey("key1"), "value1");
@@ -72,8 +72,8 @@ namespace db
 
   TEST_F(EventTest, FindInEventTest)
   {
-    Event::EventItems items = {{"key1", "value1"}, {"key2", "value2"}};
-    Event event(1, std::move(items));
+    LogEvent::EventItems items = {{"key1", "value1"}, {"key2", "value2"}};
+    LogEvent event(1, std::move(items));
     auto it = event.findInEvent("value1");
     EXPECT_NE(it, event.getEventItems().end());
     EXPECT_EQ(it->first, "key1");
@@ -90,8 +90,8 @@ namespace db
 
   TEST_F(EventTest, FindInEventRegexTest)
   {
-    Event::EventItems items = {{"key1", "value1"}, {"key2", "value2"}, {"key3", "anotherValue"}};
-    Event event(1, std::move(items));
+    LogEvent::EventItems items = {{"key1", "value1"}, {"key2", "value2"}, {"key3", "anotherValue"}};
+    LogEvent event(1, std::move(items));
 
     auto it = event.findInEvent("value[0-9]");
     EXPECT_NE(it, event.getEventItems().end());

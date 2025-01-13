@@ -1,4 +1,4 @@
-#include "gui/item_list_view.hpp"
+#include "gui/ItemVirtualListControl.hpp"
 
 #include <string>
 #include <iostream>

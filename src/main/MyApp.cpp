@@ -1,4 +1,4 @@
-#include "gui/main_window.hpp"
+#include "gui/MainWindow.hpp"
 #include "MyApp.hpp"
 
 wxIMPLEMENT_APP(MyApp);

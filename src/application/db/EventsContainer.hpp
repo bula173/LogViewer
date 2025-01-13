@@ -4,24 +4,24 @@
 #include <vector>
 #include <ranges>
 
-#include "db/event.hpp"
-#include "mvc/model.hpp"
+#include "db/LogEvent.hpp"
+#include "mvc/Model.hpp"
 
 namespace db
 {
 
-	class EventsContainer : public mvc::Model<std::vector<Event>>
+	class EventsContainer : public mvc::Model<std::vector<LogEvent>>
 	{
 
 	public:
 		EventsContainer() {}
 
-		void AddEvent(Event &&event)
+		void AddEvent(LogEvent &&event)
 		{
-			this->AddItem(event);
+			this->AddItem(std::move(event));
 		}
 
-		const Event &GetEvent(const int index)
+		const LogEvent &GetEvent(const int index)
 		{
 			return this->GetItem(index);
 		}

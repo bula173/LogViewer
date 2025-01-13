@@ -1,11 +1,6 @@
 message(STATUS "Building LogViewer::thirdparty")
 message (STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
-
-set(wxUSE_METAL OFF CACHE BOOL "Disable METAL build" FORCE)
-set(wxUSE_OPENGL ON CACHE BOOL "Enable OpenGL support" FORCE)
-
-
 find_package(wxWidgets QUIET COMPONENTS core base xml)
 
 if(wxWidgets_FOUND)
@@ -18,17 +13,30 @@ else()
     execute_process(COMMAND git submodule update --init --recursive
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
     # Set wxWidgets to static mode
-    set(wxBUILD_SHARED OFF CACHE BOOL "Build static libraries" FORCE)
-    set(wxBUILD_PRECOMP OFF CACHE BOOL "Disable precompiled headers" FORCE)
-    set(wxBUILD_MONOLITHIC OFF CACHE BOOL "Disable monolithic build" FORCE)
-    set(wxBUILD_FEATURES "core;xml;base" CACHE STRING "Build only base, core, and xml libraries" FORCE)
-    set(wxUSE_XRC OFF CACHE BOOL "Disable XRC" FORCE)
-    set(wxUSE_AUI OFF CACHE BOOL "Disable AUI" FORCE)
-    set(wxUSE_SYS_LIBS OFF CACHE BOOL "Don't use system libraries" FORCE)
-    set(wxUSE_WEBVIEW OFF CACHE BOOL "Disable webview" FORCE)
-    
+    set(wxUSE_SHARED OFF CACHE BOOL "Build static libraries" FORCE)
+
+    # Disable unnecessary libraries
+    set(wxUSE_WEBVIEW "no" CACHE STRING "Disable wxWebView library" FORCE)
+    set(wxUSE_QA "no" CACHE STRING "Disable wxWebView library" FORCE)
+    set(wxUSE_AUI "no" CACHE STRING "Disable wxWebView library" FORCE)
+    set(wxUSE_NET "no" CACHE STRING "Disable wxWebView library" FORCE)
+    set(wxUSE_MEDIA "no" CACHE STRING "Disable wxMedia library" FORCE)
+
+    # Enable required libraries
+    set(wxUSE_BASE "yes" CACHE STRING "Enable wxBase library" FORCE)
+    set(wxUSE_CORE "yes" CACHE STRING "Enable wxCore library" FORCE)
+    #without xrc a xml is not enabled
+    set(wxUSE_XRC "yes" CACHE STRING "Disable wxXRC library" FORCE)
+
+    # Disable system libraries and liblzma
+    set(wxUSE_USE_LIBLZMA "no" CACHE STRING "Disable liblzma usage" FORCE)
+    set(wxUSE_USE_SYSTEM_LIBRARIES "no" CACHE STRING "Disable usage of system libraries" FORCE)
+
     if(APPLE)
-        set(wxCONFIGURE_OPTIONS "--disable-optimise --disable-sys-libs --without-liblzma" CACHE STRING "wxCONFIGURE_OPTIONS" FORCE)
+        # macOS-specific options
+        set(wxUSE_OSX_COCOA "yes" CACHE STRING "Use Cocoa on macOS" FORCE)
+        set(wxUSE_USE_PRECOMP_HEADERS "no" CACHE STRING "Disable precompiled headers" FORCE)
+        set(wxUSE_WITHOUT_SUBDIRS "yes" CACHE STRING "Place all libraries in the same directory" FORCE)
     endif()
     
     add_subdirectory(wxwidgets)
@@ -41,7 +49,7 @@ else()
     COMMENT "Building wxWidgets locally"
     )
 
-    add_dependencies(BuildWxWidgets wxcore wxbase)
+    add_dependencies(BuildWxWidgets wxcore wxbase wxxrc)
 
     #Display all CMake variables
     #include(${CMAKE_SOURCE_DIR}/displayVars.cmake)

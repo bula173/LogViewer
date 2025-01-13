@@ -4,10 +4,13 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/build-debug/_deps/googletest-src/googlemock/include",
-                "${workspaceFolder}/build-debug/_deps/glog-src/src",
                 "${workspaceFolder}",
                 "${workspaceFolder}/build-debug/_deps/googletest-src/googletest/include",
-                "${workspaceFolder}/src/application"
+                "${workspaceFolder}/src/application",
+                "${workspaceFolder}/thirdparty/wxwidgets/include",
+                "${workspaceFolder}/build/_deps/googletest-src/googletest/include",
+                "${workspaceFolder}/build/_deps/googletest-src/googlemock/include",
+                "${workspaceFolder}/thirdparty/wxwidgets/include/msvc"
             ],
             "defines": [
                 "__WXOSX_COCOA__",
@@ -17,7 +20,7 @@
             "macFrameworkPath": [],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
-            "cppStandard": "c++20",
+            "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64"
         },
         {

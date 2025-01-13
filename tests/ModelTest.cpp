@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "src/application/mvc/model.hpp"
-#include "src/application/mvc/view.hpp"
+#include "src/application/mvc/Model.hpp"
+#include "src/application/mvc/View.hpp"
 
 class MockView : public mvc::View
 {
@@ -45,4 +45,11 @@ TEST_F(ModelTest, GetCurrentItemIndexTest)
 {
   model.SetCurrentItem(0);
   EXPECT_EQ(model.GetCurrentItemIndex(), 0);
+}
+
+TEST_F(ModelTest, ClearTest)
+{
+  model.AddItem(42);
+  model.Clear();
+  EXPECT_EQ(model.Size(), 0);
 }

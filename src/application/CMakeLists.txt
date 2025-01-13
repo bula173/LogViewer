@@ -1,10 +1,12 @@
 message(STATUS "Building LogViewer::application")
 message (STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
+# Enable exporting compile commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 file(GLOB_RECURSE APP_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 add_library(application STATIC ${APP_SRCS})
-
 
 if(WX_LOCAL_BUILD)
     message(STATUS "wxWidgets Not Found in system!")
@@ -39,6 +41,9 @@ if(WX_LOCAL_BUILD)
         string(REGEX REPLACE "-L([^;]+)" "\\1"
         wxWidgets_LIBRARY_DIRS "${wxWidgets_LIBRARY_DIRS}")
     endif()
+
+
+    message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
 
     execute_process(
         COMMAND ${WX_CONFIG_EXECUTABLE} --cxxflags
@@ -80,6 +85,21 @@ else()
     target_compile_definitions(application PUBLIC ${wxWidgets_DEFINITIONS})
 
 endif()
+
+find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+if(CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+
+else()
+    message(STATUS "clang-tidy not found.")
+endif()
+
+add_custom_target(clang-tidy
+    COMMAND ${CLANG_TIDY_EXE} -p ${CMAKE_BINARY_DIR} ${APP_SRCS}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running clang-tidy"
+)
 
 target_link_libraries(application INTERFACE ${wxWidgets_LIBRARIES})
 target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS})

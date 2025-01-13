@@ -4,10 +4,11 @@
 #include <wx/wx.h>
 #include <wx/splitter.h>
 
-#include "gui/events_virtual_list_control.hpp"
-#include "gui/item_list_view.hpp"
-#include "db/events_container.hpp"
-
+#include "gui/EventsVirtualListControl.hpp"
+#include "gui/ItemVirtualListControl.hpp"
+#include "db/EventsContainer.hpp"
+#include "parser/IDataParser.hpp"
+#include "xml/XmlParser.hpp"
 #include <atomic>
 
 namespace gui
@@ -20,10 +21,14 @@ namespace gui
 
 	};
 
-	class MainWindow : public wxFrame
+	class MainWindow : public wxFrame, public parser::IDataParserObserver
 	{
 	public:
 		MainWindow(const wxString &title, const wxPoint &pos, const wxSize &size);
+
+	public: // IDataParserObserver
+		void ProgressUpdated() override;
+		void NewEventFound(db::LogEvent &&event) override;
 
 	private:
 		void OnHello(wxCommandEvent &event);
@@ -31,11 +36,10 @@ namespace gui
 		void OnClose(wxCloseEvent &event);
 		void OnAbout(wxCommandEvent &event);
 		void OnSize(wxSizeEvent &event);
+		void OnOpen(wxCommandEvent &event);
 		void OnHideSearchResult(wxCommandEvent &event);
 		void OnHideLeftPanel(wxCommandEvent &event);
 		void OnHideRightPanel(wxCommandEvent &event);
-
-		wxDECLARE_EVENT_TABLE();
 
 		void setupMenu();
 		void setupLayout();
@@ -56,6 +60,7 @@ namespace gui
 
 		std::atomic<bool> m_closerequest{false};
 		bool m_processing{false};
+		std::shared_ptr<parser::IDataParser> m_parser{nullptr};
 	};
 
 } // namespace gui
