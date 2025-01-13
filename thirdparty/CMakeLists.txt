@@ -1,9 +1,7 @@
 message(STATUS "Building LogViewer::thirdparty")
 message (STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
-# Ensure git submodules are checked out
-execute_process(COMMAND git submodule update --init --recursive
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(wxUSE_METAL OFF CACHE BOOL "Disable METAL build" FORCE)
 set(wxUSE_OPENGL ON CACHE BOOL "Enable OpenGL support" FORCE)
 
@@ -12,9 +10,13 @@ find_package(wxWidgets QUIET COMPONENTS core base xml)
 
 if(wxWidgets_FOUND)
     message(STATUS "wxWidgets Found in system!")
-    set(WX_LOCAL_BUILD TRUE CACHE BOOL "WxLocal build")
+    set(WX_LOCAL_BUILD FALSE CACHE BOOL "WxLocal build")
 else()
     message(STATUS "wxWidgets not found! Try to build it from source.")
+
+    # Ensure git submodules are checked out
+    execute_process(COMMAND git submodule update --init --recursive
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
     # Set wxWidgets to static mode
     set(wxBUILD_SHARED OFF CACHE BOOL "Build static libraries" FORCE)
     set(wxBUILD_PRECOMP OFF CACHE BOOL "Disable precompiled headers" FORCE)
