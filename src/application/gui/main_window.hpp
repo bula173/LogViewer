@@ -8,6 +8,8 @@
 #include "gui/item_list_view.hpp"
 #include "db/events_container.hpp"
 
+#include <atomic>
+
 namespace gui
 {
 	enum

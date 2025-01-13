@@ -24,7 +24,7 @@ else()
     set(wxUSE_AUI OFF CACHE BOOL "Disable AUI" FORCE)
     set(wxUSE_SYS_LIBS OFF CACHE BOOL "Don't use system libraries" FORCE)
     set(wxUSE_WEBVIEW OFF CACHE BOOL "Disable webview" FORCE)
-    add_subdirectory(wxWidgets)
+    add_subdirectory(wxwidgets)
 
     set(WX_CONFIG_EXECUTABLE "${wxWidgets_BINARY_DIR}/wx-config")
     set(ENV{WX_CONFIG} "${WX_CONFIG_EXECUTABLE}")
