@@ -14,7 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Release]
-        c_compiler: [gcc, clang]
         cpp_compiler: [g++, clang++]
 
     steps:
@@ -29,13 +28,12 @@ jobs:
     - name: Install dependencies on Ubuntu
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev g++ clang
+        sudo apt-get install -y libgtk-3-dev libwxgtk3.0-gtk3-dev g++ clang
 
     - name: Configure CMake
       run: |
         cmake -B ${{ steps.strings.outputs.build-output-dir }} \
               -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
-              -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
               -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
               -S ${{ github.workspace }}
 
