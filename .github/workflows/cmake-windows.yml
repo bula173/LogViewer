@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       fail-fast: false
-      
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
         with:
           msystem: mingw64
           update: true
-          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-wxwidgets3.2-msw
 
       - name: Configuring
         run: |
@@ -40,12 +40,7 @@ jobs:
           cmake -G "MinGW Makefiles" \
                 -DCMAKE_C_COMPILER=clang.exe \
                 -DCMAKE_CXX_COMPILER=clang++.exe \
-                -DCMAKE_CXX_FLAGS=-Werror \
                 -DCMAKE_BUILD_TYPE=Release \
-                -DwxBUILD_SAMPLES=ALL \
-                -DwxBUILD_TESTS=ALL \
-                -DwxBUILD_DEMOS=ON \
-                -DwxUSE_WEBVIEW_EDGE=ON \
                 ..
 
       - name: Building
