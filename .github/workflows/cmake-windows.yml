@@ -51,4 +51,4 @@ jobs:
       - name: Test
         shell: cmd
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
-        run: ctest --build-config
+        run: ctest --build-config Release
