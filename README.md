@@ -31,4 +31,21 @@ cmake --build build-debug -j
 
 This will create a directory named either `build-debug` or `build-rel` and create all build artifacts there. The main executable can be found in the `dist` folder.
 
+## MSYS config flags
+pacman -S mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
 
+clang --version
+          cmake --version
+          mkdir build_cmake
+          pushd build_cmake
+          cmake -G "MinGW Makefiles" \
+                -DCMAKE_C_COMPILER=clang.exe \
+                -DCMAKE_CXX_COMPILER=clang++.exe \
+                -DCMAKE_CXX_FLAGS=-Werror \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DwxBUILD_SAMPLES=ALL \
+                -DwxBUILD_TESTS=ALL \
+                -DwxBUILD_DEMOS=ON \
+                -DwxUSE_WEBVIEW_EDGE=ON \
+                ..
+cmake --build . -- -j4

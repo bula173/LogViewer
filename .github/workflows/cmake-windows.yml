@@ -11,40 +11,49 @@ jobs:
   build:
     runs-on: windows-latest
 
+    defaults:
+      run:
+        shell: msys2 {0}
+
     strategy:
       fail-fast: false
-      matrix:
-        build_type: [Release]
-        c_compiler: [cl]
-        cpp_compiler: [cl]
-
+      
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
 
-    - name: Set reusable strings
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
 
-    - name: Install dependencies on Windows
-      run: |
-        choco install wxwidgets
+      - name: Configuring
+        run: |
+          clang --version
+          cmake --version
+          mkdir build_cmake
+          pushd build_cmake
+          cmake -G "MinGW Makefiles" \
+                -DCMAKE_C_COMPILER=clang.exe \
+                -DCMAKE_CXX_COMPILER=clang++.exe \
+                -DCMAKE_CXX_FLAGS=-Werror \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DwxBUILD_SAMPLES=ALL \
+                -DwxBUILD_TESTS=ALL \
+                -DwxBUILD_DEMOS=ON \
+                -DwxUSE_WEBVIEW_EDGE=ON \
+                ..
 
-    - name: Configure CMake
-      shell: cmd
-      run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} ^
-              -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ^
-              -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} ^
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} ^
-              -S ${{ github.workspace }}
+      - name: Building
+        working-directory: build_cmake
+        run: |
+          cmake --build . -- -j
 
-    - name: Build
-      shell: cmd
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
-
-    - name: Test
-      shell: cmd
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }}
+      - name: Test
+        shell: cmd
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
+        run: ctest --build-config
