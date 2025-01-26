@@ -10,6 +10,7 @@
 #include "parser/IDataParser.hpp"
 #include "xml/XmlParser.hpp"
 #include <atomic>
+#include <memory>
 
 namespace gui
 {
