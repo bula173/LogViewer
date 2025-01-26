@@ -276,7 +276,7 @@ namespace gui
 
   void MainWindow::NewEventFound(db::LogEvent &&event)
   {
-    // m_events.AddEvent(*m_parser->GetLastEvent());
+    m_events.AddEvent(std::move(event));
   }
 
 } // namespace gui
