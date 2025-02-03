@@ -52,3 +52,9 @@ jobs:
         shell: cmd
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: ctest --build-config Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: build/output.txt
