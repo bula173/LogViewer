@@ -5,26 +5,31 @@
 #include <ranges>
 
 #include "db/LogEvent.hpp"
-#include "mvc/Model.hpp"
+#include "mvc/IModel.hpp"
 
 namespace db
 {
 
-	class EventsContainer : public mvc::Model<std::vector<LogEvent>>
+	class EventsContainer : public mvc::IModel
 	{
 
 	public:
-		EventsContainer() {}
+		EventsContainer();
+		virtual ~EventsContainer();
+		void AddEvent(LogEvent &&event);
+		const LogEvent &GetEvent(const int index);
 
-		void AddEvent(LogEvent &&event)
-		{
-			this->AddItem(std::move(event));
-		}
+	public: // IModel
+		int GetCurrentItemIndex() override;
+		void SetCurrentItem(const int item) override;
+		void AddItem(LogEvent &&item) override;
+		LogEvent &GetItem(const int index) override;
+		void Clear() override;
+		size_t Size() override;
 
-		const LogEvent &GetEvent(const int index)
-		{
-			return this->GetItem(index);
-		}
+	protected:
+		std::vector<LogEvent> m_data;
+		int m_currentItem;
 	};
 
 } // namespace db

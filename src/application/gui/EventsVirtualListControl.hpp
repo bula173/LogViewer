@@ -4,12 +4,12 @@
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 
-#include "mvc/View.hpp"
+#include "mvc/IView.hpp"
 #include "db/EventsContainer.hpp"
 
 namespace gui
 {
-	class EventsVirtualListControl : public wxListCtrl, public mvc::View
+	class EventsVirtualListControl : public wxListCtrl, public mvc::IView
 	{
 	public:
 		EventsVirtualListControl(db::EventsContainer &events, wxWindow *parent, const wxWindowID id = wxID_ANY,
@@ -18,7 +18,7 @@ namespace gui
 		virtual wxString OnGetItemText(long index, long column) const wxOVERRIDE;
 		void RefreshAfterUpdate();
 
-		// implement View interface
+		// implement IView interface
 		virtual void OnDataUpdated() override;
 		virtual void OnCurrentIndexUpdated(const int index) override;
 

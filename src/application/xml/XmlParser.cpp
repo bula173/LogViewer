@@ -61,7 +61,6 @@ namespace parser
         // Process each <event> element
         // For example, you can extract attributes or child elements here
         wxString eventContent = child->GetNodeContent();
-        std::cout << "Event: " << eventContent.ToStdString() << std::endl;
         wxXmlNode *item = child->GetChildren();
         db::LogEvent::EventItems eventItems;
         while (item)

@@ -234,11 +234,6 @@ namespace gui
       wxLogMessage("File dialog canceled.");
       return;
     }
-    else
-    {
-      wxString path = openFileDialog.GetPath();
-      wxLogMessage("Selected file: %s", path);
-    }
 
     // Proceed loading the file chosen by the user
     std::string filePath = openFileDialog.GetPath().ToStdString();
@@ -275,6 +270,7 @@ namespace gui
   }
 
   void MainWindow::NewEventFound(db::LogEvent &&event)
+
   {
     m_events.AddEvent(std::move(event));
   }

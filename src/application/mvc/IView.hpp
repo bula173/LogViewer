@@ -3,11 +3,11 @@
 
 namespace mvc
 {
-	class View
+	class IView
 	{
 	public:
-		View() {}
-		virtual ~View() {}
+		IView() {}
+		virtual ~IView() {}
 		virtual void OnDataUpdated() = 0;
 		virtual void OnCurrentIndexUpdated(const int index) = 0;
 	};

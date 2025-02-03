@@ -27,7 +27,7 @@ namespace gui
     auto s = m_events.Size();
 
     this->SetItemCount(s);
-    this->RefreshItem(s - 1);
+    this->RefreshItem(s - 1); //-1 because we have to refresh the last item
     this->Update();
   }
 
