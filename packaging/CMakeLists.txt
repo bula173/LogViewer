@@ -1,4 +1,3 @@
-
 #------------------------------------------------------------------------------
 # CPACK
 
@@ -150,8 +149,9 @@ if(MINGW)
 
     include(InstallRequiredSystemLibraries)
     install(FILES
-        ${WXWIN}/lib/gcc_dll/wxbase32u_gcc_custom.dll
-        ${WXWIN}/lib/gcc_dll/wxmsw32u_core_gcc_custom.dll
+        ${WXWIN}/bin/libwx_baseu-3.2.dll
+        ${WXWIN}/bin/libwx_mswu_core-3.2.dll
+        ${WXWIN}/bin/libwx_baseu_xml-3.2.dll
         DESTINATION bin
     )
 endif()
