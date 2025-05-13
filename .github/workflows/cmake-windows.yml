@@ -54,10 +54,6 @@ jobs:
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: ctest --build-config Release
 
-      - name: Debug wxWidgets DLLs
-        run: |
-          ls /mingw64/lib/gcc_dll
-
       - name: Cpack
         working-directory: build_cmake
         run: |
