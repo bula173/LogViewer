@@ -3,10 +3,17 @@ message(STATUS "Building LogViewer::main")
 message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 # Adds convenience methods, see cmake/cleanCppExtensions.cmake
-include(cleanCppExtensions)
 
-# Creates options to turn on sanitizers, see cmake/sanitizers.cmake
-include(sanitizers)
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
+    include(cleanCppExtensions)
+else()
+    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")  
+endif()
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/sanitizers.cmake")
+    include(sanitizers)
+else()
+    message(WARNING "sanitizers.cmake not found, sanitizers not available")
+endif()
 
 # configure version.cpp.in with selected version
 configure_file (
@@ -51,7 +58,13 @@ install(TARGETS ${PROJECT_NAME}
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
 # Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
-addRunAndDebugTargets(${PROJECT_NAME})
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
+    message(STATUS "Using cleanCppExtensions.cmake")
+    include(cleanCppExtensions)
+else()
+    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")
+endif()
+# Add run and debug targets
 
 
 # Link wxWidgets
