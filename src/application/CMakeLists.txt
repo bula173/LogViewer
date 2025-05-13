@@ -83,6 +83,8 @@ else()
     set(wxWidgets_USE_STATIC_LIBS ON)
     include(${wxWidgets_USE_FILE})
     target_compile_definitions(application PUBLIC ${wxWidgets_DEFINITIONS})
+    # Make wxWidgets variables global
+    #set(wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}" CACHE STRING "wxWidgets libraries" FORCE)
 
 endif()
 

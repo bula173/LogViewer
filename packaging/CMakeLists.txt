@@ -142,20 +142,6 @@ else()
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png")
 endif()
 
-
-if(MINGW)
-    message(STATUS "MinGW detected")
-    get_filename_component(GCC_PATH ${CMAKE_C_COMPILER} PATH)
-
-    include(InstallRequiredSystemLibraries)
-    install(FILES
-        ${WXWIN}/bin/libwx_baseu-3.2.dll
-        ${WXWIN}/bin/libwx_mswu_core-3.2.dll
-        ${WXWIN}/bin/libwx_baseu_xml-3.2.dll
-        DESTINATION bin
-    )
-endif()
-
 #------------------------------------------------------------------------------
 # and include CPack, so we get target for packages
 include(CPack)
