@@ -148,13 +148,10 @@ if(MINGW)
     message(STATUS "MinGW detected")
     get_filename_component(GCC_PATH ${CMAKE_C_COMPILER} PATH)
 
+    include(InstallRequiredSystemLibraries)
     install(FILES
-        ${GCC_PATH}/libstdc++-6.dll
-        ${GCC_PATH}/libwinpthread-1.dll
-        ${GCC_PATH}/libgcc_s_seh-1.dll
-        # Add wx DLLs below
-        ${WXWIN}/lib/gcc_dll/wxmsw31u_core_gcc_custom.dll
-        ${WXWIN}/lib/gcc_dll/wxbase31u_gcc_custom.dll
+        ${WXWIN}/lib/gcc_dll/wxbase32u_gcc_custom.dll
+        ${WXWIN}/lib/gcc_dll/wxmsw32u_core_gcc_custom.dll
         DESTINATION bin
     )
 endif()
