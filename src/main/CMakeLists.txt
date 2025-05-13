@@ -105,6 +105,10 @@ if(MINGW)
     set(_lib_paths "")
     set(_lib_names "")
 
+    message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
+    message(STATUS "_lib_paths: ${_lib_paths}")
+    message(STATUS "_lib_names: ${_lib_names}")
+
     foreach(_item ${wxWidgets_LIBRARIES})
         if(_item MATCHES "^-L(.+)")
             # Extract path after -L
