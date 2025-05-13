@@ -1,92 +1,97 @@
-#include "xml/XmlParser.hpp"
-#include <wx/xml/xml.h>
-#include "parser/wxStdInputStreamAdapter.hpp"
+#include "xml/xmlParser.hpp"
 #include "db/LogEvent.hpp"
+#include "parser/wxStdInputStreamAdapter.hpp"
+#include <fstream> // Include this header for std::ifstream
+#include <iostream>
 #include <memory>
 #include <sstream>
-#include <iostream>
-#include <fstream> // Include this header for std::ifstream
+#include <wx/xml/xml.h>
 
 namespace parser
 {
 
-  XmlParser::XmlParser() : IDataParser(), m_currentProgress(0), m_totalProgress(0)
-  {
-  }
+XmlParser::XmlParser()
+    : IDataParser()
+    , m_currentProgress(0)
+    , m_totalProgress(0)
+{
+}
 
-  void XmlParser::ParseData(const std::string &filepath)
-  {
+void XmlParser::ParseData(const std::string& filepath)
+{
     // Open the file
     std::ifstream input(filepath);
 
     if (!input.is_open())
     {
-      std::cerr << "Failed to open file: " << filepath << std::endl;
-      return;
+        std::cerr << "Failed to open file: " << filepath << std::endl;
+        return;
     }
 
     // Parse the data
     ParseData(input);
 
     input.close();
-  }
-  void XmlParser::ParseData(std::istream &input)
-  {
-
-    // Wrap std::istream in a wxStreamInputStream
+}
+void XmlParser::ParseData(std::istream& input)
+{
     wxStdInputStreamAdapter wxStream(input);
-    // Create a wxXmlDocument object
     wxXmlDocument xmlDoc;
     if (!xmlDoc.Load(wxStream))
     {
-      std::cerr << "Failed to load XML data." << std::endl;
-      return;
+        std::cerr << "Failed to load XML data." << std::endl;
+        return;
     }
 
-    // Get the root element
-    wxXmlNode *root = xmlDoc.GetRoot();
+    wxXmlNode* root = xmlDoc.GetRoot();
     if (root->GetName() != "events")
     {
-      std::cerr << "Invalid root element. Expected <events>." << std::endl;
-      return;
+        std::cerr << "Invalid root element. Expected <events>." << std::endl;
+        return;
     }
 
-    // Iterate through the child nodes
-    wxXmlNode *child = root->GetChildren();
+    // Count total events first
+    size_t totalEvents = 0;
+    for (wxXmlNode* node = root->GetChildren(); node; node = node->GetNext())
+        if (node->GetName() == "event")
+            ++totalEvents;
+
+    // Now, parse and update progress
+    wxXmlNode* child = root->GetChildren();
     int id = 0;
+    size_t processed = 0;
     while (child)
     {
-      if (child->GetName() == "event")
-      {
-        // Process each <event> element
-        // For example, you can extract attributes or child elements here
-        wxString eventContent = child->GetNodeContent();
-        wxXmlNode *item = child->GetChildren();
-        db::LogEvent::EventItems eventItems;
-        while (item)
+        if (child->GetName() == "event")
         {
-          eventItems.push_back({item->GetName().ToStdString(), item->GetNodeContent().ToStdString()});
-          item = item->GetNext();
+            wxXmlNode* item = child->GetChildren();
+            db::LogEvent::EventItems eventItems;
+            while (item)
+            {
+                eventItems.push_back({item->GetName().ToStdString(),
+                    item->GetNodeContent().ToStdString()});
+                item = item->GetNext();
+            }
+            NewEventNotification({id, std::move(eventItems)});
+            // Calculate progress as percentage
+            ++processed;
+            m_currentProgress =
+                (totalEvents > 0) ? (processed * 100) / totalEvents : 100;
+            SendProgress();
         }
-        // Notify observers
-        NewEventNotification({id, std::move(eventItems)});
-        m_currentProgress = GetCurrentProgress();
-        SendProgress();
-      }
-
-      child = child->GetNext();
-      id++;
+        child = child->GetNext();
+        id++;
     }
-  }
+}
 
-  uint32_t XmlParser::GetCurrentProgress() const
-  {
+uint32_t XmlParser::GetCurrentProgress() const
+{
     return m_currentProgress;
-  }
+}
 
-  uint32_t XmlParser::GetTotalProgress() const
-  {
+uint32_t XmlParser::GetTotalProgress() const
+{
     return 100u; // 100% progress
-  }
+}
 
 } // namespace parser

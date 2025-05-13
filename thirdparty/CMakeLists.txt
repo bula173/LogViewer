@@ -1,6 +1,9 @@
 message(STATUS "Building LogViewer::thirdparty")
 message (STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
+# Enable FetchContent or Git submodule builds
+include(FetchContent)
+
 find_package(wxWidgets QUIET COMPONENTS core base xml)
 
 if(wxWidgets_FOUND)

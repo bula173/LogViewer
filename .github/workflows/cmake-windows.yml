@@ -53,8 +53,13 @@ jobs:
         working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: ctest --build-config Release
 
+      - name: Cpack
+        working-directory: build_cmake
+        run: |
+          cpack -G ZIP
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: LogViewer_mvsc
-          path: dist/Release
+          path: dist/packages
