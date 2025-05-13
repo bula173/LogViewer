@@ -1,7 +1,6 @@
 
 #------------------------------------------------------------------------------
 # CPACK
-include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_VENDOR "mkwiatko")
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
@@ -145,7 +144,20 @@ else()
 endif()
 
 
+if(MINGW)
+    message(STATUS "MinGW detected")
+    get_filename_component(GCC_PATH ${CMAKE_C_COMPILER} PATH)
 
+    install(FILES
+        ${GCC_PATH}/libstdc++-6.dll
+        ${GCC_PATH}/libwinpthread-1.dll
+        ${GCC_PATH}/libgcc_s_seh-1.dll
+        # Add wx DLLs below
+        ${WXWIN}/lib/gcc_dll/wxmsw31u_core_gcc_custom.dll
+        ${WXWIN}/lib/gcc_dll/wxbase31u_gcc_custom.dll
+        DESTINATION bin
+    )
+endif()
 
 #------------------------------------------------------------------------------
 # and include CPack, so we get target for packages
