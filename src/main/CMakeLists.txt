@@ -101,4 +101,10 @@ endif(MINGW)
 # Other MISC targets
 
 # Adds misc targets: format, cppcheck, tidy, see cmake/cleanCppExtensions.cmake
-addMiscTargets()
+if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
+    message(STATUS "Using addMiscTargets from cleanCppExtensions.cmake")
+    addMiscTargets()
+else()
+    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")
+endif()
+
