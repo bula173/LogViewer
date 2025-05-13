@@ -50,7 +50,7 @@ jobs:
 
       - name: Test
         shell: cmd
-        working-directory: build_cmake
+        working-directory: ${{ steps.strings.outputs.build-output-dir }}
         run: ctest --build-config Release
 
       - name: Cpack
