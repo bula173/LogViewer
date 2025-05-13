@@ -1,18 +1,23 @@
-
 message(STATUS "Building LogViewer::main")
 message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 # Adds convenience methods, see cmake/cleanCppExtensions.cmake
 
+# Using macro from cmake/cleanCpppExtensions.cpp included on the top
+# Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
 if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
-    include(cleanCppExtensions)
+    message(STATUS "Using cleanCppExtensions.cmake from ${CMAKE_SOURCE_DIR}/cmake")
+    include("${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
 else()
-    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")  
+    message(WARNING "cleanCppExtensions.cmake not found at ${CMAKE_SOURCE_DIR}/cmake, run and debug targets not available")
 endif()
+
+
 if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/sanitizers.cmake")
-    include(sanitizers)
+    message(STATUS "Using sanitizers.cmake from ${CMAKE_SOURCE_DIR}/cmake")
+    include("${CMAKE_SOURCE_DIR}/cmake/sanitizers.cmake")
 else()
-    message(WARNING "sanitizers.cmake not found, sanitizers not available")
+    message(WARNING "sanitizers.cmake not found at ${CMAKE_SOURCE_DIR}/cmake, sanitizers not available")
 endif()
 
 # configure version.cpp.in with selected version
@@ -58,13 +63,7 @@ install(TARGETS ${PROJECT_NAME}
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
 # Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
-if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
-    message(STATUS "Using cleanCppExtensions.cmake")
-    include(cleanCppExtensions)
-else()
-    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")
-endif()
-# Add run and debug targets
+addRunAndDebugTargets(${PROJECT_NAME})
 
 
 # Link wxWidgets
@@ -101,10 +100,4 @@ endif(MINGW)
 # Other MISC targets
 
 # Adds misc targets: format, cppcheck, tidy, see cmake/cleanCppExtensions.cmake
-if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
-    message(STATUS "Using addMiscTargets from cleanCppExtensions.cmake")
-    addMiscTargets()
-else()
-    message(WARNING "cleanCppExtensions.cmake not found, run and debug targets not available")
-endif()
-
+addMiscTargets()
