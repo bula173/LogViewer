@@ -110,7 +110,7 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 
 if(MINGW)
     message(STATUS "MinGW detected")
-
+    
     # Copy MINGW needed libraries for building on windows
     set(_lib_paths "")
     set(_lib_names "")
@@ -136,7 +136,7 @@ if(MINGW)
     foreach(_lib ${_lib_names})
         set(_found_lib "")
         foreach(_path ${_lib_paths})
-            foreach(_ext ".dll")
+            foreach(_ext ".dylib" ".so" ".dll" ".a" )
                 set(_candidate "${_path}/lib${_lib}${_ext}")
                 if(EXISTS "${_candidate}")
                     install(FILES "${_candidate}" DESTINATION bin)
