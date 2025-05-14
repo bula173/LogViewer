@@ -106,7 +106,63 @@ add_custom_target(clang-tidy
 target_link_libraries(application INTERFACE ${wxWidgets_LIBRARIES})
 target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS})
 
+#-------------------------------------------------------------------------------
 
+if(MINGW)
+    message(STATUS "MinGW detected")
+
+     foreach(_wxlib ${wxWidgets_LIBRARIES})
+        if(EXISTS ${_wxlib})
+            install(FILES ${_wxlib} DESTINATION bin)
+            message(STATUS "Copying wxWidgets library: ${_wxlib}")
+        else()
+            message(WARNING "wxWidgets library not found: ${_wxlib}")
+        endif()
+    endforeach()
+
+    # Copy MINGW needed libraries for building on windows
+    set(_lib_paths "")
+    set(_lib_names "")
+
+    message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
+    message(STATUS "wxWidgets_DIRS: ${wxWidgets_DIRS}")
+
+    foreach(_item ${wxWidgets_LIBRARIES})
+        if(_item MATCHES "^-L(.+)")
+            # Extract path after -L
+            string(REGEX REPLACE "^-L" "" _path "${_item}")
+            list(APPEND _lib_paths "${_path}")
+        elseif(_item MATCHES "^-l(.+)")
+            # Extract lib name after -l
+            string(REGEX REPLACE "^-l" "" _lib "${_item}")
+            list(APPEND _lib_names "${_lib}")
+        endif()
+    endforeach()
+
+    message(STATUS "_lib_paths: ${_lib_paths}")
+    message(STATUS "_lib_names: ${_lib_names}")
+
+    foreach(_lib ${_lib_names})
+        set(_found_lib "")
+        foreach(_path ${_lib_paths})
+            foreach(_ext ".dylib" ".so" ".a" ".dll")
+                set(_candidate "${_path}/lib${_lib}${_ext}")
+                if(EXISTS "${_candidate}")
+                    install(FILES "${_candidate}" DESTINATION bin)
+                    message(STATUS "Copying wxWidgets library: ${_candidate}")
+                    set(_found_lib TRUE)
+                    break()
+                endif()
+            endforeach()
+            if(_found_lib)
+                break()
+            endif()
+        endforeach()
+        if(NOT _found_lib)
+            message(WARNING "wxWidgets library not found for: ${_lib}")
+        endif()
+    endforeach()
+endif(MINGW)
 
 
 
