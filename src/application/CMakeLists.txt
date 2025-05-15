@@ -146,6 +146,7 @@ if(MINGW)
         zlib1.dll
         libjpeg-8.dll
         libexpat-1.dll
+        libtiff-6.dll
     )
 
     message(STATUS "Runtime DLLs: ${RUNTIME_DLLS}")
