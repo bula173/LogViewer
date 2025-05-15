@@ -108,25 +108,27 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 
 #-------------------------------------------------------------------------------
 
-function(install_runtime_dlls dll_list)
+function(install_runtime_dlls)
+    set(dll_list ${ARGV})  # ARGV holds all passed arguments
     message(STATUS "Collect DLLs")
     message(STATUS "dll_list raw: ${dll_list}")
+
     foreach(dll IN LISTS dll_list)
-    find_file(dll_path
-        NAMES ${dll}
-        PATHS ENV PATH
-        PATH_SUFFIXES bin
-        NO_DEFAULT_PATH
-    )
-    
-    if(dll_path)
-        install(FILES ${dll_path} DESTINATION bin)
-        message(STATUS "Collected ${dll_path}")
-    else()
-        message(WARNING "Could not find ${dll}")
-    endif()
-        endforeach()
-    endfunction()
+        find_file(dll_path
+            NAMES ${dll}
+            PATHS ENV PATH
+            PATH_SUFFIXES bin
+            NO_DEFAULT_PATH
+        )
+
+        if(dll_path)
+            install(FILES ${dll_path} DESTINATION bin)
+            message(STATUS "Collected ${dll_path}")
+        else()
+            message(WARNING "Could not find ${dll}")
+        endif()
+    endforeach()
+endfunction()
 
 if(MINGW)
     message(STATUS "MinGW detected - collecting runtime DLLs")
