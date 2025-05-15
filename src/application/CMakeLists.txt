@@ -139,19 +139,52 @@ if(MINGW)
     install(FILES ${WX_DLLS} DESTINATION bin)
     message(STATUS "Colllect ${WX_DLLS}")
 
-    set(RUNTIME_DLLS
-        libpng16-16.dll
-        libpcre2-16-0.dll
-        liblzma-5.dll
-        zlib1.dll
-        libjpeg-8.dll
-        libexpat-1.dll
-        libtiff-6.dll
-    )
-
-    message(STATUS "Runtime DLLs: ${RUNTIME_DLLS}")
-
-    install_runtime_dlls(${RUNTIME_DLLS})
+    # CMake script to run `ldd` and collect required DLLs
+    
+    # Set the path to your application (e.g., MyApp.exe)
+    set(EXECUTABLE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.exe")
+    
+    # Check if the executable exists
+    if(EXISTS ${EXECUTABLE_PATH})
+        message(STATUS "Running ldd on ${EXECUTABLE_PATH}")
+    
+        # Run ldd and capture the output in a variable
+        execute_process(
+            COMMAND ldd ${EXECUTABLE_PATH}
+            RESULT_VARIABLE LDD_RESULT
+            OUTPUT_VARIABLE LDD_OUTPUT
+            ERROR_VARIABLE LDD_ERROR
+        )
+    
+        # Check if the ldd command ran successfully
+        if(LDD_RESULT EQUAL 0)
+            message(STATUS "ldd output: ${LDD_OUTPUT}")
+    
+            # Extract DLL paths from the ldd output (Windows-style paths)
+            string(REPLACE " => " ";" LDD_OUTPUT ${LDD_OUTPUT})  # Replace " => " with ";"
+            string(REPLACE "\n" ";" LDD_OUTPUT ${LDD_OUTPUT})  # Replace newlines with ";"
+    
+            # Set the DLLs to install
+            set(DLLS_TO_INSTALL "")
+            foreach(DLL_PATH IN LISTS LDD_OUTPUT)
+                # If the DLL path is not empty and is a valid DLL (ends with .dll)
+                if(DLL_PATH MATCHES ".*\\.dll$")
+                    list(APPEND DLLS_TO_INSTALL ${DLL_PATH})
+                endif()
+            endforeach()
+    
+            # Install the DLLs
+            foreach(DLL IN LISTS DLLS_TO_INSTALL)
+                message(STATUS "Installing DLL: ${DLL}")
+                install(FILES ${DLL} DESTINATION bin)
+            endforeach()
+    
+        else()
+            message(WARNING "ldd failed: ${LDD_ERROR}")
+        endif()
+    else()
+        message(WARNING "Executable not found at ${EXECUTABLE_PATH}")
+    endif()
 endif()
 
 
