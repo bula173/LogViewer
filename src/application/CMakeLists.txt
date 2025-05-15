@@ -142,7 +142,7 @@ if(MINGW)
     set(RUNTIME_DLLS
         libpng16-16.dll
         libpcre2-16-0.dll
-        liblzma-4.dll
+        liblzma-5.dll
         zlib1.dll
         libjpeg-8.dll
         libexpat-1.dll
