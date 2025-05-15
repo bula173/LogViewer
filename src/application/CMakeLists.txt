@@ -113,7 +113,7 @@ function(install_runtime_dlls)
     message(STATUS "Collect DLLs")
     message(STATUS "dll_list raw: ${dll_list}")
 
-    foreach(dll IN LISTS dll_list)
+     foreach(dll IN ITEMS ${ARGV})
         find_file(dll_path
             NAMES ${dll}
             PATHS ENV PATH
