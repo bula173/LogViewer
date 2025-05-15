@@ -14,8 +14,6 @@ if(NOT LDD_RESULT EQUAL 0)
     message(FATAL_ERROR "ldd failed: ${LDD_ERROR}")
 endif()
 
-message(STATUS "Ldd output ${LDD_OUTPUT}")
-
 # Parse output and copy each DLL
 string(REPLACE "\n" ";" LINES "${LDD_OUTPUT}")
 set(DLL_LIST "")  # Initialize an empty list
@@ -27,7 +25,6 @@ foreach(LINE IN LISTS LINES)
         string(REGEX REPLACE "(.*)=>[ ]*[^ ]*mingw64[^ ]*\\.dll.*" "\\1" DLL "${LINE}")
         list(APPEND DLL_LIST "${DLL}")
         message(STATUS "Found DLL: ${DLL}")
-
     endif()
 endforeach()
 

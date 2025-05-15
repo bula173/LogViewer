@@ -57,9 +57,7 @@ else()
     add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${PROJECT_SOURCE_DIR}/packaging/main.exe.manifest)
     # Path where DLLs should be copied (e.g., next to the .exe)
     if(MINGW)
-        set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")
-        set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DLL_OUTPUT_DIR})
-        
+        set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")        
         add_custom_target(copy_runtime_dlls ALL
             COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${PROJECT_NAME}>" -DARGV1=${DLL_OUTPUT_DIR} -DARGV2=${CMAKE_C_COMPILER}
                     -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
@@ -90,13 +88,11 @@ add_dependencies(${PROJECT_NAME} application)
 
 if(MINGW)
     message(STATUS "MinGW detected")
-    
-    file(GLOB LIB_FILES "${PROJECT_SOURCE_DIR}/dist/lib/*")
 
-    # Install them to the bin/ directory
-    install(FILES ${LIB_FILES}
-        DESTINATION bin
-    )
+    install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/lib/"
+    DESTINATION bin
+    FILES_MATCHING PATTERN "*.dll"
+)
 endif(MINGW)
 
 
