@@ -108,22 +108,31 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 
 #-------------------------------------------------------------------------------
 
-if(MINGW)
-    message(STATUS "MinGW detected - application")
-# Install required DLLs explicitly from MSYS2's mingw64/bin
-# You can add more as needed
-set(MSYS_DLL_DIR "/msys64/mingw64/bin")
-# Collect all wxWidgets DLLs
-file(GLOB WX_DLLS "${MSYS_DLL_DIR}/wx*.dll")
+function(install_runtime_dlls dll_list)
+    foreach(dll IN LISTS dll_list)
+        find_file(dll_path ${dll} PATHS ENV PATH PATH_SUFFIXES bin)
+        if(dll_path)
+            install(FILES ${dll_path} DESTINATION bin)
+        else()
+            message(WARNING "Could not find ${dll}")
+        endif()
+    endforeach()
+endfunction()
 
-install(FILES
-    ${WX_DLLS}
-    ${MSYS_DLL_DIR}/libpng16-16.dll
-    ${MSYS_DLL_DIR}/zlib1.dll
-    ${MSYS_DLL_DIR}/libjpeg-8.dll
-    ${MSYS_DLL_DIR}/libexpat-1.dll
-    DESTINATION bin)
-endif(MINGW)
+if(MINGW)
+    message(STATUS "MinGW detected - collecting runtime DLLs")
+    file(GLOB WX_DLLS "$ENV{PATH}/wx*.dll")
+    install(FILES ${WX_DLLS} DESTINATION bin)
+
+    set(RUNTIME_DLLS
+        libpng16-16.dll
+        zlib1.dll
+        libjpeg-8.dll
+        libexpat-1.dll
+    )
+
+    install_runtime_dlls("${RUNTIME_DLLS}")
+endif()
 
 
 
