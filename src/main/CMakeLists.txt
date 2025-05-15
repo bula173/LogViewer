@@ -57,14 +57,14 @@ else()
     add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${PROJECT_SOURCE_DIR}/packaging/main.exe.manifest)
     # Path where DLLs should be copied (e.g., next to the .exe)
     if(MINGW)
-        set(DLL_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/bin")
+        set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")
         set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DLL_OUTPUT_DIR})
         
-        # Add post-build command
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -DARGV0=$<TARGET_FILE:MyApp> -DARGV1=${DLL_OUTPUT_DIR}
+        add_custom_target(copy_runtime_dlls ALL
+            COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${PROJECT_NAME}>" -DARGV1=${DLL_OUTPUT_DIR} -DARGV2=${CMAKE_C_COMPILER}
                     -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
             COMMENT "Running ldd and copying runtime DLLs"
+            DEPENDS ${PROJECT_NAME}
         )
     endif()
 endif()
@@ -90,19 +90,12 @@ add_dependencies(${PROJECT_NAME} application)
 
 if(MINGW)
     message(STATUS "MinGW detected")
-    get_filename_component(GCC_PATH ${CMAKE_C_COMPILER} PATH)
-    if(${GCC_PATH} MATCHES "mingw64/bin")
-        set(libgcc "libgcc_s_seh-1.dll") #64bit
-        message(STATUS "  64bit dlls is building")
-    else()
-        set(libgcc "libgcc_s_dw2-1.dll") #32bit
-        message(STATUS "  32bit dlls is building")
-    endif()
+    
+    file(GLOB LIB_FILES "${PROJECT_SOURCE_DIR}/dist/lib/*")
 
-    install(FILES ${GCC_PATH}/${libgcc}
-        ${GCC_PATH}/libwinpthread-1.dll
-        ${GCC_PATH}/libstdc++-6.dll
-        DESTINATION ./bin/
+    # Install them to the bin/ directory
+    install(FILES ${LIB_FILES}
+        DESTINATION bin
     )
 endif(MINGW)
 
