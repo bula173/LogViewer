@@ -282,7 +282,6 @@ void MainWindow::ProgressUpdated()
 {
     int progress = m_parser->GetCurrentProgress();
     m_progressGauge->SetValue(progress);
-    SetStatusText("Loading .. " + progress);
     wxYield();
 
     if (progress >= m_progressGauge->GetRange())
