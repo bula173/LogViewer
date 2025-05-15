@@ -55,6 +55,18 @@ else()
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
     add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${PROJECT_SOURCE_DIR}/packaging/main.exe.manifest)
+    # Path where DLLs should be copied (e.g., next to the .exe)
+    if(MINGW)
+        set(DLL_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/bin")
+        set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DLL_OUTPUT_DIR})
+        
+        # Add post-build command
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -DARGV0=$<TARGET_FILE:MyApp> -DARGV1=${DLL_OUTPUT_DIR}
+                    -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
+            COMMENT "Running ldd and copying runtime DLLs"
+        )
+    endif()
 endif()
 
 install(TARGETS ${PROJECT_NAME}
