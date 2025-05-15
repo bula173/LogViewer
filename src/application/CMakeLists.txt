@@ -109,10 +109,12 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 #-------------------------------------------------------------------------------
 
 function(install_runtime_dlls dll_list)
+    message(STATUS "Collect DLLs")
     foreach(dll IN LISTS dll_list)
         find_file(dll_path ${dll} PATHS ENV PATH PATH_SUFFIXES bin)
         if(dll_path)
             install(FILES ${dll_path} DESTINATION bin)
+            message(STATUS "Colllect ${dll_path}")
         else()
             message(WARNING "Could not find ${dll}")
         endif()
@@ -121,8 +123,11 @@ endfunction()
 
 if(MINGW)
     message(STATUS "MinGW detected - collecting runtime DLLs")
-    file(GLOB WX_DLLS "$ENV{PATH}/wx*.dll")
+    get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
+    message(STATUS "Compiler directory: ${COMPILER_DIR}")
+    file(GLOB WX_DLLS "${COMPILER_DIR}/wx*.dll")
     install(FILES ${WX_DLLS} DESTINATION bin)
+    message(STATUS "Colllect ${WX_DLLS}")
 
     set(RUNTIME_DLLS
         libpng16-16.dll
