@@ -24,12 +24,16 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install NSIS using Chocolatey
+        run: choco install nsis -y
+
+
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
           update: true
-          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-wxwidgets3.2-msw
+          install: mingw-w64-clang-x86_64-cppcheck mingw-w64-x86_64-nsis mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-wxwidgets3.2-msw
 
       - name: Configuring
         run: |
@@ -57,10 +61,10 @@ jobs:
       - name: Cpack
         working-directory: build_cmake
         run: |
-          cpack -G ZIP
+          cpack -G NSIS
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: LogViewer_mvsc
-          path: dist/packages
+          path: dist/packages/.*exe

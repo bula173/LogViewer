@@ -272,9 +272,9 @@ void MainWindow::ParseData(const std::string filePath)
 
     m_processing = true;
 
-    SetStatusText("Data ready");
     m_progressGauge->SetRange(m_parser->GetTotalProgress());
     m_parser->ParseData(filePath);
+    SetStatusText("Data ready");
 }
 
 // Data Observer methods
@@ -282,6 +282,7 @@ void MainWindow::ProgressUpdated()
 {
     int progress = m_parser->GetCurrentProgress();
     m_progressGauge->SetValue(progress);
+    SetStatusText("Loading .. " + progress);
     wxYield();
 
     if (progress >= m_progressGauge->GetRange())

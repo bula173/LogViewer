@@ -109,50 +109,20 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 #-------------------------------------------------------------------------------
 
 if(MINGW)
-    message(STATUS "MinGW detected")
-    
-    # Copy MINGW needed libraries for building on windows
-    set(_lib_paths "")
-    set(_lib_names "")
+    message(STATUS "MinGW detected - application")
+# Install required DLLs explicitly from MSYS2's mingw64/bin
+# You can add more as needed
+set(MSYS_DLL_DIR "/msys64/mingw64/bin")
+# Collect all wxWidgets DLLs
+file(GLOB WX_DLLS "${MSYS_DLL_DIR}/wx*.dll")
 
-    message(STATUS "wxWidgets_LIBRARIES: ${wxWidgets_LIBRARIES}")
-    message(STATUS "wxWidgets_DIRS: ${wxWidgets_DIRS}")
-
-    foreach(_item ${wxWidgets_LIBRARIES})
-        if(_item MATCHES "^-L(.+)")
-            # Extract path after -L
-            string(REGEX REPLACE "^-L" "" _path "${_item}")
-            list(APPEND _lib_paths "${_path}")
-        elseif(_item MATCHES "^-l(.+)")
-            # Extract lib name after -l
-            string(REGEX REPLACE "^-l" "" _lib "${_item}")
-            list(APPEND _lib_names "${_lib}")
-        endif()
-    endforeach()
-
-    message(STATUS "_lib_paths: ${_lib_paths}")
-    message(STATUS "_lib_names: ${_lib_names}")
-
-    foreach(_lib ${_lib_names})
-        set(_found_lib "")
-        foreach(_path ${_lib_paths})
-            foreach(_ext ".dylib" ".so" ".dll" ".a" )
-                set(_candidate "${_path}/lib${_lib}${_ext}")
-                if(EXISTS "${_candidate}")
-                    install(FILES "${_candidate}" DESTINATION bin)
-                    message(STATUS "Copying wxWidgets library: ${_candidate}")
-                    set(_found_lib TRUE)
-                    break()
-                endif()
-            endforeach()
-            if(_found_lib)
-                break()
-            endif()
-        endforeach()
-        if(NOT _found_lib)
-            message(WARNING "wxWidgets library not found for: ${_lib}")
-        endif()
-    endforeach()
+install(FILES
+    ${WX_DLLS}
+    ${MSYS_DLL_DIR}/libpng16-16.dll
+    ${MSYS_DLL_DIR}/zlib1.dll
+    ${MSYS_DLL_DIR}/libjpeg-8.dll
+    ${MSYS_DLL_DIR}/libexpat-1.dll
+    DESTINATION bin)
 endif(MINGW)
 
 
