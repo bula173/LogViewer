@@ -109,11 +109,12 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 #-------------------------------------------------------------------------------
 
 function(install_runtime_dlls)
-    set(dll_list ${ARGV})  # ARGV holds all passed arguments
     message(STATUS "Collect DLLs")
-    message(STATUS "dll_list raw: ${dll_list}")
+    message(STATUS "dll_list raw: ${ARGV}")
 
-     foreach(dll IN ITEMS ${ARGV})
+    foreach(dll IN ITEMS ${ARGV})
+        unset(dll_path CACHE)  # Prevent reuse of old value
+
         find_file(dll_path
             NAMES ${dll}
             PATHS ENV PATH
