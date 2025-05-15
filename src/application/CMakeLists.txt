@@ -111,15 +111,21 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 function(install_runtime_dlls dll_list)
     message(STATUS "Collect DLLs")
     foreach(dll IN LISTS dll_list)
-        find_file(dll_path ${dll} PATHS ENV PATH PATH_SUFFIXES bin)
-        if(dll_path)
-            install(FILES ${dll_path} DESTINATION bin)
-            message(STATUS "Colllect ${dll_path}")
-        else()
-            message(WARNING "Could not find ${dll}")
-        endif()
-    endforeach()
-endfunction()
+    find_file(dll_path
+        NAMES ${dll}
+        PATHS ENV PATH
+        PATH_SUFFIXES bin
+        NO_DEFAULT_PATH
+    )
+    
+    if(dll_path)
+        install(FILES ${dll_path} DESTINATION bin)
+        message(STATUS "Collected ${dll_path}")
+    else()
+        message(WARNING "Could not find ${dll}")
+    endif()
+        endforeach()
+    endfunction()
 
 if(MINGW)
     message(STATUS "MinGW detected - collecting runtime DLLs")
@@ -131,10 +137,14 @@ if(MINGW)
 
     set(RUNTIME_DLLS
         libpng16-16.dll
+        libpcre2-16-0.dll
+        liblzma-4.dll
         zlib1.dll
         libjpeg-8.dll
         libexpat-1.dll
     )
+
+    message(STATUS "Runtime DLLs: ${RUNTIME_DLLS}")
 
     install_runtime_dlls("${RUNTIME_DLLS}")
 endif()
