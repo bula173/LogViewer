@@ -30,7 +30,10 @@ jobs:
           msystem: mingw64
           update: true
           install: mingw-w64-x86_64-nsis mingw-w64-clang-x86_64-cppcheck mingw-w64-x86_64-nsis mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-wxwidgets3.2-msw
-
+          
+      - name: Print NSIS version
+        run: makensis -VERSION
+        
       - name: Configuring
         run: |
           clang --version
