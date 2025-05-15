@@ -110,6 +110,7 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWi
 
 function(install_runtime_dlls dll_list)
     message(STATUS "Collect DLLs")
+    message(STATUS "dll_list raw: ${dll_list}")
     foreach(dll IN LISTS dll_list)
     find_file(dll_path
         NAMES ${dll}
@@ -146,7 +147,7 @@ if(MINGW)
 
     message(STATUS "Runtime DLLs: ${RUNTIME_DLLS}")
 
-    install_runtime_dlls("${RUNTIME_DLLS}")
+    install_runtime_dlls(${RUNTIME_DLLS})
 endif()
 
 
