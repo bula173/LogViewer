@@ -7,8 +7,10 @@
 #include "db/EventsContainer.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 #include "gui/ItemVirtualListControl.hpp"
+#include "main/version.h"
 #include "parser/IDataParser.hpp"
 #include "xml/xmlParser.hpp"
+
 #include <atomic>
 #include <memory>
 
@@ -25,7 +27,8 @@ enum
 class MainWindow : public wxFrame, public parser::IDataParserObserver
 {
   public:
-    MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size,
+        const Version::Version& version);
 
   public: // IDataParserObserver
     void ProgressUpdated() override;
@@ -63,6 +66,8 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     std::atomic<bool> m_closerequest {false};
     bool m_processing {false};
     std::shared_ptr<parser::IDataParser> m_parser {nullptr};
+
+    const Version::Version& m_version;
 };
 
 } // namespace gui

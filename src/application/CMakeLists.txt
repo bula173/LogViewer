@@ -104,7 +104,7 @@ add_custom_target(clang-tidy
 )
 
 target_link_libraries(application INTERFACE ${wxWidgets_LIBRARIES})
-target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS})
+target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS} "${CMAKE_CURRENT_SOURCE_DIR}/../")
 
 #-------------------------------------------------------------------------------
 

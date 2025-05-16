@@ -1,14 +1,16 @@
 #include "gui/MainWindow.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
+
 #include <wx/app.h>
 
 namespace gui
 {
 
-MainWindow::MainWindow(
-    const wxString& title, const wxPoint& pos, const wxSize& size)
+MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
+    const wxSize& size, const Version::Version& version)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
+    , m_version(version)
 {
 
     this->setupMenu();
@@ -34,9 +36,10 @@ void MainWindow::setupMenu()
     wxMenu* menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H");
     menuFile->Append(wxID_OPEN, "&Open...\tCtrl-O", "Open a file");
-
+#ifndef __WXMAC__ // Add "About" manually for non-macOS
     wxMenu* menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
+#endif
 
     wxMenu* menuView = new wxMenu;
     menuView->Append(wxID_VIEW_LIST, "Hide Search Result Panel", "Change view",
@@ -48,7 +51,9 @@ void MainWindow::setupMenu()
 
     wxMenuBar* menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
+#ifndef __WXMAC__ // Add "About" manually for non-macOS
     menuBar->Append(menuHelp, "&Help");
+#endif
     menuBar->Append(menuView, "&View");
     SetMenuBar(menuBar);
 }
@@ -190,8 +195,9 @@ void MainWindow::OnClose(wxCloseEvent& event)
 
 void MainWindow::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox("This is a wxWidgets' Hello world sample", "About Hello World",
-        wxOK | wxICON_INFORMATION);
+    wxMessageBox(
+        "This is simple log viewer which parse logs and display in table view.",
+        "About" + m_version.asLongStr(), wxOK | wxICON_INFORMATION);
 }
 void MainWindow::OnHello(wxCommandEvent& event)
 {

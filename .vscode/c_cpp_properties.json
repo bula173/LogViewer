@@ -10,7 +10,8 @@
                 "${workspaceFolder}/thirdparty/wxwidgets/include",
                 "${workspaceFolder}/build/_deps/googletest-src/googletest/include",
                 "${workspaceFolder}/build/_deps/googletest-src/googlemock/include",
-                "${workspaceFolder}/thirdparty/wxwidgets/include/msvc"
+                "${workspaceFolder}/thirdparty/wxwidgets/include/msvc",
+                "${workspaceFolder}/src"
             ],
             "defines": [
                 "__WXOSX_COCOA__",

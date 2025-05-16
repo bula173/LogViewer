@@ -43,7 +43,7 @@ endif()
 if(APPLE)
 
     # create bundle on apple compiles
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
 
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.LogViewer.LogViewer")
@@ -54,7 +54,7 @@ else()
     # the WIN32 is needed for Windows in order for it to look for WinMain
     # instead of the main function. This is ignored on other systems,
     # so it works on all platforms
-    add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${PROJECT_SOURCE_DIR}/packaging/main.exe.manifest)
+    add_executable(${PROJECT_NAME} WIN32 ${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp ${CMAKE_CURRENT_BINARY_DIR}/version.cpp  ${PROJECT_SOURCE_DIR}/packaging/main.exe.manifest)
     # Path where DLLs should be copied (e.g., next to the .exe)
     if(MINGW)
         set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")        
@@ -81,7 +81,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE application)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_dependencies(${PROJECT_NAME} application)
+add_dependencies(${PROJECT_NAME} versionFileTouchForRebuild application)
 
 
 #-------------------------------------------------------------------------------
