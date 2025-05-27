@@ -62,5 +62,5 @@ endif()
 
 #add_subdirectory(gflags)
 add_subdirectory(gtest)
-
-
+add_subdirectory(nlohmann)
+add_subdirectory(spdlog)

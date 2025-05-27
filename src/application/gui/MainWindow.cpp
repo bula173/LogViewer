@@ -2,6 +2,7 @@
 #include "gui/EventsVirtualListControl.hpp"
 
 
+#include <spdlog/spdlog.h>
 #include <wx/app.h>
 
 namespace gui
@@ -12,12 +13,16 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     : wxFrame(NULL, wxID_ANY, title, pos, size)
     , m_version(version)
 {
-
+    spdlog::info(
+        "MainWindow created with title: {}", std::string(title.mb_str()));
     this->setupMenu();
     this->setupLayout();
 
     this->Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnClose, this);
-    this->Bind(wxEVT_MENU, &MainWindow::OnHello, this, ID_Hello);
+#ifndef NDEBUG
+    this->Bind(wxEVT_MENU, &MainWindow::OnPopulateDummyData, this,
+        ID_PopulateDummyData);
+#endif
     this->Bind(
         wxEVT_MENU, &MainWindow::OnHideSearchResult, this, wxID_VIEW_LIST);
     this->Bind(
@@ -27,20 +32,26 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
     this->Bind(wxEVT_MENU, &MainWindow::OnAbout, this, wxID_ABOUT);
     this->Bind(wxEVT_SIZE, &MainWindow::OnSize, this);
-    this->Bind(wxEVT_MENU, &MainWindow::OnOpen, this, wxID_OPEN);
+    this->Bind(wxEVT_MENU, &MainWindow::OnOpenFile, this, wxID_OPEN);
+    this->Bind(wxEVT_MENU, &MainWindow::OnClearParser, this, ID_ParserClear);
 }
 
 void MainWindow::setupMenu()
 {
 
+    // Create the menu bar
+    // File menu
     wxMenu* menuFile = new wxMenu;
-    menuFile->Append(ID_Hello, "&Populate dummy data.\tCtrl-H");
+#ifndef NDEBUG
+    menuFile->Append(ID_PopulateDummyData, "&Populate dummy data.\tCtrl-D",
+        "Populate dummy data");
+#endif
     menuFile->Append(wxID_OPEN, "&Open...\tCtrl-O", "Open a file");
 #ifndef __WXMAC__ // Add "About" manually for non-macOS
     wxMenu* menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
 #endif
-
+    // View menu
     wxMenu* menuView = new wxMenu;
     menuView->Append(wxID_VIEW_LIST, "Hide Search Result Panel", "Change view",
         wxITEM_CHECK);
@@ -49,11 +60,18 @@ void MainWindow::setupMenu()
     menuView->Append(
         ID_ViewRightPanel, "Hide Right Panel", "Change view", wxITEM_CHECK);
 
+    // Parser menu
+    wxMenu* menuParser = new wxMenu;
+    menuParser->Append(ID_ParserClear, "Clear", "Parser");
+
+
+    // Main menu bar
     wxMenuBar* menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
 #ifndef __WXMAC__ // Add "About" manually for non-macOS
     menuBar->Append(menuHelp, "&Help");
 #endif
+    menuBar->Append(menuParser, "&Parser");
     menuBar->Append(menuView, "&View");
     SetMenuBar(menuBar);
 }
@@ -71,6 +89,7 @@ void MainWindow::OnSize(wxSizeEvent& event)
 }
 void MainWindow::setupLayout()
 {
+    spdlog::info("Setting up layout...");
     /*
     ________________________________________
     |              ToolBar                 |
@@ -118,31 +137,35 @@ void MainWindow::setupLayout()
 
     CreateToolBar();
     setupStatusBar();
+    spdlog::info("Layout setup complete.");
 }
 
 void MainWindow::setupStatusBar()
 {
+    spdlog::info("Setting up status bar...");
 
     CreateStatusBar(2); // 1 - Message, 2-Progressbar
 
     wxRect rect;
     GetStatusBar()->GetFieldRect(1, rect);
 
-    m_progressGauge = new wxGauge(GetStatusBar(), wxID_ANY, m_eventsNum,
+    m_progressGauge = new wxGauge(GetStatusBar(), wxID_ANY, 1,
         rect.GetPosition(), rect.GetSize(), wxGA_SMOOTH);
     m_progressGauge->SetValue(0);
-}
 
-void MainWindow::populateData()
+    spdlog::info("Status bar setup complete.");
+}
+#ifndef NDEBUG
+void MainWindow::OnPopulateDummyData(wxCommandEvent& event)
 {
+    spdlog::info("Populating dummy data...");
 
     m_events.Clear();
-
     SetStatusText("Loading ..");
     m_progressGauge->SetValue(0);
 
     m_processing = true;
-    for (long i = 0; i < m_eventsNum; ++i)
+    for (long i = 0; i < 1000; ++i)
     {
         if (i % 10)
         {
@@ -173,39 +196,54 @@ void MainWindow::populateData()
 
     SetStatusText("Data ready");
     m_processing = false;
+
+    spdlog::info("Dummy data population complete.");
 }
+#endif
+
+
 void MainWindow::OnExit(wxCommandEvent& event)
 {
+    spdlog::info("Exit requested.");
     Close(true);
 }
 
 void MainWindow::OnClose(wxCloseEvent& event)
 {
-
+    spdlog::info("Window close event triggered.");
     if (m_processing)
     {
+        spdlog::warn("Close requested while processing. Vetoing close.");
         event.Veto();
         m_closerequest = true;
     }
     else
     {
+        spdlog::info("Destroying window.");
         this->Destroy();
     }
 }
 
 void MainWindow::OnAbout(wxCommandEvent& event)
 {
+    spdlog::info("About dialog opened.");
     wxMessageBox(
         "This is simple log viewer which parse logs and display in table view.",
         "About" + m_version.asLongStr(), wxOK | wxICON_INFORMATION);
 }
-void MainWindow::OnHello(wxCommandEvent& event)
+
+void MainWindow::OnClearParser(wxCommandEvent& event)
 {
-    populateData();
+    spdlog::info("Parser clear triggered.");
+    m_events.Clear();
+    m_progressGauge->SetValue(0);
+    SetStatusText("Data cleared");
 }
 
 void MainWindow::OnHideSearchResult(wxCommandEvent& event)
 {
+    spdlog::info("Toggling Search Result Panel: {}",
+        event.IsChecked() ? "Hide" : "Show");
     if (event.IsChecked())
     {
         m_searchResultPanel->Hide();
@@ -222,6 +260,8 @@ void MainWindow::OnHideSearchResult(wxCommandEvent& event)
 
 void MainWindow::OnHideLeftPanel(wxCommandEvent& event)
 {
+    spdlog::info(
+        "Toggling Left Panel: {}", event.IsChecked() ? "Hide" : "Show");
     if (event.IsChecked())
     {
         m_leftPanel->Hide();
@@ -237,6 +277,8 @@ void MainWindow::OnHideLeftPanel(wxCommandEvent& event)
 
 void MainWindow::OnHideRightPanel(wxCommandEvent& event)
 {
+    spdlog::info(
+        "Toggling Right Panel: {}", event.IsChecked() ? "Hide" : "Show");
     if (event.IsChecked())
     {
         m_itemView->Hide();
@@ -250,22 +292,31 @@ void MainWindow::OnHideRightPanel(wxCommandEvent& event)
     this->Layout();
 }
 
-void MainWindow::OnOpen(wxCommandEvent& event)
+void MainWindow::OnOpenFile(wxCommandEvent& event)
 {
+    spdlog::info("Open file dialog triggered.");
     wxFileDialog openFileDialog(this, _("Open XML file"), "", "",
         "XML files (*.xml)|*.xml|All files (*.*)|*.*",
         wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
-    if (openFileDialog.ShowModal() == wxID_OK)
+    auto result = openFileDialog.ShowModal();
+
+    if (result == wxID_OK)
     {
-        // Proceed loading the file chosen by the user
         std::string filePath = openFileDialog.GetPath().ToStdString();
+        spdlog::info("File selected: {}", filePath);
         CallAfter([this, filePath]() { ParseData(filePath); });
+    }
+    else
+    {
+        spdlog::info("Open file dialog canceled. Reason: {}", result);
     }
 }
 
 void MainWindow::ParseData(const std::string filePath)
 {
+    spdlog::info("Parsing data from file: {}", filePath);
+
     // Add your file processing code here
     // For example, you can call your XML parser to parse the selected file
     m_events.Clear();
@@ -281,12 +332,15 @@ void MainWindow::ParseData(const std::string filePath)
     m_progressGauge->SetRange(m_parser->GetTotalProgress());
     m_parser->ParseData(filePath);
     SetStatusText("Data ready");
+
+    spdlog::info("Parsing complete.");
 }
 
 // Data Observer methods
 void MainWindow::ProgressUpdated()
 {
     int progress = m_parser->GetCurrentProgress();
+    spdlog::debug("Progress updated: {}", progress);
     m_progressGauge->SetValue(progress);
     wxYield();
 
@@ -304,6 +358,7 @@ void MainWindow::ProgressUpdated()
 
 void MainWindow::NewEventFound(db::LogEvent&& event)
 {
+    spdlog::debug("New event found.");
     m_events.AddEvent(std::move(event));
 }
 

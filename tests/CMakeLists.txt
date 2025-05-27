@@ -9,6 +9,12 @@ add_executable(
   ${TEST_SOURCES}
 )
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/etc/config.json
+    ${CMAKE_BINARY_DIR}/tests/config.json
+    COPYONLY
+)
+
 target_compile_definitions(${PROJECT_NAME}_tests PRIVATE TESTING)
 
 target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})

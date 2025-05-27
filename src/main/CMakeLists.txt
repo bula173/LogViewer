@@ -40,6 +40,12 @@ elseif (APPLE) #osx icon ressource file, provided from /packaging directory
 endif()
 
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/etc/config.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config.json
+    COPYONLY
+)
+
 if(APPLE)
 
     # create bundle on apple compiles

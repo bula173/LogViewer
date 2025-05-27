@@ -1,0 +1,31 @@
+{
+  "default_parser": "xml",
+  "parsers": {
+    "xml": {
+      "rootElement": "events",
+      "eventElement": "event",
+      "columns": [
+        { "name": "id", "visible":true, "width": 50 },
+        { "name": "timestamp", "visible":true, "width": 150 },
+        { "name": "type", "visible":true, "width": 200 },
+        { "name": "info", "visible":true, "width": 300 }
+      ]
+    },
+    "csv": {
+      "delimiter": ",",
+      "columns": [
+        { "name": "timestamp", "display_name": "Time" },
+        { "name": "level", "display_name": "Level" },
+        { "name": "message", "display_name": "Message" }
+      ]
+    },
+    "json": {
+      "log_array": "entries",
+      "columns": [
+        { "name": "timestamp", "display_name": "Time" },
+        { "name": "level", "display_name": "Level" },
+        { "name": "message", "display_name": "Message" }
+      ]
+    }
+  }
+}

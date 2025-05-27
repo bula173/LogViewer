@@ -1,4 +1,5 @@
 #include "gui/ItemVirtualListControl.hpp"
+#include <spdlog/spdlog.h>
 
 #include <iostream>
 #include <string>
@@ -45,17 +46,44 @@ void ItemVirtualListControl::OnDataUpdated()
 
 void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
 {
+    spdlog::debug(
+        "ItemVirtualListControl::OnCurrentIndexUpdated called with index: {}",
+        index);
 
-    auto s = m_events.GetEvent(m_events.GetCurrentItemIndex())
-                 .getEventItems()
-                 .size();
-    this->SetItemCount(s);
-    this->RefreshItem(s - 1);
+    if (index < 0 || index > static_cast<int>(m_events.Size()))
+    {
+        spdlog::error(
+            "ItemVirtualListControl::OnCurrentIndexUpdated: index out "
+            "of range");
+        return;
+    }
+
+    if (index > 0)
+    {
+        auto s = m_events.GetEvent(m_events.GetCurrentItemIndex())
+                     .getEventItems()
+                     .size();
+        spdlog::debug(
+            "ItemVirtualListControl::Current event item count: {}", s);
+
+        this->SetItemCount(s);
+        this->RefreshItem(s - 1);
+    }
+    else
+    {
+
+        this->SetItemCount(0);
+        this->RefreshItem(0);
+    }
+
     this->Update();
 }
 
 const wxString ItemVirtualListControl::getColumnName(const int column) const
 {
+    spdlog::debug(
+        "ItemVirtualListControl::getColumnName called for column: {}", column);
+
     wxListItem item;
     item.SetMask(wxLIST_MASK_TEXT);
     this->GetColumn(column, item);
@@ -64,6 +92,9 @@ const wxString ItemVirtualListControl::getColumnName(const int column) const
 
 wxString ItemVirtualListControl::OnGetItemText(long index, long column) const
 {
+    spdlog::debug("ItemVirtualListControl::OnGetItemText called for index: {}, "
+                  "column: {}",
+        index, column);
 
     auto items =
         m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
@@ -81,9 +112,35 @@ wxString ItemVirtualListControl::OnGetItemText(long index, long column) const
 
 void ItemVirtualListControl::RefreshAfterUpdate()
 {
-    this->SetItemCount(m_events.GetEvent(m_events.GetCurrentItemIndex())
-            .getEventItems()
-            .size());
+    spdlog::debug("ItemVirtualListControl::RefreshAfterUpdate called");
+
+    if (m_events.GetCurrentItemIndex() < 0)
+    {
+        spdlog::error(
+            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
+        return;
+    }
+    if (m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
+    {
+        spdlog::error(
+            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
+        return;
+    }
+
+    if (m_events.GetCurrentItemIndex() == 0)
+    {
+
+        this->SetItemCount(0);
+    }
+    else
+    {
+
+
+        this->SetItemCount(m_events.GetEvent(m_events.GetCurrentItemIndex())
+                .getEventItems()
+                .size());
+    }
+
     this->Refresh();
     this->Update();
 }

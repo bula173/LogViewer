@@ -1,4 +1,5 @@
 #include "src/application/xml/xmlParser.hpp"
+#include "src/application/config/Config.hpp"
 #include "src/application/db/LogEvent.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -20,6 +21,16 @@ class XmlParserTest : public ::testing::Test
     void SetUp() override
     {
         // Set up code if needed
+        auto& config = config::GetConfig();
+
+        // Get current working directory (assumes running from project root or
+        // build/)
+        std::filesystem::path cwd = std::filesystem::current_path();
+        std::filesystem::path configPath = cwd / "config.json";
+
+        config.SetConfigFilePath(configPath.string());
+        config.LoadConfig();
+
         parser.RegisterObserver(&mockObserver);
     }
 

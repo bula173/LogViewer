@@ -103,8 +103,17 @@ add_custom_target(clang-tidy
     COMMENT "Running clang-tidy"
 )
 
-target_link_libraries(application INTERFACE ${wxWidgets_LIBRARIES})
-target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${wxWidgets_INCLUDE_DIRS} "${CMAKE_CURRENT_SOURCE_DIR}/../")
+target_link_libraries(application INTERFACE 
+    ${wxWidgets_LIBRARIES} 
+    nlohmann_json::nlohmann_json
+    spdlog::spdlog_header_only)
+
+target_include_directories(application PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR} 
+    ${wxWidgets_INCLUDE_DIRS} 
+    ${nlohmann_json_SOURCE_DIR}/include
+    ${spdlog_SOURCE_DIR}/include
+    "${CMAKE_CURRENT_SOURCE_DIR}/../")
 
 #-------------------------------------------------------------------------------
 

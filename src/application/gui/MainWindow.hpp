@@ -18,10 +18,10 @@ namespace gui
 {
 enum
 {
-    ID_Hello = 1,
+    ID_PopulateDummyData = 1,
     ID_ViewLeftPanel = 2,
-    ID_ViewRightPanel = 3
-
+    ID_ViewRightPanel = 3,
+    ID_ParserClear = 4
 };
 
 class MainWindow : public wxFrame, public parser::IDataParserObserver
@@ -35,20 +35,23 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     void NewEventFound(db::LogEvent&& event) override;
 
   private:
-    void OnHello(wxCommandEvent& event);
+#ifndef NDEBUG
+    void OnPopulateDummyData(wxCommandEvent& event);
+#endif
     void OnExit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
-    void OnOpen(wxCommandEvent& event);
+    void OnOpenFile(wxCommandEvent& event);
     void OnHideSearchResult(wxCommandEvent& event);
     void OnHideLeftPanel(wxCommandEvent& event);
     void OnHideRightPanel(wxCommandEvent& event);
+    void OnClearParser(wxCommandEvent& event);
 
     void setupMenu();
     void setupLayout();
     void setupStatusBar();
-    void populateData();
+
     void ParseData(const std::string filePath);
 
   private:
@@ -61,7 +64,6 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     wxSplitterWindow* m_rigth_spliter {nullptr};
     db::EventsContainer m_events;
     wxGauge* m_progressGauge {nullptr};
-    const long m_eventsNum {100000};
 
     std::atomic<bool> m_closerequest {false};
     bool m_processing {false};

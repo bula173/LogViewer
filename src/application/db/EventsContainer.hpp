@@ -27,9 +27,10 @@ class EventsContainer : public mvc::IModel
     void Clear() override;
     size_t Size() override;
 
-  protected:
+
+  private:
+    long m_currentItem {0};
     std::vector<LogEvent> m_data;
-    int m_currentItem;
 };
 
 } // namespace db
