@@ -17,10 +17,13 @@ bool MyApp::OnInit()
 
     if (!wxApp::OnInit())
         return false;
+
+    setupLogging();
+
     spdlog::info("Initializing MyApp");
 
     setupConfig();
-    setupLogging();
+    ChangeLogLevel();
 
     const auto& version = Version::current();
 
@@ -95,5 +98,13 @@ void MyApp::setupLogging()
     spdlog::flush_on(spdlog::level::debug);
 
     spdlog::info("Setting up logging configuration");
+}
+
+void MyApp::ChangeLogLevel()
+{
+    auto& config = config::GetConfig();
+    spdlog::info("Changing log level to: {}", config.logLevel);
+    spdlog::info("Log path: {}", config.GetAppLogPath());
+    spdlog::set_level(spdlog::level::from_str(config.logLevel));
 }
 // This is the main application class. It initializes the wxWidgets library

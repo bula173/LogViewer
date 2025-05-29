@@ -21,7 +21,7 @@ struct Columns
 class Config
 {
   public:
-    Config() = default;
+    Config();
     Config(const Config&) = delete;
     Config& operator=(const Config&) = delete;
     Config(Config&&) = delete;

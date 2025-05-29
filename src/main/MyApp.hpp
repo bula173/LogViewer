@@ -13,6 +13,7 @@ class MyApp : public wxApp
   private:
     void setupLogging();
     void setupConfig();
+    void ChangeLogLevel();
 
   private:
     const std::string m_appName {"LogViewer"};

@@ -23,6 +23,10 @@ Config& GetConfig()
     return configInstance;
 }
 
+Config::Config()
+{
+    SetupLogPath();
+}
 
 void Config::SetAppName(const std::string& name)
 {
@@ -86,7 +90,7 @@ void Config::LoadConfig()
             return;
         }
 
-        SetupLogPath();
+
         GetLoggingConfig(j);
         ParseXmlConfig(j);
 
