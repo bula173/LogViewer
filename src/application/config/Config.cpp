@@ -293,8 +293,8 @@ std::filesystem::path Config::GetDefaultConfigPath()
 
 std::filesystem::path Config::GetDefaultLogPath()
 {
-    auto logFIleName = "log.txt";
-    auto logFilePath = GetDefaultAppPath() / logFIleName;
+    auto logFileName = "log.txt";
+    auto logFilePath = GetDefaultAppPath() / logFileName;
     return logFilePath;
 }
 

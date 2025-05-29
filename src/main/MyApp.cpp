@@ -66,24 +66,29 @@ void MyApp::setupConfig()
 void MyApp::setupLogging()
 {
     auto& config = config::GetConfig();
+    std::vector<spdlog::sink_ptr> sinks;
     // Create both file and console sinks
-    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-        config.GetAppLogPath(), true);
+    try
+    {
+        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+            config.GetAppLogPath(), true);
+        file_sink->set_level(spdlog::level::from_str(config.logLevel));
+        sinks.push_back(file_sink);
+    }
+    catch (const spdlog::spdlog_ex& ex)
+    {
+        spdlog::error("Failed to create file sink: {}", ex.what());
+    }
+
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    sinks.push_back(console_sink);
+
     spdlog::info("Log file path: {}", config.GetAppLogPath());
 
-
-#ifdef NDEBUG
-    file_sink->set_level(spdlog::level::from_str(config.logLevel));
     console_sink->set_level(spdlog::level::from_str(config.logLevel));
     spdlog::info("Logging configuration loaded from config file. Log level: {}",
         config.logLevel);
-#else
-    file_sink->set_level(spdlog::level::debug);
-    console_sink->set_level(spdlog::level::debug);
-#endif
 
-    std::vector<spdlog::sink_ptr> sinks {file_sink, console_sink};
     auto logger = std::make_shared<spdlog::logger>(
         "multi_sink", sinks.begin(), sinks.end());
     spdlog::set_default_logger(logger);
