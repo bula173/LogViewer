@@ -49,7 +49,7 @@ void Config::LoadConfig()
         std::filesystem::path cwd = std::filesystem::current_path();
         std::filesystem::path defaultInstalled = cwd / "default_config.json";
 
-        std::vector<std::string> searchPaths = {
+        std::vector<std::filesystem::path> searchPaths = {
             cwd / "etc" / "default_config.json",
             cwd / "config" / "default_config.json",
             cwd / "default_config.json"};
