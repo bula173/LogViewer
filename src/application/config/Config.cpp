@@ -47,13 +47,28 @@ void Config::LoadConfig()
     if (!std::filesystem::exists(m_configFilePath))
     {
         std::filesystem::path cwd = std::filesystem::current_path();
-        std::filesystem::path defaultInstalled =
-            cwd / "etc" / "default_config.json";
+        std::filesystem::path defaultInstalled = cwd / "default_config.json";
+
+        std::vector<std::string> searchPaths = {
+            cwd / "etc" / "default_config.json",
+            cwd / "config" / "default_config.json",
+            cwd / "default_config.json"};
+
+        for (const auto& path : searchPaths)
+        {
+            if (std::filesystem::exists(path))
+            {
+                defaultInstalled = path;
+                spdlog::info("Default config template found at: {}",
+                    defaultInstalled.string());
+                break;
+            }
+        }
 
         if (!std::filesystem::exists(defaultInstalled))
         {
-            spdlog::error("Default config template not found at: {}",
-                defaultInstalled.string());
+            spdlog::error(
+                "Default config template not found in search paths. Aborting.");
         }
 
         try
