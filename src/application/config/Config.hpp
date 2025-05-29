@@ -41,6 +41,8 @@ class Config
     void ParseXmlConfig(const json& j);
     void GetLoggingConfig(const json& j);
     std::filesystem::path GetDefaultConfigPath();
+    std::filesystem::path GetDefaultLogPath();
+    std::filesystem::path GetDefaultAppPath();
     void SetupLogPath();
 
   private:

@@ -87,6 +87,7 @@ void MyApp::setupLogging()
     auto logger = std::make_shared<spdlog::logger>(
         "multi_sink", sinks.begin(), sinks.end());
     spdlog::set_default_logger(logger);
+    spdlog::flush_on(spdlog::level::debug);
 
     spdlog::info("Setting up logging configuration");
 }

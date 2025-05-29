@@ -306,7 +306,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Open file dialog triggered.");
     wxFileDialog openFileDialog(this, _("Open log file"), "", "",
-        "XML files (*.xml)|*.xml|All files (*.*)|*.*", wxFD_OPEN);
+        "XML files (*.xml)|*.xml|All files (*.*)|*.*");
 
     auto result = openFileDialog.ShowModal();
 
