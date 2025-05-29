@@ -77,6 +77,8 @@ install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION "."
     RUNTIME DESTINATION bin)
 
+install(FILES ${CMAKE_SOURCE_DIR}/etc/config.json DESTINATION ".")
+
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
 # Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
 addRunAndDebugTargets(${PROJECT_NAME})

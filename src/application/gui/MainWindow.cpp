@@ -1,9 +1,10 @@
 #include "gui/MainWindow.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
-
 #include <spdlog/spdlog.h>
 #include <wx/app.h>
+// std
+#include <filesystem>
 
 namespace gui
 {
@@ -34,6 +35,8 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(wxEVT_SIZE, &MainWindow::OnSize, this);
     this->Bind(wxEVT_MENU, &MainWindow::OnOpenFile, this, wxID_OPEN);
     this->Bind(wxEVT_MENU, &MainWindow::OnClearParser, this, ID_ParserClear);
+    this->Bind(
+        wxEVT_MENU, &MainWindow::OnOpenConfigEditor, this, ID_ConfigEditor);
 }
 
 void MainWindow::setupMenu()
@@ -64,6 +67,9 @@ void MainWindow::setupMenu()
     wxMenu* menuParser = new wxMenu;
     menuParser->Append(ID_ParserClear, "Clear", "Parser");
 
+    // Config menu
+    menuFile->Append(
+        ID_ConfigEditor, "Edit &Config...\tCtrl+E", "Open Config Editor");
 
     // Main menu bar
     wxMenuBar* menuBar = new wxMenuBar;
@@ -156,7 +162,7 @@ void MainWindow::setupStatusBar()
     spdlog::info("Status bar setup complete.");
 }
 #ifndef NDEBUG
-void MainWindow::OnPopulateDummyData(wxCommandEvent& event)
+void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Populating dummy data...");
 
@@ -202,7 +208,7 @@ void MainWindow::OnPopulateDummyData(wxCommandEvent& event)
 #endif
 
 
-void MainWindow::OnExit(wxCommandEvent& event)
+void MainWindow::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Exit requested.");
     Close(true);
@@ -224,7 +230,7 @@ void MainWindow::OnClose(wxCloseEvent& event)
     }
 }
 
-void MainWindow::OnAbout(wxCommandEvent& event)
+void MainWindow::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("About dialog opened.");
     wxMessageBox(
@@ -232,7 +238,7 @@ void MainWindow::OnAbout(wxCommandEvent& event)
         "About" + m_version.asLongStr(), wxOK | wxICON_INFORMATION);
 }
 
-void MainWindow::OnClearParser(wxCommandEvent& event)
+void MainWindow::OnClearParser(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Parser clear triggered.");
     m_events.Clear();
@@ -292,12 +298,11 @@ void MainWindow::OnHideRightPanel(wxCommandEvent& event)
     this->Layout();
 }
 
-void MainWindow::OnOpenFile(wxCommandEvent& event)
+void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Open file dialog triggered.");
-    wxFileDialog openFileDialog(this, _("Open XML file"), "", "",
-        "XML files (*.xml)|*.xml|All files (*.*)|*.*",
-        wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Open log file"), "", "",
+        "XML files (*.xml)|*.xml|All files (*.*)|*.*", wxFD_OPEN);
 
     auto result = openFileDialog.ShowModal();
 
@@ -309,8 +314,35 @@ void MainWindow::OnOpenFile(wxCommandEvent& event)
     }
     else
     {
-        spdlog::info("Open file dialog canceled. Reason: {}", result);
+        spdlog::warn("Open file dialog canceled. Reason: {}", result);
+        return;
     }
+}
+
+void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
+{
+    spdlog::info("Config Editor menu selected");
+    // Option 1: Open config.json in system editor
+    // Get current working directory (assumes running from project root or
+    // build/)
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::filesystem::path configPath = cwd / "config.json";
+
+    if (!std::filesystem::exists(configPath))
+    {
+        spdlog::error("Config file does not exist: {}", configPath.string());
+        wxMessageBox(
+            "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    spdlog::info("Opening config file: {}", configPath.string());
+    // Use wxLaunchDefaultApplication to open the config file in the default
+    // editor
+    wxLaunchDefaultApplication(configPath.string());
+
+    // Option 2: Show a custom dialog (implement your own ConfigEditorDialog)
+    // ConfigEditorDialog dlg(this, configPath);
+    // dlg.ShowModal();
 }
 
 void MainWindow::ParseData(const std::string filePath)

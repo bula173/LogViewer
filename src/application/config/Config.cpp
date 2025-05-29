@@ -39,7 +39,7 @@ void Config::LoadConfig()
             spdlog::error("Invalid JSON data in config file.");
             return;
         }
-
+        GetLoggingConfig(j);
         ParseXmlConfig(j);
 
         // Example: m_someParameter = j["someParameter"].get<std::string>();
@@ -150,5 +150,27 @@ void Config::ParseXmlConfig(const json& j)
         spdlog::warn("Missing 'columns' in config file.");
     }
 }
+
+void Config::GetLoggingConfig(const json& j)
+{
+    if (j.contains("logging"))
+    {
+        const auto& loggingConfig = j["logging"];
+        if (loggingConfig.contains("level"))
+        {
+            logLevel = loggingConfig["level"].get<std::string>();
+            spdlog::info("Logging level set to: {}", logLevel);
+        }
+        else
+        {
+            spdlog::warn("Missing 'level' in logging config.");
+        }
+    }
+    else
+    {
+        spdlog::warn("Missing 'logging' in config file.");
+    }
+}
+
 
 } // namespace config

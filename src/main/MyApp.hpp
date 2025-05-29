@@ -9,6 +9,10 @@ class MyApp : public wxApp
     MyApp() = default;
     virtual ~MyApp() = default;
     virtual bool OnInit();
+
+  private:
+    void setupLogging();
+    void setupConfig();
 };
 
 #endif // MYAPP_HPP

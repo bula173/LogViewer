@@ -4,6 +4,8 @@
 #include "gui/MainWindow.hpp"
 #include "main/version.h"
 // third party
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 // std
 #include <filesystem>
@@ -12,32 +14,16 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    spdlog::info("Starting LogViewer application");
 
-#ifdef NDEBUG
-    spdlog::info("Release build");
-    spdlog::set_level(spdlog::level::warn); // Release: warnings and errors only
-#else
-    spdlog::info("Debug build");
-    spdlog::set_level(
-        spdlog::level::debug); // Debug: show debug/info/warn/error
-#endif
     if (!wxApp::OnInit())
         return false;
+    spdlog::info("Initializing MyApp");
 
-    spdlog::info(
-        "Current working dir: {}", std::filesystem::current_path().string());
+    setupConfig();
+    setupLogging();
 
     const auto& version = Version::current();
-    auto& config = config::GetConfig();
 
-    // Get current working directory (assumes running from project root or
-    // build/)
-    std::filesystem::path cwd = std::filesystem::current_path();
-    std::filesystem::path configPath = cwd / "config.json";
-
-    config.SetConfigFilePath(configPath.string());
-    config.LoadConfig();
     gui::MainWindow* frame =
         new gui::MainWindow("LogViewer " + version.asShortStr(),
             wxPoint(50, 50), wxSize(1000, 600), version);
@@ -54,5 +40,59 @@ bool MyApp::OnInit()
 
     spdlog::info("Main window created and shown");
     return true;
+}
+
+void MyApp::setupConfig()
+{
+    spdlog::info("Setting up configuration");
+
+    // Set the log level based on build type
+#ifdef NDEBUG
+    spdlog::info("Release build");
+#else
+    spdlog::info("Debug build");
+#endif
+
+    spdlog::info(
+        "Current working dir: {}", std::filesystem::current_path().string());
+
+    auto& config = config::GetConfig();
+
+    // Get current working directory (assumes running from project root or
+    // build/)
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::filesystem::path configPath = cwd / "config.json";
+
+    config.SetConfigFilePath(configPath.string());
+    config.LoadConfig();
+}
+
+void MyApp::setupLogging()
+{
+    auto logPath = std::filesystem::current_path() / "log.txt";
+    // Create both file and console sinks
+    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+        logPath.string(), true);
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    spdlog::info("Log file path: {}", logPath.string());
+
+
+#ifdef NDEBUG
+    auto& config = config::GetConfig();
+    file_sink->set_level(spdlog::level::from_str(config.logLevel));
+    console_sink->set_level(spdlog::level::from_str(config.logLevel));
+    spdlog::info("Logging configuration loaded from config file. Log level: {}",
+        config.logLevel);
+#else
+    file_sink->set_level(spdlog::level::debug);
+    console_sink->set_level(spdlog::level::debug);
+#endif
+
+    std::vector<spdlog::sink_ptr> sinks {file_sink, console_sink};
+    auto logger = std::make_shared<spdlog::logger>(
+        "multi_sink", sinks.begin(), sinks.end());
+    spdlog::set_default_logger(logger);
+
+    spdlog::info("Setting up logging configuration");
 }
 // This is the main application class. It initializes the wxWidgets library

@@ -31,6 +31,7 @@ class Config
   private:
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
+    void GetLoggingConfig(const json& j);
 
   private:
     std::string m_configFilePath;
@@ -39,6 +40,7 @@ class Config
     std::string xmlRootElement;
     std::string xmlEventElement;
     std::vector<Columns> columns;
+    std::string logLevel {"info"}; // Default log level
 };
 
 Config& GetConfig();
