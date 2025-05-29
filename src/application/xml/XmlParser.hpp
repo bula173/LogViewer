@@ -23,7 +23,6 @@ class XmlParser : public IDataParser
 
   private:
     uint32_t m_currentProgress;
-    uint32_t m_totalProgress;
 };
 } // namespace parser
 #endif // PARSER_XMLPARSER_HPP

@@ -116,16 +116,3 @@ target_include_directories(application PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/../")
 
 #-------------------------------------------------------------------------------
-
-if(MINGW)
-    message(STATUS "MinGW detected - collecting runtime DLLs")
-    get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
-    message(STATUS "Compiler directory: ${COMPILER_DIR}")
-    file(GLOB WX_DLLS "${COMPILER_DIR}/wx*.dll")
-    install(FILES ${WX_DLLS} DESTINATION bin)
-    message(STATUS "Colllect ${WX_DLLS}")
-endif()
-
-
-
-

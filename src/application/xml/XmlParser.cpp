@@ -18,7 +18,6 @@ namespace parser
 XmlParser::XmlParser()
     : IDataParser()
     , m_currentProgress(0)
-    , m_totalProgress(0)
 {
 }
 
@@ -52,10 +51,13 @@ void XmlParser::ParseData(std::istream& input)
     }
 
     wxXmlNode* root = xmlDoc.GetRoot();
-    spdlog::debug("XmlParser::ParseData root element: {}", root ? root->GetName().ToStdString() : "nullptr");
+    spdlog::debug("XmlParser::ParseData root element: {}",
+        root ? root->GetName().ToStdString() : "nullptr");
     if (!root || root->GetName() != config.xmlRootElement)
     {
-        spdlog::error("XmlParser::ParseData invalid root element. Expected <{}>.", config.xmlRootElement);
+        spdlog::error(
+            "XmlParser::ParseData invalid root element. Expected <{}>.",
+            config.xmlRootElement);
         return;
     }
 
@@ -64,7 +66,8 @@ void XmlParser::ParseData(std::istream& input)
     for (wxXmlNode* node = root->GetChildren(); node; node = node->GetNext())
         if (node->GetName() == config.xmlEventElement)
             ++totalEvents;
-    spdlog::debug("XmlParser::ParseData total events to parse: {}", totalEvents);
+    spdlog::debug(
+        "XmlParser::ParseData total events to parse: {}", totalEvents);
 
     // Now, parse and update progress
     wxXmlNode* child = root->GetChildren();
@@ -79,7 +82,9 @@ void XmlParser::ParseData(std::istream& input)
             db::LogEvent::EventItems eventItems;
             while (item)
             {
-                spdlog::debug("XmlParser::ParseData found item: {} = {}", item->GetName().ToStdString(), item->GetNodeContent().ToStdString());
+                spdlog::debug("XmlParser::ParseData found item: {} = {}",
+                    item->GetName().ToStdString(),
+                    item->GetNodeContent().ToStdString());
                 eventItems.push_back({item->GetName().ToStdString(),
                     item->GetNodeContent().ToStdString()});
                 item = item->GetNext();
@@ -93,7 +98,8 @@ void XmlParser::ParseData(std::istream& input)
         child = child->GetNext();
         id++;
     }
-    spdlog::debug("XmlParser::ParseData finished parsing. Processed: {}", processed);
+    spdlog::debug(
+        "XmlParser::ParseData finished parsing. Processed: {}", processed);
 }
 
 uint32_t XmlParser::GetCurrentProgress() const

@@ -43,6 +43,10 @@
                 "-DCMAKE_BUILD_TYPE=Debug",
                 "-S.",
                 "-Bbuild-debug",
+                "-DADDRESS_SANITIZER=ON",
+                "-DUB_SANITIZER=ON",
+                "-DTHREAD_SANITIZER=ON",
+                "-DMEMORY_SANITIZER=ON",
                 ""
             ]
         },
@@ -54,6 +58,10 @@
                 "-DCMAKE_BUILD_TYPE=Release",
                 "-S.",
                 "-Bbuild-release",
+                "-DADDRESS_SANITIZER=ON",
+                "-DUB_SANITIZER=ON",
+                "-DTHREAD_SANITIZER=ON",
+                "-DMEMORY_SANITIZER=ON",
                 ""
             ]
         },

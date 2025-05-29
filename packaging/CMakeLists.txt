@@ -40,7 +40,7 @@ if(WIN32 AND NOT UNIX)
         # sure there is at least one set of four (4) backlasshes.
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
         # Icon of the installer
-        set(CPACK_NSIS_MUI_ICON "${PROJECT_SOURCE_DIR}\\\\packaging\\\\exampleApp.ico")
+        set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.ico")
         # set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
         # set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
         set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
@@ -49,12 +49,12 @@ if(WIN32 AND NOT UNIX)
         message(STATUS "   + NSIS                                 NO ")
     endif()
 
-    set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}\\\\packaging\\\\exampleApp.png")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")
 
     # Configure file with right path, place the result to PROJECT_BINARY_DIR.
     # When ${PROJECT_BINARY_DIR}/exampleApp.icon.rc is added to an executable
     # it will have icon specified in exampleApp.icon.in.rc
-    configure_file($${PROJECT_SOURCE_DIR}/packaging/exampleApp.icon.in.rc
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.icon.in.rc
         ${PROJECT_BINARY_DIR}/exampleApp.icon.rc)
 
 elseif(APPLE)

@@ -9,8 +9,8 @@ namespace gui
 ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : m_events(events)
-    , wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
+    : wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
+    , m_events(events)
 {
 
     this->AppendColumn("param");
