@@ -74,7 +74,6 @@ void MyApp::setupLogging()
 
 
 #ifdef NDEBUG
-    auto& config = config::GetConfig();
     file_sink->set_level(spdlog::level::from_str(config.logLevel));
     console_sink->set_level(spdlog::level::from_str(config.logLevel));
     spdlog::info("Logging configuration loaded from config file. Log level: {}",
