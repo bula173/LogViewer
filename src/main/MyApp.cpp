@@ -3,10 +3,6 @@
 #include "config/Config.hpp"
 #include "gui/MainWindow.hpp"
 #include "main/version.h"
-// third party
-#include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
 // std
 #include <filesystem>
 
@@ -70,6 +66,8 @@ void MyApp::setupLogging()
 {
     auto& config = config::GetConfig();
     std::vector<spdlog::sink_ptr> sinks;
+
+
     // Create both file and console sinks
     try
     {
@@ -103,8 +101,12 @@ void MyApp::setupLogging()
 void MyApp::ChangeLogLevel()
 {
     auto& config = config::GetConfig();
-    spdlog::info("Changing log level to: {}", config.logLevel);
-    spdlog::info("Log path: {}", config.GetAppLogPath());
-    spdlog::set_level(spdlog::level::from_str(config.logLevel));
+    auto level = spdlog::level::from_str(config.logLevel);
+
+    if (level != spdlog::get_level())
+    {
+        spdlog::set_level(level);
+        spdlog::info("Log level changed to: {}", config.logLevel);
+    }
 }
 // This is the main application class. It initializes the wxWidgets library

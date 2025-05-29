@@ -54,7 +54,7 @@ class Config
     std::string xmlRootElement;
     std::string xmlEventElement;
     std::vector<Columns> columns;
-    std::string logLevel {"info"}; // Default log level
+    std::string logLevel {"debug"}; // Default log level
 };
 
 Config& GetConfig();

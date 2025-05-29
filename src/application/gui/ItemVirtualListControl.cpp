@@ -9,10 +9,14 @@ namespace gui
 ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
+    : wxListCtrl(parent, id, pos, size,
+          wxLC_REPORT | wxLC_VIRTUAL | wxLC_HRULES | wxLC_VRULES)
     , m_events(events)
 {
-
+    // Set alternate row color (light gray) and normal row color (white)
+    SetAlternateRowColour(wxColour(230, 230, 230)); // alternate rows
+    EnableAlternateRowColours(false);
+    ExtendRulesAndAlternateColour();
     this->AppendColumn("param");
     this->AppendColumn("value");
     // Bind resize event to auto-expand last column
@@ -71,7 +75,7 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
     }
     else
     {
-
+        this->DeleteAllItems();
         this->SetItemCount(0);
         this->RefreshItem(0);
     }
@@ -96,6 +100,27 @@ wxString ItemVirtualListControl::OnGetItemText(long index, long column) const
                   "column: {}",
         index, column);
 
+    spdlog::debug("ItemVirtualListControl::OnGetItemText: "
+                  "m_events.GetCurrentItemIndex(): {}",
+        m_events.GetCurrentItemIndex());
+    if (index < 0 || index >= static_cast<long>(m_events.Size()))
+    {
+        spdlog::debug(
+            "ItemVirtualListControl::OnGetItemText: index out of range");
+        return "";
+    }
+    if (m_events.GetCurrentItemIndex() < 0 ||
+        m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
+    {
+        spdlog::debug(
+            "ItemVirtualListControl::OnGetItemText: current item index out of "
+            "range");
+        return "";
+    }
+
+    if (m_events.Size() == 0)
+        return "";
+
     auto items =
         m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
 
@@ -116,14 +141,14 @@ void ItemVirtualListControl::RefreshAfterUpdate()
 
     if (m_events.GetCurrentItemIndex() < 0)
     {
-        spdlog::error(
-            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
+        spdlog::error("ItemVirtualListControl::RefreshAfterUpdate: index "
+                      "out of range");
         return;
     }
     if (m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
     {
-        spdlog::error(
-            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
+        spdlog::error("ItemVirtualListControl::RefreshAfterUpdate: index "
+                      "out of range");
         return;
     }
 

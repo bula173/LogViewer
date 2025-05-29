@@ -51,6 +51,10 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     void OnClearParser(wxCommandEvent& event);
     void OnOpenConfigEditor(wxCommandEvent& event);
     void OnOpenAppLog(wxCommandEvent& event);
+    void OnSearch(wxCommandEvent& event);
+    void OnSearchResultActivated(wxListEvent& event);
+    void OnFilterChanged(wxCommandEvent&);
+    void UpdateFilters();
 
     void setupMenu();
     void setupLayout();
@@ -66,8 +70,13 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     wxSplitterWindow* m_bottom_spliter {nullptr};
     wxSplitterWindow* m_left_spliter {nullptr};
     wxSplitterWindow* m_rigth_spliter {nullptr};
+    wxTextCtrl* m_searchBox {nullptr};
+    wxButton* m_searchButton {nullptr};
+    wxListCtrl* m_searchResultsList {nullptr};
     db::EventsContainer m_events;
     wxGauge* m_progressGauge {nullptr};
+    wxChoice* m_typeFilter {nullptr};
+    wxChoice* m_timestampFilter {nullptr};
 
     std::atomic<bool> m_closerequest {false};
     bool m_processing {false};

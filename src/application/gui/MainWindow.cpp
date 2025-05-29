@@ -6,6 +6,7 @@
 #include <wx/app.h>
 // std
 #include <filesystem>
+#include <set>
 
 namespace gui
 {
@@ -39,6 +40,35 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(
         wxEVT_MENU, &MainWindow::OnOpenConfigEditor, this, ID_ConfigEditor);
     this->Bind(wxEVT_MENU, &MainWindow::OnOpenAppLog, this, ID_AppLogViewer);
+    this->Bind(
+        wxEVT_BUTTON, &MainWindow::OnSearch, this, m_searchButton->GetId());
+    m_searchBox->Bind(wxEVT_TEXT_ENTER, &MainWindow::OnSearch, this);
+    m_searchResultsList->Bind(
+        wxEVT_LIST_ITEM_ACTIVATED, &MainWindow::OnSearchResultActivated, this);
+
+    // Bind resize event to auto-expand last column
+    m_searchResultsList->Bind(wxEVT_SIZE,
+        [this](wxSizeEvent& evt)
+        {
+            spdlog::debug("EventsVirtualListControl::wxEVT_SIZE triggered");
+            // Call the default handler first
+            evt.Skip();
+
+            // Calculate total width of all columns except the last
+            int totalWidth = 0;
+            int colCount = m_searchResultsList->GetColumnCount();
+            for (int i = 0; i < colCount - 1; ++i)
+                totalWidth += m_searchResultsList->GetColumnWidth(i);
+
+            // Set last column width to fill the remaining space
+            int lastCol = colCount - 1;
+            int clientWidth = m_searchResultsList->GetClientSize().GetWidth();
+            int newWidth = clientWidth - totalWidth - 2; // -2 for border fudge
+            if (newWidth > 50)                           // minimum width
+                m_searchResultsList->SetColumnWidth(lastCol, newWidth);
+        });
+    m_typeFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
+    m_timestampFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
 }
 
 void MainWindow::setupMenu()
@@ -129,13 +159,37 @@ void MainWindow::setupLayout()
 
     m_leftPanel = new wxPanel(m_left_spliter);
     m_searchResultPanel = new wxPanel(m_bottom_spliter);
+
+    // Create a vertical sizer for the whole search panel
+    auto* searchSizer = new wxBoxSizer(wxVERTICAL);
+
+    // Create a horizontal sizer for the search box and button
+    auto* searchBarSizer = new wxBoxSizer(wxHORIZONTAL);
+    m_searchBox = new wxTextCtrl(m_searchResultPanel, wxID_ANY, "",
+        wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    m_searchButton = new wxButton(m_searchResultPanel, wxID_ANY, "Search");
+    searchBarSizer->Add(m_searchBox, 1, wxEXPAND | wxALL, 5);
+    searchBarSizer->Add(m_searchButton, 0, wxEXPAND | wxALL, 5);
+
+    m_searchResultsList = new wxListCtrl(m_searchResultPanel, wxID_ANY,
+        wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+
+    m_searchResultsList->InsertColumn(0, "Event ID");
+    m_searchResultsList->InsertColumn(1, "Match");
+
+
+    searchSizer->Add(searchBarSizer, 0, wxEXPAND);
+    searchSizer->Add(m_searchResultsList, 1, wxEXPAND | wxALL, 5);
+
+    m_searchResultPanel->SetSizer(searchSizer);
+
     m_eventsListCtrl = new gui::EventsVirtualListControl(
         m_events, m_rigth_spliter); // main panel
     m_itemView = new gui::ItemVirtualListControl(m_events, m_rigth_spliter);
 
     m_bottom_spliter->SplitHorizontally(
         m_left_spliter, m_searchResultPanel, -1);
-    m_bottom_spliter->SetSashGravity(0.2);
+    m_bottom_spliter->SetSashGravity(0.3);
 
     m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
     m_left_spliter->SetSashGravity(0.2);
@@ -143,12 +197,73 @@ void MainWindow::setupLayout()
     m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
     m_rigth_spliter->SetSashGravity(0.8);
 
-    m_leftPanel->SetBackgroundColour(wxColor(200, 100, 200));
-    m_searchResultPanel->SetBackgroundColour(wxColor(100, 200, 200));
+    auto* filterSizer = new wxBoxSizer(wxVERTICAL);
+
+    // Example: Type filter
+    m_typeFilter = new wxChoice(m_leftPanel, wxID_ANY);
+    filterSizer->Add(
+        new wxStaticText(m_leftPanel, wxID_ANY, "Type:"), 0, wxALL, 5);
+    filterSizer->Add(m_typeFilter, 0, wxEXPAND | wxALL, 5);
+
+
+    // Example: Timestamp filter
+    m_timestampFilter = new wxChoice(m_leftPanel, wxID_ANY);
+    filterSizer->Add(
+        new wxStaticText(m_leftPanel, wxID_ANY, "Timestamp:"), 0, wxALL, 5);
+    filterSizer->Add(m_timestampFilter, 0, wxEXPAND | wxALL, 5);
+
+    m_leftPanel->SetSizer(filterSizer);
 
     CreateToolBar();
     setupStatusBar();
     spdlog::info("Layout setup complete.");
+}
+
+void MainWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
+{
+    wxString query = m_searchBox->GetValue();
+    m_searchResultsList->DeleteAllItems();
+
+    int idx = 0;
+    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    {
+        const auto& event = m_events.GetEvent(i);
+        for (const auto& item : event.getEventItems())
+        {
+            if (item.second.find(query.ToStdString()) != std::string::npos)
+            {
+                long row = m_searchResultsList->InsertItem(
+                    idx, std::to_string(event.getId()));
+                m_searchResultsList->SetItem(row, 1, item.second);
+                ++idx;
+                break;
+            }
+        }
+    }
+}
+
+void MainWindow::OnSearchResultActivated(wxListEvent& event)
+{
+    long itemIndex = event.GetIndex();
+    wxString eventIdStr = m_searchResultsList->GetItemText(itemIndex);
+    long eventId;
+    if (!eventIdStr.ToLong(&eventId))
+    {
+        spdlog::warn(
+            "Could not convert event ID from search result to long: {}",
+            eventIdStr.ToStdString());
+        return;
+    }
+
+    // Find the index of the event with this ID in m_events
+    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    {
+        if (m_events.GetEvent(i).getId() == eventId)
+        {
+            m_events.SetCurrentItem(i); // This will update m_eventsListCtrl
+            break;
+        }
+    }
 }
 
 void MainWindow::setupStatusBar()
@@ -170,7 +285,8 @@ void MainWindow::setupStatusBar()
 void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Populating dummy data...");
-
+    m_searchResultsList->DeleteAllItems();
+    m_searchBox->SetValue("");
     m_events.Clear();
     SetStatusText("Loading ..");
     m_progressGauge->SetValue(0);
@@ -245,6 +361,8 @@ void MainWindow::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MainWindow::OnClearParser(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Parser clear triggered.");
+    m_searchResultsList->DeleteAllItems();
+    m_searchBox->SetValue("");
     m_events.Clear();
     m_progressGauge->SetValue(0);
     SetStatusText("Data cleared");
@@ -315,6 +433,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
         std::string filePath = openFileDialog.GetPath().ToStdString();
         spdlog::info("File selected: {}", filePath);
         CallAfter([this, filePath]() { ParseData(filePath); });
+        CallAfter([this, filePath]() { UpdateFilters(); });
     }
     else
     {
@@ -346,6 +465,30 @@ void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
     // dlg.ShowModal();
 }
 
+void MainWindow::OnFilterChanged(wxCommandEvent&)
+{
+    wxString selectedType = m_typeFilter->GetStringSelection();
+    wxString selectedTimestamp = m_timestampFilter->GetStringSelection();
+
+    // Filter events and update m_eventsListCtrl
+    std::vector<int> filteredIndices;
+    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    {
+        const auto& event = m_events.GetEvent(i);
+        bool match = true;
+        if (selectedType != "All" && event.findByKey("type") != selectedType)
+            match = false;
+        if (selectedTimestamp != "All" &&
+            event.findByKey("timestamp") != selectedTimestamp)
+            match = false;
+        if (match)
+            filteredIndices.push_back(i);
+    }
+    // You can now update m_eventsListCtrl to show only filteredIndices
+    // (This may require adapting your EventsContainer and
+    // EventsVirtualListControl)
+}
+
 void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
 {
 
@@ -372,6 +515,8 @@ void MainWindow::ParseData(const std::string filePath)
 
     // Add your file processing code here
     // For example, you can call your XML parser to parse the selected file
+    m_searchResultsList->DeleteAllItems();
+    m_searchBox->SetValue("");
     m_events.Clear();
     m_parser = std::make_shared<parser::XmlParser>();
 
@@ -388,6 +533,45 @@ void MainWindow::ParseData(const std::string filePath)
     m_processing = false;
 
     spdlog::info("Parsing complete.");
+}
+
+void MainWindow::UpdateFilters()
+{
+    // Collect unique values for each filter
+    std::set<std::string> types;
+    std::set<std::string> timestamps;
+    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    {
+        const auto& event = m_events.GetEvent(i);
+        types.insert(event.findByKey("type"));
+        timestamps.insert(event.findByKey("timestamp"));
+    }
+
+    // Update type filter
+    m_typeFilter->Freeze();
+    m_typeFilter->Clear();
+    m_typeFilter->Append("All");
+    for (const auto& t : types)
+        m_typeFilter->Append(t);
+    m_typeFilter->SetSelection(0);
+    m_typeFilter->Thaw();
+    m_typeFilter->Show();
+
+    // Update timestamp filter
+    m_timestampFilter->Freeze();
+    m_timestampFilter->Clear();
+    m_timestampFilter->Append("All");
+    for (const auto& ts : timestamps)
+        m_timestampFilter->Append(ts);
+    m_timestampFilter->SetSelection(0);
+    m_timestampFilter->Thaw();
+
+    // If you have more filters, update them here in the same way
+
+    // Refresh the left panel layout
+    m_leftPanel->GetSizer()->Layout();
+    m_leftPanel->GetSizer()->Fit(m_leftPanel);
+    m_leftPanel->Layout();
 }
 
 // Data Observer methods

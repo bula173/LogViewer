@@ -2,17 +2,25 @@
 #include "config/Config.hpp"
 #include <spdlog/spdlog.h>
 #include <string>
+#include <wx/colour.h>
 
 namespace gui
 {
 EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : wxListCtrl(parent, id, pos, size, wxLC_REPORT | wxLC_VIRTUAL)
+    : wxListCtrl(parent, id, pos, size,
+          wxLC_REPORT | wxLC_VIRTUAL | wxLC_HRULES | wxLC_VRULES |
+              wxLC_SINGLE_SEL)
     , m_events(events)
 {
     spdlog::debug(
         "EventsVirtualListControl::EventsVirtualListControl constructed");
+
+    // Set alternate row color (light gray) and normal row color (white)
+    SetAlternateRowColour(wxColour(230, 230, 230)); // alternate rows
+    EnableAlternateRowColours(false);
+    ExtendRulesAndAlternateColour();
 
     auto colConfig = config::GetConfig().columns;
 
@@ -84,6 +92,25 @@ wxString EventsVirtualListControl::OnGetItemText(long index, long column) const
     spdlog::debug("EventsVirtualListControl::OnGetItemText called for index: "
                   "{}, column: {}",
         index, column);
+
+    if (index < 0 || index >= static_cast<long>(m_events.Size()))
+    {
+        spdlog::debug(
+            "ItemVirtualListControl::OnGetItemText: index out of range");
+        return "";
+    }
+    if (m_events.GetCurrentItemIndex() < 0 ||
+        m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
+    {
+        spdlog::debug(
+            "ItemVirtualListControl::OnGetItemText: current item index out of "
+            "range");
+        return "";
+    }
+
+    if (m_events.Size() == 0)
+        return "";
+
     switch (column)
     {
         case 0:
@@ -107,6 +134,8 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
     spdlog::debug(
         "EventsVirtualListControl::OnCurrentIndexUpdated called with index: {}",
         index);
-    // do nothing
+    SetItemState(index, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
+        wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
+    EnsureVisible(index);
 }
 } // namespace gui
