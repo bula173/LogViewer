@@ -22,7 +22,8 @@ enum
     ID_ViewLeftPanel = 2,
     ID_ViewRightPanel = 3,
     ID_ParserClear = 4,
-    ID_ConfigEditor = 5
+    ID_ConfigEditor = 5,
+    ID_AppLogViewer = 6
 };
 
 class MainWindow : public wxFrame, public parser::IDataParserObserver
@@ -49,6 +50,7 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     void OnHideRightPanel(wxCommandEvent& event);
     void OnClearParser(wxCommandEvent& event);
     void OnOpenConfigEditor(wxCommandEvent& event);
+    void OnOpenAppLog(wxCommandEvent& event);
 
     void setupMenu();
     void setupLayout();

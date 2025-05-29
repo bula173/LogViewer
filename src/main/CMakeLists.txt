@@ -40,12 +40,6 @@ elseif (APPLE) #osx icon ressource file, provided from /packaging directory
 endif()
 
 
-configure_file(
-    ${CMAKE_SOURCE_DIR}/etc/config.json
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config.json
-    COPYONLY
-)
-
 if(APPLE)
 
     # create bundle on apple compiles
@@ -73,16 +67,21 @@ else()
     endif()
 endif()
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/etc/default_config.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config.json
+    COPYONLY
+)
+
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION "."
-    RUNTIME DESTINATION bin)
+    RUNTIME DESTINATION ".")
 
-install(FILES ${CMAKE_SOURCE_DIR}/etc/config.json DESTINATION ".")
+install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json DESTINATION ".")
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
 # Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
 addRunAndDebugTargets(${PROJECT_NAME})
-
 
 # Link wxWidgets
 target_link_libraries(${PROJECT_NAME} PRIVATE application)

@@ -10,7 +10,7 @@ add_executable(
 )
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/etc/config.json
+    ${CMAKE_SOURCE_DIR}/etc/default_config.json
     ${CMAKE_BINARY_DIR}/tests/config.json
     COPYONLY
 )

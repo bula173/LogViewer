@@ -25,9 +25,9 @@ bool MyApp::OnInit()
     const auto& version = Version::current();
 
     gui::MainWindow* frame =
-        new gui::MainWindow("LogViewer " + version.asShortStr(),
+        new gui::MainWindow(m_appName + " " + version.asShortStr(),
             wxPoint(50, 50), wxSize(1000, 600), version);
-    SetTopWindow(frame);
+    // frame->SetIcon(wxICON(app_icon)); // Set the application icon
     try
     {
         frame->Show(true);
@@ -58,23 +58,19 @@ void MyApp::setupConfig()
 
     auto& config = config::GetConfig();
 
-    // Get current working directory (assumes running from project root or
-    // build/)
-    std::filesystem::path cwd = std::filesystem::current_path();
-    std::filesystem::path configPath = cwd / "config.json";
-
-    config.SetConfigFilePath(configPath.string());
+    config.SetAppName(m_appName);
+    spdlog::info("Application name set to: {}", config.appName);
     config.LoadConfig();
 }
 
 void MyApp::setupLogging()
 {
-    auto logPath = std::filesystem::current_path() / "log.txt";
+    auto& config = config::GetConfig();
     // Create both file and console sinks
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-        logPath.string(), true);
+        config.GetAppLogPath(), true);
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    spdlog::info("Log file path: {}", logPath.string());
+    spdlog::info("Log file path: {}", config.GetAppLogPath());
 
 
 #ifdef NDEBUG

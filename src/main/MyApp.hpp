@@ -13,6 +13,9 @@ class MyApp : public wxApp
   private:
     void setupLogging();
     void setupConfig();
+
+  private:
+    const std::string m_appName {"LogViewer"};
 };
 
 #endif // MYAPP_HPP

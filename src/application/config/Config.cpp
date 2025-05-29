@@ -23,8 +23,54 @@ Config& GetConfig()
     return configInstance;
 }
 
+
+void Config::SetAppName(const std::string& name)
+{
+    appName = name;
+};
+
+
 void Config::LoadConfig()
 {
+
+    if (!std::filesystem::exists(m_configFilePath))
+    {
+        std::filesystem::path configFilePath = GetDefaultConfigPath();
+        m_configFilePath = configFilePath.string();
+        spdlog::info("Using config file path: {}", m_configFilePath);
+    }
+
+    if (!std::filesystem::exists(m_configFilePath))
+    {
+        std::filesystem::path cwd = std::filesystem::current_path();
+        std::filesystem::path defaultInstalled =
+            cwd / "etc" / "default_config.json";
+
+        if (!std::filesystem::exists(defaultInstalled))
+        {
+            spdlog::error("Default config template not found at: {}",
+                defaultInstalled.string());
+        }
+
+        try
+        {
+            std::filesystem::copy_file(defaultInstalled, m_configFilePath,
+                std::filesystem::copy_options::overwrite_existing);
+            spdlog::info(
+                "Copied default config to user path: {}", m_configFilePath);
+        }
+        catch (const std::filesystem::filesystem_error& e)
+        {
+            spdlog::error("Failed to copy default config: {}", e.what());
+            return; // optional: abort config load
+        }
+    }
+    else
+    {
+        spdlog::info("Config file exists at: {}", m_configFilePath);
+    }
+
+
     // Load the configuration file
     std::ifstream configFile(m_configFilePath);
     if (configFile.is_open())
@@ -39,6 +85,8 @@ void Config::LoadConfig()
             spdlog::error("Invalid JSON data in config file.");
             return;
         }
+
+        SetupLogPath();
         GetLoggingConfig(j);
         ParseXmlConfig(j);
 
@@ -49,6 +97,15 @@ void Config::LoadConfig()
     {
         spdlog::error("Could not open config file: {}", m_configFilePath);
     }
+}
+
+void Config::SetupLogPath()
+{
+    // Set the log path based on the application name
+    std::filesystem::path logPath = GetDefaultConfigPath();
+    logPath.replace_filename("log.txt");
+    m_logPath = logPath.string();
+    spdlog::info("Log file path set to: {}", m_logPath);
 }
 
 void Config::SaveConfig()
@@ -83,6 +140,11 @@ void Config::SetConfigFilePath(const std::string& path)
     m_configFilePath = path;
 }
 
+const std::string& Config::GetAppLogPath() const
+{
+    return m_logPath;
+}
+
 const json& Config::GetParserConfig(const json& j)
 {
     if (j.contains("parsers"))
@@ -92,6 +154,7 @@ const json& Config::GetParserConfig(const json& j)
     else
     {
         spdlog::error("Missing 'parsers' in config file.");
+        return j; // Return the original JSON if "parsers" is not found
     }
 }
 void Config::ParseXmlConfig(const json& j)
@@ -171,6 +234,55 @@ void Config::GetLoggingConfig(const json& j)
         spdlog::warn("Missing 'logging' in config file.");
     }
 }
+std::filesystem::path Config::GetDefaultConfigPath()
+{
+    std::filesystem::path configPath;
 
+#ifdef _WIN32
+    const char* appData = std::getenv("APPDATA");
+    if (appData)
+    {
+        configPath = std::filesystem::path(appData) / appName / "config.json";
+    }
+#elif __APPLE__
+    const char* home = std::getenv("HOME");
+    if (home)
+    {
+        configPath = std::filesystem::path(home) / "Library" /
+            "Application Support" / appName / "config.json";
+    }
+#else // Linux and others
+    const char* configHome = std::getenv("XDG_CONFIG_HOME");
+    const char* home = std::getenv("HOME");
+    if (configHome)
+    {
+        configPath =
+            std::filesystem::path(configHome) / appName / "config.json";
+    }
+    else if (home)
+    {
+        configPath =
+            std::filesystem::path(home) / ".config" / appName / "config.json";
+    }
+#endif
+
+    if (!configPath.empty())
+    {
+        try
+        {
+            std::filesystem::create_directories(configPath.parent_path());
+        }
+        catch (const std::filesystem::filesystem_error& e)
+        {
+            spdlog::error("Failed to create config directory '{}': {}",
+                configPath.parent_path().string(), e.what());
+        }
+        catch (const std::exception& e)
+        {
+            spdlog::error("Error creating config directory: {}", e.what());
+        }
+    }
+    return configPath;
+}
 
 } // namespace config

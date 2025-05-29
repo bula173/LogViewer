@@ -1,4 +1,5 @@
 #include "gui/MainWindow.hpp"
+#include "config/Config.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
 #include <spdlog/spdlog.h>
@@ -37,6 +38,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(wxEVT_MENU, &MainWindow::OnClearParser, this, ID_ParserClear);
     this->Bind(
         wxEVT_MENU, &MainWindow::OnOpenConfigEditor, this, ID_ConfigEditor);
+    this->Bind(wxEVT_MENU, &MainWindow::OnOpenAppLog, this, ID_AppLogViewer);
 }
 
 void MainWindow::setupMenu()
@@ -70,6 +72,9 @@ void MainWindow::setupMenu()
     // Config menu
     menuFile->Append(
         ID_ConfigEditor, "Edit &Config...\tCtrl+E", "Open Config Editor");
+
+    menuFile->Append(
+        ID_AppLogViewer, "Open &Application Logs...\tCtrl+L", "Open App Logs");
 
     // Main menu bar
     wxMenuBar* menuBar = new wxMenuBar;
@@ -207,7 +212,6 @@ void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
 }
 #endif
 
-
 void MainWindow::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Exit requested.");
@@ -322,27 +326,44 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("Config Editor menu selected");
-    // Option 1: Open config.json in system editor
-    // Get current working directory (assumes running from project root or
-    // build/)
-    std::filesystem::path cwd = std::filesystem::current_path();
-    std::filesystem::path configPath = cwd / "config.json";
 
+    auto& config = config::GetConfig();
+    auto& configPath = config.GetConfigFilePath();
     if (!std::filesystem::exists(configPath))
     {
-        spdlog::error("Config file does not exist: {}", configPath.string());
+        spdlog::error("Config file does not exist: {}", configPath);
         wxMessageBox(
             "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
         return;
     }
-    spdlog::info("Opening config file: {}", configPath.string());
+    spdlog::info("Opening config file: {}", configPath);
     // Use wxLaunchDefaultApplication to open the config file in the default
     // editor
-    wxLaunchDefaultApplication(configPath.string());
+    wxLaunchDefaultApplication(configPath);
 
     // Option 2: Show a custom dialog (implement your own ConfigEditorDialog)
     // ConfigEditorDialog dlg(this, configPath);
     // dlg.ShowModal();
+}
+
+void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
+{
+
+    spdlog::info("Lod View menu selected");
+
+    auto& config = config::GetConfig();
+    auto& configPath = config.GetAppLogPath();
+    if (!std::filesystem::exists(configPath))
+    {
+        spdlog::error("Config file does not exist: {}", configPath);
+        wxMessageBox(
+            "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    spdlog::info("Opening config file: {}", configPath);
+    // Use wxLaunchDefaultApplication to open the config file in the default
+    // editor
+    wxLaunchDefaultApplication(configPath);
 }
 
 void MainWindow::ParseData(const std::string filePath)
@@ -364,6 +385,7 @@ void MainWindow::ParseData(const std::string filePath)
     m_progressGauge->SetRange(m_parser->GetTotalProgress());
     m_parser->ParseData(filePath);
     SetStatusText("Data ready");
+    m_processing = false;
 
     spdlog::info("Parsing complete.");
 }
