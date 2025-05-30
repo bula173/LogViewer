@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
+#include <wx/dataview.h>
 #include <wx/splitter.h>
 #include <wx/wx.h>
 
@@ -52,9 +53,13 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     void OnOpenConfigEditor(wxCommandEvent& event);
     void OnOpenAppLog(wxCommandEvent& event);
     void OnSearch(wxCommandEvent& event);
-    void OnSearchResultActivated(wxListEvent& event);
+    void OnSearchResultActivated(wxDataViewEvent& event);
     void OnFilterChanged(wxCommandEvent&);
     void UpdateFilters();
+    void OnThemeLight(wxCommandEvent&);
+    void OnThemeDark(wxCommandEvent&);
+    void ApplyDarkThemeRecursive(wxWindow* window);
+    void ApplyLightThemeRecursive(wxWindow* window);
 
     void setupMenu();
     void setupLayout();
@@ -72,7 +77,7 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     wxSplitterWindow* m_rigth_spliter {nullptr};
     wxTextCtrl* m_searchBox {nullptr};
     wxButton* m_searchButton {nullptr};
-    wxListCtrl* m_searchResultsList {nullptr};
+    wxDataViewListCtrl* m_searchResultsList {nullptr};
     db::EventsContainer m_events;
     wxGauge* m_progressGauge {nullptr};
     wxChoice* m_typeFilter {nullptr};

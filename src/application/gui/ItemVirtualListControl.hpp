@@ -1,7 +1,7 @@
 #ifndef GUI_ITEMVIRTUALLISTCONTROL_HPP
 #define GUI_ITEMVIRTUALLISTCONTROL_HPP
 
-#include <wx/listctrl.h>
+#include <wx/dataview.h>
 #include <wx/wx.h>
 
 #include "db/EventsContainer.hpp"
@@ -9,14 +9,13 @@
 
 namespace gui
 {
-class ItemVirtualListControl : public wxListCtrl, public mvc::IView
+class ItemVirtualListControl : public wxDataViewListCtrl, public mvc::IView
 {
   public:
     ItemVirtualListControl(db::EventsContainer& events, wxWindow* parent,
         const wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize);
 
-    virtual wxString OnGetItemText(long index, long column) const wxOVERRIDE;
     void RefreshAfterUpdate();
 
     // implement IView interface

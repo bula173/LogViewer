@@ -4,6 +4,7 @@
 
 #include <spdlog/spdlog.h>
 #include <wx/app.h>
+#include <wx/settings.h>
 // std
 #include <filesystem>
 #include <set>
@@ -43,32 +44,13 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(
         wxEVT_BUTTON, &MainWindow::OnSearch, this, m_searchButton->GetId());
     m_searchBox->Bind(wxEVT_TEXT_ENTER, &MainWindow::OnSearch, this);
-    m_searchResultsList->Bind(
-        wxEVT_LIST_ITEM_ACTIVATED, &MainWindow::OnSearchResultActivated, this);
+    m_searchResultsList->Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED,
+        &MainWindow::OnSearchResultActivated, this);
 
-    // Bind resize event to auto-expand last column
-    m_searchResultsList->Bind(wxEVT_SIZE,
-        [this](wxSizeEvent& evt)
-        {
-            spdlog::debug("EventsVirtualListControl::wxEVT_SIZE triggered");
-            // Call the default handler first
-            evt.Skip();
-
-            // Calculate total width of all columns except the last
-            int totalWidth = 0;
-            int colCount = m_searchResultsList->GetColumnCount();
-            for (int i = 0; i < colCount - 1; ++i)
-                totalWidth += m_searchResultsList->GetColumnWidth(i);
-
-            // Set last column width to fill the remaining space
-            int lastCol = colCount - 1;
-            int clientWidth = m_searchResultsList->GetClientSize().GetWidth();
-            int newWidth = clientWidth - totalWidth - 2; // -2 for border fudge
-            if (newWidth > 50)                           // minimum width
-                m_searchResultsList->SetColumnWidth(lastCol, newWidth);
-        });
     m_typeFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
     m_timestampFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
+    this->Bind(wxEVT_MENU, &MainWindow::OnThemeLight, this, 2001);
+    this->Bind(wxEVT_MENU, &MainWindow::OnThemeDark, this, 2002);
 }
 
 void MainWindow::setupMenu()
@@ -95,6 +77,10 @@ void MainWindow::setupMenu()
     menuView->Append(
         ID_ViewRightPanel, "Hide Right Panel", "Change view", wxITEM_CHECK);
 
+    wxMenu* menuTheme = new wxMenu;
+    menuTheme->AppendRadioItem(2001, "Light Theme");
+    menuTheme->AppendRadioItem(2002, "Dark Theme");
+
     // Parser menu
     wxMenu* menuParser = new wxMenu;
     menuParser->Append(ID_ParserClear, "Clear", "Parser");
@@ -113,6 +99,7 @@ void MainWindow::setupMenu()
     menuBar->Append(menuHelp, "&Help");
 #endif
     menuBar->Append(menuParser, "&Parser");
+    menuBar->Append(menuTheme, "&Theme");
     menuBar->Append(menuView, "&View");
     SetMenuBar(menuBar);
 }
@@ -128,6 +115,51 @@ void MainWindow::OnSize(wxSizeEvent& event)
     GetStatusBar()->GetFieldRect(1, rect);
     m_progressGauge->SetSize(rect);
 }
+
+void MainWindow::ApplyDarkThemeRecursive(wxWindow* window)
+{
+    if (!window)
+        return;
+
+    window->SetBackgroundColour(wxColour(50, 50, 50));
+    window->SetForegroundColour(wxColour(220, 220, 220));
+
+    for (auto child : window->GetChildren())
+    {
+        ApplyDarkThemeRecursive(child);
+    }
+}
+
+void MainWindow::ApplyLightThemeRecursive(wxWindow* window)
+{
+    if (!window)
+        return;
+
+    window->SetBackgroundColour(wxColour(220, 220, 220));
+    window->SetForegroundColour(wxColour(30, 30, 30));
+
+    for (auto child : window->GetChildren())
+    {
+        ApplyLightThemeRecursive(child);
+    }
+}
+
+void MainWindow::OnThemeLight(wxCommandEvent&)
+{
+    spdlog::info("Switching to Light Theme");
+    ApplyLightThemeRecursive(this);
+    this->Refresh();
+    this->Update();
+}
+
+void MainWindow::OnThemeDark(wxCommandEvent&)
+{
+    spdlog::info("Switching to Dark Theme");
+    ApplyDarkThemeRecursive(this);
+    this->Refresh();
+    this->Update();
+}
+
 void MainWindow::setupLayout()
 {
     spdlog::info("Setting up layout...");
@@ -171,11 +203,11 @@ void MainWindow::setupLayout()
     searchBarSizer->Add(m_searchBox, 1, wxEXPAND | wxALL, 5);
     searchBarSizer->Add(m_searchButton, 0, wxEXPAND | wxALL, 5);
 
-    m_searchResultsList = new wxListCtrl(m_searchResultPanel, wxID_ANY,
-        wxDefaultPosition, wxDefaultSize, wxLC_REPORT);
+    m_searchResultsList = new wxDataViewListCtrl(m_searchResultPanel, wxID_ANY,
+        wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES | wxDV_VERT_RULES);
 
-    m_searchResultsList->InsertColumn(0, "Event ID");
-    m_searchResultsList->InsertColumn(1, "Match");
+    m_searchResultsList->AppendTextColumn("Event ID");
+    m_searchResultsList->AppendTextColumn("Match");
 
 
     searchSizer->Add(searchBarSizer, 0, wxEXPAND);
@@ -183,8 +215,8 @@ void MainWindow::setupLayout()
 
     m_searchResultPanel->SetSizer(searchSizer);
 
-    m_eventsListCtrl = new gui::EventsVirtualListControl(
-        m_events, m_rigth_spliter); // main panel
+    m_eventsListCtrl =
+        new gui::EventsVirtualListControl(m_events, m_rigth_spliter);
     m_itemView = new gui::ItemVirtualListControl(m_events, m_rigth_spliter);
 
     m_bottom_spliter->SplitHorizontally(
@@ -224,7 +256,6 @@ void MainWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
     wxString query = m_searchBox->GetValue();
     m_searchResultsList->DeleteAllItems();
 
-    int idx = 0;
     for (unsigned long i = 0; i < m_events.Size(); ++i)
     {
         const auto& event = m_events.GetEvent(i);
@@ -232,20 +263,22 @@ void MainWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
         {
             if (item.second.find(query.ToStdString()) != std::string::npos)
             {
-                long row = m_searchResultsList->InsertItem(
-                    idx, std::to_string(event.getId()));
-                m_searchResultsList->SetItem(row, 1, item.second);
-                ++idx;
+                wxVector<wxVariant> row;
+                row.push_back(wxVariant(std::to_string(event.getId())));
+                row.push_back(wxVariant(item.second));
+                m_searchResultsList->AppendItem(row);
                 break;
             }
         }
     }
 }
 
-void MainWindow::OnSearchResultActivated(wxListEvent& event)
+void MainWindow::OnSearchResultActivated(wxDataViewEvent& event)
 {
-    long itemIndex = event.GetIndex();
-    wxString eventIdStr = m_searchResultsList->GetItemText(itemIndex);
+    int itemIndex = m_searchResultsList->ItemToRow(event.GetItem());
+    wxVariant value;
+    m_searchResultsList->GetValue(value, itemIndex, 0); // column 0 = Event ID
+    wxString eventIdStr = value.GetString();
     long eventId;
     if (!eventIdStr.ToLong(&eventId))
     {
@@ -353,8 +386,8 @@ void MainWindow::OnClose(wxCloseEvent& event)
 void MainWindow::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     spdlog::info("About dialog opened.");
-    wxMessageBox(
-        "This is simple log viewer which parse logs and display in table view.",
+    wxMessageBox("This is simple log viewer which parse logs and display "
+                 "in table view.",
         "About" + m_version.asLongStr(), wxOK | wxICON_INFORMATION);
 }
 
@@ -460,8 +493,8 @@ void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
     // editor
     wxLaunchDefaultApplication(configPath);
 
-    // Option 2: Show a custom dialog (implement your own ConfigEditorDialog)
-    // ConfigEditorDialog dlg(this, configPath);
+    // Option 2: Show a custom dialog (implement your own
+    // ConfigEditorDialog) ConfigEditorDialog dlg(this, configPath);
     // dlg.ShowModal();
 }
 
@@ -484,9 +517,6 @@ void MainWindow::OnFilterChanged(wxCommandEvent&)
         if (match)
             filteredIndices.push_back(i);
     }
-    // You can now update m_eventsListCtrl to show only filteredIndices
-    // (This may require adapting your EventsContainer and
-    // EventsVirtualListControl)
 }
 
 void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
@@ -567,11 +597,9 @@ void MainWindow::UpdateFilters()
     m_timestampFilter->Thaw();
 
     // If you have more filters, update them here in the same way
-
     // Refresh the left panel layout
-    m_leftPanel->GetSizer()->Layout();
-    m_leftPanel->GetSizer()->Fit(m_leftPanel);
-    m_leftPanel->Layout();
+    Refresh();
+    this->Layout();
 }
 
 // Data Observer methods

@@ -1,22 +1,21 @@
 #ifndef GUI_EVENTSVIRTUALLISTCONTROL_HPP
 #define GUI_EVENTSVIRTUALLISTCONTROL_HPP
 
-#include <wx/listctrl.h>
+#include <wx/dataview.h>
 #include <wx/wx.h>
 
-#include "db/EventsContainer.hpp"
+#include "gui/EventsContainerAdapter.hpp"
 #include "mvc/IView.hpp"
 
 namespace gui
 {
-class EventsVirtualListControl : public wxListCtrl, public mvc::IView
+class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
 {
   public:
     EventsVirtualListControl(db::EventsContainer& events, wxWindow* parent,
         const wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize);
 
-    virtual wxString OnGetItemText(long index, long column) const wxOVERRIDE;
     void RefreshAfterUpdate();
 
     // implement IView interface
@@ -24,10 +23,8 @@ class EventsVirtualListControl : public wxListCtrl, public mvc::IView
     virtual void OnCurrentIndexUpdated(const int index) override;
 
   private:
-    const wxString getColumnName(const int column) const;
-
-  private:
     db::EventsContainer& m_events;
+    EventsContainerAdapter* m_model;
 };
 
 } // namespace gui

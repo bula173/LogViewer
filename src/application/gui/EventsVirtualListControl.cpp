@@ -6,127 +6,65 @@
 
 namespace gui
 {
+
+
 EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : wxListCtrl(parent, id, pos, size,
-          wxLC_REPORT | wxLC_VIRTUAL | wxLC_HRULES | wxLC_VRULES |
-              wxLC_SINGLE_SEL)
+    : wxDataViewCtrl(
+          parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES | wxDV_SINGLE)
     , m_events(events)
 {
     spdlog::debug(
         "EventsVirtualListControl::EventsVirtualListControl constructed");
 
-    // Set alternate row color (light gray) and normal row color (white)
-    SetAlternateRowColour(wxColour(230, 230, 230)); // alternate rows
-    EnableAlternateRowColours(false);
-    ExtendRulesAndAlternateColour();
+    auto& colConfig = config::GetConfig().columns;
 
-    auto colConfig = config::GetConfig().columns;
+    m_events.RegisterOndDataUpdated(this);
 
+    m_model = new gui::EventsContainerAdapter(m_events);
+    m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
+    this->AssociateModel(m_model);
+
+
+    int colIndex = 0;
     for (const auto& col : colConfig)
     {
         if (col.visible)
         {
             spdlog::debug("Adding column: {}", col.name);
-            this->AppendColumn(col.name, wxLIST_FORMAT_LEFT, col.width);
+            auto renderer = new wxDataViewTextRenderer(
+                "string", wxDATAVIEW_CELL_INERT, wxDVR_DEFAULT_ALIGNMENT);
+            auto column = new wxDataViewColumn(col.name, renderer, colIndex,
+                col.width, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE);
+            this->AppendColumn(column);
+            ++colIndex;
         }
     }
 
-    m_events.RegisterOndDataUpdated(this);
-
-    this->Bind(wxEVT_LIST_ITEM_SELECTED,
-        [this](wxListEvent& evt)
+    this->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
+        [this](wxDataViewEvent& evt)
         {
-            spdlog::debug(
-                "EventsVirtualListControl::wxEVT_LIST_ITEM_SELECTED index: {}",
-                evt.GetIndex());
-            this->m_events.SetCurrentItem(evt.GetIndex());
-        });
-
-    // Bind resize event to auto-expand last column
-    this->Bind(wxEVT_SIZE,
-        [this](wxSizeEvent& evt)
-        {
-            spdlog::debug("EventsVirtualListControl::wxEVT_SIZE triggered");
-            // Call the default handler first
-            evt.Skip();
-
-            // Calculate total width of all columns except the last
-            int totalWidth = 0;
-            int colCount = this->GetColumnCount();
-            for (int i = 0; i < colCount - 1; ++i)
-                totalWidth += this->GetColumnWidth(i);
-
-            // Set last column width to fill the remaining space
-            int lastCol = colCount - 1;
-            int clientWidth = this->GetClientSize().GetWidth();
-            int newWidth = clientWidth - totalWidth - 2; // -2 for border fudge
-            if (newWidth > 50)                           // minimum width
-                this->SetColumnWidth(lastCol, newWidth);
+            unsigned int item = m_model->GetRow(evt.GetItem());
+            spdlog::debug("EventsVirtualListControl::wxEVT_DATAVIEW_SELECTION_"
+                          "CHANGED index: {}",
+                item);
+            this->m_events.SetCurrentItem(item);
         });
 }
 
 void EventsVirtualListControl::OnDataUpdated()
 {
     spdlog::debug("EventsVirtualListControl::OnDataUpdated called");
-    auto s = m_events.Size();
-    this->SetItemCount(s);
-    this->RefreshItem(s - 1); //-1 because we have to refresh the last item
-    this->Update();
-}
-
-const wxString EventsVirtualListControl::getColumnName(const int column) const
-{
-    spdlog::debug(
-        "EventsVirtualListControl::getColumnName called for column: {}",
-        column);
-    wxListItem item;
-    item.SetMask(wxLIST_MASK_TEXT);
-    this->GetColumn(column, item);
-    return item.GetText();
-}
-
-wxString EventsVirtualListControl::OnGetItemText(long index, long column) const
-{
-    spdlog::debug("EventsVirtualListControl::OnGetItemText called for index: "
-                  "{}, column: {}",
-        index, column);
-
-    if (index < 0 || index >= static_cast<long>(m_events.Size()))
-    {
-        spdlog::debug(
-            "ItemVirtualListControl::OnGetItemText: index out of range");
-        return "";
-    }
-    if (m_events.GetCurrentItemIndex() < 0 ||
-        m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
-    {
-        spdlog::debug(
-            "ItemVirtualListControl::OnGetItemText: current item index out of "
-            "range");
-        return "";
-    }
-
-    if (m_events.Size() == 0)
-        return "";
-
-    switch (column)
-    {
-        case 0:
-            return std::to_string(m_events.GetEvent(index).getId());
-        default:
-            return m_events.GetEvent(index).findByKey(
-                getColumnName(column).ToStdString());
-    }
+    m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
+    m_model->Reset(static_cast<unsigned int>(m_events.Size()));
 }
 
 void EventsVirtualListControl::RefreshAfterUpdate()
 {
     spdlog::debug("EventsVirtualListControl::RefreshAfterUpdate called");
-    this->SetItemCount(m_events.Size());
-    this->Refresh();
-    this->Update();
+    m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
+    m_model->Reset(static_cast<unsigned int>(m_events.Size()));
 }
 
 void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
@@ -134,8 +72,10 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
     spdlog::debug(
         "EventsVirtualListControl::OnCurrentIndexUpdated called with index: {}",
         index);
-    SetItemState(index, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
-        wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
-    EnsureVisible(index);
+    wxDataViewItem item = m_model->GetItem(index);
+    this->Select(item);
+    this->EnsureVisible(item);
+    this->SetCurrentItem(item);
+    this->SetFocus();
 }
 } // namespace gui

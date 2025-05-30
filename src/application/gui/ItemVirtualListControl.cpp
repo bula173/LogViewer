@@ -9,36 +9,12 @@ namespace gui
 ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : wxListCtrl(parent, id, pos, size,
-          wxLC_REPORT | wxLC_VIRTUAL | wxLC_HRULES | wxLC_VRULES)
+    : wxDataViewListCtrl(
+          parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES)
     , m_events(events)
 {
-    // Set alternate row color (light gray) and normal row color (white)
-    SetAlternateRowColour(wxColour(230, 230, 230)); // alternate rows
-    EnableAlternateRowColours(false);
-    ExtendRulesAndAlternateColour();
-    this->AppendColumn("param");
-    this->AppendColumn("value");
-    // Bind resize event to auto-expand last column
-    this->Bind(wxEVT_SIZE,
-        [this](wxSizeEvent& evt)
-        {
-            // Call the default handler first
-            evt.Skip();
-
-            // Calculate total width of all columns except the last
-            int totalWidth = 0;
-            int colCount = this->GetColumnCount();
-            for (int i = 0; i < colCount - 1; ++i)
-                totalWidth += this->GetColumnWidth(i);
-
-            // Set last column width to fill the remaining space
-            int lastCol = colCount - 1;
-            int clientWidth = this->GetClientSize().GetWidth();
-            int newWidth = clientWidth - totalWidth - 2; // -2 for border fudge
-            if (newWidth > 50)                           // minimum width
-                this->SetColumnWidth(lastCol, newWidth);
-        });
+    this->AppendTextColumn("param");
+    this->AppendTextColumn("value");
 
     m_events.RegisterOndDataUpdated(this);
 }
@@ -62,77 +38,22 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
         return;
     }
 
+    this->DeleteAllItems();
+
     if (index > 0)
     {
-        auto s = m_events.GetEvent(m_events.GetCurrentItemIndex())
-                     .getEventItems()
-                     .size();
-        spdlog::debug(
-            "ItemVirtualListControl::Current event item count: {}", s);
-
-        this->SetItemCount(s);
-        this->RefreshItem(s - 1);
-    }
-    else
-    {
-        this->DeleteAllItems();
-        this->SetItemCount(0);
-        this->RefreshItem(0);
+        auto items =
+            m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
+        for (const auto& item : items)
+        {
+            wxVector<wxVariant> data;
+            data.push_back(wxVariant(item.first));
+            data.push_back(wxVariant(item.second));
+            this->AppendItem(data);
+        }
     }
 
     this->Update();
-}
-
-const wxString ItemVirtualListControl::getColumnName(const int column) const
-{
-    spdlog::debug(
-        "ItemVirtualListControl::getColumnName called for column: {}", column);
-
-    wxListItem item;
-    item.SetMask(wxLIST_MASK_TEXT);
-    this->GetColumn(column, item);
-    return item.GetText();
-}
-
-wxString ItemVirtualListControl::OnGetItemText(long index, long column) const
-{
-    spdlog::debug("ItemVirtualListControl::OnGetItemText called for index: {}, "
-                  "column: {}",
-        index, column);
-
-    spdlog::debug("ItemVirtualListControl::OnGetItemText: "
-                  "m_events.GetCurrentItemIndex(): {}",
-        m_events.GetCurrentItemIndex());
-    if (index < 0 || index >= static_cast<long>(m_events.Size()))
-    {
-        spdlog::debug(
-            "ItemVirtualListControl::OnGetItemText: index out of range");
-        return "";
-    }
-    if (m_events.GetCurrentItemIndex() < 0 ||
-        m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
-    {
-        spdlog::debug(
-            "ItemVirtualListControl::OnGetItemText: current item index out of "
-            "range");
-        return "";
-    }
-
-    if (m_events.Size() == 0)
-        return "";
-
-    auto items =
-        m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
-
-    switch (column)
-    {
-        case 0:
-            return items[index].first;
-        case 1:
-            return items.at(index).second;
-        default:
-            return "";
-    }
 }
 
 void ItemVirtualListControl::RefreshAfterUpdate()
@@ -141,29 +62,30 @@ void ItemVirtualListControl::RefreshAfterUpdate()
 
     if (m_events.GetCurrentItemIndex() < 0)
     {
-        spdlog::error("ItemVirtualListControl::RefreshAfterUpdate: index "
-                      "out of range");
+        spdlog::error(
+            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
         return;
     }
     if (m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
     {
-        spdlog::error("ItemVirtualListControl::RefreshAfterUpdate: index "
-                      "out of range");
+        spdlog::error(
+            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
         return;
     }
 
-    if (m_events.GetCurrentItemIndex() == 0)
+    this->DeleteAllItems();
+
+    if (m_events.GetCurrentItemIndex() > 0)
     {
-
-        this->SetItemCount(0);
-    }
-    else
-    {
-
-
-        this->SetItemCount(m_events.GetEvent(m_events.GetCurrentItemIndex())
-                .getEventItems()
-                .size());
+        auto items =
+            m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
+        for (const auto& item : items)
+        {
+            wxVector<wxVariant> data;
+            data.push_back(wxVariant(item.first));
+            data.push_back(wxVariant(item.second));
+            this->AppendItem(data);
+        }
     }
 
     this->Refresh();
