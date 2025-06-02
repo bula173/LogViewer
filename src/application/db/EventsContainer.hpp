@@ -1,7 +1,6 @@
 #ifndef DB_EVENTSCONTAINER_HPP
 #define DB_EVENTSCONTAINER_HPP
 
-#include <ranges>
 #include <vector>
 
 #include "db/LogEvent.hpp"
