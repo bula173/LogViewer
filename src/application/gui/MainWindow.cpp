@@ -136,7 +136,7 @@ void MainWindow::ApplyLightThemeRecursive(wxWindow* window)
         return;
 
     window->SetBackgroundColour(wxColour(220, 220, 220));
-    window->SetForegroundColour(wxColour(30, 30, 30));
+    window->SetForegroundColour(wxColour(10, 10, 10));
 
     for (auto child : window->GetChildren())
     {

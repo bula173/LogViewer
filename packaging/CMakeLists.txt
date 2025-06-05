@@ -14,12 +14,12 @@ set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_PROJECT_NAME}")
-set(CPACK_PACKAGE_W)
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 
 
 # set human names to exetuables
-set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer Executable")
+set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer")
 set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
 set(CPACK_STRIP_FILES TRUE)
 
@@ -143,6 +143,15 @@ else()
 endif()
 
 #------------------------------------------------------------------------------
+
+message(STATUS "")
+message(STATUS "    == Packaging overview for ${PROJECT_NAME} ==")
+message(STATUS "Version:              ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH} ${VERSION_TYPE} @ ${VERSION_HOST}")
+message(STATUS "Install prefix:       ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Compiler:             ${CMAKE_CXX_COMPILER}")
+message(STATUS "CMake generator:      ${CMAKE_GENERATOR}")
+message(STATUS "CPACK_PACKAGE_DIRECTORY: ${CPACK_PACKAGE_DIRECTORY}")
+message(STATUS "")
 # and include CPack, so we get target for packages
 include(CPack)
 

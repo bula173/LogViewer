@@ -37,30 +37,22 @@ endif()
 # Set default install location to dist folder in build dir
 # we do not want to install to /usr by default
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/dist" CACHE PATH
+    set (CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/dist" CACHE PATH
         "Install path prefix, prepended onto install directories." FORCE )
-endif()
-#------------------------------------------------------------------------------
-# Custom Install target, used in run target in source/CMakeLists.txt
-if (CMAKE_GENERATOR MATCHES "Makefiles")
-    # Make it multithreaded
-    add_custom_target( Install_ COMMAND "${CMAKE_COMMAND}" --build . --target
-        install -- -j WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
-else()
-    add_custom_target( Install_ COMMAND "${CMAKE_COMMAND}" --build . --target
-        install WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
 endif()
 
 
 #------------------------------------------------------------------------------
 # Included CMakeLists.txt
-add_subdirectory(packaging)
 
 add_subdirectory(thirdparty)
 
 add_subdirectory(src)
 
+add_subdirectory(packaging)
+
 add_subdirectory(tests)
+
 
 enable_testing()
 
@@ -75,4 +67,3 @@ message(STATUS "CMAKE_BUILD_TYPE:     ${CMAKE_BUILD_TYPE}")
 message(STATUS "  possible options: Debug Release RelWithDebInfo MinSizeRel")
 message(STATUS "  set with ` cmake -DCMAKE_BUILD_TYPE=Debug .. `")
 message(STATUS "")
-
