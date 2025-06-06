@@ -73,6 +73,11 @@ static void EndElementHandler(void* userData, const XML_Char* name)
         state->currentElement.clear();
         state->currentText.clear();
     }
+    state->eventsSinceLastNotify++;
+    if (state->eventsSinceLastNotify >= 100) {
+        state->parser->SendProgress();
+        state->eventsSinceLastNotify = 0;
+    }
 }
 
 static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
@@ -158,6 +163,7 @@ void XmlParser::ParseData(std::istream& input)
 
     spdlog::debug("XmlParser::ParseData finished parsing. Processed: {}",
         state.bytesProcessed);
+    SendProgress(); // Ensure the view is up-to-date at the end
 }
 
 uint32_t XmlParser::GetCurrentProgress() const

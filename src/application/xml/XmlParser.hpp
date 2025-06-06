@@ -33,6 +33,7 @@ struct ParserState
     std::string currentText;
     size_t totalBytes = 0;
     size_t bytesProcessed = 0;
+    size_t eventsSinceLastNotify = 0;
     int eventId = 0;
     bool insideRoot = false;
     bool insideEvent = false;
