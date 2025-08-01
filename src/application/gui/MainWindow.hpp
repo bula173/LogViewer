@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <wx/dataview.h>
+#include <wx/filehistory.h>
 #include <wx/splitter.h>
 #include <wx/wx.h>
 
@@ -67,6 +68,12 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
 
     void ParseData(const std::string filePath);
 
+
+    // Methods to add
+    void AddToRecentFiles(const wxString& path);
+    void LoadRecentFile(wxCommandEvent& event);
+    void OnDropFiles(wxDropFilesEvent& event);
+
   private:
     gui::EventsVirtualListControl* m_eventsListCtrl {nullptr};
     gui::ItemVirtualListControl* m_itemView {nullptr};
@@ -88,6 +95,7 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     std::shared_ptr<parser::IDataParser> m_parser {nullptr};
 
     const Version::Version& m_version;
+    wxFileHistory m_fileHistory;
 };
 
 } // namespace gui

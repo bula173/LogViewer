@@ -16,6 +16,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     const wxSize& size, const Version::Version& version)
     : wxFrame(NULL, wxID_ANY, title, pos, size)
     , m_version(version)
+    , m_fileHistory(9) // Initialize file history to remember up to 9 files
 {
     spdlog::info(
         "MainWindow created with title: {}", std::string(title.mb_str()));
@@ -51,6 +52,13 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     m_timestampFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
     this->Bind(wxEVT_MENU, &MainWindow::OnThemeLight, this, 2001);
     this->Bind(wxEVT_MENU, &MainWindow::OnThemeDark, this, 2002);
+
+    this->DragAcceptFiles(true);
+    this->Bind(wxEVT_DROP_FILES, &MainWindow::OnDropFiles, this);
+
+    // Add this binding for recent files
+    this->Bind(
+        wxEVT_MENU, &MainWindow::LoadRecentFile, this, wxID_FILE1, wxID_FILE9);
 }
 
 void MainWindow::setupMenu()
@@ -64,6 +72,13 @@ void MainWindow::setupMenu()
         "Populate dummy data");
 #endif
     menuFile->Append(wxID_OPEN, "&Open...\tCtrl-O", "Open a file");
+
+    // Add this section for recent files
+    menuFile->AppendSeparator();
+    m_fileHistory.UseMenu(menuFile);
+    m_fileHistory.AddFilesToMenu();
+    menuFile->AppendSeparator();
+
 #ifndef __WXMAC__ // Add "About" manually for non-macOS
     wxMenu* menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -455,24 +470,42 @@ void MainWindow::OnHideRightPanel(wxCommandEvent& event)
 
 void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("Open file dialog triggered.");
-    wxFileDialog openFileDialog(this, _("Open log file"), "", "",
-        "XML files (*.xml)|*.xml|All files (*.*)|*.*");
+    spdlog::info("OnOpenFile event triggered.");
 
-    auto result = openFileDialog.ShowModal();
+    // Using CallAfter is the standard and most reliable way to show
+    // modal dialogs on macOS to avoid event loop issues.
+    CallAfter(
+        [this]()
+        {
+            if (m_processing)
+            {
+                wxMessageBox("A file is already being processed. Please wait.",
+                    "Processing in Progress", wxOK | wxICON_INFORMATION, this);
+                return;
+            }
 
-    if (result == wxID_OK)
-    {
-        std::string filePath = openFileDialog.GetPath().ToStdString();
-        spdlog::info("File selected: {}", filePath);
-        CallAfter([this, filePath]() { ParseData(filePath); });
-        CallAfter([this, filePath]() { UpdateFilters(); });
-    }
-    else
-    {
-        spdlog::warn("Open file dialog canceled. Reason: {}", result);
-        return;
-    }
+            static wxString lastDir; // Remember the last directory
+
+            wxFileDialog openFileDialog(this, _("Open log file"), lastDir, "",
+                "XML files (*.xml)|*.xml|Log files (*.log)|*.log|All files "
+                "(*.*)|*.*",
+                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+            if (openFileDialog.ShowModal() == wxID_OK)
+            {
+                wxString path = openFileDialog.GetPath();
+                lastDir =
+                    openFileDialog.GetDirectory(); // Update the last directory
+
+                AddToRecentFiles(path);
+                ParseData(path.ToStdString());
+                UpdateFilters();
+            }
+            else
+            {
+                spdlog::warn("File dialog was canceled by the user.");
+            }
+        });
 }
 
 void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
@@ -627,5 +660,48 @@ void MainWindow::NewEventFound(db::LogEvent&& event)
     spdlog::debug("New event found.");
     m_events.AddEvent(std::move(event));
 }
+
+void MainWindow::OnDropFiles(wxDropFilesEvent& event)
+{
+    if (event.GetNumberOfFiles() > 0)
+    {
+        wxString* droppedFiles = event.GetFiles();
+        wxString filename = droppedFiles[0];
+        std::string filePath = filename.ToStdString();
+
+        // Process the dropped file
+        ParseData(filePath);
+        UpdateFilters();
+
+        // Add to recent files
+        AddToRecentFiles(filename);
+    }
+}
+
+void MainWindow::AddToRecentFiles(const wxString& path)
+{
+    m_fileHistory.AddFileToHistory(path);
+}
+
+void MainWindow::LoadRecentFile(wxCommandEvent& event)
+{
+    int fileId = event.GetId() - wxID_FILE1;
+    if (fileId >= 0 && fileId < m_fileHistory.GetCount())
+    {
+        wxString path = m_fileHistory.GetHistoryFile(fileId);
+        if (!path.IsEmpty() && wxFileExists(path))
+        {
+            std::string filePath = path.ToStdString();
+            ParseData(filePath);
+            UpdateFilters();
+        }
+        else
+        {
+            spdlog::warn("Recent file not found: {}", path.ToStdString());
+            m_fileHistory.RemoveFileFromHistory(fileId);
+        }
+    }
+}
+
 
 } // namespace gui
