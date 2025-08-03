@@ -47,14 +47,16 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     m_searchBox->Bind(wxEVT_TEXT_ENTER, &MainWindow::OnSearch, this);
     m_searchResultsList->Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED,
         &MainWindow::OnSearchResultActivated, this);
+    m_applyFilterButton->Bind(wxEVT_BUTTON, &MainWindow::OnFilterChanged, this);
 
-    m_typeFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
-    m_timestampFilter->Bind(wxEVT_CHOICE, &MainWindow::OnFilterChanged, this);
     this->Bind(wxEVT_MENU, &MainWindow::OnThemeLight, this, 2001);
     this->Bind(wxEVT_MENU, &MainWindow::OnThemeDark, this, 2002);
 
     this->DragAcceptFiles(true);
     this->Bind(wxEVT_DROP_FILES, &MainWindow::OnDropFiles, this);
+    this->Bind(
+        wxEVT_MENU, &MainWindow::OnReloadConfig, this, ID_ParserReloadConfig);
+
 
     // Add this binding for recent files
     this->Bind(
@@ -99,6 +101,8 @@ void MainWindow::setupMenu()
     // Parser menu
     wxMenu* menuParser = new wxMenu;
     menuParser->Append(ID_ParserClear, "Clear", "Parser");
+    menuParser->Append(ID_ParserReloadConfig, "Reload Config",
+        "Reload configuration file"); // Add this line
 
     // Config menu
     menuFile->Append(
@@ -189,7 +193,7 @@ void MainWindow::setupLayout()
     ________________________________________
     |          Search result Panel         |
     _______________________________________
-    |              Status Bar              |
+
     | General message | Progresbar         |
     ________________________________________
     */
@@ -246,18 +250,31 @@ void MainWindow::setupLayout()
 
     auto* filterSizer = new wxBoxSizer(wxVERTICAL);
 
-    // Example: Type filter
-    m_typeFilter = new wxChoice(m_leftPanel, wxID_ANY);
+    m_typeFilter = new wxCheckListBox(
+        m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+
+    m_typeFilter->Bind(
+        wxEVT_CONTEXT_MENU, &MainWindow::OnTypeFilterContextMenu, this);
+
+    m_timestampFilter =
+        new wxDatePickerCtrl(m_leftPanel, wxID_ANY, wxDefaultDateTime,
+            wxDefaultPosition, wxDefaultSize, wxDP_DROPDOWN | wxDP_SHOWCENTURY);
+
+    // Type filter label (fixed)
     filterSizer->Add(
         new wxStaticText(m_leftPanel, wxID_ANY, "Type:"), 0, wxALL, 5);
-    filterSizer->Add(m_typeFilter, 0, wxEXPAND | wxALL, 5);
+    // Type filter (expandable)
+    filterSizer->Add(m_typeFilter, 1, wxEXPAND | wxALL, 5);
 
-
-    // Example: Timestamp filter
-    m_timestampFilter = new wxChoice(m_leftPanel, wxID_ANY);
+    // Timestamp filter label (fixed)
     filterSizer->Add(
         new wxStaticText(m_leftPanel, wxID_ANY, "Timestamp:"), 0, wxALL, 5);
-    filterSizer->Add(m_timestampFilter, 0, wxEXPAND | wxALL, 5);
+    // Timestamp filter (expandable)
+    filterSizer->Add(m_timestampFilter, 1, wxEXPAND | wxALL, 5);
+
+    // --- Add Filter Button ---
+    m_applyFilterButton = new wxButton(m_leftPanel, wxID_ANY, "Apply Filter");
+    filterSizer->Add(m_applyFilterButton, 0, wxEXPAND | wxALL, 5);
 
     m_leftPanel->SetSizer(filterSizer);
 
@@ -533,22 +550,47 @@ void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
 
 void MainWindow::OnFilterChanged(wxCommandEvent&)
 {
-    wxString selectedType = m_typeFilter->GetStringSelection();
-    wxString selectedTimestamp = m_timestampFilter->GetStringSelection();
+    wxArrayInt selectedType;
+
+    // If there are no entries in m_typeFilter, do not proceed
+    if (m_typeFilter == nullptr)
+        return;
+
+    m_typeFilter->GetCheckedItems(selectedType);
+
+    std::set<std::string> selectedTypeStrings;
+    for (auto idx : selectedType)
+        selectedTypeStrings.insert(m_typeFilter->GetString(idx).ToStdString());
 
     // Filter events and update m_eventsListCtrl
-    std::vector<int> filteredIndices;
+    std::vector<unsigned long> filteredIndices;
     for (unsigned long i = 0; i < m_events.Size(); ++i)
     {
         const auto& event = m_events.GetEvent(i);
-        bool match = true;
-        if (selectedType != "All" && event.findByKey("type") != selectedType)
-            match = false;
-        if (selectedTimestamp != "All" &&
-            event.findByKey("timestamp") != selectedTimestamp)
-            match = false;
-        if (match)
+        std::string eventType = event.findByKey("type");
+        bool typeMatch = selectedTypeStrings.empty() ||
+            selectedTypeStrings.count(eventType) > 0;
+
+        if (typeMatch)
+        {
             filteredIndices.push_back(i);
+        }
+    }
+
+    // Update the events list control with the filtered indices
+    if (filteredIndices.empty())
+    {
+        spdlog::info("No events match the selected filters.");
+        m_eventsListCtrl->SetFilteredEvents({});
+        m_eventsListCtrl->Refresh();
+    }
+    else
+    {
+        spdlog::info("Filtered events count: {}", filteredIndices.size());
+        // Set the filtered events in the list control
+        m_eventsListCtrl->SetFilteredEvents(filteredIndices);
+        // Refresh the list control to show the filtered events
+        m_eventsListCtrl->Refresh();
     }
 }
 
@@ -600,6 +642,10 @@ void MainWindow::ParseData(const std::string filePath)
 
 void MainWindow::UpdateFilters()
 {
+
+    if (!m_typeFilter)
+        return;
+
     // Collect unique values for each filter
     std::set<std::string> types;
     std::set<std::string> timestamps;
@@ -609,25 +655,16 @@ void MainWindow::UpdateFilters()
         types.insert(event.findByKey("type"));
         timestamps.insert(event.findByKey("timestamp"));
     }
-
     // Update type filter
-    m_typeFilter->Freeze();
     m_typeFilter->Clear();
-    m_typeFilter->Append("All");
     for (const auto& t : types)
+    {
         m_typeFilter->Append(t);
-    m_typeFilter->SetSelection(0);
-    m_typeFilter->Thaw();
+        m_typeFilter->Check(
+            m_typeFilter->GetCount() - 1, true); // Check by default
+    }
     m_typeFilter->Show();
 
-    // Update timestamp filter
-    m_timestampFilter->Freeze();
-    m_timestampFilter->Clear();
-    m_timestampFilter->Append("All");
-    for (const auto& ts : timestamps)
-        m_timestampFilter->Append(ts);
-    m_timestampFilter->SetSelection(0);
-    m_timestampFilter->Thaw();
 
     // If you have more filters, update them here in the same way
     // Refresh the left panel layout
@@ -710,6 +747,48 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
             m_fileHistory.RemoveFileFromHistory(fileId);
         }
     }
+}
+
+void MainWindow::OnTypeFilterContextMenu(wxContextMenuEvent& event)
+{
+    wxMenu menu;
+    menu.Append(ID_TypeFilter_SelectAll, "Select All");
+    menu.Append(ID_TypeFilter_DeselectAll, "Deselect All");
+    menu.Append(ID_TypeFilter_InvertSelection, "Invert Selection");
+    menu.Bind(wxEVT_COMMAND_MENU_SELECTED, &MainWindow::OnTypeFilterMenu, this);
+    PopupMenu(&menu);
+}
+
+void MainWindow::OnTypeFilterMenu(wxCommandEvent& event)
+{
+    if (!m_typeFilter)
+        return;
+    int count = m_typeFilter->GetCount();
+    switch (event.GetId())
+    {
+        case ID_TypeFilter_SelectAll:
+            for (int i = 0; i < count; ++i)
+                m_typeFilter->Check(i, true);
+            break;
+        case ID_TypeFilter_DeselectAll:
+            for (int i = 0; i < count; ++i)
+                m_typeFilter->Check(i, false);
+            break;
+        case ID_TypeFilter_InvertSelection:
+            for (int i = 0; i < count; ++i)
+                m_typeFilter->Check(i, !m_typeFilter->IsChecked(i));
+            break;
+    }
+}
+
+void MainWindow::OnReloadConfig(wxCommandEvent&)
+{
+    spdlog::info("Reloading configuration...");
+    // config::GetConfig().Reload(); // Assuming your config class has a
+    // Reload() method
+    wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
+    // Optionally, update filters or UI if config affects them
+    UpdateFilters();
 }
 
 

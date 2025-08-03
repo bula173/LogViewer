@@ -29,8 +29,16 @@ void EventsContainerAdapter::GetValueByRow(
 {
     if (!(row < m_rowCount))
         return;
-    // Example: Adjust according to EventsContainer's API
-    const auto& event = m_container.GetEvent(row);
+
+    size_t actualRow = row;
+    if (!m_filteredIndices.empty())
+    {
+        if (row >= m_filteredIndices.size())
+            return;
+        actualRow = m_filteredIndices[row];
+    }
+
+    const auto& event = m_container.GetEvent(actualRow);
     auto& colConfig = config::GetConfig().columns;
     if (col >= colConfig.size() || !colConfig[col].visible)
     {
@@ -39,7 +47,6 @@ void EventsContainerAdapter::GetValueByRow(
     }
     if (col == 0)
     {
-        // Assuming the first column is the event ID
         variant = wxString::FromUTF8(std::to_string(event.getId()));
         return;
     }
@@ -66,5 +73,14 @@ bool EventsContainerAdapter::SetValueByRow(
 void EventsContainerAdapter::SetRowCount(unsigned int rows)
 {
     SyncWithContainer();
+}
+
+void EventsContainerAdapter::SetFilteredIndices(
+    const std::vector<size_t>& indices)
+{
+
+    m_filteredIndices = indices;
+    m_rowCount = static_cast<unsigned int>(m_filteredIndices.size());
+    Reset(m_rowCount);
 }
 } // namespace gui

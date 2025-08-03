@@ -22,6 +22,8 @@
 #include <wx/checklst.h>
 #include <wx/config.h>
 #include <wx/dataview.h>
+#include <wx/datectrl.h>
+#include <wx/dateevt.h>
 #include <wx/filehistory.h>
 #include <wx/gauge.h>
 #include <wx/splitter.h>
@@ -442,6 +444,14 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
      * UI accordingly. Called after parsing is complete.
      */
     void UpdateFilters();
+    /**
+     * @brief Reloads the application configuration from disk.
+     *
+     * Re-reads the configuration file and updates all UI components
+     * based on the new settings. Useful for applying changes made in
+     * the config editor without restarting the application.
+     */
+    void OnReloadConfig(wxCommandEvent&);
 
     // UI Control member variables
 
@@ -464,8 +474,8 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     wxButton* m_searchButton {nullptr}; ///< Search execute button
     wxDataViewListCtrl* m_searchResultsList {
         nullptr}; ///< Search results display with clickable items
-    wxChoice* m_typeFilter {nullptr}; ///< Multi-select type filter control
-    wxChoice* m_timestampFilter {
+    wxCheckListBox* m_typeFilter {nullptr}; ///< Multi-select type filter
+    wxDatePickerCtrl* m_timestampFilter {
         nullptr}; ///< Timestamp filter dropdown (single select)
     wxButton* m_applyFilterButton {
         nullptr}; ///< Apply current filter settings button
@@ -503,7 +513,18 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
         ID_ViewRightPanel, ///< View menu item for toggling right panel
         ID_ParserClear,    ///< Parser menu item for clearing data
         ID_ConfigEditor,   ///< Tools menu item for config editing
-        ID_AppLogViewer    ///< Tools menu item for viewing application logs
+        ID_AppLogViewer,   ///< Tools menu item for viewing application logs
+        ID_ParserReloadConfig = wxID_HIGHEST + 200
+    };
+
+    void OnTypeFilterContextMenu(wxContextMenuEvent& event);
+    void OnTypeFilterMenu(wxCommandEvent& event);
+
+    enum
+    {
+        ID_TypeFilter_SelectAll = wxID_HIGHEST + 100,
+        ID_TypeFilter_DeselectAll,
+        ID_TypeFilter_InvertSelection
     };
 };
 

@@ -3,9 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <wx/clipbrd.h>
 
 namespace gui
 {
+
 ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
@@ -17,6 +19,45 @@ ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     this->AppendTextColumn("value");
 
     m_events.RegisterOndDataUpdated(this);
+
+    // Bind right-click or Ctrl+C for copying value
+    this->Bind(wxEVT_COMMAND_MENU_SELECTED,
+        &ItemVirtualListControl::OnCopyValue, this, wxID_COPY);
+    this->Bind(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
+        &ItemVirtualListControl::OnContextMenu, this);
+    this->Bind(wxEVT_KEY_DOWN, &ItemVirtualListControl::OnKeyDown, this);
+}
+
+void ItemVirtualListControl::OnContextMenu(wxDataViewEvent& event)
+{
+    wxMenu menu;
+    menu.Append(wxID_COPY, "Copy Value");
+    PopupMenu(&menu);
+}
+
+void ItemVirtualListControl::OnCopyValue(wxCommandEvent& event)
+{
+    int selectedRow = this->GetSelectedRow();
+    if (selectedRow == wxNOT_FOUND)
+        return;
+    wxVariant value;
+    this->GetValue(value, selectedRow, 1); // column 1 is "value"
+    if (wxTheClipboard->Open())
+    {
+        wxTheClipboard->SetData(new wxTextDataObject(value.GetString()));
+        wxTheClipboard->Close();
+    }
+}
+
+void ItemVirtualListControl::OnKeyDown(wxKeyEvent& event)
+{
+    if (event.GetKeyCode() == 'C' && event.ControlDown())
+    {
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_COPY);
+        OnCopyValue(event);
+        return;
+    }
+    event.Skip();
 }
 
 void ItemVirtualListControl::OnDataUpdated()

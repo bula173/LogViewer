@@ -27,6 +27,10 @@ class ItemVirtualListControl : public wxDataViewListCtrl, public mvc::IView
 
   private:
     db::EventsContainer& m_events;
+
+    void OnContextMenu(wxDataViewEvent& event);
+    void OnCopyValue(wxCommandEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
 };
 
 } // namespace gui

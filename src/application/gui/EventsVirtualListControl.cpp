@@ -78,4 +78,15 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
     this->SetCurrentItem(item);
     this->SetFocus();
 }
+
+void EventsVirtualListControl::SetFilteredEvents(
+    const std::vector<size_t>& filteredIndices)
+{
+    spdlog::debug(
+        "EventsVirtualListControl::SetFilteredEvents called, count: {}",
+        filteredIndices.size());
+    m_model->SetFilteredIndices(filteredIndices);
+    m_model->SetRowCount(static_cast<unsigned int>(filteredIndices.size()));
+    m_model->Reset(static_cast<unsigned int>(filteredIndices.size()));
+}
 } // namespace gui

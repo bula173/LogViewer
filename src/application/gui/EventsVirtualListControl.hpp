@@ -18,6 +18,12 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
 
     void RefreshAfterUpdate();
 
+    /**
+     * @brief Sets the filtered events to be displayed in the control.
+     * @param filteredIndices Vector of indices (or IDs) of events to display.
+     */
+    void SetFilteredEvents(const std::vector<size_t>& filteredIndices);
+
     // implement IView interface
     virtual void OnDataUpdated() override;
     virtual void OnCurrentIndexUpdated(const int index) override;
