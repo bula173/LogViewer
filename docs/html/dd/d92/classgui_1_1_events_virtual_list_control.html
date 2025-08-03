@@ -102,7 +102,7 @@ Inheritance diagram for gui::EventsVirtualListControl:</div>
 <area shape="rect" title=" " alt="" coords="51,181,228,328"/>
 <area shape="rect" href="../../d7/d5c/classwx_data_view_ctrl.html" title=" " alt="" coords="5,36,111,102"/>
 <area shape="poly" title=" " alt="" coords="81,114,110,180,105,182,76,116"/>
-<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title=" " alt="" coords="136,5,309,133"/>
+<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title="Interface for view components in the MVC architecture." alt="" coords="136,5,309,133"/>
 <area shape="poly" title=" " alt="" coords="190,147,174,182,170,180,185,145"/>
 </map>
 </div>
@@ -114,13 +114,13 @@ Collaboration diagram for gui::EventsVirtualListControl:</div>
 <area shape="rect" title=" " alt="" coords="195,1063,372,1190"/>
 <area shape="rect" href="../../d7/d5c/classwx_data_view_ctrl.html" title=" " alt="" coords="5,865,111,931"/>
 <area shape="poly" title=" " alt="" coords="88,942,125,990,163,1027,202,1061,199,1065,159,1031,122,994,84,945"/>
-<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title=" " alt="" coords="136,834,309,962"/>
+<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title="Interface for view components in the MVC architecture." alt="" coords="136,834,309,962"/>
 <area shape="poly" title=" " alt="" coords="245,975,269,1063,264,1064,240,976"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="472,463,626,733"/>
 <area shape="poly" title=" " alt="" coords="577,733,580,798,575,866,558,933,544,964,526,994,496,1026,462,1053,425,1075,388,1093,386,1088,423,1070,459,1048,493,1022,521,990,539,962,553,931,570,865,575,798,572,733"/>
 <area shape="rect" href="../../d9/d23/classgui_1_1_events_container_adapter.html" title=" " alt="" coords="333,804,511,992"/>
 <area shape="poly" title=" " alt="" coords="494,734,471,789,466,787,490,732"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="268,143,450,392"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title="Interface for model components in the MVC architecture." alt="" coords="268,143,450,392"/>
 <area shape="poly" title=" " alt="" coords="440,403,474,462,470,465,436,406"/>
 <area shape="rect" title=" " alt="" coords="287,5,432,72"/>
 <area shape="poly" title=" " alt="" coords="362,71,362,126,357,126,357,71"/>
@@ -141,7 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2497f4abd95945914cec74d19537e3e3" id="r_a2497f4abd95945914cec74d19537e3e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2497f4abd95945914cec74d19537e3e3">EventsVirtualListControl</a> (<a class="el" href="../../db/d71/classdb_1_1_events_container.html">db::EventsContainer</a> &amp;events, wxWindow *parent, const wxWindowID id=wxID_ANY, const wxPoint &amp;pos=wxDefaultPosition, const wxSize &amp;size=wxDefaultSize)</td></tr>
 <tr class="memitem:acef3581e13af332485a5eb06fec0fb2c" id="r_acef3581e13af332485a5eb06fec0fb2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acef3581e13af332485a5eb06fec0fb2c">RefreshAfterUpdate</a> ()</td></tr>
 <tr class="memitem:a07ae1c2f6d76b6798de619463ff75559" id="r_a07ae1c2f6d76b6798de619463ff75559"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07ae1c2f6d76b6798de619463ff75559">OnDataUpdated</a> () override</td></tr>
+<tr class="memdesc:a07ae1c2f6d76b6798de619463ff75559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the model's data is updated.  <br /></td></tr>
 <tr class="memitem:ab1cca5fbeb68b3b64375095fd4405eec" id="r_ab1cca5fbeb68b3b64375095fd4405eec"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1cca5fbeb68b3b64375095fd4405eec">OnCurrentIndexUpdated</a> (const int index) override</td></tr>
+<tr class="memdesc:ab1cca5fbeb68b3b64375095fd4405eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the current item index in the model is updated.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -219,6 +221,15 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Called when the current item index in the model is updated. </p>
+<p>This method should be implemented to update the view based on the new current item index.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The new current item index in the model </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implements <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html#add66d1a1cf530c222e3377c474770744">mvc::IView</a>.</p>
 
 </div>
@@ -245,6 +256,9 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called when the model's data is updated. </p>
+<p>This method should be implemented to refresh the view with the latest data from the model. </p>
 
 <p>Implements <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html#ada9c25029c69a4a770a2357ae039a450">mvc::IView</a>.</p>
 

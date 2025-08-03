@@ -103,7 +103,7 @@ Inheritance diagram for db::EventsContainer:</div>
 <div class="center"><img src="../../d8/d37/classdb_1_1_events_container__inherit__graph.png" border="0" usemap="#adb_1_1_events_container_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="adb_1_1_events_container_inherit__map" id="adb_1_1_events_container_inherit__map">
 <area shape="rect" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="19,303,173,593"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="5,5,187,255"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title="Interface for model components in the MVC architecture." alt="" coords="5,5,187,255"/>
 <area shape="poly" title=" " alt="" coords="99,269,99,303,94,303,94,269"/>
 </map>
 </div>
@@ -113,7 +113,7 @@ Collaboration diagram for db::EventsContainer:</div>
 <div class="center"><img src="../../d6/d9b/classdb_1_1_events_container__coll__graph.png" border="0" usemap="#adb_1_1_events_container_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="adb_1_1_events_container_coll__map" id="adb_1_1_events_container_coll__map">
 <area shape="rect" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="209,463,363,733"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="5,143,187,392"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title="Interface for model components in the MVC architecture." alt="" coords="5,143,187,392"/>
 <area shape="poly" title=" " alt="" coords="177,403,211,462,207,465,172,406"/>
 <area shape="rect" title=" " alt="" coords="24,5,169,72"/>
 <area shape="poly" title=" " alt="" coords="99,71,99,126,94,126,94,71"/>
@@ -149,11 +149,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a43c3bb4ef1fdacc95503720615d0048e" id="r_a43c3bb4ef1fdacc95503720615d0048e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43c3bb4ef1fdacc95503720615d0048e">GetItem</a> (const int index) override</td></tr>
 <tr class="memdesc:a43c3bb4ef1fdacc95503720615d0048e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets an event by index.  <br /></td></tr>
 <tr class="memitem:a130db4ec5dbe8deeb41647606fa2a3b0" id="r_a130db4ec5dbe8deeb41647606fa2a3b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a130db4ec5dbe8deeb41647606fa2a3b0">RegisterOndDataUpdated</a> (IView *view)</td></tr>
+<tr class="memdesc:a130db4ec5dbe8deeb41647606fa2a3b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a view to receive data update notifications.  <br /></td></tr>
 <tr class="memitem:aecc89af25b0685af5395062d6c9b2adb" id="r_aecc89af25b0685af5395062d6c9b2adb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb">NotifyDataChanged</a> ()</td></tr>
+<tr class="memdesc:aecc89af25b0685af5395062d6c9b2adb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all registered views that the model's data has changed.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a3d75f2fd779d4750889a10d3226f5d60" id="r_a3d75f2fd779d4750889a10d3226f5d60"><td class="memItemLeft" align="right" valign="top">std::vector&lt; IView * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a3d75f2fd779d4750889a10d3226f5d60">m_views</a></td></tr>
+<tr class="memdesc:a3d75f2fd779d4750889a10d3226f5d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of registered views to notify on data changes.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -255,7 +258,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" title="Adds a new event to the container." alt="" coords="5,5,146,46"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title="Adds a new item to the model." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="382,13,598,38"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="382,13,598,38"/>
 <area shape="poly" title=" " alt="" coords="334,23,366,23,366,28,334,28"/>
 </map>
 </div>
@@ -291,7 +294,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph" id="adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph">
 <area shape="rect" title="Adds a batch of new events to the container." alt="" coords="5,5,146,46"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,13,410,38"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="194,13,410,38"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 </map>
 </div>
@@ -337,7 +340,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph" id="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph">
 <area shape="rect" title="Adds a new item to the model." alt="" coords="5,5,146,46"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,13,410,38"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="194,13,410,38"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 </map>
 </div>
@@ -389,7 +392,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph" id="adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph">
 <area shape="rect" title="Removes all events from the container." alt="" coords="5,27,146,68"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,5,410,31"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="194,5,410,31"/>
 <area shape="poly" title=" " alt="" coords="145,36,182,31,183,36,146,41"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a3fc32ef754405956b1d385968266639c" title="Sets the currently selected item index." alt="" coords="232,55,372,96"/>
 <area shape="poly" title=" " alt="" coords="146,53,216,62,216,68,145,59"/>
@@ -546,12 +549,16 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Notifies all registered views that the model's data has changed. </p>
+<p>This method should be called whenever the model's data is updated to ensure all views are refreshed with the latest information.</p>
+<dl class="section note"><dt>Note</dt><dd>Views should implement OnDataUpdated() to handle this notification </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph.png" border="0" usemap="#ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" loading="lazy" alt=""/></div>
 <map name="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" id="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph">
-<area shape="rect" title=" " alt="" coords="382,78,598,104"/>
+<area shape="rect" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="382,78,598,104"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aa2ad44074f50410d379fa0d620235857" title="Adds a batch of new events to the container." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="428,76,334,48,335,43,429,71"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title="Adds a new item to the model." alt="" coords="194,71,334,111"/>
@@ -587,6 +594,15 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Registers a view to receive data update notifications. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">view</td><td>Pointer to the view object to register </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The view must implement the IView interface and remain valid for the lifetime of the model </dd></dl>
 
 </div>
 </div>
@@ -741,6 +757,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>List of registered views to notify on data changes. </p>
 
 </div>
 </div>

@@ -93,13 +93,16 @@ $(function(){initNavTree('d5/d21/classmvc_1_1_i_model.html','../../','dd/d55/cla
 </div><!--header-->
 <div class="contents">
 
+<p>Interface for model components in the MVC architecture.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../d6/d1b/_i_model_8hpp_source.html">IModel.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for mvc::IModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/d2a/classmvc_1_1_i_model__inherit__graph.png" border="0" usemap="#amvc_1_1_i_model_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="amvc_1_1_i_model_inherit__map" id="amvc_1_1_i_model_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,5,187,255"/>
+<area shape="rect" title="Interface for model components in the MVC architecture." alt="" coords="5,5,187,255"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="19,303,173,593"/>
 <area shape="poly" title=" " alt="" coords="99,269,99,303,94,303,94,269"/>
 </map>
@@ -109,7 +112,7 @@ Collaboration diagram for mvc::IModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d93/classmvc_1_1_i_model__coll__graph.png" border="0" usemap="#amvc_1_1_i_model_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="amvc_1_1_i_model_coll__map" id="amvc_1_1_i_model_coll__map">
-<area shape="rect" title=" " alt="" coords="5,143,187,392"/>
+<area shape="rect" title="Interface for model components in the MVC architecture." alt="" coords="5,143,187,392"/>
 <area shape="rect" title=" " alt="" coords="24,5,169,72"/>
 <area shape="poly" title=" " alt="" coords="99,71,99,126,94,126,94,71"/>
 </map>
@@ -118,21 +121,35 @@ Collaboration diagram for mvc::IModel:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8fa71a57f92461eb590a80852cfa7c03" id="r_a8fa71a57f92461eb590a80852cfa7c03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fa71a57f92461eb590a80852cfa7c03">IModel</a> ()</td></tr>
+<tr class="memdesc:a8fa71a57f92461eb590a80852cfa7c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="memitem:a6a478f5602c9e7a62180ee82000ccc9d" id="r_a6a478f5602c9e7a62180ee82000ccc9d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a478f5602c9e7a62180ee82000ccc9d">~IModel</a> ()</td></tr>
+<tr class="memdesc:a6a478f5602c9e7a62180ee82000ccc9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
 <tr class="memitem:a130db4ec5dbe8deeb41647606fa2a3b0" id="r_a130db4ec5dbe8deeb41647606fa2a3b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a130db4ec5dbe8deeb41647606fa2a3b0">RegisterOndDataUpdated</a> (<a class="el" href="../../d8/dee/classmvc_1_1_i_view.html">IView</a> *view)</td></tr>
+<tr class="memdesc:a130db4ec5dbe8deeb41647606fa2a3b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a view to receive data update notifications.  <br /></td></tr>
 <tr class="memitem:aecc89af25b0685af5395062d6c9b2adb" id="r_aecc89af25b0685af5395062d6c9b2adb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecc89af25b0685af5395062d6c9b2adb">NotifyDataChanged</a> ()</td></tr>
+<tr class="memdesc:aecc89af25b0685af5395062d6c9b2adb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all registered views that the model's data has changed.  <br /></td></tr>
 <tr class="memitem:a8be6e82c4fa06c92b25113274c363ee1" id="r_a8be6e82c4fa06c92b25113274c363ee1"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8be6e82c4fa06c92b25113274c363ee1">GetCurrentItemIndex</a> ()=0</td></tr>
+<tr class="memdesc:a8be6e82c4fa06c92b25113274c363ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all registered views that the current item index has changed.  <br /></td></tr>
 <tr class="memitem:a104a27d339c4acfb46c611ee1e5ca134" id="r_a104a27d339c4acfb46c611ee1e5ca134"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a104a27d339c4acfb46c611ee1e5ca134">SetCurrentItem</a> (const int item)=0</td></tr>
-<tr class="memitem:ab5c7c61c608ac93e0c61b268aeccfd65" id="r_ab5c7c61c608ac93e0c61b268aeccfd65"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5c7c61c608ac93e0c61b268aeccfd65">AddItem</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&amp;item)=0</td></tr>
-<tr class="memitem:a1af59889f48c384710ff803f2acc8105" id="r_a1af59889f48c384710ff803f2acc8105"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1af59889f48c384710ff803f2acc8105">GetItem</a> (const int index)=0</td></tr>
-<tr class="memitem:a9d74ff150918efd09549cdb0fc458b07" id="r_a9d74ff150918efd09549cdb0fc458b07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d74ff150918efd09549cdb0fc458b07">Clear</a> ()=0</td></tr>
+<tr class="memdesc:a104a27d339c4acfb46c611ee1e5ca134"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the current item index in the model.  <br /></td></tr>
 <tr class="memitem:a33db499493216acf9ca1a6e513ca0965" id="r_a33db499493216acf9ca1a6e513ca0965"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33db499493216acf9ca1a6e513ca0965">Size</a> ()=0</td></tr>
+<tr class="memdesc:a33db499493216acf9ca1a6e513ca0965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the total number of items in the model.  <br /></td></tr>
+<tr class="memitem:ab5c7c61c608ac93e0c61b268aeccfd65" id="r_ab5c7c61c608ac93e0c61b268aeccfd65"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5c7c61c608ac93e0c61b268aeccfd65">AddItem</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&amp;item)=0</td></tr>
+<tr class="memdesc:ab5c7c61c608ac93e0c61b268aeccfd65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new item to the model.  <br /></td></tr>
+<tr class="memitem:a1af59889f48c384710ff803f2acc8105" id="r_a1af59889f48c384710ff803f2acc8105"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1af59889f48c384710ff803f2acc8105">GetItem</a> (const int index)=0</td></tr>
+<tr class="memdesc:a1af59889f48c384710ff803f2acc8105"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets an item from the model.  <br /></td></tr>
+<tr class="memitem:a9d74ff150918efd09549cdb0fc458b07" id="r_a9d74ff150918efd09549cdb0fc458b07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d74ff150918efd09549cdb0fc458b07">Clear</a> ()=0</td></tr>
+<tr class="memdesc:a9d74ff150918efd09549cdb0fc458b07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all items from the model.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a3d75f2fd779d4750889a10d3226f5d60" id="r_a3d75f2fd779d4750889a10d3226f5d60"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html">IView</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d75f2fd779d4750889a10d3226f5d60">m_views</a></td></tr>
+<tr class="memdesc:a3d75f2fd779d4750889a10d3226f5d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of registered views to notify on data changes.  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Interface for model components in the MVC architecture. </p>
+<p>This interface defines the methods that any model component must implement to manage data and notify views about changes. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8fa71a57f92461eb590a80852cfa7c03" name="a8fa71a57f92461eb590a80852cfa7c03"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8fa71a57f92461eb590a80852cfa7c03">&#9670;&#160;</a></span>IModel()</h2>
 
@@ -155,6 +172,9 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>Initializes the model and prepares it for use. </p>
 
 </div>
 </div>
@@ -181,6 +201,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Default destructor. </p>
+<p>Cleans up resources and unregisters views when the model is destroyed. </p><dl class="section note"><dt>Note</dt><dd>This destructor is virtual to ensure proper cleanup of derived classes. </dd></dl>
+
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
@@ -206,6 +229,15 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Adds a new item to the model. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>The item to add (moved to avoid copying) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method should be called when a new item is created or parsed </dd></dl>
 
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca">db::EventsContainer</a>.</p>
 
@@ -234,6 +266,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Clears all items from the model. </p>
+<p>This method should be called when the model needs to be reset or emptied. It will also notify all views that the data has been cleared. </p>
+
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#aaed5363927f1baab3e7994dc91404538">db::EventsContainer</a>.</p>
 
 </div>
@@ -260,6 +295,15 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Notifies all registered views that the current item index has changed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The new current item index in the model </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Views should implement OnCurrentIndexUpdated() to handle this notification </dd></dl>
 
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#a34b0c189a736adb5886b59acb0dea9ca">db::EventsContainer</a>.</p>
 
@@ -288,6 +332,15 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Gets an item from the model. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the item to retrieve </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">db::LogEvent</a>&amp; A reference to the requested item </dd></dl>
+
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#a43c3bb4ef1fdacc95503720615d0048e">db::EventsContainer</a>.</p>
 
 </div>
@@ -314,12 +367,16 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Notifies all registered views that the model's data has changed. </p>
+<p>This method should be called whenever the model's data is updated to ensure all views are refreshed with the latest information.</p>
+<dl class="section note"><dt>Note</dt><dd>Views should implement OnDataUpdated() to handle this notification </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph.png" border="0" usemap="#ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" loading="lazy" alt=""/></div>
 <map name="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" id="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph">
-<area shape="rect" title=" " alt="" coords="382,78,598,104"/>
+<area shape="rect" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="382,78,598,104"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aa2ad44074f50410d379fa0d620235857" title="Adds a batch of new events to the container." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="428,76,334,48,335,43,429,71"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title="Adds a new item to the model." alt="" coords="194,71,334,111"/>
@@ -356,6 +413,15 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Registers a view to receive data update notifications. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">view</td><td>Pointer to the view object to register </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The view must implement the <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html" title="Interface for view components in the MVC architecture.">IView</a> interface and remain valid for the lifetime of the model </dd></dl>
+
 </div>
 </div>
 <a id="a104a27d339c4acfb46c611ee1e5ca134" name="a104a27d339c4acfb46c611ee1e5ca134"></a>
@@ -380,6 +446,14 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sets the current item index in the model. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>The new current item index </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#a3fc32ef754405956b1d385968266639c">db::EventsContainer</a>.</p>
 
@@ -408,6 +482,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the total number of items in the model. </p>
+<dl class="section return"><dt>Returns</dt><dd>size_t The total number of items </dd></dl>
+
 <p>Implemented in <a class="el" href="../../db/d71/classdb_1_1_events_container.html#ade0f9c3fc8fb62b812d23cba0ec01718">db::EventsContainer</a>.</p>
 
 </div>
@@ -432,6 +509,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>List of registered views to notify on data changes. </p>
 
 </div>
 </div>

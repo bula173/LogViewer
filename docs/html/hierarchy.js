@@ -2,7 +2,8 @@ var hierarchy =
 [
     [ "config::Columns", "d2/dd1/structconfig_1_1_columns.html", null ],
     [ "config::Config", "d7/dcc/classconfig_1_1_config.html", null ],
-    [ "mvc::IContrloler", "d3/dd7/classmvc_1_1_i_contrloler.html", null ],
+    [ "IContrloler", "dd/ddf/class_i_contrloler.html", null ],
+    [ "mvc::IController", "d9/dd6/classmvc_1_1_i_controller.html", null ],
     [ "parser::IDataParser", "d8/ddd/classparser_1_1_i_data_parser.html", [
       [ "parser::XmlParser", "d7/dd4/classparser_1_1_xml_parser.html", null ]
     ] ],

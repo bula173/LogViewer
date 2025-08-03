@@ -27,38 +27,43 @@ const LogEvent::EventItems& LogEvent::getEventItems() const
 
 const std::string LogEvent::findByKey(const std::string& key) const
 {
-    /**
-     * @brief Linear search through event items to find matching key.
-     *
-     * Uses std::find_if with a lambda to locate the first item with matching
-     * key. Returns empty string if no match is found.
-     */
-    auto it = std::find_if(m_eventItems.begin(), m_eventItems.end(),
-        [&key](const std::pair<std::string, std::string>& element)
-        { return element.first == key; });
+    spdlog::debug("LogEvent::findByKey called with key: {}", key);
 
-    if (it != m_eventItems.end())
+    std::string result {""};
+    auto pair = std::ranges::find_if(
+        m_eventItems, [&key](const auto& item) { return item.first == key; });
+
+    if (pair != m_eventItems.end())
     {
-        return it->second;
+        result = pair->second;
+        spdlog::debug("LogEvent::findByKey found value: {}", result);
     }
-    return "";
+    else
+    {
+        spdlog::debug("LogEvent::findByKey did not find key: {}", key);
+    }
+
+    return result;
 }
 
 LogEvent::EventItemsIterator LogEvent::findInEvent(const std::string& search)
 {
-    /**
-     * @brief Searches for the given term in both keys and values.
-     *
-     * Performs substring search across all key-value pairs in the event.
-     * Returns iterator to first matching item, or end() if not found.
-     */
-    return std::find_if(m_eventItems.begin(), m_eventItems.end(),
-        [&search](const std::pair<std::string, std::string>& element)
-        {
-            // Search in both key and value using substring matching
-            return element.first.find(search) != std::string::npos ||
-                element.second.find(search) != std::string::npos;
-        });
+    spdlog::debug("LogEvent::findInEvent called with search: {}", search);
+    std::regex searchRegex(search);
+    auto it =
+        std::ranges::find_if(m_eventItems, [&searchRegex](const auto& item)
+            { return std::regex_search(item.second, searchRegex); });
+    if (it != m_eventItems.end())
+    {
+        spdlog::debug(
+            "LogEvent::findInEvent found match for search: {}", search);
+    }
+    else
+    {
+        spdlog::debug(
+            "LogEvent::findInEvent found no match for search: {}", search);
+    }
+    return it;
 }
 
 } // namespace db

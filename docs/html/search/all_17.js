@@ -2,7 +2,7 @@ var searchData=
 [
   ['_7econfig_0',['~Config',['../d7/dcc/classconfig_1_1_config.html#ae961675b6c43c49f7db0c0e11d781642',1,'config::Config']]],
   ['_7eeventscontainer_1',['~EventsContainer',['../db/d71/classdb_1_1_events_container.html#a8df14cfc9ac8e78ae73931216b79b798',1,'db::EventsContainer']]],
-  ['_7eicontrloler_2',['~IContrloler',['../d3/dd7/classmvc_1_1_i_contrloler.html#a9413260c018894fdfa70e721cb32469d',1,'mvc::IContrloler']]],
+  ['_7eicontroller_2',['~IController',['../d9/dd6/classmvc_1_1_i_controller.html#ab683a0ef6debdaa191f51c5c440c611a',1,'mvc::IController']]],
   ['_7eidataparser_3',['~IDataParser',['../d8/ddd/classparser_1_1_i_data_parser.html#a9b39377303663519b50e33e44ca20418',1,'parser::IDataParser']]],
   ['_7eidataparserobserver_4',['~IDataParserObserver',['../d0/dfb/classparser_1_1_i_data_parser_observer.html#a2c6307e3179ef62d90ff17e0842b3d80',1,'parser::IDataParserObserver']]],
   ['_7eimodel_5',['~IModel',['../d5/d21/classmvc_1_1_i_model.html#a6a478f5602c9e7a62180ee82000ccc9d',1,'mvc::IModel']]],

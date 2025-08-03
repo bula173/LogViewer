@@ -102,7 +102,7 @@ Inheritance diagram for gui::ItemVirtualListControl:</div>
 <area shape="rect" title=" " alt="" coords="69,181,242,328"/>
 <area shape="rect" href="../../d0/d74/classwx_data_view_list_ctrl.html" title=" " alt="" coords="5,36,132,102"/>
 <area shape="poly" title=" " alt="" coords="92,114,123,180,119,182,88,116"/>
-<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title=" " alt="" coords="156,5,328,133"/>
+<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title="Interface for view components in the MVC architecture." alt="" coords="156,5,328,133"/>
 <area shape="poly" title=" " alt="" coords="209,147,192,182,187,180,204,145"/>
 </map>
 </div>
@@ -114,11 +114,11 @@ Collaboration diagram for gui::ItemVirtualListControl:</div>
 <area shape="rect" title=" " alt="" coords="156,804,328,951"/>
 <area shape="rect" href="../../d0/d74/classwx_data_view_list_ctrl.html" title=" " alt="" coords="5,565,132,631"/>
 <area shape="poly" title=" " alt="" coords="95,643,146,731,193,803,188,806,141,734,90,646"/>
-<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title=" " alt="" coords="156,534,328,662"/>
+<area shape="rect" href="../../d8/dee/classmvc_1_1_i_view.html" title="Interface for view components in the MVC architecture." alt="" coords="156,534,328,662"/>
 <area shape="poly" title=" " alt="" coords="245,676,245,804,239,804,239,676"/>
 <area shape="rect" href="../../db/d71/classdb_1_1_events_container.html" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="353,463,507,733"/>
 <area shape="poly" title=" " alt="" coords="355,716,343,734,304,791,299,788,338,731,351,713"/>
-<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="150,143,332,392"/>
+<area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title="Interface for model components in the MVC architecture." alt="" coords="150,143,332,392"/>
 <area shape="poly" title=" " alt="" coords="321,403,355,462,351,465,317,406"/>
 <area shape="rect" title=" " alt="" coords="168,5,314,72"/>
 <area shape="poly" title=" " alt="" coords="243,71,243,126,238,126,238,71"/>
@@ -134,7 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab997a6e1b947490f62e749cb06dc2e9e" id="r_ab997a6e1b947490f62e749cb06dc2e9e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab997a6e1b947490f62e749cb06dc2e9e">ItemVirtualListControl</a> (<a class="el" href="../../db/d71/classdb_1_1_events_container.html">db::EventsContainer</a> &amp;events, wxWindow *parent, const wxWindowID id=wxID_ANY, const wxPoint &amp;pos=wxDefaultPosition, const wxSize &amp;size=wxDefaultSize)</td></tr>
 <tr class="memitem:a32fff42b3460498319984d10b3cb5aa7" id="r_a32fff42b3460498319984d10b3cb5aa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32fff42b3460498319984d10b3cb5aa7">RefreshAfterUpdate</a> ()</td></tr>
 <tr class="memitem:aaa29312e18c80f64b799f18c28acb144" id="r_aaa29312e18c80f64b799f18c28acb144"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa29312e18c80f64b799f18c28acb144">OnDataUpdated</a> () override</td></tr>
+<tr class="memdesc:aaa29312e18c80f64b799f18c28acb144"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the model's data is updated.  <br /></td></tr>
 <tr class="memitem:a9585b9b7c335c3abbd06226cfbbcad48" id="r_a9585b9b7c335c3abbd06226cfbbcad48"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9585b9b7c335c3abbd06226cfbbcad48">OnCurrentIndexUpdated</a> (const int index) override</td></tr>
+<tr class="memdesc:a9585b9b7c335c3abbd06226cfbbcad48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the current item index in the model is updated.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -230,6 +232,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Called when the current item index in the model is updated. </p>
+<p>This method should be implemented to update the view based on the new current item index.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The new current item index in the model </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implements <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html#add66d1a1cf530c222e3377c474770744">mvc::IView</a>.</p>
 
 </div>
@@ -257,13 +268,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Called when the model's data is updated. </p>
+<p>This method should be implemented to refresh the view with the latest data from the model. </p>
+
 <p>Implements <a class="el" href="../../d8/dee/classmvc_1_1_i_view.html#ada9c25029c69a4a770a2357ae039a450">mvc::IView</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d38/classgui_1_1_item_virtual_list_control_aaa29312e18c80f64b799f18c28acb144_cgraph.png" border="0" usemap="#ada/d38/classgui_1_1_item_virtual_list_control_aaa29312e18c80f64b799f18c28acb144_cgraph" loading="lazy" alt=""/></div>
 <map name="ada/d38/classgui_1_1_item_virtual_list_control_aaa29312e18c80f64b799f18c28acb144_cgraph" id="ada/d38/classgui_1_1_item_virtual_list_control_aaa29312e18c80f64b799f18c28acb144_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,178,46"/>
+<area shape="rect" title="Called when the model&#39;s data is updated." alt="" coords="5,5,178,46"/>
 <area shape="rect" href="../../da/d38/classgui_1_1_item_virtual_list_control.html#a32fff42b3460498319984d10b3cb5aa7" title=" " alt="" coords="226,5,398,46"/>
 <area shape="poly" title=" " alt="" coords="178,23,210,23,210,28,178,28"/>
 </map>
@@ -291,7 +305,7 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="../../da/d38/classgui_1_1_item_virtual_list_control_a32fff42b3460498319984d10b3cb5aa7_icgraph.png" border="0" usemap="#ada/d38/classgui_1_1_item_virtual_list_control_a32fff42b3460498319984d10b3cb5aa7_icgraph" loading="lazy" alt=""/></div>
 <map name="ada/d38/classgui_1_1_item_virtual_list_control_a32fff42b3460498319984d10b3cb5aa7_icgraph" id="ada/d38/classgui_1_1_item_virtual_list_control_a32fff42b3460498319984d10b3cb5aa7_icgraph">
 <area shape="rect" title=" " alt="" coords="226,5,398,46"/>
-<area shape="rect" href="../../da/d38/classgui_1_1_item_virtual_list_control.html#aaa29312e18c80f64b799f18c28acb144" title=" " alt="" coords="5,5,178,46"/>
+<area shape="rect" href="../../da/d38/classgui_1_1_item_virtual_list_control.html#aaa29312e18c80f64b799f18c28acb144" title="Called when the model&#39;s data is updated." alt="" coords="5,5,178,46"/>
 <area shape="poly" title=" " alt="" coords="210,28,178,28,178,23,210,23"/>
 </map>
 </div>

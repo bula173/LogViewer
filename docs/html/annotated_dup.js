@@ -15,7 +15,7 @@ var annotated_dup =
       [ "MainWindow", "df/d15/classgui_1_1_main_window.html", "df/d15/classgui_1_1_main_window" ]
     ] ],
     [ "mvc", "da/ddc/namespacemvc.html", [
-      [ "IContrloler", "d3/dd7/classmvc_1_1_i_contrloler.html", "d3/dd7/classmvc_1_1_i_contrloler" ],
+      [ "IController", "d9/dd6/classmvc_1_1_i_controller.html", "d9/dd6/classmvc_1_1_i_controller" ],
       [ "IModel", "d5/d21/classmvc_1_1_i_model.html", "d5/d21/classmvc_1_1_i_model" ],
       [ "IView", "d8/dee/classmvc_1_1_i_view.html", "d8/dee/classmvc_1_1_i_view" ]
     ] ],
@@ -25,6 +25,7 @@ var annotated_dup =
       [ "ParserState", "de/db3/structparser_1_1_parser_state.html", "de/db3/structparser_1_1_parser_state" ],
       [ "XmlParser", "d7/dd4/classparser_1_1_xml_parser.html", "d7/dd4/classparser_1_1_xml_parser" ]
     ] ],
+    [ "IContrloler", "dd/ddf/class_i_contrloler.html", null ],
     [ "MyApp", "dd/da7/class_my_app.html", "dd/da7/class_my_app" ],
     [ "wxApp", "d0/dd8/classwx_app.html", null ],
     [ "wxDataViewCtrl", "d7/d5c/classwx_data_view_ctrl.html", null ],

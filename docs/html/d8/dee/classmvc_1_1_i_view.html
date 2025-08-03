@@ -93,13 +93,16 @@ $(function(){initNavTree('d8/dee/classmvc_1_1_i_view.html','../../','d3/d76/clas
 </div><!--header-->
 <div class="contents">
 
+<p>Interface for view components in the MVC architecture.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../de/d47/_i_view_8hpp_source.html">IView.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for mvc::IView:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/d1e/classmvc_1_1_i_view__inherit__graph.png" border="0" usemap="#amvc_1_1_i_view_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="amvc_1_1_i_view_inherit__map" id="amvc_1_1_i_view_inherit__map">
-<area shape="rect" title=" " alt="" coords="106,5,279,133"/>
+<area shape="rect" title="Interface for view components in the MVC architecture." alt="" coords="106,5,279,133"/>
 <area shape="rect" href="../../dd/d92/classgui_1_1_events_virtual_list_control.html" title=" " alt="" coords="5,181,182,328"/>
 <area shape="poly" title=" " alt="" coords="154,147,135,183,130,180,149,144"/>
 <area shape="rect" href="../../da/d38/classgui_1_1_item_virtual_list_control.html" title=" " alt="" coords="206,181,379,328"/>
@@ -111,18 +114,26 @@ Collaboration diagram for mvc::IView:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../df/d8e/classmvc_1_1_i_view__coll__graph.png" border="0" usemap="#amvc_1_1_i_view_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="amvc_1_1_i_view_coll__map" id="amvc_1_1_i_view_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,178,133"/>
+<area shape="rect" title="Interface for view components in the MVC architecture." alt="" coords="5,5,178,133"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab42dc481fea35a652d0581f1889bed49" id="r_ab42dc481fea35a652d0581f1889bed49"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab42dc481fea35a652d0581f1889bed49">IView</a> ()</td></tr>
+<tr class="memdesc:ab42dc481fea35a652d0581f1889bed49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="memitem:aa90b0409cb5cf98e72ab84a355e0ee67" id="r_aa90b0409cb5cf98e72ab84a355e0ee67"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa90b0409cb5cf98e72ab84a355e0ee67">~IView</a> ()</td></tr>
+<tr class="memdesc:aa90b0409cb5cf98e72ab84a355e0ee67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
 <tr class="memitem:ada9c25029c69a4a770a2357ae039a450" id="r_ada9c25029c69a4a770a2357ae039a450"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada9c25029c69a4a770a2357ae039a450">OnDataUpdated</a> ()=0</td></tr>
+<tr class="memdesc:ada9c25029c69a4a770a2357ae039a450"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the model's data is updated.  <br /></td></tr>
 <tr class="memitem:add66d1a1cf530c222e3377c474770744" id="r_add66d1a1cf530c222e3377c474770744"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add66d1a1cf530c222e3377c474770744">OnCurrentIndexUpdated</a> (const int index)=0</td></tr>
+<tr class="memdesc:add66d1a1cf530c222e3377c474770744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the current item index in the model is updated.  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Interface for view components in the MVC architecture. </p>
+<dl class="section note"><dt>Note</dt><dd>This interface is designed to be implemented by classes that represent the user interface components displaying data from the model.</dd></dl>
+<p>This interface defines the methods that any view component must implement to receive updates from the model. It allows the model to notify views about data changes and current index updates. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab42dc481fea35a652d0581f1889bed49" name="ab42dc481fea35a652d0581f1889bed49"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab42dc481fea35a652d0581f1889bed49">&#9670;&#160;</a></span>IView()</h2>
 
@@ -145,6 +156,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Default constructor. </p>
 
 </div>
 </div>
@@ -170,6 +183,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Default destructor. </p>
+<p>Ensures proper cleanup of resources when the view is destroyed. </p>
 
 </div>
 </div>
@@ -197,6 +213,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Called when the current item index in the model is updated. </p>
+<p>This method should be implemented to update the view based on the new current item index.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The new current item index in the model </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implemented in <a class="el" href="../../dd/d92/classgui_1_1_events_virtual_list_control.html#ab1cca5fbeb68b3b64375095fd4405eec">gui::EventsVirtualListControl</a>, and <a class="el" href="../../da/d38/classgui_1_1_item_virtual_list_control.html#a9585b9b7c335c3abbd06226cfbbcad48">gui::ItemVirtualListControl</a>.</p>
 
 </div>
@@ -223,6 +248,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called when the model's data is updated. </p>
+<p>This method should be implemented to refresh the view with the latest data from the model. </p>
 
 <p>Implemented in <a class="el" href="../../dd/d92/classgui_1_1_events_virtual_list_control.html#a07ae1c2f6d76b6798de619463ff75559">gui::EventsVirtualListControl</a>, and <a class="el" href="../../da/d38/classgui_1_1_item_virtual_list_control.html#aaa29312e18c80f64b799f18c28acb144">gui::ItemVirtualListControl</a>.</p>
 

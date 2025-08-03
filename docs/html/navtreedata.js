@@ -37,8 +37,7 @@ var NAVTREE =
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerator", "namespacemembers_eval.html", null ]
+        [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -49,7 +48,8 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -66,7 +66,7 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "db/d71/classdb_1_1_events_container.html#a273ef5ba2fc2fc9a368c645ad0b9a71e",
-"pages.html"
+"hierarchy.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
