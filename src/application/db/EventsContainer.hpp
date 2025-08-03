@@ -16,7 +16,10 @@ class EventsContainer : public mvc::IModel
     EventsContainer();
     virtual ~EventsContainer();
     void AddEvent(LogEvent&& event);
+    void AddEventBatch(
+        std::vector<std::pair<int, LogEvent::EventItems>>&& eventBatch);
     const LogEvent& GetEvent(const int index);
+
 
   public: // IModel
     int GetCurrentItemIndex() override;

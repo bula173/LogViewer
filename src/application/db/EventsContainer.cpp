@@ -19,6 +19,18 @@ void EventsContainer::AddEvent(LogEvent&& event)
     this->AddItem(std::move(event));
 }
 
+void EventsContainer::AddEventBatch(
+    std::vector<std::pair<int, LogEvent::EventItems>>&& eventBatch)
+{
+    spdlog::debug("EventsContainer::AddEventBatch called with size: {}",
+        eventBatch.size());
+    for (auto& item : eventBatch)
+    {
+        m_data.emplace_back(item.first, std::move(item.second));
+    }
+    this->NotifyDataChanged();
+}
+
 const LogEvent& EventsContainer::GetEvent(const int index)
 {
     spdlog::debug("EventsContainer::GetEvent called with index: {}", index);

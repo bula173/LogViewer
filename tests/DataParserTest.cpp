@@ -5,11 +5,21 @@
 #include <gtest/gtest.h>
 #include <memory>
 
+// --- Mocks ---
+
 class MockIDataParserObserver : public parser::IDataParserObserver
 {
   public:
+    // Create a type alias to hide the comma from the preprocessor
+    using EventBatchType =
+        std::vector<std::pair<int, db::LogEvent::EventItems>>;
+
     MOCK_METHOD(void, ProgressUpdated, (), (override));
     MOCK_METHOD(void, NewEventFound, (db::LogEvent && event), (override));
+
+    // Use the alias in the MOCK_METHOD macro
+    MOCK_METHOD(
+        void, NewEventBatchFound, (EventBatchType && eventBatch), (override));
 };
 
 class MockIDataParser : public parser::IDataParser

@@ -23,10 +23,6 @@ class XmlParser : public IDataParser
     uint32_t GetCurrentProgress() const override;
     uint32_t GetTotalProgress() const override;
 
-    void SendEventBatch(
-        std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch);
-
-
   public:
     uint32_t m_currentProgress = 0; // Initialize to 0
 };

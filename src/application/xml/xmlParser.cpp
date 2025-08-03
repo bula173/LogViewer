@@ -71,7 +71,7 @@ static void EndElementHandler(void* userData, const XML_Char* name)
         // Send batch every N events
         if (state->eventBatch.size() >= 500)
         { // Larger batches
-            state->parser->SendEventBatch(std::move(state->eventBatch));
+            state->parser->NotifyNewEventBatch(std::move(state->eventBatch));
             state->eventBatch.clear();
         }
     }
@@ -190,7 +190,8 @@ void XmlParser::ParseData(std::istream& input)
     // Send final batch if any
     if (!state.eventBatch.empty())
     {
-        SendEventBatch(std::move(state.eventBatch)); // This should now work
+        NotifyNewEventBatch(
+            std::move(state.eventBatch)); // This should now work
     }
 
     XML_ParserFree(parser);
@@ -208,18 +209,6 @@ uint32_t XmlParser::GetCurrentProgress() const
 uint32_t XmlParser::GetTotalProgress() const
 {
     return 100u; // 100% progress
-}
-
-void XmlParser::SendEventBatch(
-    std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
-{
-    // Process each event in the batch
-    for (auto& [eventId, items] : eventBatch)
-    {
-        // Create an event and notify observers
-        db::LogEvent event(eventId, std::move(items));
-        NotifyNewEvent(std::move(event)); // Use the base class method
-    }
 }
 
 } // namespace parser

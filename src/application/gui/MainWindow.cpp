@@ -661,6 +661,15 @@ void MainWindow::NewEventFound(db::LogEvent&& event)
     m_events.AddEvent(std::move(event));
 }
 
+void MainWindow::NewEventBatchFound(
+    std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
+{
+    spdlog::debug("New event batch found with size: {}", eventBatch.size());
+    m_events.AddEventBatch(std::move(eventBatch));
+    m_eventsListCtrl->Refresh();
+    m_itemView->Refresh();
+}
+
 void MainWindow::OnDropFiles(wxDropFilesEvent& event)
 {
     if (event.GetNumberOfFiles() > 0)

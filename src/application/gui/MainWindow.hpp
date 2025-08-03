@@ -37,6 +37,9 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
   public: // IDataParserObserver
     void ProgressUpdated() override;
     void NewEventFound(db::LogEvent&& event) override;
+    void NewEventBatchFound(
+        std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
+        override;
 
   private:
 #ifndef NDEBUG

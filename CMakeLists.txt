@@ -47,7 +47,17 @@ endif()
 
 add_subdirectory(thirdparty)
 
+# Include the sanitizer selection logic from our dedicated file.
+# This must be done BEFORE you define your executable target.
+include(cmake/sanitizers.cmake)
+
 add_subdirectory(src)
+
+# After your add_executable(LogViewer ...) command, call the function
+# to apply the selected sanitizer flags to your target.
+if (NOT LOGVIEWER_SANITIZER STREQUAL "None")
+    target_enable_sanitizer(LogViewer)
+endif()
 
 add_subdirectory(packaging)
 

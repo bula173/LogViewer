@@ -10,6 +10,9 @@ class MockObserver : public parser::IDataParserObserver
   public:
     MOCK_METHOD(void, NewEventFound, (db::LogEvent && event), (override));
     MOCK_METHOD(void, ProgressUpdated, (), (override));
+    MOCK_METHOD1(NewEventBatchFound,
+        void(std::vector<std::pair<int, db::LogEvent::EventItems>>&&
+                eventBatch));
 };
 
 class XmlParserTest : public ::testing::Test
@@ -32,6 +35,12 @@ class XmlParserTest : public ::testing::Test
         config.LoadConfig();
 
         parser.RegisterObserver(&mockObserver);
+
+        // Suppress warnings for ProgressUpdated by stating it can be called any
+        // number of times. This makes the tests cleaner and focused on the
+        // event notifications.
+        EXPECT_CALL(mockObserver, ProgressUpdated())
+            .Times(testing::AnyNumber());
     }
 
     void TearDown() override
@@ -54,15 +63,29 @@ TEST_F(XmlParserTest, ParseValidXml)
 
     std::istringstream input(xmlData);
 
-    EXPECT_CALL(mockObserver, NewEventFound(testing::_))
+    // Expect NewEventBatchFound to be called once.
+    EXPECT_CALL(mockObserver, NewEventBatchFound(testing::_))
         .Times(1)
         .WillOnce(
-            [](const db::LogEvent& event)
+            [](const std::vector<std::pair<int, db::LogEvent::EventItems>>&
+                    batch)
             {
+                // Verify the batch contains exactly one event.
+                ASSERT_EQ(batch.size(), 1);
+
+                // Construct a LogEvent from the batch data to use helper
+                // methods.
+                db::LogEvent event(batch[0].first, std::move(batch[0].second));
+
+                // Change GetValueByKey to findByKey to match your LogEvent
+                // class
                 EXPECT_EQ(event.findByKey("timestamp"), "2025-01-14T15:20:55");
                 EXPECT_EQ(event.findByKey("type"), "INFO");
                 EXPECT_EQ(event.findByKey("info"), "Test event");
             });
+
+    // This test should not expect NewEventFound anymore.
+    EXPECT_CALL(mockObserver, NewEventFound(testing::_)).Times(0);
 
     parser.ParseData(input);
 }
@@ -80,7 +103,12 @@ TEST_F(XmlParserTest, ParseInvalidXml)
 
     std::istringstream input(xmlData);
 
+    // For invalid XML, we expect that NO events are found,
+    // either individually or in a batch.
     EXPECT_CALL(mockObserver, NewEventFound(testing::_)).Times(0);
+    EXPECT_CALL(mockObserver, NewEventBatchFound(testing::_)).Times(0);
 
+    // The parser might throw an exception or simply finish without sending
+    // events. This test ensures no event data is dispatched.
     parser.ParseData(input);
 }

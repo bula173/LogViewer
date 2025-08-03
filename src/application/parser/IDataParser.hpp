@@ -12,6 +12,8 @@ class IDataParserObserver
   public:
     virtual ~IDataParserObserver() = default;
     virtual void NewEventFound(db::LogEvent&& event) = 0;
+    virtual void NewEventBatchFound(
+        std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch) = 0;
     virtual void ProgressUpdated() = 0;
 };
 
@@ -25,17 +27,21 @@ class IDataParser
     virtual uint32_t GetCurrentProgress() const = 0;
     virtual uint32_t GetTotalProgress() const = 0;
 
-    void AddObserver(IDataParserObserver* observer)
+    /**
+     * @brief Registers an observer to receive notifications.
+     * @param observer A pointer to the observer object.
+     */
+    void RegisterObserver(IDataParserObserver* observer)
     {
         if (observer)
         {
-            observers.push_back(observer);
+            // Prevent adding the same observer multiple times
+            auto it = std::find(observers.begin(), observers.end(), observer);
+            if (it == observers.end())
+            {
+                observers.push_back(observer);
+            }
         }
-    }
-
-    void RegisterObserver(IDataParserObserver* observer)
-    {
-        AddObserver(observer);
     }
 
     void RemoveObserver(IDataParserObserver* observer)
@@ -53,6 +59,33 @@ class IDataParser
     void UnregisterObserver(IDataParserObserver* observer)
     {
         RemoveObserver(observer);
+    }
+
+    void NotifyNewEventBatch(
+        std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
+    {
+        if (observers.empty())
+        {
+            return;
+        }
+
+        // Handle all observers except the last one by sending a copy of the
+        // batch
+        for (size_t i = 0; i < observers.size() - 1; ++i)
+        {
+            if (observers[i])
+            {
+                auto eventBatchCopy =
+                    eventBatch; // Make a copy of the entire vector
+                observers[i]->NewEventBatchFound(std::move(eventBatchCopy));
+            }
+        }
+
+        // Handle the last observer by moving the original batch to avoid a copy
+        if (!observers.empty() && observers.back())
+        {
+            observers.back()->NewEventBatchFound(std::move(eventBatch));
+        }
     }
 
     void NotifyNewEvent(db::LogEvent&& event)
