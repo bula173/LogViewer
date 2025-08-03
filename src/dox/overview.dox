@@ -1,0 +1,26 @@
+/**
+@mainpage LogViewer Application Overview
+
+@section intro_sec Introduction
+
+LogViewer is a high-performance desktop application designed for parsing, viewing, and analyzing structured log files. Built in C++ with the wxWidgets framework, it provides a responsive and native user interface on multiple platforms.
+
+The primary goal of the application is to handle very large log files (potentially containing millions of events) without consuming excessive memory or becoming unresponsive.
+
+@section features_sec Key Features
+
+- **Efficient XML Parsing:** Utilizes the stream-based Expat library to parse XML log files with a low memory footprint.
+- **Virtual List Controls:** The main event list and detail views are implemented as virtual controls. This means they only request data for visible rows, allowing the application to handle massive datasets instantly.
+- **Decoupled Architecture:** A clean separation between the data parsing logic and the user interface is achieved using the Observer design pattern.
+- **Configurable:** Application settings, such as parser rules and UI column layouts, are managed through an external JSON configuration file.
+- **Cross-Platform:** Built on wxWidgets to support compilation and execution on Windows, macOS, and Linux.
+
+@section usage_sec How to Use
+
+1.  **Launch the Application:** Start LogViewer.
+2.  **Open a File:** Use the `File -> Open` menu, drag-and-drop a file onto the window, or select a file from the "Recent Files" list.
+3.  **View Events:** The main panel will populate with the parsed log events. Scroll through the list to view all entries.
+4.  **Inspect Details:** Click on a specific event in the main list. The panel on the right will display all the key-value pairs for that selected event.
+5.  **Filter and Search:** (Future capability) Use the filter and search controls to narrow down the results and find specific information.
+
+*/

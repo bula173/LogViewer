@@ -1,0 +1,55 @@
+/**
+@page architecture Software Architecture
+
+This page details the software architecture, design patterns, and data flow of the LogViewer application.
+
+@section components_sec Core Components
+
+The application is logically divided into several key namespaces and components:
+
+- **GUI Layer (`gui`):**
+    - **`MainWindow`:** The central class of the application. It orchestrates all UI components, handles user events, and acts as an observer to the parser.
+    - **`EventsVirtualListControl`:** A highly optimized list control for displaying the main list of log events.
+    - **`ItemVirtualListControl`:** A list control for displaying the key-value details of a single selected event.
+    - **`MyApp`:** The wxWidgets application entry point, responsible for initialization.
+
+- **Parsing Layer (`parser`):**
+    - **`IDataParser`:** An abstract interface defining the contract for any parser. It implements the "Subject" part of the Observer pattern.
+    - **`IDataParserObserver`:** An interface that classes (like `MainWindow`) can implement to receive notifications from a parser.
+    - **`XmlParser`:** A concrete implementation of `IDataParser` that uses the Expat library to parse XML files.
+
+- **Data Model (`db`):**
+    - **`LogEvent`:** A simple class representing a single, structured log entry.
+    - **`EventsContainer`:** A container that owns and manages all the `LogEvent` objects parsed from a file. This separates the application's data from the UI.
+
+- **Configuration (`config`):**
+    - **`Config`:** A singleton class that loads and provides global access to application settings from a `config.json` file.
+
+@section patterns_sec Design Patterns
+
+- **Observer Pattern:** This is the cornerstone of the application's architecture. The `XmlParser` (Subject) is completely decoupled from the `MainWindow` (Observer). When the parser finds an event or makes progress, it simply notifies its registered observers via the `IDataParserObserver` interface. This allows the parsing logic to be tested independently and enables other types of parsers or observers to be added in the future.
+
+- **Singleton Pattern:** The `Config` class is a singleton to ensure that there is only one source of configuration truth throughout the application.
+
+- **Model-View-Controller (MVC) - like approach:**
+    - **Model:** The `db::EventsContainer` acts as the data model.
+    - **View:** The `gui::EventsVirtualListControl` and other UI elements are the view.
+    - **Controller:** The `gui::MainWindow` acts as the controller, handling user input, triggering the parser, and updating the view based on changes to the model.
+
+@section dataflow_sec Data Flow (File Parsing)
+
+The typical data flow for opening and parsing a file is as follows:
+
+1.  The user interacts with `MainWindow` (e.g., clicks "Open File").
+2.  `MainWindow` creates an instance of `parser::XmlParser`.
+3.  `MainWindow` calls `parser->RegisterObserver(this)`, registering itself to receive updates.
+4.  `MainWindow` calls `parser->ParseData(filepath)`.
+5.  The `XmlParser` reads the file and feeds data to the Expat engine.
+6.  As Expat's callbacks are triggered, `XmlParser` constructs `db::LogEvent` objects.
+7.  For each new event, `XmlParser` calls `NotifyNewEvent()`, which in turn calls `NewEventFound()` on `MainWindow`.
+8.  `MainWindow::NewEventFound()` takes the `LogEvent` and moves it into the `db::EventsContainer`.
+9.  Periodically, `XmlParser` calls `NotifyProgressUpdated()`, which calls `ProgressUpdated()` on `MainWindow` to update the `wxGauge`.
+10. `MainWindow` updates the item count on `EventsVirtualListControl`. The control then automatically requests data for visible rows by calling its `GetValue()` method, which reads directly from the `EventsContainer`.
+
+This architecture ensures that the UI remains responsive at all times and that memory usage stays low, regardless of the input file size.
+*/

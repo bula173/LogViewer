@@ -3,6 +3,9 @@
 #include "config/Config.hpp"
 #include "db/LogEvent.hpp"
 
+// third-party
+#include <spdlog/spdlog.h>
+
 // std
 #include <fstream> // Include this header for std::ifstream
 #include <iostream>
