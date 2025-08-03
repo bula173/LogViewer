@@ -11,7 +11,7 @@ var classdb_1_1_events_container =
     [ "GetItem", "db/d71/classdb_1_1_events_container.html#a43c3bb4ef1fdacc95503720615d0048e", null ],
     [ "NotifyDataChanged", "db/d71/classdb_1_1_events_container.html#aecc89af25b0685af5395062d6c9b2adb", null ],
     [ "RegisterOndDataUpdated", "db/d71/classdb_1_1_events_container.html#a130db4ec5dbe8deeb41647606fa2a3b0", null ],
-    [ "SetCurrentItem", "db/d71/classdb_1_1_events_container.html#a91ea9aa3c507889d2efd78f896b5db02", null ],
+    [ "SetCurrentItem", "db/d71/classdb_1_1_events_container.html#a3fc32ef754405956b1d385968266639c", null ],
     [ "Size", "db/d71/classdb_1_1_events_container.html#ade0f9c3fc8fb62b812d23cba0ec01718", null ],
     [ "m_currentItem", "db/d71/classdb_1_1_events_container.html#a10e70432c89db2ca6d477be18a218557", null ],
     [ "m_data", "db/d71/classdb_1_1_events_container.html#a551b1a5de03069665bda95df6cfe047a", null ],

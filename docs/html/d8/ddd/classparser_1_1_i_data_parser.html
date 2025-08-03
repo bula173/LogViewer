@@ -93,15 +93,18 @@ $(function(){initNavTree('d8/ddd/classparser_1_1_i_data_parser.html','../../','d
 </div><!--header-->
 <div class="contents">
 
+<p>Abstract base class for all data parsing implementations.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../dc/d1b/_i_data_parser_8hpp_source.html">IDataParser.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for parser::IDataParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d0/d73/classparser_1_1_i_data_parser__inherit__graph.png" border="0" usemap="#aparser_1_1_i_data_parser_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="aparser_1_1_i_data_parser_inherit__map" id="aparser_1_1_i_data_parser_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,5,173,275"/>
-<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html" title=" " alt="" coords="15,323,163,491"/>
-<area shape="poly" title=" " alt="" coords="92,290,92,323,87,323,87,290"/>
+<area shape="rect" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,173,255"/>
+<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html" title=" " alt="" coords="15,303,163,471"/>
+<area shape="poly" title=" " alt="" coords="92,270,92,303,87,303,87,270"/>
 </map>
 </div>
 <div class="dynheader">
@@ -109,32 +112,46 @@ Collaboration diagram for parser::IDataParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d6/d9d/classparser_1_1_i_data_parser__coll__graph.png" border="0" usemap="#aparser_1_1_i_data_parser_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aparser_1_1_i_data_parser_coll__map" id="aparser_1_1_i_data_parser_coll__map">
-<area shape="rect" title=" " alt="" coords="8,158,176,427"/>
+<area shape="rect" title="Abstract base class for all data parsing implementations." alt="" coords="8,158,176,407"/>
 <area shape="rect" title=" " alt="" coords="5,5,178,87"/>
-<area shape="poly" title=" " alt="" coords="94,87,94,141,89,141,89,87"/>
+<area shape="poly" title=" " alt="" coords="94,86,94,141,89,141,89,86"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9b39377303663519b50e33e44ca20418" id="r_a9b39377303663519b50e33e44ca20418"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b39377303663519b50e33e44ca20418">~IDataParser</a> ()=default</td></tr>
+<tr class="memdesc:a9b39377303663519b50e33e44ca20418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor for proper cleanup of derived classes.  <br /></td></tr>
 <tr class="memitem:a430fc5da36383371e8a25aaa10269bb8" id="r_a430fc5da36383371e8a25aaa10269bb8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a430fc5da36383371e8a25aaa10269bb8">ParseData</a> (const std::string &amp;filepath)=0</td></tr>
+<tr class="memdesc:a430fc5da36383371e8a25aaa10269bb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses data from a file path.  <br /></td></tr>
 <tr class="memitem:adfce47886f1b6d071a8e8b051512b1d5" id="r_adfce47886f1b6d071a8e8b051512b1d5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfce47886f1b6d071a8e8b051512b1d5">ParseData</a> (std::istream &amp;input)=0</td></tr>
+<tr class="memdesc:adfce47886f1b6d071a8e8b051512b1d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses data from an input stream.  <br /></td></tr>
 <tr class="memitem:a714468ed0e54516b4405a17c604c1dbc" id="r_a714468ed0e54516b4405a17c604c1dbc"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a714468ed0e54516b4405a17c604c1dbc">GetCurrentProgress</a> () const =0</td></tr>
+<tr class="memdesc:a714468ed0e54516b4405a17c604c1dbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current parsing progress.  <br /></td></tr>
 <tr class="memitem:a49135d85a8459410ff91c24a892f88d1" id="r_a49135d85a8459410ff91c24a892f88d1"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49135d85a8459410ff91c24a892f88d1">GetTotalProgress</a> () const =0</td></tr>
+<tr class="memdesc:a49135d85a8459410ff91c24a892f88d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the total expected progress value.  <br /></td></tr>
 <tr class="memitem:abda83b8d68f9be83f416f7ae685cea6f" id="r_abda83b8d68f9be83f416f7ae685cea6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abda83b8d68f9be83f416f7ae685cea6f">RegisterObserver</a> (<a class="el" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> *observer)</td></tr>
-<tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive notifications.  <br /></td></tr>
-<tr class="memitem:ab408ed5d6726dec8c5ec7a2a8c4f99b6" id="r_ab408ed5d6726dec8c5ec7a2a8c4f99b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab408ed5d6726dec8c5ec7a2a8c4f99b6">RemoveObserver</a> (<a class="el" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> *observer)</td></tr>
+<tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive parsing notifications.  <br /></td></tr>
 <tr class="memitem:ac2b109cb3475dc7dec15198f1a184963" id="r_ac2b109cb3475dc7dec15198f1a184963"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2b109cb3475dc7dec15198f1a184963">UnregisterObserver</a> (<a class="el" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> *observer)</td></tr>
-<tr class="memitem:ac66a6d032e95fb5c0f26695e2c1c5db9" id="r_ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac66a6d032e95fb5c0f26695e2c1c5db9">NotifyNewEventBatch</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534">db::LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)</td></tr>
+<tr class="memdesc:ac2b109cb3475dc7dec15198f1a184963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a previously registered observer.  <br /></td></tr>
 <tr class="memitem:a7eb5f01158daf2c64c0e9d7e45ba4d5e" id="r_a7eb5f01158daf2c64c0e9d7e45ba4d5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eb5f01158daf2c64c0e9d7e45ba4d5e">NotifyNewEvent</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&amp;event)</td></tr>
+<tr class="memdesc:a7eb5f01158daf2c64c0e9d7e45ba4d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about a newly found event.  <br /></td></tr>
 <tr class="memitem:a596df39e4d90cad4eb364aa5382ab51c" id="r_a596df39e4d90cad4eb364aa5382ab51c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a596df39e4d90cad4eb364aa5382ab51c">NotifyProgressUpdated</a> ()</td></tr>
+<tr class="memdesc:a596df39e4d90cad4eb364aa5382ab51c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about parsing progress updates.  <br /></td></tr>
+<tr class="memitem:ac66a6d032e95fb5c0f26695e2c1c5db9" id="r_ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac66a6d032e95fb5c0f26695e2c1c5db9">NotifyNewEventBatch</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534">db::LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)</td></tr>
+<tr class="memdesc:ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about a batch of newly found events.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a85fc1a7ee1778b5c8cbaf144886b362f" id="r_a85fc1a7ee1778b5c8cbaf144886b362f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85fc1a7ee1778b5c8cbaf144886b362f">observers</a></td></tr>
+<tr class="memdesc:a85fc1a7ee1778b5c8cbaf144886b362f"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of registered observers.  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract base class for all data parsing implementations. </p>
+<p>This class defines the common interface for parsing different log file formats. Concrete implementations handle specific formats (XML, JSON, CSV, etc.) while providing a consistent interface for client code.</p>
+<dl class="section user"><dt>Observer Pattern</dt><dd>The parser uses the Observer pattern to notify interested parties about parsing progress and discovered events without tight coupling.</dd></dl>
+<dl class="section user"><dt>Thread Safety</dt><dd>Base class is not thread-safe. Derived classes should document their thread safety guarantees. </dd></dl>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9b39377303663519b50e33e44ca20418" name="a9b39377303663519b50e33e44ca20418"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b39377303663519b50e33e44ca20418">&#9670;&#160;</a></span>~IDataParser()</h2>
 
@@ -157,6 +174,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Virtual destructor for proper cleanup of derived classes. </p>
 
 </div>
 </div>
@@ -183,6 +202,10 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets the current parsing progress. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t Current progress value (meaning depends on implementation) </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Progress values should be used with <a class="el" href="#a49135d85a8459410ff91c24a892f88d1" title="Gets the total expected progress value.">GetTotalProgress()</a> for percentage calculations </dd></dl>
 
 <p>Implemented in <a class="el" href="../../d7/dd4/classparser_1_1_xml_parser.html#af1b09e0fbb00a74d8acfed9225f8fc0f">parser::XmlParser</a>.</p>
 
@@ -211,6 +234,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the total expected progress value. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t Maximum progress value when parsing is complete </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Return 0 if total progress cannot be determined in advance </dd></dl>
+
 <p>Implemented in <a class="el" href="../../d7/dd4/classparser_1_1_xml_parser.html#a9e2430e0f0988465de536d88612e4d3e">parser::XmlParser</a>.</p>
 
 </div>
@@ -238,6 +265,17 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Notifies all observers about a newly found event. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>The new event to report (moved to avoid copying) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method should be called by derived classes when events are discovered </dd></dl>
+<p>Efficient event distribution to multiple observers.</p>
+<p>Creates copies for all observers except the last one, then moves the original to the last observer to minimize unnecessary copying.</p>
+
 </div>
 </div>
 <a id="ac66a6d032e95fb5c0f26695e2c1c5db9" name="ac66a6d032e95fb5c0f26695e2c1c5db9"></a>
@@ -262,15 +300,26 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Notifies all observers about a batch of newly found events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventBatch</td><td>Vector of (id, items) pairs representing the events </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This is more efficient than calling NotifyNewEvent multiple times </dd></dl>
+<p>Efficient batch event distribution with copy optimization.</p>
+<p>Similar to NotifyNewEvent, creates copies for all observers except the last one to minimize memory allocation and copying overhead.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/ddd/classparser_1_1_i_data_parser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph.png" border="0" usemap="#ad8/ddd/classparser_1_1_i_data_parser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" loading="lazy" alt=""/></div>
 <map name="ad8/ddd/classparser_1_1_i_data_parser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" id="ad8/ddd/classparser_1_1_i_data_parser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph">
-<area shape="rect" title=" " alt="" coords="417,23,576,64"/>
+<area shape="rect" title="Notifies all observers about a batch of newly found events." alt="" coords="417,23,576,64"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a0e019323b587d204f1c323b648e49069" title=" " alt="" coords="188,5,369,31"/>
 <area shape="poly" title=" " alt="" coords="402,35,369,31,370,26,402,30"/>
-<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e" title=" " alt="" coords="5,23,140,64"/>
+<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parses data from an input stream." alt="" coords="5,23,140,64"/>
 <area shape="poly" title=" " alt="" coords="402,46,140,46,140,41,402,41"/>
 <area shape="poly" title=" " alt="" coords="173,34,140,38,140,33,172,29"/>
 </map>
@@ -300,15 +349,20 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Notifies all observers about parsing progress updates. </p>
+<dl class="section note"><dt>Note</dt><dd>This method should be called periodically by derived classes during parsing </dd></dl>
+<p>Simple progress notification to all registered observers.</p>
+<p>Iterates through all observers and calls their ProgressUpdated method. Null pointer checking ensures robustness against invalid observers.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/ddd/classparser_1_1_i_data_parser_a596df39e4d90cad4eb364aa5382ab51c_icgraph.png" border="0" usemap="#ad8/ddd/classparser_1_1_i_data_parser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" loading="lazy" alt=""/></div>
 <map name="ad8/ddd/classparser_1_1_i_data_parser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" id="ad8/ddd/classparser_1_1_i_data_parser_a596df39e4d90cad4eb364aa5382ab51c_icgraph">
-<area shape="rect" title=" " alt="" coords="431,23,596,64"/>
+<area shape="rect" title="Notifies all observers about parsing progress updates." alt="" coords="431,23,596,64"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a2ca85c636838cb16234df98c7518de5e" title=" " alt="" coords="188,5,383,31"/>
 <area shape="poly" title=" " alt="" coords="416,35,383,32,384,26,416,30"/>
-<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e" title=" " alt="" coords="5,23,140,64"/>
+<area shape="rect" href="../../d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parses data from an input stream." alt="" coords="5,23,140,64"/>
 <area shape="poly" title=" " alt="" coords="415,46,140,46,140,41,415,41"/>
 <area shape="poly" title=" " alt="" coords="173,34,141,38,140,33,172,29"/>
 </map>
@@ -339,6 +393,21 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Parses data from a file path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filepath</td><td>The path to the file to parse </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if the file cannot be opened or parsed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method should be implemented by derived classes for file-based parsing </dd></dl>
+
 <p>Implemented in <a class="el" href="../../d7/dd4/classparser_1_1_xml_parser.html#a7445604294d0fd34c7eabb9bb439af4f">parser::XmlParser</a>.</p>
 
 </div>
@@ -365,6 +434,21 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Parses data from an input stream. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>The input stream to read data from </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if the stream cannot be read or parsed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method enables parsing from various sources (files, network, memory) </dd></dl>
 
 <p>Implemented in <a class="el" href="../../d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e">parser::XmlParser</a>.</p>
 
@@ -393,48 +477,16 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Registers an observer to receive notifications. </p>
+<p>Registers an observer to receive parsing notifications. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">observer</td><td>A pointer to the observer object. </td></tr>
+    <tr><td class="paramname">observer</td><td>Pointer to the observer object </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="ab408ed5d6726dec8c5ec7a2a8c4f99b6" name="ab408ed5d6726dec8c5ec7a2a8c4f99b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab408ed5d6726dec8c5ec7a2a8c4f99b6">&#9670;&#160;</a></span>RemoveObserver()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void parser::IDataParser::RemoveObserver </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> *</td>          <td class="paramname"><span class="paramname"><em>observer</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d8/ddd/classparser_1_1_i_data_parser_ab408ed5d6726dec8c5ec7a2a8c4f99b6_icgraph.png" border="0" usemap="#ad8/ddd/classparser_1_1_i_data_parser_ab408ed5d6726dec8c5ec7a2a8c4f99b6_icgraph" loading="lazy" alt=""/></div>
-<map name="ad8/ddd/classparser_1_1_i_data_parser_ab408ed5d6726dec8c5ec7a2a8c4f99b6_icgraph" id="ad8/ddd/classparser_1_1_i_data_parser_ab408ed5d6726dec8c5ec7a2a8c4f99b6_icgraph">
-<area shape="rect" title=" " alt="" coords="196,5,331,46"/>
-<area shape="rect" href="../../d8/ddd/classparser_1_1_i_data_parser.html#ac2b109cb3475dc7dec15198f1a184963" title=" " alt="" coords="5,5,148,46"/>
-<area shape="poly" title=" " alt="" coords="180,28,148,28,148,23,180,23"/>
-</map>
-</div>
+<dl class="section note"><dt>Note</dt><dd>The observer must remain valid until parsing completes or it's unregistered </dd>
+<dd>
+Duplicate observers are automatically prevented </dd></dl>
 
 </div>
 </div>
@@ -460,16 +512,17 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d8/ddd/classparser_1_1_i_data_parser_ac2b109cb3475dc7dec15198f1a184963_cgraph.png" border="0" usemap="#ad8/ddd/classparser_1_1_i_data_parser_ac2b109cb3475dc7dec15198f1a184963_cgraph" loading="lazy" alt=""/></div>
-<map name="ad8/ddd/classparser_1_1_i_data_parser_ac2b109cb3475dc7dec15198f1a184963_cgraph" id="ad8/ddd/classparser_1_1_i_data_parser_ac2b109cb3475dc7dec15198f1a184963_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,148,46"/>
-<area shape="rect" href="../../d8/ddd/classparser_1_1_i_data_parser.html#ab408ed5d6726dec8c5ec7a2a8c4f99b6" title=" " alt="" coords="196,5,331,46"/>
-<area shape="poly" title=" " alt="" coords="148,23,180,23,180,28,148,28"/>
-</map>
-</div>
+
+<p>Unregisters a previously registered observer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">observer</td><td>Pointer to the observer to remove </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>It's safe to call this method with observers that weren't registered </dd></dl>
+<p>Removes observer from the notification list.</p>
+<p>Uses std::find to locate the observer and std::vector::erase to remove it. Safe to call with null pointers or unregistered observers.</p>
 
 </div>
 </div>
@@ -493,6 +546,8 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>List of registered observers. </p>
 
 </div>
 </div>

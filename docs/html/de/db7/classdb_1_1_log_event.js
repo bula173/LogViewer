@@ -1,9 +1,9 @@
 var classdb_1_1_log_event =
 [
     [ "EventItems", "de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534", null ],
-    [ "EventItemsConstIterator", "de/db7/classdb_1_1_log_event.html#a1712af1b93d11101a3b3cab856290e06", null ],
-    [ "EventItemsIterator", "de/db7/classdb_1_1_log_event.html#aa699304747dd9c5fd35ba337ec9f233f", null ],
-    [ "LogEvent", "de/db7/classdb_1_1_log_event.html#a1e269594cb79dcd4dc5cde474d98b1fc", null ],
+    [ "EventItemsConstIterator", "de/db7/classdb_1_1_log_event.html#a1de0f0bed5289cc3bd077fb3fe688181", null ],
+    [ "EventItemsIterator", "de/db7/classdb_1_1_log_event.html#abd88d16bac9ece677923f0bd73ff1311", null ],
+    [ "LogEvent", "de/db7/classdb_1_1_log_event.html#a6a3479132d6f664ef1e15bc5e7fc69fd", null ],
     [ "LogEvent", "de/db7/classdb_1_1_log_event.html#ade2cbe216c097884b6b78191db2a0865", null ],
     [ "findByKey", "de/db7/classdb_1_1_log_event.html#afe0e2352e6e65e6562000c568b021102", null ],
     [ "findInEvent", "de/db7/classdb_1_1_log_event.html#a3127be5b344071f7b8d1cd0f55f8f8e5", null ],

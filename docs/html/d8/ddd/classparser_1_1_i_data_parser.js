@@ -9,7 +9,6 @@ var classparser_1_1_i_data_parser =
     [ "ParseData", "d8/ddd/classparser_1_1_i_data_parser.html#a430fc5da36383371e8a25aaa10269bb8", null ],
     [ "ParseData", "d8/ddd/classparser_1_1_i_data_parser.html#adfce47886f1b6d071a8e8b051512b1d5", null ],
     [ "RegisterObserver", "d8/ddd/classparser_1_1_i_data_parser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],
-    [ "RemoveObserver", "d8/ddd/classparser_1_1_i_data_parser.html#ab408ed5d6726dec8c5ec7a2a8c4f99b6", null ],
     [ "UnregisterObserver", "d8/ddd/classparser_1_1_i_data_parser.html#ac2b109cb3475dc7dec15198f1a184963", null ],
     [ "observers", "d8/ddd/classparser_1_1_i_data_parser.html#a85fc1a7ee1778b5c8cbaf144886b362f", null ]
 ];

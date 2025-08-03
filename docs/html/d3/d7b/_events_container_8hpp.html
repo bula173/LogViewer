@@ -92,34 +92,37 @@ $(function(){initNavTree('d3/d7b/_events_container_8hpp.html','../../',''); });
   <div class="headertitle"><div class="title">EventsContainer.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="../../de/d77/_log_event_8hpp_source.html">db/LogEvent.hpp</a>&quot;</code><br />
+
+<p>Container class for managing collections of LogEvent objects.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="../../de/d77/_log_event_8hpp_source.html">db/LogEvent.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d6/d1b/_i_model_8hpp_source.html">mvc/IModel.hpp</a>&quot;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for EventsContainer.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d60/_events_container_8hpp__incl.png" border="0" usemap="#asrc_2application_2db_2_events_container_8hpp" loading="lazy" alt=""/></div>
 <map name="asrc_2application_2db_2_events_container_8hpp" id="asrc_2application_2db_2_events_container_8hpp">
-<area shape="rect" title=" " alt="" coords="177,5,323,46"/>
-<area shape="rect" title=" " alt="" coords="5,241,63,267"/>
-<area shape="poly" title=" " alt="" coords="197,49,157,68,114,95,73,128,42,169,33,197,32,226,27,226,28,196,37,166,70,124,110,90,154,64,195,44"/>
-<area shape="rect" href="../../de/d77/_log_event_8hpp.html" title=" " alt="" coords="516,168,635,193"/>
-<area shape="poly" title=" " alt="" coords="293,44,537,158,535,163,291,49"/>
-<area shape="rect" href="../../d6/d1b/_i_model_8hpp.html" title=" " alt="" coords="193,94,307,120"/>
-<area shape="poly" title=" " alt="" coords="253,46,253,78,247,78,247,46"/>
-<area shape="poly" title=" " alt="" coords="516,194,504,196,78,250,78,245,503,191,515,189"/>
-<area shape="rect" title=" " alt="" coords="549,241,602,267"/>
-<area shape="poly" title=" " alt="" coords="578,194,578,226,573,226,573,194"/>
-<area shape="poly" title=" " alt="" coords="193,115,159,121,124,131,90,147,61,169,45,197,38,227,33,225,40,195,57,166,88,143,122,126,158,116,192,109"/>
-<area shape="poly" title=" " alt="" coords="306,118,506,161,505,167,305,123"/>
-<area shape="rect" href="../../de/d47/_i_view_8hpp.html" title=" " alt="" coords="385,168,491,193"/>
-<area shape="poly" title=" " alt="" coords="283,118,393,159,391,164,281,123"/>
-<area shape="rect" title=" " alt="" coords="72,168,143,193"/>
-<area shape="poly" title=" " alt="" coords="227,123,147,163,144,158,225,118"/>
-<area shape="rect" title=" " alt="" coords="167,168,224,193"/>
-<area shape="poly" title=" " alt="" coords="243,122,216,157,212,154,239,118"/>
-<area shape="rect" title=" " alt="" coords="248,168,361,193"/>
-<area shape="poly" title=" " alt="" coords="261,118,288,154,284,157,257,122"/>
+<area shape="rect" title="Container class for managing collections of LogEvent objects." alt="" coords="206,5,353,46"/>
+<area shape="rect" href="../../de/d77/_log_event_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="5,168,125,193"/>
+<area shape="poly" title=" " alt="" coords="254,49,96,161,93,156,251,44"/>
+<area shape="rect" title=" " alt="" coords="134,241,191,267"/>
+<area shape="poly" title=" " alt="" coords="354,32,463,51,520,64,573,82,616,103,644,129,651,144,652,160,646,177,633,195,611,207,570,217,451,234,207,253,207,248,450,229,569,212,609,202,630,191,642,175,647,159,646,145,640,132,613,107,571,87,519,70,462,56,353,38"/>
+<area shape="rect" href="../../d6/d1b/_i_model_8hpp.html" title=" " alt="" coords="222,94,337,120"/>
+<area shape="poly" title=" " alt="" coords="282,46,282,78,277,78,277,46"/>
+<area shape="rect" title=" " alt="" coords="38,241,92,267"/>
+<area shape="poly" title=" " alt="" coords="68,194,68,226,62,226,62,194"/>
+<area shape="poly" title=" " alt="" coords="83,192,136,230,132,234,80,196"/>
+<area shape="poly" title=" " alt="" coords="244,123,117,165,115,160,242,118"/>
+<area shape="poly" title=" " alt="" coords="252,122,219,142,190,169,175,197,168,227,163,225,170,196,186,166,216,137,249,118"/>
+<area shape="rect" href="../../de/d47/_i_view_8hpp.html" title=" " alt="" coords="513,168,620,193"/>
+<area shape="poly" title=" " alt="" coords="329,118,504,161,502,166,328,123"/>
+<area shape="rect" title=" " alt="" coords="200,168,271,193"/>
+<area shape="poly" title=" " alt="" coords="275,121,253,156,249,153,270,118"/>
+<area shape="rect" title=" " alt="" coords="295,168,352,193"/>
+<area shape="poly" title=" " alt="" coords="289,118,310,153,306,156,285,121"/>
+<area shape="rect" title=" " alt="" coords="377,168,489,193"/>
+<area shape="poly" title=" " alt="" coords="307,118,394,158,392,163,305,123"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -127,8 +130,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d06/_events_container_8hpp__dep__incl.png" border="0" usemap="#asrc_2application_2db_2_events_container_8hppdep" loading="lazy" alt=""/></div>
 <map name="asrc_2application_2db_2_events_container_8hppdep" id="asrc_2application_2db_2_events_container_8hppdep">
-<area shape="rect" title=" " alt="" coords="310,5,457,46"/>
-<area shape="rect" href="../../d9/d51/_events_container_8cpp.html" title=" " alt="" coords="50,94,197,135"/>
+<area shape="rect" title="Container class for managing collections of LogEvent objects." alt="" coords="310,5,457,46"/>
+<area shape="rect" href="../../d9/d51/_events_container_8cpp.html" title="Implementation of the EventsContainer class methods." alt="" coords="50,94,197,135"/>
 <area shape="poly" title=" " alt="" coords="311,54,184,96,182,91,309,49"/>
 <area shape="rect" href="../../d2/db3/_events_container_adapter_8hpp.html" title=" " alt="" coords="221,94,413,135"/>
 <area shape="poly" title=" " alt="" coords="361,60,334,95,330,92,357,57"/>
@@ -159,12 +162,18 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:db_3A_3AEventsContainer" id="r_db_3A_3AEventsContainer"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d71/classdb_1_1_events_container.html">db::EventsContainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">High-performance container for managing large collections of <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> objects.  <a href="../../db/d71/classdb_1_1_events_container.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:db" id="r_db"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d45/namespacedb.html">db</a></td></tr>
+<tr class="memdesc:d0/d45/namespacedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Database and data model components for the LogViewer application. <br /></td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Container class for managing collections of LogEvent objects. </p>
+<dl class="section author"><dt>Author</dt><dd>LogViewer Development Team </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2025 </dd></dl>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

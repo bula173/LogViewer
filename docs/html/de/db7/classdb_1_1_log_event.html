@@ -93,13 +93,16 @@ $(function(){initNavTree('de/db7/classdb_1_1_log_event.html','../../','d3/de2/cl
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a single, structured log event with key-value data.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../de/d77/_log_event_8hpp_source.html">LogEvent.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for db::LogEvent:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../df/d6b/classdb_1_1_log_event__coll__graph.png" border="0" usemap="#adb_1_1_log_event_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="adb_1_1_log_event_coll__map" id="adb_1_1_log_event_coll__map">
-<area shape="rect" title=" " alt="" coords="18,158,135,346"/>
+<area shape="rect" title="Represents a single, structured log event with key&#45;value data." alt="" coords="18,158,135,346"/>
 <area shape="rect" title=" " alt="" coords="5,13,30,79"/>
 <area shape="poly" title=" " alt="" coords="29,78,47,141,42,142,24,80"/>
 <area shape="rect" title=" " alt="" coords="54,5,216,87"/>
@@ -110,26 +113,43 @@ Collaboration diagram for db::LogEvent:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a5eb43981a1c2d3c936cd9b96fc0b9534" id="r_a5eb43981a1c2d3c936cd9b96fc0b9534"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534">EventItems</a> = std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;</td></tr>
-<tr class="memitem:aa699304747dd9c5fd35ba337ec9f233f" id="r_aa699304747dd9c5fd35ba337ec9f233f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa699304747dd9c5fd35ba337ec9f233f">EventItemsIterator</a> = std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::iterator</td></tr>
-<tr class="memitem:a1712af1b93d11101a3b3cab856290e06" id="r_a1712af1b93d11101a3b3cab856290e06"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1712af1b93d11101a3b3cab856290e06">EventItemsConstIterator</a> = std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::const_iterator</td></tr>
+<tr class="memdesc:a5eb43981a1c2d3c936cd9b96fc0b9534"><td class="mdescLeft">&#160;</td><td class="mdescRight">A collection of key-value pairs representing event data (eventFieldName, data).  <br /></td></tr>
+<tr class="memitem:abd88d16bac9ece677923f0bd73ff1311" id="r_abd88d16bac9ece677923f0bd73ff1311"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd88d16bac9ece677923f0bd73ff1311">EventItemsIterator</a></td></tr>
+<tr class="memdesc:abd88d16bac9ece677923f0bd73ff1311"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterator type for traversing event items.  <br /></td></tr>
+<tr class="memitem:a1de0f0bed5289cc3bd077fb3fe688181" id="r_a1de0f0bed5289cc3bd077fb3fe688181"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1de0f0bed5289cc3bd077fb3fe688181">EventItemsConstIterator</a></td></tr>
+<tr class="memdesc:a1de0f0bed5289cc3bd077fb3fe688181"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const iterator type for traversing event items.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1e269594cb79dcd4dc5cde474d98b1fc" id="r_a1e269594cb79dcd4dc5cde474d98b1fc"><td class="memTemplParams" colspan="2">template&lt;typename... Args, typename = std::enable_if_t&lt;std::is_constructible_v&lt;EventItems, Args &amp;&amp;...&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a1e269594cb79dcd4dc5cde474d98b1fc template"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e269594cb79dcd4dc5cde474d98b1fc">LogEvent</a> (int id, Args &amp;&amp;...args)</td></tr>
+<tr class="memitem:a6a3479132d6f664ef1e15bc5e7fc69fd" id="r_a6a3479132d6f664ef1e15bc5e7fc69fd"><td class="memTemplParams" colspan="2">template&lt;typename... Args, typename = std::enable_if_t&lt;std::is_constructible_v&lt;EventItems, Args&amp;&amp;...&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a6a3479132d6f664ef1e15bc5e7fc69fd template"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a3479132d6f664ef1e15bc5e7fc69fd">LogEvent</a> (int id, Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a6a3479132d6f664ef1e15bc5e7fc69fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template constructor with perfect forwarding.  <br /></td></tr>
 <tr class="memitem:ade2cbe216c097884b6b78191db2a0865" id="r_ade2cbe216c097884b6b78191db2a0865"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade2cbe216c097884b6b78191db2a0865">LogEvent</a> (int id, std::initializer_list&lt; std::pair&lt; std::string, std::string &gt; &gt; items)</td></tr>
+<tr class="memdesc:ade2cbe216c097884b6b78191db2a0865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> from an initializer list.  <br /></td></tr>
 <tr class="memitem:a80b8ed295339d648fe829752e254bd83" id="r_a80b8ed295339d648fe829752e254bd83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80b8ed295339d648fe829752e254bd83">getId</a> () const</td></tr>
+<tr class="memdesc:a80b8ed295339d648fe829752e254bd83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the unique ID of the event.  <br /></td></tr>
 <tr class="memitem:a3af989b3030089d5e717aa8ec83cb206" id="r_a3af989b3030089d5e717aa8ec83cb206"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534">EventItems</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3af989b3030089d5e717aa8ec83cb206">getEventItems</a> () const</td></tr>
+<tr class="memdesc:a3af989b3030089d5e717aa8ec83cb206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a const reference to the event's data items.  <br /></td></tr>
 <tr class="memitem:afe0e2352e6e65e6562000c568b021102" id="r_afe0e2352e6e65e6562000c568b021102"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe0e2352e6e65e6562000c568b021102">findByKey</a> (const std::string &amp;key) const</td></tr>
-<tr class="memitem:a3127be5b344071f7b8d1cd0f55f8f8e5" id="r_a3127be5b344071f7b8d1cd0f55f8f8e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aa699304747dd9c5fd35ba337ec9f233f">EventItemsIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3127be5b344071f7b8d1cd0f55f8f8e5">findInEvent</a> (const std::string &amp;search)</td></tr>
+<tr class="memdesc:afe0e2352e6e65e6562000c568b021102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a value by its key in the event's items.  <br /></td></tr>
+<tr class="memitem:a3127be5b344071f7b8d1cd0f55f8f8e5" id="r_a3127be5b344071f7b8d1cd0f55f8f8e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#abd88d16bac9ece677923f0bd73ff1311">EventItemsIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3127be5b344071f7b8d1cd0f55f8f8e5">findInEvent</a> (const std::string &amp;search)</td></tr>
+<tr class="memdesc:a3127be5b344071f7b8d1cd0f55f8f8e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds an iterator to the first item matching the search term.  <br /></td></tr>
 <tr class="memitem:aa169f880960d2ac5e96cf5173f6f3d48" id="r_aa169f880960d2ac5e96cf5173f6f3d48"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa169f880960d2ac5e96cf5173f6f3d48">operator==</a> (const <a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &amp;other) const</td></tr>
+<tr class="memdesc:aa169f880960d2ac5e96cf5173f6f3d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality comparison operator.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aaf80f7bbb57cc917517704db840e3d81" id="r_aaf80f7bbb57cc917517704db840e3d81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf80f7bbb57cc917517704db840e3d81">m_id</a></td></tr>
+<tr class="memdesc:aaf80f7bbb57cc917517704db840e3d81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique event identifier.  <br /></td></tr>
 <tr class="memitem:a20a21824db803b81042f7fec1bf16a39" id="r_a20a21824db803b81042f7fec1bf16a39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534">EventItems</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20a21824db803b81042f7fec1bf16a39">m_eventItems</a></td></tr>
+<tr class="memdesc:a20a21824db803b81042f7fec1bf16a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The structured data of the event.  <br /></td></tr>
 </table>
-<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a single, structured log event with key-value data. </p>
+<p>A <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> encapsulates a log entry as a collection of key-value pairs, providing efficient access to structured log data. Each event has a unique identifier and contains metadata such as timestamps, severity levels, and custom attributes.</p>
+<dl class="section user"><dt>Thread Safety</dt><dd>This class is not thread-safe. External synchronization is required when accessing <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> instances from multiple threads.</dd></dl>
+<dl class="section user"><dt>Memory Management</dt><dd><a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> uses move semantics and perfect forwarding where possible to minimize unnecessary copying of large data sets. </dd></dl>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="a5eb43981a1c2d3c936cd9b96fc0b9534" name="a5eb43981a1c2d3c936cd9b96fc0b9534"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5eb43981a1c2d3c936cd9b96fc0b9534">&#9670;&#160;</a></span>EventItems</h2>
 
@@ -142,44 +162,54 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A collection of key-value pairs representing event data (eventFieldName, data). </p>
+
 </div>
 </div>
-<a id="a1712af1b93d11101a3b3cab856290e06" name="a1712af1b93d11101a3b3cab856290e06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1712af1b93d11101a3b3cab856290e06">&#9670;&#160;</a></span>EventItemsConstIterator</h2>
+<a id="a1de0f0bed5289cc3bd077fb3fe688181" name="a1de0f0bed5289cc3bd077fb3fe688181"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1de0f0bed5289cc3bd077fb3fe688181">&#9670;&#160;</a></span>EventItemsConstIterator</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a1712af1b93d11101a3b3cab856290e06">db::LogEvent::EventItemsConstIterator</a> = std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::const_iterator</td>
+          <td class="memname">using <a class="el" href="#a1de0f0bed5289cc3bd077fb3fe688181">db::LogEvent::EventItemsConstIterator</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">        std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::const_iterator</div>
+</div><!-- fragment -->
+<p>Const iterator type for traversing event items. </p>
 
 </div>
 </div>
-<a id="aa699304747dd9c5fd35ba337ec9f233f" name="aa699304747dd9c5fd35ba337ec9f233f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa699304747dd9c5fd35ba337ec9f233f">&#9670;&#160;</a></span>EventItemsIterator</h2>
+<a id="abd88d16bac9ece677923f0bd73ff1311" name="abd88d16bac9ece677923f0bd73ff1311"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd88d16bac9ece677923f0bd73ff1311">&#9670;&#160;</a></span>EventItemsIterator</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#aa699304747dd9c5fd35ba337ec9f233f">db::LogEvent::EventItemsIterator</a> = std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::iterator</td>
+          <td class="memname">using <a class="el" href="#abd88d16bac9ece677923f0bd73ff1311">db::LogEvent::EventItemsIterator</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">        std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;::iterator</div>
+</div><!-- fragment -->
+<p>Iterator type for traversing event items. </p>
 
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1e269594cb79dcd4dc5cde474d98b1fc" name="a1e269594cb79dcd4dc5cde474d98b1fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e269594cb79dcd4dc5cde474d98b1fc">&#9670;&#160;</a></span>LogEvent() <span class="overload">[1/2]</span></h2>
+<a id="a6a3479132d6f664ef1e15bc5e7fc69fd" name="a6a3479132d6f664ef1e15bc5e7fc69fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a3479132d6f664ef1e15bc5e7fc69fd">&#9670;&#160;</a></span>LogEvent() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... Args, typename = std::enable_if_t&lt;std::is_constructible_v&lt;EventItems, Args &amp;&amp;...&gt;&gt;&gt; </div>
+template&lt;typename... Args, typename = std::enable_if_t&lt;std::is_constructible_v&lt;EventItems, Args&amp;&amp;...&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -201,13 +231,30 @@ template&lt;typename... Args, typename = std::enable_if_t&lt;std::is_constructib
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Template constructor with perfect forwarding. </p>
+<p>Constructs a <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> with an ID and forwards arguments to <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">EventItems</a> constructor. This enables efficient construction from various argument types.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Args</td><td>Variadic template arguments for <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">EventItems</a> construction </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The unique identifier for the event </td></tr>
+    <tr><td class="paramname">args</td><td>Arguments forwarded to <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">EventItems</a> constructor </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Uses SFINAE to ensure Args can construct an <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">EventItems</a> object </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../de/db7/classdb_1_1_log_event_a1e269594cb79dcd4dc5cde474d98b1fc_icgraph.png" border="0" usemap="#ade/db7/classdb_1_1_log_event_a1e269594cb79dcd4dc5cde474d98b1fc_icgraph" loading="lazy" alt=""/></div>
-<map name="ade/db7/classdb_1_1_log_event_a1e269594cb79dcd4dc5cde474d98b1fc_icgraph" id="ade/db7/classdb_1_1_log_event_a1e269594cb79dcd4dc5cde474d98b1fc_icgraph">
-<area shape="rect" title=" " alt="" coords="223,5,384,31"/>
-<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#aa169f880960d2ac5e96cf5173f6f3d48" title=" " alt="" coords="5,5,175,31"/>
+<div class="center"><img src="../../de/db7/classdb_1_1_log_event_a6a3479132d6f664ef1e15bc5e7fc69fd_icgraph.png" border="0" usemap="#ade/db7/classdb_1_1_log_event_a6a3479132d6f664ef1e15bc5e7fc69fd_icgraph" loading="lazy" alt=""/></div>
+<map name="ade/db7/classdb_1_1_log_event_a6a3479132d6f664ef1e15bc5e7fc69fd_icgraph" id="ade/db7/classdb_1_1_log_event_a6a3479132d6f664ef1e15bc5e7fc69fd_icgraph">
+<area shape="rect" title="Template constructor with perfect forwarding." alt="" coords="223,5,384,31"/>
+<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#aa169f880960d2ac5e96cf5173f6f3d48" title="Equality comparison operator." alt="" coords="5,5,175,31"/>
 <area shape="poly" title=" " alt="" coords="207,21,175,21,175,16,207,16"/>
 </map>
 </div>
@@ -241,6 +288,19 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Constructs a <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> from an initializer list. </p>
+<p>Convenient constructor for creating events with compile-time known data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The unique identifier for the event </td></tr>
+    <tr><td class="paramname">items</td><td>Initializer list of key-value pairs</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><a class="code hl_function" href="#a6a3479132d6f664ef1e15bc5e7fc69fd">LogEvent</a> event(1, {{<span class="stringliteral">&quot;timestamp&quot;</span>, <span class="stringliteral">&quot;2025-01-01&quot;</span>}, {<span class="stringliteral">&quot;type&quot;</span>, <span class="stringliteral">&quot;INFO&quot;</span>}});</div>
+<div class="ttc" id="aclassdb_1_1_log_event_html_a6a3479132d6f664ef1e15bc5e7fc69fd"><div class="ttname"><a href="#a6a3479132d6f664ef1e15bc5e7fc69fd">db::LogEvent::LogEvent</a></div><div class="ttdeci">LogEvent(int id, Args &amp;&amp;... args)</div><div class="ttdoc">Template constructor with perfect forwarding.</div><div class="ttdef"><b>Definition</b> LogEvent.hpp:68</div></div>
+</div><!-- fragment --> </dd></dl>
+
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
@@ -259,6 +319,19 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Finds a value by its key in the event's items. </p>
+<p>Performs a linear search through the event's key-value pairs to find the first occurrence of the specified key.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const std::string The corresponding value, or empty string if not found </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Returns the first matching value if duplicate keys exist @complexity O(n) where n is the number of items in the event </dd></dl>
+<p>Linear search through event items to find matching key.</p>
+<p>Uses std::find_if with a lambda to locate the first item with matching key. Returns empty string if no match is found.</p>
+
 </div>
 </div>
 <a id="a3127be5b344071f7b8d1cd0f55f8f8e5" name="a3127be5b344071f7b8d1cd0f55f8f8e5"></a>
@@ -268,13 +341,26 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#aa699304747dd9c5fd35ba337ec9f233f">LogEvent::EventItemsIterator</a> db::LogEvent::findInEvent </td>
+          <td class="memname"><a class="el" href="#abd88d16bac9ece677923f0bd73ff1311">LogEvent::EventItemsIterator</a> db::LogEvent::findInEvent </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>search</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Finds an iterator to the first item matching the search term. </p>
+<p>Searches through both keys and values for the specified search term.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">search</td><td>The term to search for in keys and values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="#abd88d16bac9ece677923f0bd73ff1311" title="Iterator type for traversing event items.">EventItemsIterator</a> Iterator to the found item, or end() if not found </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This method performs a substring search, not exact matching </dd></dl>
+<p>Searches for the given term in both keys and values.</p>
+<p>Performs substring search across all key-value pairs in the event. Returns iterator to first matching item, or end() if not found.</p>
 
 </div>
 </div>
@@ -293,6 +379,10 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Gets a const reference to the event's data items. </p>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">EventItems</a>&amp; Reference to the internal items collection </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Use this method for read-only access to avoid unnecessary copying </dd></dl>
+
 </div>
 </div>
 <a id="a80b8ed295339d648fe829752e254bd83" name="a80b8ed295339d648fe829752e254bd83"></a>
@@ -309,13 +399,17 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Gets the unique ID of the event. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The event's unique identifier </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Event IDs should be unique within a single log file or session </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/db7/classdb_1_1_log_event_a80b8ed295339d648fe829752e254bd83_icgraph.png" border="0" usemap="#ade/db7/classdb_1_1_log_event_a80b8ed295339d648fe829752e254bd83_icgraph" loading="lazy" alt=""/></div>
 <map name="ade/db7/classdb_1_1_log_event_a80b8ed295339d648fe829752e254bd83_icgraph" id="ade/db7/classdb_1_1_log_event_a80b8ed295339d648fe829752e254bd83_icgraph">
-<area shape="rect" title=" " alt="" coords="223,5,358,31"/>
-<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#aa169f880960d2ac5e96cf5173f6f3d48" title=" " alt="" coords="5,5,175,31"/>
+<area shape="rect" title="Gets the unique ID of the event." alt="" coords="223,5,358,31"/>
+<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#aa169f880960d2ac5e96cf5173f6f3d48" title="Equality comparison operator." alt="" coords="5,5,175,31"/>
 <area shape="poly" title=" " alt="" coords="207,21,175,21,175,16,207,16"/>
 </map>
 </div>
@@ -344,15 +438,26 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Equality comparison operator. </p>
+<p>Two <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> objects are considered equal if they have the same ID. The actual event data is not compared.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> to compare against </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool true if both events have the same ID </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This comparison is based solely on ID, not event content </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/db7/classdb_1_1_log_event_aa169f880960d2ac5e96cf5173f6f3d48_cgraph.png" border="0" usemap="#ade/db7/classdb_1_1_log_event_aa169f880960d2ac5e96cf5173f6f3d48_cgraph" loading="lazy" alt=""/></div>
 <map name="ade/db7/classdb_1_1_log_event_aa169f880960d2ac5e96cf5173f6f3d48_cgraph" id="ade/db7/classdb_1_1_log_event_aa169f880960d2ac5e96cf5173f6f3d48_cgraph">
-<area shape="rect" title=" " alt="" coords="5,31,175,56"/>
-<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#a80b8ed295339d648fe829752e254bd83" title=" " alt="" coords="236,5,371,31"/>
+<area shape="rect" title="Equality comparison operator." alt="" coords="5,31,175,56"/>
+<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#a80b8ed295339d648fe829752e254bd83" title="Gets the unique ID of the event." alt="" coords="236,5,371,31"/>
 <area shape="poly" title=" " alt="" coords="175,31,220,25,221,31,176,36"/>
-<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#a1e269594cb79dcd4dc5cde474d98b1fc" title=" " alt="" coords="223,55,384,80"/>
+<area shape="rect" href="../../de/db7/classdb_1_1_log_event.html#a6a3479132d6f664ef1e15bc5e7fc69fd" title="Template constructor with perfect forwarding." alt="" coords="223,55,384,80"/>
 <area shape="poly" title=" " alt="" coords="176,50,208,54,207,59,175,56"/>
 </map>
 </div>
@@ -380,6 +485,8 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>The structured data of the event. </p>
+
 </div>
 </div>
 <a id="aaf80f7bbb57cc917517704db840e3d81" name="aaf80f7bbb57cc917517704db840e3d81"></a>
@@ -401,6 +508,8 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Unique event identifier. </p>
 
 </div>
 </div>

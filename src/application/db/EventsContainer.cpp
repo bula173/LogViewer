@@ -1,3 +1,10 @@
+/**
+ * @file EventsContainer.cpp
+ * @brief Implementation of the EventsContainer class methods.
+ * @author LogViewer Development Team
+ * @date 2025
+ */
+
 #include "EventsContainer.hpp"
 #include <spdlog/spdlog.h>
 
@@ -15,6 +22,12 @@ EventsContainer::~EventsContainer()
 
 void EventsContainer::AddEvent(LogEvent&& event)
 {
+    /**
+     * @brief Moves the event into the internal vector storage.
+     *
+     * Uses move semantics to avoid copying large event data structures.
+     * The vector will automatically manage memory allocation and resizing.
+     */
     spdlog::debug("EventsContainer::AddEvent called");
     this->AddItem(std::move(event));
 }
@@ -33,6 +46,13 @@ void EventsContainer::AddEventBatch(
 
 const LogEvent& EventsContainer::GetEvent(const int index)
 {
+    /**
+     * @brief Provides bounds-checked access to events.
+     *
+     * Uses vector's at() method which throws std::out_of_range for invalid
+     * indices. This ensures safe access even with invalid indices from UI
+     * components.
+     */
     spdlog::debug("EventsContainer::GetEvent called with index: {}", index);
     return this->GetItem(index);
 }
@@ -46,6 +66,12 @@ int EventsContainer::GetCurrentItemIndex()
 
 void EventsContainer::SetCurrentItem(const int item)
 {
+    /**
+     * @brief Updates the current selection index.
+     *
+     * This method is typically called by virtual list controls to maintain
+     * synchronization between the UI selection and the data model.
+     */
     spdlog::debug("EventsContainer::SetCurrentItem called with item: {}", item);
     m_currentItem = item;
     for (auto v : m_views)
@@ -77,6 +103,13 @@ LogEvent& EventsContainer::GetItem(const int index)
 
 void EventsContainer::Clear()
 {
+    /**
+     * @brief Clears all stored events and resets selection.
+     *
+     * Removes all events from the container and resets the current item
+     * selection to indicate no selection. This method is typically called when
+     * loading a new file or clearing the current session.
+     */
     spdlog::debug("EventsContainer::Clear called");
     if (m_data.empty())
     {
@@ -91,6 +124,11 @@ void EventsContainer::Clear()
 
 size_t EventsContainer::Size()
 {
+    /**
+     * @brief Returns the current number of stored events.
+     *
+     * Delegates to the underlying vector's size() method for O(1) performance.
+     */
     spdlog::debug("EventsContainer::Size called, returning {}", m_data.size());
     return m_data.size();
 }

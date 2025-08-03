@@ -10,7 +10,6 @@ var classparser_1_1_xml_parser =
     [ "ParseData", "d7/dd4/classparser_1_1_xml_parser.html#a7445604294d0fd34c7eabb9bb439af4f", null ],
     [ "ParseData", "d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e", null ],
     [ "RegisterObserver", "d7/dd4/classparser_1_1_xml_parser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],
-    [ "RemoveObserver", "d7/dd4/classparser_1_1_xml_parser.html#ab408ed5d6726dec8c5ec7a2a8c4f99b6", null ],
     [ "UnregisterObserver", "d7/dd4/classparser_1_1_xml_parser.html#ac2b109cb3475dc7dec15198f1a184963", null ],
     [ "m_currentProgress", "d7/dd4/classparser_1_1_xml_parser.html#a10b96d7d351c6b4bf04423a903bcf294", null ],
     [ "observers", "d7/dd4/classparser_1_1_xml_parser.html#a85fc1a7ee1778b5c8cbaf144886b362f", null ]

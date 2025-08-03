@@ -93,13 +93,16 @@ $(function(){initNavTree('d0/dfb/classparser_1_1_i_data_parser_observer.html','.
 </div><!--header-->
 <div class="contents">
 
+<p>Observer interface for receiving notifications from data parsers.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../dc/d1b/_i_data_parser_8hpp_source.html">IDataParser.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for parser::IDataParserObserver:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/ddd/classparser_1_1_i_data_parser_observer__inherit__graph.png" border="0" usemap="#aparser_1_1_i_data_parser_observer_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="aparser_1_1_i_data_parser_observer_inherit__map" id="aparser_1_1_i_data_parser_observer_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,5,183,133"/>
+<area shape="rect" title="Observer interface for receiving notifications from data parsers." alt="" coords="5,5,183,133"/>
 <area shape="rect" href="../../df/d15/classgui_1_1_main_window.html" title=" " alt="" coords="7,181,181,735"/>
 <area shape="poly" title=" " alt="" coords="97,148,97,181,92,181,92,148"/>
 </map>
@@ -109,18 +112,41 @@ Collaboration diagram for parser::IDataParserObserver:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d36/classparser_1_1_i_data_parser_observer__coll__graph.png" border="0" usemap="#aparser_1_1_i_data_parser_observer_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aparser_1_1_i_data_parser_observer_coll__map" id="aparser_1_1_i_data_parser_observer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,183,133"/>
+<area shape="rect" title="Observer interface for receiving notifications from data parsers." alt="" coords="5,5,183,133"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c6307e3179ef62d90ff17e0842b3d80" id="r_a2c6307e3179ef62d90ff17e0842b3d80"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c6307e3179ef62d90ff17e0842b3d80">~IDataParserObserver</a> ()=default</td></tr>
-<tr class="memitem:a586e2d73544dca99dfc9c2c940c7d26c" id="r_a586e2d73544dca99dfc9c2c940c7d26c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a586e2d73544dca99dfc9c2c940c7d26c">NewEventFound</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&amp;event)=0</td></tr>
-<tr class="memitem:a40b820edaea082e424b50bb7d8e1c7f4" id="r_a40b820edaea082e424b50bb7d8e1c7f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40b820edaea082e424b50bb7d8e1c7f4">NewEventBatchFound</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534">db::LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)=0</td></tr>
+<tr class="memdesc:a2c6307e3179ef62d90ff17e0842b3d80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor for proper cleanup of derived classes.  <br /></td></tr>
 <tr class="memitem:adf85054486791ae77f6aa94f9a5308c7" id="r_adf85054486791ae77f6aa94f9a5308c7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf85054486791ae77f6aa94f9a5308c7">ProgressUpdated</a> ()=0</td></tr>
+<tr class="memdesc:adf85054486791ae77f6aa94f9a5308c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when parsing progress is updated.  <br /></td></tr>
+<tr class="memitem:a586e2d73544dca99dfc9c2c940c7d26c" id="r_a586e2d73544dca99dfc9c2c940c7d26c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a586e2d73544dca99dfc9c2c940c7d26c">NewEventFound</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&amp;event)=0</td></tr>
+<tr class="memdesc:a586e2d73544dca99dfc9c2c940c7d26c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a new event is discovered during parsing.  <br /></td></tr>
+<tr class="memitem:a40b820edaea082e424b50bb7d8e1c7f4" id="r_a40b820edaea082e424b50bb7d8e1c7f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40b820edaea082e424b50bb7d8e1c7f4">NewEventBatchFound</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534">db::LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)=0</td></tr>
+<tr class="memdesc:a40b820edaea082e424b50bb7d8e1c7f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a batch of new events is discovered during parsing.  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Observer interface for receiving notifications from data parsers. </p>
+<p>This interface follows the Observer pattern to provide loose coupling between data parsing operations and user interface components. Observers receive notifications about parsing progress and newly discovered events.</p>
+<dl class="section user"><dt>Usage Example</dt><dd><div class="fragment"><div class="line"><span class="keyword">class </span>MyObserver : <span class="keyword">public</span> <a class="code hl_class" href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">IDataParserObserver</a> {</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="#adf85054486791ae77f6aa94f9a5308c7">ProgressUpdated</a>()<span class="keyword"> override </span>{</div>
+<div class="line">        <span class="comment">// Update progress bar in UI</span></div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordtype">void</span> <a class="code hl_function" href="#a586e2d73544dca99dfc9c2c940c7d26c">NewEventFound</a>(<a class="code hl_class" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a>&amp;&amp; event)<span class="keyword"> override </span>{</div>
+<div class="line">        <span class="comment">// Add event to display container</span></div>
+<div class="line">        events.AddEvent(std::move(event));</div>
+<div class="line">    }</div>
+<div class="line">};</div>
+<div class="ttc" id="aclassdb_1_1_log_event_html"><div class="ttname"><a href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a></div><div class="ttdoc">Represents a single, structured log event with key-value data.</div><div class="ttdef"><b>Definition</b> LogEvent.hpp:39</div></div>
+<div class="ttc" id="aclassparser_1_1_i_data_parser_observer_html"><div class="ttname"><a href="../../d0/dfb/classparser_1_1_i_data_parser_observer.html">parser::IDataParserObserver</a></div><div class="ttdoc">Observer interface for receiving notifications from data parsers.</div><div class="ttdef"><b>Definition</b> IDataParser.hpp:49</div></div>
+<div class="ttc" id="aclassparser_1_1_i_data_parser_observer_html_a586e2d73544dca99dfc9c2c940c7d26c"><div class="ttname"><a href="#a586e2d73544dca99dfc9c2c940c7d26c">parser::IDataParserObserver::NewEventFound</a></div><div class="ttdeci">virtual void NewEventFound(db::LogEvent &amp;&amp;event)=0</div><div class="ttdoc">Called when a new event is discovered during parsing.</div></div>
+<div class="ttc" id="aclassparser_1_1_i_data_parser_observer_html_adf85054486791ae77f6aa94f9a5308c7"><div class="ttname"><a href="#adf85054486791ae77f6aa94f9a5308c7">parser::IDataParserObserver::ProgressUpdated</a></div><div class="ttdeci">virtual void ProgressUpdated()=0</div><div class="ttdoc">Called when parsing progress is updated.</div></div>
+</div><!-- fragment --> </dd></dl>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2c6307e3179ef62d90ff17e0842b3d80" name="a2c6307e3179ef62d90ff17e0842b3d80"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c6307e3179ef62d90ff17e0842b3d80">&#9670;&#160;</a></span>~IDataParserObserver()</h2>
 
@@ -143,6 +169,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Virtual destructor for proper cleanup of derived classes. </p>
 
 </div>
 </div>
@@ -169,6 +197,16 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called when a batch of new events is discovered during parsing. </p>
+<p>For performance reasons, parsers may collect multiple events before notifying observers. This method delivers a batch of events at once.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventBatch</td><td>Vector of (id, items) pairs representing the events </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method is preferred over NewEventFound for high-throughput scenarios </dd></dl>
 
 <p>Implemented in <a class="el" href="../../df/d15/classgui_1_1_main_window.html#a5ab2ab49c91a3f070132b695a106fc2f">gui::MainWindow</a>.</p>
 
@@ -197,6 +235,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Called when a new event is discovered during parsing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>The newly parsed LogEvent (moved to avoid copying) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Implementations should be efficient as this may be called very frequently during parsing of large files </dd></dl>
+
 <p>Implemented in <a class="el" href="../../df/d15/classgui_1_1_main_window.html#aeed46e9b83801103381b80ee926043d6">gui::MainWindow</a>.</p>
 
 </div>
@@ -223,6 +270,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Called when parsing progress is updated. </p>
+<p>This method is invoked periodically during parsing operations to allow observers to update progress indicators in the user interface.</p>
+<dl class="section note"><dt>Note</dt><dd>Implementations should be efficient as this may be called frequently </dd></dl>
 
 <p>Implemented in <a class="el" href="../../df/d15/classgui_1_1_main_window.html#ab3913ba94eb737f94ad5b913efab7b78">gui::MainWindow</a>.</p>
 

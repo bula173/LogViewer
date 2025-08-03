@@ -93,13 +93,16 @@ $(function(){initNavTree('db/d71/classdb_1_1_events_container.html','../../','d5
 </div><!--header-->
 <div class="contents">
 
+<p>High-performance container for managing large collections of <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> objects.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../d3/d7b/_events_container_8hpp_source.html">EventsContainer.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for db::EventsContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/d37/classdb_1_1_events_container__inherit__graph.png" border="0" usemap="#adb_1_1_events_container_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="adb_1_1_events_container_inherit__map" id="adb_1_1_events_container_inherit__map">
-<area shape="rect" title=" " alt="" coords="19,303,173,593"/>
+<area shape="rect" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="19,303,173,593"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="5,5,187,255"/>
 <area shape="poly" title=" " alt="" coords="99,269,99,303,94,303,94,269"/>
 </map>
@@ -109,31 +112,42 @@ Collaboration diagram for db::EventsContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d6/d9b/classdb_1_1_events_container__coll__graph.png" border="0" usemap="#adb_1_1_events_container_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="adb_1_1_events_container_coll__map" id="adb_1_1_events_container_coll__map">
-<area shape="rect" title=" " alt="" coords="151,463,305,733"/>
+<area shape="rect" title="High&#45;performance container for managing large collections of LogEvent objects." alt="" coords="209,463,363,733"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html" title=" " alt="" coords="5,143,187,392"/>
-<area shape="poly" title=" " alt="" coords="154,405,177,462,172,464,149,407"/>
+<area shape="poly" title=" " alt="" coords="177,403,211,462,207,465,172,406"/>
 <area shape="rect" title=" " alt="" coords="24,5,169,72"/>
 <area shape="poly" title=" " alt="" coords="99,71,99,126,94,126,94,71"/>
-<area shape="rect" title=" " alt="" coords="211,234,246,300"/>
-<area shape="poly" title=" " alt="" coords="231,300,231,446,226,446,226,300"/>
-<area shape="rect" title=" " alt="" coords="281,234,429,300"/>
-<area shape="poly" title=" " alt="" coords="356,301,348,366,328,440,316,469,311,467,323,438,342,365,351,300"/>
+<area shape="rect" title=" " alt="" coords="212,234,360,300"/>
+<area shape="poly" title=" " alt="" coords="288,300,288,446,283,446,283,300"/>
+<area shape="rect" title=" " alt="" coords="383,234,418,300"/>
+<area shape="poly" title=" " alt="" coords="397,301,374,393,354,448,349,446,368,391,392,300"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad0c0ae27055a4b711fad53e95e592166" id="r_ad0c0ae27055a4b711fad53e95e592166"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0c0ae27055a4b711fad53e95e592166">EventsContainer</a> ()</td></tr>
+<tr class="memdesc:ad0c0ae27055a4b711fad53e95e592166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="memitem:a8df14cfc9ac8e78ae73931216b79b798" id="r_a8df14cfc9ac8e78ae73931216b79b798"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8df14cfc9ac8e78ae73931216b79b798">~EventsContainer</a> ()</td></tr>
+<tr class="memdesc:a8df14cfc9ac8e78ae73931216b79b798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <br /></td></tr>
 <tr class="memitem:a273ef5ba2fc2fc9a368c645ad0b9a71e" id="r_a273ef5ba2fc2fc9a368c645ad0b9a71e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a273ef5ba2fc2fc9a368c645ad0b9a71e">AddEvent</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &amp;&amp;event)</td></tr>
+<tr class="memdesc:a273ef5ba2fc2fc9a368c645ad0b9a71e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new event to the container.  <br /></td></tr>
 <tr class="memitem:aa2ad44074f50410d379fa0d620235857" id="r_aa2ad44074f50410d379fa0d620235857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2ad44074f50410d379fa0d620235857">AddEventBatch</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534">LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)</td></tr>
+<tr class="memdesc:aa2ad44074f50410d379fa0d620235857"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a batch of new events to the container.  <br /></td></tr>
 <tr class="memitem:aac2868a7695557c898b1292f55413410" id="r_aac2868a7695557c898b1292f55413410"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac2868a7695557c898b1292f55413410">GetEvent</a> (const int index)</td></tr>
-<tr class="memitem:a34b0c189a736adb5886b59acb0dea9ca" id="r_a34b0c189a736adb5886b59acb0dea9ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34b0c189a736adb5886b59acb0dea9ca">GetCurrentItemIndex</a> () override</td></tr>
-<tr class="memitem:a91ea9aa3c507889d2efd78f896b5db02" id="r_a91ea9aa3c507889d2efd78f896b5db02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91ea9aa3c507889d2efd78f896b5db02">SetCurrentItem</a> (const int item) override</td></tr>
+<tr class="memdesc:aac2868a7695557c898b1292f55413410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an event by index.  <br /></td></tr>
 <tr class="memitem:a69fc7f556f697e95b390a025e17229ca" id="r_a69fc7f556f697e95b390a025e17229ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69fc7f556f697e95b390a025e17229ca">AddItem</a> (<a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &amp;&amp;item) override</td></tr>
-<tr class="memitem:a43c3bb4ef1fdacc95503720615d0048e" id="r_a43c3bb4ef1fdacc95503720615d0048e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43c3bb4ef1fdacc95503720615d0048e">GetItem</a> (const int index) override</td></tr>
-<tr class="memitem:aaed5363927f1baab3e7994dc91404538" id="r_aaed5363927f1baab3e7994dc91404538"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaed5363927f1baab3e7994dc91404538">Clear</a> () override</td></tr>
+<tr class="memdesc:a69fc7f556f697e95b390a025e17229ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new item to the model.  <br /></td></tr>
 <tr class="memitem:ade0f9c3fc8fb62b812d23cba0ec01718" id="r_ade0f9c3fc8fb62b812d23cba0ec01718"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade0f9c3fc8fb62b812d23cba0ec01718">Size</a> () override</td></tr>
+<tr class="memdesc:ade0f9c3fc8fb62b812d23cba0ec01718"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of events in the container.  <br /></td></tr>
+<tr class="memitem:a3fc32ef754405956b1d385968266639c" id="r_a3fc32ef754405956b1d385968266639c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fc32ef754405956b1d385968266639c">SetCurrentItem</a> (const int index) override</td></tr>
+<tr class="memdesc:a3fc32ef754405956b1d385968266639c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the currently selected item index.  <br /></td></tr>
+<tr class="memitem:a34b0c189a736adb5886b59acb0dea9ca" id="r_a34b0c189a736adb5886b59acb0dea9ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34b0c189a736adb5886b59acb0dea9ca">GetCurrentItemIndex</a> () override</td></tr>
+<tr class="memdesc:a34b0c189a736adb5886b59acb0dea9ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the currently selected item index.  <br /></td></tr>
+<tr class="memitem:aaed5363927f1baab3e7994dc91404538" id="r_aaed5363927f1baab3e7994dc91404538"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaed5363927f1baab3e7994dc91404538">Clear</a> () override</td></tr>
+<tr class="memdesc:aaed5363927f1baab3e7994dc91404538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all events from the container.  <br /></td></tr>
+<tr class="memitem:a43c3bb4ef1fdacc95503720615d0048e" id="r_a43c3bb4ef1fdacc95503720615d0048e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43c3bb4ef1fdacc95503720615d0048e">GetItem</a> (const int index) override</td></tr>
+<tr class="memdesc:a43c3bb4ef1fdacc95503720615d0048e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets an event by index.  <br /></td></tr>
 <tr class="memitem:a130db4ec5dbe8deeb41647606fa2a3b0" id="r_a130db4ec5dbe8deeb41647606fa2a3b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a130db4ec5dbe8deeb41647606fa2a3b0">RegisterOndDataUpdated</a> (IView *view)</td></tr>
 <tr class="memitem:aecc89af25b0685af5395062d6c9b2adb" id="r_aecc89af25b0685af5395062d6c9b2adb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb">NotifyDataChanged</a> ()</td></tr>
 </table><table class="memberdecls">
@@ -143,10 +157,22 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a10e70432c89db2ca6d477be18a218557" id="r_a10e70432c89db2ca6d477be18a218557"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10e70432c89db2ca6d477be18a218557">m_currentItem</a> {0}</td></tr>
 <tr class="memitem:a551b1a5de03069665bda95df6cfe047a" id="r_a551b1a5de03069665bda95df6cfe047a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db7/classdb_1_1_log_event.html">LogEvent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a551b1a5de03069665bda95df6cfe047a">m_data</a></td></tr>
+<tr class="memdesc:a551b1a5de03069665bda95df6cfe047a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal storage for events.  <br /></td></tr>
+<tr class="memitem:a10e70432c89db2ca6d477be18a218557" id="r_a10e70432c89db2ca6d477be18a218557"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10e70432c89db2ca6d477be18a218557">m_currentItem</a></td></tr>
+<tr class="memdesc:a10e70432c89db2ca6d477be18a218557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Currently selected item index (-1 = no selection)  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>High-performance container for managing large collections of <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> objects. </p>
+<p><a class="el" href="../../db/d71/classdb_1_1_events_container.html" title="High-performance container for managing large collections of LogEvent objects.">EventsContainer</a> provides efficient storage and access to <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> collections, optimized for handling very large log files (potentially millions of events). The container supports random access, iteration, and provides methods for virtual list control integration.</p>
+<dl class="section user"><dt>Performance Characteristics</dt><dd><ul>
+<li>Random access: O(1)</li>
+<li>Insertion at end: O(1) amortized</li>
+<li>Memory usage: Optimized for large datasets</li>
+</ul>
+</dd></dl>
+<dl class="section user"><dt>Thread Safety</dt><dd>This class is not thread-safe. External synchronization is required when accessing from multiple threads during modification operations. </dd></dl>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad0c0ae27055a4b711fad53e95e592166" name="ad0c0ae27055a4b711fad53e95e592166"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0c0ae27055a4b711fad53e95e592166">&#9670;&#160;</a></span>EventsContainer()</h2>
 
@@ -161,6 +187,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>Creates an empty container ready to accept <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> objects. </p>
 
 </div>
 </div>
@@ -187,6 +216,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Destructor. </p>
+<p>Cleans up resources and clears the internal event storage. </p>
+
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
@@ -204,13 +236,24 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Adds a new event to the container. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>The <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> to add (moved into the container) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The event is moved to avoid unnecessary copying @complexity O(1) amortized </dd></dl>
+<p>Moves the event into the internal vector storage.</p>
+<p>Uses move semantics to avoid copying large event data structures. The vector will automatically manage memory allocation and resizing.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_a273ef5ba2fc2fc9a368c645ad0b9a71e_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a273ef5ba2fc2fc9a368c645ad0b9a71e_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_a273ef5ba2fc2fc9a368c645ad0b9a71e_cgraph" id="adb/d71/classdb_1_1_events_container_a273ef5ba2fc2fc9a368c645ad0b9a71e_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,146,46"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title=" " alt="" coords="194,5,334,46"/>
+<area shape="rect" title="Adds a new event to the container." alt="" coords="5,5,146,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title="Adds a new item to the model." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="382,13,598,38"/>
 <area shape="poly" title=" " alt="" coords="334,23,366,23,366,28,334,28"/>
@@ -233,12 +276,21 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Adds a batch of new events to the container. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventBatch</td><td>A vector of pairs, each containing an integer and a <a class="el" href="../../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534" title="A collection of key-value pairs representing event data (eventFieldName, data).">LogEvent::EventItems</a> object, representing the batch of events to add (moved into the container) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The eventBatch is moved to avoid unnecessary copying @complexity O(k) amortized, where k is the number of events in the batch </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph" id="adb/d71/classdb_1_1_events_container_aa2ad44074f50410d379fa0d620235857_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,146,46"/>
+<area shape="rect" title="Adds a batch of new events to the container." alt="" coords="5,5,146,46"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,13,410,38"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 </map>
@@ -269,13 +321,22 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Adds a new item to the model. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>The <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> to add (moved into the model) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method is used to add new events to the model. </dd></dl>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#ab5c7c61c608ac93e0c61b268aeccfd65">mvc::IModel</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph" id="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,146,46"/>
+<area shape="rect" title="Adds a new item to the model." alt="" coords="5,5,146,46"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,13,410,38"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 </map>
@@ -285,8 +346,8 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_icgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_icgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_icgraph" id="adb/d71/classdb_1_1_events_container_a69fc7f556f697e95b390a025e17229ca_icgraph">
-<area shape="rect" title=" " alt="" coords="194,5,334,46"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a273ef5ba2fc2fc9a368c645ad0b9a71e" title=" " alt="" coords="5,5,146,46"/>
+<area shape="rect" title="Adds a new item to the model." alt="" coords="194,5,334,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a273ef5ba2fc2fc9a368c645ad0b9a71e" title="Adds a new event to the container." alt="" coords="5,5,146,46"/>
 <area shape="poly" title=" " alt="" coords="178,28,146,28,146,23,178,23"/>
 </map>
 </div>
@@ -316,16 +377,21 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Removes all events from the container. </p>
+<p>After this call, <a class="el" href="#ade0f9c3fc8fb62b812d23cba0ec01718" title="Gets the number of events in the container.">Size()</a> returns 0 and the container is ready for new events. @complexity O(n) where n is the number of stored events </p>
+<p>Clears all stored events and resets selection.</p>
+<p>Removes all events from the container and resets the current item selection to indicate no selection. This method is typically called when loading a new file or clearing the current session.</p>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a9d74ff150918efd09549cdb0fc458b07">mvc::IModel</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph" id="adb/d71/classdb_1_1_events_container_aaed5363927f1baab3e7994dc91404538_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,146,68"/>
+<area shape="rect" title="Removes all events from the container." alt="" coords="5,27,146,68"/>
 <area shape="rect" href="../../d5/d21/classmvc_1_1_i_model.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="194,5,410,31"/>
 <area shape="poly" title=" " alt="" coords="145,36,182,31,183,36,146,41"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a91ea9aa3c507889d2efd78f896b5db02" title=" " alt="" coords="232,55,372,96"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a3fc32ef754405956b1d385968266639c" title="Sets the currently selected item index." alt="" coords="232,55,372,96"/>
 <area shape="poly" title=" " alt="" coords="146,53,216,62,216,68,145,59"/>
 </map>
 </div>
@@ -355,6 +421,9 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the currently selected item index. </p>
+<dl class="section return"><dt>Returns</dt><dd>long The index of the currently selected item, or -1 if none selected </dd></dl>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a8be6e82c4fa06c92b25113274c363ee1">mvc::IModel</a>.</p>
 
 </div>
@@ -373,13 +442,30 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Retrieves an event by index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The zero-based index of the event to retrieve </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a>&amp; Reference to the event at the specified index </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if index is &gt;= <a class="el" href="#ade0f9c3fc8fb62b812d23cba0ec01718" title="Gets the number of events in the container.">Size()</a> @complexity O(1) </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Provides bounds-checked access to events.</p>
+<p>Uses vector's at() method which throws std::out_of_range for invalid indices. This ensures safe access even with invalid indices from UI components.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_aac2868a7695557c898b1292f55413410_cgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_aac2868a7695557c898b1292f55413410_cgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_aac2868a7695557c898b1292f55413410_cgraph" id="adb/d71/classdb_1_1_events_container_aac2868a7695557c898b1292f55413410_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,146,46"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a43c3bb4ef1fdacc95503720615d0048e" title=" " alt="" coords="194,5,334,46"/>
+<area shape="rect" title="Retrieves an event by index." alt="" coords="5,5,146,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a43c3bb4ef1fdacc95503720615d0048e" title="Gets an event by index." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="146,23,178,23,178,28,146,28"/>
 </map>
 </div>
@@ -409,14 +495,29 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets an event by index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The zero-based index of the event to retrieve </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">LogEvent</a>&amp; Reference to the event at the specified index </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if index is &gt;= <a class="el" href="#ade0f9c3fc8fb62b812d23cba0ec01718" title="Gets the number of events in the container.">Size()</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a1af59889f48c384710ff803f2acc8105">mvc::IModel</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d71/classdb_1_1_events_container_a43c3bb4ef1fdacc95503720615d0048e_icgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a43c3bb4ef1fdacc95503720615d0048e_icgraph" loading="lazy" alt=""/></div>
 <map name="adb/d71/classdb_1_1_events_container_a43c3bb4ef1fdacc95503720615d0048e_icgraph" id="adb/d71/classdb_1_1_events_container_a43c3bb4ef1fdacc95503720615d0048e_icgraph">
-<area shape="rect" title=" " alt="" coords="194,5,334,46"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aac2868a7695557c898b1292f55413410" title=" " alt="" coords="5,5,146,46"/>
+<area shape="rect" title="Gets an event by index." alt="" coords="194,5,334,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aac2868a7695557c898b1292f55413410" title="Retrieves an event by index." alt="" coords="5,5,146,46"/>
 <area shape="poly" title=" " alt="" coords="178,28,146,28,146,23,178,23"/>
 </map>
 </div>
@@ -451,13 +552,13 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="../../d5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph.png" border="0" usemap="#ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" loading="lazy" alt=""/></div>
 <map name="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph" id="ad5/d21/classmvc_1_1_i_model_aecc89af25b0685af5395062d6c9b2adb_icgraph">
 <area shape="rect" title=" " alt="" coords="382,78,598,104"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aa2ad44074f50410d379fa0d620235857" title=" " alt="" coords="194,5,334,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aa2ad44074f50410d379fa0d620235857" title="Adds a batch of new events to the container." alt="" coords="194,5,334,46"/>
 <area shape="poly" title=" " alt="" coords="428,76,334,48,335,43,429,71"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title=" " alt="" coords="194,71,334,111"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a69fc7f556f697e95b390a025e17229ca" title="Adds a new item to the model." alt="" coords="194,71,334,111"/>
 <area shape="poly" title=" " alt="" coords="366,94,334,94,334,88,366,88"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aaed5363927f1baab3e7994dc91404538" title=" " alt="" coords="194,136,334,177"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aaed5363927f1baab3e7994dc91404538" title="Removes all events from the container." alt="" coords="194,136,334,177"/>
 <area shape="poly" title=" " alt="" coords="429,111,335,139,334,134,428,106"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a273ef5ba2fc2fc9a368c645ad0b9a71e" title=" " alt="" coords="5,71,146,111"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#a273ef5ba2fc2fc9a368c645ad0b9a71e" title="Adds a new event to the container." alt="" coords="5,71,146,111"/>
 <area shape="poly" title=" " alt="" coords="178,94,146,94,146,88,178,88"/>
 </map>
 </div>
@@ -489,8 +590,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a91ea9aa3c507889d2efd78f896b5db02" name="a91ea9aa3c507889d2efd78f896b5db02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91ea9aa3c507889d2efd78f896b5db02">&#9670;&#160;</a></span>SetCurrentItem()</h2>
+<a id="a3fc32ef754405956b1d385968266639c" name="a3fc32ef754405956b1d385968266639c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fc32ef754405956b1d385968266639c">&#9670;&#160;</a></span>SetCurrentItem()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,7 +602,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void db::EventsContainer::SetCurrentItem </td>
           <td>(</td>
-          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>item</em></span></td><td>)</td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -512,14 +613,26 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Sets the currently selected item index. </p>
+<p>Updates the internal current item index for virtual list control synchronization.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the item to set as current </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method is used for UI synchronization purposes </dd></dl>
+<p>Updates the current selection index.</p>
+<p>This method is typically called by virtual list controls to maintain synchronization between the UI selection and the data model.</p>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a104a27d339c4acfb46c611ee1e5ca134">mvc::IModel</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../db/d71/classdb_1_1_events_container_a91ea9aa3c507889d2efd78f896b5db02_icgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a91ea9aa3c507889d2efd78f896b5db02_icgraph" loading="lazy" alt=""/></div>
-<map name="adb/d71/classdb_1_1_events_container_a91ea9aa3c507889d2efd78f896b5db02_icgraph" id="adb/d71/classdb_1_1_events_container_a91ea9aa3c507889d2efd78f896b5db02_icgraph">
-<area shape="rect" title=" " alt="" coords="194,5,334,46"/>
-<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aaed5363927f1baab3e7994dc91404538" title=" " alt="" coords="5,5,146,46"/>
+<div class="center"><img src="../../db/d71/classdb_1_1_events_container_a3fc32ef754405956b1d385968266639c_icgraph.png" border="0" usemap="#adb/d71/classdb_1_1_events_container_a3fc32ef754405956b1d385968266639c_icgraph" loading="lazy" alt=""/></div>
+<map name="adb/d71/classdb_1_1_events_container_a3fc32ef754405956b1d385968266639c_icgraph" id="adb/d71/classdb_1_1_events_container_a3fc32ef754405956b1d385968266639c_icgraph">
+<area shape="rect" title="Sets the currently selected item index." alt="" coords="194,5,334,46"/>
+<area shape="rect" href="../../db/d71/classdb_1_1_events_container.html#aaed5363927f1baab3e7994dc91404538" title="Removes all events from the container." alt="" coords="5,5,146,46"/>
 <area shape="poly" title=" " alt="" coords="178,28,146,28,146,23,178,23"/>
 </map>
 </div>
@@ -549,6 +662,11 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the number of events in the container. </p>
+<dl class="section return"><dt>Returns</dt><dd>size_t The number of stored events @complexity O(1) </dd></dl>
+<p>Returns the current number of stored events.</p>
+<p>Delegates to the underlying vector's size() method for O(1) performance.</p>
+
 <p>Implements <a class="el" href="../../d5/d21/classmvc_1_1_i_model.html#a33db499493216acf9ca1a6e513ca0965">mvc::IModel</a>.</p>
 
 </div>
@@ -564,7 +682,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">long db::EventsContainer::m_currentItem {0}</td>
+          <td class="memname">long db::EventsContainer::m_currentItem</td>
         </tr>
       </table>
   </td>
@@ -573,6 +691,10 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">        -1}</div>
+</div><!-- fragment -->
+<p>Currently selected item index (-1 = no selection) </p>
 
 </div>
 </div>
@@ -595,6 +717,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Internal storage for events. </p>
 
 </div>
 </div>

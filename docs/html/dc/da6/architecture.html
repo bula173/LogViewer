@@ -126,7 +126,7 @@ Design Patterns</h1>
 <li><b>Observer Pattern:</b> This is the cornerstone of the application's architecture. The <span class="tt">XmlParser</span> (Subject) is completely decoupled from the <span class="tt">MainWindow</span> (Observer). When the parser finds an event or makes progress, it simply notifies its registered observers via the <span class="tt">IDataParserObserver</span> interface. This allows the parsing logic to be tested independently and enables other types of parsers or observers to be added in the future.</li>
 <li><b>Singleton Pattern:</b> The <span class="tt">Config</span> class is a singleton to ensure that there is only one source of configuration truth throughout the application.</li>
 <li><b>Model-View-Controller (MVC) - like approach:</b><ul>
-<li><b>Model:</b> The <span class="tt"><a class="el" href="../../db/d71/classdb_1_1_events_container.html">db::EventsContainer</a></span> acts as the data model.</li>
+<li><b>Model:</b> The <span class="tt"><a class="el" href="../../db/d71/classdb_1_1_events_container.html" title="High-performance container for managing large collections of LogEvent objects.">db::EventsContainer</a></span> acts as the data model.</li>
 <li><b>View:</b> The <span class="tt"><a class="el" href="../../dd/d92/classgui_1_1_events_virtual_list_control.html">gui::EventsVirtualListControl</a></span> and other UI elements are the view.</li>
 <li><b>Controller:</b> The <span class="tt"><a class="el" href="../../df/d15/classgui_1_1_main_window.html">gui::MainWindow</a></span> acts as the controller, handling user input, triggering the parser, and updating the view based on changes to the model.</li>
 </ul>
@@ -141,9 +141,9 @@ Data Flow (File Parsing)</h1>
 <li><span class="tt">MainWindow</span> calls <span class="tt">parser-&gt;RegisterObserver(this)</span>, registering itself to receive updates.</li>
 <li><span class="tt">MainWindow</span> calls <span class="tt">parser-&gt;ParseData(filepath)</span>.</li>
 <li>The <span class="tt">XmlParser</span> reads the file and feeds data to the Expat engine.</li>
-<li>As Expat's callbacks are triggered, <span class="tt">XmlParser</span> constructs <span class="tt"><a class="el" href="../../de/db7/classdb_1_1_log_event.html">db::LogEvent</a></span> objects.</li>
+<li>As Expat's callbacks are triggered, <span class="tt">XmlParser</span> constructs <span class="tt"><a class="el" href="../../de/db7/classdb_1_1_log_event.html" title="Represents a single, structured log event with key-value data.">db::LogEvent</a></span> objects.</li>
 <li>For each new event, <span class="tt">XmlParser</span> calls <span class="tt">NotifyNewEvent()</span>, which in turn calls <span class="tt">NewEventFound()</span> on <span class="tt">MainWindow</span>.</li>
-<li><span class="tt">MainWindow::NewEventFound()</span> takes the <span class="tt">LogEvent</span> and moves it into the <span class="tt"><a class="el" href="../../db/d71/classdb_1_1_events_container.html">db::EventsContainer</a></span>.</li>
+<li><span class="tt">MainWindow::NewEventFound()</span> takes the <span class="tt">LogEvent</span> and moves it into the <span class="tt"><a class="el" href="../../db/d71/classdb_1_1_events_container.html" title="High-performance container for managing large collections of LogEvent objects.">db::EventsContainer</a></span>.</li>
 <li>Periodically, <span class="tt">XmlParser</span> calls <span class="tt">NotifyProgressUpdated()</span>, which calls <span class="tt">ProgressUpdated()</span> on <span class="tt">MainWindow</span> to update the <span class="tt">wxGauge</span>.</li>
 <li><span class="tt">MainWindow</span> updates the item count on <span class="tt">EventsVirtualListControl</span>. The control then automatically requests data for visible rows by calling its <span class="tt">GetValue()</span> method, which reads directly from the <span class="tt">EventsContainer</span>.</li>
 </ol>

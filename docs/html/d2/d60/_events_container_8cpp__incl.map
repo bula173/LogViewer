@@ -1,25 +1,25 @@
 <map id="src/application/db/EventsContainer.cpp" name="src/application/db/EventsContainer.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="381,5,528,46"/>
-<area shape="rect" id="Node000002" href="$d3/d7b/_events_container_8hpp.html" title=" " alt="" coords="330,94,472,120"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,48,420,83,416,80,439,45"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="525,241,637,267"/>
-<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="468,45,570,227,565,229,463,48"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="315,315,373,341"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="330,112,252,120,164,142,121,159,80,181,43,209,13,243,8,254,13,265,31,280,60,291,138,309,225,318,300,323,299,328,225,324,138,314,59,297,29,284,9,269,3,254,8,240,40,205,77,176,118,154,162,137,251,115,330,106"/>
-<area shape="rect" id="Node000004" href="$de/d77/_log_event_8hpp.html" title=" " alt="" coords="382,241,501,267"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="407,119,437,226,431,227,402,121"/>
-<area shape="rect" id="Node000006" href="$d6/d1b/_i_model_8hpp.html" title=" " alt="" coords="287,168,401,193"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="394,122,365,157,361,154,390,118"/>
-<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="426,270,374,308,371,304,423,265"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="415,315,468,341"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="444,267,444,299,439,299,439,267"/>
-<area shape="poly" id="edge12_Node000006_Node000003" title=" " alt="" coords="347,194,347,300,341,300,341,194"/>
-<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="362,192,415,230,411,234,359,196"/>
-<area shape="rect" id="Node000007" href="$de/d47/_i_view_8hpp.html" title=" " alt="" coords="23,241,129,267"/>
-<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="299,196,137,239,136,234,298,191"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="154,241,225,267"/>
-<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="319,196,230,237,228,232,317,191"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="249,241,306,267"/>
-<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="335,195,301,232,297,228,331,192"/>
-<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="385,191,527,234,525,239,383,196"/>
+<area shape="rect" id="Node000001" title="Implementation of the EventsContainer class methods." alt="" coords="358,5,504,46"/>
+<area shape="rect" id="Node000002" href="$d3/d7b/_events_container_8hpp.html" title="Container class for managing collections of LogEvent objects." alt="" coords="307,94,449,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="420,48,397,83,392,80,416,45"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="522,241,634,267"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="446,45,564,226,560,229,442,48"/>
+<area shape="rect" id="Node000003" href="$de/d77/_log_event_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="378,241,498,267"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="385,119,430,226,425,228,380,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,315,63,341"/>
+<area shape="poly" id="edge12_Node000002_Node000005" title=" " alt="" coords="307,117,240,129,166,152,130,168,96,189,66,213,40,243,34,256,30,270,31,300,26,300,25,270,29,254,36,240,62,210,93,184,128,164,164,147,239,124,306,111"/>
+<area shape="rect" id="Node000006" href="$d6/d1b/_i_model_8hpp.html" title=" " alt="" coords="244,168,358,193"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="367,122,327,159,323,155,363,118"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="411,315,465,341"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="441,267,441,299,435,299,435,267"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="378,269,78,321,77,316,377,263"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="325,192,402,231,400,236,323,196"/>
+<area shape="poly" id="edge11_Node000006_Node000005" title=" " alt="" coords="243,192,138,212,91,226,61,243,51,256,45,270,38,301,33,299,40,268,47,253,58,239,89,222,137,207,242,187"/>
+<area shape="rect" id="Node000007" href="$de/d47/_i_view_8hpp.html" title=" " alt="" coords="248,241,354,267"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="303,194,303,226,298,226,298,194"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="72,241,143,267"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="269,196,155,238,154,233,267,191"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="167,241,224,267"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="284,196,227,235,224,230,281,192"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="348,191,517,234,516,240,347,196"/>
 </map>
