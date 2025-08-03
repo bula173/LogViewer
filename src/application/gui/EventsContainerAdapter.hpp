@@ -26,6 +26,13 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
      * @param indices Vector of indices in the original container to show.
      */
     void SetFilteredIndices(const std::vector<size_t>& indices);
+    bool GetAttrByRow(unsigned int row, unsigned int col,
+        wxDataViewItemAttr& attr) const override;
+
+    wxColour GetFontColorForColumnValue(
+        const std::string& column, const std::string& value) const;
+    wxColour GetBgColorForColumnValue(
+        const std::string& column, const std::string& value) const;
 
   private:
     db::EventsContainer& m_container;

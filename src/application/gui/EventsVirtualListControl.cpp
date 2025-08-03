@@ -89,4 +89,5 @@ void EventsVirtualListControl::SetFilteredEvents(
     m_model->SetRowCount(static_cast<unsigned int>(filteredIndices.size()));
     m_model->Reset(static_cast<unsigned int>(filteredIndices.size()));
 }
+
 } // namespace gui

@@ -105,11 +105,20 @@ void Config::LoadConfig()
             return;
         }
 
-
+        GetColorConfig(j);
         GetLoggingConfig(j);
         ParseXmlConfig(j);
 
+
         // Example: m_someParameter = j["someParameter"].get<std::string>();
+        for (auto& [col, valMap] : j["columnColors"].items())
+        {
+            for (auto& [val, colors] : valMap.items())
+            {
+                columnColors[col][val] = {colors[0], colors[1]};
+            }
+        }
+
         configFile.close();
     }
     else
@@ -315,6 +324,26 @@ std::filesystem::path Config::GetDefaultLogPath()
     auto logFileName = "log.txt";
     auto logFilePath = GetDefaultAppPath() / logFileName;
     return logFilePath;
+}
+
+void Config::GetColorConfig(const json& j)
+{
+    if (j.contains("columnColors"))
+    {
+        for (const auto& col : j["columnColors"].items())
+        {
+            ValueColorMap valueColorMap;
+            for (const auto& val : col.value().items())
+            {
+                valueColorMap[val.key()] = {val.value()[0], val.value()[1]};
+            }
+            columnColors[col.key()] = std::move(valueColorMap);
+        }
+    }
+    else
+    {
+        spdlog::warn("Missing 'columnColors' in config file.");
+    }
 }
 
 } // namespace config

@@ -3,7 +3,9 @@
 #include <nlohmann/json.hpp>
 // std
 #include <filesystem>
+#include <map>
 #include <string>
+#include <vector>
 
 
 namespace config
@@ -17,6 +19,15 @@ struct Columns
     bool visible {true};
     int width {100}; // Default width
 };
+
+struct ColumnColor
+{
+    std::string fg;
+    std::string bg;
+};
+using ValueColorMap = std::map<std::string, ColumnColor>; // value -> color
+using ColumnColorMap =
+    std::map<std::string, ValueColorMap>; // column -> (value -> color)
 
 class Config
 {
@@ -44,6 +55,7 @@ class Config
     std::filesystem::path GetDefaultLogPath();
     std::filesystem::path GetDefaultAppPath();
     void SetupLogPath();
+    void GetColorConfig(const json& j);
 
   private:
     std::string m_configFilePath {"etc/config.json"}; // Default path
@@ -55,6 +67,7 @@ class Config
     std::string xmlEventElement;
     std::vector<Columns> columns;
     std::string logLevel {"debug"}; // Default log level
+    ColumnColorMap columnColors;
 };
 
 Config& GetConfig();

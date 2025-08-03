@@ -10,9 +10,15 @@
       "columns": [
         { "name": "id", "visible":true, "width": 50 },
         { "name": "timestamp", "visible":true, "width": 150 },
+        { "name": "message", "visible":true, "width": 100 },
         { "name": "type", "visible":true, "width": 200 },
         { "name": "info", "visible":true, "width": 300 }
       ]
+    }
+  },
+  "columnColors": {
+    "type": {
+      "alarm":                   ["#f0f090", "#ff4200"],
     }
   }
 }

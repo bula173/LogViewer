@@ -2,6 +2,7 @@
 
 
 #include "EventsContainerAdapter.hpp"
+#include "gui/EventsVirtualListControl.hpp" // for color helpers, if needed
 
 namespace gui
 {
@@ -82,5 +83,61 @@ void EventsContainerAdapter::SetFilteredIndices(
     m_filteredIndices = indices;
     m_rowCount = static_cast<unsigned int>(m_filteredIndices.size());
     Reset(m_rowCount);
+}
+
+wxColour EventsContainerAdapter::GetBgColorForColumnValue(
+    const std::string& column, const std::string& value) const
+{
+    const auto& colMap = config::GetConfig().columnColors;
+    auto colIt = colMap.find(column);
+    if (colIt != colMap.end())
+    {
+        auto valIt = colIt->second.find(value);
+        if (valIt != colIt->second.end())
+            return wxColour(valIt->second.bg); // bg
+    }
+    return wxNullColour;
+}
+
+wxColour EventsContainerAdapter::GetFontColorForColumnValue(
+    const std::string& column, const std::string& value) const
+{
+    const auto& colMap = config::GetConfig().columnColors;
+    auto colIt = colMap.find(column);
+    if (colIt != colMap.end())
+    {
+        auto valIt = colIt->second.find(value);
+        if (valIt != colIt->second.end())
+            return wxColour(valIt->second.fg); // fg
+    }
+    return wxNullColour;
+}
+
+bool EventsContainerAdapter::GetAttrByRow(
+    unsigned int row, unsigned int col, wxDataViewItemAttr& attr) const
+{
+    // Get the actual event index if filtered
+    size_t actualRow = m_filteredIndices.empty() ? row : m_filteredIndices[row];
+    const auto& event = m_container.GetEvent(actualRow);
+
+    // Example: use "type" column for coloring
+    std::string typeValue = event.findByKey("type");
+
+    // Use your config-driven color helpers
+    wxColour bg = GetBgColorForColumnValue("type", typeValue);
+    wxColour fg = GetFontColorForColumnValue("type", typeValue);
+
+    bool colored = false;
+    if (bg.IsOk())
+    {
+        attr.SetBackgroundColour(bg);
+        colored = true;
+    }
+    if (fg.IsOk())
+    {
+        attr.SetColour(fg);
+        colored = true;
+    }
+    return colored;
 }
 } // namespace gui
