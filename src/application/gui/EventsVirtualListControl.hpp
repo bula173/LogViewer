@@ -27,7 +27,6 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
     // implement IView interface
     virtual void OnDataUpdated() override;
     virtual void OnCurrentIndexUpdated(const int index) override;
-    void UpdateColumns();
 
   private:
     db::EventsContainer& m_events;
