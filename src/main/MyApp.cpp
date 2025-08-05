@@ -58,8 +58,7 @@ void MyApp::setupConfig()
 
     auto& config = config::GetConfig();
 
-    config.SetAppName(m_appName);
-    spdlog::info("Application name set to: {}", config.appName);
+    spdlog::info("Application name: LogViewer");
     config.LoadConfig();
 }
 
@@ -73,7 +72,7 @@ void MyApp::setupLogging()
     try
     {
         auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-            config.GetAppLogPath(), true);
+            config::Config::GetDefaultLogPath().string(), true);
         file_sink->set_level(spdlog::level::from_str(config.logLevel));
         sinks.push_back(file_sink);
     }
@@ -85,7 +84,8 @@ void MyApp::setupLogging()
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     sinks.push_back(console_sink);
 
-    spdlog::info("Log file path: {}", config.GetAppLogPath());
+    spdlog::info(
+        "Log file path: {}", config::Config::GetDefaultLogPath().string());
 
     console_sink->set_level(spdlog::level::from_str(config.logLevel));
     spdlog::info("Logging configuration loaded from config file. Log level: {}",

@@ -1,6 +1,7 @@
 #include "src/application/xml/xmlParser.hpp"
 #include "src/application/config/Config.hpp"
 #include "src/application/db/LogEvent.hpp"
+#include <fstream>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <sstream>
@@ -31,6 +32,25 @@ class XmlParserTest : public ::testing::Test
         std::filesystem::path cwd = std::filesystem::current_path();
         std::filesystem::path configPath = cwd / "config.json";
 
+        // Create test config file
+        std::ofstream testConfigFile(configPath);
+        testConfigFile << R"({
+            "default_parser": "xml",
+            "logging": {"level": "debug"},
+            "parsers": {
+                "xml": {
+                    "rootElement": "events",
+                    "eventElement": "event",
+                    "columns": [
+                        {"name": "id", "visible": true, "width": 50},
+                        {"name": "timestamp", "visible": true, "width": 150}
+                    ]
+                }
+            }
+        })";
+        testConfigFile.close();
+
+        // Set the path and load
         config.SetConfigFilePath(configPath.string());
         config.LoadConfig();
 

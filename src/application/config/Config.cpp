@@ -2,25 +2,28 @@
 #include <fstream>
 #include <spdlog/spdlog.h>
 
+using json = nlohmann::json;
+
 namespace config
 {
 
-static Config configInstance;
-// This is a singleton instance of the Config class
-// that is used to manage the configuration settings.
-// It is defined in the cpp file to ensure that there is only one instance
-// of the Config class throughout the application.
-// This is a common pattern in C++ to provide a global access point
-// to a configuration object without exposing the details of its implementation.
-// The instance is created statically, and the GetConfig function
-// provides access to this instance.
-// This allows other parts of the application to access the configuration
-// settings without needing to create their own instances of the Config class.
-// The instance is created statically, and the GetConfig function
-// provides access to this instance.
+/**
+ * @brief Global function to get the configuration instance.
+ * @return Reference to the Config singleton
+ */
 Config& GetConfig()
 {
-    return configInstance;
+    return Config::GetInstance();
+}
+
+/**
+ * @brief Get the singleton instance of the configuration.
+ * @return Reference to the Config instance
+ */
+Config& Config::GetInstance()
+{
+    static Config instance; // Create static instance inside the method
+    return instance;
 }
 
 Config::Config()
@@ -30,100 +33,98 @@ Config::Config()
 
 void Config::SetAppName(const std::string& name)
 {
-    appName = name;
+    m_appName = name;
 };
 
 
 void Config::LoadConfig()
 {
-
     if (!std::filesystem::exists(m_configFilePath))
     {
-        std::filesystem::path configFilePath = GetDefaultConfigPath();
-        m_configFilePath = configFilePath.string();
-        spdlog::info("Using config file path: {}", m_configFilePath);
+        spdlog::warn("Config file not found: {}. Using defaults.",
+            m_configFilePath.string());
+        return;
     }
 
-    if (!std::filesystem::exists(m_configFilePath))
-    {
-        std::filesystem::path cwd = std::filesystem::current_path();
-        std::filesystem::path defaultInstalled = cwd / "default_config.json";
-
-        std::vector<std::filesystem::path> searchPaths = {
-            cwd / "etc" / "default_config.json",
-            cwd / "config" / "default_config.json",
-            cwd / "default_config.json"};
-
-        for (const auto& path : searchPaths)
-        {
-            if (std::filesystem::exists(path))
-            {
-                defaultInstalled = path;
-                spdlog::info("Default config template found at: {}",
-                    defaultInstalled.string());
-                break;
-            }
-        }
-
-        if (!std::filesystem::exists(defaultInstalled))
-        {
-            spdlog::error(
-                "Default config template not found in search paths. Aborting.");
-        }
-
-        try
-        {
-            std::filesystem::copy_file(defaultInstalled, m_configFilePath,
-                std::filesystem::copy_options::overwrite_existing);
-            spdlog::info(
-                "Copied default config to user path: {}", m_configFilePath);
-        }
-        catch (const std::filesystem::filesystem_error& e)
-        {
-            spdlog::error("Failed to copy default config: {}", e.what());
-            return; // optional: abort config load
-        }
-    }
-    else
-    {
-        spdlog::info("Config file exists at: {}", m_configFilePath);
-    }
-
-
-    // Load the configuration file
     std::ifstream configFile(m_configFilePath);
-    if (configFile.is_open())
+    if (!configFile.is_open())
     {
-        json j;
-        configFile >> j;
-        spdlog::info("Loaded config from: {}", m_configFilePath);
+        spdlog::error(
+            "Could not open config file: {}", m_configFilePath.string());
+        return;
+    }
 
-        // Check if the JSON data is valid
-        if (j.is_null())
+    try
+    {
+        configFile >> m_configData;
+        configFile.close();
+
+        // Load all data into local variables
+        LoadFromJson();
+
+        spdlog::info(
+            "Configuration loaded from: {}", m_configFilePath.string());
+    }
+    catch (const json::parse_error& e)
+    {
+        spdlog::error("Invalid JSON data in config file: {}", e.what());
+    }
+}
+
+void Config::LoadFromJson()
+{
+    // Load basic settings
+    if (m_configData.contains("default_parser"))
+        default_parser = m_configData["default_parser"].get<std::string>();
+
+    if (m_configData.contains("logging") &&
+        m_configData["logging"].contains("level"))
+        logLevel = m_configData["logging"]["level"].get<std::string>();
+
+    // Load XML parser settings
+    if (m_configData.contains("parsers") &&
+        m_configData["parsers"].contains("xml"))
+    {
+        const auto& xmlConfig = m_configData["parsers"]["xml"];
+
+        if (xmlConfig.contains("rootElement"))
+            xmlRootElement = xmlConfig["rootElement"].get<std::string>();
+
+        if (xmlConfig.contains("eventElement"))
+            xmlEventElement = xmlConfig["eventElement"].get<std::string>();
+
+        // Load columns
+        if (xmlConfig.contains("columns"))
         {
-            spdlog::error("Invalid JSON data in config file.");
-            return;
-        }
-
-        GetColorConfig(j);
-        GetLoggingConfig(j);
-        ParseXmlConfig(j);
-
-
-        // Example: m_someParameter = j["someParameter"].get<std::string>();
-        for (auto& [col, valMap] : j["columnColors"].items())
-        {
-            for (auto& [val, colors] : valMap.items())
+            columns.clear();
+            for (const auto& col : xmlConfig["columns"])
             {
-                columnColors[col][val] = {colors[0], colors[1]};
+                Column column;
+                column.name = col["name"].get<std::string>();
+                column.visible = col["visible"].get<bool>();
+                column.width = col["width"].get<int>();
+                columns.push_back(column);
             }
         }
-
-        configFile.close();
     }
-    else
+
+    // Load column colors
+    if (m_configData.contains("columnColors"))
     {
-        spdlog::error("Could not open config file: {}", m_configFilePath);
+        columnColors.clear();
+        for (const auto& [colName, valueMap] :
+            m_configData["columnColors"].items())
+        {
+            ColumnColorMap colorMap;
+            for (const auto& [value, colors] : valueMap.items())
+            {
+                EventTypeColor color;
+                color.fg = colors[0].get<std::string>();
+                color.bg = colors[1].get<std::string>();
+                colorMap[value] = color;
+            }
+            columnColors[colName] = colorMap;
+        }
     }
 }
 
@@ -137,24 +138,57 @@ void Config::SetupLogPath()
 
 void Config::SaveConfig()
 {
-    // Save the configuration to the file
+    // Build JSON from local variables
+    BuildJsonFromVariables();
+
+    // Save to file
     std::ofstream configFile(m_configFilePath);
     if (configFile.is_open())
     {
-        json j;
-
-        // Set the JSON data from the configuration parameters
-        // Example: j["someParameter"] = m_someParameter;
-
-        configFile << j.dump(4); // Pretty print with 4 spaces
+        configFile << m_configData.dump(4); // Pretty print with 4 spaces
         configFile.close();
-        spdlog::info("Saved config to: {}", m_configFilePath);
+        spdlog::info("Configuration saved to: {}", m_configFilePath.string());
     }
     else
     {
-        spdlog::error(
-            "Could not open config file for writing: {}", m_configFilePath);
+        spdlog::error("Could not open config file for writing: {}",
+            m_configFilePath.string());
     }
+}
+
+void Config::BuildJsonFromVariables()
+{
+    m_configData.clear();
+
+    // Basic settings
+    m_configData["default_parser"] = default_parser;
+    m_configData["logging"]["level"] = logLevel;
+
+    // XML parser settings
+    m_configData["parsers"]["xml"]["rootElement"] = xmlRootElement;
+    m_configData["parsers"]["xml"]["eventElement"] = xmlEventElement;
+
+    // Columns
+    m_configData["parsers"]["xml"]["columns"] = json::array();
+    for (const auto& col : columns)
+    {
+        m_configData["parsers"]["xml"]["columns"].push_back({{"name", col.name},
+            {"visible", col.visible}, {"width", col.width}});
+    }
+
+    // Column colors
+    for (const auto& [colName, valueMap] : columnColors)
+    {
+        for (const auto& [value, color] : valueMap)
+        {
+            m_configData["columnColors"][colName][value] = {color.fg, color.bg};
+        }
+    }
+}
+
+void Config::Reload()
+{
+    LoadConfig();
 }
 
 const std::string& Config::GetConfigFilePath() const
@@ -162,7 +196,7 @@ const std::string& Config::GetConfigFilePath() const
     return m_configFilePath;
 }
 
-void Config::SetConfigFilePath(const std::string& path)
+void Config::SetConfigFilePath(const std::filesystem::path& path)
 {
     m_configFilePath = path;
 }
@@ -265,6 +299,7 @@ void Config::GetLoggingConfig(const json& j)
 std::filesystem::path Config::GetDefaultAppPath()
 {
     std::filesystem::path configPath;
+    std::string appName = "LogViewer"; // Default app name
 
 #ifdef _WIN32
     const char* appData = std::getenv("APPDATA");
@@ -315,8 +350,8 @@ std::filesystem::path Config::GetDefaultAppPath()
 std::filesystem::path Config::GetDefaultConfigPath()
 {
     auto configFileName = "config.json";
-    auto cofigFilePath = GetDefaultAppPath() / configFileName;
-    return cofigFilePath;
+    auto configFilePath = GetDefaultAppPath() / configFileName;
+    return configFilePath;
 }
 
 std::filesystem::path Config::GetDefaultLogPath()
@@ -324,26 +359,6 @@ std::filesystem::path Config::GetDefaultLogPath()
     auto logFileName = "log.txt";
     auto logFilePath = GetDefaultAppPath() / logFileName;
     return logFilePath;
-}
-
-void Config::GetColorConfig(const json& j)
-{
-    if (j.contains("columnColors"))
-    {
-        for (const auto& col : j["columnColors"].items())
-        {
-            ValueColorMap valueColorMap;
-            for (const auto& val : col.value().items())
-            {
-                valueColorMap[val.key()] = {val.value()[0], val.value()[1]};
-            }
-            columnColors[col.key()] = std::move(valueColorMap);
-        }
-    }
-    else
-    {
-        spdlog::warn("Missing 'columnColors' in config file.");
-    }
 }
 
 } // namespace config
