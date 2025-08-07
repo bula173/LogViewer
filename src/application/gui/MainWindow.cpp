@@ -273,49 +273,79 @@ void MainWindow::setupLayout()
 
 void MainWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
 {
-    wxString query = m_searchBox->GetValue();
-    m_searchResultsList->DeleteAllItems();
-
-    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    try
     {
-        const auto& event = m_events.GetEvent(i);
-        for (const auto& item : event.getEventItems())
+        wxString query = m_searchBox->GetValue();
+        m_searchResultsList->DeleteAllItems();
+
+        for (unsigned long i = 0; i < m_events.Size(); ++i)
         {
-            if (item.second.find(query.ToStdString()) != std::string::npos)
+            const auto& event = m_events.GetEvent(i);
+            for (const auto& item : event.getEventItems())
             {
-                wxVector<wxVariant> row;
-                row.push_back(wxVariant(std::to_string(event.getId())));
-                row.push_back(wxVariant(item.second));
-                m_searchResultsList->AppendItem(row);
-                break;
+                if (item.second.find(query.ToStdString()) != std::string::npos)
+                {
+                    wxVector<wxVariant> row;
+                    row.push_back(wxVariant(std::to_string(event.getId())));
+                    row.push_back(wxVariant(item.second));
+                    m_searchResultsList->AppendItem(row);
+                    break;
+                }
             }
         }
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnSearch: {}", ex.what());
+        wxMessageBox(wxString::Format("Exception in search:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnSearch");
+        wxMessageBox("Unknown error in search.", "Error", wxOK | wxICON_ERROR);
     }
 }
 
 void MainWindow::OnSearchResultActivated(wxDataViewEvent& event)
 {
-    int itemIndex = m_searchResultsList->ItemToRow(event.GetItem());
-    wxVariant value;
-    m_searchResultsList->GetValue(value, itemIndex, 0); // column 0 = Event ID
-    wxString eventIdStr = value.GetString();
-    long eventId;
-    if (!eventIdStr.ToLong(&eventId))
+    try
     {
-        spdlog::warn(
-            "Could not convert event ID from search result to long: {}",
-            eventIdStr.ToStdString());
-        return;
-    }
-
-    // Find the index of the event with this ID in m_events
-    for (unsigned long i = 0; i < m_events.Size(); ++i)
-    {
-        if (m_events.GetEvent(i).getId() == eventId)
+        int itemIndex = m_searchResultsList->ItemToRow(event.GetItem());
+        wxVariant value;
+        m_searchResultsList->GetValue(
+            value, itemIndex, 0); // column 0 = Event ID
+        wxString eventIdStr = value.GetString();
+        long eventId;
+        if (!eventIdStr.ToLong(&eventId))
         {
-            m_events.SetCurrentItem(i); // This will update m_eventsListCtrl
-            break;
+            spdlog::warn(
+                "Could not convert event ID from search result to long: {}",
+                eventIdStr.ToStdString());
+            return;
         }
+
+        for (unsigned long i = 0; i < m_events.Size(); ++i)
+        {
+            if (m_events.GetEvent(i).getId() == eventId)
+            {
+                m_events.SetCurrentItem(i);
+                break;
+            }
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnSearchResultActivated: {}", ex.what());
+        wxMessageBox(
+            wxString::Format("Exception in search result:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnSearchResultActivated");
+        wxMessageBox(
+            "Unknown error in search result.", "Error", wxOK | wxICON_ERROR);
     }
 }
 
@@ -415,12 +445,28 @@ void MainWindow::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MainWindow::OnClearParser(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("Parser clear triggered.");
-    m_searchResultsList->DeleteAllItems();
-    m_searchBox->SetValue("");
-    m_events.Clear();
-    m_progressGauge->SetValue(0);
-    SetStatusText("Data cleared");
+    try
+    {
+        spdlog::info("Parser clear triggered.");
+        m_searchResultsList->DeleteAllItems();
+        m_searchBox->SetValue("");
+        m_events.Clear();
+        m_progressGauge->SetValue(0);
+        SetStatusText("Data cleared");
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnClearParser: {}", ex.what());
+        wxMessageBox(
+            wxString::Format("Exception in clear parser:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnClearParser");
+        wxMessageBox(
+            "Unknown error in clear parser.", "Error", wxOK | wxICON_ERROR);
+    }
 }
 
 void MainWindow::OnHideSearchResult(wxCommandEvent& event)
@@ -477,175 +523,186 @@ void MainWindow::OnHideRightPanel(wxCommandEvent& event)
 
 void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("OnOpenFile event triggered.");
+    try
+    {
+        spdlog::info("OnOpenFile event triggered.");
 
-    // Using CallAfter is the standard and most reliable way to show
-    // modal dialogs on macOS to avoid event loop issues.
-    CallAfter(
-        [this]()
-        {
-            if (m_processing)
+        // Using CallAfter is the standard and most reliable way to show
+        // modal dialogs on macOS to avoid event loop issues.
+        CallAfter(
+            [this]()
             {
-                wxMessageBox("A file is already being processed. Please wait.",
-                    "Processing in Progress", wxOK | wxICON_INFORMATION, this);
-                return;
-            }
+                if (m_processing)
+                {
+                    wxMessageBox(
+                        "A file is already being processed. Please wait.",
+                        "Processing in Progress", wxOK | wxICON_INFORMATION,
+                        this);
+                    return;
+                }
 
-            static wxString lastDir; // Remember the last directory
+                static wxString lastDir; // Remember the last directory
 
-            wxFileDialog openFileDialog(this, _("Open log file"), lastDir, "",
-                "XML files (*.xml)|*.xml|Log files (*.log)|*.log|All files "
-                "(*.*)|*.*",
-                wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+                wxFileDialog openFileDialog(this, _("Open log file"), lastDir,
+                    "",
+                    "XML files (*.xml)|*.xml|Log files (*.log)|*.log|All files "
+                    "(*.*)|*.*",
+                    wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
-            if (openFileDialog.ShowModal() == wxID_OK)
-            {
-                wxString path = openFileDialog.GetPath();
-                lastDir =
-                    openFileDialog.GetDirectory(); // Update the last directory
+                if (openFileDialog.ShowModal() == wxID_OK)
+                {
+                    wxString path = openFileDialog.GetPath();
+                    lastDir = openFileDialog
+                                  .GetDirectory(); // Update the last directory
 
-                AddToRecentFiles(path);
-                ParseData(path.ToStdString());
-                UpdateFilters();
-            }
-            else
-            {
-                spdlog::warn("File dialog was canceled by the user.");
-            }
-        });
+                    AddToRecentFiles(path);
+                    ParseData(path.ToStdString());
+                    UpdateFilters();
+                }
+                else
+                {
+                    spdlog::warn("File dialog was canceled by the user.");
+                }
+            });
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnOpenFile: {}", ex.what());
+        wxMessageBox(wxString::Format("Exception in open file:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnOpenFile");
+        wxMessageBox(
+            "Unknown error in open file.", "Error", wxOK | wxICON_ERROR);
+    }
 }
 
 void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("Config Editor menu selected");
-
-    auto& config = config::GetConfig();
-    auto& configPath = config.GetConfigFilePath();
-    if (!std::filesystem::exists(configPath))
+    try
     {
-        spdlog::error("Config file does not exist: {}", configPath);
-        wxMessageBox(
-            "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
-        return;
-    }
-    spdlog::info("Opening config file: {}", configPath);
-    // Use wxLaunchDefaultApplication to open the config file in the default
-    // editor
-    wxLaunchDefaultApplication(configPath);
+        spdlog::info("Config Editor menu selected");
 
-    // Option 2: Show a custom dialog (implement your own
-    // ConfigEditorDialog) ConfigEditorDialog dlg(this, configPath);
-    // dlg.ShowModal();
-}
-
-void MainWindow::OnFilterChanged(wxCommandEvent&)
-{
-    wxArrayInt selectedType;
-
-    // If there are no entries in m_typeFilter, do not proceed
-    if (m_typeFilter == nullptr)
-        return;
-
-    m_typeFilter->GetCheckedItems(selectedType);
-
-    std::set<std::string> selectedTypeStrings;
-    for (auto idx : selectedType)
-        selectedTypeStrings.insert(m_typeFilter->GetString(idx).ToStdString());
-
-    // Filter events and update m_eventsListCtrl
-    std::vector<unsigned long> filteredIndices;
-    for (unsigned long i = 0; i < m_events.Size(); ++i)
-    {
-        const auto& event = m_events.GetEvent(i);
-        std::string eventType = event.findByKey("type");
-        bool typeMatch = selectedTypeStrings.empty() ||
-            selectedTypeStrings.count(eventType) > 0;
-
-        if (typeMatch)
+        auto& config = config::GetConfig();
+        auto& configPath = config.GetConfigFilePath();
+        if (!std::filesystem::exists(configPath))
         {
-            filteredIndices.push_back(i);
+            spdlog::error("Config file does not exist: {}", configPath);
+            wxMessageBox(
+                "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
+            return;
         }
+        spdlog::info("Opening config file: {}", configPath);
+        wxLaunchDefaultApplication(configPath);
     }
-
-    // Update the events list control with the filtered indices
-    if (filteredIndices.empty())
+    catch (const std::exception& ex)
     {
-        spdlog::info("No events match the selected filters.");
-        m_eventsListCtrl->SetFilteredEvents({});
-        m_eventsListCtrl->Refresh();
+        spdlog::error("Exception in OnOpenConfigEditor: {}", ex.what());
+        wxMessageBox(
+            wxString::Format("Exception in config editor:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
     }
-    else
+    catch (...)
     {
-        spdlog::info("Filtered events count: {}", filteredIndices.size());
-        // Set the filtered events in the list control
-        m_eventsListCtrl->SetFilteredEvents(filteredIndices);
-        // Refresh the list control to show the filtered events
-        m_eventsListCtrl->Refresh();
+        spdlog::error("Unknown exception in OnOpenConfigEditor");
+        wxMessageBox(
+            "Unknown error in config editor.", "Error", wxOK | wxICON_ERROR);
     }
 }
 
 void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
 {
-
-    spdlog::info("Lod View menu selected");
-
-    auto& config = config::GetConfig();
-    auto& configPath = config.GetAppLogPath();
-    if (!std::filesystem::exists(configPath))
+    try
     {
-        spdlog::error("Config file does not exist: {}", configPath);
-        wxMessageBox(
-            "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
-        return;
+        spdlog::info("Lod View menu selected");
+
+        auto& config = config::GetConfig();
+        auto& configPath = config.GetAppLogPath();
+        if (!std::filesystem::exists(configPath))
+        {
+            spdlog::error("Config file does not exist: {}", configPath);
+            wxMessageBox(
+                "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
+            return;
+        }
+        spdlog::info("Opening config file: {}", configPath);
+        wxLaunchDefaultApplication(configPath);
     }
-    spdlog::info("Opening config file: {}", configPath);
-    // Use wxLaunchDefaultApplication to open the config file in the default
-    // editor
-    wxLaunchDefaultApplication(configPath);
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnOpenAppLog: {}", ex.what());
+        wxMessageBox(wxString::Format("Exception in app log:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnOpenAppLog");
+        wxMessageBox("Unknown error in app log.", "Error", wxOK | wxICON_ERROR);
+    }
 }
 
 void MainWindow::ParseData(const std::string filePath)
 {
-    spdlog::info("Parsing data from file: {}", filePath);
-
-    if (filePath.empty())
+    try
     {
-        spdlog::error("File path is empty.");
-        wxMessageBox("File path is empty.", "Error", wxOK | wxICON_ERROR);
-        return;
+        spdlog::info("Parsing data from file: {}", filePath);
+
+        if (filePath.empty())
+        {
+            spdlog::error("File path is empty.");
+            wxMessageBox("File path is empty.", "Error", wxOK | wxICON_ERROR);
+            return;
+        }
+        if (!std::filesystem::exists(filePath))
+        {
+            spdlog::error("File does not exist: {}", filePath);
+            wxMessageBox("File does not exist.", "Error", wxOK | wxICON_ERROR);
+            return;
+        }
+        m_searchResultsList->DeleteAllItems();
+        m_searchBox->SetValue("");
+        m_events.Clear();
+        m_parser = std::make_shared<parser::XmlParser>();
+
+        m_parser->RegisterObserver(this);
+
+        SetStatusText("Loading ..");
+        m_progressGauge->Show();
+        m_progressGauge->SetRange(100);
+        m_progressGauge->SetValue(0);
+        m_progressGauge->Refresh();
+        m_progressGauge->Update();
+
+        m_processing = true;
+
+        m_progressGauge->SetRange(m_parser->GetTotalProgress());
+        m_parser->ParseData(filePath);
+        m_progressGauge->SetValue(100);
+        SetStatusText("Data ready. Path: " + filePath);
+        m_processing = false;
+        m_progressGauge->Hide();
+
+        spdlog::info("Parsing complete.");
     }
-    if (!std::filesystem::exists(filePath))
+    catch (const std::exception& ex)
     {
-        spdlog::error("File does not exist: {}", filePath);
-        wxMessageBox("File does not exist.", "Error", wxOK | wxICON_ERROR);
-        return;
+        spdlog::error("Exception in ParseData: {}", ex.what());
+        wxMessageBox(
+            wxString::Format("Exception during parsing:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+        m_processing = false;
+        m_progressGauge->Hide();
     }
-    // Add your file processing code here
-    // For example, you can call your XML parser to parse the selected file
-    m_searchResultsList->DeleteAllItems();
-    m_searchBox->SetValue("");
-    m_events.Clear();
-    m_parser = std::make_shared<parser::XmlParser>();
-
-    m_parser->RegisterObserver(this);
-
-    SetStatusText("Loading ..");
-    m_progressGauge->Show();
-    m_progressGauge->SetRange(100);
-    m_progressGauge->SetValue(0);
-    m_progressGauge->Refresh();
-    m_progressGauge->Update();
-
-    m_processing = true;
-
-    m_progressGauge->SetRange(m_parser->GetTotalProgress());
-    m_parser->ParseData(filePath);
-    m_progressGauge->SetValue(100);
-    SetStatusText("Data ready. Path: " + filePath);
-    m_processing = false;
-    m_progressGauge->Hide();
-
-    spdlog::info("Parsing complete.");
+    catch (...)
+    {
+        spdlog::error("Unknown exception in ParseData");
+        wxMessageBox(
+            "Unknown error during parsing.", "Error", wxOK | wxICON_ERROR);
+        m_processing = false;
+        m_progressGauge->Hide();
+    }
 }
 
 void MainWindow::UpdateFilters()
@@ -789,14 +846,37 @@ void MainWindow::OnTypeFilterMenu(wxCommandEvent& event)
 
 void MainWindow::OnReloadConfig(wxCommandEvent&)
 {
-    spdlog::info("Reloading configuration...");
-    config::GetConfig().Reload(); // Assuming your config class has a
-    // Reload() method
-    // Update row colors with new configuration
-    m_eventsListCtrl->UpdateColors();
-    spdlog::info("Configuration reload complete.");
+    try
+    {
+        spdlog::info("Reloading configuration...");
+        config::GetConfig().Reload();
+        m_eventsListCtrl->UpdateColors();
+        spdlog::info("Configuration reload complete.");
+        wxMessageBox(
+            "Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception during configuration reload: {}", ex.what());
+        wxMessageBox(
+            wxString::Format(
+                "Exception during configuration reload:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception during configuration reload.");
+        wxMessageBox("Unknown error during configuration reload.", "Error",
+            wxOK | wxICON_ERROR);
+    }
+}
 
-    wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
+void MainWindow::OnFilterChanged(wxCommandEvent& event)
+{
+    spdlog::info("Filter changed.");
+    // TODO: Add your filter logic here, e.g.:
+    // Update the event list based on the new filter state
+    UpdateFilters();
 }
 
 

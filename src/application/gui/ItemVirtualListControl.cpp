@@ -67,24 +67,25 @@ void ItemVirtualListControl::OnDataUpdated()
 
 void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
 {
-    spdlog::debug(
-        "ItemVirtualListControl::OnCurrentIndexUpdated called with index: {}",
-        index);
-
-    if (index < 0 || index > static_cast<int>(m_events.Size()))
+    try
     {
-        spdlog::error(
-            "ItemVirtualListControl::OnCurrentIndexUpdated: index out "
-            "of range");
-        return;
-    }
+        spdlog::debug("ItemVirtualListControl::OnCurrentIndexUpdated called "
+                      "with index: {}",
+            index);
 
-    this->DeleteAllItems();
+        if (index < 0 || index >= static_cast<int>(m_events.Size()))
+        {
+            spdlog::warn(
+                "ItemVirtualListControl::OnCurrentIndexUpdated: index {} out "
+                "of range (size: {})",
+                index, m_events.Size());
+            this->DeleteAllItems();
+            return;
+        }
 
-    if (index > 0)
-    {
-        auto items =
-            m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
+        this->DeleteAllItems();
+
+        auto items = m_events.GetEvent(index).getEventItems();
         for (const auto& item : items)
         {
             wxVector<wxVariant> data;
@@ -92,34 +93,43 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
             data.push_back(wxVariant(item.second));
             this->AppendItem(data);
         }
-    }
 
-    this->Update();
+        this->Update();
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnCurrentIndexUpdated: {}", ex.what());
+        this->DeleteAllItems();
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnCurrentIndexUpdated");
+        this->DeleteAllItems();
+    }
 }
 
 void ItemVirtualListControl::RefreshAfterUpdate()
 {
-    spdlog::debug("ItemVirtualListControl::RefreshAfterUpdate called");
-
-    if (m_events.GetCurrentItemIndex() < 0)
+    try
     {
-        spdlog::error(
-            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
-        return;
-    }
-    if (m_events.GetCurrentItemIndex() > static_cast<int>(m_events.Size()))
-    {
-        spdlog::error(
-            "ItemVirtualListControl::RefreshAfterUpdate: index out of range");
-        return;
-    }
+        spdlog::debug("ItemVirtualListControl::RefreshAfterUpdate called");
 
-    this->DeleteAllItems();
+        int currentIndex = m_events.GetCurrentItemIndex();
 
-    if (m_events.GetCurrentItemIndex() > 0)
-    {
-        auto items =
-            m_events.GetEvent(m_events.GetCurrentItemIndex()).getEventItems();
+        if (currentIndex < 0 ||
+            currentIndex >= static_cast<int>(m_events.Size()))
+        {
+            spdlog::warn(
+                "ItemVirtualListControl::RefreshAfterUpdate: index {} out "
+                "of range (size: {})",
+                currentIndex, m_events.Size());
+            this->DeleteAllItems();
+            return;
+        }
+
+        this->DeleteAllItems();
+
+        auto items = m_events.GetEvent(currentIndex).getEventItems();
         for (const auto& item : items)
         {
             wxVector<wxVariant> data;
@@ -127,9 +137,19 @@ void ItemVirtualListControl::RefreshAfterUpdate()
             data.push_back(wxVariant(item.second));
             this->AppendItem(data);
         }
-    }
 
-    this->Refresh();
-    this->Update();
+        this->Refresh();
+        this->Update();
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in RefreshAfterUpdate: {}", ex.what());
+        this->DeleteAllItems();
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in RefreshAfterUpdate");
+        this->DeleteAllItems();
+    }
 }
 } // namespace gui
