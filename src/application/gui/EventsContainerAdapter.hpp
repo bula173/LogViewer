@@ -25,7 +25,7 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
      * @brief Set the indices of events to be shown (filtered view).
      * @param indices Vector of indices in the original container to show.
      */
-    void SetFilteredIndices(const std::vector<size_t>& indices);
+    void SetFilteredIndices(const std::vector<unsigned long>& indices);
     bool GetAttrByRow(unsigned int row, unsigned int col,
         wxDataViewItemAttr& attr) const override;
 
@@ -37,7 +37,7 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
   private:
     db::EventsContainer& m_container;
     unsigned int m_rowCount;
-    std::vector<size_t>
+    std::vector<unsigned long>
         m_filteredIndices; ///< Maps filtered row to container index
 };
 }

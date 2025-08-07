@@ -77,7 +77,7 @@ void EventsContainerAdapter::SetRowCount(unsigned int rows)
 }
 
 void EventsContainerAdapter::SetFilteredIndices(
-    const std::vector<size_t>& indices)
+    const std::vector<unsigned long>& indices)
 {
 
     m_filteredIndices = indices;
@@ -96,7 +96,11 @@ wxColour EventsContainerAdapter::GetBgColorForColumnValue(
         if (valIt != colIt->second.end())
             return wxColour(valIt->second.bg); // bg
     }
-    return wxNullColour;
+    else
+    {
+        return wxColour(10, 10, 10); // Default grey if not found
+    }
+    return wxColour(10, 10, 10); // Default grey if not found
 }
 
 wxColour EventsContainerAdapter::GetFontColorForColumnValue(
@@ -110,7 +114,11 @@ wxColour EventsContainerAdapter::GetFontColorForColumnValue(
         if (valIt != colIt->second.end())
             return wxColour(valIt->second.fg); // fg
     }
-    return wxNullColour;
+    else
+    {
+        return wxColour(255, 255, 255); // Default black if not found
+    }
+    return wxColour(255, 255, 255); // Default black if not found
 }
 
 bool EventsContainerAdapter::GetAttrByRow(
