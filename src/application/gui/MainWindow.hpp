@@ -475,8 +475,6 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     wxDataViewListCtrl* m_searchResultsList {
         nullptr}; ///< Search results display with clickable items
     wxCheckListBox* m_typeFilter {nullptr}; ///< Multi-select type filter
-    wxDatePickerCtrl* m_timestampFilter {
-        nullptr}; ///< Timestamp filter dropdown (single select)
     wxButton* m_applyFilterButton {
         nullptr}; ///< Apply current filter settings button
     wxButton* m_clearFilterButton {

@@ -255,23 +255,11 @@ void MainWindow::setupLayout()
 
     m_typeFilter->Bind(
         wxEVT_CONTEXT_MENU, &MainWindow::OnTypeFilterContextMenu, this);
-
-    m_timestampFilter =
-        new wxDatePickerCtrl(m_leftPanel, wxID_ANY, wxDefaultDateTime,
-            wxDefaultPosition, wxDefaultSize, wxDP_DROPDOWN | wxDP_SHOWCENTURY);
-
     // Type filter label (fixed)
     filterSizer->Add(
         new wxStaticText(m_leftPanel, wxID_ANY, "Type:"), 0, wxALL, 5);
     // Type filter (expandable)
     filterSizer->Add(m_typeFilter, 1, wxEXPAND | wxALL, 5);
-
-    // Timestamp filter label (fixed)
-    filterSizer->Add(
-        new wxStaticText(m_leftPanel, wxID_ANY, "Timestamp:"), 0, wxALL, 5);
-    // Timestamp filter (expandable)
-    filterSizer->Add(m_timestampFilter, 1, wxEXPAND | wxALL, 5);
-
     // --- Add Filter Button ---
     m_applyFilterButton = new wxButton(m_leftPanel, wxID_ANY, "Apply Filter");
     filterSizer->Add(m_applyFilterButton, 0, wxEXPAND | wxALL, 5);
@@ -385,9 +373,11 @@ void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
             return;
         }
     }
-
+    m_progressGauge->SetValue(100);
     SetStatusText("Data ready");
     m_processing = false;
+    m_progressGauge->Hide();
+
 
     spdlog::info("Dummy data population complete.");
 }
@@ -618,6 +608,18 @@ void MainWindow::ParseData(const std::string filePath)
 {
     spdlog::info("Parsing data from file: {}", filePath);
 
+    if (filePath.empty())
+    {
+        spdlog::error("File path is empty.");
+        wxMessageBox("File path is empty.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+    if (!std::filesystem::exists(filePath))
+    {
+        spdlog::error("File does not exist: {}", filePath);
+        wxMessageBox("File does not exist.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
     // Add your file processing code here
     // For example, you can call your XML parser to parse the selected file
     m_searchResultsList->DeleteAllItems();
@@ -628,14 +630,20 @@ void MainWindow::ParseData(const std::string filePath)
     m_parser->RegisterObserver(this);
 
     SetStatusText("Loading ..");
+    m_progressGauge->Show();
+    m_progressGauge->SetRange(100);
     m_progressGauge->SetValue(0);
+    m_progressGauge->Refresh();
+    m_progressGauge->Update();
 
     m_processing = true;
 
     m_progressGauge->SetRange(m_parser->GetTotalProgress());
     m_parser->ParseData(filePath);
-    SetStatusText("Data ready");
+    m_progressGauge->SetValue(100);
+    SetStatusText("Data ready. Path: " + filePath);
     m_processing = false;
+    m_progressGauge->Hide();
 
     spdlog::info("Parsing complete.");
 }
@@ -648,12 +656,10 @@ void MainWindow::UpdateFilters()
 
     // Collect unique values for each filter
     std::set<std::string> types;
-    std::set<std::string> timestamps;
     for (unsigned long i = 0; i < m_events.Size(); ++i)
     {
         const auto& event = m_events.GetEvent(i);
         types.insert(event.findByKey("type"));
-        timestamps.insert(event.findByKey("timestamp"));
     }
     // Update type filter
     m_typeFilter->Clear();
@@ -784,18 +790,13 @@ void MainWindow::OnTypeFilterMenu(wxCommandEvent& event)
 void MainWindow::OnReloadConfig(wxCommandEvent&)
 {
     spdlog::info("Reloading configuration...");
-    // config::GetConfig().Reload(); // Assuming your config class has a
+    config::GetConfig().Reload(); // Assuming your config class has a
     // Reload() method
-    wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
-    // Optionally, update filters or UI if config affects them
-    UpdateFilters();
-    // Update columns
-    // Update columns in EventsVirtualListControl
-    m_eventsListCtrl->UpdateColumns();
-
     // Update row colors with new configuration
     m_eventsListCtrl->UpdateColors();
     spdlog::info("Configuration reload complete.");
+
+    wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
 }
 
 

@@ -128,6 +128,9 @@ bool EventsContainerAdapter::GetAttrByRow(
     size_t actualRow = m_filteredIndices.empty() ? row : m_filteredIndices[row];
     const auto& event = m_container.GetEvent(actualRow);
 
+    spdlog::debug(
+        "EventsContainerAdapter::GetAttrByRow called for row: {}, col: {}", row,
+        col);
     // Example: use "type" column for coloring
     std::string typeValue = event.findByKey("type");
 
@@ -166,8 +169,6 @@ size_t EventsContainerAdapter::GetFilteredIndex(unsigned int filteredRow) const
 void EventsContainerAdapter::UpdateColors()
 {
     spdlog::debug("EventsContainerAdapter::UpdateColors called");
-
-    // Force wxWidgets to re-evaluate all row attributes
     RefreshRowAttributes();
 }
 
@@ -175,15 +176,14 @@ void EventsContainerAdapter::RefreshRowAttributes()
 {
     spdlog::debug("EventsContainerAdapter::RefreshRowAttributes called");
 
-    // This will cause wxWidgets to call GetAttrByRow again for all visible rows
-    // Reset without changing row count to trigger attribute refresh
+    // Try multiple approaches for maximum compatibility
+    Cleared();
     Reset(m_rowCount);
 
-    // Alternative approach: Fire item changed events for all rows
-    // for (unsigned int i = 0; i < m_rowCount; ++i)
-    // {
-    //     wxDataViewItem item = GetItem(i);
-    //     ItemChanged(item);
-    // }
+    // Also notify value changes for all visible rows
+    for (unsigned int i = 0; i < m_rowCount; ++i)
+    {
+        ItemChanged(GetItem(i));
+    }
 }
 } // namespace gui

@@ -42,6 +42,14 @@ class Config
     void LoadConfig();
     void SaveConfig();
 
+    /**
+     * @brief Reload configuration from file.
+     *
+     * Convenience method that calls LoadConfig() to reload
+     * the configuration from the current config file path.
+     */
+    void Reload();
+
     const std::string& GetConfigFilePath() const;
     const std::string& GetAppLogPath() const;
     void SetConfigFilePath(const std::string& path);

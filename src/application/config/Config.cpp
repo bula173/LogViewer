@@ -346,4 +346,11 @@ void Config::GetColorConfig(const json& j)
     }
 }
 
+void Config::Reload()
+{
+    spdlog::info("Reloading configuration from: {}", m_configFilePath);
+    LoadConfig();
+    spdlog::info("Configuration reload complete");
+}
+
 } // namespace config
