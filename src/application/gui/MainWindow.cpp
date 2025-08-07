@@ -1,5 +1,6 @@
 #include "gui/MainWindow.hpp"
 #include "config/Config.hpp"
+#include "error/Error.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
 #include <spdlog/spdlog.h>
@@ -527,21 +528,16 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
     {
         spdlog::info("OnOpenFile event triggered.");
 
-        // Using CallAfter is the standard and most reliable way to show
-        // modal dialogs on macOS to avoid event loop issues.
         CallAfter(
             [this]()
             {
                 if (m_processing)
                 {
-                    wxMessageBox(
-                        "A file is already being processed. Please wait.",
-                        "Processing in Progress", wxOK | wxICON_INFORMATION,
-                        this);
-                    return;
+                    throw error::Error(
+                        "A file is already being processed. Please wait.");
                 }
 
-                static wxString lastDir; // Remember the last directory
+                static wxString lastDir;
 
                 wxFileDialog openFileDialog(this, _("Open log file"), lastDir,
                     "",
@@ -552,8 +548,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
                 if (openFileDialog.ShowModal() == wxID_OK)
                 {
                     wxString path = openFileDialog.GetPath();
-                    lastDir = openFileDialog
-                                  .GetDirectory(); // Update the last directory
+                    lastDir = openFileDialog.GetDirectory();
 
                     AddToRecentFiles(path);
                     std::filesystem::path filePathObj(path.ToStdString());
@@ -565,6 +560,11 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
                     spdlog::warn("File dialog was canceled by the user.");
                 }
             });
+    }
+    catch (const error::Error& err)
+    {
+        spdlog::error("Application error in OnOpenFile: {}", err.what());
+        // Message box already shown by error::Error
     }
     catch (const std::exception& ex)
     {
@@ -652,17 +652,11 @@ void MainWindow::ParseData(const std::filesystem::path& filePath)
 
         if (filePath.empty())
         {
-            spdlog::error("File path is empty.");
-            wxMessageBox("File path is empty.", "Error", wxOK | wxICON_ERROR);
-            return;
+            throw error::Error("File path is empty.");
         }
         if (!std::filesystem::exists(filePath))
         {
-            spdlog::error("File does not exist: {}", filePath.string());
-            wxMessageBox(
-                wxString::Format("File does not exist: %s", filePath.string()),
-                "Error", wxOK | wxICON_ERROR);
-            return;
+            throw error::Error("File does not exist: " + filePath.string());
         }
         m_searchResultsList->DeleteAllItems();
         m_searchBox->SetValue("");
@@ -688,6 +682,13 @@ void MainWindow::ParseData(const std::filesystem::path& filePath)
         m_progressGauge->Hide();
 
         spdlog::info("Parsing complete.");
+    }
+    catch (const error::Error& err)
+    {
+        spdlog::error("Application error in ParseData: {}", err.what());
+        m_processing = false;
+        m_progressGauge->Hide();
+        // Message box already shown by error::Error
     }
     catch (const std::exception& ex)
     {
@@ -773,50 +774,96 @@ void MainWindow::NewEventBatchFound(
     m_itemView->Refresh();
 }
 
-void MainWindow::OnDropFiles(wxDropFilesEvent& event)
-{
-    if (event.GetNumberOfFiles() > 0)
-    {
-        wxString* droppedFiles = event.GetFiles();
-        wxString filename = droppedFiles[0];
-        std::filesystem::path filePathObj(filename.ToStdString());
-
-        spdlog::info("File dropped: {}", filePathObj.string());
-
-        // Process the dropped file
-        ParseData(filePathObj);
-        UpdateFilters();
-
-        // Add to recent files
-        AddToRecentFiles(filename);
-    }
-}
-
 void MainWindow::AddToRecentFiles(const wxString& path)
 {
     m_fileHistory.AddFileToHistory(path);
 }
 
+void MainWindow::OnDropFiles(wxDropFilesEvent& event)
+{
+    try
+    {
+        if (event.GetNumberOfFiles() > 0)
+        {
+            wxString* droppedFiles = event.GetFiles();
+            wxString filename = droppedFiles[0];
+            if (filename.IsEmpty())
+            {
+                throw error::Error("Dropped file path is empty.");
+            }
+            std::filesystem::path filePathObj(filename.ToStdString());
+
+            spdlog::info("File dropped: {}", filePathObj.string());
+
+            // Process the dropped file
+            ParseData(filePathObj);
+            UpdateFilters();
+
+            // Add to recent files
+            AddToRecentFiles(filename);
+        }
+    }
+    catch (const error::Error& err)
+    {
+        spdlog::error("Application error in OnDropFiles: {}", err.what());
+        // Message box already shown by error::Error
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in OnDropFiles: {}", ex.what());
+        wxMessageBox(wxString::Format("Exception in file drop:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in OnDropFiles");
+        wxMessageBox(
+            "Unknown error in file drop.", "Error", wxOK | wxICON_ERROR);
+    }
+    spdlog::info("File drop processing complete.");
+}
+
 void MainWindow::LoadRecentFile(wxCommandEvent& event)
 {
     int fileId = event.GetId() - wxID_FILE1;
-    if (fileId >= 0 && static_cast<size_t>(fileId) < m_fileHistory.GetCount())
+
+    try
     {
-        wxString path = m_fileHistory.GetHistoryFile(fileId);
-        if (!path.IsEmpty() && wxFileExists(path))
+        if (fileId < 0 ||
+            static_cast<size_t>(fileId) >= m_fileHistory.GetCount())
         {
-            std::filesystem::path filePathObj(path.ToStdString());
-            ParseData(filePathObj);
-            UpdateFilters();
+            throw error::Error("Invalid recent file index.");
         }
-        else
+        wxString path = m_fileHistory.GetHistoryFile(fileId);
+        if (path.IsEmpty() || !wxFileExists(path))
         {
             spdlog::warn("Recent file not found: {}", path.ToStdString());
             m_fileHistory.RemoveFileFromHistory(fileId);
+            throw error::Error("Recent file not found: " + path.ToStdString());
         }
+        std::filesystem::path filePathObj(path.ToStdString());
+        ParseData(filePathObj);
+        UpdateFilters();
+    }
+    catch (const error::Error& err)
+    {
+        spdlog::error("Application error in LoadRecentFile: {}", err.what());
+        // Message box already shown by error::Error
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception in LoadRecentFile: {}", ex.what());
+        wxMessageBox(
+            wxString::Format("Exception in load recent file:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception in LoadRecentFile");
+        wxMessageBox(
+            "Unknown error in load recent file.", "Error", wxOK | wxICON_ERROR);
     }
 }
-
 void MainWindow::OnTypeFilterContextMenu(wxContextMenuEvent& /*event*/)
 {
     wxMenu menu;

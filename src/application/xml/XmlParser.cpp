@@ -2,6 +2,7 @@
 #include "xml/xmlParser.hpp"
 #include "config/Config.hpp"
 #include "db/LogEvent.hpp"
+#include "error/Error.hpp"
 
 // third-party
 #include <spdlog/spdlog.h>
@@ -133,9 +134,8 @@ void XmlParser::ParseData(const std::filesystem::path& filepath)
 
     if (!input.is_open())
     {
-        spdlog::error(
-            "XmlParser::ParseData failed to open file: {}", filepath.string());
-        throw std::runtime_error("Failed to open file: " + filepath.string());
+        throw error::Error(
+            "XmlParser::ParseData failed to open file: " + filepath.string());
     }
 
     ParseData(input);
@@ -159,8 +159,7 @@ void XmlParser::ParseData(std::istream& input)
     XML_Parser parser = XML_ParserCreate(NULL);
     if (!parser)
     {
-        spdlog::error("XmlParser::ParseData failed to create XML parser");
-        return;
+        throw error::Error("XmlParser::ParseData failed to create XML parser");
     }
 
     state.parserHandle = parser;
@@ -185,8 +184,10 @@ void XmlParser::ParseData(std::istream& input)
             if (XML_Parse(parser, buffer.data(), static_cast<int>(bytesRead),
                     input.eof() ? XML_TRUE : XML_FALSE) == XML_STATUS_ERROR)
             {
-                spdlog::error("XmlParser::ParseData failed to parse XML: {}",
-                    XML_ErrorString(XML_GetErrorCode(parser)));
+
+                throw error::Error(
+                    "XmlParser::ParseData failed to parse XML: " +
+                    std::string(XML_ErrorString(XML_GetErrorCode(parser))));
                 break;
             }
         }
