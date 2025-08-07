@@ -556,7 +556,12 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
                                   .GetDirectory(); // Update the last directory
 
                     AddToRecentFiles(path);
-                    ParseData(path.ToStdString());
+#if defined(_WIN32)
+                    std::filesystem::path filePath = path.ToStdWstring();
+#else
+                    std::filesystem::path filePath = path.ToStdString();
+#endif
+                    ParseData(filePath.string());
                     UpdateFilters();
                 }
                 else
