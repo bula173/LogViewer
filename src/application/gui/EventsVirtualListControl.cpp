@@ -80,7 +80,7 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
 }
 
 void EventsVirtualListControl::SetFilteredEvents(
-    const std::vector<size_t>& filteredIndices)
+    const std::vector<unsigned long>& filteredIndices)
 {
     spdlog::debug(
         "EventsVirtualListControl::SetFilteredEvents called, count: {}",

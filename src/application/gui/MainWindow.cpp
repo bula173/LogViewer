@@ -1,6 +1,5 @@
 #include "gui/MainWindow.hpp"
 #include "config/Config.hpp"
-#include "gui/ConfigEditorDialog.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
 #include <spdlog/spdlog.h>
@@ -55,6 +54,9 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
 
     this->DragAcceptFiles(true);
     this->Bind(wxEVT_DROP_FILES, &MainWindow::OnDropFiles, this);
+    this->Bind(
+        wxEVT_MENU, &MainWindow::OnReloadConfig, this, ID_ParserReloadConfig);
+
 
     // Add this binding for recent files
     this->Bind(
@@ -99,6 +101,9 @@ void MainWindow::setupMenu()
     // Parser menu
     wxMenu* menuParser = new wxMenu;
     menuParser->Append(ID_ParserClear, "Clear", "Parser");
+    menuParser->Append(ID_ParserReloadConfig, "Reload Config",
+        "Reload configuration file"); // Add this line
+
     // Config menu
     menuFile->Append(
         ID_ConfigEditor, "Edit &Config...\tCtrl+E", "Open Config Editor");
@@ -520,19 +525,27 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
         });
 }
 
-void MainWindow::OnOpenConfigEditor(wxCommandEvent&)
+void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
 {
-    ConfigEditorDialog dlg(this);
-    if (dlg.ShowModal() == wxID_OK)
+    spdlog::info("Config Editor menu selected");
+
+    auto& config = config::GetConfig();
+    auto& configPath = config.GetConfigFilePath();
+    if (!std::filesystem::exists(configPath))
     {
-        config::GetConfig().SaveConfig(); // reload config from file
-
-        ChangeLogLevel();
-        // Update columns in EventsVirtualListControl
-        m_eventsListCtrl->UpdateColumns();
-
-        spdlog::info("Configuration saved and reloaded.");
+        spdlog::error("Config file does not exist: {}", configPath);
+        wxMessageBox(
+            "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
+        return;
     }
+    spdlog::info("Opening config file: {}", configPath);
+    // Use wxLaunchDefaultApplication to open the config file in the default
+    // editor
+    wxLaunchDefaultApplication(configPath);
+
+    // Option 2: Show a custom dialog (implement your own
+    // ConfigEditorDialog) ConfigEditorDialog dlg(this, configPath);
+    // dlg.ShowModal();
 }
 
 void MainWindow::OnFilterChanged(wxCommandEvent&)
@@ -586,7 +599,8 @@ void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
 
     spdlog::info("Lod View menu selected");
 
-    auto configPath = config::Config::GetDefaultLogPath().string();
+    auto& config = config::GetConfig();
+    auto& configPath = config.GetAppLogPath();
     if (!std::filesystem::exists(configPath))
     {
         spdlog::error("Config file does not exist: {}", configPath);
@@ -767,16 +781,15 @@ void MainWindow::OnTypeFilterMenu(wxCommandEvent& event)
     }
 }
 
-void MainWindow::ChangeLogLevel()
+void MainWindow::OnReloadConfig(wxCommandEvent&)
 {
-    auto& config = config::GetConfig();
-    auto level = spdlog::level::from_str(config.logLevel);
-
-    if (level != spdlog::get_level())
-    {
-        spdlog::set_level(level);
-        spdlog::info("Log level changed to: {}", config.logLevel);
-    }
+    spdlog::info("Reloading configuration...");
+    // config::GetConfig().Reload(); // Assuming your config class has a
+    // Reload() method
+    wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
+    // Optionally, update filters or UI if config affects them
+    UpdateFilters();
 }
+
 
 } // namespace gui

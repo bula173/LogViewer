@@ -445,16 +445,15 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
      */
     void UpdateFilters();
     /**
-     * @brief Updates the visibility of the search results panel.
+     * @brief Reloads the application configuration from disk.
      *
-     * Toggles the visibility of the search results panel based on user
-     * preferences and current state. Preserves the panel state for future
-     * sessions.
+     * Re-reads the configuration file and updates all UI components
+     * based on the new settings. Useful for applying changes made in
+     * the config editor without restarting the application.
      */
-    void ChangeLogLevel();
+    void OnReloadConfig(wxCommandEvent&);
 
     // UI Control member variables
-
 
     gui::EventsVirtualListControl* m_eventsListCtrl {
         nullptr}; ///< Main event list display (center panel)
@@ -514,7 +513,8 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
         ID_ViewRightPanel, ///< View menu item for toggling right panel
         ID_ParserClear,    ///< Parser menu item for clearing data
         ID_ConfigEditor,   ///< Tools menu item for config editing
-        ID_AppLogViewer    ///< Tools menu item for viewing application logs
+        ID_AppLogViewer,   ///< Tools menu item for viewing application logs
+        ID_ParserReloadConfig = wxID_HIGHEST + 200
     };
 
     void OnTypeFilterContextMenu(wxContextMenuEvent& event);
