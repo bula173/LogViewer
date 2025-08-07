@@ -417,7 +417,7 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
      * selections
      * @note Progress updates are handled through the observer interface
      */
-    void ParseData(const std::string filePath);
+    void ParseData(const std::filesystem::path& filePath);
 
     /**
      * @brief Adds a file path to the recent files history.

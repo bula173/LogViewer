@@ -9,6 +9,7 @@
 #include "../db/LogEvent.hpp"
 #include <algorithm>
 #include <cstdint>
+#include <filesystem>
 #include <istream>
 #include <vector>
 
@@ -119,7 +120,7 @@ class IDataParser
      * @note This method should be implemented by derived classes for file-based
      * parsing
      */
-    virtual void ParseData(const std::string& filepath) = 0;
+    virtual void ParseData(const std::filesystem::path& filepath) = 0;
 
     /**
      * @brief Parses data from an input stream.

@@ -556,12 +556,8 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
                                   .GetDirectory(); // Update the last directory
 
                     AddToRecentFiles(path);
-#if defined(_WIN32)
-                    std::filesystem::path filePath = path.ToStdWstring();
-#else
-                    std::filesystem::path filePath = path.ToStdString();
-#endif
-                    ParseData(filePath.string());
+                    std::filesystem::path filePathObj(path.ToStdString());
+                    ParseData(filePathObj);
                     UpdateFilters();
                 }
                 else
@@ -648,11 +644,11 @@ void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MainWindow::ParseData(const std::string filePath)
+void MainWindow::ParseData(const std::filesystem::path& filePath)
 {
     try
     {
-        spdlog::info("Parsing data from file: {}", filePath);
+        spdlog::info("Parsing data from file: {}", filePath.string());
 
         if (filePath.empty())
         {
@@ -662,8 +658,10 @@ void MainWindow::ParseData(const std::string filePath)
         }
         if (!std::filesystem::exists(filePath))
         {
-            spdlog::error("File does not exist: {}", filePath);
-            wxMessageBox("File does not exist.", "Error", wxOK | wxICON_ERROR);
+            spdlog::error("File does not exist: {}", filePath.string());
+            wxMessageBox(
+                wxString::Format("File does not exist: %s", filePath.string()),
+                "Error", wxOK | wxICON_ERROR);
             return;
         }
         m_searchResultsList->DeleteAllItems();
@@ -685,7 +683,7 @@ void MainWindow::ParseData(const std::string filePath)
         m_progressGauge->SetRange(m_parser->GetTotalProgress());
         m_parser->ParseData(filePath);
         m_progressGauge->SetValue(100);
-        SetStatusText("Data ready. Path: " + filePath);
+        SetStatusText("Data ready. Path: " + filePath.string());
         m_processing = false;
         m_progressGauge->Hide();
 
@@ -781,10 +779,12 @@ void MainWindow::OnDropFiles(wxDropFilesEvent& event)
     {
         wxString* droppedFiles = event.GetFiles();
         wxString filename = droppedFiles[0];
-        std::string filePath = filename.ToStdString();
+        std::filesystem::path filePathObj(filename.ToStdString());
+
+        spdlog::info("File dropped: {}", filePathObj.string());
 
         // Process the dropped file
-        ParseData(filePath);
+        ParseData(filePathObj);
         UpdateFilters();
 
         // Add to recent files
@@ -800,13 +800,13 @@ void MainWindow::AddToRecentFiles(const wxString& path)
 void MainWindow::LoadRecentFile(wxCommandEvent& event)
 {
     int fileId = event.GetId() - wxID_FILE1;
-    if (fileId >= 0 && fileId < m_fileHistory.GetCount())
+    if (fileId >= 0 && static_cast<size_t>(fileId) < m_fileHistory.GetCount())
     {
         wxString path = m_fileHistory.GetHistoryFile(fileId);
         if (!path.IsEmpty() && wxFileExists(path))
         {
-            std::string filePath = path.ToStdString();
-            ParseData(filePath);
+            std::filesystem::path filePathObj(path.ToStdString());
+            ParseData(filePathObj);
             UpdateFilters();
         }
         else
@@ -817,7 +817,7 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
     }
 }
 
-void MainWindow::OnTypeFilterContextMenu(wxContextMenuEvent& event)
+void MainWindow::OnTypeFilterContextMenu(wxContextMenuEvent& /*event*/)
 {
     wxMenu menu;
     menu.Append(ID_TypeFilter_SelectAll, "Select All");
@@ -876,7 +876,7 @@ void MainWindow::OnReloadConfig(wxCommandEvent&)
     }
 }
 
-void MainWindow::OnFilterChanged(wxCommandEvent& event)
+void MainWindow::OnFilterChanged(wxCommandEvent& /*event*/)
 {
     spdlog::info("Filter changed.");
     // TODO: Add your filter logic here, e.g.:

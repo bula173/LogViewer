@@ -28,7 +28,8 @@ class MockIDataParser : public parser::IDataParser
     MockIDataParser()
         : IDataParser() { };
     MOCK_METHOD(void, ParseData, (std::istream & input), (override));
-    MOCK_METHOD(void, ParseData, (const std::string& input), (override));
+    MOCK_METHOD(
+        void, ParseData, (const std::filesystem::path& input), (override));
     MOCK_METHOD(uint32_t, GetCurrentProgress, (), (const, override));
     MOCK_METHOD(uint32_t, GetTotalProgress, (), (const, override));
 };

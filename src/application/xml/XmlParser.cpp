@@ -125,15 +125,17 @@ XmlParser::XmlParser()
 }
 
 // Loads and parses XML file using Expat
-void XmlParser::ParseData(const std::string& filepath)
+void XmlParser::ParseData(const std::filesystem::path& filepath)
 {
-    spdlog::debug("XmlParser::ParseData called with filepath: {}", filepath);
-    std::ifstream input(filepath);
+    spdlog::debug(
+        "XmlParser::ParseData called with filepath: {}", filepath.string());
+    std::ifstream input(filepath, std::ios::binary);
 
     if (!input.is_open())
     {
-        spdlog::error("XmlParser::ParseData failed to open file: {}", filepath);
-        return;
+        spdlog::error(
+            "XmlParser::ParseData failed to open file: {}", filepath.string());
+        throw std::runtime_error("Failed to open file: " + filepath.string());
     }
 
     ParseData(input);

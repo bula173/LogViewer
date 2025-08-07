@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <expat.h>
 
+#include <filesystem>
 #include <istream>
 
 #include "parser/IDataParser.hpp"
@@ -18,7 +19,7 @@ class XmlParser : public IDataParser
     XmlParser();
     virtual ~XmlParser() = default;
     // Loads and parses XML file using Expat
-    void ParseData(const std::string& filepath) override;
+    void ParseData(const std::filesystem::path& filepath) override;
     void ParseData(std::istream& input) override;
     uint32_t GetCurrentProgress() const override;
     uint32_t GetTotalProgress() const override;
