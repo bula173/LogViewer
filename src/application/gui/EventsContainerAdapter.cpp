@@ -148,4 +148,18 @@ bool EventsContainerAdapter::GetAttrByRow(
     }
     return colored;
 }
+
+bool EventsContainerAdapter::HasFilteredIndices() const
+{
+    return !m_filteredIndices.empty();
+}
+
+size_t EventsContainerAdapter::GetFilteredIndex(unsigned int filteredRow) const
+{
+    if (m_filteredIndices.empty() || filteredRow >= m_filteredIndices.size())
+    {
+        return filteredRow; // Fallback to direct index
+    }
+    return m_filteredIndices[filteredRow];
+}
 } // namespace gui

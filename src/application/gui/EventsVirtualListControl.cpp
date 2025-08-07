@@ -45,11 +45,25 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
     this->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
         [this](wxDataViewEvent& evt)
         {
-            unsigned int item = m_model->GetRow(evt.GetItem());
+            unsigned int filteredRowIndex = m_model->GetRow(evt.GetItem());
             spdlog::debug("EventsVirtualListControl::wxEVT_DATAVIEW_SELECTION_"
-                          "CHANGED index: {}",
-                item);
-            this->m_events.SetCurrentItem(item);
+                          "CHANGED filtered row index: {}",
+                filteredRowIndex);
+
+            // Convert filtered row index to actual event index
+            size_t actualEventIndex;
+            if (m_model->HasFilteredIndices())
+            {
+                actualEventIndex = m_model->GetFilteredIndex(filteredRowIndex);
+                spdlog::debug(
+                    "Converted to actual event index: {}", actualEventIndex);
+            }
+            else
+            {
+                actualEventIndex = filteredRowIndex;
+            }
+
+            this->m_events.SetCurrentItem(actualEventIndex);
         });
 }
 
@@ -72,6 +86,7 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
     spdlog::debug(
         "EventsVirtualListControl::OnCurrentIndexUpdated called with index: {}",
         index);
+
     wxDataViewItem item = m_model->GetItem(index);
     this->Select(item);
     this->EnsureVisible(item);

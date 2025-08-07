@@ -34,6 +34,19 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
     wxColour GetBgColorForColumnValue(
         const std::string& column, const std::string& value) const;
 
+    /**
+     * @brief Check if filtered indices are active.
+     * @return True if filtering is active
+     */
+    bool HasFilteredIndices() const;
+
+    /**
+     * @brief Get the actual event index from filtered row index.
+     * @param filteredRow Row index in the filtered view
+     * @return Actual event index in the container
+     */
+    size_t GetFilteredIndex(unsigned int filteredRow) const;
+
   private:
     db::EventsContainer& m_container;
     unsigned int m_rowCount;
