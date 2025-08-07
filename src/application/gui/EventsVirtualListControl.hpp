@@ -24,6 +24,13 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
      */
     void SetFilteredEvents(const std::vector<unsigned long>& filteredIndices);
 
+    /**
+     * @brief Update colors and refresh the view.
+     *
+     * Call this after configuration changes to update row colors.
+     */
+    void UpdateColors();
+
     // implement IView interface
     virtual void OnDataUpdated() override;
     virtual void OnCurrentIndexUpdated(const int index) override;

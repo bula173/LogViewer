@@ -105,4 +105,15 @@ void EventsVirtualListControl::SetFilteredEvents(
     m_model->Reset(static_cast<unsigned int>(filteredIndices.size()));
 }
 
+void EventsVirtualListControl::UpdateColors()
+{
+    spdlog::debug("EventsVirtualListControl::UpdateColors called");
+
+    // Update the model's colors
+    m_model->UpdateColors();
+
+    // Force a complete refresh of the control
+    Refresh();
+}
+
 } // namespace gui

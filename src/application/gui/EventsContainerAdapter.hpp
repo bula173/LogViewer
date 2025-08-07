@@ -47,6 +47,21 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
      */
     size_t GetFilteredIndex(unsigned int filteredRow) const;
 
+    /**
+     * @brief Update row colors and refresh the view.
+     *
+     * Call this method after configuration changes to update
+     * the row colors according to the new color mappings.
+     */
+    void UpdateColors();
+
+    /**
+     * @brief Force refresh of all row attributes.
+     *
+     * This will trigger a re-evaluation of GetAttrByRow for all visible rows.
+     */
+    void RefreshRowAttributes();
+
   private:
     db::EventsContainer& m_container;
     unsigned int m_rowCount;

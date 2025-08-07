@@ -789,6 +789,13 @@ void MainWindow::OnReloadConfig(wxCommandEvent&)
     wxMessageBox("Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
     // Optionally, update filters or UI if config affects them
     UpdateFilters();
+    // Update columns
+    // Update columns in EventsVirtualListControl
+    m_eventsListCtrl->UpdateColumns();
+
+    // Update row colors with new configuration
+    m_eventsListCtrl->UpdateColors();
+    spdlog::info("Configuration reload complete.");
 }
 
 

@@ -162,4 +162,28 @@ size_t EventsContainerAdapter::GetFilteredIndex(unsigned int filteredRow) const
     }
     return m_filteredIndices[filteredRow];
 }
+
+void EventsContainerAdapter::UpdateColors()
+{
+    spdlog::debug("EventsContainerAdapter::UpdateColors called");
+
+    // Force wxWidgets to re-evaluate all row attributes
+    RefreshRowAttributes();
+}
+
+void EventsContainerAdapter::RefreshRowAttributes()
+{
+    spdlog::debug("EventsContainerAdapter::RefreshRowAttributes called");
+
+    // This will cause wxWidgets to call GetAttrByRow again for all visible rows
+    // Reset without changing row count to trigger attribute refresh
+    Reset(m_rowCount);
+
+    // Alternative approach: Fire item changed events for all rows
+    // for (unsigned int i = 0; i < m_rowCount; ++i)
+    // {
+    //     wxDataViewItem item = GetItem(i);
+    //     ItemChanged(item);
+    // }
+}
 } // namespace gui
