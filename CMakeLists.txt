@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
 
 # Project setup, versioning stuff here, change when changing the version
 # Note: keep the project name lower case only for easy linux packaging support
-project(LogViewer VERSION 0.0.2
+project(LogViewer VERSION 0.0.3
       DESCRIPTION "A simple log viewer" 
       LANGUAGES CXX)
 set(VERSION_TYPE "beta" CACHE STRING "version type" FORCE)

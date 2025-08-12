@@ -494,7 +494,6 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
         false}; ///< Window close requested flag (thread-safe)
     std::shared_ptr<parser::XmlParser>
         m_parser; ///< Current parser instance (shared ownership)
-
     // Menu and control identifiers
 
     /**

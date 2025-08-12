@@ -7,8 +7,33 @@
 // std
 #include <filesystem>
 
-wxDECLARE_APP(MyApp);
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP_NO_MAIN(MyApp);
+
+int main(int argc, char** argv)
+{
+    try
+    {
+        if (!wxEntryStart(argc, argv))
+            return 1;
+
+        int code = 1;
+        if (wxTheApp && wxTheApp->CallOnInit())
+        {
+            code = wxTheApp->OnRun();
+            wxTheApp->OnExit();
+        }
+
+        wxEntryCleanup();
+        return code;
+    }
+    catch (...)
+    {
+        spdlog::error("Unhandled exception occurred");
+        wxMessageBox("An unexpected error occurred. Please check the logs.",
+            "Error", wxOK | wxICON_ERROR);
+        abort();
+    }
+}
 
 bool MyApp::OnInit()
 {
