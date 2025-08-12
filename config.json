@@ -1,0 +1,14 @@
+{
+            "default_parser": "xml",
+            "logging": {"level": "debug"},
+            "parsers": {
+                "xml": {
+                    "rootElement": "events",
+                    "eventElement": "event",
+                    "columns": [
+                        {"name": "id", "visible": true, "width": 50},
+                        {"name": "timestamp", "visible": true, "width": 150}
+                    ]
+                }
+            }
+        }

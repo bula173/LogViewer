@@ -79,8 +79,77 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb",
             "preLaunchTask": "Build debug with CMake",
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests"
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests.exe"
+            }
+        },
+        {
+            "name": "Launch Tests (Debug)",
+            "type": "cppdbg",
+            "request": "launch",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                { "name": "GTEST_COLOR", "value": "1" }
+            ],
+            "externalConsole": false,
+            "preLaunchTask": "Build debug with CMake",
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests"
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/bin/LogViewer_tests.exe"
+            }
+        },
+        {
+            "name": "Launch Single Test (Debug)",
+            "type": "cppdbg",
+            "request": "launch",
+            "args": ["--gtest_filter=${input:gtestFilter}"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                { "name": "GTEST_COLOR", "value": "1" }
+            ],
+            "externalConsole": false,
+            "preLaunchTask": "Build debug with CMake",
+            "linux": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
+            },
+            "osx": {
+                "MIMode": "lldb",
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests.exe"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "gtestFilter",
+            "type": "promptString",
+            "description": "gtest filter (e.g. XmlParserTest.ParseInvalidXml or XmlParserTest.*)",
+            "default": "XmlParserTest.*"
         }
     ]
 }

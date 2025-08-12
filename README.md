@@ -1,6 +1,15 @@
 # LogViewer
 
-Simple tool to parse XML logs
+A wxWidgets-based log viewer with virtual list controls and configurable row coloring.
+
+- GUI: wxDataViewCtrl (EventsVirtualListControl, ItemVirtualListControl)
+- Model: db::EventsContainer (adapter: gui::EventsContainerAdapter)
+- Parsing: parser::XmlParser (std::filesystem::path-based)
+- Errors: error::Error (derives from std::runtime_error; shows wxMessageBox; logs via spdlog)
+
+Build:
+- macOS (clang), Windows (MSVC), Linux (GCC/Clang)
+- Docs: `cmake --build . --target doc` (if Doxygen found)
 
 ## How this works
 

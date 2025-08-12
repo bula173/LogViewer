@@ -9,6 +9,19 @@
 // std
 #include <filesystem>
 #include <set>
+#include <wx/utils.h> // wxLaunchDefaultApplication
+
+namespace
+{
+inline std::filesystem::path WxToPath(const wxString& s)
+{
+#if defined(_WIN32)
+    return std::filesystem::path {s.ToStdWstring()};
+#else
+    return std::filesystem::path {s.ToStdString()};
+#endif
+}
+} // namespace
 
 namespace gui
 {
@@ -551,7 +564,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
                     lastDir = openFileDialog.GetDirectory();
 
                     AddToRecentFiles(path);
-                    std::filesystem::path filePathObj(path.ToStdString());
+                    auto filePathObj = WxToPath(path);
                     ParseData(filePathObj);
                     UpdateFilters();
                 }
@@ -711,32 +724,35 @@ void MainWindow::ParseData(const std::filesystem::path& filePath)
 
 void MainWindow::UpdateFilters()
 {
-
-    if (!m_typeFilter)
-        return;
-
-    // Collect unique values for each filter
-    std::set<std::string> types;
-    for (unsigned long i = 0; i < m_events.Size(); ++i)
+    try
     {
-        const auto& event = m_events.GetEvent(i);
-        types.insert(event.findByKey("type"));
+        std::set<std::string> types;
+        for (unsigned long i = 0; i < m_events.Size(); ++i)
+        {
+            const auto& event = m_events.GetEvent(i);
+            types.insert(event.findByKey("type"));
+        }
+
+        m_typeFilter->Clear();
+        for (const auto& t : types)
+        {
+            m_typeFilter->Append(t);
+            m_typeFilter->Check(m_typeFilter->GetCount() - 1, true);
+        }
+        m_typeFilter->Show();
+
+        Refresh();
+        this->Layout();
     }
-    // Update type filter
-    m_typeFilter->Clear();
-    for (const auto& t : types)
+    catch (const error::Error& e)
     {
-        m_typeFilter->Append(t);
-        m_typeFilter->Check(
-            m_typeFilter->GetCount() - 1, true); // Check by default
+        spdlog::error("Application error in UpdateFilters: {}", e.what());
+        throw; // propagate
     }
-    m_typeFilter->Show();
-
-
-    // If you have more filters, update them here in the same way
-    // Refresh the left panel layout
-    Refresh();
-    this->Layout();
+    catch (const std::exception& e)
+    {
+        throw error::Error(std::string("UpdateFilters failed: ") + e.what());
+    }
 }
 
 // Data Observer methods
@@ -791,8 +807,7 @@ void MainWindow::OnDropFiles(wxDropFilesEvent& event)
             {
                 throw error::Error("Dropped file path is empty.");
             }
-            std::filesystem::path filePathObj(filename.ToStdString());
-
+            auto filePathObj = WxToPath(filename);
             spdlog::info("File dropped: {}", filePathObj.string());
 
             // Process the dropped file
@@ -839,9 +854,10 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
         {
             spdlog::warn("Recent file not found: {}", path.ToStdString());
             m_fileHistory.RemoveFileFromHistory(fileId);
-            throw error::Error("Recent file not found: " + path.ToStdString());
+            throw error::Error(
+                std::string("Recent file not found: ") + path.ToStdString());
         }
-        std::filesystem::path filePathObj(path.ToStdString());
+        auto filePathObj = WxToPath(path);
         ParseData(filePathObj);
         UpdateFilters();
     }
@@ -930,6 +946,5 @@ void MainWindow::OnFilterChanged(wxCommandEvent& /*event*/)
     // Update the event list based on the new filter state
     UpdateFilters();
 }
-
 
 } // namespace gui

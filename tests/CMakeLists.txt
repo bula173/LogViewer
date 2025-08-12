@@ -26,6 +26,7 @@ target_link_libraries(${PROJECT_NAME}_tests
 )
 
 include(GoogleTest)
+include(CTest)
 gtest_discover_tests(${PROJECT_NAME}_tests)
 
 # Enable testing

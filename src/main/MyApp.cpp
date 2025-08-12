@@ -1,6 +1,7 @@
 // internal
 #include "MyApp.hpp"
 #include "config/Config.hpp"
+#include "error/Error.hpp"
 #include "gui/MainWindow.hpp"
 #include "main/version.h"
 // std
@@ -32,11 +33,32 @@ bool MyApp::OnInit()
     {
         frame->Show(true);
     }
+    catch (const wxString& e)
+    {
+        spdlog::error("Failed to show main window: {}", e.ToStdString());
+        wxMessageBox(wxString::Format("Failed to show main window:\n%s", e),
+            "Error", wxOK | wxICON_ERROR);
+        return false;
+    }
+    catch (const error::Error& e)
+    {
+        spdlog::error("Fatal application error: {}", e.what());
+        return false;
+    }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        spdlog::error("Fatal std::exception: {}", e.what());
+        wxMessageBox(wxString::Format("Unhandled exception:\n%s", e.what()),
+            "Error", wxOK | wxICON_ERROR);
+        return false;
     }
-
+    catch (...)
+    {
+        spdlog::error("Fatal unknown exception");
+        wxMessageBox(
+            "Unhandled unknown exception.", "Error", wxOK | wxICON_ERROR);
+        return false;
+    }
 
     spdlog::info("Main window created and shown");
     return true;
@@ -81,6 +103,16 @@ void MyApp::setupLogging()
     {
         spdlog::error("Failed to create file sink: {}", ex.what());
     }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Exception while creating file sink: {}", ex.what());
+    }
+    catch (...)
+    {
+        spdlog::error("Unknown exception while creating file sink");
+    }
+
+    // Console sink for debug output
 
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     sinks.push_back(console_sink);

@@ -21,3 +21,9 @@ subprojects/*
 build
 build-debug
 build-release
+
+# Track docs sources and Doxyfile, ignore generated output
+!docs/
+!docs/*.md
+!Doxyfile
+docs/doxygen/

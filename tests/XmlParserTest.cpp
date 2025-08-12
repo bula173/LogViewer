@@ -1,6 +1,8 @@
 #include "src/application/xml/xmlParser.hpp"
 #include "src/application/config/Config.hpp"
 #include "src/application/db/LogEvent.hpp"
+#include "src/application/error/Error.hpp"
+#include <filesystem>
 #include <fstream>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -16,8 +18,17 @@ class MockObserver : public parser::IDataParserObserver
                 eventBatch));
 };
 
-class XmlParserTest : public ::testing::Test
+struct XmlParserTest : ::testing::Test
 {
+    static void SetUpTestSuite()
+    {
+        error::SetShowDialogs(false);
+    }
+    static void TearDownTestSuite()
+    {
+        error::SetShowDialogs(true);
+    }
+
   protected:
     MockObserver mockObserver;
     parser::XmlParser parser;
@@ -130,5 +141,24 @@ TEST_F(XmlParserTest, ParseInvalidXml)
 
     // The parser might throw an exception or simply finish without sending
     // events. This test ensures no event data is dispatched.
-    parser.ParseData(input);
+    // Expect application-level error
+    try
+    {
+        parser.ParseData(input);
+        FAIL() << "Expected error::Error";
+    }
+    catch (const error::Error& e)
+    {
+        EXPECT_THAT(std::string(e.what()), testing::HasSubstr("XML"));
+    }
+    catch (...)
+    {
+        FAIL() << "Expected error::Error";
+    }
+}
+
+TEST_F(XmlParserTest, ParseCompletelyInvalidXml)
+{
+    std::istringstream badXml("<root><unclosed></root>");
+    EXPECT_THROW(parser.ParseData(badXml), error::Error);
 }
