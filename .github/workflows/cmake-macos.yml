@@ -14,7 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Release]
-        cpp_compiler: [clang++]
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -31,25 +30,34 @@ jobs:
           brew update
           brew install ninja ccache wxwidgets expat
 
+      - name: Show toolchain
+        run: |
+          echo "PATH=$PATH"
+          which clang || true
+          which clang++ || true
+          clang++ --version || true
+          which wx-config || true
+          wx-config --version || true
+
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-${{ runner.os }}-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-
-            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-
+            ccache-${{ runner.os }}-clang-${{ matrix.build_type }}-
+            ccache-${{ runner.os }}-clang-
 
       - name: Configure CMake
         run: |
+          # Ensure brew is early in PATH, but keep the system PATH (contains /usr/bin/clang++)
+          export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
           cmake -B "${BUILD_DIR}" -S "${{ github.workspace }}" \
                 -G "${CMAKE_GENERATOR}" \
-                -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DCMAKE_C_COMPILER="$(command -v clang)" \
+                -DCMAKE_CXX_COMPILER="$(command -v clang++)" \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-        env:
-          # Ensure brew’s wx-config is visible
-          PATH: /opt/homebrew/bin:/usr/local/bin:${{ env.PATH }}
 
       - name: Build
         run: cmake --build "${BUILD_DIR}" --config ${{ matrix.build_type }}

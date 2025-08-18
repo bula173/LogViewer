@@ -36,9 +36,19 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-ccache
-            mingw-w64-x86_64-wxWidgets
+            mingw-w64-x86_64-wxWidgets3.2
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gtest
+
+      - name: Show toolchain
+        shell: msys2 {0}
+        run: |
+          echo "PATH=$PATH"
+          which gcc || true
+          which g++ || true
+          which ninja || true
+          which wx-config || true
+          wx-config --version || true
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -52,11 +62,12 @@ jobs:
       - name: Configure CMake (MinGW64)
         shell: msys2 {0}
         run: |
+          export PATH="/mingw64/bin:$PATH"
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
                 -G "$CMAKE_GENERATOR" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_C_COMPILER=gcc \
-                -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_C_COMPILER=/mingw64/bin/gcc \
+                -DCMAKE_CXX_COMPILER=/mingw64/bin/g++ \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
