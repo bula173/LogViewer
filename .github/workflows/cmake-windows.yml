@@ -1,69 +1,84 @@
-name: CMake on Windows
+name: CMake on Windows (MSYS2 MinGW)
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
-    
+
 jobs:
   build:
     runs-on: windows-latest
 
-    defaults:
-      run:
-        shell: msys2 {0}
-
     strategy:
       fail-fast: false
+      matrix:
+        build_type: [Release]
+
+    env:
+      BUILD_DIR: ${{ github.workspace }}/build
+      CMAKE_GENERATOR: Ninja
+      CCACHE_DIR: ${{ github.workspace }}\\.ccache
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+      GTEST_COLOR: 1
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
+      - uses: actions/checkout@v4
 
-      - name: Setup MSYS2
+      - name: Set up MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw64
+          msystem: MINGW64
           update: true
-          install: mingw-w64-x86_64-nsis mingw-w64-clang-x86_64-cppcheck mingw-w64-x86_64-nsis mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-wxwidgets3.2-msw mingw-w64-x86_64-libtiff
-          
-      - name: Print NSIS version
-        run: makensis -VERSION
-        
-      - name: Configuring
-        run: |
-          clang --version
-          cmake --version
-          mkdir build_cmake
-          pushd build_cmake
-          cmake -G "MinGW Makefiles" \
-                -DCMAKE_C_COMPILER=clang.exe \
-                -DCMAKE_CXX_COMPILER=clang++.exe \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DWXWIN=/mingw64 \
-                ..
+          install: >-
+            base-devel
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-ccache
+            mingw-w64-x86_64-wxWidgets
+            mingw-w64-x86_64-expat
+            mingw-w64-x86_64-gtest
 
-      - name: Building
-        working-directory: build_cmake
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-mingw-${{ matrix.build_type }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ runner.os }}-mingw-${{ matrix.build_type }}-
+            ccache-${{ runner.os }}-mingw-
+
+      - name: Configure CMake (MinGW64)
+        shell: msys2 {0}
         run: |
-          cmake --build . -- -j
+          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
+                -G "$CMAKE_GENERATOR" \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DCMAKE_C_COMPILER=gcc \
+                -DCMAKE_CXX_COMPILER=g++ \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      - name: Build
+        shell: msys2 {0}
+        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
+
+      - name: List tests
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}
+        run: ctest -N || true
 
       - name: Test
-        shell: cmd
-        working-directory: ${{ steps.strings.outputs.build-output-dir }}
-        run: ctest --build-config Release
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}
+        run: ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
-      - name: Cpack
-        working-directory: build_cmake
-        run: |
-          cpack -G NSIS
-
-      - name: Upload Artifact
+      - name: Upload test logs on failure
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: LogViewer_mvsc
-          path: dist/packages/*.exe
+          name: ctest-logs-windows-${{ matrix.build_type }}
+          path: |
+            ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
+            ${{ env.BUILD_DIR }}/Testing/**/Test.xml
+            ${{ env.BUILD_DIR }}/CTestTestfile.cmake

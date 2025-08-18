@@ -16,29 +16,58 @@ jobs:
         build_type: [Release]
         cpp_compiler: [clang++]
 
+    env:
+      BUILD_DIR: ${{ github.workspace }}/build
+      CMAKE_GENERATOR: Ninja
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CMAKE_BUILD_PARALLEL_LEVEL: 4
+      GTEST_COLOR: 1
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set reusable strings
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - name: Install dependencies (Homebrew)
+        run: |
+          brew update
+          brew install ninja ccache wxwidgets expat
 
-    - name: Install dependencies on macOS
-      run: |
-        brew install wxwidgets
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-
+            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-
 
-    - name: Configure CMake
-      run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} \
-              -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
-              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-              -S ${{ github.workspace }}
+      - name: Configure CMake
+        run: |
+          cmake -B "${BUILD_DIR}" -S "${{ github.workspace }}" \
+                -G "${CMAKE_GENERATOR}" \
+                -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        env:
+          # Ensure brew’s wx-config is visible
+          PATH: /opt/homebrew/bin:/usr/local/bin:${{ env.PATH }}
 
-    - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      - name: Build
+        run: cmake --build "${BUILD_DIR}" --config ${{ matrix.build_type }}
 
-    - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }} --output-on-failure --rerun-failed
+      - name: List tests
+        working-directory: ${{ env.BUILD_DIR }}
+        run: ctest -N || true
+
+      - name: Test
+        working-directory: ${{ env.BUILD_DIR }}
+        run: ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
+
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ctest-logs-macos-${{ matrix.build_type }}
+          path: |
+            ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
+            ${{ env.BUILD_DIR }}/Testing/**/Test.xml
+            ${{ env.BUILD_DIR }}/CTestTestfile.cmake
