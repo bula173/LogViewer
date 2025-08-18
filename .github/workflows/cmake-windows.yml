@@ -44,20 +44,23 @@ jobs:
             mingw-w64-x86_64-clang
             mingw-w64-x86_64-wxwidgets3.2-msw
             mingw-w64-x86_64-libtiff
-          
-      - name: Print NSIS version
-        run: makensis -VERSION
-        
-      - name: Configuring
 
+      - name: Print NSIS version
+        shell: msys2 {0}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          which makensis || true
+          makensis -VERSION
 
       - name: Show toolchain
         shell: msys2 {0}
         run: |
+          export PATH="/mingw64/bin:$PATH"
           echo "PATH=$PATH"
           which gcc || true
           which g++ || true
           which ninja || true
+          which cmake || true
           which wx-config || true
           wx-config --version || true
 
@@ -79,7 +82,9 @@ jobs:
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
                 -DCMAKE_C_COMPILER=/mingw64/bin/gcc \
                 -DCMAKE_CXX_COMPILER=/mingw64/bin/g++ \
-                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+                -DCMAKE_PREFIX_PATH=/mingw64 \
+                -DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config
 
       - name: Build
         shell: msys2 {0}
