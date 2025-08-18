@@ -36,9 +36,20 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-ccache
-            mingw-w64-x86_64-wxWidgets3.2
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gtest
+            mingw-w64-x86_64-nsis
+            mingw-w64-clang-x86_64-cppcheck
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-clang
+            mingw-w64-x86_64-wxwidgets3.2-msw
+            mingw-w64-x86_64-libtiff
+          
+      - name: Print NSIS version
+        run: makensis -VERSION
+        
+      - name: Configuring
+
 
       - name: Show toolchain
         shell: msys2 {0}
