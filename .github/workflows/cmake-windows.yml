@@ -45,43 +45,46 @@ jobs:
             mingw-w64-x86_64-wxwidgets3.2-msw
             mingw-w64-x86_64-libtiff
 
-      - name: Print NSIS version
-        shell: msys2 {0}
-        run: |
-          export PATH="/mingw64/bin:$PATH"
-          which makensis || true
-          makensis -VERSION
-
-      - name: Show toolchain
+      - name: Print toolchain (clang)
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           echo "PATH=$PATH"
-          which gcc || true
-          which g++ || true
+          which clang || true
+          which clang++ || true
+          clang++ --version || true
           which ninja || true
           which cmake || true
           which wx-config || true
           wx-config --version || true
+          which makensis || true
+          makensis -VERSION
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-mingw-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-${{ runner.os }}-mingw-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-mingw-${{ matrix.build_type }}-
-            ccache-${{ runner.os }}-mingw-
+            ccache-${{ runner.os }}-mingw-clang-${{ matrix.build_type }}-
+            ccache-${{ runner.os }}-mingw-clang-
 
-      - name: Configure CMake (MinGW64)
+      - name: Configure CMake (MinGW64 + clang)
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
+          # Use Windows-style absolute paths for compilers to satisfy CMake on Windows
+          CC_WIN="$(cygpath -m /mingw64/bin/clang.exe)"
+          CXX_WIN="$(cygpath -m /mingw64/bin/clang++.exe)"
+          AR_WIN="$(cygpath -m /mingw64/bin/llvm-ar.exe)"
+          RANLIB_WIN="$(cygpath -m /mingw64/bin/llvm-ranlib.exe)"
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
                 -G "$CMAKE_GENERATOR" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_C_COMPILER=/mingw64/bin/gcc \
-                -DCMAKE_CXX_COMPILER=/mingw64/bin/g++ \
+                -DCMAKE_C_COMPILER="$CC_WIN" \
+                -DCMAKE_CXX_COMPILER="$CXX_WIN" \
+                -DCMAKE_AR="$AR_WIN" \
+                -DCMAKE_RANLIB="$RANLIB_WIN" \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_PREFIX_PATH=/mingw64 \
                 -DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config
@@ -104,7 +107,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ctest-logs-windows-${{ matrix.build_type }}
+          name: ctest-logs-windows-clang-${{ matrix.build_type }}
           path: |
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
             ${{ env.BUILD_DIR }}/Testing/**/Test.xml
