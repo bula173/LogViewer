@@ -1,19 +1,25 @@
-name: CMake on macOS
+name: macOS CI (clang)
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: macos-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: macos-latest
-
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release]
+        build_type: [Debug, Release]
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -28,54 +34,104 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache wxwidgets expat
-
-      - name: Show toolchain
-        run: |
-          echo "PATH=$PATH"
-          which clang || true
-          which clang++ || true
-          clang++ --version || true
-          which wx-config || true
-          wx-config --version || true
+          brew install ninja ccache wxwidgets expat cppcheck
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-clang-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-macos-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-clang-${{ matrix.build_type }}-
-            ccache-${{ runner.os }}-clang-
+            ccache-macos-clang-${{ matrix.build_type }}-
+            ccache-macos-clang-
 
-      - name: Configure CMake
+      - name: Toolchain info
         run: |
-          # Ensure brew is early in PATH, but keep the system PATH (contains /usr/bin/clang++)
+          which clang || true
+          which clang++ || true
+          clang++ --version || true
+          which wx-config || true
+          wx-config --version || true
+          cppcheck --version || true
+
+      - name: Configure
+        run: |
           export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
-          cmake -B "${BUILD_DIR}" -S "${{ github.workspace }}" \
-                -G "${CMAKE_GENERATOR}" \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_C_COMPILER="$(command -v clang)" \
-                -DCMAKE_CXX_COMPILER="$(command -v clang++)" \
-                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          EXTRA_FLAGS=""
+          if [ "${{ matrix.build_type }}" = "Debug" ]; then
+            EXTRA_FLAGS="-DCMAKE_CXX_FLAGS=-fprofile-instr-generate\ -fcoverage-mapping -DCMAKE_C_FLAGS=-fprofile-instr-generate\ -fcoverage-mapping"
+          fi
+          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
+            -G "$CMAKE_GENERATOR" \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            $EXTRA_FLAGS
 
       - name: Build
-        run: cmake --build "${BUILD_DIR}" --config ${{ matrix.build_type }}
+        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} -- -k0
+
+      - name: Static analysis (cppcheck)
+        if: matrix.build_type == 'Debug'
+        run: |
+          cppcheck --enable=warning,performance,portability \
+                   --inline-suppr --error-exitcode=1 \
+                   -I src -I include \
+                   src 2> cppcheck-report.txt || (cat cppcheck-report.txt; exit 1)
+          cat cppcheck-report.txt
 
       - name: List tests
         working-directory: ${{ env.BUILD_DIR }}
         run: ctest -N || true
 
-      - name: Test
+      - name: Run tests
         working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
+        env:
+          CTEST_OUTPUT_ON_FAILURE: 1
+          # Enable per-test coverage data for Debug (ignored in Release)
+          LLVM_PROFILE_FILE: "profile-%p-%m.profraw"
+        run: |
+          ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
 
-      - name: Upload test logs on failure
-        if: failure()
+      - name: Coverage (llvm-cov merge)
+        if: matrix.build_type == 'Debug'
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          shopt -s nullglob
+          PROFRAW=( *.profraw )
+          if [ ${#PROFRAW[@]} -gt 0 ] && command -v llvm-profdata >/dev/null 2>&1; then
+            echo "Merging ${#PROFRAW[@]} profraw files..."
+            llvm-profdata merge -sparse *.profraw -o coverage.profdata || true
+            echo "To produce a report locally:"
+            echo "  llvm-cov show ./your_binary -instr-profile=coverage.profdata > coverage.txt"
+          else
+            echo "No profraw files or llvm-profdata missing."
+          fi
+
+      - name: Install (staging)
+        if: matrix.build_type == 'Release'
+        run: |
+          cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+
+      - name: Verify CPack config
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        run: |
+          test -f "$BUILD_DIR/CPackConfig.cmake" || { echo "CPackConfig.cmake missing"; ls -1 "$BUILD_DIR"; exit 1; }
+
+      - name: Package (CPack DMG)
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          cpack -G DragNDrop -C Release --config CPackConfig.cmake || (echo "CPack failed"; ls -R .; exit 1)
+
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ctest-logs-macos-${{ matrix.build_type }}
+          name: macos-${{ matrix.build_type }}-artifacts
           path: |
+            ${{ env.BUILD_DIR }}/_staging/**
+            ${{ env.BUILD_DIR }}/_CPack_Packages/*/DragNDrop/*.dmg
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
-            ${{ env.BUILD_DIR }}/Testing/**/Test.xml
-            ${{ env.BUILD_DIR }}/CTestTestfile.cmake
+            ${{ env.BUILD_DIR }}/coverage.profdata
+            ${{ env.BUILD_DIR }}/*.profraw
+          if-no-files-found: ignore

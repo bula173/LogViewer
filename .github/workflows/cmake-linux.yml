@@ -1,75 +1,137 @@
-name: CMake on Linux
+name: Linux CI (GCC/Clang)
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: linux-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release]
-        cpp_compiler: [g++, clang++]
+        build_type: [Debug, Release]
+        compiler: [gcc, clang]
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
       CMAKE_GENERATOR: Ninja
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CMAKE_BUILD_PARALLEL_LEVEL: 4
+      GTEST_COLOR: 1
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies (Ubuntu)
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            ninja-build ccache \
+            ninja-build ccache build-essential \
             libgtk-3-dev libwxgtk3.2-dev libexpat1-dev \
-            g++ clang
+            libgtest-dev cppcheck lcov xvfb
+
+          # Build gtest static libs (libgtest-dev ships only sources)
+          (cd /usr/src/googletest && sudo cmake -B build -S . && sudo cmake --build build --target gtest gtest_main && \
+           sudo cp build/lib/libgtest*.a /usr/lib/)
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}-
-            ccache-${{ runner.os }}-${{ matrix.cpp_compiler }}-
+            ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-
+            ccache-linux-${{ matrix.compiler }}-
+            ccache-linux-
 
-      - name: Configure CMake
+      - name: Configure
         run: |
-          cmake -B "${BUILD_DIR}" -S "${{ github.workspace }}" \
-                -G "${CMAKE_GENERATOR}" \
-                -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          if [ "${{ matrix.compiler }}" = "gcc" ]; then
+            export CC=gcc
+            export CXX=g++
+          else
+            sudo apt-get install -y clang
+            export CC=clang
+            export CXX=clang++
+          fi
+
+          EXTRA_FLAGS=""
+          if [ "${{ matrix.build_type }}" = "Debug" ]; then
+            # Coverage flags (gcov for gcc, llvm-cov for clang)
+            if [ "${{ matrix.compiler }}" = "gcc" ]; then
+              EXTRA_FLAGS="-DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage -DCMAKE_EXE_LINKER_FLAGS=--coverage"
+            else
+              EXTRA_FLAGS="-DCMAKE_CXX_FLAGS='-fprofile-instr-generate -fcoverage-mapping' -DCMAKE_C_FLAGS='-fprofile-instr-generate -fcoverage-mapping'"
+            fi
+          fi
+
+          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
+            -G "$CMAKE_GENERATOR" \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            $EXTRA_FLAGS
 
       - name: Build
-        run: cmake --build "${BUILD_DIR}" --config ${{ matrix.build_type }}
+        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} -- -k0
+
+      - name: Static analysis (cppcheck)
+        if: matrix.build_type == 'Debug'
+        run: |
+          cppcheck --version
+            # Tune include paths per your tree
+          cppcheck --enable=warning,performance,portability \
+                   --inline-suppr --error-exitcode=1 \
+                   -I src -I include \
+                   src 2> cppcheck-report.txt || (cat cppcheck-report.txt; exit 1)
+          cat cppcheck-report.txt
 
       - name: List tests
         working-directory: ${{ env.BUILD_DIR }}
         run: ctest -N || true
 
-      - name: Test (headless with Xvfb)
+      - name: Run tests (xvfb)
         working-directory: ${{ env.BUILD_DIR }}
         run: |
-          # Run tests under a virtual X server to satisfy any wx GUI needs
-          xvfb-run -a ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} \
-                   --output-on-failure --rerun-failed
+          export CTEST_OUTPUT_ON_FAILURE=1
+          xvfb-run -a ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
-      - name: Upload test logs on failure
-        if: failure()
+      - name: Coverage (gcc)  # optional artifact
+        if: matrix.build_type == 'Debug' && matrix.compiler == 'gcc'
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          echo "Collecting lcov coverage..."
+          lcov --capture --directory . --output-file coverage.info || true
+          lcov --remove coverage.info '/usr/*' '*/_deps/*' --output-file coverage.filtered.info || true
+          lcov --summary coverage.filtered.info || true
+
+      - name: Install (staging)
+        if: matrix.build_type == 'Release'
+        run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+
+      - name: Package (CPack TGZ)
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        working-directory: ${{ env.BUILD_DIR }}
+        run: cpack -G TGZ -C Release --config CPackConfig.cmake || (echo "CPack failed"; ls -R .; exit 1)
+
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ctest-logs-${{ matrix.cpp_compiler }}-${{ matrix.build_type }}
+          name: linux-${{ matrix.compiler }}-${{ matrix.build_type }}-artifacts
           path: |
+            ${{ env.BUILD_DIR }}/_staging/**
+            ${{ env.BUILD_DIR }}/_CPack_Packages/Linux/TGZ/*.tar.gz
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
-            ${{ env.BUILD_DIR }}/Testing/**/Test.xml
-            ${{ env.BUILD_DIR }}/CTestTestfile.cmake
+            ${{ env.BUILD_DIR }}/coverage*.info
+          if-no-files-found: ignore

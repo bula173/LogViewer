@@ -1,24 +1,30 @@
-name: CMake on Windows (MSYS2 MinGW)
+name: Windows CI (MSYS2 / clang)
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: windows-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: windows-latest
-
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release]
+        build_type: [Debug, Release]
 
     env:
-      BUILD_DIR: ${{ github.workspace }}/build
+      BUILD_DIR: ${{ github.workspace }}\build
       CMAKE_GENERATOR: Ninja
-      CCACHE_DIR: ${{ github.workspace }}\\.ccache
+      CCACHE_DIR: ${{ github.workspace }}\.ccache
       CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
 
@@ -29,86 +35,130 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
-          update: true
+            # Keep toolchain + clang (clang depends on runtimes from toolchain)
           install: >-
             base-devel
+            git
+            zip
             mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-clang
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-ccache
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gtest
-            mingw-w64-x86_64-nsis
-            mingw-w64-clang-x86_64-cppcheck
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-clang
             mingw-w64-x86_64-wxwidgets3.2-msw
             mingw-w64-x86_64-libtiff
+            mingw-w64-x86_64-cppcheck
+            mingw-w64-x86_64-nsis
+          update: true
 
-      - name: Print toolchain (clang)
+      - name: Toolchain info
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          echo "PATH=$PATH"
           which clang || true
           which clang++ || true
           clang++ --version || true
-          which ninja || true
-          which cmake || true
           which wx-config || true
           wx-config --version || true
+          which cppcheck || true
           which makensis || true
-          makensis -VERSION
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ runner.os }}-mingw-clang-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-win-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-${{ runner.os }}-mingw-clang-${{ matrix.build_type }}-
-            ccache-${{ runner.os }}-mingw-clang-
+            ccache-win-clang-${{ matrix.build_type }}-
+            ccache-win-clang-
 
-      - name: Configure CMake (MinGW64 + clang)
+      - name: Configure (CMake)
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          # Use Windows-style absolute paths for compilers to satisfy CMake on Windows
-          CC_WIN="$(cygpath -m /mingw64/bin/clang.exe)"
-          CXX_WIN="$(cygpath -m /mingw64/bin/clang++.exe)"
-          AR_WIN="$(cygpath -m /mingw64/bin/llvm-ar.exe)"
-          RANLIB_WIN="$(cygpath -m /mingw64/bin/llvm-ranlib.exe)"
+          CC="$(cygpath -m /mingw64/bin/clang.exe)"
+          CXX="$(cygpath -m /mingw64/bin/clang++.exe)"
+          EXTRA_FLAGS=""
+          if [ "${{ matrix.build_type }}" = "Debug" ]; then
+            # Coverage flags (llvm-cov later if desired)
+            EXTRA_FLAGS="-DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage"
+          fi
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
                 -G "$CMAKE_GENERATOR" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_C_COMPILER="$CC_WIN" \
-                -DCMAKE_CXX_COMPILER="$CXX_WIN" \
-                -DCMAKE_AR="$AR_WIN" \
-                -DCMAKE_RANLIB="$RANLIB_WIN" \
+                -DCMAKE_C_COMPILER="$CC" \
+                -DCMAKE_CXX_COMPILER="$CXX" \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_PREFIX_PATH=/mingw64 \
-                -DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config
+                -DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config \
+                $EXTRA_FLAGS
 
       - name: Build
         shell: msys2 {0}
-        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
+        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} -- -k0
+
+      - name: Static analysis (cppcheck)
+        if: matrix.build_type == 'Debug'
+        shell: msys2 {0}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          cppcheck --version
+          # Adjust source dirs as needed; suppress inconsequential warnings
+          cppcheck --enable=warning,performance,portability \
+                   --inline-suppr --error-exitcode=1 \
+                   -I src -I include \
+                   src 2> cppcheck-report.txt || (cat cppcheck-report.txt; exit 1)
+          cat cppcheck-report.txt
 
       - name: List tests
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
         run: ctest -N || true
 
-      - name: Test
+      - name: Run tests
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
+        run: |
+          export CTEST_OUTPUT_ON_FAILURE=1
+          ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
-      - name: Upload test logs on failure
-        if: failure()
+      - name: Coverage report (llvm-cov)  # optional, Debug only
+        if: matrix.build_type == 'Debug'
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+            if command -v llvm-profdata >/dev/null 2>&1; then
+              echo "Collecting coverage..."
+              find . -name "*.profraw" -delete
+              # If you set LLVM_PROFILE_FILE env before tests you can merge:
+              # llvm-profdata merge -sparse *.profraw -o coverage.profdata
+              echo "Skipping detailed coverage (needs instrumentation run)."
+            else
+              echo "llvm-profdata/llvm-cov not available."
+            fi
+
+      - name: Install (staging)
+        if: matrix.build_type == 'Release'
+        shell: msys2 {0}
+        run: |
+          cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+
+      - name: Package (CPack NSIS)
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          cpack -G NSIS -C Release --config CPackConfig.cmake || (echo "CPack failed"; ls -R .; exit 1)
+
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ctest-logs-windows-clang-${{ matrix.build_type }}
+          name: windows-${{ matrix.build_type }}-artifacts
           path: |
-            ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
-            ${{ env.BUILD_DIR }}/Testing/**/Test.xml
-            ${{ env.BUILD_DIR }}/CTestTestfile.cmake
+            ${{ env.BUILD_DIR }}\_staging\**
+            ${{ env.BUILD_DIR }}\_CPack_Packages\win64\NSIS\*.exe
+            ${{ env.BUILD_DIR }}\Testing\Temporary\LastTest.log
+          if-no-files-found: ignore
