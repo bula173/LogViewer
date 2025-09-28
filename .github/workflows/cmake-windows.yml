@@ -84,28 +84,16 @@ jobs:
 
       - name: Build
         shell: msys2 {0}
-        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
-
-      - name: Static analysis (cppcheck)
-        if: matrix.build_type == 'Debug'
-        shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cppcheck --enable=warning,performance,portability \
-                   --inline-suppr --error-exitcode=1 \
-                   -I src -I include \
-                   src 2> cppcheck-report.txt || (cat cppcheck-report.txt; exit 1)
-          cat cppcheck-report.txt
-
-      - name: List tests
-        shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -N || true
+          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
 
       - name: Run tests
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'

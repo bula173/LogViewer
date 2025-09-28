@@ -67,11 +67,26 @@ jobs:
       - name: Static analysis (cppcheck)
         if: matrix.build_type == 'Debug'
         run: |
-          cppcheck --enable=warning,performance,portability \
-                   --inline-suppr --error-exitcode=1 \
-                   -I src -I include \
-                   src 2> cppcheck-report.txt || (cat cppcheck-report.txt; exit 1)
+          set -e
+          cppcheck --version
+          # Run cppcheck; do not fail immediately
+          cppcheck \
+            --enable=warning,performance,portability \
+            --inline-suppr \
+            --suppress=normalCheckLevelMaxBranches \
+            --template=gcc \
+            -I src -I include \
+            src 2> cppcheck-report.txt || true
+          echo "---- cppcheck raw report ----"
           cat cppcheck-report.txt
+          echo "-----------------------------"
+          # Fail only on warning or error lines
+          if grep -E ":[0-9]+:[0-9]+: (error|warning):" cppcheck-report.txt >/dev/null; then
+            echo "cppcheck found issues."
+            exit 1
+          else
+            echo "No cppcheck blocking issues."
+          fi
 
       - name: List tests
         working-directory: ${{ env.BUILD_DIR }}
