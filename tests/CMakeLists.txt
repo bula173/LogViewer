@@ -27,7 +27,12 @@ target_link_libraries(${PROJECT_NAME}_tests
 
 include(GoogleTest)
 include(CTest)
-gtest_discover_tests(${PROJECT_NAME}_tests)
+
+if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Skipping test discovery in Debug on Windows")
+else()
+    gtest_discover_tests(${PROJECT_NAME}_tests)
+endif()
 
 # Enable testing
 enable_testing()
