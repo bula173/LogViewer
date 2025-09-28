@@ -47,28 +47,22 @@ jobs:
 
       - name: Toolchain info
         run: |
-          which clang || true
-          which clang++ || true
-          clang++ --version || true
-          which wx-config || true
-          wx-config --version || true
-          cppcheck --version || true
+          which clang++
+          clang++ --version
+          wx-config --version
 
       - name: Configure
         run: |
-          export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
-          EXTRA_FLAGS=""
-          if [ "${{ matrix.build_type }}" = "Debug" ]; then
-            EXTRA_FLAGS="-DCMAKE_CXX_FLAGS=-fprofile-instr-generate\ -fcoverage-mapping -DCMAKE_C_FLAGS=-fprofile-instr-generate\ -fcoverage-mapping"
-          fi
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            $EXTRA_FLAGS
+            -DCMAKE_C_COMPILER=/usr/bin/clang \
+            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
-        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} -- -k0
+        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
 
       - name: Static analysis (cppcheck)
         if: matrix.build_type == 'Debug'
@@ -85,27 +79,7 @@ jobs:
 
       - name: Run tests
         working-directory: ${{ env.BUILD_DIR }}
-        env:
-          CTEST_OUTPUT_ON_FAILURE: 1
-          # Enable per-test coverage data for Debug (ignored in Release)
-          LLVM_PROFILE_FILE: "profile-%p-%m.profraw"
-        run: |
-          ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
-
-      - name: Coverage (llvm-cov merge)
-        if: matrix.build_type == 'Debug'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          shopt -s nullglob
-          PROFRAW=( *.profraw )
-          if [ ${#PROFRAW[@]} -gt 0 ] && command -v llvm-profdata >/dev/null 2>&1; then
-            echo "Merging ${#PROFRAW[@]} profraw files..."
-            llvm-profdata merge -sparse *.profraw -o coverage.profdata || true
-            echo "To produce a report locally:"
-            echo "  llvm-cov show ./your_binary -instr-profile=coverage.profdata > coverage.txt"
-          else
-            echo "No profraw files or llvm-profdata missing."
-          fi
+        run: ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
@@ -114,14 +88,12 @@ jobs:
 
       - name: Verify CPack config
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        run: |
-          test -f "$BUILD_DIR/CPackConfig.cmake" || { echo "CPackConfig.cmake missing"; ls -1 "$BUILD_DIR"; exit 1; }
+        run: test -f "$BUILD_DIR/CPackConfig.cmake"
 
       - name: Package (CPack DMG)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          cpack -G DragNDrop -C Release --config CPackConfig.cmake || (echo "CPack failed"; ls -R .; exit 1)
+        run: cpack -G DragNDrop -C Release --config CPackConfig.cmake
 
       - name: Upload artifacts
         if: always()
@@ -132,6 +104,4 @@ jobs:
             ${{ env.BUILD_DIR }}/_staging/**
             ${{ env.BUILD_DIR }}/_CPack_Packages/*/DragNDrop/*.dmg
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
-            ${{ env.BUILD_DIR }}/coverage.profdata
-            ${{ env.BUILD_DIR }}/*.profraw
           if-no-files-found: ignore
