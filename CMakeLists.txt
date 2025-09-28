@@ -76,3 +76,7 @@ endif()
 #         endif()
 #     endforeach()
 # endif()
+
+if(APPLE AND CMAKE_CXX_COMPILER MATCHES "clang-cl$")
+    message(FATAL_ERROR "clang-cl detected on macOS; use /usr/bin/clang++. Clean build/ and reconfigure.")
+endif()

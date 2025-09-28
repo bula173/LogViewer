@@ -2,84 +2,237 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build debug with CMake",
+            "label": "Configure Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S",
+                ".",
+                "-B",
+                "build/debug",
+                "-G",
+                "Ninja",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-S",
+                ".",
+                "-B",
+                "build/release",
+                "-G",
+                "Ninja",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Debug",
             "type": "shell",
             "command": "cmake",
             "args": [
                 "--build",
-                "build-debug",
-                "-j8"
+                "build/debug",
+                "-j",
+                "8"
+            ],
+            "dependsOn": [
+                "Configure Debug"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": [
-                "Configure with CMake debug"
+            "problemMatcher": [
+                "$gcc"
             ]
         },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build/release",
+                "-j",
+                "8"
+            ],
+            "dependsOn": [
+                "Configure Release"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+
+        /* Compatibility alias tasks (fixes: Could not find the task 'Build release with CMake') */
         {
             "label": "Build release with CMake",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build-release",
-                "-j8"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
             "dependsOn": [
-                "Configure with CMake release"
+                "Build Release"
+            ],
+            "command": "echo",
+            "args": [
+                "Build Release completed"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build debug with CMake",
+            "type": "shell",
+            "dependsOn": [
+                "Build Debug"
+            ],
+            "command": "echo",
+            "args": [
+                "Build Debug completed"
+            ],
+            "problemMatcher": []
+        },
+
+        {
+            "label": "Test Debug",
+            "type": "shell",
+            "command": "ctest",
+            "args": [
+                "--test-dir",
+                "build/debug",
+                "--output-on-failure",
+                "-j",
+                "8"
+            ],
+            "dependsOn": [
+                "Build Debug"
             ]
         },
         {
-            "label": "Configure with CMake debug",
+            "label": "Static Analysis (cppcheck)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/debug/cppcheck-report.txt >/dev/null; then cat build/debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
+            ],
+            "dependsOn": [
+                "Configure Debug"
+            ]
+        },
+        {
+            "label": "Install Release",
             "type": "shell",
             "command": "cmake",
             "args": [
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "-S.",
-                "-Bbuild-debug",
-                "-DADDRESS_SANITIZER=ON",
-                "-DUB_SANITIZER=ON",
-                "-DTHREAD_SANITIZER=ON",
-                "-DMEMORY_SANITIZER=ON",
-                ""
+                "--install",
+                "build/release",
+                "--prefix",
+                "build/release/_staging",
+                "--config",
+                "Release"
+            ],
+            "dependsOn": [
+                "Build Release"
             ]
         },
         {
-            "label": "Configure with CMake release",
+            "label": "Package Release",
             "type": "shell",
-            "command": "cmake",
+            "command": "bash",
             "args": [
-                "-DCMAKE_BUILD_TYPE=Release",
-                "-S.",
-                "-Bbuild-release",
-                "-DADDRESS_SANITIZER=ON",
-                "-DUB_SANITIZER=ON",
-                "-DTHREAD_SANITIZER=ON",
-                "-DMEMORY_SANITIZER=ON",
-                ""
+                "-c",
+                "cd build/release && cpack -G $(uname | grep -qi darwin && echo DragNDrop || echo TGZ) -C Release --config CPackConfig.cmake"
+            ],
+            "dependsOn": [
+                "Install Release"
             ]
         },
         {
-            "label": "Run",
+            "label": "Run App (Debug)",
             "type": "shell",
             "linux": {
-                "command": "${workspaceFolder}/dist/Debug/LogViewer"
-              },
-              "osx": {
-                "command": "${workspaceFolder}/dist/Debug/LogViewer.app"
-              },
-              "windows": {
-                "command": "${workspaceFolder}/dist/Debug/LogViewer.exe"
-              },
-            "args": [
-                
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "exec build/debug/src/LogViewer || exec build/debug/LogViewer"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "APP=build/debug/src/LogViewer; BUNDLE=build/debug/src/LogViewer.app/Contents/MacOS/LogViewer; [ -x \"$BUNDLE\" ] && exec \"$BUNDLE\" || exec \"$APP\""
+                ]
+            },
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "if exist build\\debug\\src\\LogViewer.exe (build\\debug\\src\\LogViewer.exe) else (build\\debug\\LogViewer.exe)"
+                ],
+                "options": {
+                    "env": {
+                        "PATH": "C:\\msys64\\mingw64\\bin;%PATH%"
+                    }
+                }
+            },
+            "dependsOn": [
+                "Build Debug"
             ]
+        },
+        {
+            "label": "Run Tests (Debug)",
+            "type": "shell",
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "ctest --test-dir build/debug --output-on-failure"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "ctest --test-dir build/debug --output-on-failure"
+                ]
+            },
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "ctest --test-dir build\\debug --output-on-failure"
+                ],
+                "options": {
+                    "env": {
+                        "PATH": "C:\\msys64\\mingw64\\bin;%PATH%"
+                    }
+                }
+            },
+            "dependsOn": [
+                "Build Debug"
+            ]
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "rm -rf build dist compile_commands.json"
+            ],
+            "problemMatcher": []
         }
     ]
 }

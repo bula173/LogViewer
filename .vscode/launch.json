@@ -73,7 +73,7 @@
             "name": "Launch Test",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/LogViewer_tests",
+            "program": "${workspaceFolder}/tests/bin/LogViewer_tests",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -82,15 +82,15 @@
             "preLaunchTask": "Build debug with CMake",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
             },
             "windows": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests.exe"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests.exe"
             }
         },
         {
@@ -107,15 +107,15 @@
             "preLaunchTask": "Build debug with CMake",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests"
             },
             "windows": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/bin/LogViewer_tests.exe"
+                "program": "${workspaceFolder}/tests/bin/LogViewer_tests.exe"
             }
         },
         {
@@ -141,6 +141,18 @@
             "windows": {
                 "MIMode": "gdb",
                 "program": "${workspaceFolder}/tests/bin/LogViewer_tests.exe"
+            }
+        },
+        {
+            "name": "LogViewer (Debug)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/debug/src/LogViewer",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "lldb",
+            "preLaunchTask": "Build Debug",
+            "osx": {
+                "program": "${workspaceFolder}/build/debug/src/LogViewer.app/Contents/MacOS/LogViewer"
             }
         }
     ],
