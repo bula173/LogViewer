@@ -26,44 +26,8 @@ target_link_libraries(${PROJECT_NAME}_tests
 )
 
 include(GoogleTest)
-
-# Remove any previous incorrect copy_if_different commands.
-
-if (WIN32)
-    # Copy required DLLs next to the test executable (wxWidgets, expat)
-    set(_rt_dir "C:/msys64/mingw64/bin")
-    file(GLOB _dlls
-        "${_rt_dir}/wxmsw*.dll"
-        "${_rt_dir}/wxbase*.dll"
-        "${_rt_dir}/libexpat*.dll"
-    )
-    foreach(dll ${_dlls})
-        add_custom_command(TARGET LogViewer_tests POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${dll}" "$<TARGET_FILE_DIR:LogViewer_tests>"
-            VERBATIM)
-    endforeach()
-
-    # Simple test registration (avoid gtest_discover_tests executing during build)
-    add_test(NAME LogViewerTests COMMAND LogViewer_tests)
-
-    set_tests_properties(LogViewerTests PROPERTIES
-        ENVIRONMENT "PATH=$<TARGET_FILE_DIR:LogViewer_tests>;C:\\msys64\\mingw64\\bin;$ENV{PATH}")
-else()
-    # Normal automatic discovery on non-Windows
-    gtest_discover_tests(LogViewer_tests
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DISCOVERY_TIMEOUT 60
-    )
-endif()
-
-# (Optional) Copy required DLLs next to the test exe (fallback if PATH still problematic)
-if (WIN32)
-    file(GLOB WX_DLLS "${wxWidgets_LIB_DIR}/*.dll")
-    add_custom_command(TARGET LogViewer_tests POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WX_DLLS} $<TARGET_FILE_DIR:LogViewer_tests>
-        VERBATIM
-    )
-endif()
+include(CTest)
+gtest_discover_tests(${PROJECT_NAME}_tests)
 
 # Enable testing
 enable_testing()
