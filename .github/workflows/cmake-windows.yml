@@ -104,15 +104,41 @@ jobs:
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
-        run: cpack -G NSIS -C Release --config CPackConfig.cmake
+        run: |
+          set -e
+          export PATH="/mingw64/bin:$PATH"
+          if [ ! -f CPackConfig.cmake ]; then
+            echo "CPackConfig.cmake missing. Did you include(CPack) in CMakeLists.txt?"
+            ls -1 .
+            exit 1
+          fi
+          echo "Running CPack..."
+          cpack -G NSIS -C Release --config CPackConfig.cmake -VV
+          echo "Produced files:"
+          find . -maxdepth 4 -name '*.exe' -o -name '*.msi'
 
-      - name: Upload artifacts
+      - name: Upload tests artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-clang-${{ matrix.build_type }}-artifacts
+          name: windows-${{ matrix.build_type }}-tests
           path: |
-            ${{ env.BUILD_DIR }}\_staging\**
-            ${{ env.BUILD_DIR }}\_CPack_Packages\win64\NSIS\*.exe
             ${{ env.BUILD_DIR }}\Testing\Temporary\LastTest.log
+            ${{ env.BUILD_DIR }}\tests\bin\LogViewer_tests.exe
           if-no-files-found: ignore
+
+      - name: Upload staging artifact
+        if: matrix.build_type == 'Release' && always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-Release-staging
+            path: ${{ env.BUILD_DIR }}\_staging\**
+            if-no-files-found: ignore
+
+      - name: Upload installer artifact
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-Release-installer
+          path: ${{ env.BUILD_DIR }}\_CPack_Packages\win64\NSIS\*.exe
+          if-no-files-found: error
