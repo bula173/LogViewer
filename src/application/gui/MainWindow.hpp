@@ -12,6 +12,7 @@
 #include "../xml/xmlParser.hpp"
 #include "EventsVirtualListControl.hpp"
 #include "ItemVirtualListControl.hpp"
+#include "config/ConfigObserver.hpp"
 
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
@@ -87,7 +88,9 @@ namespace gui
  * - Batched event processing to minimize UI update overhead
  * - Progress reporting to maintain UI responsiveness during large file parsing
  */
-class MainWindow : public wxFrame, public parser::IDataParserObserver
+class MainWindow : public wxFrame,
+                   public parser::IDataParserObserver,
+                   public config::ConfigObserver
 {
   public:
     /**
@@ -151,6 +154,9 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
     void NewEventBatchFound(
         std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
         override;
+
+    // ConfigObserver interface implementation
+    virtual void OnConfigChanged() override;
 
   private:
     // Event handler method declarations
@@ -363,6 +369,7 @@ class MainWindow : public wxFrame, public parser::IDataParserObserver
      * @param window The root window to apply the light theme to
      */
     void ApplyLightThemeRecursive(wxWindow* window);
+
 
 #ifndef NDEBUG
     /**

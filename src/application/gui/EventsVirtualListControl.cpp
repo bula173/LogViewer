@@ -18,29 +18,14 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
     spdlog::debug(
         "EventsVirtualListControl::EventsVirtualListControl constructed");
 
-    auto& colConfig = config::GetConfig().columns;
-
     m_events.RegisterOndDataUpdated(this);
 
     m_model = new gui::EventsContainerAdapter(m_events);
     m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
     this->AssociateModel(m_model);
 
-
-    int colIndex = 0;
-    for (const auto& col : colConfig)
-    {
-        if (col.visible)
-        {
-            spdlog::debug("Adding column: {}", col.name);
-            auto renderer = new wxDataViewTextRenderer(
-                "string", wxDATAVIEW_CELL_INERT, wxDVR_DEFAULT_ALIGNMENT);
-            auto column = new wxDataViewColumn(col.name, renderer, colIndex,
-                col.width, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE);
-            this->AppendColumn(column);
-            ++colIndex;
-        }
-    }
+    // Use the common method instead of duplicating code
+    AddColumnsFromConfig();
 
     this->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
         [this](wxDataViewEvent& evt)
@@ -121,6 +106,169 @@ void EventsVirtualListControl::UpdateColors()
     // Ensure immediate repaint
     this->wxWindow::Refresh();
     this->wxWindow::Update();
+}
+
+void EventsVirtualListControl::RefreshColumns()
+{
+    spdlog::debug("EventsVirtualListControl::RefreshColumns called");
+
+    // Get config columns that should be visible
+    const auto& colConfig = config::GetConfig().columns;
+    std::vector<const config::ColumnConfig*> visibleConfigColumns;
+
+    for (const auto& col : colConfig)
+    {
+        if (col.isVisible)
+        {
+            visibleConfigColumns.push_back(&col);
+        }
+    }
+
+    // Freeze UI updates
+    Freeze();
+
+    // Step 1: Update existing columns where possible
+    int existingCount = GetColumnCount();
+    int configCount = static_cast<int>(visibleConfigColumns.size());
+    int commonCount = std::min(existingCount, configCount);
+
+    // Update common columns (reuse existing ones)
+    for (int i = 0; i < commonCount; i++)
+    {
+        wxDataViewColumn* col = GetColumn(i);
+        const config::ColumnConfig* configCol = visibleConfigColumns[i];
+
+        // Update column properties
+        if (col)
+        {
+            col->SetTitle(configCol->name);
+            col->SetWidth(configCol->width);
+        }
+    }
+
+    // Step 2: Remove extra columns if we have too many
+    if (existingCount > configCount)
+    {
+        for (int i = existingCount - 1; i >= configCount; i--)
+        {
+            wxDataViewColumn* col = GetColumn(i);
+            if (col)
+            {
+                spdlog::debug("Removing extra column at index {}", i);
+                DeleteColumn(col);
+            }
+        }
+    }
+
+    // Step 3: Add missing columns if we have too few
+    if (configCount > existingCount)
+    {
+        for (int i = existingCount; i < configCount; i++)
+        {
+            const config::ColumnConfig* configCol = visibleConfigColumns[i];
+            spdlog::debug("Adding missing column: {}", configCol->name);
+
+            auto renderer =
+                new wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT);
+            auto column = new wxDataViewColumn(configCol->name, renderer, i,
+                configCol->width, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE);
+
+            AppendColumn(column);
+        }
+    }
+
+    // IMPORTANT: Force column width recalculation to eliminate dead space
+    // Either use column width auto-resize...
+    for (unsigned int i = 0; i < GetColumnCount(); i++)
+    {
+        wxDataViewColumn* col = GetColumn(i);
+        if (col)
+        {
+            col->SetWidth(col->GetWidth()); // Force recalculation
+        }
+    }
+
+    // Refresh the model data
+    if (m_model)
+    {
+        m_model->Reset(static_cast<unsigned int>(m_model->GetCount()));
+    }
+
+    // IMPORTANT: Force complete layout update - more aggressive than just
+    // Layout()
+    wxSize curSize = GetSize();
+    SetSize(curSize.x + 1, curSize.y); // Trigger size change
+    SetSize(curSize);                  // Restore original size
+
+    // Resume UI updates
+    Thaw();
+
+    // Normal layout call may not be sufficient
+    Layout();
+
+    // Ask parent to resize us as well
+    if (GetParent() && GetParent()->GetSizer())
+    {
+        GetParent()->Layout();
+    }
+}
+
+// Add this private method
+void EventsVirtualListControl::AddColumnsFromConfig()
+{
+    const auto& colConfig = config::GetConfig().columns;
+
+    // Create vector of pointers to visible columns
+    std::vector<const config::ColumnConfig*> visibleConfigColumns;
+    for (const auto& col : colConfig)
+    {
+        if (col.isVisible)
+        {
+            visibleConfigColumns.push_back(&col);
+        }
+    }
+
+    // Add columns
+    int colIndex = 0;
+    for (const auto* col : visibleConfigColumns)
+    {
+        spdlog::debug("Adding column: {}.", col->name);
+        try
+        {
+            auto renderer = new wxDataViewTextRenderer(
+                "string", wxDATAVIEW_CELL_INERT, wxDVR_DEFAULT_ALIGNMENT);
+            auto column = new wxDataViewColumn(col->name, renderer, colIndex,
+                col->width, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE);
+
+            if (!AppendColumn(column))
+            {
+                spdlog::error("Failed to append column: {}", col->name);
+                delete column; // Clean up if append fails
+            }
+            else
+            {
+                ++colIndex;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            spdlog::error(
+                "Exception adding column {}: {}", col->name, e.what());
+        }
+    }
+}
+
+// Add this helper to count expected columns
+unsigned int EventsVirtualListControl::CountVisibleConfigColumns() const
+{
+    const auto& colConfig = config::GetConfig().columns;
+    int visible = 0;
+    for (const auto& col : colConfig)
+    {
+        if (col.isVisible)
+            visible++;
+    }
+    return visible;
 }
 
 } // namespace gui

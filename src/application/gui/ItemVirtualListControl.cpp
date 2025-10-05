@@ -28,14 +28,14 @@ ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     this->Bind(wxEVT_KEY_DOWN, &ItemVirtualListControl::OnKeyDown, this);
 }
 
-void ItemVirtualListControl::OnContextMenu(wxDataViewEvent& event)
+void ItemVirtualListControl::OnContextMenu(wxDataViewEvent& WXUNUSED(event))
 {
     wxMenu menu;
     menu.Append(wxID_COPY, "Copy Value");
     PopupMenu(&menu);
 }
 
-void ItemVirtualListControl::OnCopyValue(wxCommandEvent& event)
+void ItemVirtualListControl::OnCopyValue(wxCommandEvent& WXUNUSED(event))
 {
     int selectedRow = this->GetSelectedRow();
     if (selectedRow == wxNOT_FOUND)
@@ -53,8 +53,8 @@ void ItemVirtualListControl::OnKeyDown(wxKeyEvent& event)
 {
     if (event.GetKeyCode() == 'C' && event.ControlDown())
     {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_COPY);
-        OnCopyValue(event);
+        wxCommandEvent eventCopy(wxEVT_COMMAND_MENU_SELECTED, wxID_COPY);
+        OnCopyValue(eventCopy);
         return;
     }
     event.Skip();

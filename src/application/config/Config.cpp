@@ -145,6 +145,22 @@ void Config::SaveConfig()
 
         // Set the JSON data from the configuration parameters
         // Example: j["someParameter"] = m_someParameter;
+        j["parsers"]["xml"]["rootElement"] = xmlRootElement;
+        j["parsers"]["xml"]["eventElement"] = xmlEventElement;
+        j["parsers"]["xml"]["columns"] = json::array();
+        for (const auto& col : columns)
+        {
+            j["parsers"]["xml"]["columns"].push_back({{"name", col.name},
+                {"visible", col.isVisible}, {"width", col.width}});
+        }
+        j["logging"]["level"] = logLevel;
+        for (const auto& [col, valMap] : columnColors)
+        {
+            for (const auto& [val, colors] : valMap)
+            {
+                j["columnColors"][col][val] = {colors.fg, colors.bg};
+            }
+        }
 
         configFile << j.dump(4); // Pretty print with 4 spaces
         configFile.close();
@@ -228,9 +244,9 @@ void Config::ParseXmlConfig(const json& j)
     {
         for (const auto& col : parser["xml"]["columns"])
         {
-            Columns column;
+            ColumnConfig column;
             column.name = col["name"].get<std::string>();
-            column.visible = col.value("visible", true);
+            column.isVisible = col.value("visible", true);
             column.width = col.value("width", 100); // Default width
             columns.push_back(column);
         }
@@ -351,6 +367,18 @@ void Config::Reload()
     spdlog::info("Reloading configuration from: {}", m_configFilePath);
     LoadConfig();
     spdlog::info("Configuration reload complete");
+}
+
+// Read-only access for UI display
+const std::vector<ColumnConfig>& Config::GetColumns() const
+{
+    return columns;
+}
+
+// Mutable access for configuration
+std::vector<ColumnConfig>& Config::GetMutableColumns()
+{
+    return columns;
 }
 
 } // namespace config

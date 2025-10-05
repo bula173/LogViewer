@@ -31,6 +31,13 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
      */
     void UpdateColors();
 
+    /**
+     * @brief Refresh the columns based on current configuration.
+     * Call this after configuration changes to update columns.
+     * @note This does not refresh the data, just the columns.
+     */
+    void RefreshColumns();
+
     // implement IView interface
     virtual void OnDataUpdated() override;
     virtual void OnCurrentIndexUpdated(const int index) override;
@@ -38,6 +45,12 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
   private:
     db::EventsContainer& m_events;
     EventsContainerAdapter* m_model;
+
+    // Helper to count expected visible columns
+    unsigned int CountVisibleConfigColumns() const;
+
+    // Helper to add columns from configuration
+    void AddColumnsFromConfig();
 };
 
 } // namespace gui

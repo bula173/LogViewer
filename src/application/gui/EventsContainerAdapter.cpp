@@ -19,7 +19,7 @@ unsigned int EventsContainerAdapter::GetColumnCount() const
     return static_cast<unsigned int>(config::GetConfig().columns.size());
 }
 
-wxString EventsContainerAdapter::GetColumnType(unsigned int col) const
+wxString EventsContainerAdapter::GetColumnType(unsigned int WXUNUSED(col)) const
 {
     // All columns as string for simplicity
     return "string";
@@ -28,8 +28,12 @@ wxString EventsContainerAdapter::GetColumnType(unsigned int col) const
 void EventsContainerAdapter::GetValueByRow(
     wxVariant& variant, unsigned int row, unsigned int col) const
 {
-    if (!(row < m_rowCount))
+    if (row >= m_rowCount)
+    {
+        spdlog::warn("GetValueByRow: Row index {} out of bounds (max: {})", row,
+            m_rowCount - 1);
         return;
+    }
 
     size_t actualRow = row;
     if (!m_filteredIndices.empty())
@@ -39,19 +43,46 @@ void EventsContainerAdapter::GetValueByRow(
         actualRow = m_filteredIndices[row];
     }
 
+    // Find the Nth visible column from config (where N = col)
+    const auto& colConfig = config::GetConfig().columns;
+    unsigned int visibleCount = 0;
+    size_t configColIdx = 0;
+
+    for (size_t i = 0; i < colConfig.size(); i++)
+    {
+        if (colConfig[i].isVisible)
+        {
+            if (visibleCount == col)
+            {
+                configColIdx = i;
+                break;
+            }
+            visibleCount++;
+        }
+    }
+
+    // If we couldn't find enough visible columns
+    if (visibleCount != col)
+    {
+        spdlog::warn("GetValueByRow: Not enough visible columns ({}) for "
+                     "column index {}",
+            visibleCount, col);
+        variant = wxVariant("");
+        return;
+    }
+
+
+    const auto& columnName = colConfig[configColIdx].name;
     const auto& event = m_container.GetEvent(actualRow);
-    auto& colConfig = config::GetConfig().columns;
-    if (col >= colConfig.size() || !colConfig[col].visible)
+
+    if (columnName == "id")
     {
-        variant = wxVariant();
-        return;
+        variant = wxString::FromUTF8(std::to_string(event.getId()).c_str());
     }
-    if (col == 0)
+    else
     {
-        variant = wxString::FromUTF8(std::to_string(event.getId()));
-        return;
+        variant = wxString::FromUTF8(event.findByKey(columnName));
     }
-    variant = wxString::FromUTF8(event.findByKey(colConfig[col].name));
 }
 
 void EventsContainerAdapter::SyncWithContainer()
@@ -71,7 +102,7 @@ bool EventsContainerAdapter::SetValueByRow(
     return false;
 }
 
-void EventsContainerAdapter::SetRowCount(unsigned int rows)
+void EventsContainerAdapter::SetRowCount(unsigned int WXUNUSED(rows))
 {
     SyncWithContainer();
 }

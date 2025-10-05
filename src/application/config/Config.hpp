@@ -13,10 +13,10 @@ namespace config
 
 using json = nlohmann::json;
 
-struct Columns
+struct ColumnConfig
 {
     std::string name;
-    bool visible {true};
+    bool isVisible {true};
     int width {100}; // Default width
 };
 
@@ -54,6 +54,10 @@ class Config
     const std::string& GetAppLogPath() const;
     void SetConfigFilePath(const std::string& path);
     void SetAppName(const std::string& name);
+    // Read-only access for UI display
+    const std::vector<ColumnConfig>& GetColumns() const;
+    // Mutable access for configuration
+    std::vector<ColumnConfig>& GetMutableColumns();
 
   private:
     const json& GetParserConfig(const json& j);
@@ -73,7 +77,7 @@ class Config
     std::string appName {"LogViewer"};
     std::string xmlRootElement;
     std::string xmlEventElement;
-    std::vector<Columns> columns;
+    std::vector<ColumnConfig> columns;
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
 };

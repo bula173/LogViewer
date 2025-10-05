@@ -1,5 +1,7 @@
 #include "gui/MainWindow.hpp"
 #include "config/Config.hpp"
+#include "gui/ConfigEditorDialog.hpp"
+
 #include "error/Error.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
@@ -28,7 +30,6 @@ inline std::filesystem::path WxToPath(const wxString& s)
 // searchResultColumns, etc.)
 inline std::vector<std::string> GetSearchColumnsFromConfig()
 {
-    const auto& cfg = config::GetConfig();
     // TODO: If your config uses a different name, change this line accordingly:
     // Example options you might have in your project:
     // return cfg.searchResultColumns;
@@ -128,7 +129,6 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
 
 void MainWindow::setupMenu()
 {
-
     // Create the menu bar
     // File menu
     wxMenu* menuFile = new wxMenu;
@@ -143,6 +143,7 @@ void MainWindow::setupMenu()
     m_fileHistory.UseMenu(menuFile);
     m_fileHistory.AddFilesToMenu();
     menuFile->AppendSeparator();
+    menuFile->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit the application");
 
 #ifndef __WXMAC__ // Add "About" manually for non-macOS
     wxMenu* menuHelp = new wxMenu;
@@ -164,15 +165,15 @@ void MainWindow::setupMenu()
     // Parser menu
     wxMenu* menuParser = new wxMenu;
     menuParser->Append(ID_ParserClear, "Clear", "Parser");
-    menuParser->Append(ID_ParserReloadConfig, "Reload Config",
-        "Reload configuration file"); // Add this line
 
-    // Config menu
-    menuFile->Append(
+    // NEW: Config menu - move items here
+    wxMenu* menuConfig = new wxMenu;
+    menuConfig->Append(
         ID_ConfigEditor, "Edit &Config...\tCtrl+E", "Open Config Editor");
-
-    menuFile->Append(
+    menuConfig->Append(
         ID_AppLogViewer, "Open &Application Logs...\tCtrl+L", "Open App Logs");
+    menuConfig->Append(
+        ID_ParserReloadConfig, "Reload Config", "Reload configuration file");
 
     // Main menu bar
     wxMenuBar* menuBar = new wxMenuBar;
@@ -181,6 +182,7 @@ void MainWindow::setupMenu()
     menuBar->Append(menuHelp, "&Help");
 #endif
     menuBar->Append(menuParser, "&Parser");
+    menuBar->Append(menuConfig, "&Config"); // Add Config menu
     menuBar->Append(menuTheme, "&Theme");
     menuBar->Append(menuView, "&View");
     SetMenuBar(menuBar);
@@ -773,37 +775,29 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
 void MainWindow::OnOpenConfigEditor(wxCommandEvent& WXUNUSED(event))
 {
-    try
-    {
-        spdlog::info("Config Editor menu selected");
+    ConfigEditorDialog dialog(this);
 
-        auto& config = config::GetConfig();
-        auto& configPath = config.GetConfigFilePath();
-        if (!std::filesystem::exists(configPath))
-        {
-            spdlog::error("Config file does not exist: {}", configPath);
-            wxMessageBox(
-                "Config file does not exist.", "Error", wxOK | wxICON_ERROR);
-            return;
-        }
-        spdlog::info("Opening config file: {}", configPath);
-        wxLaunchDefaultApplication(configPath);
-    }
-    catch (const std::exception& ex)
-    {
-        spdlog::error("Exception in OnOpenConfigEditor: {}", ex.what());
-        wxMessageBox(
-            wxString::Format("Exception in config editor:\n%s", ex.what()),
-            "Error", wxOK | wxICON_ERROR);
-    }
-    catch (...)
-    {
-        spdlog::error("Unknown exception in OnOpenConfigEditor");
-        wxMessageBox(
-            "Unknown error in config editor.", "Error", wxOK | wxICON_ERROR);
-    }
+    // Register as observer before showing dialog
+    dialog.AddObserver(this);
+
+    dialog.ShowModal();
+    // Observer is automatically removed when dialog is destroyed
 }
 
+// Observer interface implementation
+void MainWindow::OnConfigChanged()
+{
+    spdlog::info("Configuration changed, updating UI...");
+    // Update any UI elements that depend on config
+    if (m_eventsListCtrl)
+    {
+        m_eventsListCtrl->RefreshColumns(); // Assuming this method exists
+        m_eventsListCtrl->Refresh();
+    }
+
+    // Force layout update if needed
+    Layout();
+}
 void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
 {
     try
