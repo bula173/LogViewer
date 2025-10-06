@@ -3,6 +3,9 @@
 #include "MainWindow.hpp"
 #include "filters/FilterManager.hpp"
 #include <spdlog/spdlog.h>
+#include <wx/filedlg.h> // For wxFileDialog
+#include <wx/msgdlg.h>  // For wxMessageBox
+#include <wx/statline.h>
 #include <wx/stattext.h>
 
 namespace gui
@@ -57,6 +60,20 @@ void FiltersPanel::CreateControls()
 
     mainSizer->Add(buttonSizer2, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5);
 
+    // Add a separator between the existing buttons and the file operations
+    mainSizer->Add(new wxStaticLine(this, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+
+    // File operations buttons
+    wxBoxSizer* fileBtnSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    m_saveAsButton = new wxButton(this, wxID_ANY, "Save Filters As...");
+    m_loadButton = new wxButton(this, wxID_ANY, "Load Filters...");
+
+    fileBtnSizer->Add(m_saveAsButton, 1, wxRIGHT, 5);
+    fileBtnSizer->Add(m_loadButton, 1);
+
+    mainSizer->Add(fileBtnSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5);
+
     // Initial button states
     m_editButton->Disable();
     m_removeButton->Disable();
@@ -81,6 +98,10 @@ void FiltersPanel::BindEvents()
 
     // Add this binding for mouse clicks
     m_filtersList->Bind(wxEVT_LEFT_DOWN, &FiltersPanel::OnListItemClick, this);
+
+    // File operation events
+    m_saveAsButton->Bind(wxEVT_BUTTON, &FiltersPanel::OnSaveFiltersAs, this);
+    m_loadButton->Bind(wxEVT_BUTTON, &FiltersPanel::OnLoadFilters, this);
 }
 
 void FiltersPanel::RefreshFilters()
@@ -311,6 +332,64 @@ void FiltersPanel::OnListItemClick(wxMouseEvent& event)
 
     // Continue event processing for selection, etc.
     event.Skip();
+}
+
+void FiltersPanel::OnSaveFiltersAs(wxCommandEvent& WXUNUSED(event))
+{
+    spdlog::info("OnSaveFiltersAs called"); // Add this line
+
+    wxFileDialog saveDialog(this, "Save Filters", "", "filters.json",
+        "Filter files (*.json)|*.json", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (saveDialog.ShowModal() == wxID_CANCEL)
+        return;
+
+    wxString path = saveDialog.GetPath();
+
+    if (filters::FilterManager::getInstance().saveFiltersToPath(
+            path.ToStdString()))
+    {
+        wxMessageBox(wxString::Format("Filters saved to:\n%s", path),
+            "Filters Saved", wxOK | wxICON_INFORMATION);
+    }
+    else
+    {
+        wxMessageBox(wxString::Format("Failed to save filters to:\n%s", path),
+            "Save Error", wxOK | wxICON_ERROR);
+    }
+}
+
+void FiltersPanel::OnLoadFilters(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog openDialog(this, "Load Filters", "", "",
+        "Filter files (*.json)|*.json|All files (*.*)|*.*",
+        wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (openDialog.ShowModal() == wxID_CANCEL)
+        return;
+
+    wxString path = openDialog.GetPath();
+
+    if (wxMessageBox(
+            "Loading filters will replace all current filters. Continue?",
+            "Confirm Load", wxYES_NO | wxICON_QUESTION) != wxYES)
+    {
+        return;
+    }
+
+    if (filters::FilterManager::getInstance().loadFiltersFromPath(
+            path.ToStdString()))
+    {
+        RefreshFilters();
+        ApplyFilters();
+        wxMessageBox(wxString::Format("Filters loaded from:\n%s", path),
+            "Filters Loaded", wxOK | wxICON_INFORMATION);
+    }
+    else
+    {
+        wxMessageBox(wxString::Format("Failed to load filters from:\n%s", path),
+            "Load Error", wxOK | wxICON_ERROR);
+    }
 }
 
 } // namespace gui

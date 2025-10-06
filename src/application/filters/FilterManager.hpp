@@ -25,7 +25,8 @@ class FilterManager
     void enableAllFilters(bool enable);
 
     // Filter application
-    std::vector<size_t> applyFilters(db::EventsContainer& container) const;
+    std::vector<unsigned long> applyFilters(
+        db::EventsContainer& container) const;
 
     // Filter storage
     void loadFilters();
@@ -37,6 +38,10 @@ class FilterManager
 
     // File operations
     std::string getFiltersFilePath() const;
+
+    // Custom path methods
+    bool saveFiltersToPath(const std::string& path) const;
+    bool loadFiltersFromPath(const std::string& path);
 
   private:
     FilterManager();

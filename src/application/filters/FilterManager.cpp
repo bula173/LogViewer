@@ -102,10 +102,10 @@ void FilterManager::enableAllFilters(bool enable)
     spdlog::debug("{} all filters", enable ? "Enabled" : "Disabled");
 }
 
-std::vector<size_t> FilterManager::applyFilters(
+std::vector<unsigned long> FilterManager::applyFilters(
     db::EventsContainer& container) const
 {
-    std::vector<size_t> result;
+    std::vector<unsigned long> result;
     result.reserve(container.Size());
 
     // Count enabled filters
@@ -256,6 +256,95 @@ void FilterManager::saveFilters()
     catch (const std::exception& e)
     {
         spdlog::error("Error saving filters: {}", e.what());
+    }
+}
+
+bool FilterManager::saveFiltersToPath(const std::string& path) const
+{
+    try
+    {
+        // Create directory if it doesn't exist
+        std::filesystem::path filePath(path);
+        std::filesystem::create_directories(filePath.parent_path());
+
+        nlohmann::json j = nlohmann::json::array();
+        for (const auto& filter : m_filters)
+        {
+            if (filter)
+            {
+                j.push_back(filter->toJson());
+            }
+        }
+
+        std::ofstream file(path);
+        if (!file.is_open())
+        {
+            spdlog::error("Failed to open filters file for writing: {}", path);
+            return false;
+        }
+
+        file << j.dump(2); // Pretty print with 2-space indent
+        spdlog::info("Saved {} filters to {}", m_filters.size(), path);
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        spdlog::error("Error saving filters to {}: {}", path, e.what());
+        return false;
+    }
+}
+
+bool FilterManager::loadFiltersFromPath(const std::string& path)
+{
+    if (!std::filesystem::exists(path))
+    {
+        spdlog::info("Filters file does not exist at: {}", path);
+        return false;
+    }
+
+    try
+    {
+        std::ifstream file(path);
+        if (!file.is_open())
+        {
+            spdlog::error("Failed to open filters file: {}", path);
+            return false;
+        }
+
+        nlohmann::json j;
+        file >> j;
+
+        FilterList newFilters;
+
+        if (j.is_array())
+        {
+            for (const auto& filterJson : j)
+            {
+                try
+                {
+                    Filter filter = Filter::fromJson(filterJson);
+                    newFilters.push_back(std::make_shared<Filter>(filter));
+                }
+                catch (const std::exception& e)
+                {
+                    spdlog::error("Error parsing filter: {}", e.what());
+                }
+            }
+        }
+
+        // Only replace existing filters if parsing was successful
+        if (!newFilters.empty())
+        {
+            m_filters = std::move(newFilters);
+            spdlog::info("Loaded {} filters from {}", m_filters.size(), path);
+            return true;
+        }
+        return false;
+    }
+    catch (const std::exception& e)
+    {
+        spdlog::error("Error loading filters from {}: {}", path, e.what());
+        return false;
     }
 }
 

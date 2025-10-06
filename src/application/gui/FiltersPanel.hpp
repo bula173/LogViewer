@@ -30,6 +30,8 @@ class FiltersPanel : public wxPanel
     void OnApplyFilters(wxCommandEvent& event);
     void OnClearFilters(wxCommandEvent& event);
     void OnListItemClick(wxMouseEvent& event);
+    void OnSaveFiltersAs(wxCommandEvent& event);
+    void OnLoadFilters(wxCommandEvent& event);
 
     // Controls
     wxListCtrl* m_filtersList = nullptr;
@@ -38,6 +40,8 @@ class FiltersPanel : public wxPanel
     wxButton* m_removeButton = nullptr;
     wxButton* m_applyButton = nullptr;
     wxButton* m_clearButton = nullptr;
+    wxButton* m_saveAsButton = nullptr;
+    wxButton* m_loadButton = nullptr;
 
     // Currently selected filter
     int m_selectedFilterIndex = -1;
