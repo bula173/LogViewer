@@ -34,7 +34,7 @@ void Config::SetAppName(const std::string& name)
 };
 
 
-void Config::LoadConfig()
+bool Config::LoadConfig()
 {
 
     if (!std::filesystem::exists(m_configFilePath))
@@ -125,6 +125,8 @@ void Config::LoadConfig()
     {
         spdlog::error("Could not open config file: {}", m_configFilePath);
     }
+
+    return true; // Config loaded successfully
 }
 
 void Config::SetupLogPath()
