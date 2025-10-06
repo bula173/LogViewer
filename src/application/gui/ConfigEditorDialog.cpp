@@ -22,7 +22,7 @@ ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY);
 
     // General settings panel
-    wxPanel* generalPanel = new wxPanel(notebook);
+    wxPanel* generalPanel = new wxPanel(notebook, wxID_ANY);
     wxBoxSizer* generalSizer = new wxBoxSizer(wxVERTICAL);
     wxFlexGridSizer* grid = new wxFlexGridSizer(2, 10, 10);
 
@@ -146,8 +146,8 @@ ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
 
     // Column navigation buttons
     wxBoxSizer* moveButtonSizer = new wxBoxSizer(wxVERTICAL);
-    wxButton* moveUpBtn = new wxButton(scrollWin, wxID_ANY, "↑ Move Up");
-    wxButton* moveDownBtn = new wxButton(scrollWin, wxID_ANY, "↓ Move Down");
+    wxButton* moveUpBtn = new wxButton(scrollWin, wxID_ANY, "Move Up");
+    wxButton* moveDownBtn = new wxButton(scrollWin, wxID_ANY, "Move Down");
 
     moveUpBtn->Bind(wxEVT_BUTTON, &ConfigEditorDialog::OnMoveColumnUp, this);
     moveDownBtn->Bind(
@@ -346,12 +346,14 @@ ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
 
     colorsPanel->SetSizer(colorsSizer);
 
-    // Add colors tab to notebook
+    // Add pages to notebook AFTER configuring them - not before
+    notebook->AddPage(generalPanel, "General");
+    notebook->AddPage(columnsPanel, "Columns");
     notebook->AddPage(colorsPanel, "Colors");
 
     // Main layout
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->Add(notebook, 1, wxEXPAND | wxALL, 5);
+    mainSizer->Add(notebook, 1, wxEXPAND | wxALL, 10);
 
     // Dialog buttons
     wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);

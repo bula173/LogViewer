@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <wx/clipbrd.h>
+#include <wx/dataview.h>
+#include <wx/dcclient.h>
 
 namespace gui
 {
@@ -15,25 +17,25 @@ ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
           parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES)
     , m_events(events)
 {
-    this->AppendTextColumn("param");
-    this->AppendTextColumn("value");
+    spdlog::debug("ItemVirtualListControl::ItemVirtualListControl constructed");
+    // Define columns
+    this->AppendTextColumn("Key", wxDATAVIEW_CELL_INERT, 150, wxALIGN_LEFT,
+        wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
+    this->AppendTextColumn("Value", wxDATAVIEW_CELL_INERT, 300, wxALIGN_LEFT,
+        wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
+    // Bind size event
+    this->Bind(wxEVT_SIZE, &ItemVirtualListControl::OnColumnResized, this);
+
+    // Use tooltips for long text
+    this->Bind(wxEVT_MOTION, &ItemVirtualListControl::OnMouseMove, this);
 
     m_events.RegisterOndDataUpdated(this);
 
     // Bind right-click or Ctrl+C for copying value
     this->Bind(wxEVT_COMMAND_MENU_SELECTED,
         &ItemVirtualListControl::OnCopyValue, this, wxID_COPY);
-    this->Bind(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
-        &ItemVirtualListControl::OnContextMenu, this);
-    this->Bind(wxEVT_KEY_DOWN, &ItemVirtualListControl::OnKeyDown, this);
 }
 
-void ItemVirtualListControl::OnContextMenu(wxDataViewEvent& WXUNUSED(event))
-{
-    wxMenu menu;
-    menu.Append(wxID_COPY, "Copy Value");
-    PopupMenu(&menu);
-}
 
 void ItemVirtualListControl::OnCopyValue(wxCommandEvent& WXUNUSED(event))
 {
@@ -58,11 +60,6 @@ void ItemVirtualListControl::OnKeyDown(wxKeyEvent& event)
         return;
     }
     event.Skip();
-}
-
-void ItemVirtualListControl::OnDataUpdated()
-{
-    RefreshAfterUpdate();
 }
 
 void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
@@ -152,4 +149,85 @@ void ItemVirtualListControl::RefreshAfterUpdate()
         this->DeleteAllItems();
     }
 }
+
+void ItemVirtualListControl::OnMouseMove(wxMouseEvent& event)
+{
+    wxPoint pos = event.GetPosition();
+    wxDataViewItem item;
+    wxDataViewColumn* column;
+
+    // Hit test to see which item is under the mouse
+    this->HitTest(pos, item, column);
+
+    if (item.IsOk() && column)
+    {
+        // Use a simpler approach that works across platforms
+        // Store current selection
+        wxDataViewItemArray oldSelection;
+        this->GetSelections(oldSelection);
+
+        // Select the item under mouse temporarily
+        this->UnselectAll();
+        this->Select(item);
+
+        // Get selected row
+        int row = this->GetSelectedRow();
+        int col = this->GetColumnPosition(column);
+
+        // Restore original selection
+        this->UnselectAll();
+        for (const auto& selItem : oldSelection)
+        {
+            this->Select(selItem);
+        }
+
+        if (row != wxNOT_FOUND && col != wxNOT_FOUND)
+        {
+            // Get the data value
+            wxVariant value;
+            this->GetValue(value, row, col);
+            wxString text = value.GetString();
+
+            // Use column width to determine if tooltip is needed
+            wxClientDC dc(this);
+            wxSize textExtent = dc.GetTextExtent(text);
+            int colWidth = column->GetWidth();
+
+            if (textExtent.GetWidth() > colWidth || text.Contains("\n"))
+            {
+                SetToolTip(text);
+            }
+            else
+            {
+                UnsetToolTip();
+            }
+            return;
+        }
+    }
+
+    UnsetToolTip();
+    event.Skip();
+}
+
+void ItemVirtualListControl::OnItemHover(wxDataViewEvent& event)
+{
+    // This is needed for tooltip detection
+    // We don't actually want to start a drag, so veto it
+    event.Veto();
+}
+
+// Simplified handler for column resize
+void ItemVirtualListControl::OnColumnResized(wxSizeEvent& event)
+{
+    // Just refresh the control
+    this->Refresh();
+    event.Skip();
+}
+
+void ItemVirtualListControl::OnDataUpdated()
+{
+    // Update data
+    RefreshAfterUpdate();
+}
+
 } // namespace gui

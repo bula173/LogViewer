@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
-project(LogViewer VERSION 0.0.4 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
+project(LogViewer VERSION 0.0.5 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
 
 cmake_policy(SET CMP0074 NEW)
 

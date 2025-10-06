@@ -3,15 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/build-debug/_deps/googletest-src/googlemock/include",
                 "${workspaceFolder}",
-                "${workspaceFolder}/build-debug/_deps/googletest-src/googletest/include",
                 "${workspaceFolder}/src/application",
-                "${workspaceFolder}/thirdparty/wxwidgets/include",
                 "${workspaceFolder}/build/_deps/googletest-src/googletest/include",
                 "${workspaceFolder}/build/_deps/googletest-src/googlemock/include",
-                "${workspaceFolder}/thirdparty/wxwidgets/include/msvc",
-                "${workspaceFolder}/src"
+                "/opt/homebrew/include/wx-3.3"
             ],
             "defines": [
                 "__WXOSX_COCOA__",

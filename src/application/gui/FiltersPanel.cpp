@@ -118,7 +118,7 @@ void FiltersPanel::RefreshFilters()
             continue;
 
         long itemIdx =
-            m_filtersList->InsertItem(idx, filter->isEnabled ? "[✓]" : "[ ]");
+            m_filtersList->InsertItem(idx, filter->isEnabled ? "[x]" : "[ ]");
         m_filtersList->SetItem(itemIdx, 1, filter->name);
         m_filtersList->SetItem(itemIdx, 2, filter->columnName);
         m_filtersList->SetItem(itemIdx, 3, filter->pattern);
@@ -245,7 +245,7 @@ void FiltersPanel::OnFilterChecked(wxListEvent& event)
     bool newState = !isCurrentlyEnabled;
 
     // Update the UI
-    m_filtersList->SetItem(index, 0, newState ? "[✓]" : "[ ]");
+    m_filtersList->SetItem(index, 0, newState ? "[x]" : "[ ]");
 
     // Update the filter
     filters::FilterManager::getInstance().enableFilter(
@@ -311,7 +311,7 @@ void FiltersPanel::OnListItemClick(wxMouseEvent& event)
             bool newState = !isCurrentlyEnabled;
 
             // Update the UI
-            m_filtersList->SetItem(item, 0, newState ? "[✓]" : "[ ]");
+            m_filtersList->SetItem(item, 0, newState ? "[x]" : "[ ]");
 
             // Update the filter
             filters::FilterManager::getInstance().enableFilter(
@@ -336,26 +336,38 @@ void FiltersPanel::OnListItemClick(wxMouseEvent& event)
 
 void FiltersPanel::OnSaveFiltersAs(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("OnSaveFiltersAs called"); // Add this line
+    spdlog::info("OnSaveFiltersAs called");
 
-    wxFileDialog saveDialog(this, "Save Filters", "", "filters.json",
+    // Get top-level parent window for proper dialog centering
+    wxWindow* topParent = wxGetTopLevelParent(this);
+
+    // Create the file dialog with explicit parent
+    wxFileDialog saveDialog(topParent, "Save Filters", "", "filters.json",
         "Filter files (*.json)|*.json", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
-    if (saveDialog.ShowModal() == wxID_CANCEL)
+    // For macOS, ensure dialog appears by explicitly yielding events
+    wxYield();
+
+    int result = saveDialog.ShowModal();
+
+    if (result == wxID_CANCEL)
         return;
 
     wxString path = saveDialog.GetPath();
+    spdlog::info("Selected path: {}", path.ToStdString());
 
     if (filters::FilterManager::getInstance().saveFiltersToPath(
             path.ToStdString()))
     {
         wxMessageBox(wxString::Format("Filters saved to:\n%s", path),
-            "Filters Saved", wxOK | wxICON_INFORMATION);
+            "Filters Saved", wxOK | wxICON_INFORMATION, topParent);
+        spdlog::info("Filters saved successfully");
     }
     else
     {
         wxMessageBox(wxString::Format("Failed to save filters to:\n%s", path),
-            "Save Error", wxOK | wxICON_ERROR);
+            "Save Error", wxOK | wxICON_ERROR, topParent);
+        spdlog::error("Failed to save filters");
     }
 }
 
