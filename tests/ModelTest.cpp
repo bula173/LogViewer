@@ -49,7 +49,7 @@ class ModelImpl : public IModel
         NotifyDataChanged();
     }
 
-    size_t Size() override
+    size_t Size() const override
     {
         return items.size();
     }

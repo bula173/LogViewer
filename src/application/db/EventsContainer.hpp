@@ -96,7 +96,7 @@ class EventsContainer : public mvc::IModel
      * @return size_t The number of stored events
      * @complexity O(1)
      */
-    size_t Size() override;
+    size_t Size() const override;
 
     /**
      * @brief Sets the currently selected item index.

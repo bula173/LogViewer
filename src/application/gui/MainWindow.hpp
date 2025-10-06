@@ -13,6 +13,7 @@
 #include "EventsVirtualListControl.hpp"
 #include "ItemVirtualListControl.hpp"
 #include "config/ConfigObserver.hpp"
+#include "gui/FiltersPanel.hpp"
 
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
@@ -486,6 +487,7 @@ class MainWindow : public wxFrame,
         nullptr}; ///< Apply current filter settings button
     wxButton* m_clearFilterButton {
         nullptr}; ///< Clear all filters and show all events button
+    gui::FiltersPanel* m_filtersPanel = nullptr; ///< Filters panel instance
 
     // Data and state member variables
 
@@ -530,6 +532,10 @@ class MainWindow : public wxFrame,
         ID_TypeFilter_DeselectAll,
         ID_TypeFilter_InvertSelection
     };
+
+  public:
+    // Called by the FiltersPanel to apply filters
+    void ApplyFilters();
 };
 
 } // namespace gui

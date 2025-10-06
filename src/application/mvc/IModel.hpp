@@ -94,7 +94,7 @@ class IModel
      *
      * @return size_t The total number of items
      */
-    virtual size_t Size() = 0;
+    virtual size_t Size() const = 0;
     /**
      * @brief Adds a new item to the model.
      *

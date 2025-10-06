@@ -122,7 +122,7 @@ void EventsContainer::Clear()
     this->NotifyDataChanged();
 }
 
-size_t EventsContainer::Size()
+size_t EventsContainer::Size() const
 {
     /**
      * @brief Returns the current number of stored events.

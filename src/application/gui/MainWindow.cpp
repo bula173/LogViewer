@@ -1,6 +1,9 @@
 #include "gui/MainWindow.hpp"
 #include "config/Config.hpp"
+#include "filters/FilterManager.hpp"
 #include "gui/ConfigEditorDialog.hpp"
+#include "gui/FiltersPanel.hpp"
+#include <wx/notebook.h>
 
 #include "error/Error.hpp"
 #include "gui/EventsVirtualListControl.hpp"
@@ -8,6 +11,7 @@
 #include <spdlog/spdlog.h>
 #include <wx/app.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 // std
 #include <filesystem>
 #include <set>
@@ -319,21 +323,51 @@ void MainWindow::setupLayout()
     m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
     m_rigth_spliter->SetSashGravity(0.8);
 
+    // In setupLayout() method, replace the filterSizer code with this:
+
     auto* filterSizer = new wxBoxSizer(wxVERTICAL);
 
-    m_typeFilter = new wxCheckListBox(
-        m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    // Create a notebook for tabs
+    wxNotebook* filterNotebook = new wxNotebook(m_leftPanel, wxID_ANY);
 
+    // First tab - Extended Filters
+    wxPanel* filtersTab = new wxPanel(filterNotebook);
+    wxBoxSizer* filtersTabSizer = new wxBoxSizer(wxVERTICAL);
+
+    // Add FiltersPanel to the first tab
+    m_filtersPanel = new FiltersPanel(filtersTab);
+    filtersTabSizer->Add(m_filtersPanel, 1, wxEXPAND | wxALL, 5);
+    filtersTab->SetSizer(filtersTabSizer);
+
+    // Second tab - Type Filters
+    wxPanel* typeFilterTab = new wxPanel(filterNotebook);
+    wxBoxSizer* typeFilterSizer = new wxBoxSizer(wxVERTICAL);
+
+    // Add type filter controls to the second tab
+    m_typeFilter = new wxCheckListBox(
+        typeFilterTab, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_typeFilter->Bind(
         wxEVT_CONTEXT_MENU, &MainWindow::OnTypeFilterContextMenu, this);
-    // Type filter label (fixed)
-    filterSizer->Add(
-        new wxStaticText(m_leftPanel, wxID_ANY, "Type:"), 0, wxALL, 5);
-    // Type filter (expandable)
-    filterSizer->Add(m_typeFilter, 1, wxEXPAND | wxALL, 5);
-    // --- Add Filter Button ---
-    m_applyFilterButton = new wxButton(m_leftPanel, wxID_ANY, "Apply Filter");
-    filterSizer->Add(m_applyFilterButton, 0, wxEXPAND | wxALL, 5);
+
+    // Type filter label
+    typeFilterSizer->Add(
+        new wxStaticText(typeFilterTab, wxID_ANY, "Type:"), 0, wxALL, 5);
+
+    // Type filter list (expandable)
+    typeFilterSizer->Add(m_typeFilter, 1, wxEXPAND | wxALL, 5);
+
+    // Apply Filter Button
+    m_applyFilterButton = new wxButton(typeFilterTab, wxID_ANY, "Apply Filter");
+    typeFilterSizer->Add(m_applyFilterButton, 0, wxEXPAND | wxALL, 5);
+
+    typeFilterTab->SetSizer(typeFilterSizer);
+
+    // Add tabs to notebook
+    filterNotebook->AddPage(filtersTab, "Extended Filters");
+    filterNotebook->AddPage(typeFilterTab, "Type Filters");
+
+    // Add notebook to the left panel sizer (taking all available space)
+    filterSizer->Add(filterNotebook, 1, wxEXPAND | wxALL, 5);
 
     m_leftPanel->SetSizer(filterSizer);
 
@@ -1175,6 +1209,33 @@ void MainWindow::OnFilterChanged(wxCommandEvent&)
     {
         spdlog::info("Filtered events count: {}", filteredIndices.size());
         m_eventsListCtrl->SetFilteredEvents(filteredIndices);
+        m_eventsListCtrl->Refresh();
+    }
+
+    SetStatusText(statusTxt);
+}
+
+void MainWindow::ApplyFilters()
+{
+    if (!m_eventsListCtrl || m_events.Size() == 0)
+    {
+        return;
+    }
+
+    wxString statusTxt =
+        GetStatusBar() ? GetStatusBar()->GetStatusText(0) : wxString();
+    SetStatusText("Applying filters...");
+
+    // Apply filters from FilterManager to the events container
+    auto filteredIndices =
+        filters::FilterManager::getInstance().applyFilters(m_events);
+
+    // Update the events list with filtered indices
+    auto adapter =
+        static_cast<gui::EventsContainerAdapter*>(m_eventsListCtrl->GetModel());
+    if (adapter)
+    {
+        adapter->SetFilteredIndices(filteredIndices);
         m_eventsListCtrl->Refresh();
     }
 
