@@ -115,15 +115,6 @@ jobs:
           echo "Running CPack..."
           cpack -G NSIS -C Release --config CPackConfig.cmake -VV
 
-          # More detailed debug output to locate installer files
-          echo "Looking for installer files:"
-          find . -name "*.exe" | grep -i setup
-          find . -name "*.exe" -o -name "*.msi" | sort
-
-          # Show full CPack output directory structure
-          echo "CPack output directory structure:"
-          find _CPack_Packages -type f | grep -E "\.(exe|msi)$" || echo "No installers found in _CPack_Packages"
-
       - name: Upload tests artifact
         if: always()
         uses: actions/upload-artifact@v4
