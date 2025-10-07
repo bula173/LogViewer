@@ -52,10 +52,10 @@ if(WIN32 AND NOT UNIX)
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")
 
     # Configure file with right path, place the result to PROJECT_BINARY_DIR.
-    # When ${PROJECT_BINARY_DIR}/exampleApp.icon.rc is added to an executable
-    # it will have icon specified in exampleApp.icon.in.rc
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.icon.in.rc
-        ${PROJECT_BINARY_DIR}/exampleApp.icon.rc)
+    # When ${PROJECT_BINARY_DIR}/LogViewer.rc is added to an executable
+    # it will have icon specified in LogViewer.ico
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.rc.in
+        ${PROJECT_BINARY_DIR}/packaging/LogViewer.rc @ONLY)
 
 elseif(APPLE)
     #--------------------------------------------------------------------------
