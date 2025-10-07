@@ -7,18 +7,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# --- Coverage temporarily disabled ---
-# option(ENABLE_COVERAGE "Enable code coverage (GCC or Clang on Linux/macOS only)" OFF)
-# if(ENABLE_COVERAGE)
-#     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#         add_compile_options(--coverage)
-#         add_link_options(--coverage)
-#     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND NOT WIN32)
-#         add_compile_options(-fprofile-instr-generate -fcoverage-mapping)
-#         add_link_options(-fprofile-instr-generate -fcoverage-mapping)
-#     endif()
-# endif()
-
 # Be nice and export compile commands by default, this is handy for clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -65,17 +53,6 @@ if(DOXYGEN_FOUND)
     COMMENT "Generating API documentation with Doxygen"
     VERBATIM)
 endif()
-
-# Previous Windows clang coverage cleanup no longer needed (coverage disabled)
-# if (WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-#     foreach(var CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-#         if (${var} MATCHES "--coverage")
-#             message(WARNING "Removing unsupported --coverage for Windows Clang")
-#             string(REPLACE "--coverage" "" cleaned "${${var}}")
-#             set(${var} "${cleaned}" CACHE STRING "" FORCE)
-#         endif()
-#     endforeach()
-# endif()
 
 if(APPLE AND CMAKE_CXX_COMPILER MATCHES "clang-cl$")
     message(FATAL_ERROR "clang-cl detected on macOS; use /usr/bin/clang++. Clean build/ and reconfigure.")
