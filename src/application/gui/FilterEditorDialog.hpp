@@ -6,6 +6,7 @@
 #include <wx/choice.h>
 #include <wx/dialog.h>
 #include <wx/notebook.h>
+#include <wx/panel.h> // Add this line for wxPanel
 #include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
