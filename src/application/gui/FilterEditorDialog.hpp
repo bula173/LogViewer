@@ -5,6 +5,8 @@
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/dialog.h>
+#include <wx/notebook.h>
+#include <wx/spinctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
@@ -31,9 +33,19 @@ class FilterEditorDialog : public wxDialog
     wxTextCtrl* m_patternCtrl = nullptr;
     wxCheckBox* m_caseSensitiveCheckbox = nullptr;
     wxCheckBox* m_invertedCheckbox = nullptr;
+    wxNotebook* m_notebook = nullptr;
+    wxChoice* m_filterTypeChoice = nullptr;
+    wxTextCtrl* m_parameterKeyCtrl = nullptr;
+    wxSpinCtrl* m_depthSpinner = nullptr;
 
     // Filter being edited (nullptr for new filter)
     filters::FilterPtr m_filter;
+    wxPanel* m_columnFilterPanel = nullptr;
+    wxPanel* m_parameterFilterPanel = nullptr;
+
+    void CreateColumnFilterControls(wxPanel* parent);
+    void CreateParameterFilterControls(wxPanel* parent);
+    void OnFilterTypeChanged(wxCommandEvent& event);
 };
 
 } // namespace gui

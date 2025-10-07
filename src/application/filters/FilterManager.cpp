@@ -119,7 +119,7 @@ std::vector<unsigned long> FilterManager::applyFilters(
     // If no filters enabled, include all events
     if (enabledFilters == 0)
     {
-        for (size_t i = 0; i < container.Size(); ++i)
+        for (unsigned long i = 0; i < container.Size(); ++i)
         {
             result.push_back(i);
         }
@@ -127,7 +127,7 @@ std::vector<unsigned long> FilterManager::applyFilters(
     }
 
     // Apply filters to each event using OR logic
-    for (size_t i = 0; i < container.Size(); ++i)
+    for (unsigned long i = 0; i < container.Size(); ++i)
     {
         const auto& event = container.GetEvent(i);
         bool passesAnyFilter = false;
@@ -137,6 +137,18 @@ std::vector<unsigned long> FilterManager::applyFilters(
             if (!filter || !filter->isEnabled)
                 continue;
 
+            // Handle parameter filter differently
+            if (filter->isParameterFilter)
+            {
+                if (filter->matchesParameter(event))
+                {
+                    passesAnyFilter = true;
+                    break;
+                }
+                continue;
+            }
+
+            // Regular column filter processing
             // Special case for wildcard column - check all fields
             if (filter->columnName == "*")
             {

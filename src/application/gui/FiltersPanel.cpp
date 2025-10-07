@@ -118,9 +118,20 @@ void FiltersPanel::RefreshFilters()
             continue;
 
         long itemIdx =
-            m_filtersList->InsertItem(idx, filter->isEnabled ? "[x]" : "[ ]");
+            m_filtersList->InsertItem(idx, filter->isEnabled ? "✓" : "");
         m_filtersList->SetItem(itemIdx, 1, filter->name);
-        m_filtersList->SetItem(itemIdx, 2, filter->columnName);
+
+        // Show different information based on filter type
+        if (filter->isParameterFilter)
+        {
+            m_filtersList->SetItem(
+                itemIdx, 2, "Parameter: " + filter->parameterKey);
+        }
+        else
+        {
+            m_filtersList->SetItem(itemIdx, 2, "Column: " + filter->columnName);
+        }
+
         m_filtersList->SetItem(itemIdx, 3, filter->pattern);
         m_filtersList->SetItemData(itemIdx, idx); // Store index
 
@@ -233,34 +244,6 @@ void FiltersPanel::OnFilterSelected(wxListEvent& event)
     // Enable edit/remove buttons
     m_editButton->Enable();
     m_removeButton->Enable();
-}
-
-void FiltersPanel::OnFilterChecked(wxListEvent& event)
-{
-    int index = event.GetIndex();
-    wxString filterName = m_filtersList->GetItemText(index, 1);
-
-    // Toggle the checkmark
-    bool isCurrentlyEnabled = !m_filtersList->GetItemText(index, 0).empty();
-    bool newState = !isCurrentlyEnabled;
-
-    // Update the UI
-    m_filtersList->SetItem(index, 0, newState ? "[x]" : "[ ]");
-
-    // Update the filter
-    filters::FilterManager::getInstance().enableFilter(
-        filterName.ToStdString(), newState);
-    filters::FilterManager::getInstance().saveFilters();
-
-    // Update item appearance
-    if (newState)
-    {
-        m_filtersList->SetItemTextColour(index, *wxBLACK);
-    }
-    else
-    {
-        m_filtersList->SetItemTextColour(index, wxColour(150, 150, 150));
-    }
 }
 
 void FiltersPanel::OnApplyFilters(wxCommandEvent& WXUNUSED(event))

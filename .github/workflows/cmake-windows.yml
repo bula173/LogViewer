@@ -138,10 +138,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-Release-installer
-          # Try multiple possible paths where the installer might be
           path: |
             ${{ github.workspace }}/dist/packages/*.exe
-            ${{ env.BUILD_DIR }}/_CPack_Packages/win64/NSIS/*.exe
-            ${{ env.BUILD_DIR }}/_CPack_Packages/*/NSIS/*.exe
-            ${{ env.BUILD_DIR }}/*.exe
           if-no-files-found: warn

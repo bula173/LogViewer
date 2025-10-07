@@ -3,7 +3,9 @@
 #include "filters/FilterManager.hpp"
 #include <spdlog/spdlog.h>
 #include <wx/msgdlg.h>
+#include <wx/notebook.h>
 #include <wx/sizer.h>
+#include <wx/spinctrl.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
@@ -36,44 +38,62 @@ void FilterEditorDialog::CreateControls()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    // Filter properties section
-    wxFlexGridSizer* gridSizer = new wxFlexGridSizer(2, 5, 10);
-    gridSizer->AddGrowableCol(1);
+    // Filter type choice
+    wxBoxSizer* typeBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    typeBoxSizer->Add(new wxStaticText(this, wxID_ANY, "Filter Type:"), 0,
+        wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+
+    m_filterTypeChoice = new wxChoice(this, wxID_ANY);
+    m_filterTypeChoice->Append("Column Filter");
+    m_filterTypeChoice->Append("Parameter Filter");
+    typeBoxSizer->Add(m_filterTypeChoice, 1);
+    m_filterTypeChoice->SetSelection(0);
+
+    mainSizer->Add(typeBoxSizer, 0, wxEXPAND | wxALL, 10);
+
+    // Create tabbed interface for different filter types
+    m_notebook = new wxNotebook(this, wxID_ANY);
+
+    // Column filter panel
+    wxPanel* columnPanel = new wxPanel(m_notebook);
+    CreateColumnFilterControls(columnPanel);
+
+    // Parameter filter panel
+    wxPanel* paramPanel = new wxPanel(m_notebook);
+    CreateParameterFilterControls(paramPanel);
+
+    m_notebook->AddPage(columnPanel, "Column Filter");
+    m_notebook->AddPage(paramPanel, "Parameter Filter");
+
+    mainSizer->Add(m_notebook, 1, wxEXPAND | wxALL, 10);
+
+    // Common controls
+    wxFlexGridSizer* commonGrid = new wxFlexGridSizer(2, 5, 10);
+    commonGrid->AddGrowableCol(1);
 
     // Name
-    gridSizer->Add(
+    commonGrid->Add(
         new wxStaticText(this, wxID_ANY, "Name:"), 0, wxALIGN_CENTER_VERTICAL);
     m_nameCtrl = new wxTextCtrl(this, wxID_ANY);
-    gridSizer->Add(m_nameCtrl, 1, wxEXPAND);
-
-    // Column
-    gridSizer->Add(new wxStaticText(this, wxID_ANY, "Column:"), 0,
-        wxALIGN_CENTER_VERTICAL);
-    m_columnChoice = new wxChoice(this, wxID_ANY);
-    PopulateColumnChoices();
-    gridSizer->Add(m_columnChoice, 1, wxEXPAND);
+    commonGrid->Add(m_nameCtrl, 1, wxEXPAND);
 
     // Pattern
-    gridSizer->Add(new wxStaticText(this, wxID_ANY, "Pattern (regex):"), 0,
+    commonGrid->Add(new wxStaticText(this, wxID_ANY, "Pattern (regex):"), 0,
         wxALIGN_CENTER_VERTICAL);
     m_patternCtrl = new wxTextCtrl(this, wxID_ANY);
-    gridSizer->Add(m_patternCtrl, 1, wxEXPAND);
+    commonGrid->Add(m_patternCtrl, 1, wxEXPAND);
 
     // Options
-    gridSizer->Add(new wxStaticText(this, wxID_ANY, "Options:"), 0,
+    commonGrid->Add(new wxStaticText(this, wxID_ANY, "Options:"), 0,
         wxALIGN_CENTER_VERTICAL);
     wxBoxSizer* optionsSizer = new wxBoxSizer(wxHORIZONTAL);
     m_caseSensitiveCheckbox = new wxCheckBox(this, wxID_ANY, "Case sensitive");
     m_invertedCheckbox = new wxCheckBox(this, wxID_ANY, "Inverted match");
     optionsSizer->Add(m_caseSensitiveCheckbox, 0, wxRIGHT, 10);
     optionsSizer->Add(m_invertedCheckbox, 0);
-    gridSizer->Add(optionsSizer, 1, wxEXPAND);
+    commonGrid->Add(optionsSizer, 1, wxEXPAND);
 
-    mainSizer->Add(gridSizer, 0, wxEXPAND | wxALL, 10);
-
-    // Separator
-    mainSizer->Add(new wxStaticLine(this, wxID_ANY), 0, wxEXPAND | wxALL, 5);
-
+    mainSizer->Add(commonGrid, 0, wxEXPAND | wxALL, 10);
 
     // Buttons
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -86,31 +106,99 @@ void FilterEditorDialog::CreateControls()
 
     mainSizer->Add(buttonSizer, 0, wxEXPAND | wxALL, 10);
 
-    // If editing existing filter, populate fields
+    // Bind events
+    m_filterTypeChoice->Bind(
+        wxEVT_CHOICE, &FilterEditorDialog::OnFilterTypeChanged, this);
+
+    // If editing existing filter, populate fields and select appropriate type
     if (m_filter)
     {
         m_nameCtrl->SetValue(m_filter->name);
-
-        // Find and select column
-        int colIndex = m_columnChoice->FindString(m_filter->columnName);
-        if (colIndex != wxNOT_FOUND)
-        {
-            m_columnChoice->SetSelection(colIndex);
-        }
-
         m_patternCtrl->SetValue(m_filter->pattern);
         m_caseSensitiveCheckbox->SetValue(m_filter->isCaseSensitive);
         m_invertedCheckbox->SetValue(m_filter->isInverted);
-    }
-    else
-    {
-        // Default values for new filter
-        m_columnChoice->SetSelection(0); // First column
-        m_caseSensitiveCheckbox->SetValue(false);
-        m_invertedCheckbox->SetValue(false);
+
+        if (m_filter->isParameterFilter)
+        {
+            m_filterTypeChoice->SetSelection(1);
+            m_notebook->SetSelection(1);
+
+            // Set parameter filter specific fields
+            m_parameterKeyCtrl->SetValue(m_filter->parameterKey);
+            m_depthSpinner->SetValue(m_filter->parameterDepth);
+        }
+        else
+        {
+            m_filterTypeChoice->SetSelection(0);
+            m_notebook->SetSelection(0);
+
+            // Set column filter specific fields
+            int colIndex = m_columnChoice->FindString(m_filter->columnName);
+            if (colIndex != wxNOT_FOUND)
+            {
+                m_columnChoice->SetSelection(colIndex);
+            }
+        }
     }
 
     SetSizer(mainSizer);
+}
+
+void FilterEditorDialog::CreateColumnFilterControls(wxPanel* parent)
+{
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+    wxFlexGridSizer* grid = new wxFlexGridSizer(2, 5, 10);
+    grid->AddGrowableCol(1);
+
+    // Column
+    grid->Add(new wxStaticText(parent, wxID_ANY, "Column:"), 0,
+        wxALIGN_CENTER_VERTICAL);
+    m_columnChoice = new wxChoice(parent, wxID_ANY);
+    PopulateColumnChoices();
+    grid->Add(m_columnChoice, 1, wxEXPAND);
+
+    sizer->Add(grid, 0, wxEXPAND | wxALL, 10);
+
+    // Description
+    sizer->Add(new wxStaticText(parent, wxID_ANY,
+                   "Column filters match against a specific column value."),
+        0, wxALL, 10);
+
+    parent->SetSizer(sizer);
+}
+
+void FilterEditorDialog::CreateParameterFilterControls(wxPanel* parent)
+{
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+    wxFlexGridSizer* grid = new wxFlexGridSizer(2, 5, 10);
+    grid->AddGrowableCol(1);
+
+    // Parameter key
+    grid->Add(new wxStaticText(parent, wxID_ANY, "Parameter Key:"), 0,
+        wxALIGN_CENTER_VERTICAL);
+    m_parameterKeyCtrl = new wxTextCtrl(parent, wxID_ANY);
+    grid->Add(m_parameterKeyCtrl, 1, wxEXPAND);
+
+    // Search depth
+    grid->Add(new wxStaticText(parent, wxID_ANY, "Search Depth:"), 0,
+        wxALIGN_CENTER_VERTICAL);
+    m_depthSpinner = new wxSpinCtrl(parent, wxID_ANY, "0", wxDefaultPosition,
+        wxDefaultSize, wxSP_ARROW_KEYS, 0, 5, 0);
+    grid->Add(m_depthSpinner, 0);
+
+    sizer->Add(grid, 0, wxEXPAND | wxALL, 10);
+
+    // Description
+    sizer->Add(new wxStaticText(parent, wxID_ANY,
+                   "Parameter filters search for a specific parameter key in "
+                   "the event data.\n"
+                   "Search depth controls how deep to look in nested "
+                   "structures (0 = top level only)."),
+        0, wxALL, 10);
+
+    parent->SetSizer(sizer);
 }
 
 void FilterEditorDialog::BindEvents()
@@ -139,6 +227,13 @@ filters::FilterPtr FilterEditorDialog::GetFilter() const
     return m_filter;
 }
 
+void FilterEditorDialog::OnFilterTypeChanged(wxCommandEvent& event)
+{
+    // Change the notebook page when the filter type changes
+    int selection = m_filterTypeChoice->GetSelection();
+    m_notebook->SetSelection(selection);
+}
+
 void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     // Validate inputs
@@ -151,17 +246,6 @@ void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    // Get column
-    int colIdx = m_columnChoice->GetSelection();
-    if (colIdx == wxNOT_FOUND)
-    {
-        wxMessageBox("Please select a column.", "Validation Error",
-            wxOK | wxICON_EXCLAMATION);
-        m_columnChoice->SetFocus();
-        return;
-    }
-    wxString columnName = m_columnChoice->GetString(colIdx);
-
     // Get pattern
     wxString pattern = m_patternCtrl->GetValue().Trim();
     if (pattern.IsEmpty())
@@ -170,6 +254,39 @@ void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
             wxOK | wxICON_EXCLAMATION);
         m_patternCtrl->SetFocus();
         return;
+    }
+
+    // Determine filter type
+    bool isParameterFilter = (m_filterTypeChoice->GetSelection() == 1);
+
+    // Get type-specific values
+    wxString columnName;
+    wxString paramKey;
+    int depth = 0;
+
+    if (isParameterFilter)
+    {
+        paramKey = m_parameterKeyCtrl->GetValue().Trim();
+        if (paramKey.IsEmpty())
+        {
+            wxMessageBox("Parameter key cannot be empty.", "Validation Error",
+                wxOK | wxICON_EXCLAMATION);
+            m_parameterKeyCtrl->SetFocus();
+            return;
+        }
+        depth = m_depthSpinner->GetValue();
+    }
+    else
+    {
+        int colIdx = m_columnChoice->GetSelection();
+        if (colIdx == wxNOT_FOUND)
+        {
+            wxMessageBox("Please select a column.", "Validation Error",
+                wxOK | wxICON_EXCLAMATION);
+            m_columnChoice->SetFocus();
+            return;
+        }
+        columnName = m_columnChoice->GetString(colIdx);
     }
 
     // Validate regex pattern
@@ -194,8 +311,8 @@ void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     {
         m_filter = std::make_shared<filters::Filter>(name.ToStdString(),
             columnName.ToStdString(), pattern.ToStdString(),
-            m_caseSensitiveCheckbox->GetValue(),
-            m_invertedCheckbox->GetValue());
+            m_caseSensitiveCheckbox->GetValue(), m_invertedCheckbox->GetValue(),
+            isParameterFilter, paramKey.ToStdString(), depth);
     }
     else
     {
@@ -216,10 +333,25 @@ void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 
         // Update existing filter
         m_filter->name = name.ToStdString();
-        m_filter->columnName = columnName.ToStdString();
         m_filter->pattern = pattern.ToStdString();
         m_filter->isCaseSensitive = m_caseSensitiveCheckbox->GetValue();
         m_filter->isInverted = m_invertedCheckbox->GetValue();
+        m_filter->isParameterFilter = isParameterFilter;
+
+        if (isParameterFilter)
+        {
+            m_filter->parameterKey = paramKey.ToStdString();
+            m_filter->parameterDepth = depth;
+            m_filter->columnName =
+                "*"; // Use wildcard column for parameter filters
+        }
+        else
+        {
+            m_filter->columnName = columnName.ToStdString();
+            m_filter->parameterKey = "";
+            m_filter->parameterDepth = 0;
+        }
+
         m_filter->compile(); // Recompile regex
     }
 
