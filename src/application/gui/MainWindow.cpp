@@ -1210,8 +1210,6 @@ void MainWindow::OnFilterChanged(wxCommandEvent&)
     else
     {
         util::Logger::Info("Filtered events count: {}", filteredIndices.size());
-        m_eventsListCtrl->SetFilteredEvents(filteredIndices);
-        m_eventsListCtrl->Refresh();
         // Update the events list with filtered indices
         auto adapter =
             static_cast<gui::EventsContainerAdapter*>(m_eventsListCtrl->GetModel());

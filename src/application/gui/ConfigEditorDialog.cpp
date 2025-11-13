@@ -347,9 +347,7 @@ ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
 
     colorsPanel->SetSizer(colorsSizer);
 
-    // Add pages to notebook AFTER configuring them - not before
-    notebook->AddPage(generalPanel, "General");
-    notebook->AddPage(columnsPanel, "Columns");
+    // Add pages to notebook (only once!)
     notebook->AddPage(colorsPanel, "Colors");
 
     // Main layout

@@ -2,6 +2,7 @@
 #define MYAPP_HPP
 
 #include <wx/wx.h>
+#include <wx/intl.h>
 
 // third party
 #include <spdlog/sinks/basic_file_sink.h>
@@ -22,6 +23,7 @@ class MyApp : public wxApp
 
   private:
     const std::string m_appName {"LogViewer"};
+    wxLocale m_locale; // Locale object for proper Unicode/Polish support
 };
 
 #endif // MYAPP_HPP

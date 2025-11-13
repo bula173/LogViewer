@@ -43,6 +43,13 @@ bool MyApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
+    // Initialize locale for proper Unicode/Polish character support
+    // This must be done before any GUI elements are created
+    if (!m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT))
+    {
+        util::Logger::Warn("Failed to initialize locale, using default");
+    }
+    
     setupLogging();
 
     util::Logger::Info("Initializing MyApp");
