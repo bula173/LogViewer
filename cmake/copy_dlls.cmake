@@ -85,7 +85,7 @@ foreach(DLL_FULLPATH IN LISTS DLL_LIST)
         # If debug DLL (with 'd' suffix) not found, try release version
         string(REGEX REPLACE "d-([0-9]+)\\.dll$" "-\\1.dll" DLL_WIN_PATH_RELEASE "${DLL_WIN_PATH}")
         if(NOT "${DLL_WIN_PATH_RELEASE}" STREQUAL "${DLL_WIN_PATH}" AND EXISTS "${DLL_WIN_PATH_RELEASE}")
-            file(COPY "${DLL_WIN_PATH_RELEASE}" DESTINATION "${DEST_DIR}")
+            file(COPY "${DLL_WIN_PATH_RELEASE}" DESTINATION "${DEST_DIR}/NAME")
             get_filename_component(DLL_NAME "${DLL_WIN_PATH_RELEASE}" NAME)
             message(WARNING "Debug DLL not found, copied release version: ${DLL_NAME} to ${DEST_DIR}")
         else()

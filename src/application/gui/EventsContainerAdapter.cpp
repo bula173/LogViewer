@@ -3,6 +3,7 @@
 
 #include "EventsContainerAdapter.hpp"
 #include "gui/EventsVirtualListControl.hpp" // for color helpers, if needed
+#include "util/WxWidgetsUtils.hpp"
 
 namespace gui
 {
@@ -73,7 +74,7 @@ void EventsContainerAdapter::GetValueByRow(
 
 
     const auto& columnName = colConfig[configColIdx].name;
-    const auto& event = m_container.GetEvent(actualRow);
+    const auto& event = m_container.GetEvent(wx_utils::to_model_index(actualRow));
 
     if (columnName == "id")
     {
@@ -87,7 +88,7 @@ void EventsContainerAdapter::GetValueByRow(
 
 void EventsContainerAdapter::SyncWithContainer()
 {
-    m_rowCount = m_container.Size();
+    m_rowCount = wx_utils::to_wx_uint(m_container.Size());
     Reset(m_rowCount);
 }
 
@@ -157,7 +158,7 @@ bool EventsContainerAdapter::GetAttrByRow(
 {
     // Get the actual event index if filtered
     size_t actualRow = m_filteredIndices.empty() ? row : m_filteredIndices[row];
-    const auto& event = m_container.GetEvent(actualRow);
+    const auto& event = m_container.GetEvent(wx_utils::to_model_index(actualRow));
 
     spdlog::debug(
         "EventsContainerAdapter::GetAttrByRow called for row: {}, col: {}", row,

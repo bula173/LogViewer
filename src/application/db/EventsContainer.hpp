@@ -8,6 +8,7 @@
 #pragma once
 #include "db/LogEvent.hpp"
 #include "mvc/IModel.hpp"
+#include <shared_mutex>
 #include <vector>
 
 /**
@@ -19,7 +20,7 @@ namespace db
 
 /**
  * @class EventsContainer
- * @brief High-performance container for managing large collections of LogEvent
+ * @brief High-performance, thread-safe container for managing large collections of LogEvent
  * objects.
  *
  * EventsContainer provides efficient storage and access to LogEvent
@@ -33,8 +34,15 @@ namespace db
  * - Memory usage: Optimized for large datasets
  *
  * @par Thread Safety
- * This class is not thread-safe. External synchronization is required when
- * accessing from multiple threads during modification operations.
+ * **Thread-safe**: All public methods are protected by internal locks.
+ * - Multiple threads can read concurrently (shared_lock)
+ * - Write operations use exclusive locks (unique_lock)
+ * - Safe for concurrent access from parser threads and UI thread
+ *
+ * @par Lock Strategy
+ * Uses std::shared_mutex for reader-writer lock pattern:
+ * - Read operations (GetEvent, Size): shared_lock allows concurrent reads
+ * - Write operations (AddEvent, Clear): unique_lock ensures exclusive access
  */
 class EventsContainer : public mvc::IModel
 {
@@ -139,6 +147,7 @@ class EventsContainer : public mvc::IModel
     std::vector<LogEvent> m_data; ///< Internal storage for events
     long m_currentItem {
         -1}; ///< Currently selected item index (-1 = no selection)
+    mutable std::shared_mutex m_mutex; ///< Reader-writer lock for thread safety
 };
 
 } // namespace db

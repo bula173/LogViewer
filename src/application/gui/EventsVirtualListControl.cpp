@@ -1,5 +1,7 @@
 #include "gui/EventsVirtualListControl.hpp"
 #include "config/Config.hpp"
+#include "util/WxWidgetsUtils.hpp"
+#include "util/Logger.hpp"
 #include <spdlog/spdlog.h>
 #include <string>
 #include <wx/colour.h>
@@ -15,7 +17,7 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
           parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES | wxDV_SINGLE)
     , m_events(events)
 {
-    spdlog::debug(
+    util::Logger::Debug(
         "EventsVirtualListControl::EventsVirtualListControl constructed");
 
     m_events.RegisterOndDataUpdated(this);
@@ -31,7 +33,7 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
         [this](wxDataViewEvent& evt)
         {
             unsigned int filteredRowIndex = m_model->GetRow(evt.GetItem());
-            spdlog::debug("EventsVirtualListControl::wxEVT_DATAVIEW_SELECTION_"
+            util::Logger::Debug("EventsVirtualListControl::wxEVT_DATAVIEW_SELECTION_"
                           "CHANGED filtered row index: {}",
                 filteredRowIndex);
 
@@ -40,7 +42,7 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
             if (m_model->HasFilteredIndices())
             {
                 actualEventIndex = m_model->GetFilteredIndex(filteredRowIndex);
-                spdlog::debug(
+                util::Logger::Debug(
                     "Converted to actual event index: {}", actualEventIndex);
             }
             else
@@ -54,25 +56,55 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
 
 void EventsVirtualListControl::OnDataUpdated()
 {
-    spdlog::debug("EventsVirtualListControl::OnDataUpdated called");
+    util::Logger::Debug("EventsVirtualListControl::OnDataUpdated called");
     m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
     m_model->Reset(static_cast<unsigned int>(m_events.Size()));
 }
 
 void EventsVirtualListControl::RefreshAfterUpdate()
 {
-    spdlog::debug("EventsVirtualListControl::RefreshAfterUpdate called");
+    util::Logger::Debug("EventsVirtualListControl::RefreshAfterUpdate called");
     m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
     m_model->Reset(static_cast<unsigned int>(m_events.Size()));
 }
 
 void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
 {
-    spdlog::debug(
+    util::Logger::Debug(
         "EventsVirtualListControl::OnCurrentIndexUpdated called with index: {}",
         index);
 
-    wxDataViewItem item = m_model->GetItem(index);
+    // The index passed here is the actual container/model index.
+    // If a filter is active we must convert it back to the filtered row
+    // index used by the view model before calling GetItem().
+    unsigned int rowIndex = wx_utils::int_to_uint(index);
+    if (m_model && m_model->HasFilteredIndices())
+    {
+        // Search for the filtered row which maps to the actual index.
+        bool found = false;
+        const unsigned int count = m_model->GetCount();
+        for (unsigned int i = 0; i < count; ++i)
+        {
+            if (m_model->GetFilteredIndex(i) == static_cast<size_t>(index))
+            {
+                rowIndex = i;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            util::Logger::Debug(
+                "EventsVirtualListControl::OnCurrentIndexUpdated - actual index {} not present in filtered indices",
+                index);
+            // If not found, clear selection and return.
+            this->UnselectAll();
+            return;
+        }
+    }
+
+    wxDataViewItem item = m_model->GetItem(rowIndex);
     this->Select(item);
     this->EnsureVisible(item);
     this->SetCurrentItem(item);
@@ -82,7 +114,7 @@ void EventsVirtualListControl::OnCurrentIndexUpdated(const int index)
 void EventsVirtualListControl::SetFilteredEvents(
     const std::vector<unsigned long>& filteredIndices)
 {
-    spdlog::debug(
+    util::Logger::Debug(
         "EventsVirtualListControl::SetFilteredEvents called, count: {}",
         filteredIndices.size());
     m_model->SetFilteredIndices(filteredIndices);
@@ -92,7 +124,7 @@ void EventsVirtualListControl::SetFilteredEvents(
 
 void EventsVirtualListControl::UpdateColors()
 {
-    spdlog::debug("EventsVirtualListControl::UpdateColors called");
+    util::Logger::Debug("EventsVirtualListControl::UpdateColors called");
 
     if (m_model)
     {
@@ -110,7 +142,7 @@ void EventsVirtualListControl::UpdateColors()
 
 void EventsVirtualListControl::RefreshColumns()
 {
-    spdlog::debug("EventsVirtualListControl::RefreshColumns called");
+    util::Logger::Debug("EventsVirtualListControl::RefreshColumns called");
 
     // Get config columns that should be visible
     const auto& colConfig = config::GetConfig().columns;
@@ -128,15 +160,15 @@ void EventsVirtualListControl::RefreshColumns()
     Freeze();
 
     // Step 1: Update existing columns where possible
-    int existingCount = GetColumnCount();
+    int existingCount = wx_utils::uint_to_int(GetColumnCount());
     int configCount = static_cast<int>(visibleConfigColumns.size());
     int commonCount = std::min(existingCount, configCount);
 
     // Update common columns (reuse existing ones)
     for (int i = 0; i < commonCount; i++)
     {
-        wxDataViewColumn* col = GetColumn(i);
-        const config::ColumnConfig* configCol = visibleConfigColumns[i];
+        wxDataViewColumn* col = GetColumn(wx_utils::int_to_uint(i));
+        const config::ColumnConfig* configCol = visibleConfigColumns[static_cast<size_t>(i)];
 
         // Update column properties
         if (col)
@@ -151,10 +183,10 @@ void EventsVirtualListControl::RefreshColumns()
     {
         for (int i = existingCount - 1; i >= configCount; i--)
         {
-            wxDataViewColumn* col = GetColumn(i);
+            wxDataViewColumn* col = GetColumn(wx_utils::int_to_uint(i));
             if (col)
             {
-                spdlog::debug("Removing extra column at index {}", i);
+                util::Logger::Debug("Removing extra column at index {}", i);
                 DeleteColumn(col);
             }
         }
@@ -165,12 +197,12 @@ void EventsVirtualListControl::RefreshColumns()
     {
         for (int i = existingCount; i < configCount; i++)
         {
-            const config::ColumnConfig* configCol = visibleConfigColumns[i];
-            spdlog::debug("Adding missing column: {}", configCol->name);
+            const config::ColumnConfig* configCol = visibleConfigColumns[static_cast<size_t>(i)];
+            util::Logger::Debug("Adding missing column: {}", configCol->name);
 
             auto renderer =
                 new wxDataViewTextRenderer("string", wxDATAVIEW_CELL_INERT);
-            auto column = new wxDataViewColumn(configCol->name, renderer, i,
+            auto column = new wxDataViewColumn(configCol->name, renderer, wx_utils::int_to_uint(i),
                 configCol->width, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE);
 
             AppendColumn(column);
@@ -181,7 +213,7 @@ void EventsVirtualListControl::RefreshColumns()
     // Either use column width auto-resize...
     for (unsigned int i = 0; i < GetColumnCount(); i++)
     {
-        wxDataViewColumn* col = GetColumn(i);
+        wxDataViewColumn* col = GetColumn(wx_utils::uint_to_int(i));
         if (col)
         {
             col->SetWidth(col->GetWidth()); // Force recalculation
@@ -229,10 +261,10 @@ void EventsVirtualListControl::AddColumnsFromConfig()
     }
 
     // Add columns
-    int colIndex = 0;
+    unsigned int colIndex = 0;
     for (const auto* col : visibleConfigColumns)
     {
-        spdlog::debug("Adding column: {}.", col->name);
+        util::Logger::Debug("Adding column: {}.", col->name);
         try
         {
             auto renderer = new wxDataViewTextRenderer(
@@ -242,7 +274,7 @@ void EventsVirtualListControl::AddColumnsFromConfig()
 
             if (!AppendColumn(column))
             {
-                spdlog::error("Failed to append column: {}", col->name);
+                util::Logger::Error("Failed to append column: {}", col->name);
                 delete column; // Clean up if append fails
             }
             else
@@ -252,7 +284,7 @@ void EventsVirtualListControl::AddColumnsFromConfig()
         }
         catch (const std::exception& e)
         {
-            spdlog::error(
+            util::Logger::Error(
                 "Exception adding column {}: {}", col->name, e.what());
         }
     }

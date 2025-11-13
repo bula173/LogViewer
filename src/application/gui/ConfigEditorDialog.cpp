@@ -1,5 +1,6 @@
 #include "ConfigEditorDialog.hpp"
 #include "config/Config.hpp"
+#include "util/Logger.hpp"
 #include <algorithm>
 #include <wx/checkbox.h>
 #include <wx/clrpicker.h>
@@ -1030,7 +1031,7 @@ void ConfigEditorDialog::SwapListItems(
     m_columnsList->SetItemData(targetPos, sourceConfigIndex);
 
     // Log the change
-    spdlog::debug("Moved column {} from position {} to position {}",
+    util::Logger::Debug("Moved column {} from position {} to position {}",
         sourceName.ToStdString(), sourcePos, targetPos);
 
     // Make sure the OnSave method will save these changes
@@ -1118,7 +1119,7 @@ wxColour ConfigEditorDialog::HexToColor(const std::string& hexColor)
     g = strtoul(hexColor.substr(3, 2).c_str(), nullptr, 16);
     b = strtoul(hexColor.substr(5, 2).c_str(), nullptr, 16);
 
-    return wxColour(r, g, b);
+    return wxColour(static_cast<unsigned char>(r), static_cast<unsigned char>(g), static_cast<unsigned char>(b));
 }
 
 std::string ConfigEditorDialog::ColorToHex(const wxColour& color)
@@ -1166,5 +1167,5 @@ void ConfigEditorDialog::OnLogLevelChanged(wxCommandEvent& WXUNUSED(event))
     spdlog::set_level(levelEnum);
 
     // Log that the level has been changed
-    spdlog::info("Log level changed to: {}", newLevel);
+    util::Logger::Info("Log level changed to: {}", newLevel);
 }

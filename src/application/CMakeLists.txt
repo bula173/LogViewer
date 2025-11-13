@@ -12,11 +12,14 @@ endif()
 
 # Explicit source file list (avoids GLOB_RECURSE issues with build system)
 set(APP_SRCS
+    command/EventCommands.cpp
+    command/ICommand.cpp
     config/Config.cpp
     db/EventsContainer.cpp
     db/LogEvent.cpp
     filters/Filter.cpp
     filters/FilterManager.cpp
+    filters/IFilterStrategy.cpp
     gui/ConfigEditorDialog.cpp
     gui/EventsContainerAdapter.cpp
     gui/EventsVirtualListControl.cpp
@@ -24,6 +27,7 @@ set(APP_SRCS
     gui/FiltersPanel.cpp
     gui/ItemVirtualListControl.cpp
     gui/MainWindow.cpp
+    parser/ParserFactory.cpp
     xml/xmlParser.cpp
 )
 

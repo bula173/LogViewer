@@ -1,6 +1,7 @@
 #include "FilterEditorDialog.hpp"
 #include "config/Config.hpp"
 #include "filters/FilterManager.hpp"
+#include "util/WxWidgetsUtils.hpp"
 #include <spdlog/spdlog.h>
 #include <wx/msgdlg.h>
 #include <wx/notebook.h>
@@ -227,11 +228,11 @@ filters::FilterPtr FilterEditorDialog::GetFilter() const
     return m_filter;
 }
 
-void FilterEditorDialog::OnFilterTypeChanged(wxCommandEvent& event)
+void FilterEditorDialog::OnFilterTypeChanged(wxCommandEvent& /*event*/)
 {
     // Change the notebook page when the filter type changes
     int selection = m_filterTypeChoice->GetSelection();
-    m_notebook->SetSelection(selection);
+    m_notebook->SetSelection(static_cast<size_t>(selection));
 }
 
 void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
@@ -286,7 +287,7 @@ void FilterEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
             m_columnChoice->SetFocus();
             return;
         }
-        columnName = m_columnChoice->GetString(colIdx);
+        columnName = m_columnChoice->GetString(wx_utils::int_to_uint(colIdx));
     }
 
     // Validate regex pattern

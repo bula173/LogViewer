@@ -76,11 +76,6 @@
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {

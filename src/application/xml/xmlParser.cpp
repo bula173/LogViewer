@@ -92,7 +92,7 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
     ParserState* state = static_cast<ParserState*>(userData);
     if (state->insideEvent && !state->currentElement.empty())
     {
-        state->currentText.append(s, len);
+        state->currentText.append(s, static_cast<size_t>(len));
     }
 
     state->bytesProcessed = XML_GetCurrentByteIndex(state->parserHandle);

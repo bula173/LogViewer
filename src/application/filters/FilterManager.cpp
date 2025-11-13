@@ -129,7 +129,7 @@ std::vector<unsigned long> FilterManager::applyFilters(
     // Apply filters to each event using OR logic
     for (unsigned long i = 0; i < container.Size(); ++i)
     {
-        const auto& event = container.GetEvent(i);
+        const auto& event = container.GetEvent(static_cast<int>(i));
         bool passesAnyFilter = false;
 
         for (const auto& filter : m_filters)

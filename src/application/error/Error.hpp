@@ -19,6 +19,20 @@
 namespace error
 {
 
+/**
+ * @brief Error code enumeration for categorizing errors
+ */
+enum class ErrorCode
+{
+    Unknown,           ///< Unknown or unspecified error
+    InvalidArgument,   ///< Invalid argument provided
+    RuntimeError,      ///< Runtime error occurred
+    NotImplemented,    ///< Feature not yet implemented
+    FileNotFound,      ///< File not found
+    ParseError,        ///< Parsing error
+    IOError            ///< Input/output error
+};
+
 inline void ShowError(const wxString& message)
 {
     wxMessageBox(message, "Error", wxOK | wxICON_ERROR);
@@ -54,27 +68,50 @@ inline bool CanShowDialogs()
 
 class Error : public std::runtime_error
 {
+  private:
+    ErrorCode m_code;
+
   public:
+    explicit Error(ErrorCode code, const char* message, bool showMsgBox = true)
+        : Error(code, std::string(message), showMsgBox)
+    {
+    }
+
+    explicit Error(ErrorCode code, const std::string& message, bool showMsgBox = true)
+        : std::runtime_error(message)
+        , m_code(code)
+    {
+        if (showMsgBox && CanShowDialogs())
+            ShowError(message);
+        spdlog::error("Application Error [{}]: {}", static_cast<int>(code), message);
+    }
+
+    explicit Error(ErrorCode code, const wxString& message, bool showMsgBox = true)
+        : std::runtime_error(message.ToStdString())
+        , m_code(code)
+    {
+        if (showMsgBox && CanShowDialogs())
+            ShowError(message);
+        spdlog::error("Application Error [{}]: {}", static_cast<int>(code), message.ToStdString());
+    }
+
+    // Legacy constructors without ErrorCode (defaults to Unknown)
     explicit Error(const char* message, bool showMsgBox = true)
-        : Error(std::string(message), showMsgBox)
+        : Error(ErrorCode::Unknown, std::string(message), showMsgBox)
     {
     }
 
     explicit Error(const std::string& message, bool showMsgBox = true)
-        : std::runtime_error(message)
+        : Error(ErrorCode::Unknown, message, showMsgBox)
     {
-        if (showMsgBox && CanShowDialogs())
-            ShowError(message);
-        spdlog::error("Application Error: {}", message);
     }
 
     explicit Error(const wxString& message, bool showMsgBox = true)
-        : std::runtime_error(message.ToStdString())
+        : Error(ErrorCode::Unknown, message, showMsgBox)
     {
-        if (showMsgBox && CanShowDialogs())
-            ShowError(message);
-        spdlog::error("Application Error: {}", message.ToStdString());
     }
+
+    ErrorCode code() const { return m_code; }
 };
 
 } // namespace error

@@ -1,4 +1,6 @@
 #include "gui/ItemVirtualListControl.hpp"
+#include "util/WxWidgetsUtils.hpp"
+#include "util/Logger.hpp"
 #include <spdlog/spdlog.h>
 
 #include <iostream>
@@ -17,7 +19,7 @@ ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
           parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES)
     , m_events(events)
 {
-    spdlog::debug("ItemVirtualListControl::ItemVirtualListControl constructed");
+    util::Logger::Debug("ItemVirtualListControl::ItemVirtualListControl constructed");
     // Define columns
     this->AppendTextColumn("Key", wxDATAVIEW_CELL_INERT, 150, wxALIGN_LEFT,
         wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
@@ -43,7 +45,7 @@ void ItemVirtualListControl::OnCopyValue(wxCommandEvent& WXUNUSED(event))
     if (selectedRow == wxNOT_FOUND)
         return;
     wxVariant value;
-    this->GetValue(value, selectedRow, 1); // column 1 is "value"
+    this->GetValue(value, wx_utils::int_to_uint(selectedRow), 1); // column 1 is "value"
     if (wxTheClipboard->Open())
     {
         wxTheClipboard->SetData(new wxTextDataObject(value.GetString()));
@@ -66,13 +68,13 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
 {
     try
     {
-        spdlog::debug("ItemVirtualListControl::OnCurrentIndexUpdated called "
+        util::Logger::Debug("ItemVirtualListControl::OnCurrentIndexUpdated called "
                       "with index: {}",
             index);
 
         if (index < 0 || index >= static_cast<int>(m_events.Size()))
         {
-            spdlog::warn(
+            util::Logger::Warn(
                 "ItemVirtualListControl::OnCurrentIndexUpdated: index {} out "
                 "of range (size: {})",
                 index, m_events.Size());
@@ -95,12 +97,12 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
     }
     catch (const std::exception& ex)
     {
-        spdlog::error("Exception in OnCurrentIndexUpdated: {}", ex.what());
+        util::Logger::Error("Exception in OnCurrentIndexUpdated: {}", ex.what());
         this->DeleteAllItems();
     }
     catch (...)
     {
-        spdlog::error("Unknown exception in OnCurrentIndexUpdated");
+        util::Logger::Error("Unknown exception in OnCurrentIndexUpdated");
         this->DeleteAllItems();
     }
 }
@@ -109,14 +111,14 @@ void ItemVirtualListControl::RefreshAfterUpdate()
 {
     try
     {
-        spdlog::debug("ItemVirtualListControl::RefreshAfterUpdate called");
+        util::Logger::Debug("ItemVirtualListControl::RefreshAfterUpdate called");
 
         int currentIndex = m_events.GetCurrentItemIndex();
 
         if (currentIndex < 0 ||
             currentIndex >= static_cast<int>(m_events.Size()))
         {
-            spdlog::warn(
+            util::Logger::Warn(
                 "ItemVirtualListControl::RefreshAfterUpdate: index {} out "
                 "of range (size: {})",
                 currentIndex, m_events.Size());
@@ -140,12 +142,12 @@ void ItemVirtualListControl::RefreshAfterUpdate()
     }
     catch (const std::exception& ex)
     {
-        spdlog::error("Exception in RefreshAfterUpdate: {}", ex.what());
+        util::Logger::Error("Exception in RefreshAfterUpdate: {}", ex.what());
         this->DeleteAllItems();
     }
     catch (...)
     {
-        spdlog::error("Unknown exception in RefreshAfterUpdate");
+        util::Logger::Error("Unknown exception in RefreshAfterUpdate");
         this->DeleteAllItems();
     }
 }
@@ -185,7 +187,7 @@ void ItemVirtualListControl::OnMouseMove(wxMouseEvent& event)
         {
             // Get the data value
             wxVariant value;
-            this->GetValue(value, row, col);
+            this->GetValue(value, wx_utils::int_to_uint(row), wx_utils::int_to_uint(col));
             wxString text = value.GetString();
 
             // Use column width to determine if tooltip is needed

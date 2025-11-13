@@ -1,4 +1,5 @@
 #include "config/Config.hpp"
+#include "util/Logger.hpp"
 #include <fstream>
 #include <spdlog/spdlog.h>
 
@@ -41,7 +42,7 @@ void Config::LoadConfig()
     {
         std::filesystem::path configFilePath = GetDefaultConfigPath();
         m_configFilePath = configFilePath.string();
-        spdlog::info("Using config file path: {}", m_configFilePath);
+        util::Logger::Info("Using config file path: {}", m_configFilePath);
     }
 
     if (!std::filesystem::exists(m_configFilePath))
@@ -59,7 +60,7 @@ void Config::LoadConfig()
             if (std::filesystem::exists(path))
             {
                 defaultInstalled = path;
-                spdlog::info("Default config template found at: {}",
+                util::Logger::Info("Default config template found at: {}",
                     defaultInstalled.string());
                 break;
             }
@@ -67,7 +68,7 @@ void Config::LoadConfig()
 
         if (!std::filesystem::exists(defaultInstalled))
         {
-            spdlog::error(
+            util::Logger::Error(
                 "Default config template not found in search paths. Aborting.");
         }
 
@@ -75,18 +76,18 @@ void Config::LoadConfig()
         {
             std::filesystem::copy_file(defaultInstalled, m_configFilePath,
                 std::filesystem::copy_options::overwrite_existing);
-            spdlog::info(
+            util::Logger::Info(
                 "Copied default config to user path: {}", m_configFilePath);
         }
         catch (const std::filesystem::filesystem_error& e)
         {
-            spdlog::error("Failed to copy default config: {}", e.what());
+            util::Logger::Error("Failed to copy default config: {}", e.what());
             return; // optional: abort config load
         }
     }
     else
     {
-        spdlog::info("Config file exists at: {}", m_configFilePath);
+        util::Logger::Info("Config file exists at: {}", m_configFilePath);
     }
 
 
@@ -96,12 +97,12 @@ void Config::LoadConfig()
     {
         json j;
         configFile >> j;
-        spdlog::info("Loaded config from: {}", m_configFilePath);
+        util::Logger::Info("Loaded config from: {}", m_configFilePath);
 
         // Check if the JSON data is valid
         if (j.is_null())
         {
-            spdlog::error("Invalid JSON data in config file.");
+            util::Logger::Error("Invalid JSON data in config file.");
             return;
         }
 
@@ -123,7 +124,7 @@ void Config::LoadConfig()
     }
     else
     {
-        spdlog::error("Could not open config file: {}", m_configFilePath);
+        util::Logger::Error("Could not open config file: {}", m_configFilePath);
     }
 }
 
@@ -132,7 +133,7 @@ void Config::SetupLogPath()
     // Set the log path based on the application name
     std::filesystem::path logPath = GetDefaultLogPath();
     m_logPath = logPath.string();
-    spdlog::info("Log file path set to: {}", m_logPath);
+    util::Logger::Info("Log file path set to: {}", m_logPath);
 }
 
 void Config::SaveConfig()
@@ -164,11 +165,11 @@ void Config::SaveConfig()
 
         configFile << j.dump(4); // Pretty print with 4 spaces
         configFile.close();
-        spdlog::info("Saved config to: {}", m_configFilePath);
+        util::Logger::Info("Saved config to: {}", m_configFilePath);
     }
     else
     {
-        spdlog::error(
+        util::Logger::Error(
             "Could not open config file for writing: {}", m_configFilePath);
     }
 }
@@ -196,7 +197,7 @@ const json& Config::GetParserConfig(const json& j)
     }
     else
     {
-        spdlog::error("Missing 'parsers' in config file.");
+        util::Logger::Error("Missing 'parsers' in config file.");
         return j; // Return the original JSON if "parsers" is not found
     }
 }
@@ -207,17 +208,17 @@ void Config::ParseXmlConfig(const json& j)
 
     if (parser.contains("xml"))
     {
-        spdlog::info("Parsing XML configuration.");
+        util::Logger::Info("Parsing XML configuration.");
     }
     else
     {
-        spdlog::warn("Missing 'xml' in config file.");
+        util::Logger::Warn("Missing 'xml' in config file.");
         return;
     }
     // Check if the XML parser configuration is present
     if (!parser["xml"].is_object())
     {
-        spdlog::error("Invalid XML parser configuration.");
+        util::Logger::Error("Invalid XML parser configuration.");
         return;
     }
 
@@ -228,7 +229,7 @@ void Config::ParseXmlConfig(const json& j)
     }
     else
     {
-        spdlog::warn("Missing 'rootElement' in config file.");
+        util::Logger::Warn("Missing 'rootElement' in config file.");
     }
 
     if (parser["xml"].contains("eventElement"))
@@ -237,7 +238,7 @@ void Config::ParseXmlConfig(const json& j)
     }
     else
     {
-        spdlog::warn("Missing 'eventElement' in config file.");
+        util::Logger::Warn("Missing 'eventElement' in config file.");
     }
 
     if (parser["xml"].contains("columns"))
@@ -253,7 +254,7 @@ void Config::ParseXmlConfig(const json& j)
     }
     else
     {
-        spdlog::warn("Missing 'columns' in config file.");
+        util::Logger::Warn("Missing 'columns' in config file.");
     }
 }
 
@@ -265,16 +266,16 @@ void Config::GetLoggingConfig(const json& j)
         if (loggingConfig.contains("level"))
         {
             logLevel = loggingConfig["level"].get<std::string>();
-            spdlog::info("Logging level set to: {}", logLevel);
+            util::Logger::Info("Logging level set to: {}", logLevel);
         }
         else
         {
-            spdlog::warn("Missing 'level' in logging config.");
+            util::Logger::Warn("Missing 'level' in logging config.");
         }
     }
     else
     {
-        spdlog::warn("Missing 'logging' in config file.");
+        util::Logger::Warn("Missing 'logging' in config file.");
     }
 }
 
@@ -316,12 +317,12 @@ std::filesystem::path Config::GetDefaultAppPath()
         }
         catch (const std::filesystem::filesystem_error& e)
         {
-            spdlog::error("Failed to create config directory '{}': {}",
+            util::Logger::Error("Failed to create config directory '{}': {}",
                 configPath.string(), e.what());
         }
         catch (const std::exception& e)
         {
-            spdlog::error("Error creating config directory: {}", e.what());
+            util::Logger::Error("Error creating config directory: {}", e.what());
         }
     }
 
@@ -358,15 +359,15 @@ void Config::GetColorConfig(const json& j)
     }
     else
     {
-        spdlog::warn("Missing 'columnColors' in config file.");
+        util::Logger::Warn("Missing 'columnColors' in config file.");
     }
 }
 
 void Config::Reload()
 {
-    spdlog::info("Reloading configuration from: {}", m_configFilePath);
+    util::Logger::Info("Reloading configuration from: {}", m_configFilePath);
     LoadConfig();
-    spdlog::info("Configuration reload complete");
+    util::Logger::Info("Configuration reload complete");
 }
 
 // Read-only access for UI display
