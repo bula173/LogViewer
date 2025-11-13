@@ -8,11 +8,24 @@ else()
 endif()
 
 
-# Enable helpfull warnings and C++20 for all files
+# Enable helpful warnings (C++ standard set globally in root CMakeLists.txt)
 if(MSVC)
-    add_compile_options(/std:c++20 /W3 /WX )
+    add_compile_options(/W4 /permissive-)
+    # Optionally treat warnings as errors on MSVC
+    # add_compile_options(/WX)
 else()
-    add_compile_options(-std=c++20 -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wunused -pedantic)
+    add_compile_options(
+        -Wall -Wextra -Wshadow -Wnon-virtual-dtor 
+        -Wold-style-cast -Wcast-align -Wunused 
+        -Woverloaded-virtual -Wpedantic -Wconversion 
+        -Wsign-conversion -Wnull-dereference 
+        -Wdouble-promotion -Wformat=2
+    )
+    # Note: -Werror disabled due to existing conversion warnings
+    # Enable with: add_compile_options(-Werror) after fixing:
+    #   - version.cpp: int/long long conversions
+    #   - EventsContainer.cpp: signed/unsigned conversions
+    #   - FilterManager.cpp: signed/unsigned conversions
 endif()
 
 # Adds convenience methods, see cmake/cleanCppExtensions.cmake

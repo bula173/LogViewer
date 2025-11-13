@@ -21,7 +21,14 @@ set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 # set human names to exetuables
 set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer")
 set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
-set(CPACK_STRIP_FILES TRUE)
+
+# Disable automatic stripping on Windows (causes issues with MSYS2 paths)
+# Files are already optimized with -O3 in Release builds
+if(WIN32)
+    set(CPACK_STRIP_FILES FALSE)
+else()
+    set(CPACK_STRIP_FILES TRUE)
+endif()
 
 if(WIN32 AND NOT UNIX)
     #--------------------------------------------------------------------------
@@ -48,12 +55,14 @@ if(WIN32 AND NOT UNIX)
         set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
         set(CPACK_NSIS_MODIFY_PATH OFF)
         
-        # Create start menu shortcuts
+        # Create start menu and desktop shortcuts
         set(CPACK_NSIS_CREATE_ICONS_EXTRA
-            "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'"
+            "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'
+            CreateShortCut '$DESKTOP\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'"
         )
         set(CPACK_NSIS_DELETE_ICONS_EXTRA
-            "Delete '$SMPROGRAMS\\\\$START_MENU\\\\LogViewer.lnk'"
+            "Delete '$SMPROGRAMS\\\\$START_MENU\\\\LogViewer.lnk'
+            Delete '$DESKTOP\\\\LogViewer.lnk'"
         )
     else()
         message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")

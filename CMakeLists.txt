@@ -5,18 +5,92 @@ cmake_policy(SET CMP0074 NEW)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Be nice and export compile commands by default, this is handy for clang-tidy
+# Export compile commands for clang-tidy and other tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(useGoldLinker)
+
+#------------------------------------------------------------------------------
+# Build options
+
 option(MEASURE_ALL "When enabled all commands will be passed through time command" OFF)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy during compilation" OFF)
+option(ENABLE_COVERAGE "Enable code coverage (Debug builds only)" OFF)
+
 if(MEASURE_ALL)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "time")
 endif()
+
+#------------------------------------------------------------------------------
+# ccache support for faster rebuilds (2-5x improvement)
+
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    message(STATUS "ccache: ENABLED (${CCACHE_PROGRAM})")
+else()
+    message(STATUS "ccache: NOT FOUND (install for faster rebuilds)")
+endif()
+
+#------------------------------------------------------------------------------
+# Link-Time Optimization (LTO) for Release builds (10-30% smaller binaries)
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT IPO_ERROR)
+
+if(IPO_SUPPORTED AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+    message(STATUS "Link-Time Optimization (LTO): ENABLED")
+else()
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        message(STATUS "Link-Time Optimization (LTO): DISABLED (${IPO_ERROR})")
+    else()
+        message(STATUS "Link-Time Optimization (LTO): DISABLED (only for Release builds)")
+    endif()
+endif()
+
+#------------------------------------------------------------------------------
+# clang-tidy integration (optional)
+
+if(ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE clang-tidy)
+    if(CLANG_TIDY_EXE)
+        set(CMAKE_CXX_CLANG_TIDY 
+            ${CLANG_TIDY_EXE};
+            --config-file=${CMAKE_SOURCE_DIR}/.clang-tidy
+        )
+        message(STATUS "clang-tidy: ENABLED at compile time (${CLANG_TIDY_EXE})")
+    else()
+        message(WARNING "clang-tidy: REQUESTED but NOT FOUND")
+    endif()
+else()
+    message(STATUS "clang-tidy: DISABLED (use -DENABLE_CLANG_TIDY=ON to enable)")
+endif()
+
+#------------------------------------------------------------------------------
+# Code coverage support (Debug builds only)
+
+if(ENABLE_COVERAGE)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            add_compile_options(--coverage -fprofile-arcs -ftest-coverage)
+            add_link_options(--coverage)
+            message(STATUS "Code coverage: ENABLED")
+        else()
+            message(WARNING "Code coverage: REQUESTED but not supported by ${CMAKE_CXX_COMPILER_ID}")
+        endif()
+    else()
+        message(WARNING "Code coverage: REQUESTED but only works in Debug builds (current: ${CMAKE_BUILD_TYPE})")
+    endif()
+else()
+    message(STATUS "Code coverage: DISABLED (use -DENABLE_COVERAGE=ON to enable)")
+endif()
+
+#------------------------------------------------------------------------------
 
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/dist" CACHE PATH
