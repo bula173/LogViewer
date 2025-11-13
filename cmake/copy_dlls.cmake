@@ -3,6 +3,14 @@ set(EXE_PATH "${ARGV0}")
 set(DEST_DIR "${ARGV1}")
 set(GCC_PATH "${ARGV2}")
 
+# Detect MSYS2 root from compiler path (e.g., C:/msys64/mingw64/bin/clang.exe or D:/a/_temp/msys64/mingw64/bin/clang.exe)
+get_filename_component(COMPILER_DIR "${GCC_PATH}" DIRECTORY)  # Gets the /bin directory
+get_filename_component(MINGW_ROOT "${COMPILER_DIR}" DIRECTORY)  # Gets the /mingw64 directory
+get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys64 directory
+
+message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
+message(STATUS "Detected MinGW64 root: ${MINGW_ROOT}")
+
 execute_process(
     COMMAND ldd "${EXE_PATH}"
     OUTPUT_VARIABLE LDD_OUTPUT
@@ -52,11 +60,15 @@ foreach(DLL_FULLPATH IN LISTS DLL_LIST)
     string(STRIP "${DLL_FULLPATH}" DLL_FULLPATH)
     # Convert MSYS2 path to Windows path if needed
     if(DLL_FULLPATH MATCHES "^/mingw64/")
-        # Handle /mingw64/ paths
-        string(REPLACE "/mingw64/" "C:/msys64/mingw64/" DLL_WIN_PATH "${DLL_FULLPATH}")
+        # Handle /mingw64/ paths - use detected MSYS2_ROOT
+        string(REPLACE "/mingw64/" "${MSYS2_ROOT}/mingw64/" DLL_WIN_PATH "${DLL_FULLPATH}")
+        # Normalize path separators to forward slashes
+        file(TO_CMAKE_PATH "${DLL_WIN_PATH}" DLL_WIN_PATH)
     elseif(DLL_FULLPATH MATCHES "^/usr/")
-        # Handle /usr/ paths
-        string(REPLACE "/usr/" "C:/msys64/usr/" DLL_WIN_PATH "${DLL_FULLPATH}")
+        # Handle /usr/ paths - use detected MSYS2_ROOT
+        string(REPLACE "/usr/" "${MSYS2_ROOT}/usr/" DLL_WIN_PATH "${DLL_FULLPATH}")
+        # Normalize path separators to forward slashes
+        file(TO_CMAKE_PATH "${DLL_WIN_PATH}" DLL_WIN_PATH)
     elseif(DLL_FULLPATH MATCHES "^/([a-zA-Z])/")
         # Handle /c/ style paths
         string(REGEX REPLACE "^/([a-zA-Z])/" "\\1:/" DLL_WIN_PATH "${DLL_FULLPATH}")
