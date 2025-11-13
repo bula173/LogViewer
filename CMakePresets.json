@@ -1,89 +1,333 @@
 {
-    "version": 8,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 25,
-        "patch": 0
-    },
+    "version": 6,
     "configurePresets": [
         {
-            "name": "debug",
-            "displayName": "Debug",
-            "description": "Debug build with Ninja",
+            "name": "linux-debug",
+            "displayName": "Linux Debug",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "binaryDir": "${sourceDir}/build/linux-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
             }
         },
         {
-            "name": "release",
-            "displayName": "Release",
-            "description": "Release build with Ninja",
+            "name": "linux-release",
+            "displayName": "Linux Release",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "binaryDir": "${sourceDir}/build/linux-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos-debug",
+            "displayName": "macOS Debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-release",
+            "displayName": "macOS Release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "windows-msys-debug",
+            "displayName": "Windows MSYS2 Debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
+            },
+            "environment": {
+                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-msys-release",
+            "displayName": "Windows MSYS2 Release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
-            }
-        },
-        {
-            "name": "Configure preset using toolchain file",
-            "displayName": "Configure preset using toolchain file",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
-            }
-        },
-        {
-            "name": "Debug",
-            "displayName": "Configure preset using toolchain file",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
-            }
-        },
-        {
-            "name": "Debug",
-            "displayName": "Custom configure preset",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
+            },
+            "environment": {
+                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "debug-build",
-            "configurePreset": "debug"
+            "name": "linux-debug-build",
+            "displayName": "Linux Debug Build",
+            "configurePreset": "linux-debug"
         },
         {
-            "name": "release-build",
-            "configurePreset": "release"
+            "name": "linux-release-build",
+            "displayName": "Linux Release Build",
+            "configurePreset": "linux-release"
+        },
+        {
+            "name": "macos-debug-build",
+            "displayName": "macOS Debug Build",
+            "configurePreset": "macos-debug"
+        },
+        {
+            "name": "macos-release-build",
+            "displayName": "macOS Release Build",
+            "configurePreset": "macos-release"
+        },
+        {
+            "name": "windows-msys-debug-build",
+            "displayName": "Windows MSYS2 Debug Build",
+            "configurePreset": "windows-msys-debug"
+        },
+        {
+            "name": "windows-msys-release-build",
+            "displayName": "Windows MSYS2 Release Build",
+            "configurePreset": "windows-msys-release"
         }
     ],
     "testPresets": [
         {
-            "name": "debug-test",
-            "configurePreset": "debug"
+            "name": "linux-debug-test",
+            "displayName": "Linux Debug Test",
+            "configurePreset": "linux-debug",
+            "output": {
+                "outputOnFailure": true
+            }
         },
         {
-            "name": "release-test",
-            "configurePreset": "release"
+            "name": "linux-release-test",
+            "displayName": "Linux Release Test",
+            "configurePreset": "linux-release",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "macos-debug-test",
+            "displayName": "macOS Debug Test",
+            "configurePreset": "macos-debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "macos-release-test",
+            "displayName": "macOS Release Test",
+            "configurePreset": "macos-release",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "windows-msys-debug-test",
+            "displayName": "Windows MSYS2 Debug Test",
+            "configurePreset": "windows-msys-debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "windows-msys-release-test",
+            "displayName": "Windows MSYS2 Release Test",
+            "configurePreset": "windows-msys-release",
+            "output": {
+                "outputOnFailure": true
+            }
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "linux-release-package",
+            "displayName": "Linux Release Package",
+            "configurePreset": "linux-release",
+            "generators": ["DEB", "TBZ2", "TXZ"]
+        },
+        {
+            "name": "macos-release-package",
+            "displayName": "macOS Release Package",
+            "configurePreset": "macos-release",
+            "generators": ["DragNDrop"]
+        },
+        {
+            "name": "windows-msys-release-package",
+            "displayName": "Windows MSYS2 Release Package",
+            "configurePreset": "windows-msys-release",
+            "generators": ["NSIS"]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "linux-debug-workflow",
+            "displayName": "Linux Debug Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "linux-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-debug-build"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-debug-test"
+                }
+            ]
+        },
+        {
+            "name": "linux-release-workflow",
+            "displayName": "Linux Release Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "linux-release"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-release-build"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-release-test"
+                },
+                {
+                    "type": "package",
+                    "name": "linux-release-package"
+                }
+            ]
+        },
+        {
+            "name": "macos-debug-workflow",
+            "displayName": "macOS Debug Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "macos-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-debug-build"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-debug-test"
+                }
+            ]
+        },
+        {
+            "name": "macos-release-workflow",
+            "displayName": "macOS Release Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "macos-release"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-release-build"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-release-test"
+                },
+                {
+                    "type": "package",
+                    "name": "macos-release-package"
+                }
+            ]
+        },
+        {
+            "name": "windows-msys-debug-workflow",
+            "displayName": "Windows MSYS2 Debug Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-msys-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msys-debug-build"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msys-debug-test"
+                }
+            ]
+        },
+        {
+            "name": "windows-msys-release-workflow",
+            "displayName": "Windows MSYS2 Release Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-msys-release"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msys-release-build"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msys-release-test"
+                },
+                {
+                    "type": "package",
+                    "name": "windows-msys-release-package"
+                }
+            ]
         }
     ]
 }

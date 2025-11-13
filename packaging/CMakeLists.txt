@@ -25,28 +25,38 @@ set(CPACK_STRIP_FILES TRUE)
 
 if(WIN32 AND NOT UNIX)
     #--------------------------------------------------------------------------
-    # Windows specific
-    set(CPACK_GENERATOR "STGZ;ZIP")
-    message(STATUS "Package generation - Windows")
-    message(STATUS "   + STGZ                                 YES ")
-    message(STATUS "   + ZIP                                  YES ")
-
-    # NSIS windows installer
-    find_program(NSIS_PATH nsis PATH_SUFFIXES nsis)
+    # Windows specific - NSIS installer only
+    find_program(NSIS_PATH makensis HINTS C:/msys64/mingw64/bin)
     if(NSIS_PATH)
-        set(CPACK_GENERATOR "${CPACK_GENERATOR};NSIS")
-        message(STATUS "   + NSIS                                 YES ")
+        set(CPACK_GENERATOR "NSIS")
+        message(STATUS "Package generation - Windows")
+        message(STATUS "   + NSIS                                 YES (${NSIS_PATH})")
+        
         # Note: There is a bug in NSI that does not handle full unix paths properly. Make
         # sure there is at least one set of four (4) backlasshes.
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
+        
         # Icon of the installer
-        set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.ico")
+        set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
+        set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
+        
+        # Install/Uninstall icons
+        set(CPACK_NSIS_INSTALLED_ICON_NAME "LogViewer.exe")
+        
         # set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
         # set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
         set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
-        set(CPACK_NSIS_MODIFY_PATH ON)
+        set(CPACK_NSIS_MODIFY_PATH OFF)
+        
+        # Create start menu shortcuts
+        set(CPACK_NSIS_CREATE_ICONS_EXTRA
+            "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'"
+        )
+        set(CPACK_NSIS_DELETE_ICONS_EXTRA
+            "Delete '$SMPROGRAMS\\\\$START_MENU\\\\LogViewer.lnk'"
+        )
     else()
-        message(STATUS "   + NSIS                                 NO ")
+        message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")
     endif()
 
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")

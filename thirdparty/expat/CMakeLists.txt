@@ -14,5 +14,7 @@ set(EXPAT_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(EXPAT_BUILD_FUZZERS OFF CACHE BOOL "" FORCE)
 set(EXPAT_BUILD_PKGCONFIG OFF CACHE BOOL "" FORCE)
 set(EXPAT_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+# Disable debug postfix so we get libexpat-1.dll in both Debug and Release
+set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "" FORCE)
 
 FetchContent_MakeAvailable(expat)

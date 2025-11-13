@@ -1,7 +1,7 @@
 #include <windows.h>
 
 // Icon resource (if you already have one)
-IDI_ICON1 ICON "LogViewer.ico"
+IDI_ICON1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/LogViewer.ico"
 
 // Version information (optional)
 VS_VERSION_INFO VERSIONINFO
@@ -34,4 +34,4 @@ BEGIN
 END
 
 // Embed manifest for modern UI
-1 RT_MANIFEST "LogViewer.manifest"
+1 RT_MANIFEST "@CMAKE_CURRENT_SOURCE_DIR@/LogViewer.manifest"

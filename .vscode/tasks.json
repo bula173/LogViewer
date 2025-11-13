@@ -4,37 +4,101 @@
         {
             "label": "Configure Debug",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-S",
-                ".",
-                "-B",
-                "build/debug",
-                "-G",
-                "Ninja",
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-                "-DCMAKE_C_COMPILER=/usr/bin/clang",
-                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
-            ],
+            "windows": {
+                "command": "C:/msys64/mingw64/bin/cmake.exe",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/debug",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                    "-DCMAKE_C_COMPILER=/mingw64/bin/clang.exe",
+                    "-DCMAKE_CXX_COMPILER=/mingw64/bin/clang++.exe",
+                    "-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/debug",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                ]
+            },
+            "osx": {
+                "command": "cmake",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/debug",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                ]
+            },
             "problemMatcher": []
         },
         {
             "label": "Configure Release",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-S",
-                ".",
-                "-B",
-                "build/release",
-                "-G",
-                "Ninja",
-                "-DCMAKE_BUILD_TYPE=Release",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-                "-DCMAKE_C_COMPILER=/usr/bin/clang",
-                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++"
-            ],
+            "windows": {
+                "command": "C:/msys64/mingw64/bin/cmake.exe",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/release",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                    "-DCMAKE_C_COMPILER=/mingw64/bin/clang.exe",
+                    "-DCMAKE_CXX_COMPILER=/mingw64/bin/clang++.exe",
+                    "-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
+                ],
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                }
+            },
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/release",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                ]
+            },
+            "osx": {
+                "command": "cmake",
+                "args": [
+                    "-S",
+                    ".",
+                    "-B",
+                    "build/release",
+                    "-G",
+                    "Ninja",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                ]
+            },
             "problemMatcher": []
         },
         {
@@ -233,6 +297,70 @@
                 "rm -rf build dist compile_commands.json"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "Build Debug with Logging",
+            "type": "shell",
+            "windows": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "dependsOn": [
+                "Configure Debug"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build Release with Logging",
+            "type": "shell",
+            "windows": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                ]
+            },
+            "dependsOn": [
+                "Configure Release"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

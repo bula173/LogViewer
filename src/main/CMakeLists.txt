@@ -41,11 +41,19 @@ else()
         ${ICON_RESOURCE})
     # Path where DLLs should be copied (e.g., next to the .exe)
     if(MINGW)
-        set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")        
-        add_custom_target(copy_runtime_dlls ALL
+        # Copy DLLs to the executable directory (for running during development)
+        add_custom_target(copy_runtime_dlls_to_exe ALL
+            COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${PROJECT_NAME}>" -DARGV1="$<TARGET_FILE_DIR:${PROJECT_NAME}>" -DARGV2=${CMAKE_C_COMPILER}
+                    -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
+            COMMENT "Copying runtime DLLs to executable directory"
+            DEPENDS ${PROJECT_NAME}
+        )
+        # Copy DLLs to dist/lib (for packaging)
+        set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")
+        add_custom_target(copy_runtime_dlls_to_dist ALL
             COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${PROJECT_NAME}>" -DARGV1=${DLL_OUTPUT_DIR} -DARGV2=${CMAKE_C_COMPILER}
                     -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
-            COMMENT "Running ldd and copying runtime DLLs"
+            COMMENT "Copying runtime DLLs to dist/lib for packaging"
             DEPENDS ${PROJECT_NAME}
         )
     endif()
@@ -57,7 +65,7 @@ configure_file(
     COPYONLY
 )
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME} 
     BUNDLE DESTINATION "."
     RUNTIME DESTINATION ".")
 

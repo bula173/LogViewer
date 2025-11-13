@@ -28,10 +28,14 @@ target_link_libraries(application INTERFACE
 
 target_include_directories(application PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR} 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../"
+)
+
+# Use SYSTEM to suppress warnings from third-party headers
+target_include_directories(application SYSTEM PUBLIC
     ${wxWidgets_INCLUDE_DIRS} 
     ${nlohmann_json_SOURCE_DIR}/include
     ${spdlog_SOURCE_DIR}/include
-    "${CMAKE_CURRENT_SOURCE_DIR}/../"
     ${EXPAT_INCLUDE_DIRS}
 )
 

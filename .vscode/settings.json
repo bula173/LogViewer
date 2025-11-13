@@ -109,8 +109,22 @@
             }
         ]
     },
-    "gtest-adapter.debugConfig": [
-        "Launch Test"
-    ],
-    "gtest-adapter.supportLocation": true,
+    "cmake.cmakePath": "C:/msys64/mingw64/bin/cmake.exe",
+    "cmake.configureSettings": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+    },
+    "cmake.buildDirectory": "${workspaceFolder}/build/${presetName}",
+    "cmake.generator": "Ninja",
+    "terminal.integrated.defaultProfile.windows": "MSYS2",
+    "terminal.integrated.profiles.windows": {
+        "MSYS2": {
+            "path": "C:\\msys64\\usr\\bin\\bash.exe",
+            "args": ["-l", "-c", "cd \"${workspaceFolder}\" && exec bash"],
+            "icon": "terminal-bash"
+        },
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        }
+    }
 }

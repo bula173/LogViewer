@@ -57,3 +57,16 @@ endif()
 if(APPLE AND CMAKE_CXX_COMPILER MATCHES "clang-cl$")
     message(FATAL_ERROR "clang-cl detected on macOS; use /usr/bin/clang++. Clean build/ and reconfigure.")
 endif()
+
+if(WIN32)
+  # Windows-specific settings
+  if(MSYS OR MINGW)
+    message(STATUS "Building with MSYS2/MinGW")
+  endif()
+elseif(APPLE)
+  # macOS-specific settings
+  message(STATUS "Building on macOS")
+elseif(UNIX)
+  # Linux-specific settings
+  message(STATUS "Building on Linux")
+endif()
