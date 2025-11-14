@@ -8,6 +8,7 @@
 #include <spdlog/spdlog.h>
 
 // std
+#include <cstring> // for std::memmove
 #include <fstream> // Include this header for std::ifstream
 #include <iostream>
 #include <memory>
@@ -92,7 +93,7 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
     ParserState* state = static_cast<ParserState*>(userData);
     if (state->insideEvent && !state->currentElement.empty())
     {
-        state->currentText.append(s, len);
+        state->currentText.append(s, static_cast<size_t>(len));
     }
 
     state->bytesProcessed = XML_GetCurrentByteIndex(state->parserHandle);
@@ -170,7 +171,8 @@ void XmlParser::ParseData(std::istream& input)
         }
     }
 
-    XML_Parser parser = XML_ParserCreate(nullptr);
+    // Create parser with explicit UTF-8 encoding for proper Polish character support
+    XML_Parser parser = XML_ParserCreate("UTF-8");
     if (!parser)
         throw error::Error("XmlParser::ParseData failed to create XML parser");
 
@@ -185,11 +187,28 @@ void XmlParser::ParseData(std::istream& input)
         constexpr size_t bufferSize = 64 * 1024;
         std::vector<char> buffer(bufferSize);
         bool finalSent = false;
+        bool firstChunk = true;
 
         for (;;)
         {
             input.read(buffer.data(), bufferSize);
-            const std::streamsize bytesRead = input.gcount();
+            std::streamsize bytesRead = input.gcount();
+
+            // Skip UTF-8 BOM (EF BB BF) if present at the start of file
+            if (firstChunk && bytesRead >= 3)
+            {
+                if (static_cast<unsigned char>(buffer[0]) == 0xEF &&
+                    static_cast<unsigned char>(buffer[1]) == 0xBB &&
+                    static_cast<unsigned char>(buffer[2]) == 0xBF)
+                {
+                    spdlog::debug("XmlParser::ParseData: UTF-8 BOM detected and skipped");
+                    // Skip the BOM by shifting the buffer
+                    std::memmove(buffer.data(), buffer.data() + 3, bytesRead - 3);
+                    bytesRead -= 3;
+                    state.bytesProcessed += 3; // Account for skipped BOM bytes
+                }
+                firstChunk = false;
+            }
 
             if (bytesRead == 0)
             {
