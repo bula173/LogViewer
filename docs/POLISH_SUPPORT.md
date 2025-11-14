@@ -102,6 +102,18 @@ The search functionality fully supports Polish characters:
 2. Use filter criteria with Polish values
 3. Sort by columns containing Polish text
 
+### Copying Text with Polish Characters
+
+The detail view (ItemVirtualListControl) supports multiple copy operations:
+
+- **Ctrl+C**: Copy the selected value to clipboard
+- **Right-click context menu**:
+  - Copy Value: Copy only the value field
+  - Copy Key: Copy only the key field
+  - Copy Both: Copy both key and value as "Key: Value"
+
+All copy operations preserve Polish characters correctly, so you can paste them into other applications.
+
 ### Configuration with Polish Text
 
 Column names, filter values, and other configuration can use Polish characters:

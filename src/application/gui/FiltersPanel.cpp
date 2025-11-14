@@ -118,7 +118,7 @@ void FiltersPanel::RefreshFilters()
             continue;
 
         long itemIdx =
-            m_filtersList->InsertItem(idx, filter->isEnabled ? "✓" : "");
+            m_filtersList->InsertItem(idx, filter->isEnabled ? "x" : "");
         m_filtersList->SetItem(itemIdx, 1, filter->name);
 
         // Show different information based on filter type

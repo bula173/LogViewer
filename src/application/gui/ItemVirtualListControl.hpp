@@ -3,11 +3,11 @@
 
 #include "db/EventsContainer.hpp"
 #include "mvc/IView.hpp"
-#include <wx/dataview.h>
+#include <wx/listctrl.h>
 
 namespace gui
 {
-class ItemVirtualListControl : public wxDataViewListCtrl, public mvc::IView
+class ItemVirtualListControl : public wxListCtrl, public mvc::IView
 {
   public:
     ItemVirtualListControl(db::EventsContainer& events, wxWindow* parent,
@@ -24,11 +24,22 @@ class ItemVirtualListControl : public wxDataViewListCtrl, public mvc::IView
   private:
     db::EventsContainer& m_events;
 
+    // Event handlers
     void OnCopyValue(wxCommandEvent& event);
     void OnKeyDown(wxKeyEvent& event);
-    void OnMouseMove(wxMouseEvent& event);
-    void OnItemHover(wxDataViewEvent& event);
     void OnColumnResized(wxSizeEvent& event);
+    void OnContextMenu(wxContextMenuEvent& event);
+    
+    // Copy operations
+    void CopyValueToClipboard();
+    void CopyKeyToClipboard();
+    void CopyBothToClipboard();
+    
+    // Text wrapping
+    wxString WrapText(const wxString& text, int width);
+    
+    // Current data
+    std::vector<std::pair<std::string, std::string>> m_currentItems;
 };
 
 } // namespace gui

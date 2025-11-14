@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 #include <wx/clipbrd.h>
-#include <wx/dataview.h>
 #include <wx/dcclient.h>
 
 namespace gui
@@ -15,42 +14,120 @@ namespace gui
 ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
-    : wxDataViewListCtrl(
-          parent, id, pos, size, wxDV_ROW_LINES | wxDV_VERT_RULES)
+    : wxListCtrl(parent, id, pos, size, 
+          wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_HRULES | wxLC_VRULES)
     , m_events(events)
 {
     util::Logger::Debug("ItemVirtualListControl::ItemVirtualListControl constructed");
-    // Define columns
-    this->AppendTextColumn("Key", wxDATAVIEW_CELL_INERT, 150, wxALIGN_LEFT,
-        wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
-    this->AppendTextColumn("Value", wxDATAVIEW_CELL_INERT, 300, wxALIGN_LEFT,
-        wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
-    // Bind size event
+    
+    // Create columns with word wrapping support
+    wxListItem col0;
+    col0.SetId(0);
+    col0.SetText("Key");
+    col0.SetWidth(150);
+    this->InsertColumn(0, col0);
+    
+    wxListItem col1;
+    col1.SetId(1);
+    col1.SetText("Value");
+    col1.SetWidth(wxLIST_AUTOSIZE_USEHEADER);
+    this->InsertColumn(1, col1);
+    
+    // Bind size event to resize value column
     this->Bind(wxEVT_SIZE, &ItemVirtualListControl::OnColumnResized, this);
-
-    // Use tooltips for long text
-    this->Bind(wxEVT_MOTION, &ItemVirtualListControl::OnMouseMove, this);
 
     m_events.RegisterOndDataUpdated(this);
 
-    // Bind right-click or Ctrl+C for copying value
-    this->Bind(wxEVT_COMMAND_MENU_SELECTED,
-        &ItemVirtualListControl::OnCopyValue, this, wxID_COPY);
+    // Bind Ctrl+C for copying value
+    this->Bind(wxEVT_CHAR_HOOK, &ItemVirtualListControl::OnKeyDown, this);
+    
+    // Bind right-click context menu for copying
+    this->Bind(wxEVT_CONTEXT_MENU, &ItemVirtualListControl::OnContextMenu, this);
 }
 
 
-void ItemVirtualListControl::OnCopyValue(wxCommandEvent& WXUNUSED(event))
+void ItemVirtualListControl::OnContextMenu(wxContextMenuEvent& event)
 {
-    int selectedRow = this->GetSelectedRow();
-    if (selectedRow == wxNOT_FOUND)
+    wxMenu menu;
+    
+    long selectedRow = this->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if (selectedRow != -1)
+    {
+        menu.Append(wxID_COPY, "Copy Value\tCtrl+C");
+        menu.AppendSeparator();
+        menu.Append(wxID_ANY, "Copy Key", "Copy the key name");
+        menu.Append(wxID_ANY + 1, "Copy Both", "Copy key and value");
+        
+        menu.Bind(wxEVT_COMMAND_MENU_SELECTED, 
+            [this](wxCommandEvent& evt) {
+                if (evt.GetId() == wxID_COPY) {
+                    CopyValueToClipboard();
+                } else if (evt.GetId() == wxID_ANY) {
+                    CopyKeyToClipboard();
+                } else if (evt.GetId() == wxID_ANY + 1) {
+                    CopyBothToClipboard();
+                }
+            });
+        
+        PopupMenu(&menu);
+    }
+    
+    event.Skip();
+}
+
+void ItemVirtualListControl::CopyValueToClipboard()
+{
+    long selectedRow = this->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if (selectedRow == -1)
         return;
-    wxVariant value;
-    this->GetValue(value, wx_utils::int_to_uint(selectedRow), 1); // column 1 is "value"
+    
+    wxString value = this->GetItemText(selectedRow, 1); // column 1 is "value"
+    
     if (wxTheClipboard->Open())
     {
-        wxTheClipboard->SetData(new wxTextDataObject(value.GetString()));
+        wxTheClipboard->SetData(new wxTextDataObject(value));
         wxTheClipboard->Close();
+        util::Logger::Debug("Copied value to clipboard: {}", value.ToStdString());
     }
+}
+
+void ItemVirtualListControl::CopyKeyToClipboard()
+{
+    long selectedRow = this->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if (selectedRow == -1)
+        return;
+    
+    wxString key = this->GetItemText(selectedRow, 0); // column 0 is "key"
+    
+    if (wxTheClipboard->Open())
+    {
+        wxTheClipboard->SetData(new wxTextDataObject(key));
+        wxTheClipboard->Close();
+        util::Logger::Debug("Copied key to clipboard: {}", key.ToStdString());
+    }
+}
+
+void ItemVirtualListControl::CopyBothToClipboard()
+{
+    long selectedRow = this->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    if (selectedRow == -1)
+        return;
+    
+    wxString key = this->GetItemText(selectedRow, 0);
+    wxString value = this->GetItemText(selectedRow, 1);
+    wxString combined = key + ": " + value;
+    
+    if (wxTheClipboard->Open())
+    {
+        wxTheClipboard->SetData(new wxTextDataObject(combined));
+        wxTheClipboard->Close();
+        util::Logger::Debug("Copied both to clipboard: {}", combined.ToStdString());
+    }
+}
+
+void ItemVirtualListControl::OnCopyValue(wxCommandEvent& WXUNUSED(event))
+{
+    CopyValueToClipboard();
 }
 
 void ItemVirtualListControl::OnKeyDown(wxKeyEvent& event)
@@ -85,14 +162,34 @@ void ItemVirtualListControl::OnCurrentIndexUpdated(const int index)
         this->DeleteAllItems();
 
         auto items = m_events.GetEvent(index).getEventItems();
+        m_currentItems = items;
+        
+        long itemIdx = 0;
+        int valueColumnWidth = this->GetColumnWidth(1);
+        if (valueColumnWidth <= 0)
+        {
+            valueColumnWidth = this->GetClientSize().GetWidth() - 150 - 20;
+        }
+        
         for (const auto& item : items)
         {
-            wxVector<wxVariant> data;
-            data.push_back(wxVariant(item.first));
-            data.push_back(wxVariant(item.second));
-            this->AppendItem(data);
+            // Use FromUTF8 to properly handle Polish characters
+            wxString key = wxString::FromUTF8(item.first.c_str());
+            wxString value = wxString::FromUTF8(item.second.c_str());
+            
+            // Wrap long text to fit column width
+            wxString wrappedValue = WrapText(value, valueColumnWidth);
+            
+            // Insert item
+            long idx = this->InsertItem(itemIdx, key);
+            this->SetItem(idx, 1, wrappedValue);
+            itemIdx++;
         }
 
+        // Trigger column resize after adding items
+        wxSizeEvent sizeEvent(this->GetSize());
+        OnColumnResized(sizeEvent);
+        
         this->Update();
     }
     catch (const std::exception& ex)
@@ -129,14 +226,34 @@ void ItemVirtualListControl::RefreshAfterUpdate()
         this->DeleteAllItems();
 
         auto items = m_events.GetEvent(currentIndex).getEventItems();
+        m_currentItems = items;
+        
+        long itemIdx = 0;
+        int valueColumnWidth = this->GetColumnWidth(1);
+        if (valueColumnWidth <= 0)
+        {
+            valueColumnWidth = this->GetClientSize().GetWidth() - 150 - 20;
+        }
+        
         for (const auto& item : items)
         {
-            wxVector<wxVariant> data;
-            data.push_back(wxVariant(item.first));
-            data.push_back(wxVariant(item.second));
-            this->AppendItem(data);
+            // Use FromUTF8 to properly handle Polish characters
+            wxString key = wxString::FromUTF8(item.first.c_str());
+            wxString value = wxString::FromUTF8(item.second.c_str());
+            
+            // Wrap long text to fit column width
+            wxString wrappedValue = WrapText(value, valueColumnWidth);
+            
+            // Insert item
+            long idx = this->InsertItem(itemIdx, key);
+            this->SetItem(idx, 1, wrappedValue);
+            itemIdx++;
         }
 
+        // Trigger column resize after adding items
+        wxSizeEvent sizeEvent(this->GetSize());
+        OnColumnResized(sizeEvent);
+        
         this->Refresh();
         this->Update();
     }
@@ -152,76 +269,19 @@ void ItemVirtualListControl::RefreshAfterUpdate()
     }
 }
 
-void ItemVirtualListControl::OnMouseMove(wxMouseEvent& event)
-{
-    wxPoint pos = event.GetPosition();
-    wxDataViewItem item;
-    wxDataViewColumn* column;
-
-    // Hit test to see which item is under the mouse
-    this->HitTest(pos, item, column);
-
-    if (item.IsOk() && column)
-    {
-        // Use a simpler approach that works across platforms
-        // Store current selection
-        wxDataViewItemArray oldSelection;
-        this->GetSelections(oldSelection);
-
-        // Select the item under mouse temporarily
-        this->UnselectAll();
-        this->Select(item);
-
-        // Get selected row
-        int row = this->GetSelectedRow();
-        int col = this->GetColumnPosition(column);
-
-        // Restore original selection
-        this->UnselectAll();
-        for (const auto& selItem : oldSelection)
-        {
-            this->Select(selItem);
-        }
-
-        if (row != wxNOT_FOUND && col != wxNOT_FOUND)
-        {
-            // Get the data value
-            wxVariant value;
-            this->GetValue(value, wx_utils::int_to_uint(row), wx_utils::int_to_uint(col));
-            wxString text = value.GetString();
-
-            // Use column width to determine if tooltip is needed
-            wxClientDC dc(this);
-            wxSize textExtent = dc.GetTextExtent(text);
-            int colWidth = column->GetWidth();
-
-            if (textExtent.GetWidth() > colWidth || text.Contains("\n"))
-            {
-                SetToolTip(text);
-            }
-            else
-            {
-                UnsetToolTip();
-            }
-            return;
-        }
-    }
-
-    UnsetToolTip();
-    event.Skip();
-}
-
-void ItemVirtualListControl::OnItemHover(wxDataViewEvent& event)
-{
-    // This is needed for tooltip detection
-    // We don't actually want to start a drag, so veto it
-    event.Veto();
-}
-
 // Simplified handler for column resize
 void ItemVirtualListControl::OnColumnResized(wxSizeEvent& event)
 {
-    // Just refresh the control
+    // Resize value column to take all remaining space
+    int totalWidth = this->GetClientSize().GetWidth();
+    int keyWidth = this->GetColumnWidth(0);
+    int valueWidth = totalWidth - keyWidth - 4; // 4 pixels for borders/scrollbar
+    
+    if (valueWidth > 50) // Minimum width
+    {
+        this->SetColumnWidth(1, valueWidth);
+    }
+    
     this->Refresh();
     event.Skip();
 }
@@ -230,6 +290,45 @@ void ItemVirtualListControl::OnDataUpdated()
 {
     // Update data
     RefreshAfterUpdate();
+}
+
+wxString ItemVirtualListControl::WrapText(const wxString& text, int width)
+{
+    if (width <= 50 || text.IsEmpty() || text.length() < 50)
+        return text;
+    
+    wxString result;
+    int pos = 0;
+    int lineLength = width / 8; // Approximate character width
+    
+    while (pos < (int)text.length())
+    {
+        int endPos = pos + lineLength;
+        
+        if (endPos >= (int)text.length())
+        {
+            // Last piece
+            result += text.Mid(pos);
+            break;
+        }
+        
+        // Find last space before the limit
+        int spacePos = text.rfind(' ', endPos);
+        if (spacePos > pos && spacePos - pos < lineLength * 1.5)
+        {
+            endPos = spacePos;
+        }
+        
+        result += text.Mid(pos, endPos - pos);
+        if (endPos < (int)text.length())
+        {
+            result += "\n";
+        }
+        
+        pos = endPos + (text[endPos] == ' ' ? 1 : 0);
+    }
+    
+    return result;
 }
 
 } // namespace gui
