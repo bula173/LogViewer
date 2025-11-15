@@ -3,6 +3,7 @@
 #include "MainWindow.hpp"
 #include "filters/FilterManager.hpp"
 #include <spdlog/spdlog.h>
+#include <limits>
 #include <wx/filedlg.h> // For wxFileDialog
 #include <wx/msgdlg.h>  // For wxMessageBox
 #include <wx/statline.h>
@@ -239,7 +240,19 @@ void FiltersPanel::OnRemoveFilter(wxCommandEvent& WXUNUSED(event))
 
 void FiltersPanel::OnFilterSelected(wxListEvent& event)
 {
-    m_selectedFilterIndex = event.GetIndex();
+    const long selectedIndex = event.GetIndex();
+    if (selectedIndex < 0)
+    {
+        m_selectedFilterIndex = -1;
+    }
+    else if (selectedIndex > std::numeric_limits<int>::max())
+    {
+        m_selectedFilterIndex = std::numeric_limits<int>::max();
+    }
+    else
+    {
+        m_selectedFilterIndex = static_cast<int>(selectedIndex);
+    }
 
     // Enable edit/remove buttons
     m_editButton->Enable();

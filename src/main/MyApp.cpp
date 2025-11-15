@@ -43,6 +43,8 @@ bool MyApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
+    setupLogging();
+
     // Initialize locale for proper Unicode/Polish character support
     // This must be done before any GUI elements are created
     if (!m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT))
@@ -50,8 +52,6 @@ bool MyApp::OnInit()
         util::Logger::Warn("Failed to initialize locale, using default");
     }
     
-    setupLogging();
-
     util::Logger::Info("Initializing MyApp");
 
     setupConfig();
@@ -107,6 +107,7 @@ void MyApp::setupConfig()
     util::Logger::Info("Release build");
 #else
     util::Logger::Info("Debug build");
+    util::Logger::SetLevel(util::LogLevel::Debug);
 #endif
 
     util::Logger::Info(
@@ -122,59 +123,22 @@ void MyApp::setupConfig()
 void MyApp::setupLogging()
 {
     auto& config = config::GetConfig();
-    std::vector<spdlog::sink_ptr> sinks;
-
-
-    // Create both file and console sinks
-    try
-    {
-        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-            config.GetAppLogPath(), true);
-        file_sink->set_level(spdlog::level::from_str(config.logLevel));
-        sinks.push_back(file_sink);
-    }
-    catch (const spdlog::spdlog_ex& ex)
-    {
-        util::Logger::Error("Failed to create file sink: {}", ex.what());
-    }
-    catch (const std::exception& ex)
-    {
-        util::Logger::Error("Exception while creating file sink: {}", ex.what());
-    }
-    catch (...)
-    {
-        util::Logger::Error("Unknown exception while creating file sink");
-    }
-
-    // Console sink for debug output
-
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    sinks.push_back(console_sink);
-
-    util::Logger::Info("Log file path: {}", config.GetAppLogPath());
-
-    console_sink->set_level(spdlog::level::from_str(config.logLevel));
-    util::Logger::Info("Logging configuration loaded from config file. Log level: {}",
-        config.logLevel);
-
-    auto logger = std::make_shared<spdlog::logger>(
-        "multi_sink", sinks.begin(), sinks.end());
-    logger->set_level(spdlog::level::from_str(config.logLevel));
-    spdlog::set_default_logger(logger);
-    spdlog::flush_on(spdlog::level::debug);
-    spdlog::flush_every(std::chrono::seconds(1)); // Auto flush every second
+    util::Logger::Initialize(util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
 
     util::Logger::Info("Setting up logging configuration");
+    util::Logger::Info("Logging configuration loaded from config file. Log level: {}",
+        config.logLevel);
+    util::Logger::Info("Log file path: {}", config.GetAppLogPath());
 }
 
 void MyApp::ChangeLogLevel()
 {
     auto& config = config::GetConfig();
-    auto level = spdlog::level::from_str(config.logLevel);
+    auto level = util::Logger::fromStrLevel(config.logLevel);
 
-    if (level != spdlog::get_level())
+    if (level != util::Logger::GetInstance()->getLevel())
     {
-        spdlog::set_level(level);
+        util::Logger::GetInstance()->setLevel(level);
         util::Logger::Info("Log level changed to: {}", config.logLevel);
     }
 }

@@ -33,7 +33,7 @@ class ConfigEditorDialog : public wxDialog
     void OnMoveColumnDown(wxCommandEvent& event);
 
     void NotifyObservers();
-    void SwapListItems(unsigned int pos1, unsigned int pos2);
+    void SwapListItems(long pos1, long pos2);
     void MoveColumnTo(int targetPos);
 
   private:

@@ -50,7 +50,8 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
                 actualEventIndex = filteredRowIndex;
             }
 
-            this->m_events.SetCurrentItem(actualEventIndex);
+            const int modelIndex = wx_utils::to_model_index(actualEventIndex);
+            this->m_events.SetCurrentItem(modelIndex);
         });
 }
 
@@ -213,7 +214,7 @@ void EventsVirtualListControl::RefreshColumns()
     // Either use column width auto-resize...
     for (unsigned int i = 0; i < GetColumnCount(); i++)
     {
-        wxDataViewColumn* col = GetColumn(wx_utils::uint_to_int(i));
+        wxDataViewColumn* col = GetColumn(i);
         if (col)
         {
             col->SetWidth(col->GetWidth()); // Force recalculation
@@ -294,7 +295,7 @@ void EventsVirtualListControl::AddColumnsFromConfig()
 unsigned int EventsVirtualListControl::CountVisibleConfigColumns() const
 {
     const auto& colConfig = config::GetConfig().columns;
-    int visible = 0;
+    unsigned int visible = 0;
     for (const auto& col : colConfig)
     {
         if (col.isVisible)

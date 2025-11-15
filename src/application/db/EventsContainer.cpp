@@ -6,18 +6,19 @@
  */
 
 #include "EventsContainer.hpp"
-#include <spdlog/spdlog.h>
+#include "util/Logger.hpp"
+
 
 namespace db
 {
 EventsContainer::EventsContainer()
 {
-    spdlog::debug("EventsContainer::EventsContainer constructed");
+    util::Logger::Debug("EventsContainer::EventsContainer constructed");
 }
 
 EventsContainer::~EventsContainer()
 {
-    spdlog::debug("EventsContainer::~EventsContainer destructed");
+    util::Logger::Debug("EventsContainer::~EventsContainer destructed");
 }
 
 void EventsContainer::AddEvent(LogEvent&& event)
@@ -29,7 +30,7 @@ void EventsContainer::AddEvent(LogEvent&& event)
      * The vector will automatically manage memory allocation and resizing.
      * Thread-safe: Uses exclusive lock for modification.
      */
-    spdlog::debug("EventsContainer::AddEvent called");
+    util::Logger::Trace("EventsContainer::AddEvent called");
     {
         std::unique_lock<std::shared_mutex> lock(m_mutex);
         this->AddItem(std::move(event));
@@ -42,7 +43,7 @@ void EventsContainer::AddEvent(LogEvent&& event)
 void EventsContainer::AddEventBatch(
     std::vector<std::pair<int, LogEvent::EventItems>>&& eventBatch)
 {
-    spdlog::debug("EventsContainer::AddEventBatch called with size: {}",
+    util::Logger::Trace("EventsContainer::AddEventBatch called with size: {}",
         eventBatch.size());
     
     // Thread-safe: Use exclusive lock for batch modification
@@ -70,14 +71,14 @@ const LogEvent& EventsContainer::GetEvent(const int index)
      * components.
      * Thread-safe: Uses shared lock for concurrent reads.
      */
-    spdlog::debug("EventsContainer::GetEvent called with index: {}", index);
+    util::Logger::Trace("EventsContainer::GetEvent called with index: {}", index);
     std::shared_lock<std::shared_mutex> lock(m_mutex);
     return this->GetItem(index);
 }
 
 int EventsContainer::GetCurrentItemIndex()
 {
-    spdlog::debug("EventsContainer::GetCurrentItemIndex called, returning {}",
+    util::Logger::Trace("EventsContainer::GetCurrentItemIndex called, returning {}",
         m_currentItem);
     return m_currentItem;
 }
@@ -90,11 +91,11 @@ void EventsContainer::SetCurrentItem(const int item)
      * This method is typically called by virtual list controls to maintain
      * synchronization between the UI selection and the data model.
      */
-    spdlog::debug("EventsContainer::SetCurrentItem called with item: {}", item);
+    util::Logger::Trace("EventsContainer::SetCurrentItem called with item: {}", item);
     m_currentItem = item;
     for (auto v : m_views)
     {
-        spdlog::debug("EventsContainer::SetCurrentItem notifying view of "
+        util::Logger::Trace("EventsContainer::SetCurrentItem notifying view of "
                       "current index update: {}",
             item);
         v->OnCurrentIndexUpdated(item);
@@ -103,7 +104,7 @@ void EventsContainer::SetCurrentItem(const int item)
 
 void EventsContainer::AddItem(LogEvent&& item)
 {
-    spdlog::debug("EventsContainer::AddItem called");
+    util::Logger::Trace("EventsContainer::AddItem called");
     // Note: AddItem is called from AddEvent which already holds the lock
     // So we don't acquire a lock here to avoid recursive locking
     m_data.push_back(std::forward<decltype(item)>(item));
@@ -113,10 +114,10 @@ void EventsContainer::AddItem(LogEvent&& item)
 LogEvent& EventsContainer::GetItem(const int index)
 {
     // Note: Caller must hold appropriate lock
-    spdlog::debug("EventsContainer::GetItem called with index: {}", index);
+    util::Logger::Trace("EventsContainer::GetItem called with index: {}", index);
     if (index < 0 || index >= static_cast<int>(m_data.size()))
     {
-        spdlog::error("EventsContainer::GetItem: index out of range");
+        util::Logger::Error("EventsContainer::GetItem: index out of range");
         throw std::out_of_range("Index out of range");
     }
     return m_data.at(static_cast<size_t>(index));
@@ -132,12 +133,12 @@ void EventsContainer::Clear()
      * loading a new file or clearing the current session.
      * Thread-safe: Uses exclusive lock for modification.
      */
-    spdlog::debug("EventsContainer::Clear called");
+    util::Logger::Debug("EventsContainer::Clear called");
     
     std::unique_lock<std::shared_mutex> lock(m_mutex);
     if (m_data.empty())
     {
-        spdlog::debug("EventsContainer::Clear: m_data already empty");
+        util::Logger::Debug("EventsContainer::Clear: m_data already empty");
         return;
     }
 
@@ -155,7 +156,7 @@ size_t EventsContainer::Size() const
      * Thread-safe: Uses shared lock for concurrent reads.
      */
     std::shared_lock<std::shared_mutex> lock(m_mutex);
-    spdlog::debug("EventsContainer::Size called, returning {}", m_data.size());
+    util::Logger::Trace("EventsContainer::Size called, returning {}", m_data.size());
     return m_data.size();
 }
 } // db namespace

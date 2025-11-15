@@ -217,8 +217,8 @@ void MainWindow::ApplyDarkThemeRecursive(wxWindow* window)
     if (!window)
         return;
 
-    window->SetBackgroundColour(wxColour(50, 50, 50));
-    window->SetForegroundColour(wxColour(220, 220, 220));
+    window->SetBackgroundColour(wxColour(0, 0, 0));
+    window->SetForegroundColour(wxColour(255, 255, 255));
 
     for (auto child : window->GetChildren())
     {
@@ -231,8 +231,8 @@ void MainWindow::ApplyLightThemeRecursive(wxWindow* window)
     if (!window)
         return;
 
-    window->SetBackgroundColour(wxColour(220, 220, 220));
-    window->SetForegroundColour(wxColour(10, 10, 10));
+    window->SetBackgroundColour(wxColour(255, 255, 255));
+    window->SetForegroundColour(wxColour(0, 0, 0));
 
     for (auto child : window->GetChildren())
     {
@@ -320,10 +320,10 @@ void MainWindow::setupLayout()
     m_bottom_spliter->SetSashGravity(0.3);
 
     m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
-    m_left_spliter->SetSashGravity(0.2);
+    m_left_spliter->SetSashGravity(0.3);
 
     m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
-    m_rigth_spliter->SetSashGravity(0.8);
+    m_rigth_spliter->SetSashGravity(0.75);
 
     // In setupLayout() method, replace the filterSizer code with this:
 
@@ -582,7 +582,7 @@ void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
     m_progressGauge->SetValue(0);
 
     m_processing = true;
-    for (long i = 0; i < 1000; ++i)
+    for (int i = 0; i < 1000; ++i)
     {
         if (i % 10)
         {

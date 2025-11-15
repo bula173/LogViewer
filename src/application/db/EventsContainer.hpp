@@ -120,7 +120,7 @@ class EventsContainer : public mvc::IModel
     /**
      * @brief Gets the currently selected item index.
      *
-     * @return long The index of the currently selected item, or -1 if none
+     * @return int The index of the currently selected item, or -1 if none
      * selected
      */
     int GetCurrentItemIndex() override;
@@ -145,8 +145,8 @@ class EventsContainer : public mvc::IModel
 
   private:
     std::vector<LogEvent> m_data; ///< Internal storage for events
-    long m_currentItem {
-        -1}; ///< Currently selected item index (-1 = no selection)
+    int m_currentItem {
+      -1}; ///< Currently selected item index (-1 = no selection)
     mutable std::shared_mutex m_mutex; ///< Reader-writer lock for thread safety
 };
 

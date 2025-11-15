@@ -11,7 +11,10 @@ namespace gui
 class EventsContainerAdapter : public wxDataViewVirtualListModel
 {
   public:
+
     explicit EventsContainerAdapter(db::EventsContainer& container);
+
+    // wxDataViewVirtualListModel interface
     virtual unsigned int GetColumnCount() const override;
     virtual wxString GetColumnType(unsigned int col) const override;
     virtual void GetValueByRow(

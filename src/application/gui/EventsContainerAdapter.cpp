@@ -4,6 +4,7 @@
 #include "EventsContainerAdapter.hpp"
 #include "gui/EventsVirtualListControl.hpp" // for color helpers, if needed
 #include "util/WxWidgetsUtils.hpp"
+#include "util/Logger.hpp"
 
 namespace gui
 {
@@ -31,7 +32,7 @@ void EventsContainerAdapter::GetValueByRow(
 {
     if (row >= m_rowCount)
     {
-        spdlog::warn("GetValueByRow: Row index {} out of bounds (max: {})", row,
+        util::Logger::Warn("GetValueByRow: Row index {} out of bounds (max: {})", row,
             m_rowCount - 1);
         return;
     }
@@ -65,7 +66,7 @@ void EventsContainerAdapter::GetValueByRow(
     // If we couldn't find enough visible columns
     if (visibleCount != col)
     {
-        spdlog::warn("GetValueByRow: Not enough visible columns ({}) for "
+        util::Logger::Warn("GetValueByRow: Not enough visible columns ({}) for "
                      "column index {}",
             visibleCount, col);
         variant = wxVariant("");
@@ -82,7 +83,15 @@ void EventsContainerAdapter::GetValueByRow(
     }
     else
     {
-        variant = wxString::FromUTF8(event.findByKey(columnName));
+        const auto& values = event.findAllByKey(columnName);
+        std::string combinedValues;
+        for (const auto& val : values) {
+            if (!combinedValues.empty()) {
+                combinedValues += ", ";
+            }
+            combinedValues += val;
+        }
+        variant = wxString::FromUTF8(combinedValues.c_str());
     }
 }
 
@@ -160,7 +169,7 @@ bool EventsContainerAdapter::GetAttrByRow(
     size_t actualRow = m_filteredIndices.empty() ? row : m_filteredIndices[row];
     const auto& event = m_container.GetEvent(wx_utils::to_model_index(actualRow));
 
-    spdlog::debug(
+    util::Logger::Trace(
         "EventsContainerAdapter::GetAttrByRow called for row: {}, col: {}", row,
         col);
     // Example: use "type" column for coloring
@@ -200,13 +209,13 @@ size_t EventsContainerAdapter::GetFilteredIndex(unsigned int filteredRow) const
 
 void EventsContainerAdapter::UpdateColors()
 {
-    spdlog::debug("EventsContainerAdapter::UpdateColors called");
+    util::Logger::Trace("EventsContainerAdapter::UpdateColors called");
     RefreshRowAttributes();
 }
 
 void EventsContainerAdapter::RefreshRowAttributes()
 {
-    spdlog::debug("EventsContainerAdapter::RefreshRowAttributes called");
+    util::Logger::Trace("EventsContainerAdapter::RefreshRowAttributes called");
 
     // Try multiple approaches for maximum compatibility
     Cleared();

@@ -21,12 +21,14 @@ set(APP_SRCS
     filters/FilterManager.cpp
     filters/IFilterStrategy.cpp
     gui/ConfigEditorDialog.cpp
+    gui/CustomDataModel.cpp
     gui/EventsContainerAdapter.cpp
     gui/EventsVirtualListControl.cpp
     gui/FilterEditorDialog.cpp
     gui/FiltersPanel.cpp
     gui/ItemVirtualListControl.cpp
     gui/MainWindow.cpp
+    gui/WrappingTextRenderer.cpp
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
 )

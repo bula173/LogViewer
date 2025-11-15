@@ -2,6 +2,7 @@
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <wx/checkbox.h>
 #include <wx/clrpicker.h>
 #include <wx/colordlg.h>
@@ -133,13 +134,13 @@ ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
     {
         const auto& column = columns[i];
 
-        long itemIndex =
-            m_columnsList->InsertItem(i, column.isVisible ? "Yes" : "No");
+        long itemIndex = m_columnsList->InsertItem(
+            static_cast<long>(i), column.isVisible ? "Yes" : "No");
         m_columnsList->SetItem(itemIndex, 1, column.name);
         m_columnsList->SetItem(itemIndex, 2, std::to_string(column.width));
 
         // Store original column name for lookup
-        m_columnsList->SetItemData(itemIndex, i); // Store index for reference
+        m_columnsList->SetItemData(itemIndex, static_cast<long>(i)); // Store index for reference
     }
 
     // Add the list control to the sizer
@@ -418,7 +419,9 @@ void ConfigEditorDialog::OnColumnSelected(wxListEvent& event)
 
         long width = 100;
         m_columnsList->GetItemText(index, 2).ToLong(&width);
-        m_columnWidth->SetValue(width);
+        const int clampedWidth = static_cast<int>(std::clamp<long>(width,
+            m_columnWidth->GetMin(), m_columnWidth->GetMax()));
+        m_columnWidth->SetValue(clampedWidth);
 
         m_selectedColumnIndex = index;
     }
@@ -462,11 +465,12 @@ void ConfigEditorDialog::OnAddColumn(wxCommandEvent& WXUNUSED(event))
             columns.push_back(newColumn);
 
             // Update list control
-            long itemIndex =
-                m_columnsList->InsertItem(m_columnsList->GetItemCount(), "Yes");
+            long itemIndex = m_columnsList->InsertItem(
+                static_cast<long>(m_columnsList->GetItemCount()), "Yes");
             m_columnsList->SetItem(itemIndex, 1, name);
             m_columnsList->SetItem(itemIndex, 2, "100");
-            m_columnsList->SetItemData(itemIndex, columns.size() - 1);
+            m_columnsList->SetItemData(itemIndex,
+                static_cast<long>(columns.size() - 1));
 
             // Select the new column
             m_columnsList->SetItemState(itemIndex,
@@ -502,10 +506,13 @@ void ConfigEditorDialog::OnRemoveColumn(wxCommandEvent& WXUNUSED(event))
     }
 
     // Find and remove from config
-    size_t configIndex = m_columnsList->GetItemData(m_selectedColumnIndex);
+    const wxUIntPtr itemData =
+        m_columnsList->GetItemData(m_selectedColumnIndex);
+    const size_t configIndex = static_cast<size_t>(itemData);
     if (configIndex < columns.size())
     {
-        columns.erase(columns.begin() + configIndex);
+        columns.erase(columns.begin() +
+            static_cast<std::ptrdiff_t>(configIndex));
     }
 
     // Remove from list
@@ -514,7 +521,7 @@ void ConfigEditorDialog::OnRemoveColumn(wxCommandEvent& WXUNUSED(event))
     // Renumber remaining items
     for (int i = 0; i < m_columnsList->GetItemCount(); ++i)
     {
-        m_columnsList->SetItemData(i, i);
+        m_columnsList->SetItemData(i, static_cast<long>(i));
     }
 
     // Reset selected index
@@ -538,7 +545,9 @@ void ConfigEditorDialog::OnApplyColumnChanges(wxCommandEvent& WXUNUSED(event))
     }
 
     auto& columns = config::GetConfig().GetMutableColumns();
-    size_t configIndex = m_columnsList->GetItemData(m_selectedColumnIndex);
+    const wxUIntPtr configItemData =
+        m_columnsList->GetItemData(m_selectedColumnIndex);
+    const size_t configIndex = static_cast<size_t>(configItemData);
 
     // Check for duplicate names if name changed
     if (newName != columns[configIndex].name)
@@ -615,11 +624,11 @@ void ConfigEditorDialog::RefreshColumns()
     {
         const auto& column = columns[i];
 
-        long itemIndex =
-            m_columnsList->InsertItem(i, column.isVisible ? "Yes" : "No");
+        long itemIndex = m_columnsList->InsertItem(
+            static_cast<long>(i), column.isVisible ? "Yes" : "No");
         m_columnsList->SetItem(itemIndex, 1, column.name);
         m_columnsList->SetItem(itemIndex, 2, std::to_string(column.width));
-        m_columnsList->SetItemData(itemIndex, i);
+        m_columnsList->SetItemData(itemIndex, static_cast<long>(i));
     }
 
     // Reset selection
@@ -664,7 +673,7 @@ void ConfigEditorDialog::RefreshColorMappings()
             m_colorMappingsList->SetItem(itemIdx, 2, colors.fg);
 
             // Store original value for lookup
-            m_colorMappingsList->SetItemData(itemIdx, idx);
+            m_colorMappingsList->SetItemData(itemIdx, static_cast<long>(idx));
             idx++;
         }
     }
@@ -949,8 +958,7 @@ void ConfigEditorDialog::NotifyObservers()
     }
 }
 
-void ConfigEditorDialog::SwapListItems(
-    unsigned int sourcePos, unsigned int targetPos)
+void ConfigEditorDialog::SwapListItems(long sourcePos, long targetPos)
 {
     if (sourcePos == targetPos)
         return;
@@ -961,10 +969,10 @@ void ConfigEditorDialog::SwapListItems(
     wxString sourceVisible = m_columnsList->GetItemText(sourcePos, 0);
     wxString sourceName = m_columnsList->GetItemText(sourcePos, 1);
     wxString sourceWidth = m_columnsList->GetItemText(sourcePos, 2);
-    long sourceConfigIndex = m_columnsList->GetItemData(sourcePos);
-
-    // Store a copy of the source column from config
-    config::ColumnConfig sourceColumn = columns[sourceConfigIndex];
+    const wxUIntPtr sourceConfigIndexRaw =
+        m_columnsList->GetItemData(sourcePos);
+    const size_t sourceConfigIndex =
+        static_cast<size_t>(sourceConfigIndexRaw);
 
     if (sourcePos < targetPos)
     {
@@ -975,23 +983,28 @@ void ConfigEditorDialog::SwapListItems(
             m_columnsList->SetItem(i, 0, m_columnsList->GetItemText(i + 1, 0));
             m_columnsList->SetItem(i, 1, m_columnsList->GetItemText(i + 1, 1));
             m_columnsList->SetItem(i, 2, m_columnsList->GetItemText(i + 1, 2));
-            m_columnsList->SetItemData(i, m_columnsList->GetItemData(i + 1));
+            const wxUIntPtr nextData = m_columnsList->GetItemData(i + 1);
+            m_columnsList->SetItemData(i, static_cast<long>(nextData));
         }
 
         // Shift columns in the config array
         // Find the indices in the config array for both positions
-        size_t configSourcePos = std::distance(columns.begin(),
+        const auto configSourcePos = std::distance(columns.begin(),
             std::find_if(columns.begin(), columns.end(),
                 [&](const config::ColumnConfig& col)
                 { return col.name == sourceName.ToStdString(); }));
 
+        const auto targetOffset = static_cast<std::ptrdiff_t>(targetPos);
+
         // Perform rotation on the config array
-        if (configSourcePos < columns.size() &&
-            configSourcePos + 1 <= targetPos && targetPos < columns.size())
+        if (configSourcePos >= 0 && targetOffset >= 0 &&
+            static_cast<size_t>(configSourcePos) < columns.size() &&
+            static_cast<size_t>(targetOffset) < columns.size() &&
+            configSourcePos <= targetOffset)
         {
             std::rotate(columns.begin() + configSourcePos,
                 columns.begin() + configSourcePos + 1,
-                columns.begin() + targetPos + 1);
+                columns.begin() + targetOffset + 1);
         }
     }
     else
@@ -1003,20 +1016,25 @@ void ConfigEditorDialog::SwapListItems(
             m_columnsList->SetItem(i, 0, m_columnsList->GetItemText(i - 1, 0));
             m_columnsList->SetItem(i, 1, m_columnsList->GetItemText(i - 1, 1));
             m_columnsList->SetItem(i, 2, m_columnsList->GetItemText(i - 1, 2));
-            m_columnsList->SetItemData(i, m_columnsList->GetItemData(i - 1));
+            const wxUIntPtr prevData = m_columnsList->GetItemData(i - 1);
+            m_columnsList->SetItemData(i, static_cast<long>(prevData));
         }
 
         // Find the indices in the config array for both positions
-        size_t configSourcePos = std::distance(columns.begin(),
+        const auto configSourcePos = std::distance(columns.begin(),
             std::find_if(columns.begin(), columns.end(),
                 [&](const config::ColumnConfig& col)
                 { return col.name == sourceName.ToStdString(); }));
 
+        const auto targetOffset = static_cast<std::ptrdiff_t>(targetPos);
+
         // Perform rotation on the config array
-        if (configSourcePos < columns.size() && targetPos <= configSourcePos &&
-            targetPos < columns.size())
+        if (configSourcePos >= 0 && targetOffset >= 0 &&
+            static_cast<size_t>(configSourcePos) < columns.size() &&
+            static_cast<size_t>(targetOffset) < columns.size() &&
+            targetOffset <= configSourcePos)
         {
-            std::rotate(columns.begin() + targetPos,
+            std::rotate(columns.begin() + targetOffset,
                 columns.begin() + configSourcePos,
                 columns.begin() + configSourcePos + 1);
         }
@@ -1026,7 +1044,7 @@ void ConfigEditorDialog::SwapListItems(
     m_columnsList->SetItem(targetPos, 0, sourceVisible);
     m_columnsList->SetItem(targetPos, 1, sourceName);
     m_columnsList->SetItem(targetPos, 2, sourceWidth);
-    m_columnsList->SetItemData(targetPos, sourceConfigIndex);
+    m_columnsList->SetItemData(targetPos, static_cast<long>(sourceConfigIndex));
 
     // Log the change
     util::Logger::Debug("Moved column {} from position {} to position {}",
@@ -1045,8 +1063,8 @@ void ConfigEditorDialog::OnMoveColumnUp(wxCommandEvent& WXUNUSED(event))
     }
 
     // Get the items to swap
-    int currentPos = m_selectedColumnIndex;
-    int newPos = currentPos - 1;
+    long currentPos = m_selectedColumnIndex;
+    long newPos = currentPos - 1;
 
     // Swap items in the list control and config
     SwapListItems(currentPos, newPos);
@@ -1068,8 +1086,8 @@ void ConfigEditorDialog::OnMoveColumnDown(wxCommandEvent& WXUNUSED(event))
     }
 
     // Get the items to swap
-    int currentPos = m_selectedColumnIndex;
-    int newPos = currentPos + 1;
+    long currentPos = m_selectedColumnIndex;
+    long newPos = currentPos + 1;
 
     // Swap items in the list control and config
     SwapListItems(currentPos, newPos);

@@ -133,7 +133,6 @@ void Config::SetupLogPath()
     // Set the log path based on the application name
     std::filesystem::path logPath = GetDefaultLogPath();
     m_logPath = logPath.string();
-    util::Logger::Info("Log file path set to: {}", m_logPath);
 }
 
 void Config::SaveConfig()

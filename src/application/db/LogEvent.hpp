@@ -121,6 +121,22 @@ class LogEvent
      */
     const std::string findByKey(const std::string& key) const;
 
+
+    /**
+     * @brief Finds all values by its key in the event's items.
+     *
+     * Performs a linear search through the event's key-value pairs to find
+     * all occurrences of the specified key.
+     *
+     * @param key The key to search for
+     * @return const std::string The corresponding value, or empty string if not
+     * found
+     * @note Returns the first matching value if duplicate keys exist
+     * @complexity O(n) where n is the number of items in the event
+     */
+    const std::vector<std::string> findAllByKey(const std::string& key) const;
+
+
     /**
      * @brief Finds an iterator to the first item matching the search term.
      *
@@ -132,6 +148,7 @@ class LogEvent
      * @note This method performs a substring search, not exact matching
      */
     EventItemsIterator findInEvent(const std::string& search);
+    
 
     /**
      * @brief Equality comparison operator.

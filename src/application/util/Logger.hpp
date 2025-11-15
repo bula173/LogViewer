@@ -14,8 +14,12 @@
 #include <source_location>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <string>
 #include <string_view>
+
+// std
+#include <chrono>
 
 namespace util {
 
@@ -68,11 +72,32 @@ public:
      * @brief Constructs a logger with given name
      * @param name Logger name (used in log output)
      */
-    explicit SpdLogger(std::string name = "LogViewer")
-        : m_logger(spdlog::get(name))
+    explicit SpdLogger(LogLevel level = LogLevel::Debug, const std::string& logFile = "", const std::string& name = "LogViewer")
     {
-        if (!m_logger) {
-            m_logger = spdlog::default_logger();
+        if (m_logger.get() == nullptr) {
+            std::vector<spdlog::sink_ptr> sinks;
+
+
+            // Console sink for debug output
+            auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+            console_sink->set_level(toSpdlogLevel(level));
+            sinks.push_back(console_sink);
+            spdlog::info("Console sink initialized");
+
+            // Additional spdlog configuration can go here
+            if (!logFile.empty()) {
+                auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFile, true);
+                file_sink->set_level(toSpdlogLevel(level));
+                sinks.push_back(file_sink);
+                spdlog::info("File sink initialized for log file: {}", logFile);
+            }
+
+            auto logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
+            logger->set_level(toSpdlogLevel(level));
+            spdlog::set_default_logger(logger);
+            m_logger = std::move(logger);
+            spdlog::flush_on(spdlog::level::trace);
+            spdlog::flush_every(std::chrono::seconds(1)); // Auto flush every second
         }
     }
 
@@ -192,15 +217,31 @@ public:
             return; // Already initialized
         }
 
-        s_instance = std::make_shared<SpdLogger>();
-        s_instance->setLevel(level);
-
-        // Additional spdlog configuration can go here
-        if (!logFile.empty()) {
-            spdlog::default_logger()->sinks().push_back(
-                std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFile));
-        }
+        s_instance = std::make_shared<SpdLogger>(level, logFile);
     }
+
+    /** 
+     * @brief Convert string to log level
+     */
+    static LogLevel fromStrLevel(const std::string& levelStr)
+    {
+        if (levelStr == "trace")
+            return LogLevel::Trace;
+        else if (levelStr == "debug")
+            return LogLevel::Debug;
+        else if (levelStr == "info")
+            return LogLevel::Info;
+        else if (levelStr == "warning")
+            return LogLevel::Warning;
+        else if (levelStr == "error")
+            return LogLevel::Error;
+        else if (levelStr == "critical")
+            return LogLevel::Critical;
+        else if (levelStr == "off")
+            return LogLevel::Off;
+        else
+            return LogLevel::Info;
+    }   
 
     /**
      * @brief Sets a custom logger instance (for testing)
