@@ -2,11 +2,36 @@
 #include "FilterEditorDialog.hpp"
 #include "MainWindow.hpp"
 #include "filters/FilterManager.hpp"
-#include <spdlog/spdlog.h>
+#include "util/Logger.hpp"
+
+#include <limits>
+#include <string>
 #include <wx/filedlg.h> // For wxFileDialog
 #include <wx/msgdlg.h>  // For wxMessageBox
 #include <wx/statline.h>
 #include <wx/stattext.h>
+
+namespace
+{
+void HandleFilterResult(const filters::FilterResult& result,
+    const std::string& context, wxWindow* parent = nullptr,
+    bool showDialog = false)
+{
+    if (!result.isErr())
+        return;
+
+    const auto& err = result.error();
+    util::Logger::Error("{} failed: {}", context, err.what());
+
+    if (showDialog && parent)
+    {
+        wxMessageBox(wxString::Format("%s\n%s",
+                         wxString::FromUTF8(context.c_str()),
+                         wxString::FromUTF8(err.what())),
+            "Filters Error", wxOK | wxICON_ERROR, parent);
+    }
+}
+} // namespace
 
 namespace gui
 {
@@ -118,7 +143,7 @@ void FiltersPanel::RefreshFilters()
             continue;
 
         long itemIdx =
-            m_filtersList->InsertItem(idx, filter->isEnabled ? "✓" : "");
+            m_filtersList->InsertItem(idx, filter->isEnabled ? "x" : "");
         m_filtersList->SetItem(itemIdx, 1, filter->name);
 
         // Show different information based on filter type
@@ -163,7 +188,7 @@ void FiltersPanel::ApplyFilters()
     MainWindow* mainWindow = dynamic_cast<MainWindow*>(parent);
     if (!mainWindow)
     {
-        spdlog::error("FiltersPanel: Cannot find MainWindow parent");
+        util::Logger::Error("FiltersPanel: Cannot find MainWindow parent");
         return;
     }
 
@@ -180,7 +205,8 @@ void FiltersPanel::OnAddFilter(wxCommandEvent& WXUNUSED(event))
         if (filter)
         {
             filters::FilterManager::getInstance().addFilter(filter);
-            filters::FilterManager::getInstance().saveFilters();
+            const auto saveResult = filters::FilterManager::getInstance().saveFilters();
+            HandleFilterResult(saveResult, "Saving filters after Add");
             RefreshFilters();
         }
     }
@@ -198,7 +224,7 @@ void FiltersPanel::OnEditFilter(wxCommandEvent& WXUNUSED(event))
 
     if (!filter)
     {
-        spdlog::error("FiltersPanel: Selected filter not found: {}",
+        util::Logger::Error("FiltersPanel: Selected filter not found: {}",
             filterName.ToStdString());
         return;
     }
@@ -210,7 +236,8 @@ void FiltersPanel::OnEditFilter(wxCommandEvent& WXUNUSED(event))
         if (updatedFilter)
         {
             filters::FilterManager::getInstance().updateFilter(updatedFilter);
-            filters::FilterManager::getInstance().saveFilters();
+            const auto saveResult = filters::FilterManager::getInstance().saveFilters();
+            HandleFilterResult(saveResult, "Saving filters after Edit");
             RefreshFilters();
             ApplyFilters();
         }
@@ -231,7 +258,8 @@ void FiltersPanel::OnRemoveFilter(wxCommandEvent& WXUNUSED(event))
     {
         filters::FilterManager::getInstance().removeFilter(
             filterName.ToStdString());
-        filters::FilterManager::getInstance().saveFilters();
+        const auto saveResult = filters::FilterManager::getInstance().saveFilters();
+        HandleFilterResult(saveResult, "Saving filters after Remove");
         RefreshFilters();
         ApplyFilters();
     }
@@ -239,7 +267,19 @@ void FiltersPanel::OnRemoveFilter(wxCommandEvent& WXUNUSED(event))
 
 void FiltersPanel::OnFilterSelected(wxListEvent& event)
 {
-    m_selectedFilterIndex = event.GetIndex();
+    const long selectedIndex = event.GetIndex();
+    if (selectedIndex < 0)
+    {
+        m_selectedFilterIndex = -1;
+    }
+    else if (selectedIndex > std::numeric_limits<int>::max())
+    {
+        m_selectedFilterIndex = std::numeric_limits<int>::max();
+    }
+    else
+    {
+        m_selectedFilterIndex = static_cast<int>(selectedIndex);
+    }
 
     // Enable edit/remove buttons
     m_editButton->Enable();
@@ -257,7 +297,8 @@ void FiltersPanel::OnClearFilters(wxCommandEvent& WXUNUSED(event))
             "Clear Filters", wxYES_NO | wxICON_QUESTION) == wxYES)
     {
         filters::FilterManager::getInstance().enableAllFilters(false);
-        filters::FilterManager::getInstance().saveFilters();
+        const auto saveResult = filters::FilterManager::getInstance().saveFilters();
+        HandleFilterResult(saveResult, "Saving filters after Clear");
         RefreshFilters();
         ApplyFilters();
     }
@@ -299,7 +340,8 @@ void FiltersPanel::OnListItemClick(wxMouseEvent& event)
             // Update the filter
             filters::FilterManager::getInstance().enableFilter(
                 filterName.ToStdString(), newState);
-            filters::FilterManager::getInstance().saveFilters();
+            const auto saveResult = filters::FilterManager::getInstance().saveFilters();
+            HandleFilterResult(saveResult, "Saving filters after Toggle");
 
             // Update item appearance
             if (newState)
@@ -319,7 +361,7 @@ void FiltersPanel::OnListItemClick(wxMouseEvent& event)
 
 void FiltersPanel::OnSaveFiltersAs(wxCommandEvent& WXUNUSED(event))
 {
-    spdlog::info("OnSaveFiltersAs called");
+    util::Logger::Info("OnSaveFiltersAs called");
 
     // Get top-level parent window for proper dialog centering
     wxWindow* topParent = wxGetTopLevelParent(this);
@@ -337,20 +379,20 @@ void FiltersPanel::OnSaveFiltersAs(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxString path = saveDialog.GetPath();
-    spdlog::info("Selected path: {}", path.ToStdString());
+    util::Logger::Info("Selected path: {}", path.ToStdString());
 
-    if (filters::FilterManager::getInstance().saveFiltersToPath(
-            path.ToStdString()))
+    const auto saveResult = filters::FilterManager::getInstance().saveFiltersToPath(
+        path.ToStdString());
+    if (!saveResult.isErr())
     {
         wxMessageBox(wxString::Format("Filters saved to:\n%s", path),
             "Filters Saved", wxOK | wxICON_INFORMATION, topParent);
-        spdlog::info("Filters saved successfully");
+        util::Logger::Info("Filters saved successfully");
     }
     else
     {
-        wxMessageBox(wxString::Format("Failed to save filters to:\n%s", path),
-            "Save Error", wxOK | wxICON_ERROR, topParent);
-        spdlog::error("Failed to save filters");
+        HandleFilterResult(saveResult, "Saving filters to custom path",
+            topParent, true);
     }
 }
 
@@ -372,8 +414,9 @@ void FiltersPanel::OnLoadFilters(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    if (filters::FilterManager::getInstance().loadFiltersFromPath(
-            path.ToStdString()))
+    auto loadResult = filters::FilterManager::getInstance().loadFiltersFromPath(
+        path.ToStdString());
+    if (!loadResult.isErr())
     {
         RefreshFilters();
         ApplyFilters();
@@ -382,8 +425,7 @@ void FiltersPanel::OnLoadFilters(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        wxMessageBox(wxString::Format("Failed to load filters from:\n%s", path),
-            "Load Error", wxOK | wxICON_ERROR);
+        HandleFilterResult(loadResult, "Loading filters from file", this, true);
     }
 }
 

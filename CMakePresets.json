@@ -53,14 +53,16 @@
             "binaryDir": "${sourceDir}/build/macos-release",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
             },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Darwin"
             }
-        },
+        },  
         {
             "name": "windows-msys-debug",
             "displayName": "Windows MSYS2 Debug",

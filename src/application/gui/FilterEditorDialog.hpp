@@ -41,8 +41,6 @@ class FilterEditorDialog : public wxDialog
 
     // Filter being edited (nullptr for new filter)
     filters::FilterPtr m_filter;
-    wxPanel* m_columnFilterPanel = nullptr;
-    wxPanel* m_parameterFilterPanel = nullptr;
 
     void CreateColumnFilterControls(wxPanel* parent);
     void CreateParameterFilterControls(wxPanel* parent);

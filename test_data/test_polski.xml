@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logs>
+    <event>
+        <timestamp>2025-01-15 10:30:00</timestamp>
+        <type>INFO</type>
+        <info>Użytkownik zalogował się do systemu</info>
+        <message>Operacja zakończona powodzeniem - użytkownik "Jan Kowalski"</message>
+        <location>Kraków</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:31:15</timestamp>
+        <type>WARNING</type>
+        <info>Próba dostępu do pliku: dane_ważne.txt</info>
+        <message>Błąd: Brak uprawnień do odczytu</message>
+        <location>Łódź</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:32:30</timestamp>
+        <type>ERROR</type>
+        <info>Połączenie z bazą danych przerwane</info>
+        <message>Sprawdź konfigurację serwera - błąd połączenia</message>
+        <location>Gdańsk</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:33:45</timestamp>
+        <type>DEBUG</type>
+        <info>Ładowanie konfiguracji z pliku: ustawienia_główne.json</info>
+        <message>Znaleziono 15 parametrów konfiguracyjnych</message>
+        <location>Poznań</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:35:00</timestamp>
+        <type>INFO</type>
+        <info>Eksport danych do pliku: raport_2025_styczeń.xlsx</info>
+        <message>Wyeksportowano 1234 wierszy - sukces</message>
+        <location>Wrocław</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:36:20</timestamp>
+        <type>WARNING</type>
+        <info>Niska ilość pamięci - tylko 512 MB dostępne</info>
+        <message>Zalecane jest zamknięcie niektórych aplikacji</message>
+        <location>Białystok</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:37:45</timestamp>
+        <type>ERROR</type>
+        <info>Nie można zapisać pliku: ważny_dokument.pdf</info>
+        <message>Błąd I/O: Dysk pełny lub brak uprawnień</message>
+        <location>Katowice</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:38:30</timestamp>
+        <type>INFO</type>
+        <info>Rozpoczęto proces synchronizacji danych</info>
+        <message>Synchronizacja zakończy się około 11:00</message>
+        <location>Lublin</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:39:15</timestamp>
+        <type>DEBUG</type>
+        <info>Wczytano moduł językowy: polski_PL.lang</info>
+        <message>Obsługiwane znaki: ą, ć, ę, ł, ń, ó, ś, ź, ż</message>
+        <location>Rzeszów</location>
+    </event>
+    <event>
+        <timestamp>2025-01-15 10:40:00</timestamp>
+        <type>INFO</type>
+        <info>Użytkownik wylogował się z systemu</info>
+        <message>Sesja trwała 10 minut - dziękujemy</message>
+        <location>Szczecin</location>
+    </event>
+</logs>

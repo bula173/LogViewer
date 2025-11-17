@@ -1,116 +1,100 @@
 {
     "version": "2.0.0",
     "tasks": [
+        // ========================================================================
+        // Configure Tasks (using CMake Presets)
+        // ========================================================================
         {
             "label": "Configure Debug",
             "type": "shell",
             "windows": {
-                "command": "C:/msys64/mingw64/bin/cmake.exe",
+                "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/debug",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Debug",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-                    "-DCMAKE_C_COMPILER=/mingw64/bin/clang.exe",
-                    "-DCMAKE_CXX_COMPILER=/mingw64/bin/clang++.exe",
-                    "-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
-                ],
-                "options": {
-                    "cwd": "${workspaceFolder}"
-                }
+                    "--preset",
+                    "windows-msys-debug"
+                ]
             },
             "linux": {
                 "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/debug",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Debug",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                    "--preset",
+                    "linux-debug"
                 ]
             },
             "osx": {
                 "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/debug",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Debug",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                    "--preset",
+                    "macos-debug"
                 ]
             },
-            "problemMatcher": []
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
         {
             "label": "Configure Release",
             "type": "shell",
             "windows": {
-                "command": "C:/msys64/mingw64/bin/cmake.exe",
+                "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/release",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-                    "-DCMAKE_C_COMPILER=/mingw64/bin/clang.exe",
-                    "-DCMAKE_CXX_COMPILER=/mingw64/bin/clang++.exe",
-                    "-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
-                ],
-                "options": {
-                    "cwd": "${workspaceFolder}"
-                }
+                    "--preset",
+                    "windows-msys-release"
+                ]
             },
             "linux": {
                 "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/release",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                    "--preset",
+                    "linux-release"
                 ]
             },
             "osx": {
                 "command": "cmake",
                 "args": [
-                    "-S",
-                    ".",
-                    "-B",
-                    "build/release",
-                    "-G",
-                    "Ninja",
-                    "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                    "--preset",
+                    "macos-release"
                 ]
             },
-            "problemMatcher": []
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
+
+        // ========================================================================
+        // Build Tasks (using CMake Presets)
+        // ========================================================================
         {
             "label": "Build Debug",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build/debug",
-                "-j",
-                "8"
-            ],
+            "windows": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "windows-msys-debug-build"
+                ]
+            },
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "linux-debug-build"
+                ]
+            },
+            "osx": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "macos-debug-build"
+                ]
+            },
             "dependsOn": [
                 "Configure Debug"
             ],
@@ -120,28 +104,55 @@
             },
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
         {
             "label": "Build Release",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build/release",
-                "-j",
-                "8"
-            ],
+            "windows": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "windows-msys-release-build"
+                ]
+            },
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "linux-release-build"
+                ]
+            },
+            "osx": {
+                "command": "cmake",
+                "args": [
+                    "--build",
+                    "--preset",
+                    "macos-release-build"
+                ]
+            },
             "dependsOn": [
                 "Configure Release"
             ],
             "group": "build",
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
 
-        /* Compatibility alias tasks (fixes: Could not find the task 'Build release with CMake') */
+        // ========================================================================
+        // Compatibility Alias Tasks
+        // ========================================================================
         {
             "label": "Build release with CMake",
             "type": "shell",
@@ -167,61 +178,135 @@
             "problemMatcher": []
         },
 
+        // ========================================================================
+        // Test Tasks (using CMake Presets)
+        // ========================================================================
         {
             "label": "Test Debug",
             "type": "shell",
-            "command": "ctest",
-            "args": [
-                "--test-dir",
-                "build/debug",
-                "--output-on-failure",
-                "-j",
-                "8"
-            ],
+            "windows": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "windows-msys-debug-test"
+                ]
+            },
+            "linux": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "linux-debug-test"
+                ]
+            },
+            "osx": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "macos-debug-test"
+                ]
+            },
             "dependsOn": [
                 "Build Debug"
-            ]
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
+        {
+            "label": "Test Release",
+            "type": "shell",
+            "windows": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "windows-msys-release-test"
+                ]
+            },
+            "linux": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "linux-release-test"
+                ]
+            },
+            "osx": {
+                "command": "ctest",
+                "args": [
+                    "--preset",
+                    "macos-release-test"
+                ]
+            },
+            "dependsOn": [
+                "Build Release"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        // ========================================================================
+        // Analysis and Packaging Tasks
+        // ========================================================================
         {
             "label": "Static Analysis (cppcheck)",
             "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/debug/cppcheck-report.txt >/dev/null; then cat build/debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
-            ],
+            "windows": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/windows-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/windows-debug/cppcheck-report.txt >/dev/null; then cat build/windows-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/linux-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/linux-debug/cppcheck-report.txt >/dev/null; then cat build/linux-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/macos-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/macos-debug/cppcheck-report.txt >/dev/null; then cat build/macos-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
+                ]
+            },
             "dependsOn": [
                 "Configure Debug"
             ]
         },
         {
-            "label": "Install Release",
+            "label": "Package Release",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--install",
-                "build/release",
-                "--prefix",
-                "build/release/_staging",
-                "--config",
-                "Release"
-            ],
+            "windows": {
+                "command": "cpack",
+                "args": [
+                    "--preset",
+                    "windows-msys-release-package"
+                ]
+            },
+            "linux": {
+                "command": "cpack",
+                "args": [
+                    "--preset",
+                    "linux-release-package"
+                ]
+            },
+            "osx": {
+                "command": "cpack",
+                "args": [
+                    "--preset",
+                    "macos-release-package"
+                ]
+            },
             "dependsOn": [
                 "Build Release"
             ]
         },
-        {
-            "label": "Package Release",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd build/release && cpack -G $(uname | grep -qi darwin && echo DragNDrop || echo TGZ) -C Release --config CPackConfig.cmake"
-            ],
-            "dependsOn": [
-                "Install Release"
-            ]
-        },
+        // ========================================================================
+        // Run Tasks
+        // ========================================================================
         {
             "label": "Run App (Debug)",
             "type": "shell",
@@ -229,21 +314,21 @@
                 "command": "bash",
                 "args": [
                     "-c",
-                    "exec build/debug/src/LogViewer || exec build/debug/LogViewer"
+                    "exec build/linux-debug/src/LogViewer || exec build/linux-debug/LogViewer"
                 ]
             },
             "osx": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "APP=build/debug/src/LogViewer; BUNDLE=build/debug/src/LogViewer.app/Contents/MacOS/LogViewer; [ -x \"$BUNDLE\" ] && exec \"$BUNDLE\" || exec \"$APP\""
+                    "APP=build/macos-debug/src/LogViewer; BUNDLE=build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer; [ -x \"$BUNDLE\" ] && exec \"$BUNDLE\" || exec \"$APP\""
                 ]
             },
             "windows": {
                 "command": "cmd",
                 "args": [
                     "/c",
-                    "if exist build\\debug\\src\\LogViewer.exe (build\\debug\\src\\LogViewer.exe) else (build\\debug\\LogViewer.exe)"
+                    "if exist build\\windows-debug\\src\\LogViewer.exe (build\\windows-debug\\src\\LogViewer.exe) else (build\\windows-debug\\LogViewer.exe)"
                 ],
                 "options": {
                     "env": {
@@ -253,7 +338,8 @@
             },
             "dependsOn": [
                 "Build Debug"
-            ]
+            ],
+            "isBackground": true
         },
         {
             "label": "Run Tests (Debug)",
@@ -262,21 +348,21 @@
                 "command": "bash",
                 "args": [
                     "-c",
-                    "ctest --test-dir build/debug --output-on-failure"
+                    "ctest --test-dir build/linux-debug --output-on-failure"
                 ]
             },
             "osx": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "ctest --test-dir build/debug --output-on-failure"
+                    "ctest --test-dir build/macos-debug --output-on-failure"
                 ]
             },
             "windows": {
                 "command": "cmd",
                 "args": [
                     "/c",
-                    "ctest --test-dir build\\debug --output-on-failure"
+                    "ctest --test-dir build\\windows-debug --output-on-failure"
                 ],
                 "options": {
                     "env": {
@@ -288,6 +374,9 @@
                 "Build Debug"
             ]
         },
+        // ========================================================================
+        // Utility Tasks
+        // ========================================================================
         {
             "label": "Clean",
             "type": "shell",
@@ -299,68 +388,104 @@
             "problemMatcher": []
         },
         {
-            "label": "Build Debug with Logging",
+            "label": "Clean Build Artifacts",
             "type": "shell",
             "windows": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                    "rm -rf build/windows-debug build/windows-release"
                 ]
             },
             "linux": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                    "rm -rf build/linux-debug build/linux-release"
                 ]
             },
             "osx": {
                 "command": "bash",
                 "args": [
                     "-c",
-                    "mkdir -p dist/logs && cmake --build build/debug 2>&1 | tee dist/logs/build-debug-$(date +%Y%m%d-%H%M%S).log"
+                    "rm -rf build/macos-debug build/macos-release"
                 ]
             },
-            "dependsOn": [
-                "Configure Debug"
-            ],
-            "group": "build",
+            "problemMatcher": []
+        },
+
+        // ========================================================================
+        // Workflow Tasks (Complete Build + Test + Package)
+        // ========================================================================
+        {
+            "label": "Full Debug Workflow",
+            "type": "shell",
+            "windows": {
+                "command": "cmake",
+                "args": [
+                    "--workflow",
+                    "--preset",
+                    "windows-msys-debug-workflow"
+                ]
+            },
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "--workflow",
+                    "--preset",
+                    "linux-debug-workflow"
+                ]
+            },
+            "osx": {
+                "command": "cmake",
+                "args": [
+                    "--workflow",
+                    "--preset",
+                    "macos-debug-workflow"
+                ]
+            },
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
         {
-            "label": "Build Release with Logging",
+            "label": "Full Release Workflow",
             "type": "shell",
             "windows": {
-                "command": "bash",
+                "command": "cmake",
                 "args": [
-                    "-c",
-                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                    "--workflow",
+                    "--preset",
+                    "windows-msys-release-workflow"
                 ]
             },
             "linux": {
-                "command": "bash",
+                "command": "cmake",
                 "args": [
-                    "-c",
-                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                    "--workflow",
+                    "--preset",
+                    "linux-release-workflow"
                 ]
             },
             "osx": {
-                "command": "bash",
+                "command": "cmake",
                 "args": [
-                    "-c",
-                    "mkdir -p dist/logs && cmake --build build/release 2>&1 | tee dist/logs/build-release-$(date +%Y%m%d-%H%M%S).log"
+                    "--workflow",
+                    "--preset",
+                    "macos-release-workflow"
                 ]
             },
-            "dependsOn": [
-                "Configure Release"
-            ],
-            "group": "build",
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         }
     ]
 }

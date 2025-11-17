@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
-project(LogViewer VERSION 0.0.5 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
+project(LogViewer VERSION 0.0.6 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
 
 cmake_policy(SET CMP0074 NEW)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Ensure spdlog debug/trace macros remain compiled in so runtime log-level
+# changes actually take effect.
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
 
 # Export compile commands for clang-tidy and other tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

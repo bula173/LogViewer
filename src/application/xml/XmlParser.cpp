@@ -3,15 +3,49 @@
 #include "config/Config.hpp"
 #include "db/LogEvent.hpp"
 #include "error/Error.hpp"
-
-// third-party
-#include <spdlog/spdlog.h>
+#include "util/Logger.hpp"
+#include "util/Result.hpp"
 
 // std
-#include <fstream> // Include this header for std::ifstream
-#include <iostream>
-#include <memory>
-#include <sstream>
+#include <cstring>
+#include <fstream>
+#include <vector>
+namespace
+{
+constexpr unsigned char UTF8_BOM[] = {0xEF, 0xBB, 0xBF};
+
+using ReadResult = util::Result<std::streamsize, error::Error>;
+
+ReadResult ReadChunk(std::istream& input, std::vector<char>& buffer)
+{
+    input.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
+    if (input.bad())
+    {
+        return ReadResult::Err(error::Error(error::ErrorCode::IOError,
+            "XmlParser::ParseData encountered stream read error", false));
+    }
+    return ReadResult::Ok(input.gcount());
+}
+
+void StripUtf8BomIfPresent(parser::ParserState& state,
+    std::vector<char>& buffer, std::streamsize& bytesRead)
+{
+    if (state.bytesProcessed > 0 || bytesRead < 3)
+        return;
+
+    if (static_cast<unsigned char>(buffer[0]) == UTF8_BOM[0] &&
+        static_cast<unsigned char>(buffer[1]) == UTF8_BOM[1] &&
+        static_cast<unsigned char>(buffer[2]) == UTF8_BOM[2])
+    {
+        util::Logger::Debug("XmlParser::ParseData detected UTF-8 BOM; skipping");
+        std::memmove(buffer.data(), buffer.data() + 3,
+            static_cast<size_t>(bytesRead - 3));
+        bytesRead -= 3;
+        state.bytesProcessed += 3; // account for skipped bytes
+    }
+}
+} // namespace
+
 namespace parser
 {
 
@@ -28,13 +62,13 @@ static void StartElementHandler(
     {
         if (elementName == config.xmlRootElement)
         {
-            spdlog::debug(
+            util::Logger::Debug(
                 "XmlParser::ParseData found root element: {}", elementName);
             state->insideRoot = true;
         }
         else
         {
-            spdlog::warn(
+            util::Logger::Warn(
                 "XmlParser::ParseData unexpected element: {} outside root",
                 elementName);
             // Do NOT flip insideRoot here; wait for the correct root.
@@ -92,10 +126,11 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
     ParserState* state = static_cast<ParserState*>(userData);
     if (state->insideEvent && !state->currentElement.empty())
     {
-        state->currentText.append(s, len);
+        state->currentText.append(s, static_cast<size_t>(len));
     }
 
-    state->bytesProcessed = XML_GetCurrentByteIndex(state->parserHandle);
+    state->bytesProcessed = static_cast<size_t>(
+        XML_GetCurrentByteIndex(state->parserHandle));
 
     // Update progress calculation
     uint32_t newProgress = (state->totalBytes > 0)
@@ -113,7 +148,7 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
         state->parser->NotifyProgressUpdated();
         state->lastProgressBytes = state->bytesProcessed;
 
-        spdlog::debug("XmlParser::ParseData progress: {}% ({}/{} bytes)",
+        util::Logger::Trace("XmlParser::ParseData progress: {}% ({}/{} bytes)",
             newProgress, state->bytesProcessed, state->totalBytes);
     }
 }
@@ -124,10 +159,12 @@ XmlParser::XmlParser()
 {
 }
 
-// Loads and parses XML file using Expat
+/**
+ * @brief Loads and parses XML data from a file path.
+ */
 void XmlParser::ParseData(const std::filesystem::path& filepath)
 {
-    spdlog::debug(
+    util::Logger::Debug(
         "XmlParser::ParseData called with filepath: {}", filepath.string());
     std::ifstream input(filepath, std::ios::binary);
 
@@ -142,9 +179,12 @@ void XmlParser::ParseData(const std::filesystem::path& filepath)
     input.close();
 }
 
+/**
+ * @brief Parse XML data from an arbitrary input stream.
+ */
 void XmlParser::ParseData(std::istream& input)
 {
-    spdlog::debug("XmlParser::ParseData called with istream");
+    util::Logger::Debug("XmlParser::ParseData called with istream");
 
     if (!input.good())
         throw error::Error(
@@ -170,7 +210,9 @@ void XmlParser::ParseData(std::istream& input)
         }
     }
 
-    XML_Parser parser = XML_ParserCreate(nullptr);
+    // Force UTF-8 parsing to keep Polish characters intact even if files lack
+    // explicit encoding declarations.
+    XML_Parser parser = XML_ParserCreate("UTF-8");
     if (!parser)
         throw error::Error("XmlParser::ParseData failed to create XML parser");
 
@@ -185,22 +227,31 @@ void XmlParser::ParseData(std::istream& input)
         constexpr size_t bufferSize = 64 * 1024;
         std::vector<char> buffer(bufferSize);
         bool finalSent = false;
+        bool bomProcessed = false;
 
         for (;;)
         {
-            input.read(buffer.data(), bufferSize);
-            const std::streamsize bytesRead = input.gcount();
+            auto chunkResult = ReadChunk(input, buffer);
+            if (chunkResult.isErr())
+            {
+                throw chunkResult.error();
+            }
+
+            std::streamsize bytesRead = chunkResult.unwrap();
 
             if (bytesRead == 0)
             {
                 // No progress: break to avoid hang. Finalize below.
-                if (input.bad())
-                    throw error::Error("XmlParser::ParseData I/O error while "
-                                       "reading input stream");
                 // If fail() without eof(), clear and break to finalize.
                 if (input.fail() && !input.eof())
                     input.clear();
                 break;
+            }
+
+            if (!bomProcessed)
+            {
+                StripUtf8BomIfPresent(state, buffer, bytesRead);
+                bomProcessed = true;
             }
 
             state.bytesProcessed += static_cast<uint64_t>(bytesRead);
@@ -250,7 +301,7 @@ void XmlParser::ParseData(std::istream& input)
         if (!state.eventBatch.empty())
             NotifyNewEventBatch(std::move(state.eventBatch));
 
-        spdlog::debug("XmlParser::ParseData finished. Processed: {}",
+        util::Logger::Debug("XmlParser::ParseData finished. Processed: {}",
             state.bytesProcessed);
         NotifyProgressUpdated();
         XML_ParserFree(parser);
@@ -263,8 +314,8 @@ void XmlParser::ParseData(std::istream& input)
     catch (const std::exception& e)
     {
         XML_ParserFree(parser);
-        throw error::Error(
-            std::string("XmlParser::ParseData (istream) failed: ") + e.what());
+        throw error::Error(std::string("XmlParser::ParseData (istream) failed: ") +
+            e.what());
     }
     catch (...)
     {

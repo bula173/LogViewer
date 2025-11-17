@@ -1,22 +1,26 @@
-// internal
 #include "MyApp.hpp"
 #include "config/Config.hpp"
 #include "error/Error.hpp"
 #include "gui/MainWindow.hpp"
 #include "main/version.h"
+#include "util/Logger.hpp"
 // std
+#include <cstdlib>
 #include <filesystem>
 
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
+/**
+ * @brief Application entry point bridging the wxWidgets lifecycle.
+ */
 int main(int argc, char** argv)
 {
     try
     {
         if (!wxEntryStart(argc, argv))
-            return 1;
+            return EXIT_FAILURE;
 
-        int code = 1;
+        int code = EXIT_FAILURE;
         if (wxTheApp && wxTheApp->CallOnInit())
         {
             code = wxTheApp->OnRun();
@@ -26,26 +30,58 @@ int main(int argc, char** argv)
         wxEntryCleanup();
         return code;
     }
+    catch (const error::Error& ex)
+    {
+        util::Logger::Critical("Unhandled application error: {}", ex.what());
+        wxMessageBox(wxString::Format("Fatal application error:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Critical("Unhandled std::exception: {}", ex.what());
+        wxMessageBox(wxString::Format("Unhandled exception:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
     catch (...)
     {
-        spdlog::error("Unhandled exception occurred");
+        util::Logger::Critical("Unhandled unknown exception occurred");
         wxMessageBox("An unexpected error occurred. Please check the logs.",
             "Error", wxOK | wxICON_ERROR);
-        abort();
     }
+    return EXIT_FAILURE;
 }
 
 bool MyApp::OnInit()
 {
-
     if (!wxApp::OnInit())
         return false;
 
-    setupLogging();
+    const auto loggingResult = setupLogging();
+    if (loggingResult.isErr())
+    {
+        util::Logger::Critical("Failed to initialize logging: {}",
+            loggingResult.error().what());
+        return false;
+    }
 
-    spdlog::info("Initializing MyApp");
+    const auto localeResult = initializeLocale();
+    if (localeResult.isErr())
+    {
+        util::Logger::Warn("{}", localeResult.error().what());
+    }
+    
+    util::Logger::Info("Initializing MyApp");
 
-    setupConfig();
+    const auto configResult = setupConfig();
+    if (configResult.isErr())
+    {
+        util::Logger::Error("Configuration initialization failed: {}",
+            configResult.error().what());
+        wxMessageBox(wxString::Format("Configuration error:\n%s",
+                          configResult.error().what()),
+            "Error", wxOK | wxICON_ERROR);
+        return false;
+    }
     ChangeLogLevel();
 
     const auto& version = Version::current();
@@ -60,111 +96,132 @@ bool MyApp::OnInit()
     }
     catch (const wxString& e)
     {
-        spdlog::error("Failed to show main window: {}", e.ToStdString());
+        util::Logger::Error("Failed to show main window: {}", e.ToStdString());
         wxMessageBox(wxString::Format("Failed to show main window:\n%s", e),
             "Error", wxOK | wxICON_ERROR);
         return false;
     }
     catch (const error::Error& e)
     {
-        spdlog::error("Fatal application error: {}", e.what());
+        util::Logger::Error("Fatal application error: {}", e.what());
         return false;
     }
     catch (const std::exception& e)
     {
-        spdlog::error("Fatal std::exception: {}", e.what());
+        util::Logger::Error("Fatal std::exception: {}", e.what());
         wxMessageBox(wxString::Format("Unhandled exception:\n%s", e.what()),
             "Error", wxOK | wxICON_ERROR);
         return false;
     }
     catch (...)
     {
-        spdlog::error("Fatal unknown exception");
+        util::Logger::Error("Fatal unknown exception");
         wxMessageBox(
             "Unhandled unknown exception.", "Error", wxOK | wxICON_ERROR);
         return false;
     }
 
-    spdlog::info("Main window created and shown");
+    util::Logger::Info("Main window created and shown");
     return true;
 }
 
-void MyApp::setupConfig()
+/**
+ * @brief Load persisted configuration and ensure application metadata is set.
+ */
+MyApp::AppResult MyApp::setupConfig()
 {
-    spdlog::info("Setting up configuration");
+    util::Logger::Info("Setting up configuration");
 
     // Set the log level based on build type
 #ifdef NDEBUG
-    spdlog::info("Release build");
+    util::Logger::Info("Release build");
 #else
-    spdlog::info("Debug build");
+    util::Logger::Info("Debug build");
+    util::Logger::SetLevel(util::LogLevel::Debug);
 #endif
 
-    spdlog::info(
+    util::Logger::Info(
         "Current working dir: {}", std::filesystem::current_path().string());
 
     auto& config = config::GetConfig();
 
-    config.SetAppName(m_appName);
-    spdlog::info("Application name set to: {}", config.appName);
-    config.LoadConfig();
-}
-
-void MyApp::setupLogging()
-{
-    auto& config = config::GetConfig();
-    std::vector<spdlog::sink_ptr> sinks;
-
-
-    // Create both file and console sinks
     try
     {
-        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-            config.GetAppLogPath(), true);
-        file_sink->set_level(spdlog::level::from_str(config.logLevel));
-        sinks.push_back(file_sink);
+        config.SetAppName(m_appName);
+        util::Logger::Info("Application name set to: {}", config.appName);
+        config.LoadConfig();
     }
-    catch (const spdlog::spdlog_ex& ex)
+    catch (const error::Error& e)
     {
-        spdlog::error("Failed to create file sink: {}", ex.what());
+        util::Logger::Error("Failed to load config: {}", e.what());
+        return AppResult::Err(error::Error(e.code(), e.what(), false));
     }
-    catch (const std::exception& ex)
+    catch (const std::exception& e)
     {
-        spdlog::error("Exception while creating file sink: {}", ex.what());
-    }
-    catch (...)
-    {
-        spdlog::error("Unknown exception while creating file sink");
+        util::Logger::Error("Unexpected configuration failure: {}", e.what());
+        return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+            std::string("Unexpected configuration failure: ") + e.what(), false));
     }
 
-    // Console sink for debug output
-
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    sinks.push_back(console_sink);
-
-    spdlog::info("Log file path: {}", config.GetAppLogPath());
-
-    console_sink->set_level(spdlog::level::from_str(config.logLevel));
-    spdlog::info("Logging configuration loaded from config file. Log level: {}",
-        config.logLevel);
-
-    auto logger = std::make_shared<spdlog::logger>(
-        "multi_sink", sinks.begin(), sinks.end());
-    spdlog::set_default_logger(logger);
-    spdlog::flush_on(spdlog::level::debug);
-
-    spdlog::info("Setting up logging configuration");
+    return AppResult::Ok(std::monostate {});
 }
 
+/**
+ * @brief Initialize the logger sinks based on configuration.
+ */
+MyApp::AppResult MyApp::setupLogging()
+{
+    try
+    {
+        auto& config = config::GetConfig();
+        util::Logger::Initialize(
+            util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
+
+        util::Logger::Info("Setting up logging configuration");
+        util::Logger::Info(
+            "Logging configuration loaded from config file. Log level: {}",
+            config.logLevel);
+        util::Logger::Info("Log file path: {}", config.GetAppLogPath());
+    }
+    catch (const error::Error& e)
+    {
+        return AppResult::Err(error::Error(e.code(), e.what(), false));
+    }
+    catch (const std::exception& e)
+    {
+        return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+            std::string("Failed to set up logging: ") + e.what(), false));
+    }
+
+    return AppResult::Ok(std::monostate {});
+}
+
+/**
+ * @brief Apply runtime log-level changes from the configuration.
+ */
 void MyApp::ChangeLogLevel()
 {
     auto& config = config::GetConfig();
-    auto level = spdlog::level::from_str(config.logLevel);
+    auto level = util::Logger::fromStrLevel(config.logLevel);
 
-    if (level != spdlog::get_level())
+    if (level != util::Logger::GetInstance()->getLevel())
     {
-        spdlog::set_level(level);
-        spdlog::info("Log level changed to: {}", config.logLevel);
+        util::Logger::GetInstance()->setLevel(level);
+        util::Logger::Info("Log level changed to: {}", config.logLevel);
     }
 }
-// This is the main application class. It initializes the wxWidgets library
+
+/**
+ * @brief Configure locale information before creating any UI widgets.
+ */
+MyApp::AppResult MyApp::initializeLocale()
+{
+    if (m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT))
+    {
+        util::Logger::Debug("Locale initialized successfully");
+        return AppResult::Ok(std::monostate {});
+    }
+
+    return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+        "Failed to initialize locale, using default", false));
+}

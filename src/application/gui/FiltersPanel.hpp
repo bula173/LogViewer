@@ -9,12 +9,22 @@
 namespace gui
 {
 
+/**
+ * @class FiltersPanel
+ * @brief Provides UI controls for creating, editing, and persisting filters.
+ */
 class FiltersPanel : public wxPanel
 {
   public:
     FiltersPanel(wxWindow* parent);
 
+    /**
+     * @brief Refresh the list control contents from the manager.
+     */
     void RefreshFilters();
+    /**
+     * @brief Apply currently enabled filters to the main view.
+     */
     void ApplyFilters();
 
   private:

@@ -1,5 +1,6 @@
 #include "Filter.hpp"
-#include <spdlog/spdlog.h>
+#include "util/Logger.hpp"
+#include "error/Error.hpp"
 
 namespace filters
 {
@@ -16,12 +17,55 @@ Filter::Filter(const std::string& name, const std::string& columnName,
     , isParameterFilter(parameterFilter)
     , parameterKey(paramKey)
     , parameterDepth(depth)
+    , m_strategy(std::make_unique<RegexFilterStrategy>()) // Default strategy
 {
     compile();
 }
 
+// Copy constructor - clone the strategy
+Filter::Filter(const Filter& other)
+    : name(other.name)
+    , columnName(other.columnName)
+    , pattern(other.pattern)
+    , isEnabled(other.isEnabled)
+    , isInverted(other.isInverted)
+    , isCaseSensitive(other.isCaseSensitive)
+    , isParameterFilter(other.isParameterFilter)
+    , parameterKey(other.parameterKey)
+    , parameterDepth(other.parameterDepth)
+    , regex(other.regex) // shared_ptr is safe to copy
+    , m_strategy(other.m_strategy ? other.m_strategy->clone() : nullptr)
+{
+}
+
+// Copy assignment
+Filter& Filter::operator=(const Filter& other)
+{
+    if (this != &other) {
+        name = other.name;
+        columnName = other.columnName;
+        pattern = other.pattern;
+        isEnabled = other.isEnabled;
+        isInverted = other.isInverted;
+        isCaseSensitive = other.isCaseSensitive;
+        isParameterFilter = other.isParameterFilter;
+        parameterKey = other.parameterKey;
+        parameterDepth = other.parameterDepth;
+        regex = other.regex;
+        m_strategy = other.m_strategy ? other.m_strategy->clone() : nullptr;
+    }
+    return *this;
+}
+
 bool Filter::matches(const std::string& value) const
 {
+    // Use strategy if available, fallback to legacy regex
+    if (m_strategy) {
+        bool matched = m_strategy->matches(value, pattern, isCaseSensitive);
+        return isInverted ? !matched : matched;
+    }
+
+    // Legacy path: use compiled regex
     if (!regex)
         return false;
 
@@ -100,6 +144,12 @@ nlohmann::json Filter::toJson() const
     j["isParameterFilter"] = isParameterFilter;
     j["parameterKey"] = parameterKey;
     j["parameterDepth"] = parameterDepth;
+    
+    // Persist strategy type
+    if (m_strategy) {
+        j["strategy"] = m_strategy->getName();
+    }
+    
     return j;
 }
 
@@ -127,6 +177,17 @@ Filter Filter::fromJson(const nlohmann::json& j)
         filter.parameterDepth = 0;
     }
 
+    // Restore strategy if persisted
+    if (j.contains("strategy"))
+    {
+        std::string strategyName = j["strategy"].get<std::string>();
+        filter.m_strategy = createStrategy(strategyName);
+    }
+    else
+    {
+        filter.m_strategy = std::make_unique<RegexFilterStrategy>();
+    }
+
     filter.compile();
     return filter;
 }
@@ -141,9 +202,33 @@ void Filter::compile()
     }
     catch (const std::regex_error& e)
     {
-        spdlog::error("Invalid regex pattern '{}': {}", pattern, e.what());
+        util::Logger::Error("Invalid regex pattern '{}': {}", pattern, e.what());
         regex = nullptr;
     }
+}
+
+void Filter::setStrategy(std::unique_ptr<IFilterStrategy> strategy)
+{
+    if (!strategy) {
+        util::Logger::Warn("Filter::setStrategy - Null strategy provided, using default regex strategy");
+        m_strategy = std::make_unique<RegexFilterStrategy>();
+        return;
+    }
+
+    // Validate pattern with new strategy
+    if (!strategy->isValidPattern(pattern)) {
+        util::Logger::Error("Filter::setStrategy - Pattern '{}' is invalid for strategy '{}'",
+            pattern, strategy->getName());
+        throw error::Error(error::ErrorCode::InvalidArgument, "Pattern incompatible with strategy");
+    }
+
+    util::Logger::Debug("Filter::setStrategy - Switching to strategy '{}'", strategy->getName());
+    m_strategy = std::move(strategy);
+}
+
+std::string Filter::getStrategyName() const
+{
+    return m_strategy ? m_strategy->getName() : "none";
 }
 
 } // namespace filters

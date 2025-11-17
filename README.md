@@ -5,7 +5,7 @@ A wxWidgets-based log viewer with virtual list controls and configurable row col
 - GUI: wxDataViewCtrl (EventsVirtualListControl, ItemVirtualListControl)
 - Model: db::EventsContainer (adapter: gui::EventsContainerAdapter)
 - Parsing: parser::XmlParser (std::filesystem::path-based)
-- Errors: error::Error (derives from std::runtime_error; shows wxMessageBox; logs via spdlog)
+- Errors: error::Error (derives from std::runtime_error; shows wxMessageBox; logs via util::Logger)
 
 Build:
 - macOS (clang), Windows (MSVC), Linux (GCC/Clang)
