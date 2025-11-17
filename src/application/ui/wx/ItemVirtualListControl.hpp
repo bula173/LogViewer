@@ -1,14 +1,15 @@
 #ifndef GUI_ITEMVIRTUALLISTCONTROL_HPP
 #define GUI_ITEMVIRTUALLISTCONTROL_HPP
 
-#include "db/EventsContainer.hpp"
+#include "mvc/IModel.hpp"
 #include "mvc/IView.hpp"
-#include "gui/CustomDataModel.hpp"
+#include "ui/IUiPanels.hpp"
+#include "ui/wx/CustomDataModel.hpp"
 #include "util/Logger.hpp"
 #include <wx/dataview.h>
 #include <memory>
 
-namespace gui
+namespace ui::wx
 {
 /**
  * @brief Data view showing key/value pairs with wrapped text.
@@ -16,10 +17,12 @@ namespace gui
  * Uses a custom data model and renderer to provide dynamic row heights
  * so long log values remain readable without tooltips.
  */
-class ItemVirtualListControl : public wxDataViewCtrl, public mvc::IView
+class ItemVirtualListControl : public wxDataViewCtrl,
+                               public mvc::IView,
+                               public ui::IItemDetailsView
 {
   public:
-    ItemVirtualListControl(db::EventsContainer& events, wxWindow* parent,
+    ItemVirtualListControl(mvc::IModel& events, wxWindow* parent,
         const wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize);
     ~ItemVirtualListControl() override;
@@ -31,11 +34,17 @@ class ItemVirtualListControl : public wxDataViewCtrl, public mvc::IView
     /** @brief mvc::IView hook notifying that selection changed. */
     void OnCurrentIndexUpdated(const int index) override;
 
+    /** @brief Implements toolkit-agnostic refresh hook. */
+    void RefreshView() override;
+
+    /** @brief Show or hide the control to honor interface contract. */
+    void ShowControl(bool show) override;
+
   private:
     const wxString getColumnName(const int column) const;
 
   private:
-    db::EventsContainer& m_events;
+    mvc::IModel& m_events;
     std::unique_ptr<CustomDataModel> m_model;
     int m_lastWrapWidth = -1;
 
@@ -62,6 +71,6 @@ class ItemVirtualListControl : public wxDataViewCtrl, public mvc::IView
     void UpdateWrappingWidth();
 };
 
-} // namespace gui
+} // namespace ui::wx
 
 #endif // GUI_ITEMVIRTUALLISTCONTROL_HPP

@@ -1,11 +1,11 @@
-#include "gui/CustomDataModel.hpp"
+#include "ui/wx/CustomDataModel.hpp"
 #include "util/Logger.hpp"
 #include <string>
 
-namespace gui
+namespace ui::wx
 {
 
-CustomDataModel::CustomDataModel(db::EventsContainer& events)
+CustomDataModel::CustomDataModel(mvc::IModel& events)
     : wxDataViewVirtualListModel()
     , m_events(events)
 {
@@ -107,7 +107,7 @@ void CustomDataModel::UpdateDataCache()
         return;
     }
 
-    const auto& event = m_events.GetEvent(currentIndex);
+    const auto& event = m_events.GetItem(currentIndex);
     const auto& items = event.getEventItems();
 
     for (const auto& [key, value] : items)
@@ -118,4 +118,4 @@ void CustomDataModel::UpdateDataCache()
     util::Logger::Debug("CustomDataModel updated with {} items", m_data.size());
 }
 
-} // namespace gui
+} // namespace ui::wx

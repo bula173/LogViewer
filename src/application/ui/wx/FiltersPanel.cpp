@@ -33,7 +33,7 @@ void HandleFilterResult(const filters::FilterResult& result,
 }
 } // namespace
 
-namespace gui
+namespace ui::wx
 {
 
 FiltersPanel::FiltersPanel(wxWindow* parent)
@@ -429,4 +429,4 @@ void FiltersPanel::OnLoadFilters(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-} // namespace gui
+} // namespace ui::wx

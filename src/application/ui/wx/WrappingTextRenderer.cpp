@@ -1,9 +1,9 @@
-#include "gui/WrappingTextRenderer.hpp"
+#include "ui/wx/WrappingTextRenderer.hpp"
 #include "util/Logger.hpp"
 #include <wx/dcclient.h>
 #include <wx/tokenzr.h>
 
-namespace gui
+namespace ui::wx
 {
 
 WrappingTextRenderer::WrappingTextRenderer(int maxWidth)
@@ -246,4 +246,4 @@ wxStringList WrappingTextRenderer::WrapTextToLines(const wxString& text, wxDC* d
     return lines;
 }
 
-} // namespace gui
+} // namespace ui::wx

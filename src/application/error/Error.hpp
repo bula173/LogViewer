@@ -5,17 +5,13 @@
 
 #pragma once
 
+#include "ui/UiServices.hpp"
 #include "util/Logger.hpp"
 
 #include <atomic>
 #include <stdexcept>
 #include <string>
-
-// Add the missing wx headers for wxTheApp and wxIsMainThread
-#include <wx/app.h> // wxTheApp
-#include <wx/msgdlg.h>
-#include <wx/string.h>
-#include <wx/thread.h> // wxIsMainThread
+#include <string_view>
 
 namespace error
 {
@@ -34,19 +30,6 @@ enum class ErrorCode
     IOError            ///< Input/output error
 };
 
-inline void ShowError(const wxString& message)
-{
-    wxMessageBox(message, "Error", wxOK | wxICON_ERROR);
-}
-inline void ShowError(const std::string& message)
-{
-    ShowError(wxString::FromUTF8(message.c_str()));
-}
-inline void ShowError(const std::wstring& message)
-{
-    ShowError(wxString(message));
-}
-
 // Global toggle for showing dialogs (default: true)
 inline std::atomic<bool>& DialogsEnabledFlag()
 {
@@ -63,8 +46,16 @@ inline bool GetShowDialogs()
 }
 inline bool CanShowDialogs()
 {
-    // Only show if enabled, app exists, and we're on the main thread
-    return GetShowDialogs() && wxTheApp != nullptr && wxIsMainThread();
+    auto presenter = ui::UiServices::Instance().GetErrorPresenter();
+    return GetShowDialogs() && presenter && presenter->CanShowDialogs();
+}
+
+inline void ShowError(std::string_view message)
+{
+    auto presenter = ui::UiServices::Instance().GetErrorPresenter();
+    if (presenter && CanShowDialogs()) {
+        presenter->ShowError(message);
+    }
 }
 
 class Error : public std::runtime_error
@@ -88,16 +79,6 @@ class Error : public std::runtime_error
             static_cast<int>(code), message);
     }
 
-    explicit Error(ErrorCode code, const wxString& message, bool showMsgBox = true)
-        : std::runtime_error(message.ToStdString())
-        , m_code(code)
-    {
-        if (showMsgBox && CanShowDialogs())
-            ShowError(message);
-        util::Logger::Error("Application Error [{}]: {}",
-            static_cast<int>(code), message.ToStdString());
-    }
-
     // Legacy constructors without ErrorCode (defaults to Unknown)
     explicit Error(const char* message, bool showMsgBox = true)
         : Error(ErrorCode::Unknown, std::string(message), showMsgBox)
@@ -105,11 +86,6 @@ class Error : public std::runtime_error
     }
 
     explicit Error(const std::string& message, bool showMsgBox = true)
-        : Error(ErrorCode::Unknown, message, showMsgBox)
-    {
-    }
-
-    explicit Error(const wxString& message, bool showMsgBox = true)
         : Error(ErrorCode::Unknown, message, showMsgBox)
     {
     }

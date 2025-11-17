@@ -1,6 +1,6 @@
-#include "gui/ItemVirtualListControl.hpp"
+#include "ui/wx/ItemVirtualListControl.hpp"
 
-#include "gui/WrappingTextRenderer.hpp"
+#include "ui/wx/WrappingTextRenderer.hpp"
 
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
@@ -12,10 +12,10 @@ constexpr int ID_COPY_KEY = wxID_HIGHEST + 101;
 constexpr int ID_COPY_BOTH = wxID_HIGHEST + 102;
 }
 
-namespace gui
+namespace ui::wx
 {
 
-ItemVirtualListControl::ItemVirtualListControl(db::EventsContainer& events,
+ItemVirtualListControl::ItemVirtualListControl(mvc::IModel& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
     : wxDataViewCtrl(parent, id, pos, size,
@@ -71,6 +71,17 @@ void ItemVirtualListControl::RefreshAfterUpdate()
         UpdateWrappingWidth();
         EnsureFirstRowSelected();
     }
+}
+
+void ItemVirtualListControl::RefreshView()
+{
+    RefreshAfterUpdate();
+    this->Refresh();
+}
+
+void ItemVirtualListControl::ShowControl(bool show)
+{
+    Show(show);
 }
 
 void ItemVirtualListControl::OnDataUpdated()
@@ -294,4 +305,4 @@ void ItemVirtualListControl::UpdateWrappingWidth()
     util::Logger::Debug("Wrapping width updated to {} px", newWidth);
 }
 
-} // namespace gui
+} // namespace ui::wx

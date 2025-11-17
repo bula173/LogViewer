@@ -1,18 +1,18 @@
 #pragma once
 
 #include "config/Config.hpp"
-#include "db/EventsContainer.hpp"
+#include "mvc/IModel.hpp"
 #include <string>
 #include <vector>
 #include <wx/dataview.h>
 
-namespace gui
+namespace ui::wx
 {
 class EventsContainerAdapter : public wxDataViewVirtualListModel
 {
   public:
 
-    explicit EventsContainerAdapter(db::EventsContainer& container);
+    explicit EventsContainerAdapter(mvc::IModel& model);
 
     // wxDataViewVirtualListModel interface
     virtual unsigned int GetColumnCount() const override;
@@ -66,7 +66,7 @@ class EventsContainerAdapter : public wxDataViewVirtualListModel
     void RefreshRowAttributes();
 
   private:
-    db::EventsContainer& m_container;
+    mvc::IModel& m_model;
     unsigned int m_rowCount;
     std::vector<unsigned long>
         m_filteredIndices; ///< Maps filtered row to container index

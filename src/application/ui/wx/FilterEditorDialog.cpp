@@ -10,7 +10,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
-namespace gui
+namespace ui::wx
 {
 
 FilterEditorDialog::FilterEditorDialog(
@@ -364,4 +364,4 @@ void FilterEditorDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 }
 
 
-} // namespace gui
+} // namespace ui::wx

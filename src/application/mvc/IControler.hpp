@@ -7,6 +7,11 @@
 #ifndef MVC_ICONTRLOLER_HPP
 #define MVC_ICONTRLOLER_HPP
 
+#include <cstddef>
+#include <functional>
+#include <string>
+#include <vector>
+
 namespace mvc
 {
 /** * @class IContrloler
@@ -20,6 +25,13 @@ namespace mvc
  *       the controller logic in the application, coordinating between models
  * and views.
  */
+struct SearchResultRow
+{
+    int eventId {0};
+    std::string matchedText;
+    std::vector<std::string> columnValues;
+};
+
 class IController
 {
   public:
@@ -36,6 +48,13 @@ class IController
      * Cleans up resources when the controller is destroyed.
      */
     virtual ~IController() { }
+
+    virtual std::vector<std::string> GetSearchColumns() const = 0;
+
+    virtual void SearchEvents(const std::string& query,
+      const std::vector<std::string>& columns,
+      const std::function<void(const SearchResultRow&)>& onResult,
+      std::function<void(size_t, size_t)> progressCallback = {}) = 0;
 };
 
 } // namespace mvc

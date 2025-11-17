@@ -6,14 +6,20 @@
  */
 
 #pragma once
-#include "../../main/version.h"
-#include "../db/EventsContainer.hpp"
-#include "../parser/IDataParser.hpp"
-#include "../xml/xmlParser.hpp"
+#include "main/version.h"
+#include "db/EventsContainer.hpp"
+#include "parser/IDataParser.hpp"
+#include "xml/xmlParser.hpp"
 #include "EventsVirtualListControl.hpp"
-#include "ItemVirtualListControl.hpp"
+#include "ui/wx/SearchResultsView.hpp"
+#include "ui/wx/TypeFilterView.hpp"
 #include "config/ConfigObserver.hpp"
-#include "gui/FiltersPanel.hpp"
+#include "ui/IEventsView.hpp"
+#include "ui/IMainWindowView.hpp"
+#include "ui/IUiPanels.hpp"
+#include "ui/MainWindowPresenter.hpp"
+#include "ui/wx/FiltersPanel.hpp"
+#include "mvc/IControler.hpp"
 
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
@@ -21,6 +27,8 @@
 #endif
 #include <atomic>
 #include <memory>
+#include <vector>
+#include <string>
 #include <wx/checklst.h>
 #include <wx/config.h>
 #include <wx/dataview.h>
@@ -31,10 +39,10 @@
 #include <wx/splitter.h>
 
 /**
- * @namespace gui
+ * @namespace ui::wx
  * @brief User interface components and controls.
  */
-namespace gui
+namespace ui::wx
 {
 
 /**
@@ -91,7 +99,9 @@ namespace gui
  */
 class MainWindow : public wxFrame,
                    public parser::IDataParserObserver,
-                   public config::ConfigObserver
+                   public config::ConfigObserver,
+                   public ui::IMainWindowView,
+                   public ui::ISearchResultsViewObserver
 {
   public:
     /**
@@ -238,7 +248,7 @@ class MainWindow : public wxFrame,
      *
      * @param event The data view event from the search results list
      */
-    void OnSearchResultActivated(wxDataViewEvent& event);
+    void OnSearchResultActivated(long eventId) override;
 
     /**
      * @brief Handles Apply Filter button clicks.
@@ -321,6 +331,7 @@ class MainWindow : public wxFrame,
     void OnOpenAppLog(wxCommandEvent& event);
 
     void OnFilterChanged(wxCommandEvent&);
+    void HandleTypeFilterChanged();
 
     /**
      * @brief Handles Theme->Light menu selection.
@@ -461,12 +472,31 @@ class MainWindow : public wxFrame,
      */
     void OnReloadConfig(wxCommandEvent&);
 
+    // ui::IMainWindowView implementation
+    std::string ReadSearchQuery() const override;
+    std::string CurrentStatusText() const override;
+    void UpdateStatusText(const std::string& text) override;
+    void SetSearchControlsEnabled(bool enabled) override;
+    void ToggleProgressVisibility(bool visible) override;
+    void ConfigureProgressRange(int range) override;
+    void UpdateProgressValue(int value) override;
+    void ProcessPendingEvents() override;
+    void RefreshLayout() override;
+
     // UI Control member variables
 
-    gui::EventsVirtualListControl* m_eventsListCtrl {
+    ui::wx::EventsVirtualListControl* m_eventsListCtrl {
         nullptr}; ///< Main event list display (center panel)
-    gui::ItemVirtualListControl* m_itemView {
+    wxWindow* m_itemDetailsWindow {
         nullptr}; ///< Selected event details view (right panel)
+    ui::IEventsListView* m_eventsListView {
+        nullptr}; ///< Toolkit-agnostic handle for events list view
+    ui::IItemDetailsView* m_itemDetailsView {
+        nullptr}; ///< Toolkit-agnostic handle for details panel
+    ui::wx::SearchResultsView* m_searchResultsList {
+        nullptr}; ///< wx implementation of search results view
+    ui::ISearchResultsView* m_searchResultsView {
+        nullptr}; ///< Toolkit-agnostic search results view
     wxPanel* m_leftPanel {nullptr}; ///< Left filter and control panel
     wxPanel* m_searchResultPanel {
         nullptr}; ///< Bottom search results panel (collapsible)
@@ -480,14 +510,13 @@ class MainWindow : public wxFrame,
     wxTextCtrl* m_searchBox {
         nullptr}; ///< Search input field with enter key support
     wxButton* m_searchButton {nullptr}; ///< Search execute button
-    wxDataViewListCtrl* m_searchResultsList {
-        nullptr}; ///< Search results display with clickable items
-    wxCheckListBox* m_typeFilter {nullptr}; ///< Multi-select type filter
+    ui::wx::TypeFilterView* m_typeFilterPanel {nullptr}; ///< wx type filter view
+    ui::ITypeFilterView* m_typeFilterView {nullptr}; ///< Toolkit-agnostic type filter
     wxButton* m_applyFilterButton {
         nullptr}; ///< Apply current filter settings button
     wxButton* m_clearFilterButton {
         nullptr}; ///< Clear all filters and show all events button
-    gui::FiltersPanel* m_filtersPanel = nullptr; ///< Filters panel instance
+    ui::wx::FiltersPanel* m_filtersPanel = nullptr; ///< Filters panel instance
 
     // Data and state member variables
 
@@ -503,6 +532,8 @@ class MainWindow : public wxFrame,
         false}; ///< Window close requested flag (thread-safe)
     std::shared_ptr<parser::XmlParser>
         m_parser; ///< Current parser instance (shared ownership)
+    std::unique_ptr<mvc::IController> m_controller;
+    std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     // Menu and control identifiers
 
     /**
@@ -523,19 +554,9 @@ class MainWindow : public wxFrame,
         ID_ParserReloadConfig = wxID_HIGHEST + 200
     };
 
-    void OnTypeFilterContextMenu(wxContextMenuEvent& event);
-    void OnTypeFilterMenu(wxCommandEvent& event);
-
-    enum
-    {
-        ID_TypeFilter_SelectAll = wxID_HIGHEST + 100,
-        ID_TypeFilter_DeselectAll,
-        ID_TypeFilter_InvertSelection
-    };
-
   public:
     // Called by the FiltersPanel to apply filters
     void ApplyFilters();
 };
 
-} // namespace gui
+} // namespace ui::wx

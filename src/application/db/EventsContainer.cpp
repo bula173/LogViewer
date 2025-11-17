@@ -8,6 +8,8 @@
 #include "EventsContainer.hpp"
 #include "util/Logger.hpp"
 
+#include <utility>
+
 
 namespace db
 {
@@ -113,11 +115,15 @@ void EventsContainer::AddItem(LogEvent&& item)
 
 LogEvent& EventsContainer::GetItem(const int index)
 {
-    // Note: Caller must hold appropriate lock
-    util::Logger::Trace("EventsContainer::GetItem called with index: {}", index);
+    return const_cast<LogEvent&>(std::as_const(*this).GetItem(index));
+}
+
+const LogEvent& EventsContainer::GetItem(const int index) const
+{
+    util::Logger::Trace("EventsContainer::GetItem const called with index: {}", index);
     if (index < 0 || index >= static_cast<int>(m_data.size()))
     {
-        util::Logger::Error("EventsContainer::GetItem: index out of range");
+        util::Logger::Error("EventsContainer::GetItem const: index out of range");
         throw std::out_of_range("Index out of range");
     }
     return m_data.at(static_cast<size_t>(index));

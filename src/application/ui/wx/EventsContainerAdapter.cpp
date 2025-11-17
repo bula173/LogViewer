@@ -2,15 +2,15 @@
 
 
 #include "EventsContainerAdapter.hpp"
-#include "gui/EventsVirtualListControl.hpp" // for color helpers, if needed
+#include "ui/wx/EventsVirtualListControl.hpp" // for color helpers, if needed
 #include "util/WxWidgetsUtils.hpp"
 #include "util/Logger.hpp"
 
-namespace gui
+namespace ui::wx
 {
-EventsContainerAdapter::EventsContainerAdapter(db::EventsContainer& container)
+EventsContainerAdapter::EventsContainerAdapter(mvc::IModel& model)
     : wxDataViewVirtualListModel(0)
-    , m_container(container)
+    , m_model(model)
     , m_rowCount(0)
 {
     SyncWithContainer();
@@ -75,7 +75,7 @@ void EventsContainerAdapter::GetValueByRow(
 
 
     const auto& columnName = colConfig[configColIdx].name;
-    const auto& event = m_container.GetEvent(wx_utils::to_model_index(actualRow));
+    const auto& event = m_model.GetItem(wx_utils::to_model_index(actualRow));
 
     if (columnName == "id")
     {
@@ -97,7 +97,7 @@ void EventsContainerAdapter::GetValueByRow(
 
 void EventsContainerAdapter::SyncWithContainer()
 {
-    m_rowCount = wx_utils::to_wx_uint(m_container.Size());
+    m_rowCount = wx_utils::to_wx_uint(m_model.Size());
     Reset(m_rowCount);
 }
 
@@ -167,7 +167,7 @@ bool EventsContainerAdapter::GetAttrByRow(
 {
     // Get the actual event index if filtered
     size_t actualRow = m_filteredIndices.empty() ? row : m_filteredIndices[row];
-    const auto& event = m_container.GetEvent(wx_utils::to_model_index(actualRow));
+    const auto& event = m_model.GetItem(wx_utils::to_model_index(actualRow));
 
     util::Logger::Trace(
         "EventsContainerAdapter::GetAttrByRow called for row: {}, col: {}", row,
@@ -227,4 +227,4 @@ void EventsContainerAdapter::RefreshRowAttributes()
         ItemChanged(GetItem(i));
     }
 }
-} // namespace gui
+} // namespace ui::wx

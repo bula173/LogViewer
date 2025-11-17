@@ -22,7 +22,7 @@ target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME}_tests
   gtest_main
   gmock
-  application
+  application_core
 )
 
 include(GoogleTest)

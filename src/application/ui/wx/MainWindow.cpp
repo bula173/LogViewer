@@ -1,22 +1,22 @@
-#include "gui/MainWindow.hpp"
+#include "ui/wx/MainWindow.hpp"
 #include "config/Config.hpp"
 #include "filters/FilterManager.hpp"
-#include "gui/ConfigEditorDialog.hpp"
-#include "gui/FiltersPanel.hpp"
+#include "ui/wx/ConfigEditorDialog.hpp"
+#include "ui/wx/FiltersPanel.hpp"
+#include "ui/wx/ItemVirtualListControl.hpp"
 #include "util/WxWidgetsUtils.hpp"
 #include "util/Logger.hpp"
+#include "mvc/MainController.hpp"
 #include <wx/notebook.h>
 
 #include "error/Error.hpp"
-#include "gui/EventsVirtualListControl.hpp"
+#include "ui/wx/EventsVirtualListControl.hpp"
 
 #include <wx/app.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
 // std
 #include <filesystem>
-#include <set>
-#include <unordered_set>
 #include <wx/utils.h> // wxLaunchDefaultApplication
 
 namespace
@@ -30,56 +30,9 @@ inline std::filesystem::path WxToPath(const wxString& s)
 #endif
 }
 
-// Helper: get columns to show in search results from config.
-// Adjust the accessor to match your Config API (e.g. GetSearchColumns(),
-// searchResultColumns, etc.)
-inline std::vector<std::string> GetSearchColumnsFromConfig()
-{
-    // TODO: If your config uses a different name, change this line accordingly:
-    // Example options you might have in your project:
-    // return cfg.searchResultColumns;
-    // return cfg.visibleColumns;
-    // return cfg.GetSearchColumns();
-    // Fallback defaults if not available:
-    return std::vector<std::string> {"timestamp", "type", "info"};
-}
-
-// Rebuild the search results columns: [Event ID] [Match] + configured columns
-// (unique)
-inline void SetupSearchResultColumns(wxDataViewListCtrl* list)
-{
-    if (!list)
-        return;
-
-    list->ClearColumns();
-
-    // Base columns
-    list->AppendTextColumn("Event ID");
-    list->AppendTextColumn("Match");
-
-    // Config-driven columns
-    std::unordered_set<std::string> added;
-    added.insert("event id");
-    added.insert("match");
-
-    std::vector<std::string> cfgCols = GetSearchColumnsFromConfig();
-    for (auto& c : cfgCols)
-    {
-        if (c.empty())
-            continue;
-        std::string key = c;
-        for (auto& ch : key)
-            ch = static_cast<char>(::tolower(static_cast<unsigned char>(ch)));
-        if (!added.count(key))
-        {
-            list->AppendTextColumn(wxString::FromUTF8(c.c_str()));
-            added.insert(key);
-        }
-    }
-}
 } // namespace
 
-namespace gui
+namespace ui::wx
 {
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     const wxSize& size, const Version::Version& version)
@@ -114,8 +67,6 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     this->Bind(
         wxEVT_BUTTON, &MainWindow::OnSearch, this, m_searchButton->GetId());
     m_searchBox->Bind(wxEVT_TEXT_ENTER, &MainWindow::OnSearch, this);
-    m_searchResultsList->Bind(wxEVT_DATAVIEW_ITEM_ACTIVATED,
-        &MainWindow::OnSearchResultActivated, this);
     m_applyFilterButton->Bind(wxEVT_BUTTON, &MainWindow::OnFilterChanged, this);
 
     this->Bind(wxEVT_MENU, &MainWindow::OnThemeLight, this, 2001);
@@ -130,6 +81,20 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos,
     // Add this binding for recent files
     this->Bind(
         wxEVT_MENU, &MainWindow::LoadRecentFile, this, wxID_FILE1, wxID_FILE9);
+
+    m_controller = std::make_unique<mvc::MainController>(m_events);
+
+    if (m_searchResultsView && m_controller)
+    {
+        m_presenter = std::make_unique<ui::MainWindowPresenter>(
+            *this, *m_controller, m_events, *m_searchResultsView,
+            m_eventsListView, m_typeFilterView, m_itemDetailsView);
+    }
+    else
+    {
+        util::Logger::Error(
+            "Unable to construct MainWindowPresenter due to missing dependencies");
+    }
 }
 
 void MainWindow::setupMenu()
@@ -298,12 +263,11 @@ void MainWindow::setupLayout()
     searchBarSizer->Add(m_searchBox, 1, wxEXPAND | wxALL, 5);
     searchBarSizer->Add(m_searchButton, 0, wxEXPAND | wxALL, 5);
 
-    m_searchResultsList = new wxDataViewListCtrl(m_searchResultPanel, wxID_ANY,
-        wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES | wxDV_VERT_RULES);
-
-    m_searchResultsList->AppendTextColumn("Event ID");
-    m_searchResultsList->AppendTextColumn("Match");
-
+    m_searchResultsList = new ui::wx::SearchResultsView(m_searchResultPanel);
+    m_searchResultsList->SetObserver(this);
+    m_searchResultsView = m_searchResultsList;
+    m_searchResultsView->BeginUpdate({});
+    m_searchResultsView->EndUpdate();
 
     searchSizer->Add(searchBarSizer, 0, wxEXPAND);
     searchSizer->Add(m_searchResultsList, 1, wxEXPAND | wxALL, 5);
@@ -311,8 +275,12 @@ void MainWindow::setupLayout()
     m_searchResultPanel->SetSizer(searchSizer);
 
     m_eventsListCtrl =
-        new gui::EventsVirtualListControl(m_events, m_rigth_spliter);
-    m_itemView = new gui::ItemVirtualListControl(m_events, m_rigth_spliter);
+        new ui::wx::EventsVirtualListControl(m_events, m_rigth_spliter);
+    auto* itemView =
+        new ui::wx::ItemVirtualListControl(m_events, m_rigth_spliter);
+    m_eventsListView = m_eventsListCtrl;
+    m_itemDetailsView = itemView;
+    m_itemDetailsWindow = itemView;
 
     m_bottom_spliter->SplitHorizontally(
         m_left_spliter, m_searchResultPanel, -1);
@@ -321,7 +289,7 @@ void MainWindow::setupLayout()
     m_left_spliter->SplitVertically(m_leftPanel, m_rigth_spliter, 1);
     m_left_spliter->SetSashGravity(0.3);
 
-    m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
+    m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemDetailsWindow, -1);
     m_rigth_spliter->SetSashGravity(0.75);
 
     // In setupLayout() method, replace the filterSizer code with this:
@@ -345,17 +313,17 @@ void MainWindow::setupLayout()
     wxBoxSizer* typeFilterSizer = new wxBoxSizer(wxVERTICAL);
 
     // Add type filter controls to the second tab
-    m_typeFilter = new wxCheckListBox(
-        typeFilterTab, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-    m_typeFilter->Bind(
-        wxEVT_CONTEXT_MENU, &MainWindow::OnTypeFilterContextMenu, this);
+    m_typeFilterPanel = new ui::wx::TypeFilterView(typeFilterTab);
+    m_typeFilterPanel->SetOnFilterChanged(
+        [this]() { HandleTypeFilterChanged(); });
+    m_typeFilterView = m_typeFilterPanel;
 
     // Type filter label
     typeFilterSizer->Add(
         new wxStaticText(typeFilterTab, wxID_ANY, "Type:"), 0, wxALL, 5);
 
     // Type filter list (expandable)
-    typeFilterSizer->Add(m_typeFilter, 1, wxEXPAND | wxALL, 5);
+    typeFilterSizer->Add(m_typeFilterPanel, 1, wxEXPAND | wxALL, 5);
 
     // Apply Filter Button
     m_applyFilterButton = new wxButton(typeFilterTab, wxID_ANY, "Apply Filter");
@@ -379,155 +347,33 @@ void MainWindow::setupLayout()
 
 void MainWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
 {
+    if (!m_presenter)
+    {
+        util::Logger::Error("Search requested before presenter initialization");
+        return;
+    }
+
     try
     {
-        wxString query = m_searchBox->GetValue();
-        wxString statusTxt =
-            GetStatusBar() ? GetStatusBar()->GetStatusText(0) : wxString();
-        const std::string queryUtf8 = query.ToStdString();
-
-        // Freeze to avoid re-entrancy during column rebuild and row appends
-        m_searchResultsList->Freeze();
-
-        // Clear old rows and rebuild columns to reflect current config
-        m_searchResultsList->DeleteAllItems();
-        SetupSearchResultColumns(m_searchResultsList);
-
-        // Prepare configured columns (must match SetupSearchResultColumns
-        // order)
-        const std::vector<std::string> cfgCols = GetSearchColumnsFromConfig();
-
-        const size_t total = m_events.Size();
-
-        // Prepare progress bar
-        if (m_progressGauge)
-        {
-            m_progressGauge->Show();
-            m_progressGauge->SetRange(
-                wx_utils::to_wx_int(std::max<size_t>(total, 1)));
-            m_progressGauge->SetValue(0);
-        }
-        SetStatusText("Searching ...");
-        if (m_searchButton)
-            m_searchButton->Enable(false);
-
-
-        for (unsigned long i = 0; i < total; ++i)
-        {
-            const auto& event = m_events.GetEvent(wx_utils::to_model_index(i));
-
-            // Query match
-            std::string matchedText;
-            if (!queryUtf8.empty())
-            {
-                for (const auto& item : event.getEventItems())
-                {
-                    if (item.second.find(queryUtf8) != std::string::npos)
-                    {
-                        matchedText = item.second;
-                        break;
-                    }
-                }
-                if (matchedText.empty())
-                {
-                    if (m_progressGauge)
-                        m_progressGauge->SetValue(static_cast<int>(i + 1));
-
-                    // Yield occasionally to keep UI responsive
-                    if ((i % 500) == 0)
-                        wxSafeYield(this, true);
-                    continue;
-                }
-            }
-
-            // Row: [Event ID] [Match] + configured columns
-            wxVector<wxVariant> row;
-            row.push_back(wxVariant(std::to_string(event.getId())));
-            row.push_back(wxVariant(wxString::FromUTF8(matchedText.c_str())));
-
-            for (const auto& key : cfgCols)
-            {
-                const std::string value = event.findByKey(key);
-                row.push_back(wxVariant(wxString::FromUTF8(value.c_str())));
-            }
-
-            m_searchResultsList->AppendItem(row);
-
-            if (m_progressGauge)
-                m_progressGauge->SetValue(static_cast<int>(i + 1));
-
-            // Yield occasionally to keep UI responsive
-            if ((i % 500) == 0)
-                wxSafeYield(this, true);
-        }
-
-        // Finish
-        if (m_progressGauge)
-        {
-            m_progressGauge->SetValue(
-                static_cast<int>(std::max<unsigned long>(total, 1)));
-            m_progressGauge->Hide();
-        }
-        if (m_searchButton)
-            m_searchButton->Enable(true);
-        SetStatusText(statusTxt);
-
-        m_searchResultsList->Thaw(); // unfreeze after the list is fully built
-        wxSafeYield(this, true);     // let paints/layouts catch up
+        m_presenter->PerformSearch();
     }
     catch (const std::exception& ex)
     {
-        if (m_searchResultsList)
-            m_searchResultsList->Thaw();
         util::Logger::Error("Exception in OnSearch: {}", ex.what());
         wxMessageBox(wxString::Format("Exception in search:\n%s", ex.what()),
             "Error", wxOK | wxICON_ERROR);
-        if (m_progressGauge)
-            m_progressGauge->Hide();
-        if (m_searchButton)
-            m_searchButton->Enable(true);
     }
     catch (...)
     {
-        if (m_searchResultsList)
-            m_searchResultsList->Thaw();
         util::Logger::Error("Unknown exception in OnSearch");
         wxMessageBox("Unknown error in search.", "Error", wxOK | wxICON_ERROR);
-        if (m_progressGauge)
-            m_progressGauge->Hide();
-        if (m_searchButton)
-            m_searchButton->Enable(true);
     }
 }
 
-void MainWindow::OnSearchResultActivated(wxDataViewEvent& event)
+void MainWindow::OnSearchResultActivated(long eventId)
 {
     try
     {
-        int itemIndex = m_searchResultsList->ItemToRow(event.GetItem());
-        if (itemIndex == wxNOT_FOUND)
-        {
-            util::Logger::Warn("OnSearchResultActivated: invalid row");
-            return;
-        }
-        if (m_searchResultsList->GetColumnCount() == 0)
-        {
-            util::Logger::Warn("OnSearchResultActivated: no columns");
-            return;
-        }
-
-        wxVariant value;
-        m_searchResultsList->GetValue(
-            value, wx_utils::int_to_uint(itemIndex), 0); // column 0 = Event ID
-        wxString eventIdStr = value.GetString();
-        long eventId;
-        if (!eventIdStr.ToLong(&eventId))
-        {
-            util::Logger::Warn(
-                "Could not convert event ID: {}", eventIdStr.ToStdString());
-            return;
-        }
-
         for (size_t i = 0; i < m_events.Size(); ++i)
         {
             if (m_events.GetEvent(wx_utils::to_model_index(i)).getId() == eventId)
@@ -539,7 +385,8 @@ void MainWindow::OnSearchResultActivated(wxDataViewEvent& event)
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("Exception in OnSearchResultActivated: {}", ex.what());
+        util::Logger::Error(
+            "Exception in OnSearchResultActivated: {}", ex.what());
         wxMessageBox(
             wxString::Format("Exception in search result:\n%s", ex.what()),
             "Error", wxOK | wxICON_ERROR);
@@ -574,7 +421,8 @@ void MainWindow::setupStatusBar()
 void MainWindow::OnPopulateDummyData(wxCommandEvent& WXUNUSED(event))
 {
     util::Logger::Info("Populating dummy data...");
-    m_searchResultsList->DeleteAllItems();
+    if (m_searchResultsView)
+        m_searchResultsView->Clear();
     m_searchBox->SetValue("");
     m_events.Clear();
     SetStatusText("Loading ..");
@@ -654,7 +502,8 @@ void MainWindow::OnClearParser(wxCommandEvent& WXUNUSED(event))
     {
 
         util::Logger::Info("Parser clear triggered.");
-        m_searchResultsList->DeleteAllItems();
+        if (m_searchResultsView)
+            m_searchResultsView->Clear();
         m_searchBox->SetValue("");
         m_events.Clear();
         m_progressGauge->SetValue(0);
@@ -714,15 +563,21 @@ void MainWindow::OnHideRightPanel(wxCommandEvent& event)
 {
     util::Logger::Info(
         "Toggling Right Panel: {}", event.IsChecked() ? "Hide" : "Show");
-    if (event.IsChecked())
+    const bool hide = event.IsChecked();
+    if (hide)
     {
-        m_itemView->Hide();
-        m_rigth_spliter->Unsplit(m_itemView);
+        if (m_itemDetailsWindow)
+            m_rigth_spliter->Unsplit(m_itemDetailsWindow);
+        if (m_presenter)
+            m_presenter->SetItemDetailsVisible(false);
     }
     else
     {
-        m_itemView->Show();
-        m_rigth_spliter->SplitVertically(m_eventsListCtrl, m_itemView, -1);
+        if (m_itemDetailsWindow)
+            m_rigth_spliter->SplitVertically(
+                m_eventsListCtrl, m_itemDetailsWindow, -1);
+        if (m_presenter)
+            m_presenter->SetItemDetailsVisible(true);
     }
     this->Layout();
 }
@@ -824,10 +679,10 @@ void MainWindow::OnConfigChanged()
 {
     util::Logger::Info("Configuration changed, updating UI...");
     // Update any UI elements that depend on config
-    if (m_eventsListCtrl)
+    if (m_eventsListView)
     {
-        m_eventsListCtrl->RefreshColumns(); // Assuming this method exists
-        m_eventsListCtrl->Refresh();
+        m_eventsListView->RefreshColumns();
+        m_eventsListView->RefreshView();
     }
 
     // Force layout update if needed
@@ -878,7 +733,8 @@ void MainWindow::ParseData(const std::filesystem::path& filePath)
         {
             throw error::Error("File does not exist: " + filePath.string());
         }
-        m_searchResultsList->DeleteAllItems();
+        if (m_searchResultsView)
+            m_searchResultsView->Clear();
         m_searchBox->SetValue("");
         m_events.Clear();
         m_parser = std::make_shared<parser::XmlParser>();
@@ -931,42 +787,9 @@ void MainWindow::ParseData(const std::filesystem::path& filePath)
 
 void MainWindow::UpdateFilters()
 {
-
-    try
+    if (m_presenter)
     {
-        std::set<std::string> types;
-        wxString statusTxt =
-            GetStatusBar() ? GetStatusBar()->GetStatusText(0) : wxString();
-        SetStatusText("Updating filters...");
-
-        for (unsigned long i = 0; i < m_events.Size(); ++i)
-        {
-            const auto& event = m_events.GetEvent(wx_utils::to_model_index(i));
-            types.insert(event.findByKey("type"));
-            if ((i % 1000) == 0)
-                wxSafeYield(this, true);
-        }
-
-        m_typeFilter->Clear();
-        for (const auto& t : types)
-        {
-            m_typeFilter->Append(t);
-            m_typeFilter->Check(m_typeFilter->GetCount() - 1, true);
-        }
-        m_typeFilter->Show();
-
-        Refresh();
-        this->Layout();
-        SetStatusText(statusTxt);
-    }
-    catch (const error::Error& e)
-    {
-        util::Logger::Error("Application error in UpdateFilters: {}", e.what());
-        throw; // propagate
-    }
-    catch (const std::exception& e)
-    {
-        throw error::Error(std::string("UpdateFilters failed: ") + e.what());
+        m_presenter->UpdateTypeFilters();
     }
 }
 
@@ -1013,10 +836,10 @@ void MainWindow::NewEventBatchFound(
 {
     util::Logger::Debug("New event batch found with size: {}", eventBatch.size());
     m_events.AddEventBatch(std::move(eventBatch));
-    if (m_eventsListCtrl)
-        m_eventsListCtrl->Refresh();
-    if (m_itemView)
-        m_itemView->Refresh();
+    if (m_eventsListView)
+        m_eventsListView->RefreshView();
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
 }
 
 void MainWindow::AddToRecentFiles(const wxString& path)
@@ -1042,6 +865,8 @@ void MainWindow::OnDropFiles(wxDropFilesEvent& event)
             // Process the dropped file
             ParseData(filePathObj);
             UpdateFilters();
+            if (m_presenter)
+                m_presenter->SetItemDetailsVisible(true);
 
             // Add to recent files
             AddToRecentFiles(filename);
@@ -1073,12 +898,17 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
 
     try
     {
+        if (m_presenter)
+            m_presenter->SetItemDetailsVisible(true);
+
         if (fileId < 0 ||
             static_cast<size_t>(fileId) >= m_fileHistory.GetCount())
         {
             throw error::Error("Invalid recent file index.");
         }
-        wxString path = m_fileHistory.GetHistoryFile(static_cast<size_t>(fileId));
+
+        wxString path =
+            m_fileHistory.GetHistoryFile(static_cast<size_t>(fileId));
         if (path.IsEmpty() || !wxFileExists(path))
         {
             util::Logger::Warn("Recent file not found: {}", path.ToStdString());
@@ -1086,6 +916,7 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
             throw error::Error(
                 std::string("Recent file not found: ") + path.ToStdString());
         }
+
         auto filePathObj = WxToPath(path);
         ParseData(filePathObj);
         UpdateFilters();
@@ -1109,45 +940,16 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
             "Unknown error in load recent file.", "Error", wxOK | wxICON_ERROR);
     }
 }
-void MainWindow::OnTypeFilterContextMenu(wxContextMenuEvent& /*event*/)
-{
-    wxMenu menu;
-    menu.Append(ID_TypeFilter_SelectAll, "Select All");
-    menu.Append(ID_TypeFilter_DeselectAll, "Deselect All");
-    menu.Append(ID_TypeFilter_InvertSelection, "Invert Selection");
-    menu.Bind(wxEVT_COMMAND_MENU_SELECTED, &MainWindow::OnTypeFilterMenu, this);
-    PopupMenu(&menu);
-}
-
-void MainWindow::OnTypeFilterMenu(wxCommandEvent& event)
-{
-    if (!m_typeFilter)
-        return;
-    unsigned int count = m_typeFilter->GetCount();
-    switch (event.GetId())
-    {
-        case ID_TypeFilter_SelectAll:
-            for (unsigned int i = 0; i < count; ++i)
-                m_typeFilter->Check(i, true);
-            break;
-        case ID_TypeFilter_DeselectAll:
-            for (unsigned int i = 0; i < count; ++i)
-                m_typeFilter->Check(i, false);
-            break;
-        case ID_TypeFilter_InvertSelection:
-            for (unsigned int i = 0; i < count; ++i)
-                m_typeFilter->Check(i, !m_typeFilter->IsChecked(i));
-            break;
-    }
-}
-
 void MainWindow::OnReloadConfig(wxCommandEvent&)
 {
     try
     {
         util::Logger::Info("Reloading configuration...");
         config::GetConfig().Reload();
-        m_eventsListCtrl->UpdateColors();
+        if (m_eventsListView)
+        {
+            m_eventsListView->UpdateColors();
+        }
         util::Logger::Info("Configuration reload complete.");
         wxMessageBox(
             "Configuration reloaded.", "Info", wxOK | wxICON_INFORMATION);
@@ -1170,63 +972,19 @@ void MainWindow::OnReloadConfig(wxCommandEvent&)
 
 void MainWindow::OnFilterChanged(wxCommandEvent&)
 {
-    wxArrayInt selectedType;
+    if (m_presenter)
+        m_presenter->ApplySelectedTypeFilters();
+}
 
-    wxString statusTxt =
-        GetStatusBar() ? GetStatusBar()->GetStatusText(0) : wxString();
-    SetStatusText("Applying filters...");
-
-    if (m_typeFilter == nullptr)
-        return;
-
-    m_typeFilter->GetCheckedItems(selectedType);
-
-    std::set<std::string> selectedTypeStrings;
-    for (auto idx : selectedType)
-        selectedTypeStrings.insert(m_typeFilter->GetString(wx_utils::int_to_uint(idx)).ToStdString());
-
-    std::vector<unsigned long> filteredIndices;
-    for (unsigned long i = 0; i < m_events.Size(); ++i)
-    {
-        const auto& event = m_events.GetEvent(wx_utils::to_model_index(i));
-        std::string eventType = event.findByKey("type");
-        bool typeMatch = selectedTypeStrings.empty() ||
-            selectedTypeStrings.count(eventType) > 0;
-
-        if (typeMatch)
-            filteredIndices.push_back(i);
-
-        if ((i % 1000) == 0)
-            wxSafeYield(this, true);
-    }
-
-    if (filteredIndices.empty())
-    {
-        util::Logger::Info("No events match the selected filters.");
-        m_eventsListCtrl->SetFilteredEvents({});
-        m_eventsListCtrl->Refresh();
-    }
-    else
-    {
-        util::Logger::Info("Filtered events count: {}", filteredIndices.size());
-        // Update the events list with filtered indices
-        auto adapter =
-            static_cast<gui::EventsContainerAdapter*>(m_eventsListCtrl->GetModel());
-        if (adapter)
-        {
-            adapter->SetFilteredIndices(filteredIndices);
-            m_eventsListCtrl->Refresh();
-        } else {
-            util::Logger::Warn("Events list control adapter is null.");
-        }
-    }
-
-    SetStatusText(statusTxt);
+void MainWindow::HandleTypeFilterChanged()
+{
+    if (m_presenter)
+        m_presenter->ApplySelectedTypeFilters();
 }
 
 void MainWindow::ApplyFilters()
 {
-    if (!m_eventsListCtrl || m_events.Size() == 0)
+    if (!m_eventsListView || m_events.Size() == 0)
     {
         return;
     }
@@ -1234,21 +992,85 @@ void MainWindow::ApplyFilters()
     wxString statusTxt =
         GetStatusBar() ? GetStatusBar()->GetStatusText(0) : wxString();
     SetStatusText("Applying filters...");
+
+    if (!m_eventsListView)
+    {
+        util::Logger::Warn("Events list view not initialized; cannot apply saved filters.");
+        SetStatusText(statusTxt);
+        return;
+    }
 
     // Apply filters from FilterManager to the events container
     auto filteredIndices =
         filters::FilterManager::getInstance().applyFilters(m_events);
 
-    // Update the events list with filtered indices
-    auto adapter =
-        static_cast<gui::EventsContainerAdapter*>(m_eventsListCtrl->GetModel());
-    if (adapter)
-    {
-        adapter->SetFilteredIndices(filteredIndices);
-        m_eventsListCtrl->Refresh();
-    }
+    m_eventsListView->SetFilteredEvents(filteredIndices);
+    m_eventsListView->RefreshView();
 
     SetStatusText(statusTxt);
 }
 
-} // namespace gui
+std::string MainWindow::ReadSearchQuery() const
+{
+    return m_searchBox ? m_searchBox->GetValue().ToStdString() : std::string {};
+}
+
+std::string MainWindow::CurrentStatusText() const
+{
+    if (auto* status = GetStatusBar())
+        return status->GetStatusText(0).ToStdString();
+    return {};
+}
+
+void MainWindow::UpdateStatusText(const std::string& text)
+{
+    SetStatusText(wxString::FromUTF8(text.c_str()));
+}
+
+void MainWindow::SetSearchControlsEnabled(bool enabled)
+{
+    if (m_searchButton)
+        m_searchButton->Enable(enabled);
+}
+
+void MainWindow::ToggleProgressVisibility(bool visible)
+{
+    if (!m_progressGauge)
+        return;
+
+    if (visible)
+    {
+        m_progressGauge->Show();
+        m_progressGauge->Refresh();
+        m_progressGauge->Update();
+    }
+    else
+    {
+        m_progressGauge->Hide();
+    }
+}
+
+void MainWindow::ConfigureProgressRange(int range)
+{
+    if (m_progressGauge)
+        m_progressGauge->SetRange(range);
+}
+
+void MainWindow::UpdateProgressValue(int value)
+{
+    if (m_progressGauge)
+        m_progressGauge->SetValue(value);
+}
+
+void MainWindow::ProcessPendingEvents()
+{
+    wxSafeYield(this, true);
+}
+
+void MainWindow::RefreshLayout()
+{
+    Refresh();
+    Layout();
+}
+
+} // namespace ui::wx

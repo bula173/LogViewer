@@ -1,12 +1,12 @@
 #ifndef GUI_CUSTOMDATAMODEL_HPP
 #define GUI_CUSTOMDATAMODEL_HPP
 
-#include "db/EventsContainer.hpp"
+#include "mvc/IModel.hpp"
 #include <wx/dataview.h>
 #include <vector>
 #include <utility>
 
-namespace gui
+namespace ui::wx
 {
 
 /**
@@ -15,7 +15,7 @@ namespace gui
 class CustomDataModel : public wxDataViewVirtualListModel
 {
 public:
-    CustomDataModel(db::EventsContainer& events);
+    CustomDataModel(mvc::IModel& events);
     virtual ~CustomDataModel() = default;
 
     // wxDataViewVirtualListModel interface
@@ -35,13 +35,13 @@ public:
     wxString GetOriginalKey(unsigned int row) const;
 
 private:
-    db::EventsContainer& m_events;
+    mvc::IModel& m_events;
     std::vector<std::pair<std::string, std::string>> m_data;
     
     /** @brief Internal helper rebuilding the cached vector. */
     void UpdateDataCache();
 };
 
-} // namespace gui
+} // namespace ui::wx
 
 #endif // GUI_CUSTOMDATAMODEL_HPP

@@ -1,15 +1,15 @@
-#include "gui/EventsVirtualListControl.hpp"
+#include "ui/wx/EventsVirtualListControl.hpp"
 #include "config/Config.hpp"
 #include "util/WxWidgetsUtils.hpp"
 #include "util/Logger.hpp"
 #include <string>
 #include <wx/colour.h>
 
-namespace gui
+namespace ui::wx
 {
 
 
-EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
+EventsVirtualListControl::EventsVirtualListControl(mvc::IModel& events,
     wxWindow* parent, const wxWindowID id, const wxPoint& pos,
     const wxSize& size)
     : wxDataViewCtrl(
@@ -21,7 +21,7 @@ EventsVirtualListControl::EventsVirtualListControl(db::EventsContainer& events,
 
     m_events.RegisterOndDataUpdated(this);
 
-    m_model = new gui::EventsContainerAdapter(m_events);
+    m_model = new ui::wx::EventsContainerAdapter(m_events);
     m_model->SetRowCount(static_cast<unsigned int>(m_events.Size()));
     this->AssociateModel(m_model);
 
@@ -303,4 +303,10 @@ unsigned int EventsVirtualListControl::CountVisibleConfigColumns() const
     return visible;
 }
 
-} // namespace gui
+void EventsVirtualListControl::RefreshView()
+{
+    RefreshAfterUpdate();
+    this->Refresh();
+}
+
+} // namespace ui::wx

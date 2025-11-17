@@ -64,8 +64,9 @@ class EventsContainer : public mvc::IModel
      * @brief Adds a new event to the container.
      *
      * @param event The LogEvent to add (moved into the container)
-     * @note The event is moved to avoid unnecessary copying
-     * @complexity O(1) amortized
+    * @note The event is moved to avoid unnecessary copying
+    * @par Complexity
+    * O(1) amortized
      */
     void AddEvent(LogEvent&& event);
 
@@ -75,8 +76,9 @@ class EventsContainer : public mvc::IModel
      * @param eventBatch A vector of pairs, each containing an integer and
      *        a LogEvent::EventItems object, representing the batch of events
      *        to add (moved into the container)
-     * @note The eventBatch is moved to avoid unnecessary copying
-     * @complexity O(k) amortized, where k is the number of events in the batch
+    * @note The eventBatch is moved to avoid unnecessary copying
+    * @par Complexity
+    * O(k) amortized, where k is the number of events in the batch
      */
     void AddEventBatch(
         std::vector<std::pair<int, LogEvent::EventItems>>&& eventBatch);
@@ -85,9 +87,10 @@ class EventsContainer : public mvc::IModel
      * @brief Retrieves an event by index.
      *
      * @param index The zero-based index of the event to retrieve
-     * @return const LogEvent& Reference to the event at the specified index
-     * @throws std::out_of_range if index is >= Size()
-     * @complexity O(1)
+    * @return const LogEvent& Reference to the event at the specified index
+    * @throws std::out_of_range if index is >= Size()
+    * @par Complexity
+    * O(1)
      */
     const LogEvent& GetEvent(const int index);
 
@@ -101,8 +104,9 @@ class EventsContainer : public mvc::IModel
     /**
      * @brief Gets the number of events in the container.
      *
-     * @return size_t The number of stored events
-     * @complexity O(1)
+    * @return size_t The number of stored events
+    * @par Complexity
+    * O(1)
      */
     size_t Size() const override;
 
@@ -128,9 +132,10 @@ class EventsContainer : public mvc::IModel
     /**
      * @brief Removes all events from the container.
      *
-     * After this call, Size() returns 0 and the container is ready for new
-     * events.
-     * @complexity O(n) where n is the number of stored events
+    * After this call, Size() returns 0 and the container is ready for new
+    * events.
+    * @par Complexity
+    * O(n) where n is the number of stored events
      */
     void Clear() override;
 
@@ -142,6 +147,7 @@ class EventsContainer : public mvc::IModel
      * @throws std::out_of_range if index is >= Size()
      */
     db::LogEvent& GetItem(const int index) override;
+    const db::LogEvent& GetItem(const int index) const override;
 
   private:
     std::vector<LogEvent> m_data; ///< Internal storage for events

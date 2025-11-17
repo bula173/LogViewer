@@ -6,7 +6,7 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 
-namespace gui
+namespace ui::wx
 {
 
 /**
@@ -57,4 +57,4 @@ class FiltersPanel : public wxPanel
     int m_selectedFilterIndex = -1;
 };
 
-} // namespace gui
+} // namespace ui::wx

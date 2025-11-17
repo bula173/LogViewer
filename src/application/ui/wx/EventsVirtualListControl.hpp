@@ -4,15 +4,19 @@
 #include <wx/dataview.h>
 #include <wx/wx.h>
 
-#include "gui/EventsContainerAdapter.hpp"
+#include "mvc/IModel.hpp"
 #include "mvc/IView.hpp"
+#include "ui/IEventsView.hpp"
+#include "ui/wx/EventsContainerAdapter.hpp"
 
-namespace gui
+namespace ui::wx
 {
-class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
+class EventsVirtualListControl : public wxDataViewCtrl,
+                                 public mvc::IView,
+                                 public ui::IEventsListView
 {
   public:
-    EventsVirtualListControl(db::EventsContainer& events, wxWindow* parent,
+    EventsVirtualListControl(mvc::IModel& events, wxWindow* parent,
         const wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize);
 
@@ -22,28 +26,32 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
      * @brief Sets the filtered events to be displayed in the control.
      * @param filteredIndices Vector of indices (or IDs) of events to display.
      */
-    void SetFilteredEvents(const std::vector<unsigned long>& filteredIndices);
+    void SetFilteredEvents(
+      const std::vector<unsigned long>& filteredIndices) override;
 
     /**
      * @brief Update colors and refresh the view.
      *
      * Call this after configuration changes to update row colors.
      */
-    void UpdateColors();
+    void UpdateColors() override;
 
     /**
      * @brief Refresh the columns based on current configuration.
      * Call this after configuration changes to update columns.
      * @note This does not refresh the data, just the columns.
      */
-    void RefreshColumns();
+    void RefreshColumns() override;
+
+    /** @brief Implements IEventsListView::RefreshView. */
+    void RefreshView() override;
 
     // implement IView interface
     virtual void OnDataUpdated() override;
     virtual void OnCurrentIndexUpdated(const int index) override;
 
   private:
-    db::EventsContainer& m_events;
+    mvc::IModel& m_events;
     EventsContainerAdapter* m_model;
 
     // Helper to count expected visible columns
@@ -53,6 +61,6 @@ class EventsVirtualListControl : public wxDataViewCtrl, public mvc::IView
     void AddColumnsFromConfig();
 };
 
-} // namespace gui
+} // namespace ui::wx
 
 #endif // GUI_EVENTSVIRTUALLISTCONTROL_HPP

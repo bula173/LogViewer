@@ -83,9 +83,9 @@ endif()
 addRunAndDebugTargets(${PROJECT_NAME})
 
 # Link wxWidgets
-target_link_libraries(${PROJECT_NAME} PRIVATE application)
+target_link_libraries(${PROJECT_NAME} PRIVATE application_wx)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_dependencies(${PROJECT_NAME} versionFileTouchForRebuild application)
+add_dependencies(${PROJECT_NAME} versionFileTouchForRebuild application_wx)
 

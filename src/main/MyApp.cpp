@@ -1,12 +1,15 @@
 #include "MyApp.hpp"
 #include "config/Config.hpp"
 #include "error/Error.hpp"
-#include "gui/MainWindow.hpp"
+#include "ui/wx/MainWindow.hpp"
 #include "main/version.h"
+#include "ui/UiServices.hpp"
+#include "ui/wx/WxErrorPresenter.hpp"
 #include "util/Logger.hpp"
 // std
 #include <cstdlib>
 #include <filesystem>
+#include <memory>
 
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
@@ -56,6 +59,9 @@ bool MyApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
+    ui::UiServices::Instance().SetErrorPresenter(
+        std::make_shared<ui::wx::WxErrorPresenter>());
+
     const auto loggingResult = setupLogging();
     if (loggingResult.isErr())
     {
@@ -86,8 +92,8 @@ bool MyApp::OnInit()
 
     const auto& version = Version::current();
 
-    gui::MainWindow* frame =
-        new gui::MainWindow(m_appName + " " + version.asShortStr(),
+    ui::wx::MainWindow* frame =
+        new ui::wx::MainWindow(m_appName + " " + version.asShortStr(),
             wxPoint(50, 50), wxSize(1000, 600), version);
     // frame->SetIcon(wxICON(app_icon)); // Set the application icon
     try

@@ -11,7 +11,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
-namespace gui
+namespace ui::wx
 {
 
 class FilterEditorDialog : public wxDialog
@@ -47,4 +47,4 @@ class FilterEditorDialog : public wxDialog
     void OnFilterTypeChanged(wxCommandEvent& event);
 };
 
-} // namespace gui
+} // namespace ui::wx

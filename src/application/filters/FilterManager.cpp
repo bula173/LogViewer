@@ -118,10 +118,10 @@ void FilterManager::enableAllFilters(bool enable)
 }
 
 std::vector<unsigned long> FilterManager::applyFilters(
-    db::EventsContainer& container) const
+    const mvc::IModel& model) const
 {
     std::vector<unsigned long> result;
-    result.reserve(container.Size());
+    result.reserve(model.Size());
 
     // Count enabled filters
     size_t enabledFilters = 0;
@@ -134,7 +134,7 @@ std::vector<unsigned long> FilterManager::applyFilters(
     // If no filters enabled, include all events
     if (enabledFilters == 0)
     {
-        for (unsigned long i = 0; i < container.Size(); ++i)
+        for (unsigned long i = 0; i < model.Size(); ++i)
         {
             result.push_back(i);
         }
@@ -142,9 +142,10 @@ std::vector<unsigned long> FilterManager::applyFilters(
     }
 
     // Apply filters to each event using OR logic
-    for (unsigned long i = 0; i < container.Size(); ++i)
+    const auto total = model.Size();
+    for (unsigned long i = 0; i < total; ++i)
     {
-        const auto& event = container.GetEvent(static_cast<int>(i));
+        const auto& event = model.GetItem(static_cast<int>(i));
         bool passesAnyFilter = false;
 
         for (const auto& filter : m_filters)

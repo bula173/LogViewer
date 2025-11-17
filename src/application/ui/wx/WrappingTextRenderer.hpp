@@ -4,7 +4,7 @@
 #include <wx/dataview.h>
 #include <wx/dc.h>
 
-namespace gui
+namespace ui::wx
 {
 
 /**
@@ -45,6 +45,6 @@ private:
     wxStringList WrapTextToLines(const wxString& text, wxDC* dc, int maxWidth) const;
 };
 
-} // namespace gui
+} // namespace ui::wx
 
 #endif // GUI_WRAPPINGTEXTRENDERER_HPP
