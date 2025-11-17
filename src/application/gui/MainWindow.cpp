@@ -10,7 +10,6 @@
 #include "error/Error.hpp"
 #include "gui/EventsVirtualListControl.hpp"
 
-#include <spdlog/spdlog.h>
 #include <wx/app.h>
 #include <wx/settings.h>
 #include <wx/statline.h>

@@ -3,10 +3,8 @@
 
 #include "db/LogEvent.hpp"
 #include "mvc/IView.hpp"
+#include "util/Logger.hpp"
 
-#include <iostream>
-#include <mutex>
-#include <spdlog/spdlog.h>
 #include <vector>
 
 namespace mvc
@@ -28,7 +26,7 @@ class IModel
      */
     IModel()
     {
-        spdlog::debug("IModel::IModel constructed");
+        util::Logger::Debug("IModel constructed");
     }
     /**
      * @brief Default destructor.
@@ -41,7 +39,7 @@ class IModel
      */
     virtual ~IModel()
     {
-        spdlog::debug("IModel::~IModel destructed, clearing views");
+        util::Logger::Debug("IModel destructed; clearing {} views", m_views.size());
         m_views.clear();
     }
     /**
@@ -53,7 +51,7 @@ class IModel
      */
     virtual void RegisterOndDataUpdated(IView* view)
     {
-        spdlog::debug("IModel::RegisterOndDataUpdated called");
+        util::Logger::Trace("Registering view {}", static_cast<const void*>(view));
         m_views.push_back(view);
     }
 
@@ -67,7 +65,7 @@ class IModel
      */
     virtual void NotifyDataChanged()
     {
-        spdlog::debug("IModel::NotifyDataChanged called");
+        util::Logger::Trace("Notifying {} registered views", m_views.size());
         for (auto v : m_views)
         {
             v->OnDataUpdated();

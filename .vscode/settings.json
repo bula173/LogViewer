@@ -86,5 +86,17 @@
     },
     "cmake.configureOnOpen": true,
     "cmake.configureOnEdit": false,
-    "cmake.autoSelectActiveFolder": false 
+    "cmake.autoSelectActiveFolder": false,
+    "cmake.outputLogEncoding": "auto",
+    "cmake.environment": {
+        "NINJA_STATUS": "[%f/%t %p%%] ",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "1",
+        "CMAKE_COLOR_MAKEFILE": "1",
+        "TERM": "xterm-256color",
+        "COLORTERM": "truecolor",
+        "LS_COLORS": "di=34:ln=36:so=35:pi=33:ex=32:bd=34;46:cd=34;43:su=37;41:sg=30;43:tw=30;42:ow=34;42:",
+        "CMAKE_BUILD_PARALLEL_LEVEL": "8",
+        "MAKEFLAGS": "-j8",
+        "NINJA_PARALLELISM": "8" 
+    }
 }

@@ -25,7 +25,7 @@
  *     Config config = result.unwrap();
  *     // Use config
  * } else {
- *     spdlog::error("Failed: {}", result.error().what());
+ *     util::Logger::Error("Failed: {}", result.error().what());
  * }
  * @endcode
  */

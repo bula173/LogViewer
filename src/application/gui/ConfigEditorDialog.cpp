@@ -11,8 +11,6 @@
 #include <wx/spinctrl.h>
 #include <wx/statline.h>
 
-#include <spdlog/common.h>
-#include <spdlog/spdlog.h>
 
 ConfigEditorDialog::ConfigEditorDialog(wxWindow* parent)
     : wxDialog(parent, wxID_ANY, "Edit Configuration", wxDefaultPosition,
@@ -1161,26 +1159,9 @@ void ConfigEditorDialog::OnLogLevelChanged(wxCommandEvent& WXUNUSED(event))
     // Update config
     cfg.logLevel = newLevel;
 
-    // Apply to spdlog
-    spdlog::level::level_enum levelEnum = spdlog::level::info; // Default
-
-    if (newLevel == "trace")
-        levelEnum = spdlog::level::trace;
-    else if (newLevel == "debug")
-        levelEnum = spdlog::level::debug;
-    else if (newLevel == "info")
-        levelEnum = spdlog::level::info;
-    else if (newLevel == "warning")
-        levelEnum = spdlog::level::warn;
-    else if (newLevel == "error")
-        levelEnum = spdlog::level::err;
-    else if (newLevel == "critical")
-        levelEnum = spdlog::level::critical;
-    else if (newLevel == "off")
-        levelEnum = spdlog::level::off;
-
-    // Set the global level
-    spdlog::set_level(levelEnum);
+    // Translate and apply via util::Logger facade
+    const auto logLevel = util::Logger::fromStrLevel(newLevel);
+    util::Logger::SetLevel(logLevel);
 
     // Log that the level has been changed
     util::Logger::Info("Log level changed to: {}", newLevel);

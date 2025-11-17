@@ -1,10 +1,11 @@
 #include "FilterManager.hpp"
+
+#include "config/Config.hpp"
+#include "util/Logger.hpp"
+
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <spdlog/spdlog.h>
-
-#include "config/Config.hpp"
 
 namespace filters
 {
@@ -17,7 +18,20 @@ FilterManager& FilterManager::getInstance()
 
 FilterManager::FilterManager()
 {
-    loadFilters();
+    auto result = loadFilters();
+    if (result.isErr())
+    {
+        const auto& err = result.error();
+        if (err.code() == error::ErrorCode::FileNotFound)
+        {
+            util::Logger::Info(
+                "Filters file not found yet: {}", err.what());
+        }
+        else
+        {
+            util::Logger::Warn("Initial filter load failed: {}", err.what());
+        }
+    }
 }
 
 FilterPtr FilterManager::createFilter(const std::string& name,
@@ -38,13 +52,14 @@ void FilterManager::addFilter(const FilterPtr& filter)
     {
         if (existingFilter->name == filter->name)
         {
-            spdlog::error("Filter with name '{}' already exists", filter->name);
+            util::Logger::Error(
+                "Filter with name '{}' already exists", filter->name);
             return;
         }
     }
 
     m_filters.push_back(filter);
-    spdlog::debug("Added filter: {}", filter->name);
+    util::Logger::Debug("Added filter: {}", filter->name);
 }
 
 void FilterManager::updateFilter(const FilterPtr& filter)
@@ -57,14 +72,14 @@ void FilterManager::updateFilter(const FilterPtr& filter)
         if (existingFilter->name == filter->name)
         {
             existingFilter = filter;
-            spdlog::debug("Updated filter: {}", filter->name);
+            util::Logger::Debug("Updated filter: {}", filter->name);
             return;
         }
     }
 
     // If not found, add as new
     m_filters.push_back(filter);
-    spdlog::debug("Added filter (during update): {}", filter->name);
+    util::Logger::Debug("Added filter (during update): {}", filter->name);
 }
 
 void FilterManager::removeFilter(const std::string& filterName)
@@ -75,7 +90,7 @@ void FilterManager::removeFilter(const std::string& filterName)
     if (it != m_filters.end())
     {
         m_filters.erase(it);
-        spdlog::debug("Removed filter: {}", filterName);
+        util::Logger::Debug("Removed filter: {}", filterName);
     }
 }
 
@@ -86,8 +101,8 @@ void FilterManager::enableFilter(const std::string& filterName, bool enable)
         if (filter->name == filterName)
         {
             filter->isEnabled = enable;
-            spdlog::debug(
-                "{} filter: {}", enable ? "Enabled" : "Disabled", filterName);
+            util::Logger::Debug("{} filter: {}",
+                enable ? "Enabled" : "Disabled", filterName);
             return;
         }
     }
@@ -99,7 +114,7 @@ void FilterManager::enableAllFilters(bool enable)
     {
         filter->isEnabled = enable;
     }
-    spdlog::debug("{} all filters", enable ? "Enabled" : "Disabled");
+    util::Logger::Debug("{} all filters", enable ? "Enabled" : "Disabled");
 }
 
 std::vector<unsigned long> FilterManager::applyFilters(
@@ -187,131 +202,72 @@ std::vector<unsigned long> FilterManager::applyFilters(
     return result;
 }
 
-void FilterManager::loadFilters()
+FilterResult FilterManager::loadFilters()
 {
-    std::string filePath = getFiltersFilePath();
-
-    if (!std::filesystem::exists(filePath))
-    {
-        spdlog::info("Filters file does not exist at: {}", filePath);
-        return;
-    }
-
-    try
-    {
-        std::ifstream file(filePath);
-        if (!file.is_open())
-        {
-            spdlog::error("Failed to open filters file: {}", filePath);
-            return;
-        }
-
-        nlohmann::json j;
-        file >> j;
-
-        m_filters.clear();
-
-        if (j.is_array())
-        {
-            for (const auto& filterJson : j)
-            {
-                try
-                {
-                    Filter filter = Filter::fromJson(filterJson);
-                    m_filters.push_back(std::make_shared<Filter>(filter));
-                }
-                catch (const std::exception& e)
-                {
-                    spdlog::error("Error parsing filter: {}", e.what());
-                }
-            }
-        }
-
-        spdlog::info("Loaded {} filters from {}", m_filters.size(), filePath);
-    }
-    catch (const std::exception& e)
-    {
-        spdlog::error("Error loading filters: {}", e.what());
-    }
+    return loadFiltersFromPath(getFiltersFilePath());
 }
 
-void FilterManager::saveFilters()
+FilterResult FilterManager::saveFilters() const
 {
-    std::string filePath = getFiltersFilePath();
-
-    try
-    {
-        // Create directory if it doesn't exist
-        std::filesystem::path path(filePath);
-        std::filesystem::create_directories(path.parent_path());
-
-        nlohmann::json j = nlohmann::json::array();
-        for (const auto& filter : m_filters)
-        {
-            if (filter)
-            {
-                j.push_back(filter->toJson());
-            }
-        }
-
-        std::ofstream file(filePath);
-        if (!file.is_open())
-        {
-            spdlog::error(
-                "Failed to open filters file for writing: {}", filePath);
-            return;
-        }
-
-        file << j.dump(2); // Pretty print with 2-space indent
-        spdlog::info("Saved {} filters to {}", m_filters.size(), filePath);
-    }
-    catch (const std::exception& e)
-    {
-        spdlog::error("Error saving filters: {}", e.what());
-    }
+    return saveFiltersToPath(getFiltersFilePath());
 }
 
-bool FilterManager::saveFiltersToPath(const std::string& path) const
+FilterResult FilterManager::saveFiltersToPath(const std::string& path) const
 {
     try
     {
-        // Create directory if it doesn't exist
+        if (path.empty())
+        {
+            return FilterResult::Err(error::Error(
+                error::ErrorCode::InvalidArgument,
+                "Filters file path is empty", false));
+        }
+
         std::filesystem::path filePath(path);
-        std::filesystem::create_directories(filePath.parent_path());
+        if (!filePath.parent_path().empty())
+        {
+            std::filesystem::create_directories(filePath.parent_path());
+        }
 
-        nlohmann::json j = nlohmann::json::array();
+        nlohmann::json jsonFilters = nlohmann::json::array();
         for (const auto& filter : m_filters)
         {
             if (filter)
-            {
-                j.push_back(filter->toJson());
-            }
+                jsonFilters.push_back(filter->toJson());
         }
 
         std::ofstream file(path);
         if (!file.is_open())
         {
-            spdlog::error("Failed to open filters file for writing: {}", path);
-            return false;
+            return FilterResult::Err(error::Error(error::ErrorCode::IOError,
+                "Failed to open filters file for writing: " + path, false));
         }
 
-        file << j.dump(2); // Pretty print with 2-space indent
-        spdlog::info("Saved {} filters to {}", m_filters.size(), path);
-        return true;
+        file << jsonFilters.dump(2);
+        util::Logger::Info(
+            "Saved {} filters to {}", m_filters.size(), path);
+        return FilterResult::Ok(std::monostate {});
     }
     catch (const std::exception& e)
     {
-        spdlog::error("Error saving filters to {}: {}", path, e.what());
-        return false;
+        return FilterResult::Err(error::Error(error::ErrorCode::IOError,
+            std::string("Error saving filters to ") + path + ": " + e.what(),
+            false));
     }
 }
 
-bool FilterManager::loadFiltersFromPath(const std::string& path)
+FilterResult FilterManager::loadFiltersFromPath(const std::string& path)
 {
+    if (path.empty())
+    {
+        return FilterResult::Err(error::Error(error::ErrorCode::InvalidArgument,
+            "Filters file path is empty", false));
+    }
+
     if (!std::filesystem::exists(path))
     {
-        spdlog::info("Filters file does not exist at: {}", path);
-        return false;
+        return FilterResult::Err(error::Error(error::ErrorCode::FileNotFound,
+            "Filters file does not exist at: " + path, false));
     }
 
     try
@@ -319,44 +275,44 @@ bool FilterManager::loadFiltersFromPath(const std::string& path)
         std::ifstream file(path);
         if (!file.is_open())
         {
-            spdlog::error("Failed to open filters file: {}", path);
-            return false;
+            return FilterResult::Err(error::Error(error::ErrorCode::IOError,
+                "Failed to open filters file: " + path, false));
         }
 
-        nlohmann::json j;
-        file >> j;
+        nlohmann::json jsonFilters;
+        file >> jsonFilters;
+
+        if (!jsonFilters.is_array())
+        {
+            return FilterResult::Err(error::Error(error::ErrorCode::ParseError,
+                "Filters file must contain an array: " + path, false));
+        }
 
         FilterList newFilters;
-
-        if (j.is_array())
+        for (const auto& filterJson : jsonFilters)
         {
-            for (const auto& filterJson : j)
+            try
             {
-                try
-                {
-                    Filter filter = Filter::fromJson(filterJson);
-                    newFilters.push_back(std::make_shared<Filter>(filter));
-                }
-                catch (const std::exception& e)
-                {
-                    spdlog::error("Error parsing filter: {}", e.what());
-                }
+                Filter filter = Filter::fromJson(filterJson);
+                newFilters.push_back(std::make_shared<Filter>(filter));
+            }
+            catch (const std::exception& e)
+            {
+                util::Logger::Error("Error parsing filter entry: {}", e.what());
             }
         }
 
-        // Only replace existing filters if parsing was successful
-        if (!newFilters.empty())
-        {
-            m_filters = std::move(newFilters);
-            spdlog::info("Loaded {} filters from {}", m_filters.size(), path);
-            return true;
-        }
-        return false;
+        m_filters = std::move(newFilters);
+        util::Logger::Info(
+            "Loaded {} filters from {}", m_filters.size(), path);
+        return FilterResult::Ok(std::monostate {});
     }
     catch (const std::exception& e)
     {
-        spdlog::error("Error loading filters from {}: {}", path, e.what());
-        return false;
+        return FilterResult::Err(error::Error(error::ErrorCode::IOError,
+            std::string("Error loading filters from ") + path + ": " +
+                e.what(),
+            false));
     }
 }
 

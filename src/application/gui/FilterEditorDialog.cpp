@@ -2,7 +2,6 @@
 #include "config/Config.hpp"
 #include "filters/FilterManager.hpp"
 #include "util/WxWidgetsUtils.hpp"
-#include <spdlog/spdlog.h>
 #include <wx/msgdlg.h>
 #include <wx/notebook.h>
 #include <wx/sizer.h>

@@ -1,7 +1,6 @@
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace config
 {

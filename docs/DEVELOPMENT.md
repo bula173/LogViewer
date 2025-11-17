@@ -259,11 +259,11 @@ try {
 try {
     config.Load("config.json");
 } catch (const error::ConfigError& e) {
-    spdlog::error("Configuration error: {}", e.what());
+    util::Logger::Error("Configuration error: {}", e.what());
     // Provide default configuration
     config.UseDefaults();
 } catch (const error::FileError& e) {
-    spdlog::error("File error: {}", e.what());
+    util::Logger::Error("File error: {}", e.what());
     // Show file picker dialog
     ShowFilePickerDialog();
 }
@@ -284,7 +284,7 @@ if (result.isOk()) {
     Config config = result.unwrap();
     // use config
 } else {
-    spdlog::error("Failed to load config: {}", result.error().what());
+    util::Logger::Error("Failed to load config: {}", result.error().what());
 }
 ```
 
@@ -491,12 +491,12 @@ TEST(XmlParserTest, NotifiesObservers) {
 
 ```cpp
 // Use appropriate log levels
-spdlog::trace("Entering function with param={}", param);  // Very verbose
-spdlog::debug("Processing event id={}", id);              // Development
-spdlog::info("File loaded: {}", filename);                // Normal operation
-spdlog::warn("Config missing, using defaults");           // Potential issues
-spdlog::error("Failed to parse: {}", error);              // Errors
-spdlog::critical("Out of memory!");                       // Fatal errors
+util::Logger::Trace("Entering function with param={}", param);  // Very verbose
+util::Logger::Debug("Processing event id={}", id);              // Development
+util::Logger::Info("File loaded: {}", filename);                // Normal operation
+util::Logger::Warn("Config missing, using defaults");           // Potential issues
+util::Logger::Error("Failed to parse: {}", error);              // Errors
+util::Logger::Critical("Out of memory!");                       // Fatal errors
 ```
 
 ### Common Issues

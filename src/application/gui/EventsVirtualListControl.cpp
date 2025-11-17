@@ -2,7 +2,6 @@
 #include "config/Config.hpp"
 #include "util/WxWidgetsUtils.hpp"
 #include "util/Logger.hpp"
-#include <spdlog/spdlog.h>
 #include <string>
 #include <wx/colour.h>
 

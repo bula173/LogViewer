@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include "util/Logger.hpp"
+
 #include <atomic>
-#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <string>
 
@@ -83,7 +84,8 @@ class Error : public std::runtime_error
     {
         if (showMsgBox && CanShowDialogs())
             ShowError(message);
-        spdlog::error("Application Error [{}]: {}", static_cast<int>(code), message);
+        util::Logger::Error("Application Error [{}]: {}",
+            static_cast<int>(code), message);
     }
 
     explicit Error(ErrorCode code, const wxString& message, bool showMsgBox = true)
@@ -92,7 +94,8 @@ class Error : public std::runtime_error
     {
         if (showMsgBox && CanShowDialogs())
             ShowError(message);
-        spdlog::error("Application Error [{}]: {}", static_cast<int>(code), message.ToStdString());
+        util::Logger::Error("Application Error [{}]: {}",
+            static_cast<int>(code), message.ToStdString());
     }
 
     // Legacy constructors without ErrorCode (defaults to Unknown)

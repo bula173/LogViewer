@@ -160,10 +160,14 @@ void WrappingTextRenderer::DrawWrappedText(wxDC* dc, const wxRect& rect, const w
 wxStringList WrappingTextRenderer::WrapTextToLines(const wxString& text, wxDC* dc, int maxWidth) const
 {
     wxStringList lines;
+    auto addLine = [&lines](const wxString& value)
+    {
+        lines.Add(value.wx_str());
+    };
     
     if (text.IsEmpty() || !dc || maxWidth <= 0)
     {
-        lines.Add(text);
+        addLine(text);
         return lines;
     }
 
@@ -177,7 +181,7 @@ wxStringList WrappingTextRenderer::WrapTextToLines(const wxString& text, wxDC* d
         // If line fits, add it as is
         if (dc->GetTextExtent(line).GetWidth() <= maxWidth)
         {
-            lines.Add(line);
+            addLine(line);
             continue;
         }
         
@@ -199,7 +203,7 @@ wxStringList WrappingTextRenderer::WrapTextToLines(const wxString& text, wxDC* d
                 // Current word doesn't fit, start new line
                 if (!currentLine.IsEmpty())
                 {
-                    lines.Add(currentLine);
+                    addLine(currentLine);
                     currentLine = word;
                 }
                 else
@@ -220,24 +224,24 @@ wxStringList WrappingTextRenderer::WrapTextToLines(const wxString& text, wxDC* d
                             }
                             if (part.IsEmpty())
                                 part = word.Mid(i, 1); // At least one character
-                            lines.Add(part);
+                            addLine(part);
                             i += part.length();
                         }
                     }
                     else
                     {
-                        lines.Add(word);
+                        addLine(word);
                     }
                 }
             }
         }
         
         if (!currentLine.IsEmpty())
-            lines.Add(currentLine);
+            addLine(currentLine);
     }
     
     if (lines.IsEmpty())
-        lines.Add(text); // Fallback
+        addLine(text); // Fallback
         
     return lines;
 }

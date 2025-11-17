@@ -1,4 +1,3 @@
-// internal
 #include "MyApp.hpp"
 #include "config/Config.hpp"
 #include "error/Error.hpp"
@@ -6,19 +5,22 @@
 #include "main/version.h"
 #include "util/Logger.hpp"
 // std
-#include <chrono>
+#include <cstdlib>
 #include <filesystem>
 
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
+/**
+ * @brief Application entry point bridging the wxWidgets lifecycle.
+ */
 int main(int argc, char** argv)
 {
     try
     {
         if (!wxEntryStart(argc, argv))
-            return 1;
+            return EXIT_FAILURE;
 
-        int code = 1;
+        int code = EXIT_FAILURE;
         if (wxTheApp && wxTheApp->CallOnInit())
         {
             code = wxTheApp->OnRun();
@@ -28,33 +30,58 @@ int main(int argc, char** argv)
         wxEntryCleanup();
         return code;
     }
+    catch (const error::Error& ex)
+    {
+        util::Logger::Critical("Unhandled application error: {}", ex.what());
+        wxMessageBox(wxString::Format("Fatal application error:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Critical("Unhandled std::exception: {}", ex.what());
+        wxMessageBox(wxString::Format("Unhandled exception:\n%s", ex.what()),
+            "Error", wxOK | wxICON_ERROR);
+    }
     catch (...)
     {
-        util::Logger::Error("Unhandled exception occurred");
+        util::Logger::Critical("Unhandled unknown exception occurred");
         wxMessageBox("An unexpected error occurred. Please check the logs.",
             "Error", wxOK | wxICON_ERROR);
-        abort();
     }
+    return EXIT_FAILURE;
 }
 
 bool MyApp::OnInit()
 {
-
     if (!wxApp::OnInit())
         return false;
 
-    setupLogging();
-
-    // Initialize locale for proper Unicode/Polish character support
-    // This must be done before any GUI elements are created
-    if (!m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT))
+    const auto loggingResult = setupLogging();
+    if (loggingResult.isErr())
     {
-        util::Logger::Warn("Failed to initialize locale, using default");
+        util::Logger::Critical("Failed to initialize logging: {}",
+            loggingResult.error().what());
+        return false;
+    }
+
+    const auto localeResult = initializeLocale();
+    if (localeResult.isErr())
+    {
+        util::Logger::Warn("{}", localeResult.error().what());
     }
     
     util::Logger::Info("Initializing MyApp");
 
-    setupConfig();
+    const auto configResult = setupConfig();
+    if (configResult.isErr())
+    {
+        util::Logger::Error("Configuration initialization failed: {}",
+            configResult.error().what());
+        wxMessageBox(wxString::Format("Configuration error:\n%s",
+                          configResult.error().what()),
+            "Error", wxOK | wxICON_ERROR);
+        return false;
+    }
     ChangeLogLevel();
 
     const auto& version = Version::current();
@@ -98,7 +125,10 @@ bool MyApp::OnInit()
     return true;
 }
 
-void MyApp::setupConfig()
+/**
+ * @brief Load persisted configuration and ensure application metadata is set.
+ */
+MyApp::AppResult MyApp::setupConfig()
 {
     util::Logger::Info("Setting up configuration");
 
@@ -115,22 +145,60 @@ void MyApp::setupConfig()
 
     auto& config = config::GetConfig();
 
-    config.SetAppName(m_appName);
-    util::Logger::Info("Application name set to: {}", config.appName);
-    config.LoadConfig();
+    try
+    {
+        config.SetAppName(m_appName);
+        util::Logger::Info("Application name set to: {}", config.appName);
+        config.LoadConfig();
+    }
+    catch (const error::Error& e)
+    {
+        util::Logger::Error("Failed to load config: {}", e.what());
+        return AppResult::Err(error::Error(e.code(), e.what(), false));
+    }
+    catch (const std::exception& e)
+    {
+        util::Logger::Error("Unexpected configuration failure: {}", e.what());
+        return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+            std::string("Unexpected configuration failure: ") + e.what(), false));
+    }
+
+    return AppResult::Ok(std::monostate {});
 }
 
-void MyApp::setupLogging()
+/**
+ * @brief Initialize the logger sinks based on configuration.
+ */
+MyApp::AppResult MyApp::setupLogging()
 {
-    auto& config = config::GetConfig();
-    util::Logger::Initialize(util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
+    try
+    {
+        auto& config = config::GetConfig();
+        util::Logger::Initialize(
+            util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
 
-    util::Logger::Info("Setting up logging configuration");
-    util::Logger::Info("Logging configuration loaded from config file. Log level: {}",
-        config.logLevel);
-    util::Logger::Info("Log file path: {}", config.GetAppLogPath());
+        util::Logger::Info("Setting up logging configuration");
+        util::Logger::Info(
+            "Logging configuration loaded from config file. Log level: {}",
+            config.logLevel);
+        util::Logger::Info("Log file path: {}", config.GetAppLogPath());
+    }
+    catch (const error::Error& e)
+    {
+        return AppResult::Err(error::Error(e.code(), e.what(), false));
+    }
+    catch (const std::exception& e)
+    {
+        return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+            std::string("Failed to set up logging: ") + e.what(), false));
+    }
+
+    return AppResult::Ok(std::monostate {});
 }
 
+/**
+ * @brief Apply runtime log-level changes from the configuration.
+ */
 void MyApp::ChangeLogLevel()
 {
     auto& config = config::GetConfig();
@@ -142,4 +210,18 @@ void MyApp::ChangeLogLevel()
         util::Logger::Info("Log level changed to: {}", config.logLevel);
     }
 }
-// This is the main application class. It initializes the wxWidgets library
+
+/**
+ * @brief Configure locale information before creating any UI widgets.
+ */
+MyApp::AppResult MyApp::initializeLocale()
+{
+    if (m_locale.Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT))
+    {
+        util::Logger::Debug("Locale initialized successfully");
+        return AppResult::Ok(std::monostate {});
+    }
+
+    return AppResult::Err(error::Error(error::ErrorCode::RuntimeError,
+        "Failed to initialize locale, using default", false));
+}
