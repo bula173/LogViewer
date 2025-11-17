@@ -103,14 +103,14 @@ jobs:
         run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
       - name: Package wx (CPack NSIS)
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        if: matrix.build_type == 'Release'
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           cmake --build "$BUILD_DIR" --config Release --target package_wx
 
       - name: Package Qt (CPack NSIS)
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        if: matrix.build_type == 'Release'
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
@@ -135,7 +135,7 @@ jobs:
             if-no-files-found: ignore
 
       - name: Upload installer artifact
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main' && always()
+        if: matrix.build_type == 'Release' && always()
         uses: actions/upload-artifact@v4
         with:
           name: windows-Release-installer
