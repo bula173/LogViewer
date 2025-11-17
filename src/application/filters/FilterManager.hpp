@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Filter.hpp"
-#include "db/EventsContainer.hpp"
+#include "mvc/IModel.hpp"
 #include "error/Error.hpp"
 #include "util/Result.hpp"
 
@@ -58,7 +58,7 @@ class FilterManager
      * @brief Apply all enabled filters and return the matching indices.
      */
     std::vector<unsigned long> applyFilters(
-        db::EventsContainer& container) const;
+      const mvc::IModel& model) const;
 
     // Filter storage
     /**

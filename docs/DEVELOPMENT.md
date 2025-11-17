@@ -139,7 +139,8 @@ private:
  * @note The event is moved, so the passed object will be in a
  *       valid but unspecified state after this call.
  *
- * @complexity O(1) amortized
+ * @par Complexity
+ * O(1) amortized
  *
  * @par Example:
  * @code

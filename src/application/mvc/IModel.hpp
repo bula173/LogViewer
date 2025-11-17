@@ -73,12 +73,12 @@ class IModel
     }
 
     /**
-     * @brief Notifies all registered views that the current item index has
-     * changed.
+     * @brief Gets the index of the currently selected item.
      *
-     * @param index The new current item index in the model
-     * @note Views should implement OnCurrentIndexUpdated() to handle this
-     * notification
+     * Views can call this to synchronize their selection state with the
+     * model. Implementations should return -1 when no item is selected.
+     *
+     * @return int Current item index or -1 if nothing is selected
      */
     virtual int GetCurrentItemIndex() = 0;
     /**
@@ -107,6 +107,13 @@ class IModel
      * @return db::LogEvent& A reference to the requested item
      */
     virtual db::LogEvent& GetItem(const int index) = 0;
+
+    /** @brief Gets a const item from the model.
+     *
+     * Provides read-only access for view components that should not mutate
+     * the underlying event.
+     */
+    virtual const db::LogEvent& GetItem(const int index) const = 0;
     /**
      * @brief Clears all items from the model.
      *

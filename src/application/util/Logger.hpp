@@ -69,8 +69,11 @@ public:
 class SpdLogger : public ILogger {
 public:
     /**
-     * @brief Constructs a logger with given name
-     * @param name Logger name (used in log output)
+     * @brief Constructs a logger implementation backed by spdlog
+     *
+     * @param level Initial log level applied to all sinks
+     * @param logFile Optional file path for persistent logging; leave empty to disable
+     * @param name Logger name (appears in log statements)
      */
     explicit SpdLogger(LogLevel level = LogLevel::Debug, const std::string& logFile = "", const std::string& name = "LogViewer")
     {

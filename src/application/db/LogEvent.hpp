@@ -116,8 +116,9 @@ class LogEvent
      * @param key The key to search for
      * @return const std::string The corresponding value, or empty string if not
      * found
-     * @note Returns the first matching value if duplicate keys exist
-     * @complexity O(n) where n is the number of items in the event
+    * @note Returns the first matching value if duplicate keys exist
+    * @par Complexity
+    * O(n) where n is the number of items in the event
      */
     const std::string findByKey(const std::string& key) const;
 
@@ -131,8 +132,9 @@ class LogEvent
      * @param key The key to search for
      * @return const std::string The corresponding value, or empty string if not
      * found
-     * @note Returns the first matching value if duplicate keys exist
-     * @complexity O(n) where n is the number of items in the event
+    * @note Returns the first matching value if duplicate keys exist
+    * @par Complexity
+    * O(n) where n is the number of items in the event
      */
     const std::vector<std::string> findAllByKey(const std::string& key) const;
 

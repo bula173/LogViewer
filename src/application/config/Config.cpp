@@ -380,4 +380,18 @@ std::vector<ColumnConfig>& Config::GetMutableColumns()
     return columns;
 }
 
+void Config::GetPrintConfig() const {
+
+    //iterate over all config parameters and set printConfig accordingly
+    util::Logger::Info("Retrieving PrintConfig settings");
+    // Load the configuration file
+    std::ifstream configFile(m_configFilePath);
+    if (configFile.is_open())
+    {
+        json j;
+        configFile >> j;
+        util::Logger::Info("Loaded config from: {}", j.dump());
+    }
+}
+
 } // namespace config

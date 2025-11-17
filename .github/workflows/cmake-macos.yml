@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache wxwidgets expat cppcheck
+          brew install ninja ccache wxwidgets expat cppcheck qt
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -59,7 +59,8 @@ jobs:
             -DCMAKE_C_COMPILER=/usr/bin/clang \
             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt)"
 
       - name: Build
         run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
@@ -105,10 +106,21 @@ jobs:
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         run: test -f "$BUILD_DIR/CPackConfig.cmake"
 
-      - name: Package (CPack DMG)
+      - name: Package wx (CPack DMG)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         working-directory: ${{ env.BUILD_DIR }}
-        run: cpack -G DragNDrop -C Release --config CPackConfig.cmake
+        run: |
+          cpack -G DragNDrop -C Release --config CPackConfig.cmake \
+            -D CPACK_COMPONENTS_ALL=wx_app\;common \
+            -D CPACK_PACKAGE_NAME=LogViewer-wx
+
+      - name: Package Qt (CPack DMG)
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          cpack -G DragNDrop -C Release --config CPackConfig.cmake \
+            -D CPACK_COMPONENTS_ALL=qt_app\;common \
+            -D CPACK_PACKAGE_NAME=LogViewer-qt
 
       - name: Upload artifacts
         if: always()

@@ -58,6 +58,7 @@ class Config
     const std::vector<ColumnConfig>& GetColumns() const;
     // Mutable access for configuration
     std::vector<ColumnConfig>& GetMutableColumns();
+    void GetPrintConfig() const;
 
   private:
     const json& GetParserConfig(const json& j);

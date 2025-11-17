@@ -53,9 +53,9 @@ if(MINGW)
     message(STATUS "MinGW detected")
 
     install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/lib/"
-    DESTINATION .
-    FILES_MATCHING PATTERN "*.dll"
-)
+        DESTINATION .
+        COMPONENT common
+        FILES_MATCHING PATTERN "*.dll")
 endif(MINGW)
 
 #------------------------------------------------------------------------------

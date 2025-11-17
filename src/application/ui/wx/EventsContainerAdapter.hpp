@@ -1,0 +1,74 @@
+#pragma once
+
+#include "config/Config.hpp"
+#include "mvc/IModel.hpp"
+#include <string>
+#include <vector>
+#include <wx/dataview.h>
+
+namespace ui::wx
+{
+class EventsContainerAdapter : public wxDataViewVirtualListModel
+{
+  public:
+
+    explicit EventsContainerAdapter(mvc::IModel& model);
+
+    // wxDataViewVirtualListModel interface
+    virtual unsigned int GetColumnCount() const override;
+    virtual wxString GetColumnType(unsigned int col) const override;
+    virtual void GetValueByRow(
+        wxVariant& variant, unsigned int row, unsigned int col) const override;
+    bool SetValueByRow(
+        const wxVariant& variant, unsigned int row, unsigned int col) override;
+    void SyncWithContainer();
+    void SetRowCount(unsigned int rows);
+
+    /**
+     * @brief Set the indices of events to be shown (filtered view).
+     * @param indices Vector of indices in the original container to show.
+     */
+    void SetFilteredIndices(const std::vector<unsigned long>& indices);
+    bool GetAttrByRow(unsigned int row, unsigned int col,
+        wxDataViewItemAttr& attr) const override;
+
+    wxColour GetFontColorForColumnValue(
+        const std::string& column, const std::string& value) const;
+    wxColour GetBgColorForColumnValue(
+        const std::string& column, const std::string& value) const;
+
+    /**
+     * @brief Check if filtered indices are active.
+     * @return True if filtering is active
+     */
+    bool HasFilteredIndices() const;
+
+    /**
+     * @brief Get the actual event index from filtered row index.
+     * @param filteredRow Row index in the filtered view
+     * @return Actual event index in the container
+     */
+    size_t GetFilteredIndex(unsigned int filteredRow) const;
+
+    /**
+     * @brief Update row colors and refresh the view.
+     *
+     * Call this method after configuration changes to update
+     * the row colors according to the new color mappings.
+     */
+    void UpdateColors();
+
+    /**
+     * @brief Force refresh of all row attributes.
+     *
+     * This will trigger a re-evaluation of GetAttrByRow for all visible rows.
+     */
+    void RefreshRowAttributes();
+
+  private:
+    mvc::IModel& m_model;
+    unsigned int m_rowCount;
+    std::vector<unsigned long>
+        m_filteredIndices; ///< Maps filtered row to container index
+};
+}

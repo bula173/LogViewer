@@ -42,6 +42,15 @@ class ModelImpl : public IModel
         return items[index];
     }
 
+    const db::LogEvent& GetItem(const int index) const override
+    {
+        if (index < 0 || index >= static_cast<int>(items.size()))
+        {
+            throw std::out_of_range("Invalid item index");
+        }
+        return items[index];
+    }
+
     void Clear() override
     {
         items.clear();
