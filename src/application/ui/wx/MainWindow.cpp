@@ -475,7 +475,7 @@ void MainWindow::OnExit(wxCommandEvent& WXUNUSED(event))
 void MainWindow::OnClose(wxCloseEvent& event)
 {
     util::Logger::Info("Window close event triggered.");
-    if (m_processing)
+    if (IsBusy())
     {
         util::Logger::Warn("Close requested while processing. Vetoing close.");
         event.Veto();
@@ -593,7 +593,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
             {
                 try
                 {
-                    if (m_processing)
+                    if (IsBusy())
                     {
                         // Never throw out of the event loop
                         error::Error("A file is already being processed. "
@@ -617,8 +617,7 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
                         AddToRecentFiles(path);
                         auto filePathObj = WxToPath(path);
-                        ParseData(filePathObj);
-                        UpdateFilters();
+                        ProcessFileSelection(filePathObj);
                     }
                     else
                     {
@@ -719,132 +718,27 @@ void MainWindow::OnOpenAppLog(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MainWindow::ParseData(const std::filesystem::path& filePath)
-{
-    try
-    {
-        util::Logger::Info("Parsing data from file: {}", filePath.string());
-
-        if (filePath.empty())
-        {
-            throw error::Error("File path is empty.");
-        }
-        if (!std::filesystem::exists(filePath))
-        {
-            throw error::Error("File does not exist: " + filePath.string());
-        }
-        if (m_searchResultsView)
-            m_searchResultsView->Clear();
-        m_searchBox->SetValue("");
-        m_events.Clear();
-        m_parser = std::make_shared<parser::XmlParser>();
-
-        m_parser->RegisterObserver(this);
-
-        SetStatusText("Loading ..");
-        m_progressGauge->Show();
-        m_progressGauge->SetRange(100);
-        m_progressGauge->SetValue(0);
-        m_progressGauge->Refresh();
-        m_progressGauge->Update();
-
-        m_processing = true;
-
-        m_progressGauge->SetRange(static_cast<int>(m_parser->GetTotalProgress()));
-        m_parser->ParseData(filePath);
-        m_progressGauge->SetValue(100);
-        SetStatusText("Data ready. Path: " + filePath.string());
-        m_processing = false;
-        m_progressGauge->Hide();
-
-        util::Logger::Info("Parsing complete.");
-    }
-    catch (const error::Error& err)
-    {
-        util::Logger::Error("Application error in ParseData: {}", err.what());
-        m_processing = false;
-        m_progressGauge->Hide();
-        // Message box already shown by error::Error
-    }
-    catch (const std::exception& ex)
-    {
-        util::Logger::Error("Exception in ParseData: {}", ex.what());
-        wxMessageBox(
-            wxString::Format("Exception during parsing:\n%s", ex.what()),
-            "Error", wxOK | wxICON_ERROR);
-        m_processing = false;
-        m_progressGauge->Hide();
-    }
-    catch (...)
-    {
-        util::Logger::Error("Unknown exception in ParseData");
-        wxMessageBox(
-            "Unknown error during parsing.", "Error", wxOK | wxICON_ERROR);
-        m_processing = false;
-        m_progressGauge->Hide();
-    }
-}
-
-void MainWindow::UpdateFilters()
-{
-    if (m_presenter)
-    {
-        m_presenter->UpdateTypeFilters();
-    }
-}
-
-// Data Observer methods
-void MainWindow::ProgressUpdated()
-{
-    if (!m_parser || !m_progressGauge)
-        return;
-
-    int progress = 0;
-    try
-    {
-        progress = static_cast<int>(m_parser->GetCurrentProgress());
-    }
-    catch (const std::exception& e)
-    {
-        util::Logger::Error(
-            "ProgressUpdated: exception getting progress: {}", e.what());
-        return;
-    }
-
-    util::Logger::Debug("Progress updated: {}", progress);
-    m_progressGauge->SetValue(progress);
-    wxYieldIfNeeded(); // safer than wxYield()
-
-    if (progress >= m_progressGauge->GetRange())
-        m_processing = false;
-
-    if (m_closerequest)
-    {
-        this->Destroy();
-        return;
-    }
-}
-
-void MainWindow::NewEventFound(db::LogEvent&& event)
-{
-    util::Logger::Debug("New event found.");
-    m_events.AddEvent(std::move(event));
-}
-
-void MainWindow::NewEventBatchFound(
-    std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
-{
-    util::Logger::Debug("New event batch found with size: {}", eventBatch.size());
-    m_events.AddEventBatch(std::move(eventBatch));
-    if (m_eventsListView)
-        m_eventsListView->RefreshView();
-    if (m_itemDetailsView)
-        m_itemDetailsView->RefreshView();
-}
 
 void MainWindow::AddToRecentFiles(const wxString& path)
 {
     m_fileHistory.AddFileToHistory(path);
+}
+
+void MainWindow::ProcessFileSelection(const std::filesystem::path& filePath)
+{
+    if (!m_presenter)
+    {
+        throw error::Error("Presenter not initialized.");
+    }
+
+    m_presenter->LoadLogFile(filePath);
+    m_presenter->SetItemDetailsVisible(true);
+}
+
+bool MainWindow::IsBusy() const
+{
+    const bool presenterBusy = m_presenter && m_presenter->IsParsing();
+    return m_processing.load() || presenterBusy;
 }
 
 void MainWindow::OnDropFiles(wxDropFilesEvent& event)
@@ -863,10 +757,7 @@ void MainWindow::OnDropFiles(wxDropFilesEvent& event)
             util::Logger::Info("File dropped: {}", filePathObj.string());
 
             // Process the dropped file
-            ParseData(filePathObj);
-            UpdateFilters();
-            if (m_presenter)
-                m_presenter->SetItemDetailsVisible(true);
+            ProcessFileSelection(filePathObj);
 
             // Add to recent files
             AddToRecentFiles(filename);
@@ -918,8 +809,7 @@ void MainWindow::LoadRecentFile(wxCommandEvent& event)
         }
 
         auto filePathObj = WxToPath(path);
-        ParseData(filePathObj);
-        UpdateFilters();
+        ProcessFileSelection(filePathObj);
     }
     catch (const error::Error& err)
     {

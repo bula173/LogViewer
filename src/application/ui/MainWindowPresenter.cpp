@@ -2,11 +2,13 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <filesystem>
 #include <limits>
 #include <set>
 #include <string>
 #include <vector>
 
+#include "error/Error.hpp"
 #include "util/Logger.hpp"
 
 namespace ui
@@ -81,6 +83,48 @@ void MainWindowPresenter::PerformSearch()
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_searchResultsView.EndUpdate();
+        throw;
+    }
+}
+
+void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
+{
+    if (m_isParsing)
+        throw error::Error("A file is already being processed");
+
+    const std::string previousStatus = m_view.CurrentStatusText();
+    m_isParsing = true;
+    m_progressConfigured = false;
+
+    m_searchResultsView.Clear();
+    m_view.SetSearchControlsEnabled(false);
+    m_view.ToggleProgressVisibility(true);
+    m_view.ConfigureProgressRange(100);
+    m_view.UpdateProgressValue(0);
+    m_view.UpdateStatusText("Loading ...");
+
+    try
+    {
+        m_controller.LoadLogFile(path, this);
+        m_view.UpdateStatusText("Data ready. Path: " + path.string());
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        UpdateTypeFilters();
+        if (m_eventsListView)
+            m_eventsListView->RefreshView();
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        m_isParsing = false;
+        m_progressConfigured = false;
+        m_view.ProcessPendingEvents();
+    }
+    catch (...)
+    {
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        m_view.UpdateStatusText(previousStatus);
+        m_isParsing = false;
+        m_progressConfigured = false;
         throw;
     }
 }
@@ -176,6 +220,33 @@ void MainWindowPresenter::SetItemDetailsVisible(bool visible)
 
     m_itemDetailsView->ShowControl(visible);
     m_view.RefreshLayout();
+}
+
+void MainWindowPresenter::ProgressUpdated()
+{
+    const auto total = m_controller.GetParserTotalProgress();
+    if (!m_progressConfigured && total > 0)
+    {
+        m_view.ConfigureProgressRange(ClampToInt(total));
+        m_progressConfigured = true;
+    }
+
+    m_view.UpdateProgressValue(ClampToInt(m_controller.GetParserCurrentProgress()));
+    m_view.ProcessPendingEvents();
+}
+
+void MainWindowPresenter::NewEventFound(db::LogEvent&&)
+{
+    // Controller already stores the event; UI refresh happens on batches.
+}
+
+void MainWindowPresenter::NewEventBatchFound(
+    std::vector<std::pair<int, db::LogEvent::EventItems>>&&)
+{
+    if (m_eventsListView)
+        m_eventsListView->RefreshView();
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
 }
 
 } // namespace ui

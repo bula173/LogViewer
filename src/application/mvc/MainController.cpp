@@ -1,9 +1,12 @@
 #include "mvc/MainController.hpp"
 
 #include "config/Config.hpp"
+#include "error/Error.hpp"
+#include "parser/ParserFactory.hpp"
 #include "util/WxWidgetsUtils.hpp"
 
 #include <algorithm>
+#include <filesystem>
 
 namespace mvc {
 
@@ -82,6 +85,77 @@ void MainController::SearchEvents(const std::string& query,
             progressCallback(i + 1, total);
         }
     }
+}
+
+void MainController::LoadLogFile(const std::filesystem::path& filepath,
+    parser::IDataParserObserver* observer)
+{
+    if (filepath.empty())
+    {
+        throw error::Error("File path is empty.");
+    }
+
+    if (!std::filesystem::exists(filepath))
+    {
+        throw error::Error("File does not exist: " + filepath.string());
+    }
+
+    auto parserResult = parser::ParserFactory::CreateFromFile(filepath);
+    if (!parserResult.isOk())
+    {
+        throw parserResult.error();
+    }
+
+    m_events.Clear();
+    m_activeParser = parserResult.unwrap();
+
+    m_activeParser->RegisterObserver(this);
+    if (observer)
+        m_activeParser->RegisterObserver(observer);
+
+    try
+    {
+        m_activeParser->ParseData(filepath);
+    }
+    catch (...)
+    {
+        if (observer)
+            m_activeParser->UnregisterObserver(observer);
+        m_activeParser->UnregisterObserver(this);
+        m_activeParser.reset();
+        throw;
+    }
+
+    if (observer)
+        m_activeParser->UnregisterObserver(observer);
+    m_activeParser->UnregisterObserver(this);
+    m_activeParser.reset();
+}
+
+uint32_t MainController::GetParserCurrentProgress() const
+{
+    return m_activeParser ? m_activeParser->GetCurrentProgress() : 0;
+}
+
+uint32_t MainController::GetParserTotalProgress() const
+{
+    return m_activeParser ? m_activeParser->GetTotalProgress() : 0;
+}
+
+void MainController::ProgressUpdated()
+{
+    // No-op for now; UI observers receive updates directly from the parser.
+}
+
+void MainController::NewEventFound(db::LogEvent&& event)
+{
+    m_events.AddEvent(std::move(event));
+}
+
+void MainController::NewEventBatchFound(
+    std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
+{
+    m_events.AddEventBatch(std::move(eventBatch));
 }
 
 } // namespace mvc

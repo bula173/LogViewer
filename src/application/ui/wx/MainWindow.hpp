@@ -8,8 +8,6 @@
 #pragma once
 #include "main/version.h"
 #include "db/EventsContainer.hpp"
-#include "parser/IDataParser.hpp"
-#include "xml/xmlParser.hpp"
 #include "EventsVirtualListControl.hpp"
 #include "ui/wx/SearchResultsView.hpp"
 #include "ui/wx/TypeFilterView.hpp"
@@ -98,7 +96,6 @@ namespace ui::wx
  * - Progress reporting to maintain UI responsiveness during large file parsing
  */
 class MainWindow : public wxFrame,
-                   public parser::IDataParserObserver,
                    public config::ConfigObserver,
                    public ui::IMainWindowView,
                    public ui::ISearchResultsViewObserver
@@ -122,49 +119,6 @@ class MainWindow : public wxFrame,
      */
     MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size,
         const Version::Version& version);
-
-    // IDataParserObserver interface implementation
-
-    /**
-     * @brief Called when parsing progress is updated.
-     *
-     * Updates the progress bar in the status bar to reflect current parsing
-     * progress. This method is called frequently during parsing operations and
-     * should be efficient.
-     *
-     * @note This method is called from the parsing thread context and must be
-     * thread-safe
-     * @note UI updates are marshaled to the main thread automatically by
-     * wxWidgets
-     */
-    void ProgressUpdated() override;
-
-    /**
-     * @brief Called when a new event is found during parsing.
-     *
-     * Adds the event to the main events container and triggers UI refresh.
-     * This method is called for each individual event discovered.
-     *
-     * @param event The newly parsed LogEvent (moved to avoid copying)
-     * @note For high-throughput scenarios, NewEventBatchFound is preferred
-     * @note This method adds the event to the display and may trigger filter
-     * updates
-     */
-    void NewEventFound(db::LogEvent&& event) override;
-
-    /**
-     * @brief Called when a batch of new events is found during parsing.
-     *
-     * Processes a batch of events efficiently, minimizing UI update overhead.
-     * This is the preferred method for high-throughput parsing scenarios.
-     *
-     * @param eventBatch Vector of (id, items) pairs representing the events
-     * @note This method is more efficient than multiple NewEventFound calls
-     * @note Filter controls are updated after batch processing is complete
-     */
-    void NewEventBatchFound(
-        std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
-        override;
 
     // ConfigObserver interface implementation
     virtual void OnConfigChanged() override;
@@ -425,20 +379,6 @@ class MainWindow : public wxFrame,
     void setupStatusBar();
 
     /**
-     * @brief Parses data from the specified file.
-     *
-     * Initiates parsing of the specified file, clearing existing data,
-     * setting up progress monitoring, and selecting appropriate parser
-     * based on file extension.
-     *
-     * @param filePath Path to the file to parse
-     * @note This method is called from file open operations and recent file
-     * selections
-     * @note Progress updates are handled through the observer interface
-     */
-    void ParseData(const std::filesystem::path& filePath);
-
-    /**
      * @brief Adds a file path to the recent files history.
      *
      * Updates the recent files menu and saves the new entry to persistent
@@ -448,6 +388,9 @@ class MainWindow : public wxFrame,
      */
     void AddToRecentFiles(const wxString& path);
 
+    /** @brief Centralized file loading hook shared by all entry points. */
+    void ProcessFileSelection(const std::filesystem::path& filePath);
+
     /**
      * @brief Loads a recent file from the history.
      *
@@ -455,14 +398,8 @@ class MainWindow : public wxFrame,
      */
     void LoadRecentFile(wxCommandEvent& event);
 
-    /**
-     * @brief Updates filter controls with unique values from loaded events.
-     *
-     * Scans through all loaded events to extract unique values for filter
-     * controls (event types, timestamps, etc.) and populates the filter
-     * UI accordingly. Called after parsing is complete.
-     */
-    void UpdateFilters();
+    /** @brief @return true when background processing is active. */
+    bool IsBusy() const;
     /**
      * @brief Reloads the application configuration from disk.
      *
@@ -527,11 +464,9 @@ class MainWindow : public wxFrame,
     db::EventsContainer
         m_events; ///< Main events collection (all loaded events)
     std::atomic<bool> m_processing {
-        false}; ///< Parsing operation in progress flag (thread-safe)
+        false}; ///< Non-parser processing flag (debug/dummy data)
     std::atomic<bool> m_closerequest {
         false}; ///< Window close requested flag (thread-safe)
-    std::shared_ptr<parser::XmlParser>
-        m_parser; ///< Current parser instance (shared ownership)
     std::unique_ptr<mvc::IController> m_controller;
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     // Menu and control identifiers
