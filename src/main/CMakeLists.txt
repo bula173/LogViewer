@@ -104,8 +104,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
 if(WIN32 AND MINGW)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/dist/lib/
         DESTINATION "."
-        FILES_MATCHING PATTERN "*.dll"
-        COMPONENT common)
+    COMPONENT common
+    FILES_MATCHING PATTERN "*.dll")
 endif()
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
