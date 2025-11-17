@@ -22,6 +22,22 @@ set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer")
 set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
 
+set(CPACK_COMPONENTS_ALL wx_app qt_app common)
+set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Shared Resources")
+set(CPACK_COMPONENT_COMMON_DESCRIPTION
+    "Shared configuration, icons, and supporting files.")
+set(CPACK_COMPONENT_COMMON_HIDDEN TRUE)
+
+set(CPACK_COMPONENT_WX_APP_DISPLAY_NAME "LogViewer (wxWidgets)")
+set(CPACK_COMPONENT_WX_APP_DESCRIPTION
+    "Classic wxWidgets-based desktop application.")
+set(CPACK_COMPONENT_WX_APP_DEPENDS common)
+
+set(CPACK_COMPONENT_QT_APP_DISPLAY_NAME "LogViewer (Qt)")
+set(CPACK_COMPONENT_QT_APP_DESCRIPTION
+    "Modern Qt-based desktop application.")
+set(CPACK_COMPONENT_QT_APP_DEPENDS common)
+
 # Disable automatic stripping on Windows (causes issues with MSYS2 paths)
 # Files are already optimized with -O3 in Release builds
 if(WIN32)
@@ -143,20 +159,21 @@ else()
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.desktop
         DESTINATION share/applications/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        )
+        COMPONENT common)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
         DESTINATION share/icons/hicolor/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        )
+        COMPONENT common)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
         DESTINATION share/icons/gnome/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        )
+        COMPONENT common)
     # License file
     install(FILES ${PROJECT_SOURCE_DIR}/license.md
         DESTINATION share/doc/${PROJECT_NAME}/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        RENAME copyright)
+        RENAME copyright
+        COMPONENT common)
     # set package icon
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png")
 endif()

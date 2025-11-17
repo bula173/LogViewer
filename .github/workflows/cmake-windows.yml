@@ -48,6 +48,8 @@ jobs:
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gtest
             mingw-w64-x86_64-wxwidgets3.2-msw
+            mingw-w64-x86_64-qt6-base
+            mingw-w64-x86_64-qt6-tools
             mingw-w64-x86_64-libtiff
             mingw-w64-x86_64-cppcheck
             mingw-w64-x86_64-nsis
@@ -100,7 +102,7 @@ jobs:
         shell: msys2 {0}
         run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
-      - name: Package (CPack NSIS)
+      - name: Package wx (CPack NSIS)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
@@ -112,8 +114,27 @@ jobs:
             ls -1 .
             exit 1
           fi
-          echo "Running CPack..."
-          cpack -G NSIS -C Release --config CPackConfig.cmake -VV
+          echo "Running CPack for wx..."
+          cpack -G NSIS -C Release --config CPackConfig.cmake -VV \
+            -D CPACK_COMPONENTS_ALL=wx_app\;common \
+            -D CPACK_PACKAGE_NAME=LogViewer-wx
+
+      - name: Package Qt (CPack NSIS)
+        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          set -e
+          export PATH="/mingw64/bin:$PATH"
+          if [ ! -f CPackConfig.cmake ]; then
+            echo "CPackConfig.cmake missing. Did you include(CPack) in CMakeLists.txt?"
+            ls -1 .
+            exit 1
+          fi
+          echo "Running CPack for Qt..."
+          cpack -G NSIS -C Release --config CPackConfig.cmake -VV \
+            -D CPACK_COMPONENTS_ALL=qt_app\;common \
+            -D CPACK_PACKAGE_NAME=LogViewer-qt
 
       - name: Upload tests artifact
         if: always()

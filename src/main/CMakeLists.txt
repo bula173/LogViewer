@@ -88,19 +88,24 @@ configure_file(
 
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION "."
-    RUNTIME DESTINATION ".")
+    RUNTIME DESTINATION "."
+    COMPONENT wx_app)
 
 install(TARGETS ${LOGVIEWER_QT_TARGET}
     BUNDLE DESTINATION "."
-    RUNTIME DESTINATION ".")
+    RUNTIME DESTINATION "."
+    COMPONENT qt_app)
 
-install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json DESTINATION ".")
+install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
+    DESTINATION "."
+    COMPONENT common)
 
 # Install runtime DLLs on Windows
 if(WIN32 AND MINGW)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/dist/lib/
         DESTINATION "."
-        FILES_MATCHING PATTERN "*.dll")
+        FILES_MATCHING PATTERN "*.dll"
+        COMPONENT common)
 endif()
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
