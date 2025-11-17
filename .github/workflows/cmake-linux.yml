@@ -92,19 +92,11 @@ jobs:
 
       - name: Package wx (CPack TGZ)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          cpack -G TGZ -C Release --config CPackConfig.cmake \
-            -D CPACK_COMPONENTS_ALL=wx_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-wx
+        run: cmake --build "$BUILD_DIR" --config Release --target package_wx
 
       - name: Package Qt (CPack TGZ)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          cpack -G TGZ -C Release --config CPackConfig.cmake \
-            -D CPACK_COMPONENTS_ALL=qt_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-qt
+        run: cmake --build "$BUILD_DIR" --config Release --target package_qt
 
       - name: Upload artifacts
         if: always()

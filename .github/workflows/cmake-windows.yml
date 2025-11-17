@@ -105,36 +105,16 @@ jobs:
       - name: Package wx (CPack NSIS)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}
         run: |
-          set -e
           export PATH="/mingw64/bin:$PATH"
-          if [ ! -f CPackConfig.cmake ]; then
-            echo "CPackConfig.cmake missing. Did you include(CPack) in CMakeLists.txt?"
-            ls -1 .
-            exit 1
-          fi
-          echo "Running CPack for wx..."
-          cpack -G NSIS -C Release --config CPackConfig.cmake -VV \
-            -D CPACK_COMPONENTS_ALL=wx_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-wx
+          cmake --build "$BUILD_DIR" --config Release --target package_wx
 
       - name: Package Qt (CPack NSIS)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}
         run: |
-          set -e
           export PATH="/mingw64/bin:$PATH"
-          if [ ! -f CPackConfig.cmake ]; then
-            echo "CPackConfig.cmake missing. Did you include(CPack) in CMakeLists.txt?"
-            ls -1 .
-            exit 1
-          fi
-          echo "Running CPack for Qt..."
-          cpack -G NSIS -C Release --config CPackConfig.cmake -VV \
-            -D CPACK_COMPONENTS_ALL=qt_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-qt
+          cmake --build "$BUILD_DIR" --config Release --target package_qt
 
       - name: Upload tests artifact
         if: always()

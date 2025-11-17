@@ -103,24 +103,16 @@ jobs:
           cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
       - name: Verify CPack config
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
+        if: matrix.build_type == 'Release'
         run: test -f "$BUILD_DIR/CPackConfig.cmake"
 
       - name: Package wx (CPack DMG)
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          cpack -G DragNDrop -C Release --config CPackConfig.cmake \
-            -D CPACK_COMPONENTS_ALL=wx_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-wx
+        if: matrix.build_type == 'Release'
+        run: cmake --build "$BUILD_DIR" --config Release --target package_wx
 
       - name: Package Qt (CPack DMG)
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: |
-          cpack -G DragNDrop -C Release --config CPackConfig.cmake \
-            -D CPACK_COMPONENTS_ALL=qt_app\;common \
-            -D CPACK_PACKAGE_NAME=LogViewer-qt
+        if: matrix.build_type == 'Release'
+        run: cmake --build "$BUILD_DIR" --config Release --target package_qt
 
       - name: Upload artifacts
         if: always()

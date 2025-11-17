@@ -191,5 +191,32 @@ message(STATUS "")
 # and include CPack, so we get target for packages
 include(CPack)
 
+if(CMAKE_CPACK_COMMAND)
+    set(_cpack_config "${CMAKE_BINARY_DIR}/CPackConfig.cmake")
+    if(APPLE)
+        set(_split_generator "DragNDrop")
+    elseif(WIN32)
+        set(_split_generator "NSIS")
+    else()
+        set(_split_generator "TGZ")
+    endif()
+
+    function(_add_split_package target component_list flavor)
+        add_custom_target(${target}
+            COMMAND "${CMAKE_CPACK_COMMAND}" --config "${_cpack_config}"
+                -C "$<CONFIG>"
+                -G "${_split_generator}"
+                "-DCPACK_COMPONENTS_ALL=${component_list}"
+                "-DCPACK_PACKAGE_NAME=LogViewer-${flavor}"
+                "-DCPACK_PACKAGE_FILE_NAME=LogViewer-${flavor}-${PROJECT_VERSION}"
+            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+            COMMENT "Creating ${flavor} installer via CPack"
+            VERBATIM)
+    endfunction()
+
+    _add_split_package(package_wx "wx_app\;common" "wx")
+    _add_split_package(package_qt "qt_app\;common" "qt")
+endif()
+
 
 
