@@ -38,6 +38,7 @@ class SearchResultsView;
 class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
+class FiltersPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -68,6 +69,12 @@ class MainWindow : public QMainWindow,
     void OnSearchRequested();
     void OnApplyFilterClicked();
     void HandleTypeFilterChanged();
+    void OnExtendedFiltersChanged();
+    void OnOpenFileRequested();
+    void OnClearDataRequested();
+    void OnOpenConfigRequested();
+    void OnOpenAppLogRequested();
+    void OnExitRequested();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -77,6 +84,9 @@ class MainWindow : public QMainWindow,
     void InitializeUi(db::EventsContainer& events);
     void InitializePresenter(mvc::IController& controller,
         db::EventsContainer& events);
+    void ApplyExtendedFilters();
+    void SetupMenus();
+    void ShowError(const QString& title, const QString& message);
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
@@ -89,10 +99,12 @@ class MainWindow : public QMainWindow,
     QSplitter* m_rightSplitter {nullptr};
     QTabWidget* m_filterTabs {nullptr};
     EventsTableView* m_eventsView {nullptr};
+    FiltersPanel* m_filtersPanel {nullptr};
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
+    db::EventsContainer* m_events {nullptr};
 };
 
 } // namespace ui::qt

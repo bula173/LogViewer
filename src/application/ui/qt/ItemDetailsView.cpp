@@ -26,9 +26,11 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
     m_details->setHorizontalHeaderLabels(headers);
     m_details->horizontalHeader()->setStretchLastSection(true);
     m_details->verticalHeader()->setVisible(false);
+    m_details->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_details->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_details->setSelectionMode(QAbstractItemView::SingleSelection);
     m_details->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_details->setWordWrap(true);
 }
 
 void ItemDetailsView::RefreshView()
@@ -71,12 +73,15 @@ void ItemDetailsView::DisplayEvent(int actualRow)
 
         keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
         valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
+        keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+        valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
 
         m_details->setItem(row, 0, keyItem);
         m_details->setItem(row, 1, valueItem);
         ++row;
     }
     m_details->resizeColumnsToContents();
+    m_details->resizeRowsToContents();
 }
 
 } // namespace ui::qt

@@ -35,6 +35,7 @@ namespace mvc
 struct SearchResultRow
 {
     int eventId {0};
+  std::string matchedKey;
     std::string matchedText;
     std::vector<std::string> columnValues;
 };

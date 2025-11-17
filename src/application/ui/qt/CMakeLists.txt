@@ -11,6 +11,8 @@ set(APP_QT_SRCS
     ../MainWindowPresenter.cpp
     EventsTableModel.cpp
     EventsTableView.cpp
+    FilterEditorDialog.cpp
+    FiltersPanel.cpp
     ItemDetailsView.cpp
     MainWindow.cpp
     SearchResultsView.cpp

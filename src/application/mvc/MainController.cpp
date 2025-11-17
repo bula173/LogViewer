@@ -51,6 +51,7 @@ void MainController::SearchEvents(const std::string& query,
 
         bool matches = !hasQuery;
         std::string matchedText;
+        std::string matchedKey;
 
         if (hasQuery)
         {
@@ -59,6 +60,7 @@ void MainController::SearchEvents(const std::string& query,
                 if (item.second.find(query) != std::string::npos)
                 {
                     matchedText = item.second;
+                    matchedKey = item.first;
                     matches = true;
                     break;
                 }
@@ -69,6 +71,7 @@ void MainController::SearchEvents(const std::string& query,
         {
             SearchResultRow row;
             row.eventId = event.getId();
+            row.matchedKey = matchedKey;
             row.matchedText = matchedText;
             row.columnValues.reserve(columns.size());
 

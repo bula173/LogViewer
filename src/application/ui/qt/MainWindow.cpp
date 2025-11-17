@@ -1,19 +1,27 @@
 #include "ui/qt/MainWindow.hpp"
 
 #include "db/EventsContainer.hpp"
+#include "filters/FilterManager.hpp"
 #include "mvc/IControler.hpp"
 #include "ui/MainWindowPresenter.hpp"
 #include "ui/qt/EventsTableView.hpp"
+#include "ui/qt/FiltersPanel.hpp"
 #include "ui/qt/ItemDetailsView.hpp"
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
+#include "config/Config.hpp"
+#include "main/version.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QCoreApplication>
+#include <QDesktopServices>
 #include <QDragEnterEvent>
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMenuBar>
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressBar>
@@ -25,6 +33,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QKeySequence>
 
 #include <filesystem>
 #include <stdexcept>
@@ -36,7 +45,9 @@ MainWindow::MainWindow(mvc::IController& controller,
     db::EventsContainer& events, QWidget* parent)
     : QMainWindow(parent)
 {
+    m_events = &events;
     InitializeUi(events);
+    SetupMenus();
     InitializePresenter(controller, events);
 }
 
@@ -58,9 +69,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     auto* filtersTab = new QWidget(m_filterTabs);
     auto* filtersLayout = new QVBoxLayout(filtersTab);
-    filtersLayout->addWidget(new QLabel("Extended filters placeholder",
-        filtersTab));
-    filtersLayout->addStretch(1);
+    m_filtersPanel = new FiltersPanel(filtersTab);
+    filtersLayout->addWidget(m_filtersPanel);
     filtersTab->setLayout(filtersLayout);
 
     auto* typeTab = new QWidget(m_filterTabs);
@@ -119,7 +129,9 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     setCentralWidget(m_bottomSplitter);
     setAcceptDrops(true);
-    setWindowTitle("LogViewer Qt");
+    const auto title = QStringLiteral("LogViewer Qt %1")
+                           .arg(QString::fromStdString(Version::current().asShortStr()));
+    setWindowTitle(title);
     setMinimumSize(1024, 768);
 
     m_statusLabel = new QLabel("Ready", this);
@@ -144,11 +156,55 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             [this]() { HandleTypeFilterChanged(); });
     }
 
+    if (m_filtersPanel)
+    {
+        connect(m_filtersPanel, &FiltersPanel::RequestApplyFilters, this,
+            &MainWindow::OnExtendedFiltersChanged);
+    }
+
     if (m_eventsView && m_itemDetailsView)
     {
         connect(m_eventsView, &EventsTableView::CurrentActualRowChanged,
             m_itemDetailsView, &ItemDetailsView::OnActualRowChanged);
     }
+}
+
+void MainWindow::SetupMenus()
+{
+    auto* bar = menuBar();
+    if (!bar)
+    {
+        bar = new QMenuBar(this);
+        setMenuBar(bar);
+    }
+    bar->clear();
+
+    auto* fileMenu = bar->addMenu(tr("&File"));
+    auto* openAction = fileMenu->addAction(tr("&Open..."));
+    openAction->setShortcut(QKeySequence::Open);
+    connect(openAction, &QAction::triggered, this,
+        &MainWindow::OnOpenFileRequested);
+
+    auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
+    clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
+    connect(clearAction, &QAction::triggered, this,
+        &MainWindow::OnClearDataRequested);
+
+    fileMenu->addSeparator();
+
+    auto* exitAction = fileMenu->addAction(tr("E&xit"));
+    exitAction->setShortcut(QKeySequence::Quit);
+    connect(exitAction, &QAction::triggered, this,
+        &MainWindow::OnExitRequested);
+
+    auto* toolsMenu = bar->addMenu(tr("&Tools"));
+    auto* configAction = toolsMenu->addAction(tr("Open &Config File"));
+    connect(configAction, &QAction::triggered, this,
+        &MainWindow::OnOpenConfigRequested);
+
+    auto* appLogAction = toolsMenu->addAction(tr("Open &App Log"));
+    connect(appLogAction, &QAction::triggered, this,
+        &MainWindow::OnOpenAppLogRequested);
 }
 
 void MainWindow::InitializePresenter(
@@ -291,6 +347,118 @@ void MainWindow::HandleTypeFilterChanged()
 {
     if (m_presenter)
         m_presenter->ApplySelectedTypeFilters();
+}
+
+void MainWindow::OnExtendedFiltersChanged()
+{
+    ApplyExtendedFilters();
+}
+
+void MainWindow::OnOpenFileRequested()
+{
+    const QString filePath = QFileDialog::getOpenFileName(this,
+        tr("Open Log File"), QString(),
+        tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
+    if (filePath.isEmpty())
+        return;
+
+    HandleDroppedFile(filePath);
+}
+
+void MainWindow::OnClearDataRequested()
+{
+    try
+    {
+        if (m_searchResults)
+            m_searchResults->Clear();
+        if (m_searchEdit)
+            m_searchEdit->clear();
+        if (m_events)
+            m_events->Clear();
+        if (m_eventsView)
+            m_eventsView->RefreshView();
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        UpdateStatusText("Data cleared");
+        ToggleProgressVisibility(false);
+    }
+    catch (const std::exception& ex)
+    {
+        ShowError(tr("Clear Data"), tr("Unable to clear data: %1").arg(ex.what()));
+    }
+}
+
+void MainWindow::OnOpenConfigRequested()
+{
+    try
+    {
+        const auto& configPath = config::GetConfig().GetConfigFilePath();
+        if (configPath.empty() || !std::filesystem::exists(configPath))
+        {
+            ShowError(tr("Config"), tr("Config file does not exist."));
+            return;
+        }
+
+        if (!QDesktopServices::openUrl(
+                QUrl::fromLocalFile(QString::fromStdString(configPath))))
+        {
+            ShowError(tr("Config"), tr("Failed to launch editor."));
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        ShowError(tr("Config"), tr("Unable to open config: %1").arg(ex.what()));
+    }
+}
+
+void MainWindow::OnOpenAppLogRequested()
+{
+    try
+    {
+        const auto& logPath = config::GetConfig().GetAppLogPath();
+        if (logPath.empty() || !std::filesystem::exists(logPath))
+        {
+            ShowError(tr("App Log"), tr("Application log file does not exist."));
+            return;
+        }
+
+        if (!QDesktopServices::openUrl(
+                QUrl::fromLocalFile(QString::fromStdString(logPath))))
+        {
+            ShowError(tr("App Log"), tr("Failed to open application log."));
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        ShowError(tr("App Log"), tr("Unable to open application log: %1").arg(ex.what()));
+    }
+}
+
+void MainWindow::OnExitRequested()
+{
+    close();
+}
+
+void MainWindow::ApplyExtendedFilters()
+{
+    if (!m_eventsView || !m_events || m_events->Size() == 0)
+        return;
+
+    const std::string previousStatus = CurrentStatusText();
+    UpdateStatusText("Applying filters...");
+
+    auto filteredIndices =
+        filters::FilterManager::getInstance().applyFilters(*m_events);
+
+    m_eventsView->SetFilteredEvents(filteredIndices);
+    m_eventsView->RefreshView();
+
+    UpdateStatusText(previousStatus);
+}
+
+void MainWindow::ShowError(const QString& title, const QString& message)
+{
+    QMessageBox::critical(this, title, message);
 }
 
 } // namespace ui::qt

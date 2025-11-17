@@ -2,15 +2,15 @@
 
 #include "ui/IUiPanels.hpp"
 
-#include <QListWidget>
+#include <QTreeWidget>
 #include <vector>
 
-class QListWidgetItem;
+class QTreeWidgetItem;
 
 namespace ui::qt
 {
 
-class SearchResultsView : public QListWidget, public ui::ISearchResultsView
+class SearchResultsView : public QTreeWidget, public ui::ISearchResultsView
 {
     Q_OBJECT
 
@@ -27,11 +27,14 @@ class SearchResultsView : public QListWidget, public ui::ISearchResultsView
     void SimulateActivation(long eventId);
 
   private slots:
-    void HandleActivation(QListWidgetItem* item);
+    void HandleActivation(QTreeWidgetItem* item, int column);
 
   private:
     ui::ISearchResultsViewObserver* m_observer {nullptr};
     std::vector<std::string> m_columns;
+    static constexpr int kEventIdColumn = 0;
+    static constexpr int kMatchedKeyColumn = 1;
+    static constexpr int kMatchTextColumn = 2;
 };
 
 } // namespace ui::qt

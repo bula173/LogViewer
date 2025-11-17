@@ -38,6 +38,7 @@ void SearchResultsView::AppendResult(const mvc::SearchResultRow& row)
 {
     wxVector<wxVariant> values;
     values.push_back(wxVariant(std::to_string(row.eventId)));
+    values.push_back(wxVariant(wxString::FromUTF8(row.matchedKey.c_str())));
     values.push_back(wxVariant(wxString::FromUTF8(row.matchedText.c_str())));
 
     for (const auto& colValue : row.columnValues)
@@ -84,10 +85,12 @@ size_t SearchResultsView::BuildColumns(
     size_t dynamic = 0;
 
     AppendTextColumn("Event ID");
+    AppendTextColumn("Matched Key");
     AppendTextColumn("Match");
 
     std::unordered_set<std::string> added;
     added.insert("event id");
+    added.insert("matched key");
     added.insert("match");
 
     for (auto column : columns)
