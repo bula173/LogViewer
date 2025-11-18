@@ -108,6 +108,44 @@ if(WIN32 AND MINGW)
     FILES_MATCHING PATTERN "*.dll")
 endif()
 
+if(TARGET ${LOGVIEWER_QT_TARGET} AND DEFINED QT_VERSION_MAJOR)
+    set(_qt_deploy_tool "")
+    set(_qt_deploy_target "")
+    set(_qt_deploy_args "")
+
+    set(_qt_dir_var "Qt${QT_VERSION_MAJOR}_DIR")
+    if(DEFINED ${_qt_dir_var})
+        get_filename_component(_qt_cmake_dir "${${_qt_dir_var}}" REALPATH)
+        get_filename_component(_qt_prefix "${_qt_cmake_dir}/../.." REALPATH)
+        set(_qt_bin_dir "${_qt_prefix}/bin")
+    endif()
+
+    if(WIN32)
+        set(_qt_deploy_target "LogViewerQt.exe")
+        find_program(_qt_deploy_tool
+            NAMES windeployqt-qt${QT_VERSION_MAJOR} windeployqt${QT_VERSION_MAJOR} windeployqt
+            HINTS ${_qt_bin_dir})
+        set(_qt_deploy_args "--release --no-translations --no-system-d3d-compiler --no-compiler-runtime --verbose 1")
+    elseif(APPLE)
+        set(_qt_deploy_target "LogViewerQt.app")
+        find_program(_qt_deploy_tool
+            NAMES macdeployqt
+            HINTS ${_qt_bin_dir})
+        set(_qt_deploy_args "-verbose=1 -no-strip -always-overwrite")
+    endif()
+
+    if(_qt_deploy_tool AND _qt_deploy_target)
+        file(TO_CMAKE_PATH "${_qt_deploy_tool}" QT_DEPLOY_TOOL)
+        set(QT_DEPLOY_TARGET "${_qt_deploy_target}")
+        set(QT_DEPLOY_ARGS "${_qt_deploy_args}")
+        set(_qt_deploy_script "${CMAKE_CURRENT_BINARY_DIR}/DeployQt_${CMAKE_SYSTEM_NAME}.cmake")
+        configure_file(${CMAKE_SOURCE_DIR}/cmake/DeployQt.cmake.in ${_qt_deploy_script} @ONLY)
+        install(SCRIPT ${_qt_deploy_script} COMPONENT qt_app)
+    elseif(WIN32 OR APPLE)
+        message(WARNING "Qt deploy tool not found; Qt packages may miss runtime dependencies.")
+    endif()
+endif()
+
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
 # Provides ${PROJECT_NAME}-run and ${PROJECT_NAME}-dbg
 addRunAndDebugTargets(${PROJECT_NAME})
