@@ -21,6 +21,7 @@ jobs:
       matrix:
         build_type: [Debug, Release]
         compiler: [gcc, clang]
+        gui_framework: [wx, qt]
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -38,7 +39,7 @@ jobs:
           sudo apt-get install -y \
             ninja-build ccache build-essential \
             libgtk-3-dev libwxgtk3.2-dev libexpat1-dev \
-            qtbase5-dev qtbase5-dev-tools \
+            qt6-base-dev qt6-base-dev-tools \
             libgtest-dev cppcheck xvfb
           (cd /usr/src/googletest && sudo cmake -B build -S . && sudo cmake --build build --target gtest gtest_main && sudo cp build/lib/libgtest*.a /usr/lib/)
 
@@ -46,8 +47,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.gui_framework }}-${{ github.sha }}
           restore-keys: |
+            ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.gui_framework }}-
             ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-
             ccache-linux-${{ matrix.compiler }}-
             ccache-linux-
@@ -60,17 +62,26 @@ jobs:
             sudo apt-get install -y clang
             export CC=clang CXX=clang++
           fi
-          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
+          
+          # Determine framework-specific settings
+          if [ "${{ matrix.gui_framework }}" = "wx" ]; then
+            GUI_FRAMEWORK="WX"
+          else
+            GUI_FRAMEWORK="QT"
+          fi
+          
+          cmake -B "$BUILD_DIR-${{ matrix.gui_framework }}" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DGUI_FRAMEWORK="$GUI_FRAMEWORK"
 
       - name: Build
-        run: cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
+        run: cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }}
 
       - name: Static analysis (cppcheck)
-        if: matrix.build_type == 'Debug'
+        if: matrix.build_type == 'Debug' && matrix.gui_framework == 'wx'
         run: |
           cppcheck --enable=warning,performance,portability \
                    --inline-suppr --error-exitcode=1 \
@@ -79,32 +90,28 @@ jobs:
           cat cppcheck-report.txt
 
       - name: List tests
-        working-directory: ${{ env.BUILD_DIR }}
+        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
         run: ctest -N || true
 
       - name: Run tests (xvfb)
-        working-directory: ${{ env.BUILD_DIR }}
+        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
         run: xvfb-run -a ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
-        run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+        run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
 
-      - name: Package wx (CPack TGZ)
+      - name: Package (CPack TGZ)
         if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        run: cmake --build "$BUILD_DIR" --config Release --target package_wx
-
-      - name: Package Qt (CPack TGZ)
-        if: matrix.build_type == 'Release' && github.ref == 'refs/heads/main'
-        run: cmake --build "$BUILD_DIR" --config Release --target package_qt
+        run: cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: linux-${{ matrix.compiler }}-${{ matrix.build_type }}-artifacts
+          name: linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ matrix.gui_framework }}-artifacts
           path: |
-            ${{ env.BUILD_DIR }}/_staging/**
-            ${{ env.BUILD_DIR }}/_CPack_Packages/Linux/TGZ/*.tar.gz
-            ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
+            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_staging/**
+            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_CPack_Packages/Linux/TGZ/*.tar.gz
+            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/Testing/Temporary/LastTest.log
           if-no-files-found: ignore

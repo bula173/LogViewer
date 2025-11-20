@@ -3,13 +3,13 @@ set(EXE_PATH "${ARGV0}")
 set(DEST_DIR "${ARGV1}")
 set(GCC_PATH "${ARGV2}")
 
-# Detect MSYS2 root from compiler path (e.g., C:/msys64/mingw64/bin/clang.exe or D:/a/_temp/msys64/mingw64/bin/clang.exe)
+# Detect MSYS2 root from compiler path (e.g., C:/msys64/mingw64/bin/clang.exe or C:/msys64/clangarm64/bin/clang.exe)
 get_filename_component(COMPILER_DIR "${GCC_PATH}" DIRECTORY)  # Gets the /bin directory
-get_filename_component(MINGW_ROOT "${COMPILER_DIR}" DIRECTORY)  # Gets the /mingw64 directory
+get_filename_component(MINGW_ROOT "${COMPILER_DIR}" DIRECTORY)  # Gets the toolchain directory (mingw64, clangarm64, etc.)
 get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys64 directory
 
 message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
-message(STATUS "Detected MinGW64 root: ${MINGW_ROOT}")
+message(STATUS "Detected toolchain root: ${MINGW_ROOT}")
 
 execute_process(
     COMMAND ldd "${EXE_PATH}"
@@ -33,24 +33,20 @@ set(DLL_LIST "")  # Initialize an empty list
 foreach(LINE IN LISTS LINES)
     # Match "not found" DLLs first (higher priority)
     if(LINE MATCHES "([^ ]+\\.dll) => not found")
-        # DLL not found - try to locate it in mingw64/bin
+        # DLL not found - try to locate it in current toolchain/bin
         string(REGEX REPLACE ".*[ \t]+([^ ]+\\.dll) => not found.*" "\\1" DLL_NAME "${LINE}")
-        set(DLL_PATH "/mingw64/bin/${DLL_NAME}")
+        # Use the detected MINGW_ROOT which should be the actual toolchain directory
+        get_filename_component(TOOLCHAIN_NAME "${MINGW_ROOT}" NAME)
+        set(DLL_PATH "/${TOOLCHAIN_NAME}/bin/${DLL_NAME}")
         list(APPEND DLL_LIST "${DLL_PATH}")
         message(STATUS "Found missing DLL (will search): ${DLL_PATH}")
-    # Match lines like: "    libfoo.dll => /mingw64/bin/libfoo.dll (0x...)"
+    # Match lines like: "    libfoo.dll => /mingw64/bin/libfoo.dll (0x...)" or "    libfoo.dll => /clangarm64/bin/libfoo.dll (0x...)"
     elseif(LINE MATCHES "=>[ ]*(/.+\\.dll)")
         # Extract the DLL path using regex - capture the full path after =>
         string(REGEX REPLACE ".*=>[ ]*(/.+\\.dll).*" "\\1" DLL_PATH "${LINE}")
         # Only process paths that start with /mingw64/, /usr/, or /clangarm64/
         if(DLL_PATH MATCHES "^/(mingw64|usr|clangarm64)/")
-            # If it's /clangarm64/, convert to /mingw64/
-            if(DLL_PATH MATCHES "^/clangarm64/")
-                string(REPLACE "/clangarm64/" "/mingw64/" DLL_PATH "${DLL_PATH}")
-                message(STATUS "Found DLL (clangarm64 -> mingw64): ${DLL_PATH}")
-            else()
-                message(STATUS "Found DLL: ${DLL_PATH}")
-            endif()
+            message(STATUS "Found DLL: ${DLL_PATH}")
             list(APPEND DLL_LIST "${DLL_PATH}")
         endif()
     endif()
@@ -59,9 +55,10 @@ endforeach()
 foreach(DLL_FULLPATH IN LISTS DLL_LIST)
     string(STRIP "${DLL_FULLPATH}" DLL_FULLPATH)
     # Convert MSYS2 path to Windows path if needed
-    if(DLL_FULLPATH MATCHES "^/mingw64/")
-        # Handle /mingw64/ paths - use detected MSYS2_ROOT
+    if(DLL_FULLPATH MATCHES "^/(mingw64|clangarm64)/")
+        # Handle /mingw64/ or /clangarm64/ paths - use detected MSYS2_ROOT
         string(REPLACE "/mingw64/" "${MSYS2_ROOT}/mingw64/" DLL_WIN_PATH "${DLL_FULLPATH}")
+        string(REPLACE "/clangarm64/" "${MSYS2_ROOT}/clangarm64/" DLL_WIN_PATH "${DLL_WIN_PATH}")
         # Normalize path separators to forward slashes
         file(TO_CMAKE_PATH "${DLL_WIN_PATH}" DLL_WIN_PATH)
     elseif(DLL_FULLPATH MATCHES "^/usr/")

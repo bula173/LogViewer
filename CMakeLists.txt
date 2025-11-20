@@ -24,6 +24,22 @@ option(MEASURE_ALL "When enabled all commands will be passed through time comman
 option(ENABLE_CLANG_TIDY "Enable clang-tidy during compilation" OFF)
 option(ENABLE_COVERAGE "Enable code coverage (Debug builds only)" OFF)
 
+# GUI Framework selection
+set(GUI_FRAMEWORK "WX" CACHE STRING "Choose GUI framework: WX or QT")
+set_property(CACHE GUI_FRAMEWORK PROPERTY STRINGS "WX" "QT")
+
+if(GUI_FRAMEWORK STREQUAL "WX")
+    message(STATUS "Building with wxWidgets GUI framework")
+    set(USE_WXWIDGETS ON)
+    set(USE_QT OFF)
+elseif(GUI_FRAMEWORK STREQUAL "QT")
+    message(STATUS "Building with Qt GUI framework") 
+    set(USE_WXWIDGETS OFF)
+    set(USE_QT ON)
+else()
+    message(FATAL_ERROR "Invalid GUI_FRAMEWORK: ${GUI_FRAMEWORK}. Must be WX or QT")
+endif()
+
 if(MEASURE_ALL)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "time")
 endif()
@@ -148,3 +164,4 @@ elseif(UNIX)
   # Linux-specific settings
   message(STATUS "Building on Linux")
 endif()
+

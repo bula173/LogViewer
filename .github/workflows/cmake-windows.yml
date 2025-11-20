@@ -20,6 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Debug, Release]
+        gui_framework: [wx, qt]
 
     env:
       BUILD_DIR: ${{ github.workspace }}\build
@@ -27,6 +28,7 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}\.ccache
       CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
+      GUI_FRAMEWORK: ${{ matrix.gui_framework }}
 
     steps:
       - uses: actions/checkout@v4
@@ -65,8 +67,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-win-clang-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-win-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-${{ github.sha }}
           restore-keys: |
+            ccache-win-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-
             ccache-win-clang-${{ matrix.build_type }}-
             ccache-win-clang-
 
@@ -74,25 +77,36 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
+          
+          # Determine framework-specific settings
+          if [ "${{ matrix.gui_framework }}" = "wx" ]; then
+            GUI_FRAMEWORK="WX"
+            EXTRA_ARGS="-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
+          else
+            GUI_FRAMEWORK="QT"
+            EXTRA_ARGS="-DQt6_DIR=/mingw64/lib/cmake/Qt6"
+          fi
+          
+          cmake -B "$BUILD_DIR-${{ matrix.gui_framework }}" -S "$GITHUB_WORKSPACE" \
                 -G "$CMAKE_GENERATOR" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
                 -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
                 -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_PREFIX_PATH=/mingw64 \
-                -DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config \
-                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+                -DGUI_FRAMEWORK="$GUI_FRAMEWORK" \
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+                $EXTRA_ARGS
 
       - name: Build
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
+          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }}
 
       - name: Run tests
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}
+        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
         run: |
           export PATH="/mingw64/bin:$PATH"
           ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
@@ -100,45 +114,38 @@ jobs:
       - name: Install (staging)
         if: matrix.build_type == 'Release'
         shell: msys2 {0}
-        run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+        run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
 
-      - name: Package wx (CPack NSIS)
+      - name: Package (CPack NSIS)
         if: matrix.build_type == 'Release'
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cmake --build "$BUILD_DIR" --config Release --target package_wx
-
-      - name: Package Qt (CPack NSIS)
-        if: matrix.build_type == 'Release'
-        shell: msys2 {0}
-        run: |
-          export PATH="/mingw64/bin:$PATH"
-          cmake --build "$BUILD_DIR" --config Release --target package_qt
+          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
 
       - name: Upload tests artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.build_type }}-tests
+          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-tests
           path: |
-            ${{ env.BUILD_DIR }}\Testing\Temporary\LastTest.log
-            ${{ env.BUILD_DIR }}\tests\bin\LogViewer_tests.exe
+            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\Testing\Temporary\LastTest.log
+            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\tests\bin\LogViewer_tests.exe
           if-no-files-found: ignore
 
       - name: Upload staging artifact
         if: matrix.build_type == 'Release' && always()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-Release-staging
-            path: ${{ env.BUILD_DIR }}\_staging\**
+            name: windows-Release-${{ matrix.gui_framework }}-staging
+            path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\_staging\**
             if-no-files-found: ignore
 
       - name: Upload installer artifact
         if: matrix.build_type == 'Release' && always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-Release-installer
+          name: windows-Release-${{ matrix.gui_framework }}-installer
           path: |
             ${{ github.workspace }}/dist/packages/*.exe
           if-no-files-found: warn

@@ -24,21 +24,36 @@ set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
 
 set(CPACK_COMPONENT_INSTALL ON)
 set(CPACK_MONOLITHIC_INSTALL OFF)
-set(CPACK_COMPONENTS_ALL wx_app qt_app common)
+
+# Set components based on what's actually being built
+set(CPACK_COMPONENTS_ALL common)
+
+# Add framework-specific components only if they're being built
+if(USE_WXWIDGETS)
+    list(APPEND CPACK_COMPONENTS_ALL wx_app)
+elseif(USE_QT)
+    list(APPEND CPACK_COMPONENTS_ALL qt_app)
+endif()
+
 set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Shared Resources")
 set(CPACK_COMPONENT_COMMON_DESCRIPTION
     "Shared configuration, icons, and supporting files.")
 set(CPACK_COMPONENT_COMMON_HIDDEN TRUE)
 
-set(CPACK_COMPONENT_WX_APP_DISPLAY_NAME "LogViewer (wxWidgets)")
-set(CPACK_COMPONENT_WX_APP_DESCRIPTION
-    "Classic wxWidgets-based desktop application.")
-set(CPACK_COMPONENT_WX_APP_DEPENDS common)
+# Only define component descriptions if they're being built
+if(USE_WXWIDGETS)
+    set(CPACK_COMPONENT_WX_APP_DISPLAY_NAME "LogViewer (wxWidgets)")
+    set(CPACK_COMPONENT_WX_APP_DESCRIPTION
+        "Classic wxWidgets-based desktop application.")
+    set(CPACK_COMPONENT_WX_APP_DEPENDS common)
+endif()
 
-set(CPACK_COMPONENT_QT_APP_DISPLAY_NAME "LogViewer (Qt)")
-set(CPACK_COMPONENT_QT_APP_DESCRIPTION
-    "Modern Qt-based desktop application.")
-set(CPACK_COMPONENT_QT_APP_DEPENDS common)
+if(USE_QT)
+    set(CPACK_COMPONENT_QT_APP_DISPLAY_NAME "LogViewer (Qt)")
+    set(CPACK_COMPONENT_QT_APP_DESCRIPTION
+        "Modern Qt-based desktop application.")
+    set(CPACK_COMPONENT_QT_APP_DEPENDS common)
+endif()
 
 # Disable automatic stripping on Windows (causes issues with MSYS2 paths)
 # Files are already optimized with -O3 in Release builds
@@ -216,8 +231,21 @@ if(CMAKE_CPACK_COMMAND)
             VERBATIM)
     endfunction()
 
-    _add_split_package(package_wx "wx_app\;common" "wx")
-    _add_split_package(package_qt "qt_app\;common" "qt")
+    # Only create packaging targets for frameworks that are being built
+    if(USE_WXWIDGETS)
+        _add_split_package(package_wx "wx_app\;common" "wx")
+    endif()
+    
+    if(USE_QT)
+        _add_split_package(package_qt "qt_app\;common" "qt")
+    endif()
+    
+    # Create a default framework-specific package target (don't use reserved "package" name)
+    if(USE_WXWIDGETS)
+        _add_split_package(package_current "wx_app\;common" "wx")
+    elseif(USE_QT)
+        _add_split_package(package_current "qt_app\;common" "qt")
+    endif()
 endif()
 
 

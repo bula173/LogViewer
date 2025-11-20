@@ -64,16 +64,17 @@
             }
         },  
         {
-            "name": "windows-msys-debug",
-            "displayName": "Windows MSYS2 Debug",
+            "name": "windows-msys-debug-wx",
+            "displayName": "Windows MSYS2 Debug (wxWidgets)",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/windows-debug",
+            "binaryDir": "${sourceDir}/build/windows-debug-wx",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "GUI_FRAMEWORK": "WX",
                 "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
             },
             "environment": {
@@ -86,17 +87,64 @@
             }
         },
         {
-            "name": "windows-msys-release",
-            "displayName": "Windows MSYS2 Release",
+            "name": "windows-msys-debug-qt",
+            "displayName": "Windows MSYS2 Debug (Qt)",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/windows-release",
+            "binaryDir": "${sourceDir}/build/windows-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "GUI_FRAMEWORK": "QT",
+                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6"
+            },
+            "environment": {
+                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-msys-release-wx",
+            "displayName": "Windows MSYS2 Release (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-release-wx",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "GUI_FRAMEWORK": "WX",
                 "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
+            },
+            "environment": {
+                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-msys-release-qt",
+            "displayName": "Windows MSYS2 Release (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
+                "GUI_FRAMEWORK": "QT",
+                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
@@ -130,14 +178,24 @@
             "configurePreset": "macos-release"
         },
         {
-            "name": "windows-msys-debug-build",
-            "displayName": "Windows MSYS2 Debug Build",
-            "configurePreset": "windows-msys-debug"
+            "name": "windows-msys-debug-wx-build",
+            "displayName": "Windows MSYS2 Debug Build (wxWidgets)",
+            "configurePreset": "windows-msys-debug-wx"
         },
         {
-            "name": "windows-msys-release-build",
-            "displayName": "Windows MSYS2 Release Build",
-            "configurePreset": "windows-msys-release"
+            "name": "windows-msys-debug-qt-build",
+            "displayName": "Windows MSYS2 Debug Build (Qt)",
+            "configurePreset": "windows-msys-debug-qt"
+        },
+        {
+            "name": "windows-msys-release-wx-build",
+            "displayName": "Windows MSYS2 Release Build (wxWidgets)",
+            "configurePreset": "windows-msys-release-wx"
+        },
+        {
+            "name": "windows-msys-release-qt-build",
+            "displayName": "Windows MSYS2 Release Build (Qt)",
+            "configurePreset": "windows-msys-release-qt"
         }
     ],
     "testPresets": [
@@ -174,17 +232,33 @@
             }
         },
         {
-            "name": "windows-msys-debug-test",
-            "displayName": "Windows MSYS2 Debug Test",
-            "configurePreset": "windows-msys-debug",
+            "name": "windows-msys-debug-wx-test",
+            "displayName": "Windows MSYS2 Debug Test (wxWidgets)",
+            "configurePreset": "windows-msys-debug-wx",
             "output": {
                 "outputOnFailure": true
             }
         },
         {
-            "name": "windows-msys-release-test",
-            "displayName": "Windows MSYS2 Release Test",
-            "configurePreset": "windows-msys-release",
+            "name": "windows-msys-debug-qt-test",
+            "displayName": "Windows MSYS2 Debug Test (Qt)",
+            "configurePreset": "windows-msys-debug-qt",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "windows-msys-release-wx-test",
+            "displayName": "Windows MSYS2 Release Test (wxWidgets)",
+            "configurePreset": "windows-msys-release-wx",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "windows-msys-release-qt-test",
+            "displayName": "Windows MSYS2 Release Test (Qt)",
+            "configurePreset": "windows-msys-release-qt",
             "output": {
                 "outputOnFailure": true
             }
@@ -204,9 +278,15 @@
             "generators": ["DragNDrop"]
         },
         {
-            "name": "windows-msys-release-package",
-            "displayName": "Windows MSYS2 Release Package",
-            "configurePreset": "windows-msys-release",
+            "name": "windows-msys-release-wx-package",
+            "displayName": "Windows MSYS2 Release Package (wxWidgets)",
+            "configurePreset": "windows-msys-release-wx",
+            "generators": ["NSIS"]
+        },
+        {
+            "name": "windows-msys-release-qt-package",
+            "displayName": "Windows MSYS2 Release Package (Qt)",
+            "configurePreset": "windows-msys-release-qt",
             "generators": ["NSIS"]
         }
     ],
@@ -292,42 +372,82 @@
             ]
         },
         {
-            "name": "windows-msys-debug-workflow",
-            "displayName": "Windows MSYS2 Debug Workflow",
+            "name": "windows-msys-debug-wx-workflow",
+            "displayName": "Windows MSYS2 Debug Workflow (wxWidgets)",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "windows-msys-debug"
+                    "name": "windows-msys-debug-wx"
                 },
                 {
                     "type": "build",
-                    "name": "windows-msys-debug-build"
+                    "name": "windows-msys-debug-wx-build"
                 },
                 {
                     "type": "test",
-                    "name": "windows-msys-debug-test"
+                    "name": "windows-msys-debug-wx-test"
                 }
             ]
         },
         {
-            "name": "windows-msys-release-workflow",
-            "displayName": "Windows MSYS2 Release Workflow",
+            "name": "windows-msys-debug-qt-workflow",
+            "displayName": "Windows MSYS2 Debug Workflow (Qt)",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "windows-msys-release"
+                    "name": "windows-msys-debug-qt"
                 },
                 {
                     "type": "build",
-                    "name": "windows-msys-release-build"
+                    "name": "windows-msys-debug-qt-build"
                 },
                 {
                     "type": "test",
-                    "name": "windows-msys-release-test"
+                    "name": "windows-msys-debug-qt-test"
+                }
+            ]
+        },
+        {
+            "name": "windows-msys-release-wx-workflow",
+            "displayName": "Windows MSYS2 Release Workflow (wxWidgets)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-msys-release-wx"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msys-release-wx-build"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msys-release-wx-test"
                 },
                 {
                     "type": "package",
-                    "name": "windows-msys-release-package"
+                    "name": "windows-msys-release-wx-package"
+                }
+            ]
+        },
+        {
+            "name": "windows-msys-release-qt-workflow",
+            "displayName": "Windows MSYS2 Release Workflow (Qt)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-msys-release-qt"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msys-release-qt-build"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msys-release-qt-test"
+                },
+                {
+                    "type": "package",
+                    "name": "windows-msys-release-qt-package"
                 }
             ]
         }
