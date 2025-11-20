@@ -123,7 +123,7 @@ jobs:
           export PATH="/mingw64/bin:$PATH"
           cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
 
-      - name: Debug: run CPack NSIS directly
+      - name: run CPack NSIS directly
         if: matrix.build_type == 'Release'
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
