@@ -2,7 +2,7 @@ name: Windows CI (MSYS2 / clang)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "qt" ]
   pull_request:
   workflow_dispatch:
 
@@ -122,6 +122,14 @@ jobs:
         run: |
           export PATH="/mingw64/bin:$PATH"
           cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
+
+      - name: Debug: run CPack NSIS directly
+        if: matrix.build_type == 'Release'
+        shell: msys2 {0}
+        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          cpack -G NSIS -C Release --config CPackConfig.cmake
 
       - name: Upload tests artifact
         if: always()

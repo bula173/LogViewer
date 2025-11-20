@@ -98,10 +98,13 @@ install(TARGETS ${GUI_TARGET_NAME}
         BUNDLE DESTINATION "."
         RUNTIME DESTINATION "."
         COMPONENT ${CPACK_COMPONENT})
-#install all files deployed by windeployqt
-install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/qt_deploy/"
-        DESTINATION "."
-        COMPONENT ${CPACK_COMPONENT})
+
+if (USE_QT)
+    #install all files deployed by windeployqt
+    install(DIRECTORY "${PROJECT_SOURCE_DIR}/dist/qt_deploy/"
+            DESTINATION "."
+            COMPONENT ${CPACK_COMPONENT})
+endif()
 
 install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
     DESTINATION "."
