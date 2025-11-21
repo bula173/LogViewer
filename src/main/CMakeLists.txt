@@ -4,7 +4,7 @@ message(STATUS "Building LogViewer::main with ${GUI_FRAMEWORK}")
 # Select the appropriate source file and target name based on GUI framework
 if(USE_WXWIDGETS)
     set(GUI_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/MyApp.cpp")
-    set(GUI_TARGET_NAME "${PROJECT_NAME}")
+    set(GUI_TARGET_NAME "${PROJECT_NAME}Wx")
     set(GUI_LIBRARY "application_wx")
     set(CPACK_COMPONENT "wx_app")
 elseif(USE_QT)

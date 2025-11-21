@@ -142,7 +142,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload staging artifact
-        if: matrix.build_type == 'Release' && always()
+        if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
             name: windows-Release-${{ matrix.gui_framework }}-staging
@@ -150,7 +150,7 @@ jobs:
             if-no-files-found: ignore
 
       - name: Upload installer artifact
-        if: matrix.build_type == 'Release' && always()
+        if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: windows-Release-${{ matrix.gui_framework }}-installer

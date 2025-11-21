@@ -2,7 +2,13 @@
 # CPACK
 
 set(CPACK_PACKAGE_VENDOR "mkwiatko")
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+if(USE_QT)
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-Qt")
+elseif(USE_WXWIDGETS)
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-wx")
+else()
+    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+endif()
 set(CPACK_PACKAGE_CONTACT "mkwiatko <marcinkwiatkowski173@gmail.com>")
 set(HOMEPAGE "https://github.com/bula173/LogViewer")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
@@ -15,6 +21,7 @@ set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+
 set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 
 
@@ -72,30 +79,34 @@ if(WIN32 AND NOT UNIX)
         message(STATUS "Package generation - Windows")
         message(STATUS "   + NSIS                                 YES (${NSIS_PATH})")
         
-        # Note: There is a bug in NSI that does not handle full unix paths properly. Make
-        # sure there is at least one set of four (4) backlasshes.
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
-        
+
+        if (USE_WXWIDGETS)
+            set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Wx")
+            set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (wxWidgets)")
+        elseif (USE_QT)
+            set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Qt")
+            set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (Qt)")
+        endif()
+
         # Icon of the installer
         set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
         set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
+        # Install/Uninstall icons: point to the right exe (Qt: LogViewerQt.exe, wx: LogViewerWx.exe)
+        set(CPACK_NSIS_INSTALLED_ICON_NAME "${CPACK_GUI_EXE_NAME}.exe")
+
         
-        # Install/Uninstall icons
-        set(CPACK_NSIS_INSTALLED_ICON_NAME "LogViewer.exe")
-        
-        # set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
-        # set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
         set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
         set(CPACK_NSIS_MODIFY_PATH OFF)
         
         # Create start menu and desktop shortcuts
         set(CPACK_NSIS_CREATE_ICONS_EXTRA
-            "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'
-            CreateShortCut '$DESKTOP\\\\LogViewer.lnk' '$INSTDIR\\\\LogViewer.exe'"
+            "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CPACK_GUI_DISPLAY_NAME}.lnk' '$INSTDIR\\\\${CPACK_GUI_EXE_NAME}.exe'
+            CreateShortCut '$DESKTOP\\\\${CPACK_GUI_DISPLAY_NAME}.lnk' '$INSTDIR\\\\${CPACK_GUI_EXE_NAME}.exe'"
         )
         set(CPACK_NSIS_DELETE_ICONS_EXTRA
-            "Delete '$SMPROGRAMS\\\\$START_MENU\\\\LogViewer.lnk'
-            Delete '$DESKTOP\\\\LogViewer.lnk'"
+            "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CPACK_GUI_DISPLAY_NAME}.lnk'
+            Delete '$DESKTOP\\\\${CPACK_GUI_DISPLAY_NAME}.lnk'"
         )
     else()
         message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")
@@ -103,9 +114,6 @@ if(WIN32 AND NOT UNIX)
 
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")
 
-    # Configure file with right path, place the result to PROJECT_BINARY_DIR.
-    # When ${PROJECT_BINARY_DIR}/LogViewer.rc is added to an executable
-    # it will have icon specified in LogViewer.ico
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.rc.in
         ${PROJECT_BINARY_DIR}/packaging/LogViewer.rc @ONLY)
 
@@ -240,12 +248,6 @@ if(CMAKE_CPACK_COMMAND)
         _add_split_package(package_qt "qt_app\;common" "qt")
     endif()
     
-    # Create a default framework-specific package target (don't use reserved "package" name)
-    if(USE_WXWIDGETS)
-        _add_split_package(package_current "wx_app\;common" "wx")
-    elseif(USE_QT)
-        _add_split_package(package_current "qt_app\;common" "qt")
-    endif()
 endif()
 
 
