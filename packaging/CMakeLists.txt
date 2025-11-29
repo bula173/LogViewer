@@ -112,7 +112,7 @@ if(WIN32 AND NOT UNIX)
         message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")
     endif()
 
-    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.png")
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.rc.in
         ${PROJECT_BINARY_DIR}/packaging/LogViewer.rc @ONLY)
@@ -125,11 +125,11 @@ elseif(APPLE)
 
     set(MACOSX_BUNDLE_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
     set(MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.LogViewer.LogViewer")
-    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns)
+    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns)
     set(MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
     
-    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     
     set(CPACK_DMG_VOLUME_NAME "LogViewer")
     set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt") 
@@ -181,15 +181,15 @@ else()
 
     # Icon and app shortcut for Linux systems
     # Note: .desktop file must have same name as executable
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.desktop
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.desktop
         DESTINATION share/applications/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         COMPONENT common)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png
         DESTINATION share/icons/hicolor/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         COMPONENT common)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png
         DESTINATION share/icons/gnome/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         COMPONENT common)
@@ -200,7 +200,7 @@ else()
         RENAME copyright
         COMPONENT common)
     # set package icon
-    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png")
 endif()
 
 #------------------------------------------------------------------------------

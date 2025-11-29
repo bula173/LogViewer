@@ -256,8 +256,8 @@ void XmlParser::ParseData(std::istream& input)
 
             state.bytesProcessed += static_cast<uint64_t>(bytesRead);
 
-            const auto isFinal = input.eof() ? XML_TRUE : XML_FALSE;
-            if (isFinal == XML_TRUE)
+            const auto isFinal = static_cast<XML_Bool>(input.eof() ? 1 : 0);
+            if (isFinal == static_cast<XML_Bool>(1))
                 finalSent = true;
 
             if (XML_Parse(parser, buffer.data(), static_cast<int>(bytesRead),
@@ -280,7 +280,7 @@ void XmlParser::ParseData(std::istream& input)
         // Finalize only if a final chunk wasn’t already sent.
         if (!finalSent)
         {
-            if (XML_Parse(parser, nullptr, 0, XML_TRUE) == XML_STATUS_ERROR)
+            if (XML_Parse(parser, nullptr, 0, static_cast<XML_Bool>(1)) == XML_STATUS_ERROR)
             {
                 const auto code = XML_GetErrorCode(parser);
                 if (code != XML_ERROR_FINISHED) // ignore double-finalize case

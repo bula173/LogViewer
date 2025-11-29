@@ -56,7 +56,7 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
         index.column() >= static_cast<int>(m_visibleColumnIndices.size()))
         return {};
 
-    const int columnConfigIndex = m_visibleColumnIndices[index.column()];
+    const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(index.column())];
     if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
         return {};
 
@@ -104,7 +104,7 @@ QVariant EventsTableModel::headerData(int section,
             return {};
 
         const auto& columns = m_config.GetColumns();
-        const int columnIndex = m_visibleColumnIndices[section];
+        const int columnIndex = m_visibleColumnIndices[static_cast<std::size_t>(section)];
         if (columnIndex < 0 || columnIndex >=
                 static_cast<int>(columns.size()))
             return {};

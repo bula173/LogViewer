@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mvc/IView.hpp"
 #include "ui/IUiPanels.hpp"
 
 #include <QWidget>
@@ -15,7 +16,9 @@ class EventsContainer;
 namespace ui::qt
 {
 
-class ItemDetailsView : public QWidget, public ui::IItemDetailsView
+class ItemDetailsView : public QWidget,
+                        public ui::IItemDetailsView,
+                        public mvc::IView
 {
     Q_OBJECT
 
@@ -25,6 +28,9 @@ class ItemDetailsView : public QWidget, public ui::IItemDetailsView
 
     void RefreshView() override;
     void ShowControl(bool show) override;
+
+    void OnDataUpdated() override;
+    void OnCurrentIndexUpdated(const int index) override;
 
   public slots:
     void OnActualRowChanged(int actualRow);

@@ -9,7 +9,10 @@
 #include "ui/qt/ItemDetailsView.hpp"
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
+#include "application/util/Logger.hpp"
 #include "config/Config.hpp"
+#include "ui/qt/ConfigEditorDialog.hpp"
+#include "ui/qt/StructuredConfigDialog.hpp"
 #include "main/version.h"
 
 #include <QAction>
@@ -46,15 +49,19 @@ MainWindow::MainWindow(mvc::IController& controller,
     : QMainWindow(parent)
 {
     m_events = &events;
+    util::Logger::Info("[MainWindow] Initializing main window");
     InitializeUi(events);
     SetupMenus();
     InitializePresenter(controller, events);
+    util::Logger::Info("[MainWindow] Main window initialized");
 }
 
 MainWindow::~MainWindow() = default;
 
 void MainWindow::InitializeUi(db::EventsContainer& events)
 {
+    util::Logger::Debug("[MainWindow] InitializeUi: events size={}",
+        events.Size());
     m_bottomSplitter = new QSplitter(Qt::Vertical, this);
     m_leftSplitter = new QSplitter(Qt::Horizontal, m_bottomSplitter);
     m_rightSplitter = new QSplitter(Qt::Horizontal, m_leftSplitter);
@@ -167,6 +174,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         connect(m_eventsView, &EventsTableView::CurrentActualRowChanged,
             m_itemDetailsView, &ItemDetailsView::OnActualRowChanged);
     }
+
+    util::Logger::Debug("[MainWindow] UI initialized");
 }
 
 void MainWindow::SetupMenus()
@@ -182,8 +191,10 @@ void MainWindow::SetupMenus()
     auto* fileMenu = bar->addMenu(tr("&File"));
     auto* openAction = fileMenu->addAction(tr("&Open..."));
     openAction->setShortcut(QKeySequence::Open);
-    connect(openAction, &QAction::triggered, this,
-        &MainWindow::OnOpenFileRequested);
+    connect(openAction, &QAction::triggered, this, [this]() {
+        util::Logger::Debug("[MainWindow] Open menu triggered");
+        OnOpenFileRequested();
+    });
 
     auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
     clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
@@ -202,6 +213,20 @@ void MainWindow::SetupMenus()
     connect(configAction, &QAction::triggered, this,
         &MainWindow::OnOpenConfigRequested);
 
+    auto* structuredConfigAction =
+        toolsMenu->addAction(tr("Edit &Config..."));
+    connect(structuredConfigAction, &QAction::triggered, this, [this]() {
+        ui::qt::StructuredConfigDialog dlg(this);
+        dlg.exec();
+    });
+
+    auto* editRawConfigAction =
+        toolsMenu->addAction(tr("Edit Raw Config JSON..."));
+    connect(editRawConfigAction, &QAction::triggered, this, [this]() {
+        ui::qt::ConfigEditorDialog dlg(this);
+        dlg.exec();
+    });
+
     auto* appLogAction = toolsMenu->addAction(tr("Open &App Log"));
     connect(appLogAction, &QAction::triggered, this,
         &MainWindow::OnOpenAppLogRequested);
@@ -210,6 +235,7 @@ void MainWindow::SetupMenus()
 void MainWindow::InitializePresenter(
     mvc::IController& controller, db::EventsContainer& events)
 {
+    util::Logger::Debug("[MainWindow] InitializePresenter");
     m_searchResults->SetObserver(this);
     m_presenter = std::make_unique<ui::MainWindowPresenter>(*this, controller,
         events, *m_searchResults, m_eventsView, m_typeFilterView,
@@ -266,12 +292,23 @@ void MainWindow::RefreshLayout()
 
 void MainWindow::OnSearchResultActivated(long eventId)
 {
-    QMessageBox::information(this, "Search Result",
-        QString("Activated event ID: %1").arg(eventId));
+        util::Logger::Debug("[MainWindow] OnSearchResultActivated eventId={}",
+            eventId);
+        for (long i = 0u; i < static_cast<long>(m_events->Size()); ++i)
+        {
+            if (static_cast<long>(m_events->GetEvent(static_cast<int>(i)).getId()) == eventId)            {
+                util::Logger::Debug(
+                    "[MainWindow] Matching event found at index={}", static_cast<long long>(i));
+                m_events->SetCurrentItem(static_cast<int>(i));
+                break;
+            }
+        }
 }
 
 void MainWindow::OnSearchRequested()
 {
+    util::Logger::Debug("[MainWindow] OnSearchRequested query='{}'",
+        ReadSearchQuery());
     if (m_presenter)
         m_presenter->PerformSearch();
 }
@@ -297,6 +334,8 @@ void MainWindow::dropEvent(QDropEvent* event)
     {
         if (url.isLocalFile())
         {
+            util::Logger::Info("[MainWindow] Dropped file: {}",
+                url.toLocalFile().toStdString());
             HandleDroppedFile(url.toLocalFile());
             break; // align with wx: only first file processed for now
         }
@@ -315,6 +354,9 @@ void MainWindow::HandleDroppedFile(const QString& path)
 
     const std::filesystem::path filePath(path.toStdString());
 
+    util::Logger::Info("[MainWindow] HandleDroppedFile path={}",
+        filePath.string());
+
     if (!m_presenter)
     {
         QMessageBox::warning(this, "File Drop",
@@ -331,6 +373,8 @@ void MainWindow::HandleDroppedFile(const QString& path)
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Failed to load file '{}': {}",
+            filePath.string(), ex.what());
         UpdateStatusText("Failed to load file");
         QMessageBox::critical(this, "File Drop Error",
             QString("Unable to load %1\n%2").arg(path).arg(ex.what()));
@@ -356,11 +400,25 @@ void MainWindow::OnExtendedFiltersChanged()
 
 void MainWindow::OnOpenFileRequested()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this,
-        tr("Open Log File"), QString(),
-        tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
-    if (filePath.isEmpty())
+    util::Logger::Debug("[MainWindow] OnOpenFileRequested: opening QFileDialog");
+
+    QFileDialog dialog(this, tr("Open Log File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
+    if (dialog.exec() != QDialog::Accepted) {
+        util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
         return;
+    }
+    const QString filePath = dialog.selectedFiles().value(0);
+
+    if (filePath.isEmpty())
+    {
+        util::Logger::Debug("[MainWindow] OnOpenFileRequested: No file selected");
+        return;
+    }
+
+    util::Logger::Info("[MainWindow] OnOpenFileRequested path={}",
+        filePath.toStdString());
 
     HandleDroppedFile(filePath);
 }
@@ -369,6 +427,7 @@ void MainWindow::OnClearDataRequested()
 {
     try
     {
+    util::Logger::Info("[MainWindow] OnClearDataRequested");
         if (m_searchResults)
             m_searchResults->Clear();
         if (m_searchEdit)
@@ -384,6 +443,7 @@ void MainWindow::OnClearDataRequested()
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Clear data failed: {}", ex.what());
         ShowError(tr("Clear Data"), tr("Unable to clear data: %1").arg(ex.what()));
     }
 }
@@ -395,6 +455,9 @@ void MainWindow::OnOpenConfigRequested()
         const auto& configPath = config::GetConfig().GetConfigFilePath();
         if (configPath.empty() || !std::filesystem::exists(configPath))
         {
+            util::Logger::Warn(
+                "[MainWindow] Config file does not exist: '{}'",
+                configPath);
             ShowError(tr("Config"), tr("Config file does not exist."));
             return;
         }
@@ -402,11 +465,16 @@ void MainWindow::OnOpenConfigRequested()
         if (!QDesktopServices::openUrl(
                 QUrl::fromLocalFile(QString::fromStdString(configPath))))
         {
+            util::Logger::Error(
+                "[MainWindow] Failed to open config file: '{}'",
+                configPath);
             ShowError(tr("Config"), tr("Failed to launch editor."));
         }
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Unable to open config: {}",
+            ex.what());
         ShowError(tr("Config"), tr("Unable to open config: %1").arg(ex.what()));
     }
 }
@@ -418,6 +486,9 @@ void MainWindow::OnOpenAppLogRequested()
         const auto& logPath = config::GetConfig().GetAppLogPath();
         if (logPath.empty() || !std::filesystem::exists(logPath))
         {
+            util::Logger::Warn(
+                "[MainWindow] Application log file does not exist: '{}'",
+                logPath);
             ShowError(tr("App Log"), tr("Application log file does not exist."));
             return;
         }
@@ -425,11 +496,16 @@ void MainWindow::OnOpenAppLogRequested()
         if (!QDesktopServices::openUrl(
                 QUrl::fromLocalFile(QString::fromStdString(logPath))))
         {
+            util::Logger::Error(
+                "[MainWindow] Failed to open application log: '{}'",
+                logPath);
             ShowError(tr("App Log"), tr("Failed to open application log."));
         }
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Unable to open application log: {}",
+            ex.what());
         ShowError(tr("App Log"), tr("Unable to open application log: %1").arg(ex.what()));
     }
 }
@@ -449,6 +525,9 @@ void MainWindow::ApplyExtendedFilters()
 
     auto filteredIndices =
         filters::FilterManager::getInstance().applyFilters(*m_events);
+
+    util::Logger::Debug("[MainWindow] ApplyExtendedFilters: {} events, {} matches",
+        m_events->Size(), filteredIndices.size());
 
     m_eventsView->SetFilteredEvents(filteredIndices);
     m_eventsView->RefreshView();

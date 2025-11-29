@@ -28,14 +28,11 @@ bool SetupLogging()
     util::Logger::Initialize(
         util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
     util::Logger::Info("Logging initialized for Qt UI");
+    util::Logger::Info(
+            "Logging configuration loaded from config file. Log level: {}",
+            config.logLevel);
+        util::Logger::Info("Log file path: {}", config.GetAppLogPath());
     return true;
-}
-
-void ApplyConfiguredLogLevel()
-{
-    auto& config = config::GetConfig();
-    auto level = util::Logger::fromStrLevel(config.logLevel);
-    util::Logger::GetInstance()->setLevel(level);
 }
 
 void ShowFatalMessage(const QString& text)
@@ -50,15 +47,13 @@ int main(int argc, char** argv)
 
     try
     {
+        SetupLogging();
         util::Logger::Info("Starting LogViewer Qt application");
         util::Logger::Info("Initializing configuration");
         SetupConfig();
         util::Logger::Info("PrintConfig: ");
         config::GetConfig().GetPrintConfig();
         util::Logger::Info("Initializing logging");
-        SetupLogging();
-        util::Logger::Info("Applying configured log level");
-        ApplyConfiguredLogLevel();
     }
     catch (const error::Error& ex)
     {

@@ -18,7 +18,9 @@ set(APP_QT_SRCS
     ItemDetailsView.cpp
     MainWindow.cpp
     SearchResultsView.cpp
-    TypeFilterView.cpp)
+    TypeFilterView.cpp
+    ConfigEditorDialog.cpp
+    StructuredConfigDialog.cpp)
 
 add_library(application_qt STATIC ${APP_QT_SRCS})
 

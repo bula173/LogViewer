@@ -39,7 +39,7 @@ set(ICON_RESOURCE "")
 if(WIN32) #windows icon resource file, provided from /packaging directory
     set(ICON_RESOURCE "${PROJECT_BINARY_DIR}/packaging/LogViewer.rc")
 elseif (APPLE) #osx icon ressource file, provided from /packaging directory
-    set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns")
+    set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns")
 endif()
 
 
@@ -54,11 +54,11 @@ if(APPLE)
         PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME ${GUI_TARGET_NAME}
             MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.LogViewer.${GUI_TARGET_NAME}"
-            MACOSX_BUNDLE_ICON_FILE exampleApp.icns
+            MACOSX_BUNDLE_ICON_FILE LogViewer.icns
             MACOSX_BUNDLE_INFO_PLIST
                 ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
 
-    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns
         PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 else()
     # the WIN32 is needed for Windows in order for it to look for WinMain

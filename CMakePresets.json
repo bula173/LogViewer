@@ -62,7 +62,7 @@
                 "lhs": "${hostSystemName}",
                 "rhs": "Darwin"
             }
-        },  
+        },
         {
             "name": "windows-msys-debug-wx",
             "displayName": "Windows MSYS2 Debug (wxWidgets)",
@@ -153,6 +153,148 @@
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Windows"
+            }
+        },
+        {
+            "name": "linux-debug-wx",
+            "displayName": "Linux Debug (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/linux-debug-wx",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "linux-debug-qt",
+            "displayName": "Linux Debug (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/linux-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "QT",
+                "Qt6_DIR": "/usr/lib/cmake/Qt6"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "linux-release-wx",
+            "displayName": "Linux Release (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/linux-release-wx",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "linux-release-qt",
+            "displayName": "Linux Release (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/linux-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "QT",
+                "Qt6_DIR": "/usr/lib/cmake/Qt6"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos-debug-wx",
+            "displayName": "macOS Debug (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-debug-wx",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-debug-qt",
+            "displayName": "macOS Debug (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "QT",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-release-wx",
+            "displayName": "macOS Release (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-release-wx",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-release-qt",
+            "displayName": "macOS Release (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "GUI_FRAMEWORK": "QT",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
             }
         }
     ],
