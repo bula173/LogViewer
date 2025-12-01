@@ -11,16 +11,23 @@ get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys
 message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
 message(STATUS "Detected toolchain root: ${MINGW_ROOT}")
 
-# Ensure the target exe is readable and executable before ldd
-execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +r "${ARGV0}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +x "${ARGV0}")
 
+# Print file status for diagnostics (Windows only)
 if(WIN32)
+  execute_process(COMMAND bash -c "ls -l \"${ARGV0}\"" OUTPUT_VARIABLE file_status ERROR_VARIABLE file_status_err)
+  message(STATUS "File status before chmod: ${file_status}")
+  if(NOT "${file_status_err}" STREQUAL "")
+    message(WARNING "ls error: ${file_status_err}")
+  endif()
+
   # Ensure file is readable and executable using MSYS2 chmod
   execute_process(COMMAND bash -c "chmod +rx \"${ARGV0}\"" RESULT_VARIABLE chmod_result)
   if(NOT chmod_result EQUAL 0)
     message(WARNING "chmod failed on ${ARGV0}, result: ${chmod_result}")
   endif()
+
+  # Sleep for 1 second to avoid file locking issues
+  execute_process(COMMAND bash -c "sleep 1")
 
   # Run ldd via MSYS2 bash to avoid Windows shell permission issues
   execute_process(
@@ -29,6 +36,7 @@ if(WIN32)
     OUTPUT_VARIABLE ldd_output
     ERROR_VARIABLE ldd_error
   )
+  message(STATUS "ldd output: ${ldd_output}")
   if(NOT ldd_result EQUAL 0)
     message(FATAL_ERROR "ldd failed: ${ldd_error}")
   endif()
@@ -46,7 +54,7 @@ else()
   endif()
 
   message(STATUS "=== LDD Output for ${EXE_PATH} ===")
-  message(STATUS "${LDD_OUTPUT}")
+  message(STATUS "${ldd_output}")
   message(STATUS "=== End LDD Output ===")
 endif()
 
