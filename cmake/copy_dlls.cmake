@@ -90,3 +90,6 @@ foreach(DLL_FULLPATH IN LISTS DLL_LIST)
         endif()
     endif()
 endforeach()
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +r "${ARGV0}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +x "${ARGV0}")
