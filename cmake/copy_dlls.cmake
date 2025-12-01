@@ -15,21 +15,40 @@ message(STATUS "Detected toolchain root: ${MINGW_ROOT}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +r "${ARGV0}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +x "${ARGV0}")
 
-# Now run ldd
-execute_process(
+if(WIN32)
+  # Ensure file is readable and executable using MSYS2 chmod
+  execute_process(COMMAND bash -c "chmod +rx \"${ARGV0}\"" RESULT_VARIABLE chmod_result)
+  if(NOT chmod_result EQUAL 0)
+    message(WARNING "chmod failed on ${ARGV0}, result: ${chmod_result}")
+  endif()
+
+  # Run ldd via MSYS2 bash to avoid Windows shell permission issues
+  execute_process(
+    COMMAND bash -c "ldd \"${ARGV0}\""
+    RESULT_VARIABLE ldd_result
+    OUTPUT_VARIABLE ldd_output
+    ERROR_VARIABLE ldd_error
+  )
+  if(NOT ldd_result EQUAL 0)
+    message(FATAL_ERROR "ldd failed: ${ldd_error}")
+  endif()
+else()
+  # Now run ldd
+  execute_process(
     COMMAND ldd "${ARGV0}"
     RESULT_VARIABLE ldd_result
     OUTPUT_VARIABLE ldd_output
     ERROR_VARIABLE ldd_error
-)
+  )
 
-if(NOT ldd_result EQUAL 0)
+  if(NOT ldd_result EQUAL 0)
     message(FATAL_ERROR "ldd failed: ${ldd_error}")
-endif()
+  endif()
 
-message(STATUS "=== LDD Output for ${EXE_PATH} ===")
-message(STATUS "${LDD_OUTPUT}")
-message(STATUS "=== End LDD Output ===")
+  message(STATUS "=== LDD Output for ${EXE_PATH} ===")
+  message(STATUS "${LDD_OUTPUT}")
+  message(STATUS "=== End LDD Output ===")
+endif()
 
 # Parse output and copy each DLL
 string(REPLACE "\n" ";" LINES "${LDD_OUTPUT}")
