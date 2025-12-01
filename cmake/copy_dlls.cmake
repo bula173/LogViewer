@@ -11,8 +11,8 @@ get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys
 message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
 message(STATUS "Detected toolchain root: ${MINGW_ROOT}")
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +r "${EXE_PATH}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +x "${EXE_PATH}")
+execute_process(COMMAND chmod +r "${EXE_PATH}")
+execute_process(COMMAND chmod +x "${EXE_PATH}")
 
 execute_process(
     COMMAND ldd "${EXE_PATH}"
