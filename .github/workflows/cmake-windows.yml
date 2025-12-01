@@ -12,6 +12,9 @@ concurrency:
 
 permissions:
   contents: read
+  packages: write
+  pages: write
+  actions: write
 
 jobs:
   build:
