@@ -11,18 +11,20 @@ get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys
 message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
 message(STATUS "Detected toolchain root: ${MINGW_ROOT}")
 
-execute_process(COMMAND chmod +r "${EXE_PATH}")
-execute_process(COMMAND chmod +x "${EXE_PATH}")
+# Ensure the target exe is readable and executable before ldd
+execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +r "${ARGV0}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E chmod +x "${ARGV0}")
 
+# Now run ldd
 execute_process(
-    COMMAND ldd "${EXE_PATH}"
-    OUTPUT_VARIABLE LDD_OUTPUT
-    RESULT_VARIABLE LDD_RESULT
-    ERROR_VARIABLE LDD_ERROR
+    COMMAND ldd "${ARGV0}"
+    RESULT_VARIABLE ldd_result
+    OUTPUT_VARIABLE ldd_output
+    ERROR_VARIABLE ldd_error
 )
 
-if(NOT LDD_RESULT EQUAL 0)
-    message(FATAL_ERROR "ldd failed: ${LDD_ERROR}")
+if(NOT ldd_result EQUAL 0)
+    message(FATAL_ERROR "ldd failed: ${ldd_error}")
 endif()
 
 message(STATUS "=== LDD Output for ${EXE_PATH} ===")
