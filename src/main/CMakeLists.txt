@@ -73,15 +73,13 @@ else()
     if(MINGW)
         # Copy DLLs to the executable directory (for running during development)
         add_custom_target(copy_runtime_dlls_to_exe ALL
-            COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${GUI_TARGET_NAME}>" -DARGV1="$<TARGET_FILE_DIR:${GUI_TARGET_NAME}>" -DARGV2=${CMAKE_C_COMPILER}
-                    -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
+            COMMAND bash -c "${CMAKE_COMMAND} -DARGV0='$<TARGET_FILE:${GUI_TARGET_NAME}>' -DARGV1='$<TARGET_FILE_DIR:${GUI_TARGET_NAME}>' -DARGV2=${CMAKE_C_COMPILER} -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake"
             COMMENT "Copying runtime DLLs to executable directory"
             DEPENDS ${GUI_TARGET_NAME})
         # Copy DLLs to dist/lib (for packaging)
         set(DLL_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/lib")
         add_custom_target(copy_runtime_dlls_to_dist ALL
-            COMMAND ${CMAKE_COMMAND} -DARGV0="$<TARGET_FILE:${GUI_TARGET_NAME}>" -DARGV1=${DLL_OUTPUT_DIR} -DARGV2=${CMAKE_C_COMPILER}
-                    -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
+            COMMAND bash -c "${CMAKE_COMMAND} -DARGV0='$<TARGET_FILE:${GUI_TARGET_NAME}>' -DARGV1=${DLL_OUTPUT_DIR} -DARGV2=${CMAKE_C_COMPILER} -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake"
             COMMENT "Copying runtime DLLs to dist/lib for packaging"
             DEPENDS ${GUI_TARGET_NAME})
     endif()
