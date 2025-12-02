@@ -114,20 +114,6 @@ jobs:
           export PATH="/mingw64/bin:$PATH"
           ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
-      - name: Check executable format (Release only)
-        if: matrix.build_type == 'Release'
-        shell: msys2 {0}
-        run: |
-          export PATH="/mingw64/bin:$PATH"
-          if [ "${{ matrix.gui_framework }}" = "qt" ]; then
-            EXE_PATH="$BUILD_DIR-${{ matrix.gui_framework }}/dist/Release/LogViewerQt.exe"
-          else
-            EXE_PATH="$BUILD_DIR-${{ matrix.gui_framework }}/dist/Release/LogViewer.exe"
-          fi
-          echo "Checking executable: $EXE_PATH"
-          file "$EXE_PATH"
-          ls -la "$EXE_PATH"
-
       - name: Install (staging)
         if: matrix.build_type == 'Release'
         shell: msys2 {0}
