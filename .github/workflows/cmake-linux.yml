@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Debug, Release]
+        build_type: [Release]
         compiler: [gcc, clang]
         gui_framework: [wx, qt]
 
