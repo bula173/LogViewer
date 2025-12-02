@@ -29,16 +29,16 @@ if(WIN32)
   # Sleep for 1 second to avoid file locking issues
   execute_process(COMMAND bash -c "sleep 1")
 
-  # Run ldd via MSYS2 bash to avoid Windows shell permission issues
+  # Use objdump to list DLL dependencies for PE executables
   execute_process(
-    COMMAND bash -c "ldd \"${ARGV0}\""
-    RESULT_VARIABLE ldd_result
-    OUTPUT_VARIABLE ldd_output
-    ERROR_VARIABLE ldd_error
+    COMMAND bash -c "objdump -p \"${ARGV0}\" | grep 'DLL Name' | sed 's/.*DLL Name: //'"
+    RESULT_VARIABLE objdump_result
+    OUTPUT_VARIABLE objdump_output
+    ERROR_VARIABLE objdump_error
   )
-  message(STATUS "ldd output: ${ldd_output}")
-  if(NOT ldd_result EQUAL 0)
-    message(FATAL_ERROR "ldd failed: ${ldd_error}")
+  message(STATUS "objdump output: ${objdump_output}")
+  if(NOT objdump_result EQUAL 0)
+    message(FATAL_ERROR "objdump failed: ${objdump_error}")
   endif()
 else()
   # Now run ldd
@@ -59,32 +59,48 @@ else()
 endif()
 
 # Parse output and copy each DLL
-string(REPLACE "\n" ";" LINES "${LDD_OUTPUT}")
-set(DLL_LIST "")  # Initialize an empty list
+if(WIN32)
+  # objdump output is list of DLL names
+  string(REPLACE "\n" ";" DLL_LIST "${objdump_output}")
+else()
+  # ldd output parsing
+  string(REPLACE "\n" ";" LINES "${ldd_output}")
+  set(DLL_LIST "")  # Initialize an empty list
 
-foreach(LINE IN LISTS LINES)
-    # Match "not found" DLLs first (higher priority)
-    if(LINE MATCHES "([^ ]+\\.dll) => not found")
-        # DLL not found - try to locate it in current toolchain/bin
-        string(REGEX REPLACE ".*[ \t]+([^ ]+\\.dll) => not found.*" "\\1" DLL_NAME "${LINE}")
-        # Use the detected MINGW_ROOT which should be the actual toolchain directory
-        get_filename_component(TOOLCHAIN_NAME "${MINGW_ROOT}" NAME)
-        set(DLL_PATH "/${TOOLCHAIN_NAME}/bin/${DLL_NAME}")
-        list(APPEND DLL_LIST "${DLL_PATH}")
-        message(STATUS "Found missing DLL (will search): ${DLL_PATH}")
-    # Match lines like: "    libfoo.dll => /mingw64/bin/libfoo.dll (0x...)" or "    libfoo.dll => /clangarm64/bin/libfoo.dll (0x...)"
-    elseif(LINE MATCHES "=>[ ]*(/.+\\.dll)")
-        # Extract the DLL path using regex - capture the full path after =>
-        string(REGEX REPLACE ".*=>[ ]*(/.+\\.dll).*" "\\1" DLL_PATH "${LINE}")
-        # Only process paths that start with /mingw64/, /usr/, or /clangarm64/
-        if(DLL_PATH MATCHES "^/(mingw64|usr|clangarm64)/")
-            message(STATUS "Found DLL: ${DLL_PATH}")
-            list(APPEND DLL_LIST "${DLL_PATH}")
-        endif()
+  foreach(LINE IN LISTS LINES)
+      # Match "not found" DLLs first (higher priority)
+      if(LINE MATCHES "([^ ]+\\.dll) => not found")
+          # DLL not found - try to locate it in current toolchain/bin
+          string(REGEX REPLACE ".*[ \t]+([^ ]+\\.dll) => not found.*" "\\1" DLL_NAME "${LINE}")
+          # Use the detected MINGW_ROOT which should be the actual toolchain directory
+          get_filename_component(TOOLCHAIN_NAME "${MINGW_ROOT}" NAME)
+          set(DLL_PATH "/${TOOLCHAIN_NAME}/bin/${DLL_NAME}")
+          list(APPEND DLL_LIST "${DLL_PATH}")
+          message(STATUS "Found missing DLL (will search): ${DLL_PATH}")
+      # Match lines like: "    libfoo.dll => /mingw64/bin/libfoo.dll (0x...)" or "    libfoo.dll => /clangarm64/bin/libfoo.dll (0x...)"
+      elseif(LINE MATCHES "=>[ ]*(/.+\\.dll)")
+          # Extract the DLL path using regex - capture the full path after =>
+          string(REGEX REPLACE ".*=>[ ]*(/.+\\.dll).*" "\\1" DLL_PATH "${LINE}")
+          # Only process paths that start with /mingw64/, /usr/, or /clangarm64/
+          if(DLL_PATH MATCHES "^/(mingw64|usr|clangarm64)/")
+              message(STATUS "Found DLL: ${DLL_PATH}")
+              list(APPEND DLL_LIST "${DLL_PATH}")
+          endif()
+      endif()
+  endforeach()
+endif()
+
+foreach(DLL_ITEM IN LISTS DLL_LIST)
+    if(WIN32)
+        # DLL_ITEM is the name, e.g., libstdc++-6.dll
+        string(STRIP "${DLL_ITEM}" DLL_NAME)
+        # Assume it's in /mingw64/bin
+        set(DLL_FULLPATH "/mingw64/bin/${DLL_NAME}")
+    else()
+        # DLL_ITEM is the path from ldd
+        set(DLL_FULLPATH "${DLL_ITEM}")
     endif()
-endforeach()
-
-foreach(DLL_FULLPATH IN LISTS DLL_LIST)
+    
     string(STRIP "${DLL_FULLPATH}" DLL_FULLPATH)
     # Convert MSYS2 path to Windows path if needed
     if(DLL_FULLPATH MATCHES "^/(mingw64|clangarm64)/")
@@ -114,7 +130,7 @@ foreach(DLL_FULLPATH IN LISTS DLL_LIST)
         # If debug DLL (with 'd' suffix) not found, try release version
         string(REGEX REPLACE "d-([0-9]+)\\.dll$" "-\\1.dll" DLL_WIN_PATH_RELEASE "${DLL_WIN_PATH}")
         if(NOT "${DLL_WIN_PATH_RELEASE}" STREQUAL "${DLL_WIN_PATH}" AND EXISTS "${DLL_WIN_PATH_RELEASE}")
-            file(COPY "${DLL_WIN_PATH_RELEASE}" DESTINATION "${DEST_DIR}/NAME")
+            file(COPY "${DLL_WIN_PATH_RELEASE}" DESTINATION "${DEST_DIR}")
             get_filename_component(DLL_NAME "${DLL_WIN_PATH_RELEASE}" NAME)
             message(WARNING "Debug DLL not found, copied release version: ${DLL_NAME} to ${DEST_DIR}")
         else()
