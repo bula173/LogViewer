@@ -40,6 +40,7 @@ class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
+class AIAnalysisPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -108,6 +109,7 @@ class MainWindow : public QMainWindow,
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
+    AIAnalysisPanel* m_aiPanel {nullptr};
     db::EventsContainer* m_events {nullptr};
 };
 

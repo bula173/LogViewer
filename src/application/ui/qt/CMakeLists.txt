@@ -20,7 +20,9 @@ set(APP_QT_SRCS
     SearchResultsView.cpp
     TypeFilterView.cpp
     ConfigEditorDialog.cpp
-    StructuredConfigDialog.cpp)
+    StructuredConfigDialog.cpp
+    AIAnalysisPanel.cpp
+    OllamaSetupDialog.cpp)
 
 add_library(application_qt STATIC ${APP_QT_SRCS})
 

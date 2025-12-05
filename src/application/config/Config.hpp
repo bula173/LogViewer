@@ -64,6 +64,7 @@ class Config
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
     void GetLoggingConfig(const json& j);
+    void GetAIConfig(const json& j);
     std::filesystem::path GetDefaultConfigPath();
     std::filesystem::path GetDefaultLogPath();
     std::filesystem::path GetDefaultAppPath();
@@ -81,6 +82,10 @@ class Config
     std::vector<ColumnConfig> columns;
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
+    
+    // AI configuration
+    std::string ollamaBaseUrl {"http://localhost:11434"};
+    std::string ollamaDefaultModel {"qwen2.5-coder:7b"};
 };
 
 Config& GetConfig();

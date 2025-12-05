@@ -107,6 +107,7 @@ void Config::LoadConfig()
 
         GetColorConfig(j);
         GetLoggingConfig(j);
+        GetAIConfig(j);
         ParseXmlConfig(j);
 
 
@@ -153,6 +154,8 @@ void Config::SaveConfig()
                 {"visible", col.isVisible}, {"width", col.width}});
         }
         j["logging"]["level"] = logLevel;
+        j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
+        j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
         for (const auto& [col, valMap] : columnColors)
         {
             for (const auto& [val, colors] : valMap)
@@ -274,6 +277,28 @@ void Config::GetLoggingConfig(const json& j)
     else
     {
         util::Logger::Warn("Missing 'logging' in config file.");
+    }
+}
+
+void Config::GetAIConfig(const json& j)
+{
+    if (j.contains("aiConfig"))
+    {
+        const auto& aiConfig = j["aiConfig"];
+        if (aiConfig.contains("baseUrl"))
+        {
+            ollamaBaseUrl = aiConfig["baseUrl"].get<std::string>();
+            util::Logger::Info("Ollama base URL set to: {}", ollamaBaseUrl);
+        }
+        if (aiConfig.contains("defaultModel"))
+        {
+            ollamaDefaultModel = aiConfig["defaultModel"].get<std::string>();
+            util::Logger::Info("Ollama default model set to: {}", ollamaDefaultModel);
+        }
+    }
+    else
+    {
+        util::Logger::Info("No AI config found, using defaults.");
     }
 }
 

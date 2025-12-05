@@ -16,15 +16,22 @@ set(APP_CORE_SRCS
     mvc/MainController.cpp
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
+    ai/OllamaClient.cpp
+    ai/LogAnalyzer.cpp
 )
 
 add_library(application_core STATIC ${APP_CORE_SRCS})
+
+# Find CURL for AI HTTP requests
+find_package(CURL REQUIRED)
 
 target_link_libraries(application_core
     PUBLIC
         nlohmann_json::nlohmann_json
         spdlog::spdlog_header_only
-        expat)
+        expat
+        CURL::libcurl
+)
 
 target_include_directories(application_core
     PUBLIC

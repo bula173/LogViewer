@@ -50,6 +50,7 @@ void StructuredConfigDialog::BuildUi()
     InitGeneralTab();
     InitColumnsTab();
     InitColorsTab();
+    InitAITab();
 
     auto* buttonBox = new QDialogButtonBox(
         QDialogButtonBox::Save | QDialogButtonBox::Cancel, this);
@@ -286,6 +287,44 @@ void StructuredConfigDialog::InitColorsTab()
     UpdateColorPreview();
 }
 
+void StructuredConfigDialog::InitAITab()
+{
+    m_aiTab = new QWidget(this);
+    auto* layout = new QVBoxLayout(m_aiTab);
+
+    auto* form = new QFormLayout();
+    
+    // Ollama Base URL
+    m_ollamaBaseUrlEdit = new QLineEdit(m_aiTab);
+    m_ollamaBaseUrlEdit->setPlaceholderText("http://localhost:11434");
+    connect(m_ollamaBaseUrlEdit, &QLineEdit::textChanged, this,
+        &StructuredConfigDialog::OnOllamaBaseUrlChanged);
+    form->addRow(tr("Ollama Base URL:"), m_ollamaBaseUrlEdit);
+    
+    // Ollama Default Model
+    m_ollamaDefaultModelEdit = new QLineEdit(m_aiTab);
+    m_ollamaDefaultModelEdit->setPlaceholderText("qwen2.5-coder:7b");
+    connect(m_ollamaDefaultModelEdit, &QLineEdit::textChanged, this,
+        &StructuredConfigDialog::OnOllamaDefaultModelChanged);
+    form->addRow(tr("Default Model:"), m_ollamaDefaultModelEdit);
+    
+    layout->addLayout(form);
+    
+    // Add information label
+    auto* infoLabel = new QLabel(
+        tr("Configure Ollama server settings for AI-powered log analysis.\n"
+           "The base URL should point to your Ollama server (local or remote).\n"
+           "Common models: qwen2.5-coder:7b, llama3.2, deepseek-coder-v2:16b"), 
+        m_aiTab);
+    infoLabel->setWordWrap(true);
+    infoLabel->setStyleSheet("QLabel { color: gray; font-style: italic; }");
+    layout->addWidget(infoLabel);
+    
+    layout->addStretch();
+
+    m_tabs->addTab(m_aiTab, tr("AI Configuration"));
+}
+
 void StructuredConfigDialog::LoadConfigToUi()
 {
     auto& cfg = config::GetConfig();
@@ -303,6 +342,10 @@ void StructuredConfigDialog::LoadConfigToUi()
     else
         m_logLevelCombo->setCurrentText(QString::fromLatin1("info"));
 
+    // Load AI config
+    m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
+    m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
+
     RefreshColumnsList();
     RefreshColorMappings();
 }
@@ -314,6 +357,8 @@ void StructuredConfigDialog::OnSaveClicked()
     cfg.xmlRootElement = m_xmlRootEdit->text().toStdString();
     cfg.xmlEventElement = m_xmlEventEdit->text().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
+    cfg.ollamaBaseUrl = m_ollamaBaseUrlEdit->text().toStdString();
+    cfg.ollamaDefaultModel = m_ollamaDefaultModelEdit->text().toStdString();
 
     try
     {
@@ -360,6 +405,19 @@ void StructuredConfigDialog::OnLogLevelChanged(int)
     const auto level = util::Logger::fromStrLevel(levelStr);
     util::Logger::SetLevel(level);
     util::Logger::Info("Log level changed to: {}", levelStr);
+}
+
+void StructuredConfigDialog::OnOllamaBaseUrlChanged()
+{
+    // URL validation could be added here if needed
+    util::Logger::Debug("Ollama base URL changed to: {}", 
+        m_ollamaBaseUrlEdit->text().toStdString());
+}
+
+void StructuredConfigDialog::OnOllamaDefaultModelChanged()
+{
+    util::Logger::Debug("Ollama default model changed to: {}", 
+        m_ollamaDefaultModelEdit->text().toStdString());
 }
 
 void StructuredConfigDialog::RefreshColumnsList()

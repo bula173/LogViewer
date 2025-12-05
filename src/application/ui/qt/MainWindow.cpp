@@ -9,6 +9,10 @@
 #include "ui/qt/ItemDetailsView.hpp"
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
+#include "ui/qt/AIAnalysisPanel.hpp"
+#include "ui/qt/OllamaSetupDialog.hpp"
+#include "ai/OllamaClient.hpp"
+#include "ai/LogAnalyzer.hpp"
 #include "application/util/Logger.hpp"
 #include "config/Config.hpp"
 #include "ui/qt/ConfigEditorDialog.hpp"
@@ -95,12 +99,33 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     leftLayout->addWidget(m_filterTabs);
     leftPanel->setLayout(leftLayout);
 
-    // Right content splitter (events list + details)
-    m_eventsView = new EventsTableView(events, m_rightSplitter);
+    // Right content area with tabs for events view and AI analysis
+    auto* rightPanel = new QWidget(m_rightSplitter);
+    auto* rightLayout = new QVBoxLayout(rightPanel);
+    rightLayout->setContentsMargins(0, 0, 0, 0);
+    
+    auto* contentTabs = new QTabWidget(rightPanel);
+    
+    // Events view tab
+    m_eventsView = new EventsTableView(events, contentTabs);
+    contentTabs->addTab(m_eventsView, "Events");
+    
+    // AI Analysis tab - use config values
+    auto& config = config::GetConfig();
+    auto aiService = std::make_shared<ai::OllamaClient>(
+        config.ollamaDefaultModel, 
+        config.ollamaBaseUrl
+    );
+    auto aiAnalyzer = std::make_shared<ai::LogAnalyzer>(aiService, events);
+    m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, contentTabs);
+    contentTabs->addTab(m_aiPanel, "AI Analysis");
+    
+    rightLayout->addWidget(contentTabs);
+    rightPanel->setLayout(rightLayout);
 
     m_itemDetailsView = new ItemDetailsView(events, m_rightSplitter);
 
-    m_rightSplitter->addWidget(m_eventsView);
+    m_rightSplitter->addWidget(rightPanel);
     m_rightSplitter->addWidget(m_itemDetailsView);
     m_rightSplitter->setStretchFactor(0, 3);
     m_rightSplitter->setStretchFactor(1, 2);
@@ -228,6 +253,14 @@ void MainWindow::SetupMenus()
     auto* appLogAction = toolsMenu->addAction(tr("Open &App Log"));
     connect(appLogAction, &QAction::triggered, this,
         &MainWindow::OnOpenAppLogRequested);
+
+    toolsMenu->addSeparator();
+
+    auto* aiSetupAction = toolsMenu->addAction(tr("AI Analysis &Setup..."));
+    connect(aiSetupAction, &QAction::triggered, this, [this]() {
+        ui::qt::OllamaSetupDialog dlg(this);
+        dlg.exec();
+    });
 }
 
 void MainWindow::InitializePresenter(

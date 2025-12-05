@@ -36,6 +36,10 @@ private slots:
     // General tab
     void OnOpenConfigFileClicked();
     void OnLogLevelChanged(int index);
+    
+    // AI tab
+    void OnOllamaBaseUrlChanged();
+    void OnOllamaDefaultModelChanged();
 
     // Columns tab
     void OnColumnSelectionChanged();
@@ -62,6 +66,7 @@ private:
     void InitGeneralTab();
     void InitColumnsTab();
     void InitColorsTab();
+    void InitAITab();
 
     void LoadConfigToUi();
 
@@ -88,6 +93,11 @@ private:
     QLineEdit* m_xmlEventEdit {nullptr};
     QComboBox* m_logLevelCombo {nullptr};
     QLabel* m_configPathLabel {nullptr};
+    
+    // AI tab widgets
+    QWidget* m_aiTab {nullptr};
+    QLineEdit* m_ollamaBaseUrlEdit {nullptr};
+    QLineEdit* m_ollamaDefaultModelEdit {nullptr};
 
     // Columns tab widgets
     QWidget* m_columnsTab {nullptr};
