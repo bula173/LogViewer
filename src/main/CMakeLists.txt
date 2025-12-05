@@ -168,30 +168,79 @@ endif()
 #-------------------------------------------------------------------------------
 # Installation rules (for CPack)
 
-# Install executable
+# Install executable to the appropriate component
 install(TARGETS ${GUI_TARGET_NAME}
     BUNDLE DESTINATION "."
     RUNTIME DESTINATION "."
-    COMPONENT ${CPACK_COMPONENT})
+    COMPONENT ${CPACK_COMPONENT})  # This is "qt_app" for Qt builds
 
-# Install config file
+# Install config file to common component
 install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
     DESTINATION "."
     RENAME config.json
     COMPONENT common)
 
-if(USE_QT AND EXISTS "${DIST_ROOT}/qt_deploy")
-    # Install Qt runtime files
-    install(DIRECTORY "${DIST_ROOT}/qt_deploy/"
-        DESTINATION "."
-        COMPONENT ${CPACK_COMPONENT})
-endif()
-
-if(EXISTS "${DIST_LIB}")
-    # Install all collected DLLs from dist/lib
-    install(DIRECTORY "${DIST_LIB}/"
-        DESTINATION "."
-        COMPONENT ${CPACK_COMPONENT}
-        FILES_MATCHING PATTERN "*.dll")
+if(USE_QT)
+    # Install all Qt runtime files (DLLs, plugins, etc.) to qt_app component
+    install(CODE "
+        set(DIST_RELEASE \"${DIST_RELEASE}\")
+        set(COMPONENT_NAME \"${CPACK_COMPONENT}\")
+        
+        message(STATUS \"=== Installing Qt application (component: \${COMPONENT_NAME}) ===\")
+        message(STATUS \"Source: \${DIST_RELEASE}\")
+        message(STATUS \"Destination: \${CMAKE_INSTALL_PREFIX}\")
+        
+        if(EXISTS \"\${DIST_RELEASE}\")
+            # Get all files recursively from dist/Release
+            file(GLOB_RECURSE ALL_FILES RELATIVE \"\${DIST_RELEASE}\" \"\${DIST_RELEASE}/*\")
+            
+            set(FILE_COUNT 0)
+            foreach(FILE \${ALL_FILES})
+                # Skip the executable and config.json (they're installed separately)
+                if(NOT FILE MATCHES \"\\\\.exe$\" AND NOT FILE STREQUAL \"config.json\")
+                    get_filename_component(FILE_DIR \"\${FILE}\" DIRECTORY)
+                    
+                    # Create destination directory if needed
+                    if(FILE_DIR)
+                        file(MAKE_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/\${FILE_DIR}\")
+                    endif()
+                    
+                    # Install the file
+                    file(INSTALL \"\${DIST_RELEASE}/\${FILE}\" 
+                         DESTINATION \"\${CMAKE_INSTALL_PREFIX}/\${FILE_DIR}\")
+                    
+                    math(EXPR FILE_COUNT \"\${FILE_COUNT} + 1\")
+                endif()
+            endforeach()
+            
+            message(STATUS \"Installed \${FILE_COUNT} Qt runtime files\")
+            message(STATUS \"=== Installation complete ===\")
+        else()
+            message(FATAL_ERROR \"Qt release directory not found: \${DIST_RELEASE}\")
+        endif()
+    " COMPONENT ${CPACK_COMPONENT})
+    
+else()
+    # For non-Qt builds (wxWidgets): Install DLLs from dist/lib
+    install(CODE "
+        set(DIST_LIB \"${DIST_LIB}\")
+        set(COMPONENT_NAME \"${CPACK_COMPONENT}\")
+        
+        message(STATUS \"=== Installing runtime DLLs (component: \${COMPONENT_NAME}) ===\")
+        
+        if(EXISTS \"\${DIST_LIB}\")
+            file(GLOB RUNTIME_DLLS \"\${DIST_LIB}/*.dll\")
+            
+            set(DLL_COUNT 0)
+            foreach(DLL \${RUNTIME_DLLS})
+                file(INSTALL \"\${DLL}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\")
+                math(EXPR DLL_COUNT \"\${DLL_COUNT} + 1\")
+            endforeach()
+            
+            message(STATUS \"Installed \${DLL_COUNT} runtime DLLs\")
+        else()
+            message(WARNING \"Runtime DLL directory not found: \${DIST_LIB}\")
+        endif()
+    " COMPONENT ${CPACK_COMPONENT})
 endif()
 
