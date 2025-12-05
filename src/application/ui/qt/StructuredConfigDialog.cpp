@@ -318,19 +318,20 @@ void StructuredConfigDialog::OnSaveClicked()
     try
     {
         cfg.SaveConfig();
-        cfg.Reload();
+        // Don't reload after save - it would discard any in-memory changes
+        // that were made through the UI but haven't been persisted yet
         NotifyObservers();
         QMessageBox::information(this, tr("Config"),
-            tr("Configuration saved and reloaded successfully."));
+            tr("Configuration saved successfully."));
         accept();
     }
     catch (const std::exception& ex)
     {
         util::Logger::Error(
-            "[StructuredConfigDialog] Failed to save/reload config: {}",
+            "[StructuredConfigDialog] Failed to save config: {}",
             ex.what());
         QMessageBox::warning(this, tr("Config"),
-            tr("Configuration saved but reload failed: %1").arg(ex.what()));
+            tr("Failed to save configuration: %1").arg(ex.what()));
     }
 }
 

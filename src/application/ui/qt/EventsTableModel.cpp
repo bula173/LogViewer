@@ -51,6 +51,10 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
     if (actualIndex < 0)
         return {};
 
+    // Safety check: ensure actualIndex is within bounds
+    if (actualIndex >= static_cast<int>(m_events.Size()))
+        return {};
+
     const auto& columns = m_config.GetColumns();
     if (index.column() < 0 ||
         index.column() >= static_cast<int>(m_visibleColumnIndices.size()))
@@ -70,16 +74,18 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
             return ComposeCellText(event, columnName);
         case Qt::ForegroundRole:
         {
-            const QColor color = ResolveColor(columnName,
-                event.findByKey(columnName), false);
+            // Apply color to entire row based on "type" column value
+            const std::string typeValue = event.findByKey("type");
+            const QColor color = ResolveColor("type", typeValue, false);
             if (color.isValid())
                 return QBrush(color);
             break;
         }
         case Qt::BackgroundRole:
         {
-            const QColor color = ResolveColor(columnName,
-                event.findByKey(columnName), true);
+            // Apply color to entire row based on "type" column value
+            const std::string typeValue = event.findByKey("type");
+            const QColor color = ResolveColor("type", typeValue, true);
             if (color.isValid())
                 return QBrush(color);
             break;

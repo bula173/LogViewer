@@ -59,7 +59,18 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
 
 void ItemDetailsView::RefreshView()
 {
-    DisplayEvent(m_events.GetCurrentItemIndex());
+    const int currentIndex = m_events.GetCurrentItemIndex();
+    // Only display if we have data and a valid index
+    if (m_events.Size() > 0 && currentIndex >= 0)
+    {
+        DisplayEvent(currentIndex);
+    }
+    else
+    {
+        // Clear the display if no data or invalid index
+        if (m_details)
+            m_details->setRowCount(0);
+    }
 }
 
 void ItemDetailsView::ShowControl(bool show)

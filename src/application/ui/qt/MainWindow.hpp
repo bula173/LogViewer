@@ -2,6 +2,7 @@
 
 #include "ui/IMainWindowView.hpp"
 #include "ui/IUiPanels.hpp"
+#include "config/ConfigObserver.hpp"
 
 #include <QMainWindow>
 #include <memory>
@@ -42,7 +43,8 @@ class FiltersPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
-                   public ui::ISearchResultsViewObserver
+                   public ui::ISearchResultsViewObserver,
+                   public config::ConfigObserver
 {
     Q_OBJECT
 
@@ -65,6 +67,9 @@ class MainWindow : public QMainWindow,
     // ISearchResultsViewObserver
     void OnSearchResultActivated(long eventId) override;
 
+    // IConfigObserver
+    void OnConfigChanged() override;
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -72,7 +77,6 @@ class MainWindow : public QMainWindow,
     void OnExtendedFiltersChanged();
     void OnOpenFileRequested();
     void OnClearDataRequested();
-    void OnOpenConfigRequested();
     void OnOpenAppLogRequested();
     void OnExitRequested();
 

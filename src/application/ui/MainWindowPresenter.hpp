@@ -52,6 +52,7 @@ class MainWindowPresenter : public parser::IDataParserObserver
 
   private:
     static int ClampToInt(std::size_t value);
+    void clearAllData();
 
     IMainWindowView& m_view;
     mvc::IController& m_controller;

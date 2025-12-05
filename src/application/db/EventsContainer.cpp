@@ -141,15 +141,26 @@ void EventsContainer::Clear()
      */
     util::Logger::Debug("EventsContainer::Clear called");
     
-    std::unique_lock<std::shared_mutex> lock(m_mutex);
-    if (m_data.empty())
     {
-        util::Logger::Debug("EventsContainer::Clear: m_data already empty");
-        return;
-    }
+        std::unique_lock<std::shared_mutex> lock(m_mutex);
+        if (m_data.empty())
+        {
+            util::Logger::Debug("EventsContainer::Clear: m_data already empty");
+            return;
+        }
 
-    m_data.clear();
-    SetCurrentItem(0); // Reset current item index
+        m_data.clear();
+        m_currentItem = -1; // Reset to no selection since container is empty
+    } // Release lock before notifying views
+    
+    // Notify current item update after releasing the lock to avoid deadlock
+    for (auto v : m_views)
+    {
+        util::Logger::Trace("EventsContainer::Clear notifying view of current index update: -1");
+        v->OnCurrentIndexUpdated(-1);
+    }
+    
+    // Notify views of data change after releasing the lock to avoid deadlock
     this->NotifyDataChanged();
 }
 

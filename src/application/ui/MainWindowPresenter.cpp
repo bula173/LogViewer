@@ -95,8 +95,8 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
-
-    m_searchResultsView.Clear();
+    m_view.UpdateStatusText("Clear...");
+    clearAllData();
     m_view.SetSearchControlsEnabled(false);
     m_view.ToggleProgressVisibility(true);
     m_view.ConfigureProgressRange(100);
@@ -123,6 +123,14 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_view.UpdateStatusText(previousStatus);
+        
+        // Update type filters even on error, so any successfully parsed events are shown
+        UpdateTypeFilters();
+        if (m_eventsListView)
+            m_eventsListView->RefreshView();
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        
         m_isParsing = false;
         m_progressConfigured = false;
         throw;
@@ -247,6 +255,14 @@ void MainWindowPresenter::NewEventBatchFound(
         m_eventsListView->RefreshView();
     if (m_itemDetailsView)
         m_itemDetailsView->RefreshView();
+}
+
+void MainWindowPresenter::clearAllData()
+{
+    util::Logger::Debug("Clearing all data from presenter-managed components");
+    m_searchResultsView.Clear();
+    m_events.Clear();
+    util::Logger::Debug("All data cleared successfully");
 }
 
 } // namespace ui

@@ -226,7 +226,7 @@ void EventsTableView::ScrollToActualRow(int actualRow)
     if (selectionModel())
     {
         selectionModel()->setCurrentIndex(
-            idx, QItemSelectionModel::ClearAndSelect);
+            idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         util::Logger::Debug("[EventsTableView] selection set to viewRow={}", viewRow);
     }
 

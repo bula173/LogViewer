@@ -209,14 +209,12 @@ void MainWindow::SetupMenus()
         &MainWindow::OnExitRequested);
 
     auto* toolsMenu = bar->addMenu(tr("&Tools"));
-    auto* configAction = toolsMenu->addAction(tr("Open &Config File"));
-    connect(configAction, &QAction::triggered, this,
-        &MainWindow::OnOpenConfigRequested);
 
     auto* structuredConfigAction =
         toolsMenu->addAction(tr("Edit &Config..."));
     connect(structuredConfigAction, &QAction::triggered, this, [this]() {
         ui::qt::StructuredConfigDialog dlg(this);
+        dlg.AddObserver(this);
         dlg.exec();
     });
 
@@ -448,37 +446,6 @@ void MainWindow::OnClearDataRequested()
     }
 }
 
-void MainWindow::OnOpenConfigRequested()
-{
-    try
-    {
-        const auto& configPath = config::GetConfig().GetConfigFilePath();
-        if (configPath.empty() || !std::filesystem::exists(configPath))
-        {
-            util::Logger::Warn(
-                "[MainWindow] Config file does not exist: '{}'",
-                configPath);
-            ShowError(tr("Config"), tr("Config file does not exist."));
-            return;
-        }
-
-        if (!QDesktopServices::openUrl(
-                QUrl::fromLocalFile(QString::fromStdString(configPath))))
-        {
-            util::Logger::Error(
-                "[MainWindow] Failed to open config file: '{}'",
-                configPath);
-            ShowError(tr("Config"), tr("Failed to launch editor."));
-        }
-    }
-    catch (const std::exception& ex)
-    {
-        util::Logger::Error("[MainWindow] Unable to open config: {}",
-            ex.what());
-        ShowError(tr("Config"), tr("Unable to open config: %1").arg(ex.what()));
-    }
-}
-
 void MainWindow::OnOpenAppLogRequested()
 {
     try
@@ -538,6 +505,21 @@ void MainWindow::ApplyExtendedFilters()
 void MainWindow::ShowError(const QString& title, const QString& message)
 {
     QMessageBox::critical(this, title, message);
+}
+
+void MainWindow::OnConfigChanged()
+{
+    util::Logger::Debug("[MainWindow] OnConfigChanged");
+    
+    // Refresh views with new configuration
+    if (m_eventsView)
+    {
+        m_eventsView->UpdateColors();
+        m_eventsView->RefreshView();
+    }
+    
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
 }
 
 } // namespace ui::qt

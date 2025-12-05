@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config/ConfigObserver.hpp"
+
 #include <QDialog>
 #include <vector>
 #include <string>
@@ -13,14 +15,6 @@ class QSpinBox;
 class QPushButton;
 class QFrame;
 class QLabel;
-
-namespace config {
-    class ConfigObserver {
-    public:
-        virtual ~ConfigObserver() = default;
-        virtual void OnConfigChanged() = 0;
-    };
-}
 
 namespace ui::qt
 {
