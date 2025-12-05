@@ -114,9 +114,26 @@ if(WIN32 AND NOT UNIX)
 
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.png")
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.rc.in
-        ${PROJECT_BINARY_DIR}/packaging/LogViewer.rc @ONLY)
 
+    # Configure RC file to replace @CMAKE_SOURCE_DIR@ with actual path
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.rc.in
+        ${PROJECT_BINARY_DIR}/packaging/LogViewer.rc
+        @ONLY
+    )
+    
+    # Also copy icon and manifest to build directory
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.ico
+        ${PROJECT_BINARY_DIR}/packaging/LogViewer.ico
+        COPYONLY
+    )
+    
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.manifest
+        ${PROJECT_BINARY_DIR}/packaging/LogViewer.manifest
+        COPYONLY
+    )
 elseif(APPLE)
     #--------------------------------------------------------------------------
     # Apple specific

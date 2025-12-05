@@ -157,7 +157,7 @@ if(WIN32)
   if(MSYS OR MINGW)
     message(STATUS "Building with MSYS2/MinGW")
     # Link MinGW runtime libraries statically to reduce DLL dependencies
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -static-libwinpthread")
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
     message(STATUS "MinGW: Static linking enabled for runtime libraries")
   endif()
 elseif(APPLE)
