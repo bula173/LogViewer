@@ -10,6 +10,7 @@
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
 #include "ui/qt/AIAnalysisPanel.hpp"
+#include "ui/qt/AIChatPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
 #include "ai/OllamaClient.hpp"
 #include "ai/LogAnalyzer.hpp"
@@ -135,10 +136,13 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_leftSplitter->setStretchFactor(0, 1);
     m_leftSplitter->setStretchFactor(1, 3);
 
-    // Search panel mirrors wx bottom splitter
-    auto* searchPanel = new QWidget(m_bottomSplitter);
+    // Bottom panel with tabs for Search and AI Chat
+    auto* bottomTabs = new QTabWidget(m_bottomSplitter);
+    
+    // Search tab
+    auto* searchPanel = new QWidget(bottomTabs);
     auto* searchLayout = new QVBoxLayout(searchPanel);
-    searchLayout->setContentsMargins(8, 8, 8, 8);
+    searchLayout->setContentsMargins(4, 4, 4, 4);
     searchLayout->setSpacing(8);
 
     auto* searchRow = new QHBoxLayout();
@@ -153,9 +157,15 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     searchLayout->addLayout(searchRow);
     searchLayout->addWidget(m_searchResults, 1);
     searchPanel->setLayout(searchLayout);
+    
+    bottomTabs->addTab(searchPanel, "Search");
+    
+    // AI Chat tab - pass events container directly for context
+    auto* chatPanel = new AIChatPanel(aiService, events, bottomTabs);
+    bottomTabs->addTab(chatPanel, "AI Chat");
 
     m_bottomSplitter->addWidget(m_leftSplitter);
-    m_bottomSplitter->addWidget(searchPanel);
+    m_bottomSplitter->addWidget(bottomTabs);
     m_bottomSplitter->setStretchFactor(0, 3);
     m_bottomSplitter->setStretchFactor(1, 1);
 

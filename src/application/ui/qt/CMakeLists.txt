@@ -4,7 +4,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Concurrent)
 
 qt_standard_project_setup()
 
@@ -22,6 +22,7 @@ set(APP_QT_SRCS
     ConfigEditorDialog.cpp
     StructuredConfigDialog.cpp
     AIAnalysisPanel.cpp
+    AIChatPanel.cpp
     OllamaSetupDialog.cpp)
 
 add_library(application_qt STATIC ${APP_QT_SRCS})
@@ -29,7 +30,8 @@ add_library(application_qt STATIC ${APP_QT_SRCS})
 target_link_libraries(application_qt
     PUBLIC
         application_core
-        Qt6::Widgets)
+        Qt6::Widgets
+        Qt6::Concurrent)
 
 target_include_directories(application_qt
     PUBLIC

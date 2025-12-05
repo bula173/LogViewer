@@ -36,6 +36,14 @@ public:
     std::string Analyze(AnalysisType type, size_t maxEvents = 100);
 
     /**
+     * @brief Perform analysis with custom user-defined prompt
+     * @param customPrompt User-provided analysis prompt
+     * @param maxEvents Maximum number of events to include (0 = all)
+     * @return Analysis results as text
+     */
+    std::string AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents = 100);
+
+    /**
      * @brief Check if AI service is ready
      */
     bool IsReady() const;

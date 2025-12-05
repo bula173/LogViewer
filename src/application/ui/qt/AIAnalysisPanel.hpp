@@ -10,6 +10,7 @@ class QTextEdit;
 class QComboBox;
 class QSpinBox;
 class QLabel;
+class QCheckBox;
 
 namespace ui::qt
 {
@@ -51,6 +52,8 @@ private:
     QPushButton* m_analyzeButton{nullptr};
     QTextEdit* m_resultsText{nullptr};
     QLabel* m_statusLabel{nullptr};
+    QCheckBox* m_useCustomPromptCheckbox{nullptr};
+    QTextEdit* m_customPromptEdit{nullptr};
 };
 
 } // namespace ui::qt

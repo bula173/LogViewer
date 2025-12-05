@@ -48,6 +48,46 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents)
     }
 }
 
+std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents)
+{
+    if (!m_aiService || !m_aiService->IsAvailable())
+    {
+        return "Error: AI service not available. Please ensure Ollama is running.\n\n"
+               "Install Ollama: https://ollama.ai\n"
+               "Run: ollama pull llama3.2";
+    }
+
+    if (m_events.Size() == 0)
+    {
+        return "No log data available to analyze.";
+    }
+
+    util::Logger::Info("Starting custom prompt analysis on {} events",
+        maxEvents > 0 ? std::min(maxEvents, m_events.Size()) : m_events.Size());
+
+    const std::string logData = FormatEventsForAI(maxEvents);
+    
+    // Build prompt with custom user request
+    std::ostringstream prompt;
+    prompt << "You are a log analysis expert. Analyze the following application logs.\n\n";
+    prompt << "User Request: " << customPrompt << "\n\n";
+    prompt << "Log Data:\n" << logData << "\n\n";
+    prompt << "Provide a detailed analysis addressing the user's request.";
+
+    try
+    {
+        const std::string result = m_aiService->SendPrompt(prompt.str());
+        util::Logger::Info("Custom analysis completed successfully");
+        return result;
+    }
+    catch (const std::exception& e)
+    {
+        const std::string error = std::string("Analysis failed: ") + e.what();
+        util::Logger::Error("{}", error);
+        return error;
+    }
+}
+
 bool LogAnalyzer::IsReady() const
 {
     return m_aiService && m_aiService->IsAvailable();

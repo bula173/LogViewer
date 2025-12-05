@@ -14,6 +14,9 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <QMessageBox>
+#include <QCheckBox>
+#include <QtConcurrent/QtConcurrent>
+#include <QFutureWatcher>
 
 namespace ui::qt
 {
@@ -36,6 +39,8 @@ void AIAnalysisPanel::BuildUi()
     // Controls group
     auto* controlsGroup = new QGroupBox(tr("AI Analysis"), this);
     auto* controlsLayout = new QFormLayout(controlsGroup);
+    controlsLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+    controlsLayout->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     // Model selector
     m_modelCombo = new QComboBox(this);
@@ -76,6 +81,27 @@ void AIAnalysisPanel::BuildUi()
     m_analysisTypeCombo->addItem(tr("Timeline"), 
         static_cast<int>(ai::LogAnalyzer::AnalysisType::Timeline));
     controlsLayout->addRow(tr("Analysis Type:"), m_analysisTypeCombo);
+
+    // Custom prompt option
+    m_useCustomPromptCheckbox = new QCheckBox(tr("Use Custom Prompt"), this);
+    m_useCustomPromptCheckbox->setToolTip(tr("Enable to write your own analysis prompt"));
+    connect(m_useCustomPromptCheckbox, &QCheckBox::toggled, this, [this](bool checked) {
+        m_customPromptEdit->setEnabled(checked);
+        m_analysisTypeCombo->setEnabled(!checked);
+    });
+    controlsLayout->addRow(m_useCustomPromptCheckbox);
+
+    m_customPromptEdit = new QTextEdit(this);
+    m_customPromptEdit->setPlaceholderText(tr("Enter your custom analysis prompt...\n\nExamples:\n- Find all database connection errors\n- What performance issues exist?\n- Analyze authentication failures"));
+    m_customPromptEdit->setEnabled(false);
+    m_customPromptEdit->setMinimumHeight(80);
+    m_customPromptEdit->setMaximumHeight(150);
+    m_customPromptEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_customPromptEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_customPromptEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_customPromptEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+    m_customPromptEdit->setToolTip(tr("Custom prompt will be used instead of predefined analysis types"));
+    controlsLayout->addRow(tr("Custom Prompt:"), m_customPromptEdit);
 
     // Max events selector
     m_maxEventsSpin = new QSpinBox(this);
@@ -139,31 +165,66 @@ void AIAnalysisPanel::OnAnalyzeClicked()
     
     emit AnalysisStarted();
 
-    // Get selected analysis type
-    const int typeIndex = m_analysisTypeCombo->currentData().toInt();
-    const auto analysisType = static_cast<ai::LogAnalyzer::AnalysisType>(typeIndex);
     const size_t maxEvents = static_cast<size_t>(m_maxEventsSpin->value());
-
-    util::Logger::Info("Starting AI analysis: type={}, maxEvents={}",
-        ai::LogAnalyzer::GetAnalysisTypeName(analysisType), maxEvents);
-
-    try
+    
+    // Check if using custom prompt
+    const bool useCustomPrompt = m_useCustomPromptCheckbox->isChecked();
+    const QString customPrompt = m_customPromptEdit->toPlainText().trimmed();
+    
+    if (useCustomPrompt && customPrompt.isEmpty())
     {
-        const std::string result = m_analyzer->Analyze(analysisType, maxEvents);
-        m_resultsText->setPlainText(QString::fromStdString(result));
-        m_statusLabel->setText(tr("Analysis complete"));
-        
-        emit AnalysisCompleted(QString::fromStdString(result));
-    }
-    catch (const std::exception& e)
-    {
-        const QString error = tr("Analysis failed: %1").arg(e.what());
-        m_resultsText->setPlainText(error);
+        m_resultsText->setPlainText(tr("Error: Custom prompt cannot be empty"));
         m_statusLabel->setText(tr("Error"));
-        util::Logger::Error("AI analysis failed: {}", e.what());
+        m_analyzeButton->setEnabled(true);
+        return;
     }
 
-    m_analyzeButton->setEnabled(true);
+    // Run analysis asynchronously to avoid blocking UI
+    auto future = QtConcurrent::run([this, useCustomPrompt, customPrompt, maxEvents]() -> std::string {
+        try
+        {
+            if (useCustomPrompt)
+            {
+                util::Logger::Info("Starting custom AI analysis: maxEvents={}", maxEvents);
+                return m_analyzer->AnalyzeWithCustomPrompt(customPrompt.toStdString(), maxEvents);
+            }
+            else
+            {
+                const int typeIndex = m_analysisTypeCombo->currentData().toInt();
+                const auto analysisType = static_cast<ai::LogAnalyzer::AnalysisType>(typeIndex);
+                util::Logger::Info("Starting AI analysis: type={}, maxEvents={}",
+                    ai::LogAnalyzer::GetAnalysisTypeName(analysisType), maxEvents);
+                return m_analyzer->Analyze(analysisType, maxEvents);
+            }
+        }
+        catch (const std::exception& e)
+        {
+            util::Logger::Error("AI analysis failed: {}", e.what());
+            throw;
+        }
+    });
+
+    auto* watcher = new QFutureWatcher<std::string>(this);
+    connect(watcher, &QFutureWatcher<std::string>::finished, this, [this, watcher]() {
+        try
+        {
+            const std::string result = watcher->result();
+            m_resultsText->setPlainText(QString::fromStdString(result));
+            m_statusLabel->setText(tr("Analysis complete"));
+            emit AnalysisCompleted(QString::fromStdString(result));
+        }
+        catch (const std::exception& e)
+        {
+            const QString error = tr("Analysis failed: %1").arg(e.what());
+            m_resultsText->setPlainText(error);
+            m_statusLabel->setText(tr("Error"));
+        }
+        
+        m_analyzeButton->setEnabled(true);
+        watcher->deleteLater();
+    });
+    
+    watcher->setFuture(future);
 }
 
 void AIAnalysisPanel::OnModelChanged(int index)
@@ -344,9 +405,9 @@ void AIAnalysisPanel::PopulateModelList()
         const QString selectedModel = m_modelCombo->currentData().toString();
         if (!selectedModel.isEmpty())
         {
-            if (auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService.get()))
+            if (auto* client = dynamic_cast<ai::OllamaClient*>(m_aiService.get()))
             {
-                ollamaClient->SetModel(selectedModel.toStdString());
+                client->SetModel(selectedModel.toStdString());
                 util::Logger::Info("Initial model set to: {}", selectedModel.toStdString());
             }
         }
