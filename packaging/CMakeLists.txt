@@ -267,5 +267,63 @@ if(CMAKE_CPACK_COMMAND)
     
 endif()
 
+#-------------------------------------------------------------------------------
+# Installation rules (for CPack)
+
+# Install executable
+install(TARGETS ${GUI_TARGET_NAME}
+    BUNDLE DESTINATION "."
+    RUNTIME DESTINATION "."
+    COMPONENT ${CPACK_COMPONENT})
+
+# Install config file
+install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
+    DESTINATION "."
+    RENAME config.json
+    COMPONENT common)
+
+if(USE_QT)
+    # Install Qt runtime files from qt_deploy directory
+    # Use CODE to check existence at install time, not configure time
+    install(CODE "
+        set(QT_DEPLOY_SRC \"${DIST_ROOT}/qt_deploy\")
+        if(EXISTS \"\${QT_DEPLOY_SRC}\")
+            message(STATUS \"Installing Qt runtime from: \${QT_DEPLOY_SRC}\")
+            file(GLOB_RECURSE QT_FILES \"\${QT_DEPLOY_SRC}/*\")
+            foreach(QT_FILE \${QT_FILES})
+                file(RELATIVE_PATH REL_PATH \"\${QT_DEPLOY_SRC}\" \"\${QT_FILE}\")
+                get_filename_component(REL_DIR \"\${REL_PATH}\" DIRECTORY)
+                file(INSTALL \"\${QT_FILE}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/\${REL_DIR}\")
+            endforeach()
+        else()
+            message(WARNING \"Qt deployment directory not found: \${QT_DEPLOY_SRC}\")
+        endif()
+    " COMPONENT ${CPACK_COMPONENT})
+    
+    # Install MinGW DLLs from dist/lib
+    install(CODE "
+        set(DIST_LIB_SRC \"${DIST_LIB}\")
+        if(EXISTS \"\${DIST_LIB_SRC}\")
+            message(STATUS \"Installing MinGW DLLs from: \${DIST_LIB_SRC}\")
+            file(GLOB MINGW_DLLS \"\${DIST_LIB_SRC}/*.dll\")
+            foreach(DLL \${MINGW_DLLS})
+                file(INSTALL \"\${DLL}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\")
+            endforeach()
+        endif()
+    " COMPONENT ${CPACK_COMPONENT})
+else()
+    # Non-Qt builds: Install DLLs from dist/lib
+    install(CODE "
+        set(DIST_LIB_SRC \"${DIST_LIB}\")
+        if(EXISTS \"\${DIST_LIB_SRC}\")
+            message(STATUS \"Installing runtime DLLs from: \${DIST_LIB_SRC}\")
+            file(GLOB RUNTIME_DLLS \"\${DIST_LIB_SRC}/*.dll\")
+            foreach(DLL \${RUNTIME_DLLS})
+                file(INSTALL \"\${DLL}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\")
+            endforeach()
+        endif()
+    " COMPONENT ${CPACK_COMPONENT})
+endif()
+
 
 
