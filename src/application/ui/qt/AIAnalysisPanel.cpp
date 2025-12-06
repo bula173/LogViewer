@@ -586,12 +586,16 @@ void AIAnalysisPanel::OnPredefinedPromptSelected(int index)
 
 void AIAnalysisPanel::OnLoadPromptFile()
 {
-    const QString fileName = QFileDialog::getOpenFileName(
-        this,
-        tr("Load Prompt from File"),
-        QDir::currentPath() + "/etc/prompts",
-        tr("Prompt Files (*.txt *.prompt);;All Files (*)")
-    );
+    QFileDialog dialog(this, tr("Load Prompt from File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setDirectory(QCoreApplication::applicationDirPath() + "/etc/prompts");
+    dialog.setNameFilter(tr("Prompt Files (*.txt *.prompt);;All Files (*)"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    const QString fileName = dialog.selectedFiles().value(0);
     
     if (fileName.isEmpty())
         return;
@@ -620,12 +624,17 @@ void AIAnalysisPanel::OnSavePromptFile()
         return;
     }
     
-    const QString fileName = QFileDialog::getSaveFileName(
-        this,
-        tr("Save Prompt to File"),
-        QDir::currentPath() + "/etc/prompts/my_prompt.txt",
-        tr("Text Files (*.txt);;Prompt Files (*.prompt);;All Files (*)")
-    );
+    QFileDialog dialog(this, tr("Save Prompt to File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setDirectory(QCoreApplication::applicationDirPath() + "/etc/prompts");
+    dialog.setNameFilter(tr("Text Files (*.txt);;Prompt Files (*.prompt);;All Files (*)"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.selectFile("my_prompt.txt");
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    const QString fileName = dialog.selectedFiles().value(0);
     
     if (fileName.isEmpty())
         return;

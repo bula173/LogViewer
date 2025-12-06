@@ -247,9 +247,18 @@ void FiltersPanel::HandleClear()
 
 void FiltersPanel::HandleSaveAs()
 {
-    const QString path = QFileDialog::getSaveFileName(this,
-        tr("Save Filters"), QStringLiteral("filters.json"),
-        tr("Filter files (*.json)"));
+
+    QFileDialog dialog(this, tr("Save Filters"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setNameFilter(tr("Filters (*.json)"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.selectFile("filters.json");
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    const QString path = dialog.selectedFiles().value(0);
+
     if (path.isEmpty())
         return;
 
@@ -267,8 +276,18 @@ void FiltersPanel::HandleSaveAs()
 
 void FiltersPanel::HandleLoad()
 {
-    const QString path = QFileDialog::getOpenFileName(this, tr("Load Filters"),
-        QString(), tr("Filter files (*.json);;All files (*.*)"));
+
+    QFileDialog dialog(this, tr("Open Log File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+
+    dialog.setNameFilter(tr("Filter files (*.json);;All files (*.*)"));
+    if (dialog.exec() != QDialog::Accepted) {
+        util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
+        return;
+    }
+
+    const QString path = dialog.selectedFiles().value(0);
+
     if (path.isEmpty())
         return;
 

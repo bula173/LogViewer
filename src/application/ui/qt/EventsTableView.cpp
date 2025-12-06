@@ -35,7 +35,7 @@ void EventsTableView::InitializeView()
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     horizontalHeader()->setStretchLastSection(true);
-    horizontalHeader()->setSectionsMovable(false);
+    horizontalHeader()->setSectionsMovable(true);
     horizontalHeader()->setSectionsClickable(true);
     verticalHeader()->setVisible(false);
     setSortingEnabled(false);
