@@ -35,13 +35,17 @@ EXTRACT_ANON_NSPACES   = YES
 #---------------------------------------------------------------------------
 # Input files related configuration options
 #---------------------------------------------------------------------------
-INPUT                  = src/application \
+INPUT                  = README.md \
+                         docs \
+                         src/application \
                          src/dox \
                          src/main
-FILE_PATTERNS          = *.hpp *.cpp *.dox
+FILE_PATTERNS          = *.hpp *.cpp *.dox *.md
 RECURSIVE              = YES
-EXCLUDE                =
+EXCLUDE                = docs/html \
+                         docs/doxygen
 EXCLUDE_PATTERNS       = */build/* */thirdparty/*
+USE_MDFILE_AS_MAINPAGE = README.md
 #---------------------------------------------------------------------------
 # HTML related configuration options
 #---------------------------------------------------------------------------
