@@ -37,11 +37,16 @@ private slots:
     void OnModelChanged(int index);
     void OnShowInstalledModels();
     void OnRefreshModels();
+    void OnPredefinedPromptSelected(int index);
+    void OnLoadPromptFile();
+    void OnSavePromptFile();
 
 private:
     void BuildUi();
     void UpdateStatusLabel();
     void PopulateModelList();
+    void LoadPredefinedPrompts();
+    QString LoadPromptFromFile(const QString& filePath);
 
     std::shared_ptr<ai::IAIService> m_aiService;
     std::shared_ptr<ai::LogAnalyzer> m_analyzer;
@@ -54,6 +59,11 @@ private:
     QLabel* m_statusLabel{nullptr};
     QCheckBox* m_useCustomPromptCheckbox{nullptr};
     QTextEdit* m_customPromptEdit{nullptr};
+    QComboBox* m_predefinedPromptCombo{nullptr};
+    QPushButton* m_loadPromptButton{nullptr};
+    QPushButton* m_savePromptButton{nullptr};
+    
+    QMap<QString, QString> m_predefinedPrompts;
 };
 
 } // namespace ui::qt

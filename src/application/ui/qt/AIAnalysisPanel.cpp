@@ -15,6 +15,11 @@
 #include <QGroupBox>
 #include <QMessageBox>
 #include <QCheckBox>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+#include <QCoreApplication>
 #include <QtConcurrent/QtConcurrent>
 #include <QFutureWatcher>
 
@@ -88,8 +93,39 @@ void AIAnalysisPanel::BuildUi()
     connect(m_useCustomPromptCheckbox, &QCheckBox::toggled, this, [this](bool checked) {
         m_customPromptEdit->setEnabled(checked);
         m_analysisTypeCombo->setEnabled(!checked);
+        m_predefinedPromptCombo->setEnabled(checked);
+        m_loadPromptButton->setEnabled(checked);
+        m_savePromptButton->setEnabled(checked);
     });
     controlsLayout->addRow(m_useCustomPromptCheckbox);
+
+    // Predefined prompts selector
+    auto* promptSelectorLayout = new QHBoxLayout();
+    m_predefinedPromptCombo = new QComboBox(this);
+    m_predefinedPromptCombo->setEnabled(false);
+    m_predefinedPromptCombo->setToolTip(tr("Select a predefined prompt template"));
+    connect(m_predefinedPromptCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &AIAnalysisPanel::OnPredefinedPromptSelected);
+    promptSelectorLayout->addWidget(m_predefinedPromptCombo, 1);
+    
+    m_loadPromptButton = new QPushButton(tr("Load..."), this);
+    m_loadPromptButton->setEnabled(false);
+    m_loadPromptButton->setToolTip(tr("Load prompt from a text file"));
+    connect(m_loadPromptButton, &QPushButton::clicked,
+            this, &AIAnalysisPanel::OnLoadPromptFile);
+    promptSelectorLayout->addWidget(m_loadPromptButton);
+    
+    m_savePromptButton = new QPushButton(tr("Save..."), this);
+    m_savePromptButton->setEnabled(false);
+    m_savePromptButton->setToolTip(tr("Save current prompt to a file"));
+    connect(m_savePromptButton, &QPushButton::clicked,
+            this, &AIAnalysisPanel::OnSavePromptFile);
+    promptSelectorLayout->addWidget(m_savePromptButton);
+    
+    controlsLayout->addRow(tr("Prompt Template:"), promptSelectorLayout);
+    
+    // Load predefined prompts
+    LoadPredefinedPrompts();
 
     m_customPromptEdit = new QTextEdit(this);
     m_customPromptEdit->setPlaceholderText(tr("Enter your custom analysis prompt...\n\nExamples:\n- Find all database connection errors\n- What performance issues exist?\n- Analyze authentication failures"));
@@ -419,6 +455,194 @@ void AIAnalysisPanel::OnRefreshModels()
     PopulateModelList();
     QMessageBox::information(this, tr("Models Refreshed"), 
         tr("Model list has been refreshed.\nFound %1 model(s).").arg(m_modelCombo->count()));
+}
+
+void AIAnalysisPanel::LoadPredefinedPrompts()
+{
+    m_predefinedPrompts.clear();
+    m_predefinedPromptCombo->clear();
+    m_predefinedPromptCombo->addItem(tr("-- Select Template --"), "");
+    
+    // Try multiple possible locations for prompts directory
+    QStringList searchPaths;
+    searchPaths << QDir::currentPath() + "/etc/prompts";  // Working directory
+    searchPaths << QCoreApplication::applicationDirPath() + "/etc/prompts";  // Application directory
+    
+#ifdef Q_OS_MAC
+    // macOS bundle: Contents/Resources/etc/prompts
+    searchPaths << QCoreApplication::applicationDirPath() + "/../Resources/etc/prompts";
+#endif
+    
+    QString promptsDir;
+    QDir dir;
+    
+    // Find the first existing prompts directory
+    for (const QString& path : searchPaths)
+    {
+        dir.setPath(path);
+        if (dir.exists())
+        {
+            promptsDir = path;
+            util::Logger::Info("Found prompts directory: {}", promptsDir.toStdString());
+            break;
+        }
+    }
+    
+    if (promptsDir.isEmpty())
+    {
+        util::Logger::Info("No prompts directory found in search paths");
+        
+        // Add some default built-in prompts as fallback
+        m_predefinedPrompts[tr("Performance Analysis")] = 
+            tr("Analyze performance-related issues in the logs. Look for:\n"
+               "- Slow operations or timeouts\n"
+               "- Resource consumption patterns\n"
+               "- Bottlenecks and their causes\n"
+               "- Recommendations for optimization");
+        
+        m_predefinedPrompts[tr("Security Audit")] = 
+            tr("Perform a security-focused analysis. Identify:\n"
+               "- Authentication failures or suspicious login attempts\n"
+               "- Authorization issues or privilege escalations\n"
+               "- Potential security vulnerabilities\n"
+               "- Unusual access patterns");
+        
+        m_predefinedPrompts[tr("Database Issues")] = 
+            tr("Focus on database-related problems:\n"
+               "- Connection failures or timeouts\n"
+               "- Query errors or slow queries\n"
+               "- Transaction issues\n"
+               "- Data integrity problems");
+               
+        m_predefinedPrompts[tr("Network Diagnostics")] = 
+            tr("Analyze network-related events:\n"
+               "- Connection failures\n"
+               "- Timeouts and latency issues\n"
+               "- Protocol errors\n"
+               "- Network topology problems");
+    }
+    else
+    {
+        // Load prompts from files
+        const QStringList filters{"*.txt", "*.prompt"};
+        const QFileInfoList files = dir.entryInfoList(filters, QDir::Files | QDir::Readable, QDir::Name);
+        
+        for (const QFileInfo& fileInfo : files)
+        {
+            const QString content = LoadPromptFromFile(fileInfo.absoluteFilePath());
+            if (!content.isEmpty())
+            {
+                const QString name = fileInfo.completeBaseName();
+                m_predefinedPrompts[name] = content;
+                util::Logger::Info("Loaded prompt template: {}", name.toStdString());
+            }
+        }
+    }
+    
+    // Populate combo box
+    for (auto it = m_predefinedPrompts.constBegin(); it != m_predefinedPrompts.constEnd(); ++it)
+    {
+        m_predefinedPromptCombo->addItem(it.key(), it.key());
+    }
+    
+    util::Logger::Info("Loaded {} predefined prompt templates", m_predefinedPrompts.size());
+}
+
+QString AIAnalysisPanel::LoadPromptFromFile(const QString& filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        util::Logger::Error("Failed to open prompt file: {}", filePath.toStdString());
+        return QString();
+    }
+    
+    const QString content = QString::fromUtf8(file.readAll());
+    file.close();
+    
+    return content.trimmed();
+}
+
+void AIAnalysisPanel::OnPredefinedPromptSelected(int index)
+{
+    if (index <= 0 || !m_customPromptEdit)
+        return;
+    
+    const QString templateName = m_predefinedPromptCombo->currentData().toString();
+    if (m_predefinedPrompts.contains(templateName))
+    {
+        m_customPromptEdit->setPlainText(m_predefinedPrompts[templateName]);
+        util::Logger::Info("Loaded predefined prompt: {}", templateName.toStdString());
+    }
+}
+
+void AIAnalysisPanel::OnLoadPromptFile()
+{
+    const QString fileName = QFileDialog::getOpenFileName(
+        this,
+        tr("Load Prompt from File"),
+        QDir::currentPath() + "/etc/prompts",
+        tr("Prompt Files (*.txt *.prompt);;All Files (*)")
+    );
+    
+    if (fileName.isEmpty())
+        return;
+    
+    const QString content = LoadPromptFromFile(fileName);
+    if (!content.isEmpty())
+    {
+        m_customPromptEdit->setPlainText(content);
+        util::Logger::Info("Loaded prompt from file: {}", fileName.toStdString());
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("Load Failed"),
+            tr("Failed to load prompt from file:\n%1").arg(fileName));
+    }
+}
+
+void AIAnalysisPanel::OnSavePromptFile()
+{
+    const QString currentPrompt = m_customPromptEdit->toPlainText().trimmed();
+    
+    if (currentPrompt.isEmpty())
+    {
+        QMessageBox::information(this, tr("No Prompt"),
+            tr("The custom prompt is empty. Nothing to save."));
+        return;
+    }
+    
+    const QString fileName = QFileDialog::getSaveFileName(
+        this,
+        tr("Save Prompt to File"),
+        QDir::currentPath() + "/etc/prompts/my_prompt.txt",
+        tr("Text Files (*.txt);;Prompt Files (*.prompt);;All Files (*)")
+    );
+    
+    if (fileName.isEmpty())
+        return;
+    
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this, tr("Save Failed"),
+            tr("Failed to save prompt to file:\n%1\n\nError: %2")
+                .arg(fileName)
+                .arg(file.errorString()));
+        util::Logger::Error("Failed to save prompt file: {}", fileName.toStdString());
+        return;
+    }
+    
+    QTextStream out(&file);
+    out << currentPrompt;
+    file.close();
+    
+    util::Logger::Info("Saved prompt to file: {}", fileName.toStdString());
+    
+    QMessageBox::information(this, tr("Prompt Saved"),
+        tr("Prompt successfully saved to:\n%1\n\n"
+           "You can load it later using the \"Load...\" button or by placing it in the etc/prompts directory.")
+            .arg(fileName));
 }
 
 } // namespace ui::qt

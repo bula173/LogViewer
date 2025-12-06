@@ -180,6 +180,15 @@ install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
     RENAME config.json
     COMPONENT common)
 
+# Install predefined AI prompts to common component
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/etc/prompts
+    DESTINATION etc
+    COMPONENT common
+    FILES_MATCHING 
+    PATTERN "*.txt"
+    PATTERN "*.prompt"
+    PATTERN "*.md")
+
 if(USE_QT)
     # Install all Qt runtime files (DLLs, plugins, etc.) to qt_app component
     install(CODE "
