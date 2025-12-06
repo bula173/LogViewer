@@ -42,6 +42,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QKeySequence>
+#include <QDockWidget>
 
 #include <filesystem>
 #include <stdexcept>
@@ -67,45 +68,19 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 {
     util::Logger::Debug("[MainWindow] InitializeUi: events size={}",
         events.Size());
-    m_bottomSplitter = new QSplitter(Qt::Vertical, this);
-    m_leftSplitter = new QSplitter(Qt::Horizontal, m_bottomSplitter);
-    m_rightSplitter = new QSplitter(Qt::Horizontal, m_leftSplitter);
 
-    // Left filters panel
-    auto* leftPanel = new QWidget(m_leftSplitter);
-    auto* leftLayout = new QVBoxLayout(leftPanel);
-    leftLayout->setContentsMargins(0, 0, 0, 0);
-    leftLayout->setSpacing(8);
+    // ===== STATUS BAR =====
+    m_statusLabel = new QLabel("Ready", this);
+    statusBar()->addWidget(m_statusLabel, 1);
 
-    m_filterTabs = new QTabWidget(leftPanel);
+    m_progressBar = new QProgressBar(this);
+    m_progressBar->setVisible(false);
+    m_progressBar->setTextVisible(false);
+    m_progressBar->setFixedHeight(12);
+    statusBar()->addPermanentWidget(m_progressBar, 0);
 
-    auto* filtersTab = new QWidget(m_filterTabs);
-    auto* filtersLayout = new QVBoxLayout(filtersTab);
-    m_filtersPanel = new FiltersPanel(filtersTab);
-    filtersLayout->addWidget(m_filtersPanel);
-    filtersTab->setLayout(filtersLayout);
-
-    auto* typeTab = new QWidget(m_filterTabs);
-    auto* typeLayout = new QVBoxLayout(typeTab);
-    typeLayout->addWidget(new QLabel("Type:", typeTab));
-    m_typeFilterView = new TypeFilterView(typeTab);
-    typeLayout->addWidget(m_typeFilterView);
-    m_applyFilterButton = new QPushButton("Apply Filter", typeTab);
-    typeLayout->addWidget(m_applyFilterButton);
-    typeTab->setLayout(typeLayout);
-
-    m_filterTabs->addTab(filtersTab, "Extended Filters");
-    m_filterTabs->addTab(typeTab, "Type Filters");
-
-    leftLayout->addWidget(m_filterTabs);
-    leftPanel->setLayout(leftLayout);
-
-    // Right content area with tabs for events view and AI analysis
-    auto* rightPanel = new QWidget(m_rightSplitter);
-    auto* rightLayout = new QVBoxLayout(rightPanel);
-    rightLayout->setContentsMargins(0, 0, 0, 0);
-    
-    auto* contentTabs = new QTabWidget(rightPanel);
+    // ===== CENTRAL WIDGET: Main content area with tabs =====
+    auto* contentTabs = new QTabWidget(this);
     
     // Events view tab
     m_eventsView = new EventsTableView(events, contentTabs);
@@ -123,23 +98,57 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, contentTabs);
     contentTabs->addTab(m_aiPanel, "AI Analysis");
     
-    rightLayout->addWidget(contentTabs);
-    rightPanel->setLayout(rightLayout);
+    setCentralWidget(contentTabs);
 
-    m_itemDetailsView = new ItemDetailsView(events, m_rightSplitter);
+    // ===== LEFT DOCK: Filters Panel =====
+    m_filtersDock = new QDockWidget("Filters", this);
+    m_filtersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                               QDockWidget::DockWidgetFloatable | 
+                               QDockWidget::DockWidgetClosable);
+    
+    m_filterTabs = new QTabWidget(m_filtersDock);
+    
+    auto* filtersTab = new QWidget(m_filterTabs);
+    auto* filtersLayout = new QVBoxLayout(filtersTab);
+    m_filtersPanel = new FiltersPanel(filtersTab);
+    filtersLayout->addWidget(m_filtersPanel);
+    filtersTab->setLayout(filtersLayout);
 
-    m_rightSplitter->addWidget(rightPanel);
-    m_rightSplitter->addWidget(m_itemDetailsView);
-    m_rightSplitter->setStretchFactor(0, 3);
-    m_rightSplitter->setStretchFactor(1, 2);
+    auto* typeTab = new QWidget(m_filterTabs);
+    auto* typeLayout = new QVBoxLayout(typeTab);
+    typeLayout->addWidget(new QLabel("Type:", typeTab));
+    m_typeFilterView = new TypeFilterView(typeTab);
+    typeLayout->addWidget(m_typeFilterView);
+    m_applyFilterButton = new QPushButton("Apply Filter", typeTab);
+    typeLayout->addWidget(m_applyFilterButton);
+    typeTab->setLayout(typeLayout);
 
-    m_leftSplitter->addWidget(leftPanel);
-    m_leftSplitter->addWidget(m_rightSplitter);
-    m_leftSplitter->setStretchFactor(0, 1);
-    m_leftSplitter->setStretchFactor(1, 3);
+    m_filterTabs->addTab(filtersTab, "Extended Filters");
+    m_filterTabs->addTab(typeTab, "Type Filters");
+    
+    m_filtersDock->setWidget(m_filterTabs);
+    addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
-    // Bottom panel with tabs for Search and AI Chat
-    auto* bottomTabs = new QTabWidget(m_bottomSplitter);
+    // ===== RIGHT DOCK: Item Details =====
+    m_detailsDock = new QDockWidget("Item Details", this);
+    m_detailsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_detailsDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                               QDockWidget::DockWidgetFloatable | 
+                               QDockWidget::DockWidgetClosable);
+    
+    m_itemDetailsView = new ItemDetailsView(events, m_detailsDock);
+    m_detailsDock->setWidget(m_itemDetailsView);
+    addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
+
+    // ===== BOTTOM DOCK: Search & AI Chat =====
+    m_bottomDock = new QDockWidget("Tools", this);
+    m_bottomDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
+    m_bottomDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                              QDockWidget::DockWidgetFloatable | 
+                              QDockWidget::DockWidgetClosable);
+    
+    auto* bottomTabs = new QTabWidget(m_bottomDock);
     
     // Search tab
     auto* searchPanel = new QWidget(bottomTabs);
@@ -162,30 +171,19 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     
     bottomTabs->addTab(searchPanel, "Search");
     
-    // AI Chat tab - pass events container directly for context
+    // AI Chat tab
     auto* chatPanel = new AIChatPanel(aiService, events, bottomTabs);
     bottomTabs->addTab(chatPanel, "AI Chat");
+    
+    m_bottomDock->setWidget(bottomTabs);
+    addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
 
-    m_bottomSplitter->addWidget(m_leftSplitter);
-    m_bottomSplitter->addWidget(bottomTabs);
-    m_bottomSplitter->setStretchFactor(0, 3);
-    m_bottomSplitter->setStretchFactor(1, 1);
-
-    setCentralWidget(m_bottomSplitter);
+    // ===== WINDOW SETTINGS =====
     setAcceptDrops(true);
     const auto title = QStringLiteral("LogViewer Qt %1")
                            .arg(QString::fromStdString(Version::current().asShortStr()));
     setWindowTitle(title);
     setMinimumSize(1024, 768);
-
-    m_statusLabel = new QLabel("Ready", this);
-    statusBar()->addWidget(m_statusLabel, 1);
-
-    m_progressBar = new QProgressBar(this);
-    m_progressBar->setVisible(false);
-    m_progressBar->setTextVisible(false);
-    m_progressBar->setFixedHeight(12);
-    statusBar()->addPermanentWidget(m_progressBar, 0);
 
     connect(m_searchButton, &QPushButton::clicked, this,
         &MainWindow::OnSearchRequested);
@@ -272,6 +270,34 @@ void MainWindow::SetupMenus()
     connect(aiSetupAction, &QAction::triggered, this, [this]() {
         ui::qt::OllamaSetupDialog dlg(this);
         dlg.exec();
+    });
+
+    // View menu for dock widgets
+    auto* viewMenu = bar->addMenu(tr("&View"));
+    viewMenu->addAction(m_filtersDock->toggleViewAction());
+    viewMenu->addAction(m_detailsDock->toggleViewAction());
+    viewMenu->addAction(m_bottomDock->toggleViewAction());
+    
+    viewMenu->addSeparator();
+    
+    auto* resetLayoutAction = viewMenu->addAction(tr("&Reset Layout"));
+    connect(resetLayoutAction, &QAction::triggered, this, [this]() {
+        // Reset all docks to default positions
+        if (m_filtersDock) {
+            m_filtersDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
+            m_filtersDock->show();
+        }
+        if (m_detailsDock) {
+            m_detailsDock->setFloating(false);
+            addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
+            m_detailsDock->show();
+        }
+        if (m_bottomDock) {
+            m_bottomDock->setFloating(false);
+            addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
+            m_bottomDock->show();
+        }
     });
 }
 

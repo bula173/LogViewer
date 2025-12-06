@@ -189,6 +189,14 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/etc/prompts
     PATTERN "*.prompt"
     PATTERN "*.md")
 
+# Install example log files to common component
+install(FILES 
+    ${CMAKE_SOURCE_DIR}/etc/example_log.xml
+    ${CMAKE_SOURCE_DIR}/etc/example_log_10k.xml
+    ${CMAKE_SOURCE_DIR}/etc/generate_log.py
+    DESTINATION etc/examples
+    COMPONENT common)
+
 if(USE_QT)
     # Install all Qt runtime files (DLLs, plugins, etc.) to qt_app component
     install(CODE "

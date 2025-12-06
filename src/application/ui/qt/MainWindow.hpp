@@ -16,6 +16,7 @@ class QTabWidget;
 class QWidget;
 class QDragEnterEvent;
 class QDropEvent;
+class QDockWidget;
 
 namespace mvc
 {
@@ -105,6 +106,11 @@ class MainWindow : public QMainWindow,
     QTabWidget* m_filterTabs {nullptr};
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
+
+    // Dock widgets for collapsible panels
+    QDockWidget* m_filtersDock {nullptr};
+    QDockWidget* m_detailsDock {nullptr};
+    QDockWidget* m_bottomDock {nullptr};
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
