@@ -1,4 +1,5 @@
 #include "ai/OllamaClient.hpp"
+#include "config/Config.hpp"
 #include "util/Logger.hpp"
 
 #include <sstream>
@@ -288,7 +289,10 @@ std::string OllamaClient::SendHttpPost(const std::string& endpoint,
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);  // 5 minutes for LLM responses
+    
+    // Use configurable timeout from config
+    const int timeout = config::GetConfig().aiTimeoutSeconds;
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, static_cast<long>(timeout));
 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");

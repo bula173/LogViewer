@@ -331,6 +331,13 @@ void StructuredConfigDialog::InitAITab()
         &StructuredConfigDialog::OnOllamaDefaultModelChanged);
     form->addRow(tr("Default Model:"), m_ollamaDefaultModelEdit);
     
+    // Timeout
+    m_aiTimeoutSpin = new QSpinBox(m_aiTab);
+    m_aiTimeoutSpin->setRange(30, 3600);  // 30 seconds to 1 hour
+    m_aiTimeoutSpin->setSuffix(" seconds");
+    m_aiTimeoutSpin->setToolTip(tr("Timeout for AI requests. Increase for slower machines or complex queries."));
+    form->addRow(tr("Request Timeout:"), m_aiTimeoutSpin);
+    
     layout->addLayout(form);
     
     // Add information label
@@ -381,6 +388,7 @@ void StructuredConfigDialog::LoadConfigToUi()
     m_aiApiKeyEdit->setText(QString::fromStdString(cfg.aiApiKey));
     m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
     m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
+    m_aiTimeoutSpin->setValue(cfg.aiTimeoutSeconds);
 
     // Populate color column combo with available columns
     m_colorColumnCombo->clear();
@@ -423,6 +431,7 @@ void StructuredConfigDialog::OnSaveClicked()
     cfg.aiApiKey = m_aiApiKeyEdit->text().toStdString();
     cfg.ollamaBaseUrl = m_ollamaBaseUrlEdit->text().toStdString();
     cfg.ollamaDefaultModel = m_ollamaDefaultModelEdit->text().toStdString();
+    cfg.aiTimeoutSeconds = m_aiTimeoutSpin->value();
 
     try
     {

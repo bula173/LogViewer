@@ -102,6 +102,7 @@ private:
     QLineEdit* m_aiApiKeyEdit {nullptr};
     QLineEdit* m_ollamaBaseUrlEdit {nullptr};
     QLineEdit* m_ollamaDefaultModelEdit {nullptr};
+    QSpinBox* m_aiTimeoutSpin {nullptr};
 
     // Columns tab widgets
     QWidget* m_columnsTab {nullptr};

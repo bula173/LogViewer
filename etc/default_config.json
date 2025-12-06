@@ -9,7 +9,8 @@
   "aiConfig": {
     "provider": "ollama",
     "baseUrl": "http://localhost:11434",
-    "defaultModel": "qwen2.5-coder:7b"
+    "defaultModel": "qwen2.5-coder:7b",
+    "timeoutSeconds": 300
   },
   "parsers": {
     "xml": {

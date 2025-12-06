@@ -92,6 +92,7 @@ class Config
     std::string aiApiKey;  // API key for cloud providers
     std::string ollamaBaseUrl {"http://localhost:11434"};
     std::string ollamaDefaultModel {"qwen2.5-coder:7b"};
+    int aiTimeoutSeconds {300};  // Timeout for AI requests in seconds (default 5 minutes)
 };
 
 Config& GetConfig();

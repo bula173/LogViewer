@@ -161,6 +161,7 @@ void Config::SaveConfig()
             j["aiConfig"]["apiKey"] = aiApiKey;
         j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
         j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
+        j["aiConfig"]["timeoutSeconds"] = aiTimeoutSeconds;
         for (const auto& [col, valMap] : columnColors)
         {
             for (const auto& [val, colors] : valMap)
@@ -330,6 +331,11 @@ void Config::GetAIConfig(const json& j)
         {
             ollamaDefaultModel = aiConfig["defaultModel"].get<std::string>();
             util::Logger::Info("AI default model set to: {}", ollamaDefaultModel);
+        }
+        if (aiConfig.contains("timeoutSeconds"))
+        {
+            aiTimeoutSeconds = aiConfig["timeoutSeconds"].get<int>();
+            util::Logger::Info("AI timeout set to: {} seconds", aiTimeoutSeconds);
         }
     }
     else
