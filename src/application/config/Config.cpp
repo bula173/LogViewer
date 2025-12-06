@@ -107,6 +107,8 @@ void Config::LoadConfig()
 
         GetColorConfig(j);
         GetLoggingConfig(j);
+        GetFilterConfig(j);
+        GetAIConfig(j);
         ParseXmlConfig(j);
 
 
@@ -153,6 +155,13 @@ void Config::SaveConfig()
                 {"visible", col.isVisible}, {"width", col.width}});
         }
         j["logging"]["level"] = logLevel;
+        j["filters"]["typeFilterField"] = typeFilterField;
+        j["aiConfig"]["provider"] = aiProvider;
+        if (!aiApiKey.empty())
+            j["aiConfig"]["apiKey"] = aiApiKey;
+        j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
+        j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
+        j["aiConfig"]["timeoutSeconds"] = aiTimeoutSeconds;
         for (const auto& [col, valMap] : columnColors)
         {
             for (const auto& [val, colors] : valMap)
@@ -274,6 +283,64 @@ void Config::GetLoggingConfig(const json& j)
     else
     {
         util::Logger::Warn("Missing 'logging' in config file.");
+    }
+}
+
+void Config::GetFilterConfig(const json& j)
+{
+    if (j.contains("filters"))
+    {
+        const auto& filterConfig = j["filters"];
+        if (filterConfig.contains("typeFilterField"))
+        {
+            typeFilterField = filterConfig["typeFilterField"].get<std::string>();
+            util::Logger::Info("Type filter field set to: {}", typeFilterField);
+        }
+        else
+        {
+            util::Logger::Info("No 'typeFilterField' in filter config, using default: type");
+        }
+    }
+    else
+    {
+        util::Logger::Info("No 'filters' config found, using default type filter field: type");
+    }
+}
+
+void Config::GetAIConfig(const json& j)
+{
+    if (j.contains("aiConfig"))
+    {
+        const auto& aiConfig = j["aiConfig"];
+        if (aiConfig.contains("provider"))
+        {
+            aiProvider = aiConfig["provider"].get<std::string>();
+            util::Logger::Info("AI provider set to: {}", aiProvider);
+        }
+        if (aiConfig.contains("apiKey"))
+        {
+            aiApiKey = aiConfig["apiKey"].get<std::string>();
+            util::Logger::Info("AI API key configured (length: {})", aiApiKey.length());
+        }
+        if (aiConfig.contains("baseUrl"))
+        {
+            ollamaBaseUrl = aiConfig["baseUrl"].get<std::string>();
+            util::Logger::Info("AI base URL set to: {}", ollamaBaseUrl);
+        }
+        if (aiConfig.contains("defaultModel"))
+        {
+            ollamaDefaultModel = aiConfig["defaultModel"].get<std::string>();
+            util::Logger::Info("AI default model set to: {}", ollamaDefaultModel);
+        }
+        if (aiConfig.contains("timeoutSeconds"))
+        {
+            aiTimeoutSeconds = aiConfig["timeoutSeconds"].get<int>();
+            util::Logger::Info("AI timeout set to: {} seconds", aiTimeoutSeconds);
+        }
+    }
+    else
+    {
+        util::Logger::Info("No AI config found, using defaults.");
     }
 }
 

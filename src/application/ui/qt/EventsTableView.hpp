@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mvc/IView.hpp"
 #include "ui/IEventsView.hpp"
 
 #include <QTableView>
@@ -15,7 +16,9 @@ namespace ui::qt
 
 class EventsTableModel;
 
-class EventsTableView : public QTableView, public ui::IEventsListView
+class EventsTableView : public QTableView,
+                        public ui::IEventsListView,
+                        public mvc::IView
 {
     Q_OBJECT
 
@@ -27,6 +30,10 @@ class EventsTableView : public QTableView, public ui::IEventsListView
     void SetFilteredEvents(
         const std::vector<unsigned long>& filteredIndices) override;
     void UpdateColors() override;
+    const std::vector<unsigned long>* GetFilteredIndices() const;
+
+    void OnDataUpdated() override;
+    void OnCurrentIndexUpdated(const int index) override;
 
     int CurrentActualRow() const;
     void ScrollToActualRow(int actualRow);

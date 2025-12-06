@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "config/Config.hpp"
 #include "error/Error.hpp"
 #include "util/Logger.hpp"
 
@@ -95,8 +96,8 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
-
-    m_searchResultsView.Clear();
+    m_view.UpdateStatusText("Clear...");
+    clearAllData();
     m_view.SetSearchControlsEnabled(false);
     m_view.ToggleProgressVisibility(true);
     m_view.ConfigureProgressRange(100);
@@ -123,6 +124,14 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_view.UpdateStatusText(previousStatus);
+        
+        // Update type filters even on error, so any successfully parsed events are shown
+        UpdateTypeFilters();
+        if (m_eventsListView)
+            m_eventsListView->RefreshView();
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        
         m_isParsing = false;
         m_progressConfigured = false;
         throw;
@@ -137,12 +146,13 @@ void MainWindowPresenter::UpdateTypeFilters()
     const std::string previousStatus = m_view.CurrentStatusText();
     m_view.UpdateStatusText("Updating filters...");
 
+    auto& config = config::GetConfig();
     std::set<std::string> types;
     const std::size_t total = m_events.Size();
     for (std::size_t i = 0; i < total; ++i)
     {
         const auto& event = m_events.GetEvent(ClampToInt(i));
-        types.insert(event.findByKey("type"));
+        types.insert(event.findByKey(config.typeFilterField));
 
         if ((i % kProgressYieldInterval) == 0)
             m_view.ProcessPendingEvents();
@@ -175,6 +185,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     const std::string previousStatus = m_view.CurrentStatusText();
     m_view.UpdateStatusText("Applying filters...");
 
+    auto& config = config::GetConfig();
     const auto checkedTypes = m_typeFilterView->CheckedTypes();
     const std::set<std::string> selectedTypeStrings(
         checkedTypes.begin(), checkedTypes.end());
@@ -186,7 +197,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     for (std::size_t i = 0; i < total; ++i)
     {
         const auto& event = m_events.GetEvent(ClampToInt(i));
-        const std::string eventType = event.findByKey("type");
+        const std::string eventType = event.findByKey(config.typeFilterField);
         const bool typeMatch = selectedTypeStrings.empty() ||
             selectedTypeStrings.count(eventType) > 0;
 
@@ -247,6 +258,14 @@ void MainWindowPresenter::NewEventBatchFound(
         m_eventsListView->RefreshView();
     if (m_itemDetailsView)
         m_itemDetailsView->RefreshView();
+}
+
+void MainWindowPresenter::clearAllData()
+{
+    util::Logger::Debug("Clearing all data from presenter-managed components");
+    m_searchResultsView.Clear();
+    m_events.Clear();
+    util::Logger::Debug("All data cleared successfully");
 }
 
 } // namespace ui

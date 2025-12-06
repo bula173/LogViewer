@@ -9,7 +9,15 @@
 #include "ui/qt/ItemDetailsView.hpp"
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
+#include "ui/qt/AIAnalysisPanel.hpp"
+#include "ui/qt/AIChatPanel.hpp"
+#include "ui/qt/OllamaSetupDialog.hpp"
+#include "ai/AIServiceFactory.hpp"
+#include "ai/LogAnalyzer.hpp"
+#include "application/util/Logger.hpp"
 #include "config/Config.hpp"
+#include "ui/qt/ConfigEditorDialog.hpp"
+#include "ui/qt/StructuredConfigDialog.hpp"
 #include "main/version.h"
 
 #include <QAction>
@@ -34,6 +42,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QKeySequence>
+#include <QDockWidget>
 
 #include <filesystem>
 #include <stdexcept>
@@ -46,27 +55,60 @@ MainWindow::MainWindow(mvc::IController& controller,
     : QMainWindow(parent)
 {
     m_events = &events;
+    util::Logger::Info("[MainWindow] Initializing main window");
     InitializeUi(events);
     SetupMenus();
     InitializePresenter(controller, events);
+    util::Logger::Info("[MainWindow] Main window initialized");
 }
 
 MainWindow::~MainWindow() = default;
 
 void MainWindow::InitializeUi(db::EventsContainer& events)
 {
-    m_bottomSplitter = new QSplitter(Qt::Vertical, this);
-    m_leftSplitter = new QSplitter(Qt::Horizontal, m_bottomSplitter);
-    m_rightSplitter = new QSplitter(Qt::Horizontal, m_leftSplitter);
+    util::Logger::Debug("[MainWindow] InitializeUi: events size={}",
+        events.Size());
 
-    // Left filters panel
-    auto* leftPanel = new QWidget(m_leftSplitter);
-    auto* leftLayout = new QVBoxLayout(leftPanel);
-    leftLayout->setContentsMargins(0, 0, 0, 0);
-    leftLayout->setSpacing(8);
+    // ===== STATUS BAR =====
+    m_statusLabel = new QLabel("Ready", this);
+    statusBar()->addWidget(m_statusLabel, 1);
 
-    m_filterTabs = new QTabWidget(leftPanel);
+    m_progressBar = new QProgressBar(this);
+    m_progressBar->setVisible(false);
+    m_progressBar->setTextVisible(false);
+    m_progressBar->setFixedHeight(12);
+    statusBar()->addPermanentWidget(m_progressBar, 0);
 
+    // ===== CENTRAL WIDGET: Main content area with tabs =====
+    auto* contentTabs = new QTabWidget(this);
+    
+    // Events view tab
+    m_eventsView = new EventsTableView(events, contentTabs);
+    contentTabs->addTab(m_eventsView, "Events");
+    
+    // AI Analysis tab - use factory to create appropriate client
+    auto& config = config::GetConfig();
+    auto aiService = ai::AIServiceFactory::CreateClient(
+        config.aiProvider,
+        config.aiApiKey,
+        config.ollamaBaseUrl,
+        config.ollamaDefaultModel
+    );
+    auto aiAnalyzer = std::make_shared<ai::LogAnalyzer>(aiService, events);
+    m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, m_eventsView, contentTabs);
+    contentTabs->addTab(m_aiPanel, "AI Analysis");
+    
+    setCentralWidget(contentTabs);
+
+    // ===== LEFT DOCK: Filters Panel =====
+    m_filtersDock = new QDockWidget("Filters", this);
+    m_filtersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                               QDockWidget::DockWidgetFloatable | 
+                               QDockWidget::DockWidgetClosable);
+    
+    m_filterTabs = new QTabWidget(m_filtersDock);
+    
     auto* filtersTab = new QWidget(m_filterTabs);
     auto* filtersLayout = new QVBoxLayout(filtersTab);
     m_filtersPanel = new FiltersPanel(filtersTab);
@@ -84,29 +126,34 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     m_filterTabs->addTab(filtersTab, "Extended Filters");
     m_filterTabs->addTab(typeTab, "Type Filters");
+    
+    m_filtersDock->setWidget(m_filterTabs);
+    addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
-    leftLayout->addWidget(m_filterTabs);
-    leftPanel->setLayout(leftLayout);
+    // ===== RIGHT DOCK: Item Details =====
+    m_detailsDock = new QDockWidget("Item Details", this);
+    m_detailsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_detailsDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                               QDockWidget::DockWidgetFloatable | 
+                               QDockWidget::DockWidgetClosable);
+    
+    m_itemDetailsView = new ItemDetailsView(events, m_detailsDock);
+    m_detailsDock->setWidget(m_itemDetailsView);
+    addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
 
-    // Right content splitter (events list + details)
-    m_eventsView = new EventsTableView(events, m_rightSplitter);
-
-    m_itemDetailsView = new ItemDetailsView(events, m_rightSplitter);
-
-    m_rightSplitter->addWidget(m_eventsView);
-    m_rightSplitter->addWidget(m_itemDetailsView);
-    m_rightSplitter->setStretchFactor(0, 3);
-    m_rightSplitter->setStretchFactor(1, 2);
-
-    m_leftSplitter->addWidget(leftPanel);
-    m_leftSplitter->addWidget(m_rightSplitter);
-    m_leftSplitter->setStretchFactor(0, 1);
-    m_leftSplitter->setStretchFactor(1, 3);
-
-    // Search panel mirrors wx bottom splitter
-    auto* searchPanel = new QWidget(m_bottomSplitter);
+    // ===== BOTTOM DOCK: Search & AI Chat =====
+    m_bottomDock = new QDockWidget("Tools", this);
+    m_bottomDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
+    m_bottomDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                              QDockWidget::DockWidgetFloatable | 
+                              QDockWidget::DockWidgetClosable);
+    
+    auto* bottomTabs = new QTabWidget(m_bottomDock);
+    
+    // Search tab
+    auto* searchPanel = new QWidget(bottomTabs);
     auto* searchLayout = new QVBoxLayout(searchPanel);
-    searchLayout->setContentsMargins(8, 8, 8, 8);
+    searchLayout->setContentsMargins(4, 4, 4, 4);
     searchLayout->setSpacing(8);
 
     auto* searchRow = new QHBoxLayout();
@@ -121,27 +168,22 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     searchLayout->addLayout(searchRow);
     searchLayout->addWidget(m_searchResults, 1);
     searchPanel->setLayout(searchLayout);
+    
+    bottomTabs->addTab(searchPanel, "Search");
+    
+    // AI Chat tab
+    auto* chatPanel = new AIChatPanel(aiService, events, bottomTabs);
+    bottomTabs->addTab(chatPanel, "AI Chat");
+    
+    m_bottomDock->setWidget(bottomTabs);
+    addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
 
-    m_bottomSplitter->addWidget(m_leftSplitter);
-    m_bottomSplitter->addWidget(searchPanel);
-    m_bottomSplitter->setStretchFactor(0, 3);
-    m_bottomSplitter->setStretchFactor(1, 1);
-
-    setCentralWidget(m_bottomSplitter);
+    // ===== WINDOW SETTINGS =====
     setAcceptDrops(true);
     const auto title = QStringLiteral("LogViewer Qt %1")
                            .arg(QString::fromStdString(Version::current().asShortStr()));
     setWindowTitle(title);
     setMinimumSize(1024, 768);
-
-    m_statusLabel = new QLabel("Ready", this);
-    statusBar()->addWidget(m_statusLabel, 1);
-
-    m_progressBar = new QProgressBar(this);
-    m_progressBar->setVisible(false);
-    m_progressBar->setTextVisible(false);
-    m_progressBar->setFixedHeight(12);
-    statusBar()->addPermanentWidget(m_progressBar, 0);
 
     connect(m_searchButton, &QPushButton::clicked, this,
         &MainWindow::OnSearchRequested);
@@ -167,6 +209,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         connect(m_eventsView, &EventsTableView::CurrentActualRowChanged,
             m_itemDetailsView, &ItemDetailsView::OnActualRowChanged);
     }
+
+    util::Logger::Debug("[MainWindow] UI initialized");
 }
 
 void MainWindow::SetupMenus()
@@ -182,8 +226,10 @@ void MainWindow::SetupMenus()
     auto* fileMenu = bar->addMenu(tr("&File"));
     auto* openAction = fileMenu->addAction(tr("&Open..."));
     openAction->setShortcut(QKeySequence::Open);
-    connect(openAction, &QAction::triggered, this,
-        &MainWindow::OnOpenFileRequested);
+    connect(openAction, &QAction::triggered, this, [this]() {
+        util::Logger::Debug("[MainWindow] Open menu triggered");
+        OnOpenFileRequested();
+    });
 
     auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
     clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
@@ -198,18 +244,67 @@ void MainWindow::SetupMenus()
         &MainWindow::OnExitRequested);
 
     auto* toolsMenu = bar->addMenu(tr("&Tools"));
-    auto* configAction = toolsMenu->addAction(tr("Open &Config File"));
-    connect(configAction, &QAction::triggered, this,
-        &MainWindow::OnOpenConfigRequested);
+
+    auto* structuredConfigAction =
+        toolsMenu->addAction(tr("Edit &Config..."));
+    connect(structuredConfigAction, &QAction::triggered, this, [this]() {
+        ui::qt::StructuredConfigDialog dlg(this);
+        dlg.AddObserver(this);
+        dlg.exec();
+    });
+
+    auto* editRawConfigAction =
+        toolsMenu->addAction(tr("Edit Raw Config JSON..."));
+    connect(editRawConfigAction, &QAction::triggered, this, [this]() {
+        ui::qt::ConfigEditorDialog dlg(this);
+        dlg.exec();
+    });
 
     auto* appLogAction = toolsMenu->addAction(tr("Open &App Log"));
     connect(appLogAction, &QAction::triggered, this,
         &MainWindow::OnOpenAppLogRequested);
+
+    toolsMenu->addSeparator();
+
+    auto* aiSetupAction = toolsMenu->addAction(tr("AI Analysis &Setup..."));
+    connect(aiSetupAction, &QAction::triggered, this, [this]() {
+        ui::qt::OllamaSetupDialog dlg(this);
+        dlg.exec();
+    });
+
+    // View menu for dock widgets
+    auto* viewMenu = bar->addMenu(tr("&View"));
+    viewMenu->addAction(m_filtersDock->toggleViewAction());
+    viewMenu->addAction(m_detailsDock->toggleViewAction());
+    viewMenu->addAction(m_bottomDock->toggleViewAction());
+    
+    viewMenu->addSeparator();
+    
+    auto* resetLayoutAction = viewMenu->addAction(tr("&Reset Layout"));
+    connect(resetLayoutAction, &QAction::triggered, this, [this]() {
+        // Reset all docks to default positions
+        if (m_filtersDock) {
+            m_filtersDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
+            m_filtersDock->show();
+        }
+        if (m_detailsDock) {
+            m_detailsDock->setFloating(false);
+            addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
+            m_detailsDock->show();
+        }
+        if (m_bottomDock) {
+            m_bottomDock->setFloating(false);
+            addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
+            m_bottomDock->show();
+        }
+    });
 }
 
 void MainWindow::InitializePresenter(
     mvc::IController& controller, db::EventsContainer& events)
 {
+    util::Logger::Debug("[MainWindow] InitializePresenter");
     m_searchResults->SetObserver(this);
     m_presenter = std::make_unique<ui::MainWindowPresenter>(*this, controller,
         events, *m_searchResults, m_eventsView, m_typeFilterView,
@@ -266,12 +361,23 @@ void MainWindow::RefreshLayout()
 
 void MainWindow::OnSearchResultActivated(long eventId)
 {
-    QMessageBox::information(this, "Search Result",
-        QString("Activated event ID: %1").arg(eventId));
+        util::Logger::Debug("[MainWindow] OnSearchResultActivated eventId={}",
+            eventId);
+        for (long i = 0u; i < static_cast<long>(m_events->Size()); ++i)
+        {
+            if (static_cast<long>(m_events->GetEvent(static_cast<int>(i)).getId()) == eventId)            {
+                util::Logger::Debug(
+                    "[MainWindow] Matching event found at index={}", static_cast<long long>(i));
+                m_events->SetCurrentItem(static_cast<int>(i));
+                break;
+            }
+        }
 }
 
 void MainWindow::OnSearchRequested()
 {
+    util::Logger::Debug("[MainWindow] OnSearchRequested query='{}'",
+        ReadSearchQuery());
     if (m_presenter)
         m_presenter->PerformSearch();
 }
@@ -297,6 +403,8 @@ void MainWindow::dropEvent(QDropEvent* event)
     {
         if (url.isLocalFile())
         {
+            util::Logger::Info("[MainWindow] Dropped file: {}",
+                url.toLocalFile().toStdString());
             HandleDroppedFile(url.toLocalFile());
             break; // align with wx: only first file processed for now
         }
@@ -315,6 +423,9 @@ void MainWindow::HandleDroppedFile(const QString& path)
 
     const std::filesystem::path filePath(path.toStdString());
 
+    util::Logger::Info("[MainWindow] HandleDroppedFile path={}",
+        filePath.string());
+
     if (!m_presenter)
     {
         QMessageBox::warning(this, "File Drop",
@@ -331,6 +442,8 @@ void MainWindow::HandleDroppedFile(const QString& path)
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Failed to load file '{}': {}",
+            filePath.string(), ex.what());
         UpdateStatusText("Failed to load file");
         QMessageBox::critical(this, "File Drop Error",
             QString("Unable to load %1\n%2").arg(path).arg(ex.what()));
@@ -356,11 +469,25 @@ void MainWindow::OnExtendedFiltersChanged()
 
 void MainWindow::OnOpenFileRequested()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this,
-        tr("Open Log File"), QString(),
-        tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
-    if (filePath.isEmpty())
+    util::Logger::Debug("[MainWindow] OnOpenFileRequested: opening QFileDialog");
+
+    QFileDialog dialog(this, tr("Open Log File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
+    if (dialog.exec() != QDialog::Accepted) {
+        util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
         return;
+    }
+    const QString filePath = dialog.selectedFiles().value(0);
+
+    if (filePath.isEmpty())
+    {
+        util::Logger::Debug("[MainWindow] OnOpenFileRequested: No file selected");
+        return;
+    }
+
+    util::Logger::Info("[MainWindow] OnOpenFileRequested path={}",
+        filePath.toStdString());
 
     HandleDroppedFile(filePath);
 }
@@ -369,6 +496,7 @@ void MainWindow::OnClearDataRequested()
 {
     try
     {
+    util::Logger::Info("[MainWindow] OnClearDataRequested");
         if (m_searchResults)
             m_searchResults->Clear();
         if (m_searchEdit)
@@ -384,30 +512,8 @@ void MainWindow::OnClearDataRequested()
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Clear data failed: {}", ex.what());
         ShowError(tr("Clear Data"), tr("Unable to clear data: %1").arg(ex.what()));
-    }
-}
-
-void MainWindow::OnOpenConfigRequested()
-{
-    try
-    {
-        const auto& configPath = config::GetConfig().GetConfigFilePath();
-        if (configPath.empty() || !std::filesystem::exists(configPath))
-        {
-            ShowError(tr("Config"), tr("Config file does not exist."));
-            return;
-        }
-
-        if (!QDesktopServices::openUrl(
-                QUrl::fromLocalFile(QString::fromStdString(configPath))))
-        {
-            ShowError(tr("Config"), tr("Failed to launch editor."));
-        }
-    }
-    catch (const std::exception& ex)
-    {
-        ShowError(tr("Config"), tr("Unable to open config: %1").arg(ex.what()));
     }
 }
 
@@ -418,6 +524,9 @@ void MainWindow::OnOpenAppLogRequested()
         const auto& logPath = config::GetConfig().GetAppLogPath();
         if (logPath.empty() || !std::filesystem::exists(logPath))
         {
+            util::Logger::Warn(
+                "[MainWindow] Application log file does not exist: '{}'",
+                logPath);
             ShowError(tr("App Log"), tr("Application log file does not exist."));
             return;
         }
@@ -425,11 +534,16 @@ void MainWindow::OnOpenAppLogRequested()
         if (!QDesktopServices::openUrl(
                 QUrl::fromLocalFile(QString::fromStdString(logPath))))
         {
+            util::Logger::Error(
+                "[MainWindow] Failed to open application log: '{}'",
+                logPath);
             ShowError(tr("App Log"), tr("Failed to open application log."));
         }
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("[MainWindow] Unable to open application log: {}",
+            ex.what());
         ShowError(tr("App Log"), tr("Unable to open application log: %1").arg(ex.what()));
     }
 }
@@ -450,6 +564,9 @@ void MainWindow::ApplyExtendedFilters()
     auto filteredIndices =
         filters::FilterManager::getInstance().applyFilters(*m_events);
 
+    util::Logger::Debug("[MainWindow] ApplyExtendedFilters: {} events, {} matches",
+        m_events->Size(), filteredIndices.size());
+
     m_eventsView->SetFilteredEvents(filteredIndices);
     m_eventsView->RefreshView();
 
@@ -459,6 +576,21 @@ void MainWindow::ApplyExtendedFilters()
 void MainWindow::ShowError(const QString& title, const QString& message)
 {
     QMessageBox::critical(this, title, message);
+}
+
+void MainWindow::OnConfigChanged()
+{
+    util::Logger::Debug("[MainWindow] OnConfigChanged");
+    
+    // Refresh views with new configuration
+    if (m_eventsView)
+    {
+        m_eventsView->UpdateColors();
+        m_eventsView->RefreshView();
+    }
+    
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
 }
 
 } // namespace ui::qt

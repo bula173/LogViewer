@@ -3,10 +3,14 @@
 #include "db/EventsContainer.hpp"
 #include "db/LogEvent.hpp"
 
+#include <QAction>
+#include <QClipboard>
 #include <QHeaderView>
+#include <QGuiApplication>
+#include <QKeySequence>
 #include <QTableWidget>
-#include <QTableWidgetItem>
 #include <QVBoxLayout>
+#include <QTableWidgetItem>
 
 namespace ui::qt
 {
@@ -27,20 +31,61 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
     m_details->horizontalHeader()->setStretchLastSection(true);
     m_details->verticalHeader()->setVisible(false);
     m_details->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_details->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_details->setSelectionBehavior(QAbstractItemView::SelectItems);
     m_details->setSelectionMode(QAbstractItemView::SingleSelection);
     m_details->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_details->setWordWrap(true);
+    m_details->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    auto* copyAction = new QAction(tr("Copy"), m_details);
+    copyAction->setShortcut(QKeySequence::Copy);
+    m_details->addAction(copyAction);
+
+    connect(copyAction, &QAction::triggered, this, [this]() {
+        const auto items = m_details->selectedItems();
+        if (items.isEmpty())
+            return;
+
+        QStringList lines;
+        for (auto* item : items)
+            lines << item->text();
+
+        QClipboard* clipboard = QGuiApplication::clipboard();
+        clipboard->setText(lines.join('\n'));
+    });
+
+    m_events.RegisterOndDataUpdated(this);
 }
 
 void ItemDetailsView::RefreshView()
 {
-    DisplayEvent(m_events.GetCurrentItemIndex());
+    const int currentIndex = m_events.GetCurrentItemIndex();
+    // Only display if we have data and a valid index
+    if (m_events.Size() > 0 && currentIndex >= 0)
+    {
+        DisplayEvent(currentIndex);
+    }
+    else
+    {
+        // Clear the display if no data or invalid index
+        if (m_details)
+            m_details->setRowCount(0);
+    }
 }
 
 void ItemDetailsView::ShowControl(bool show)
 {
     setVisible(show);
+}
+
+void ItemDetailsView::OnDataUpdated()
+{
+    RefreshView();
+}
+
+void ItemDetailsView::OnCurrentIndexUpdated(const int index)
+{
+    DisplayEvent(index);
 }
 
 void ItemDetailsView::OnActualRowChanged(int actualRow)

@@ -5,8 +5,6 @@ message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 # Core library without GUI dependencies
 
 set(APP_CORE_SRCS
-    command/EventCommands.cpp
-    command/ICommand.cpp
     config/Config.cpp
     db/EventsContainer.cpp
     db/LogEvent.cpp
@@ -16,15 +14,26 @@ set(APP_CORE_SRCS
     mvc/MainController.cpp
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
+    ai/OllamaClient.cpp
+    ai/OpenAIClient.cpp
+    ai/AnthropicClient.cpp
+    ai/GeminiClient.cpp
+    ai/AIServiceFactory.cpp
+    ai/LogAnalyzer.cpp
 )
 
 add_library(application_core STATIC ${APP_CORE_SRCS})
+
+# Find CURL for AI HTTP requests
+find_package(CURL REQUIRED)
 
 target_link_libraries(application_core
     PUBLIC
         nlohmann_json::nlohmann_json
         spdlog::spdlog_header_only
-        expat)
+        expat
+        CURL::libcurl
+)
 
 target_include_directories(application_core
     PUBLIC

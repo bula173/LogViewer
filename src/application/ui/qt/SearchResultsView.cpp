@@ -37,7 +37,7 @@ void SearchResultsView::BeginUpdate(const std::vector<std::string>& columns)
     {
         headers << QString::fromStdString(column);
     }
-    setColumnCount(headers.size());
+    setColumnCount(static_cast<int>(headers.size()));
     setHeaderLabels(headers);
 }
 
@@ -55,7 +55,7 @@ void SearchResultsView::AppendResult(const mvc::SearchResultRow& row)
     for (int i = 0; i < static_cast<int>(row.columnValues.size()); ++i)
     {
         item->setText(dynamicOffset + i,
-            QString::fromStdString(row.columnValues.at(i)));
+            QString::fromStdString(row.columnValues.at(static_cast<std::size_t>(i))));
     }
 
     addTopLevelItem(item);

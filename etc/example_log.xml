@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+    <event>
+        <timestamp>2025-12-06T10:15:23.456Z</timestamp>
+        <level>INFO</level>
+        <source>UserService</source>
+        <message>User authentication successful</message>
+        <details>
+            <userId>12345</userId>
+            <username>john.doe</username>
+            <ipAddress>192.168.1.100</ipAddress>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:24.123Z</timestamp>
+        <level>DEBUG</level>
+        <source>DatabaseConnection</source>
+        <message>Query executed successfully</message>
+        <details>
+            <query>SELECT * FROM users WHERE id = 12345</query>
+            <executionTime>45ms</executionTime>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:25.789Z</timestamp>
+        <level>WARNING</level>
+        <source>CacheManager</source>
+        <message>Cache miss for key user_profile_12345</message>
+        <details>
+            <cacheKey>user_profile_12345</cacheKey>
+            <fallbackUsed>true</fallbackUsed>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:26.456Z</timestamp>
+        <level>ERROR</level>
+        <source>PaymentProcessor</source>
+        <message>Payment transaction failed</message>
+        <details>
+            <transactionId>TXN-2025-12-06-001</transactionId>
+            <amount>99.99</amount>
+            <currency>USD</currency>
+            <errorCode>INSUFFICIENT_FUNDS</errorCode>
+            <errorMessage>Customer account balance too low</errorMessage>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:27.234Z</timestamp>
+        <level>INFO</level>
+        <source>EmailService</source>
+        <message>Notification email sent</message>
+        <details>
+            <recipient>john.doe@example.com</recipient>
+            <subject>Payment Failed - Action Required</subject>
+            <emailId>EMAIL-567890</emailId>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:28.567Z</timestamp>
+        <level>DEBUG</level>
+        <source>SessionManager</source>
+        <message>Session updated</message>
+        <details>
+            <sessionId>sess_abc123xyz456</sessionId>
+            <lastActivity>2025-12-06T10:15:28.567Z</lastActivity>
+            <expiresIn>1800</expiresIn>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:29.890Z</timestamp>
+        <level>CRITICAL</level>
+        <source>DatabaseConnection</source>
+        <message>Connection pool exhausted</message>
+        <details>
+            <activeConnections>100</activeConnections>
+            <maxConnections>100</maxConnections>
+            <waitingThreads>45</waitingThreads>
+            <recommendation>Increase connection pool size or investigate slow queries</recommendation>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:30.123Z</timestamp>
+        <level>INFO</level>
+        <source>LoadBalancer</source>
+        <message>Traffic redirected to backup server</message>
+        <details>
+            <primaryServer>server-01.example.com</primaryServer>
+            <backupServer>server-02.example.com</backupServer>
+            <reason>Primary server health check failed</reason>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:31.456Z</timestamp>
+        <level>WARNING</level>
+        <source>SecurityMonitor</source>
+        <message>Multiple failed login attempts detected</message>
+        <details>
+            <targetAccount>admin</targetAccount>
+            <attempts>5</attempts>
+            <sourceIP>203.0.113.45</sourceIP>
+            <action>Account temporarily locked</action>
+            <lockDuration>900</lockDuration>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:32.789Z</timestamp>
+        <level>INFO</level>
+        <source>ApiGateway</source>
+        <message>API request processed</message>
+        <details>
+            <endpoint>/api/v1/users/profile</endpoint>
+            <method>GET</method>
+            <statusCode>200</statusCode>
+            <responseTime>125ms</responseTime>
+            <clientId>client_xyz789</clientId>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:33.012Z</timestamp>
+        <level>DEBUG</level>
+        <source>CacheManager</source>
+        <message>Cache entry expired and removed</message>
+        <details>
+            <cacheKey>session_data_abc123</cacheKey>
+            <ttl>3600</ttl>
+            <reason>Time to live exceeded</reason>
+        </details>
+    </event>
+    
+    <event>
+        <timestamp>2025-12-06T10:15:34.345Z</timestamp>
+        <level>ERROR</level>
+        <source>FileStorageService</source>
+        <message>Disk space critically low</message>
+        <details>
+            <volume>/mnt/data</volume>
+            <availableSpace>512MB</availableSpace>
+            <totalSpace>100GB</totalSpace>
+            <usagePercent>99.5</usagePercent>
+            <alert>CRITICAL</alert>
+        </details>
+    </event>
+</events>

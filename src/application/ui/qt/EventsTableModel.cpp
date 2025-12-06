@@ -51,12 +51,16 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
     if (actualIndex < 0)
         return {};
 
+    // Safety check: ensure actualIndex is within bounds
+    if (actualIndex >= static_cast<int>(m_events.Size()))
+        return {};
+
     const auto& columns = m_config.GetColumns();
     if (index.column() < 0 ||
         index.column() >= static_cast<int>(m_visibleColumnIndices.size()))
         return {};
 
-    const int columnConfigIndex = m_visibleColumnIndices[index.column()];
+    const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(index.column())];
     if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
         return {};
 
@@ -70,16 +74,18 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
             return ComposeCellText(event, columnName);
         case Qt::ForegroundRole:
         {
-            const QColor color = ResolveColor(columnName,
-                event.findByKey(columnName), false);
+            // Apply color to entire row based on configured typeFilterField
+            const std::string typeValue = event.findByKey(m_config.typeFilterField);
+            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, false);
             if (color.isValid())
                 return QBrush(color);
             break;
         }
         case Qt::BackgroundRole:
         {
-            const QColor color = ResolveColor(columnName,
-                event.findByKey(columnName), true);
+            // Apply color to entire row based on configured typeFilterField
+            const std::string typeValue = event.findByKey(m_config.typeFilterField);
+            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, true);
             if (color.isValid())
                 return QBrush(color);
             break;
@@ -104,7 +110,7 @@ QVariant EventsTableModel::headerData(int section,
             return {};
 
         const auto& columns = m_config.GetColumns();
-        const int columnIndex = m_visibleColumnIndices[section];
+        const int columnIndex = m_visibleColumnIndices[static_cast<std::size_t>(section)];
         if (columnIndex < 0 || columnIndex >=
                 static_cast<int>(columns.size()))
             return {};

@@ -1,95 +1,52 @@
-# copy_dlls.cmake
+ # copy_dlls.cmake - Use CMake's native dependency resolver (no ldd needed)
+
 set(EXE_PATH "${ARGV0}")
 set(DEST_DIR "${ARGV1}")
-set(GCC_PATH "${ARGV2}")
+set(COMPILER_PATH "${ARGV2}")
 
-# Detect MSYS2 root from compiler path (e.g., C:/msys64/mingw64/bin/clang.exe or D:/a/_temp/msys64/mingw64/bin/clang.exe)
-get_filename_component(COMPILER_DIR "${GCC_PATH}" DIRECTORY)  # Gets the /bin directory
-get_filename_component(MINGW_ROOT "${COMPILER_DIR}" DIRECTORY)  # Gets the /mingw64 directory
-get_filename_component(MSYS2_ROOT "${MINGW_ROOT}" DIRECTORY)    # Gets the /msys64 directory
-
-message(STATUS "Detected MSYS2 root: ${MSYS2_ROOT}")
-message(STATUS "Detected MinGW64 root: ${MINGW_ROOT}")
-
-execute_process(
-    COMMAND ldd "${EXE_PATH}"
-    OUTPUT_VARIABLE LDD_OUTPUT
-    RESULT_VARIABLE LDD_RESULT
-    ERROR_VARIABLE LDD_ERROR
-)
-
-if(NOT LDD_RESULT EQUAL 0)
-    message(FATAL_ERROR "ldd failed: ${LDD_ERROR}")
+# Validate inputs
+if(NOT EXISTS "${EXE_PATH}")
+    message(WARNING "Executable not found: ${EXE_PATH}")
+    return()
 endif()
 
-message(STATUS "=== LDD Output for ${EXE_PATH} ===")
-message(STATUS "${LDD_OUTPUT}")
-message(STATUS "=== End LDD Output ===")
+# Detect toolchain bin directory
+get_filename_component(COMPILER_DIR "${COMPILER_PATH}" DIRECTORY)
+message(STATUS "Analyzing dependencies for: ${EXE_PATH}")
+message(STATUS "Toolchain bin: ${COMPILER_DIR}")
 
-# Parse output and copy each DLL
-string(REPLACE "\n" ";" LINES "${LDD_OUTPUT}")
-set(DLL_LIST "")  # Initialize an empty list
+# Create destination directory
+file(MAKE_DIRECTORY "${DEST_DIR}")
 
-foreach(LINE IN LISTS LINES)
-    # Match "not found" DLLs first (higher priority)
-    if(LINE MATCHES "([^ ]+\\.dll) => not found")
-        # DLL not found - try to locate it in mingw64/bin
-        string(REGEX REPLACE ".*[ \t]+([^ ]+\\.dll) => not found.*" "\\1" DLL_NAME "${LINE}")
-        set(DLL_PATH "/mingw64/bin/${DLL_NAME}")
-        list(APPEND DLL_LIST "${DLL_PATH}")
-        message(STATUS "Found missing DLL (will search): ${DLL_PATH}")
-    # Match lines like: "    libfoo.dll => /mingw64/bin/libfoo.dll (0x...)"
-    elseif(LINE MATCHES "=>[ ]*(/.+\\.dll)")
-        # Extract the DLL path using regex - capture the full path after =>
-        string(REGEX REPLACE ".*=>[ ]*(/.+\\.dll).*" "\\1" DLL_PATH "${LINE}")
-        # Only process paths that start with /mingw64/, /usr/, or /clangarm64/
-        if(DLL_PATH MATCHES "^/(mingw64|usr|clangarm64)/")
-            # If it's /clangarm64/, convert to /mingw64/
-            if(DLL_PATH MATCHES "^/clangarm64/")
-                string(REPLACE "/clangarm64/" "/mingw64/" DLL_PATH "${DLL_PATH}")
-                message(STATUS "Found DLL (clangarm64 -> mingw64): ${DLL_PATH}")
-            else()
-                message(STATUS "Found DLL: ${DLL_PATH}")
-            endif()
-            list(APPEND DLL_LIST "${DLL_PATH}")
+# Use CMake's file(GET_RUNTIME_DEPENDENCIES) to find all DLLs
+file(GET_RUNTIME_DEPENDENCIES
+    EXECUTABLES "${EXE_PATH}"
+    RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
+    UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
+    DIRECTORIES "${COMPILER_DIR}"
+    PRE_EXCLUDE_REGEXES "api-ms-.*" "ext-ms-.*"
+    POST_EXCLUDE_REGEXES ".*[Ss]ystem32/.*\\.dll" ".*[Ww]indows/.*\\.dll"
+)
+
+# Copy all resolved MinGW/MSYS2 DLLs
+set(COPIED_COUNT 0)
+foreach(DEP ${RESOLVED_DEPS})
+    # Only copy DLLs from the toolchain directory (skip Windows system DLLs)
+    string(FIND "${DEP}" "mingw64" TOOLCHAIN_MATCH)
+    if(NOT TOOLCHAIN_MATCH EQUAL -1)
+        get_filename_component(DLL_NAME "${DEP}" NAME)
+        
+        if(NOT EXISTS "${DEST_DIR}/${DLL_NAME}")
+            file(COPY "${DEP}" DESTINATION "${DEST_DIR}")
+            message(STATUS "Copied: ${DLL_NAME}")
+            math(EXPR COPIED_COUNT "${COPIED_COUNT} + 1")
         endif()
     endif()
 endforeach()
 
-foreach(DLL_FULLPATH IN LISTS DLL_LIST)
-    string(STRIP "${DLL_FULLPATH}" DLL_FULLPATH)
-    # Convert MSYS2 path to Windows path if needed
-    if(DLL_FULLPATH MATCHES "^/mingw64/")
-        # Handle /mingw64/ paths - use detected MSYS2_ROOT
-        string(REPLACE "/mingw64/" "${MSYS2_ROOT}/mingw64/" DLL_WIN_PATH "${DLL_FULLPATH}")
-        # Normalize path separators to forward slashes
-        file(TO_CMAKE_PATH "${DLL_WIN_PATH}" DLL_WIN_PATH)
-    elseif(DLL_FULLPATH MATCHES "^/usr/")
-        # Handle /usr/ paths - use detected MSYS2_ROOT
-        string(REPLACE "/usr/" "${MSYS2_ROOT}/usr/" DLL_WIN_PATH "${DLL_FULLPATH}")
-        # Normalize path separators to forward slashes
-        file(TO_CMAKE_PATH "${DLL_WIN_PATH}" DLL_WIN_PATH)
-    elseif(DLL_FULLPATH MATCHES "^/([a-zA-Z])/")
-        # Handle /c/ style paths
-        string(REGEX REPLACE "^/([a-zA-Z])/" "\\1:/" DLL_WIN_PATH "${DLL_FULLPATH}")
-    else()
-        # Already a Windows path or unknown format
-        set(DLL_WIN_PATH "${DLL_FULLPATH}")
-    endif()
-    
-    if(EXISTS "${DLL_WIN_PATH}")
-        file(COPY "${DLL_WIN_PATH}" DESTINATION "${DEST_DIR}")
-        get_filename_component(DLL_NAME "${DLL_WIN_PATH}" NAME)
-        message(STATUS "Copied ${DLL_NAME} to ${DEST_DIR}")
-    else()
-        # If debug DLL (with 'd' suffix) not found, try release version
-        string(REGEX REPLACE "d-([0-9]+)\\.dll$" "-\\1.dll" DLL_WIN_PATH_RELEASE "${DLL_WIN_PATH}")
-        if(NOT "${DLL_WIN_PATH_RELEASE}" STREQUAL "${DLL_WIN_PATH}" AND EXISTS "${DLL_WIN_PATH_RELEASE}")
-            file(COPY "${DLL_WIN_PATH_RELEASE}" DESTINATION "${DEST_DIR}/NAME")
-            get_filename_component(DLL_NAME "${DLL_WIN_PATH_RELEASE}" NAME)
-            message(WARNING "Debug DLL not found, copied release version: ${DLL_NAME} to ${DEST_DIR}")
-        else()
-            message(FATAL_ERROR "DLL not found: ${DLL_WIN_PATH} (original: ${DLL_FULLPATH})")
-        endif()
-    endif()
-endforeach()
+# Warn about unresolved dependencies (optional)
+if(UNRESOLVED_DEPS)
+    message(STATUS "Unresolved dependencies (may be system DLLs): ${UNRESOLVED_DEPS}")
+endif()
+
+message(STATUS "Copied ${COPIED_COUNT} MinGW/MSYS2 DLLs to ${DEST_DIR}")

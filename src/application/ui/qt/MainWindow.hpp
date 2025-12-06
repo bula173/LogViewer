@@ -2,6 +2,7 @@
 
 #include "ui/IMainWindowView.hpp"
 #include "ui/IUiPanels.hpp"
+#include "config/ConfigObserver.hpp"
 
 #include <QMainWindow>
 #include <memory>
@@ -15,6 +16,7 @@ class QTabWidget;
 class QWidget;
 class QDragEnterEvent;
 class QDropEvent;
+class QDockWidget;
 
 namespace mvc
 {
@@ -39,10 +41,12 @@ class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
+class AIAnalysisPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
-                   public ui::ISearchResultsViewObserver
+                   public ui::ISearchResultsViewObserver,
+                   public config::ConfigObserver
 {
     Q_OBJECT
 
@@ -65,6 +69,9 @@ class MainWindow : public QMainWindow,
     // ISearchResultsViewObserver
     void OnSearchResultActivated(long eventId) override;
 
+    // IConfigObserver
+    void OnConfigChanged() override;
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -72,7 +79,6 @@ class MainWindow : public QMainWindow,
     void OnExtendedFiltersChanged();
     void OnOpenFileRequested();
     void OnClearDataRequested();
-    void OnOpenConfigRequested();
     void OnOpenAppLogRequested();
     void OnExitRequested();
 
@@ -101,9 +107,15 @@ class MainWindow : public QMainWindow,
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
 
+    // Dock widgets for collapsible panels
+    QDockWidget* m_filtersDock {nullptr};
+    QDockWidget* m_detailsDock {nullptr};
+    QDockWidget* m_bottomDock {nullptr};
+
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
+    AIAnalysisPanel* m_aiPanel {nullptr};
     db::EventsContainer* m_events {nullptr};
 };
 

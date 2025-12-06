@@ -2,6 +2,8 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QMenu>
+#include <QPoint>
 #include <QSignalBlocker>
 #include <QString>
 #include <QVBoxLayout>
@@ -18,6 +20,31 @@ TypeFilterView::TypeFilterView(QWidget* parent)
     layout->addWidget(m_listWidget);
 
     m_listWidget->setSelectionMode(QAbstractItemView::NoSelection);
+
+    m_listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_listWidget, &QListWidget::customContextMenuRequested, this,
+        [this](const QPoint& pos)
+        {
+            QMenu menu(this);
+            QAction* selectAllAction =
+                menu.addAction(tr("Select All"));
+            QAction* deselectAllAction =
+                menu.addAction(tr("Deselect All"));
+            QAction* invertSelectionAction =
+                menu.addAction(tr("Invert Selection"));
+
+            QAction* chosen =
+                menu.exec(m_listWidget->viewport()->mapToGlobal(pos));
+            if (!chosen)
+                return;
+
+            if (chosen == selectAllAction)
+                SelectAll();
+            else if (chosen == deselectAllAction)
+                DeselectAll();
+            else if (chosen == invertSelectionAction)
+                InvertSelection();
+        });
 
     connect(m_listWidget, &QListWidget::itemChanged, this,
         [this](QListWidgetItem*) { NotifyChanged(); });

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
-project(LogViewer VERSION 0.0.6 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
+project(LogViewer VERSION 0.1.0 DESCRIPTION "A simple log viewer" LANGUAGES CXX)
 
 cmake_policy(SET CMP0074 NEW)
 
@@ -23,6 +23,22 @@ include(useGoldLinker)
 option(MEASURE_ALL "When enabled all commands will be passed through time command" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy during compilation" OFF)
 option(ENABLE_COVERAGE "Enable code coverage (Debug builds only)" OFF)
+
+# GUI Framework selection
+set(GUI_FRAMEWORK "WX" CACHE STRING "Choose GUI framework: WX or QT")
+set_property(CACHE GUI_FRAMEWORK PROPERTY STRINGS "WX" "QT")
+
+if(GUI_FRAMEWORK STREQUAL "WX")
+    message(STATUS "Building with wxWidgets GUI framework")
+    set(USE_WXWIDGETS ON)
+    set(USE_QT OFF)
+elseif(GUI_FRAMEWORK STREQUAL "QT")
+    message(STATUS "Building with Qt GUI framework") 
+    set(USE_WXWIDGETS OFF)
+    set(USE_QT ON)
+else()
+    message(FATAL_ERROR "Invalid GUI_FRAMEWORK: ${GUI_FRAMEWORK}. Must be WX or QT")
+endif()
 
 if(MEASURE_ALL)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "time")
@@ -140,6 +156,9 @@ if(WIN32)
   # Windows-specific settings
   if(MSYS OR MINGW)
     message(STATUS "Building with MSYS2/MinGW")
+    # Link MinGW runtime libraries statically to reduce DLL dependencies
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    message(STATUS "MinGW: Static linking enabled for runtime libraries")
   endif()
 elseif(APPLE)
   # macOS-specific settings
@@ -148,3 +167,4 @@ elseif(UNIX)
   # Linux-specific settings
   message(STATUS "Building on Linux")
 endif()
+

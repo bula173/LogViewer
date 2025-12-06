@@ -3,11 +3,39 @@
 ## Getting Started
 
 ### Prerequisites
+
+#### Required
 - **CMake** 3.25+
 - **C++20 Compiler**: Clang 15+, GCC 11+, or MSVC 2019+
-- **wxWidgets** 3.2+
-- **Ninja** build system (recommended)
+
+#### GUI Framework (Choose One)
+
+**Qt 6** (Default - includes AI features):
+- **Qt 6**: 6.5 or higher
+  - Windows: Download Qt installer from qt.io or use vcpkg
+  - macOS: `brew install qt@6`
+  - Linux: `sudo apt-get install qt6-base-dev` (Ubuntu/Debian)
+- **CURL**: For AI provider HTTP requests
+  - Windows: Available through vcpkg
+  - macOS: Included by default
+  - Linux: `sudo apt-get install libcurl4-openssl-dev`
+
+**wxWidgets** (Traditional native UI):
+- **wxWidgets**: 3.2 or higher
+  - Windows: Download from wxwidgets.org or use vcpkg
+  - macOS: `brew install wxwidgets`
+  - Linux: `sudo apt-get install libwxgtk3.2-dev` (Ubuntu/Debian)
+  - Windows (MSYS2): `pacman -S mingw-w64-x86_64-wxwidgets3.2-msw`
+
+#### Optional but Recommended
+- **Ninja** build system (recommended for faster builds)
+  - Windows: Available through package managers (choco, scoop)
+  - macOS: `brew install ninja`
+  - Linux: `sudo apt-get install ninja-build`
 - **ccache** (optional, for faster rebuilds)
+- **clang-format**: For code formatting
+- **clang-tidy**: For static analysis
+- **Doxygen**: For documentation generation
 
 ### Quick Start
 
@@ -16,16 +44,44 @@
 git clone https://github.com/bula173/LogViewer.git
 cd LogViewer
 
-# Configure and build (Debug)
-cmake --preset windows-msys-debug  # or linux-debug, macos-debug
-cmake --build --preset windows-msys-debug-build
+# Configure and build (Debug) - macOS example with Qt (default)
+cmake --preset macos-debug
+cmake --build --preset macos-debug-build
+
+# Or configure with wxWidgets
+cmake --preset macos-debug -DGUI_FRAMEWORK=WX
+cmake --build --preset macos-debug-build
 
 # Run tests
-ctest --preset windows-msys-debug-test
+ctest --preset macos-debug-test
 
-# Run application
-./dist/Debug/LogViewer
+# Run application (use bundle or binary)
+./build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer
+# or
+./build/macos-debug/src/LogViewer
 ```
+
+**Platform-specific presets:**
+- macOS: `macos-debug`, `macos-release`
+- Windows (MSYS2): `windows-msys-debug`, `windows-msys-release`
+- Linux: `linux-debug`, `linux-release`
+
+**Framework selection:**
+- Qt (default): `cmake --preset <platform>-debug` or `-DGUI_FRAMEWORK=QT`
+- wxWidgets: `cmake --preset <platform>-debug -DGUI_FRAMEWORK=WX`
+
+**Using VS Code Tasks (Recommended):**
+
+The project includes pre-configured tasks accessible via `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) > "Tasks: Run Task":
+
+- **Build Debug** - Configure and build debug version (Qt by default)
+- **Build Release** - Configure and build release version (Qt by default)
+- **Run App (Debug)** - Build and run debug application
+- **Test Debug** - Build and run tests
+- **Static Analysis (cppcheck)** - Run static analysis
+- **Package Release** - Create distributable package
+
+**Note:** VS Code tasks use Qt by default. For wxWidgets builds, use command line with `-DGUI_FRAMEWORK=WX`.
 
 ## Code Style Guide
 
@@ -75,6 +131,12 @@ class Result { };
 
 // Third-party includes
 #include <nlohmann/json.hpp>
+// Qt version:
+#include <QMainWindow>
+#include <QTableView>
+// wxWidgets version:
+// #include <wx/wx.h>
+// #include <wx/dataview.h>
 
 // Project includes
 #include "db/LogEvent.hpp"
@@ -211,6 +273,187 @@ Config& config = Config::Instance();
 
 // Bad use: Don't make everything a singleton!
 // Use dependency injection instead
+```
+
+### Qt-Specific Patterns
+
+#### Signals and Slots
+**Use when**: Components need Qt's signal/slot mechanism for event notification
+
+```cpp
+class EventsTableModel : public QAbstractTableModel {
+    Q_OBJECT  // Required for signals/slots
+
+public:
+    void UpdateData(const EventsContainer& container) {
+        beginResetModel();
+        m_data = &container;
+        endResetModel();
+        emit dataChanged(index(0, 0), index(rowCount()-1, columnCount()-1));
+    }
+
+signals:
+    void filterChanged(const QString& filterText);
+    void eventSelected(int eventId);
+
+public slots:
+    void onConfigChanged(const Config& config) {
+        // React to configuration changes
+    }
+};
+```
+
+#### Model/View Architecture
+**Use when**: Displaying data in Qt views (tables, lists, trees)
+
+```cpp
+class EventsTableModel : public QAbstractTableModel {
+    Q_OBJECT
+
+public:
+    // Required overrides
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override {
+        return m_container ? m_container->Size() : 0;
+    }
+    
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override {
+        return m_config.columns.size();
+    }
+    
+    QVariant data(const QModelIndex& index, int role) const override {
+        if (role == Qt::DisplayRole) {
+            const auto& event = m_container->GetEvent(index.row());
+            return QString::fromStdString(event.GetValue(m_config.columns[index.column()]));
+        }
+        return QVariant();
+    }
+
+private:
+    const EventsContainer* m_container = nullptr;
+    const Config& m_config;
+};
+```
+
+#### Dock Widget System
+**Use when**: Creating flexible, dockable UI panels
+
+```cpp
+class MainWindow : public QMainWindow {
+    Q_OBJECT
+
+public:
+    MainWindow() {
+        // Create dock widgets
+        m_filtersDock = new QDockWidget(tr("Filters"), this);
+        m_filtersDock->setWidget(new FiltersPanel(this));
+        addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
+        
+        m_detailsDock = new QDockWidget(tr("Details"), this);
+        m_detailsDock->setWidget(new ItemDetailsPanel(this));
+        addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
+        
+        // All docks are movable, floatable, and closable
+    }
+
+private:
+    QDockWidget* m_filtersDock = nullptr;
+    QDockWidget* m_detailsDock = nullptr;
+};
+```
+
+### wxWidgets-Specific Patterns
+
+#### Virtual List Controls
+**Use when**: Displaying large datasets efficiently with wxWidgets
+
+```cpp
+class EventsVirtualListControl : public wxDataViewVirtualListCtrl {
+public:
+    EventsVirtualListControl(wxWindow* parent, const EventsContainer* container)
+        : wxDataViewVirtualListCtrl(parent, wxID_ANY), m_container(container) {
+        // Add columns
+        AppendTextColumn("ID", wxDATAVIEW_CELL_INERT, 80);
+        AppendTextColumn("Timestamp", wxDATAVIEW_CELL_INERT, 150);
+        AppendTextColumn("Message", wxDATAVIEW_CELL_INERT, 400);
+    }
+
+    // Override to provide row count
+    unsigned int GetRowCount() override {
+        return m_container ? m_container->Size() : 0;
+    }
+
+    // Override to provide cell values
+    void GetValueByRow(wxVariant& variant, unsigned int row,
+                       unsigned int col) const override {
+        if (!m_container || row >= m_container->Size()) return;
+        
+        const auto& event = m_container->GetEvent(row);
+        switch (col) {
+            case 0: variant = event.getId(); break;
+            case 1: variant = event.GetValue("timestamp"); break;
+            case 2: variant = event.GetValue("message"); break;
+        }
+    }
+
+private:
+    const EventsContainer* m_container = nullptr;
+};
+```
+
+#### Event Handling
+**Use when**: Responding to user interactions in wxWidgets
+
+```cpp
+class MainWindow : public wxFrame {
+public:
+    MainWindow() : wxFrame(nullptr, wxID_ANY, "LogViewer") {
+        // Bind events
+        Bind(wxEVT_MENU, &MainWindow::OnOpen, this, wxID_OPEN);
+        Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
+        
+        // Custom events
+        m_eventsListCtrl->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
+            &MainWindow::OnEventSelected, this);
+    }
+
+private:
+    void OnOpen(wxCommandEvent& event) {
+        wxFileDialog dialog(this, _("Open Log File"),
+            wxEmptyString, wxEmptyString,
+            "XML files (*.xml)|*.xml|All files (*.*)|*.*",
+            wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+        
+        if (dialog.ShowModal() == wxID_OK) {
+            LoadLogFile(dialog.GetPath().ToStdString());
+        }
+    }
+    
+    void OnEventSelected(wxDataViewEvent& event) {
+        int row = m_eventsListCtrl->GetSelectedRow();
+        if (row >= 0) {
+            DisplayEventDetails(row);
+        }
+    }
+    
+    wxDataViewVirtualListCtrl* m_eventsListCtrl = nullptr;
+};
+```
+
+#### wxWidgets Type Conversions
+**Use when**: Converting between std::string and wxString
+
+```cpp
+#include "util/WxWidgetsUtils.hpp"
+
+// String conversions
+std::string stdStr = "Hello";
+wxString wxStr = wxString::FromUTF8(stdStr);
+std::string backToStd = wxStr.ToStdString();
+
+// Safe numeric conversions
+size_t count = 1000000;
+long wxCount = util::ToLong(count);  // Safe conversion with overflow check
+int colIndex = util::ToInt(count);   // Safe conversion with bounds check
 ```
 
 ## Error Handling
@@ -400,9 +643,236 @@ for (int i = 0; i < 1000000; ++i) {
 }
 ```
 
+## AI Integration Development
+
+### Adding a New AI Provider
+
+The application uses a factory pattern for AI providers. To add a new provider:
+
+#### 1. Implement IAIService Interface
+
+```cpp
+// src/application/ai/MyNewAIClient.hpp
+#pragma once
+
+#include "IAIService.hpp"
+#include <string>
+
+namespace ai {
+
+class MyNewAIClient : public IAIService {
+public:
+    MyNewAIClient() = default;
+    ~MyNewAIClient() override = default;
+
+    std::string Chat(
+        const std::string& systemPrompt,
+        const std::string& userPrompt,
+        const std::string& model) override;
+
+    std::vector<std::string> ListModels() override;
+};
+
+} // namespace ai
+```
+
+#### 2. Implement Chat Method with CURL
+
+```cpp
+// src/application/ai/MyNewAIClient.cpp
+#include "MyNewAIClient.hpp"
+#include "config/Config.hpp"
+#include <curl/curl.h>
+#include <nlohmann/json.hpp>
+
+namespace ai {
+
+std::string MyNewAIClient::Chat(
+    const std::string& systemPrompt,
+    const std::string& userPrompt,
+    const std::string& model) {
+    
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        throw std::runtime_error("Failed to initialize CURL");
+    }
+
+    // Get timeout from config (range: 30-3600 seconds)
+    const auto& config = config::GetConfig();
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT,
+        static_cast<long>(config.aiTimeoutSeconds));
+
+    // Prepare request JSON
+    nlohmann::json request = {
+        {"model", model},
+        {"messages", nlohmann::json::array({
+            {{"role", "system"}, {"content", systemPrompt}},
+            {{"role", "user"}, {"content", userPrompt}}
+        })}
+    };
+
+    std::string requestBody = request.dump();
+    std::string response;
+
+    // Set CURL options
+    curl_easy_setopt(curl, CURLOPT_URL, "https://api.myprovider.com/v1/chat");
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestBody.c_str());
+    
+    // Add headers
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+    std::string authHeader = "Authorization: Bearer " + config.aiApiKey;
+    headers = curl_slist_append(headers, authHeader.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    // Write callback
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size,
+        size_t nmemb, std::string* s) -> size_t {
+        s->append((char*)contents, size * nmemb);
+        return size * nmemb;
+    });
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+    CURLcode res = curl_easy_perform(curl);
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) {
+        throw std::runtime_error("CURL error: " +
+            std::string(curl_easy_strerror(res)));
+    }
+
+    // Parse response
+    auto jsonResponse = nlohmann::json::parse(response);
+    return jsonResponse["choices"][0]["message"]["content"].get<std::string>();
+}
+
+std::vector<std::string> MyNewAIClient::ListModels() {
+    // Implement model listing
+    return {"my-model-1", "my-model-2"};
+}
+
+} // namespace ai
+```
+
+#### 3. Register in AIServiceFactory
+
+```cpp
+// src/application/ai/AIServiceFactory.cpp
+#include "MyNewAIClient.hpp"
+
+std::unique_ptr<IAIService> AIServiceFactory::CreateService(
+    const std::string& provider) {
+    
+    if (provider == "ollama" || provider == "lmstudio") {
+        return std::make_unique<OllamaClient>();
+    } else if (provider == "openai") {
+        return std::make_unique<OpenAIClient>();
+    } else if (provider == "mynewai") {  // Add your provider
+        return std::make_unique<MyNewAIClient>();
+    }
+    
+    throw std::runtime_error("Unknown AI provider: " + provider);
+}
+```
+
+#### 4. Add to Configuration
+
+```json
+// etc/default_config.json
+{
+  "aiConfig": {
+    "provider": "mynewai",
+    "apiKey": "your-api-key-here",
+    "defaultModel": "my-model-1",
+    "timeoutSeconds": 300
+  }
+}
+```
+
+### AI Provider Guidelines
+
+#### Timeout Configuration
+- **Always use** `config.aiTimeoutSeconds` from Config
+- **Valid range**: 30-3600 seconds (enforced by UI)
+- **Default**: 300 seconds (5 minutes)
+- **Why**: Slow machines or large analyses need more time
+
+```cpp
+// ✅ Good: Use configurable timeout
+const auto& config = config::GetConfig();
+curl_easy_setopt(curl, CURLOPT_TIMEOUT,
+    static_cast<long>(config.aiTimeoutSeconds));
+
+// ❌ Bad: Hardcoded timeout
+curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);
+```
+
+#### Error Handling
+- Throw descriptive exceptions for CURL errors
+- Throw exceptions for HTTP error status codes
+- Throw exceptions for malformed JSON responses
+- All exceptions caught and displayed in UI
+
+#### Thread Safety
+- AI requests run in background threads via `QtConcurrent::run()`
+- Don't access UI directly from AI threads
+- Use signals/slots to update UI from background threads
+
+```cpp
+// In UI class
+void AIAnalysisPanel::OnAnalyze() {
+    QString prompt = m_promptEdit->toPlainText();
+    
+    // Run in background thread
+    auto future = QtConcurrent::run([this, prompt]() {
+        auto aiService = ai::AIServiceFactory::CreateService(
+            config::GetConfig().aiProvider);
+        return aiService->Chat(systemPrompt, prompt.toStdString(), model);
+    });
+    
+    // Update UI when complete (on main thread)
+    auto watcher = new QFutureWatcher<std::string>(this);
+    connect(watcher, &QFutureWatcher<std::string>::finished, this, [this, watcher]() {
+        try {
+            QString result = QString::fromStdString(watcher->result());
+            m_responseEdit->setPlainText(result);
+        } catch (const std::exception& e) {
+            QMessageBox::critical(this, tr("Error"), e.what());
+        }
+        watcher->deleteLater();
+    });
+    watcher->setFuture(future);
+}
+```
+
+### Filter-Aware Analysis
+
+AI analysis respects the configurable `typeFilterField`:
+
+```cpp
+// Get filter field from config (e.g., "level", "type", "severity")
+const auto& config = config::GetConfig();
+std::string filterField = config.typeFilterField;
+
+// When formatting events for AI analysis
+for (const auto& event : events) {
+    std::string filterValue = event.GetValue(filterField);
+    // Include in analysis prompt
+}
+```
+
+This allows analysis of logs that use different fields for categorization:
+- `"type"` - Traditional event types
+- `"level"` - Log levels (ERROR, WARN, INFO, DEBUG)
+- `"severity"` - Severity levels (CRITICAL, HIGH, MEDIUM, LOW)
+- `"priority"` - Priority levels (P0, P1, P2, P3)
+
 ## Testing
 
 ### Unit Test Structure
+
+Unit tests are framework-agnostic and test the core business logic, not UI code.
 
 ```cpp
 #include <gtest/gtest.h>
@@ -582,6 +1052,10 @@ Brief description of changes
 ## Useful Commands
 
 ```bash
+# Build with specific framework
+cmake --preset macos-debug -DGUI_FRAMEWORK=QT   # Qt build
+cmake --preset macos-debug -DGUI_FRAMEWORK=WX   # wxWidgets build
+
 # Format all code
 find src -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
@@ -606,8 +1080,27 @@ valgrind --tool=massif ./dist/Debug/LogViewer
 
 ## Resources
 
+### C++ and General
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/)
 - [Effective Modern C++](https://www.oreilly.com/library/view/effective-modern-c/9781491908419/)
-- [wxWidgets Documentation](https://docs.wxwidgets.org/)
 - [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
 - [CMake Documentation](https://cmake.org/documentation/)
+
+### Qt Framework
+- [Qt 6 Documentation](https://doc.qt.io/qt-6/)
+- [Qt Model/View Programming](https://doc.qt.io/qt-6/model-view-programming.html)
+- [Qt Signals and Slots](https://doc.qt.io/qt-6/signalsandslots.html)
+- [QMainWindow and Dock Widgets](https://doc.qt.io/qt-6/qmainwindow.html)
+
+### wxWidgets Framework
+- [wxWidgets Documentation](https://docs.wxwidgets.org/)
+- [wxDataViewCtrl](https://docs.wxwidgets.org/3.2/classwx_data_view_ctrl.html)
+- [Event Handling](https://docs.wxwidgets.org/3.2/overview_events.html)
+- [Virtual List Controls](https://docs.wxwidgets.org/3.2/overview_dataview.html)
+
+### AI Provider APIs
+- [Ollama API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md)
+- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
+- [Anthropic API Documentation](https://docs.anthropic.com/claude/reference)
+- [Google Gemini API](https://ai.google.dev/docs)
+- [xAI API Documentation](https://docs.x.ai/)

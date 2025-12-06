@@ -172,12 +172,13 @@ bool EventsContainerAdapter::GetAttrByRow(
     util::Logger::Trace(
         "EventsContainerAdapter::GetAttrByRow called for row: {}, col: {}", row,
         col);
-    // Example: use "type" column for coloring
-    std::string typeValue = event.findByKey("type");
+    // Use configured typeFilterField for coloring
+    const auto& config = config::GetConfig();
+    std::string typeValue = event.findByKey(config.typeFilterField);
 
     // Use your config-driven color helpers
-    wxColour bg = GetBgColorForColumnValue("type", typeValue);
-    wxColour fg = GetFontColorForColumnValue("type", typeValue);
+    wxColour bg = GetBgColorForColumnValue(config.typeFilterField, typeValue);
+    wxColour fg = GetFontColorForColumnValue(config.typeFilterField, typeValue);
 
     bool colored = false;
     if (bg.IsOk())
