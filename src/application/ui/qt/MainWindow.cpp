@@ -12,7 +12,7 @@
 #include "ui/qt/AIAnalysisPanel.hpp"
 #include "ui/qt/AIChatPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
-#include "ai/OllamaClient.hpp"
+#include "ai/AIServiceFactory.hpp"
 #include "ai/LogAnalyzer.hpp"
 #include "application/util/Logger.hpp"
 #include "config/Config.hpp"
@@ -111,11 +111,13 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_eventsView = new EventsTableView(events, contentTabs);
     contentTabs->addTab(m_eventsView, "Events");
     
-    // AI Analysis tab - use config values
+    // AI Analysis tab - use factory to create appropriate client
     auto& config = config::GetConfig();
-    auto aiService = std::make_shared<ai::OllamaClient>(
-        config.ollamaDefaultModel, 
-        config.ollamaBaseUrl
+    auto aiService = ai::AIServiceFactory::CreateClient(
+        config.aiProvider,
+        config.aiApiKey,
+        config.ollamaBaseUrl,
+        config.ollamaDefaultModel
     );
     auto aiAnalyzer = std::make_shared<ai::LogAnalyzer>(aiService, events);
     m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, contentTabs);

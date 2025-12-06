@@ -5,8 +5,6 @@ message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 # Core library without GUI dependencies
 
 set(APP_CORE_SRCS
-    command/EventCommands.cpp
-    command/ICommand.cpp
     config/Config.cpp
     db/EventsContainer.cpp
     db/LogEvent.cpp
@@ -17,6 +15,10 @@ set(APP_CORE_SRCS
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
     ai/OllamaClient.cpp
+    ai/OpenAIClient.cpp
+    ai/AnthropicClient.cpp
+    ai/GeminiClient.cpp
+    ai/AIServiceFactory.cpp
     ai/LogAnalyzer.cpp
 )
 

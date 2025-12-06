@@ -84,6 +84,8 @@ class Config
     ColumnColorMap columnColors;
     
     // AI configuration
+    std::string aiProvider {"ollama"};  // "ollama", "lmstudio", "openai", "anthropic", "google", "xai"
+    std::string aiApiKey;  // API key for cloud providers
     std::string ollamaBaseUrl {"http://localhost:11434"};
     std::string ollamaDefaultModel {"qwen2.5-coder:7b"};
 };

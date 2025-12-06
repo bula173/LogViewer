@@ -38,6 +38,7 @@ private slots:
     void OnLogLevelChanged(int index);
     
     // AI tab
+    void OnAIProviderChanged(int index);
     void OnOllamaBaseUrlChanged();
     void OnOllamaDefaultModelChanged();
 
@@ -96,6 +97,8 @@ private:
     
     // AI tab widgets
     QWidget* m_aiTab {nullptr};
+    QComboBox* m_aiProviderCombo {nullptr};
+    QLineEdit* m_aiApiKeyEdit {nullptr};
     QLineEdit* m_ollamaBaseUrlEdit {nullptr};
     QLineEdit* m_ollamaDefaultModelEdit {nullptr};
 

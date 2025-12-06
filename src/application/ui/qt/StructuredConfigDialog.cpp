@@ -294,14 +294,34 @@ void StructuredConfigDialog::InitAITab()
 
     auto* form = new QFormLayout();
     
-    // Ollama Base URL
+    // AI Provider Selection
+    m_aiProviderCombo = new QComboBox(m_aiTab);
+    m_aiProviderCombo->addItem(tr("Ollama (Local)"), "ollama");
+    m_aiProviderCombo->addItem(tr("LM Studio (Local)"), "lmstudio");
+    m_aiProviderCombo->addItem(tr("OpenAI / ChatGPT"), "openai");
+    m_aiProviderCombo->addItem(tr("Anthropic / Claude"), "anthropic");
+    m_aiProviderCombo->addItem(tr("Google / Gemini"), "google");
+    m_aiProviderCombo->addItem(tr("xAI / Grok"), "xai");
+    m_aiProviderCombo->addItem(tr("Custom Endpoint"), "custom");
+    connect(m_aiProviderCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+        &StructuredConfigDialog::OnAIProviderChanged);
+    form->addRow(tr("AI Provider:"), m_aiProviderCombo);
+    
+    // API Key (for cloud providers)
+    m_aiApiKeyEdit = new QLineEdit(m_aiTab);
+    m_aiApiKeyEdit->setEchoMode(QLineEdit::Password);
+    m_aiApiKeyEdit->setPlaceholderText(tr("Enter API key for cloud providers"));
+    m_aiApiKeyEdit->setEnabled(false);
+    form->addRow(tr("API Key:"), m_aiApiKeyEdit);
+    
+    // Base URL
     m_ollamaBaseUrlEdit = new QLineEdit(m_aiTab);
     m_ollamaBaseUrlEdit->setPlaceholderText("http://localhost:11434");
     connect(m_ollamaBaseUrlEdit, &QLineEdit::textChanged, this,
         &StructuredConfigDialog::OnOllamaBaseUrlChanged);
-    form->addRow(tr("Ollama Base URL:"), m_ollamaBaseUrlEdit);
+    form->addRow(tr("Base URL:"), m_ollamaBaseUrlEdit);
     
-    // Ollama Default Model
+    // Default Model
     m_ollamaDefaultModelEdit = new QLineEdit(m_aiTab);
     m_ollamaDefaultModelEdit->setPlaceholderText("qwen2.5-coder:7b");
     connect(m_ollamaDefaultModelEdit, &QLineEdit::textChanged, this,
@@ -312,12 +332,19 @@ void StructuredConfigDialog::InitAITab()
     
     // Add information label
     auto* infoLabel = new QLabel(
-        tr("Configure Ollama server settings for AI-powered log analysis.\n"
-           "The base URL should point to your Ollama server (local or remote).\n"
-           "Common models: qwen2.5-coder:7b, llama3.2, deepseek-coder-v2:16b"), 
+        tr("Configure AI provider for log analysis.\n\n"
+           "Local Providers (Free):\n"
+           "• Ollama: ollama.ai - Models: qwen2.5-coder, llama3.2, deepseek-coder\n"
+           "• LM Studio: lmstudio.ai - Run any GGUF model locally\n\n"
+           "Cloud Providers (Require API Key):\n"
+           "• OpenAI: platform.openai.com - Models: gpt-4, gpt-3.5-turbo\n"
+           "• Anthropic: claude.ai - Models: claude-3-opus, claude-3-sonnet\n"
+           "• Google: ai.google.dev - Models: gemini-pro, gemini-1.5-pro\n"
+           "• xAI: x.ai/api - Models: grok-beta\n\n"
+           "For cloud providers, you need to sign up and get an API key."), 
         m_aiTab);
     infoLabel->setWordWrap(true);
-    infoLabel->setStyleSheet("QLabel { color: gray; font-style: italic; }");
+    infoLabel->setStyleSheet("QLabel { color: gray; font-style: italic; font-size: 10pt; }");
     layout->addWidget(infoLabel);
     
     layout->addStretch();
@@ -343,6 +370,11 @@ void StructuredConfigDialog::LoadConfigToUi()
         m_logLevelCombo->setCurrentText(QString::fromLatin1("info"));
 
     // Load AI config
+    const int providerIdx = m_aiProviderCombo->findData(QString::fromStdString(cfg.aiProvider));
+    if (providerIdx >= 0)
+        m_aiProviderCombo->setCurrentIndex(providerIdx);
+    
+    m_aiApiKeyEdit->setText(QString::fromStdString(cfg.aiApiKey));
     m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
     m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
 
@@ -357,6 +389,8 @@ void StructuredConfigDialog::OnSaveClicked()
     cfg.xmlRootElement = m_xmlRootEdit->text().toStdString();
     cfg.xmlEventElement = m_xmlEventEdit->text().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
+    cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
+    cfg.aiApiKey = m_aiApiKeyEdit->text().toStdString();
     cfg.ollamaBaseUrl = m_ollamaBaseUrlEdit->text().toStdString();
     cfg.ollamaDefaultModel = m_ollamaDefaultModelEdit->text().toStdString();
 
@@ -407,16 +441,74 @@ void StructuredConfigDialog::OnLogLevelChanged(int)
     util::Logger::Info("Log level changed to: {}", levelStr);
 }
 
+void StructuredConfigDialog::OnAIProviderChanged(int index)
+{
+    if (index < 0)
+        return;
+    
+    const QString provider = m_aiProviderCombo->currentData().toString();
+    
+    // Enable/disable API key field based on provider
+    const bool isCloudProvider = (provider == "openai" || provider == "anthropic" || 
+                                   provider == "google" || provider == "xai");
+    m_aiApiKeyEdit->setEnabled(isCloudProvider);
+    
+    // Update base URL and model suggestions based on provider
+    if (provider == "ollama")
+    {
+        m_ollamaBaseUrlEdit->setText("http://localhost:11434");
+        m_ollamaBaseUrlEdit->setEnabled(true);
+        m_ollamaDefaultModelEdit->setPlaceholderText("qwen2.5-coder:7b, llama3.2, deepseek-coder");
+    }
+    else if (provider == "lmstudio")
+    {
+        m_ollamaBaseUrlEdit->setText("http://localhost:1234");
+        m_ollamaBaseUrlEdit->setEnabled(true);
+        m_ollamaDefaultModelEdit->setPlaceholderText("local-model");
+    }
+    else if (provider == "openai")
+    {
+        m_ollamaBaseUrlEdit->setText("https://api.openai.com/v1");
+        m_ollamaBaseUrlEdit->setEnabled(false);
+        m_ollamaDefaultModelEdit->setPlaceholderText("gpt-4, gpt-4-turbo, gpt-3.5-turbo");
+    }
+    else if (provider == "anthropic")
+    {
+        m_ollamaBaseUrlEdit->setText("https://api.anthropic.com/v1");
+        m_ollamaBaseUrlEdit->setEnabled(false);
+        m_ollamaDefaultModelEdit->setPlaceholderText("claude-3-opus-20240229, claude-3-sonnet-20240229");
+    }
+    else if (provider == "google")
+    {
+        m_ollamaBaseUrlEdit->setText("https://generativelanguage.googleapis.com/v1");
+        m_ollamaBaseUrlEdit->setEnabled(false);
+        m_ollamaDefaultModelEdit->setPlaceholderText("gemini-pro, gemini-1.5-pro");
+    }
+    else if (provider == "xai")
+    {
+        m_ollamaBaseUrlEdit->setText("https://api.x.ai/v1");
+        m_ollamaBaseUrlEdit->setEnabled(false);
+        m_ollamaDefaultModelEdit->setPlaceholderText("grok-beta");
+    }
+    else // custom
+    {
+        m_ollamaBaseUrlEdit->setEnabled(true);
+        m_ollamaDefaultModelEdit->setPlaceholderText("model-name");
+    }
+    
+    util::Logger::Info("AI provider changed to: {}", provider.toStdString());
+}
+
 void StructuredConfigDialog::OnOllamaBaseUrlChanged()
 {
     // URL validation could be added here if needed
-    util::Logger::Debug("Ollama base URL changed to: {}", 
+    util::Logger::Debug("AI base URL changed to: {}", 
         m_ollamaBaseUrlEdit->text().toStdString());
 }
 
 void StructuredConfigDialog::OnOllamaDefaultModelChanged()
 {
-    util::Logger::Debug("Ollama default model changed to: {}", 
+    util::Logger::Debug("AI default model changed to: {}", 
         m_ollamaDefaultModelEdit->text().toStdString());
 }
 

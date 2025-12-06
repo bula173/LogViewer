@@ -3,6 +3,11 @@
   "logging": {
     "level": "debug"
   },
+  "aiConfig": {
+    "provider": "ollama",
+    "baseUrl": "http://localhost:11434",
+    "defaultModel": "qwen2.5-coder:7b"
+  },
   "parsers": {
     "xml": {
       "rootElement": "events",

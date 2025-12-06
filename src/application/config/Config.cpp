@@ -154,6 +154,9 @@ void Config::SaveConfig()
                 {"visible", col.isVisible}, {"width", col.width}});
         }
         j["logging"]["level"] = logLevel;
+        j["aiConfig"]["provider"] = aiProvider;
+        if (!aiApiKey.empty())
+            j["aiConfig"]["apiKey"] = aiApiKey;
         j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
         j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
         for (const auto& [col, valMap] : columnColors)
@@ -285,15 +288,25 @@ void Config::GetAIConfig(const json& j)
     if (j.contains("aiConfig"))
     {
         const auto& aiConfig = j["aiConfig"];
+        if (aiConfig.contains("provider"))
+        {
+            aiProvider = aiConfig["provider"].get<std::string>();
+            util::Logger::Info("AI provider set to: {}", aiProvider);
+        }
+        if (aiConfig.contains("apiKey"))
+        {
+            aiApiKey = aiConfig["apiKey"].get<std::string>();
+            util::Logger::Info("AI API key configured (length: {})", aiApiKey.length());
+        }
         if (aiConfig.contains("baseUrl"))
         {
             ollamaBaseUrl = aiConfig["baseUrl"].get<std::string>();
-            util::Logger::Info("Ollama base URL set to: {}", ollamaBaseUrl);
+            util::Logger::Info("AI base URL set to: {}", ollamaBaseUrl);
         }
         if (aiConfig.contains("defaultModel"))
         {
             ollamaDefaultModel = aiConfig["defaultModel"].get<std::string>();
-            util::Logger::Info("Ollama default model set to: {}", ollamaDefaultModel);
+            util::Logger::Info("AI default model set to: {}", ollamaDefaultModel);
         }
     }
     else
