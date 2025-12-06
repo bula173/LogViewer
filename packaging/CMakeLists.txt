@@ -150,7 +150,6 @@ elseif(APPLE)
     
     set(CPACK_DMG_VOLUME_NAME "LogViewer")
     set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt") 
-    set(CPACK_DMG_BACKGROUND_IMAGE "${PROJECT_SOURCE_DIR}/packaging/dmg_background.png")
     set(CPACK_OSX_PACKAGE_VERSION "10.6") #min package version
     
 else()

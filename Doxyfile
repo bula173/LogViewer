@@ -4,9 +4,9 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = "LogViewer"
-PROJECT_BRIEF          = "A C++ log file viewer with a wxWidgets GUI"
+PROJECT_BRIEF          = "A modern log viewer with AI-assisted analysis (Qt 6 / wxWidgets)"
 PROJECT_LOGO           =
-OUTPUT_DIRECTORY       = docs/doxygen
+OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -14,7 +14,7 @@ REPEAT_BRIEF           = YES
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = YES
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = /Users/Marcin/workspace/cpp/LogViewer/
+STRIP_FROM_PATH        =
 INTERNAL_DOCS          = NO
 HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = YES

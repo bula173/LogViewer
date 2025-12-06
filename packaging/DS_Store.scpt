@@ -10,11 +10,10 @@ on run argv
 
 	tell application "Finder"
 		tell disk diskImage
-			-- Setup background and icon arrangement
+			-- Setup icon arrangement
 			open
 			set current view of container window to icon view
 			set theViewOptions to the icon view options of container window
-			-- set background picture of theViewOptions to file ".background:dmg_background.png"
 			set arrangement of theViewOptions to not arranged
 			set icon size of theViewOptions to 72
 			delay 5
@@ -35,7 +34,6 @@ on run argv
 				set position of item "Applications" to {530, 115}
 
 				-- Move these out of the way for users with Finder configured to show all files
-				set position of item ".background" to {161, 500}
 				set position of item ".fseventsd" to {332, 500}
 			end tell
 			update without registering applications

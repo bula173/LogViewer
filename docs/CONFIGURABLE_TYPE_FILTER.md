@@ -25,6 +25,17 @@ The type filter now uses a configurable field name instead of hardcoded "type", 
 - Added `"filters"` section with `"typeFilterField": "level"`
 - This matches the example log structure which uses "level" for event types
 
+### UI Configuration Dialog
+- Added to Edit → Config → General tab
+- Field: "Type Filter Field" with placeholder text showing examples
+- Users can change without editing JSON manually
+
+### Color Configuration Dialog
+- Edit → Config → Colors tab
+- Column dropdown now auto-populates with available columns
+- Defaults to the `typeFilterField` value for consistency
+- Users can add color mappings for different field values
+
 ## Configuration Example
 
 ```json

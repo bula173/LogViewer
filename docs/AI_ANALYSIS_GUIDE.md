@@ -69,12 +69,21 @@ See "Model Selection" section below for comparison.
 ### 4. Using AI Analysis
 
 1. Load a log file in LogViewer
-2. Click on the "AI Analysis" tab in the left panel
+2. Click on the "AI Analysis" tab in the main content area
 3. **(New!)** Select AI model from dropdown (default: Qwen 2.5 Coder 7B)
 4. Select analysis type (Summary, Error Analysis, etc.)
-5. Set max events to analyze (default: 100)
+5. Set max events to analyze (default: 5,000)
 6. Click "Analyze Logs"
 7. Wait for results (typically 10-30 seconds)
+
+**Note:** The application uses filter-aware analysis. If you have active filters (e.g., showing only ERROR events), the AI will analyze only the filtered results.
+
+### 5. Configure Timeout (For Slow Machines)
+
+1. Go to Edit → Config → AI tab
+2. Adjust "Request Timeout" (default: 300 seconds)
+3. For slow machines or large analyses, increase to 600-900 seconds
+4. Click Save
 
 ## Model Selection
 
@@ -93,15 +102,19 @@ LogViewer includes a model selector in the AI Analysis panel. Choose based on yo
 
 ## Configuration
 
-To change the AI model or endpoint, edit the OllamaClient initialization in `MainWindow.cpp`:
+All AI settings can be configured through the UI:
 
-```cpp
-// Default:
-auto aiService = std::make_shared<ai::OllamaClient>("llama3.2", "http://localhost:11434");
+1. **Edit → Config → AI tab:**
+   - AI Provider: Choose between Ollama, LM Studio, OpenAI, Anthropic, Google, xAI
+   - API Key: For cloud providers (not needed for local Ollama/LM Studio)
+   - Base URL: Default `http://localhost:11434` for Ollama
+   - Default Model: e.g., `qwen2.5-coder:7b`
+   - Request Timeout: Adjust for slow machines (30-3600 seconds)
 
-// Custom model:
-auto aiService = std::make_shared<ai::OllamaClient>("mistral", "http://localhost:11434");
-```
+2. **Edit → Config → General tab:**
+   - Type Filter Field: Set which field to use for filtering/coloring (e.g., "level", "severity")
+
+Configuration is saved to `~/Library/Application Support/LogViewerQt/config.json` (macOS) or equivalent on other platforms.
 
 ## Troubleshooting
 
@@ -111,11 +124,13 @@ auto aiService = std::make_shared<ai::OllamaClient>("mistral", "http://localhost
 - Check if the port is correct (default: 11434)
 - Verify model is downloaded: `ollama list`
 
-### Slow analysis
+### Slow analysis or timeouts
 
-- Reduce max events to analyze (try 50 instead of 100)
+- **Increase timeout**: Edit → Config → AI tab → Request Timeout (increase to 600+ seconds)
+- Reduce max events to analyze (default cap is 5,000 with intelligent sampling)
 - Use a smaller model like `llama3.2:1b`
 - Ensure your CPU/GPU has enough resources
+- Check system load (close other heavy applications)
 
 ### Connection errors
 
