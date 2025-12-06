@@ -2,7 +2,7 @@ name: macOS CI (clang)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","qt" ]
   pull_request:
   workflow_dispatch:
 

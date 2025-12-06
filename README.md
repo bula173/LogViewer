@@ -387,6 +387,21 @@ brew upgrade cmake
 - Check file permissions in config directory
 - See platform-specific paths above
 
+### Packaging Issues
+
+**DMG creation fails on macOS (CI/GitHub Actions):**
+- The custom DS_Store AppleScript is automatically disabled in CI environments
+- Local builds use custom icon layout; CI builds use default layout
+- Both produce functional DMG files
+
+**Package task not found:**
+```bash
+# Build release first, then package
+cmake --preset macos-release
+cmake --build --preset macos-release-build
+cmake --build --preset macos-release-build --target package
+```
+
 ## Support
 
 - **Issues**: https://github.com/bula173/LogViewer/issues

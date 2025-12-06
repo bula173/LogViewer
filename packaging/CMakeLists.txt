@@ -149,7 +149,21 @@ elseif(APPLE)
     set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     
     set(CPACK_DMG_VOLUME_NAME "LogViewer")
-    set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt") 
+    
+    # Only use DS_Store setup script if not in CI environment
+    # The AppleScript fails in headless GitHub Actions runners
+    if(NOT DEFINED ENV{CI} AND NOT DEFINED ENV{GITHUB_ACTIONS})
+        set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt")
+        message(STATUS "DMG will use custom DS_Store layout (interactive mode)")
+    else()
+        message(STATUS "DMG will use default layout (CI mode - skipping AppleScript)")
+        # Use basic DMG settings for CI/headless environments
+        set(CPACK_DMG_FORMAT "UDZO")  # Compressed format
+        set(CPACK_DMG_BACKGROUND_IMAGE "")  # No background image in CI
+    endif()
+    
+    # Common DMG settings
+    set(CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE ON)
     set(CPACK_OSX_PACKAGE_VERSION "10.6") #min package version
     
 else()

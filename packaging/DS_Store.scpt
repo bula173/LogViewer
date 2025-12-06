@@ -1,3 +1,16 @@
+-- DMG Icon Layout Script for LogViewer
+--
+-- This AppleScript customizes the Finder window appearance when opening
+-- the LogViewer DMG installer on macOS. It positions icons, sets the
+-- window size, and configures view options.
+--
+-- NOTE: This script only runs in interactive/local builds. It is automatically
+-- disabled in CI/CD environments (GitHub Actions) where Finder is not available.
+-- See packaging/CMakeLists.txt for the conditional logic.
+--
+-- Usage: Called automatically by CPack when creating DMG files locally
+-- Not used in: GitHub Actions CI builds (headless environment)
+
 on run argv
 	-- Constants
 	set X_POS to 400
