@@ -1,5 +1,6 @@
 #include "ui/qt/AIAnalysisPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
+#include "ui/qt/EventsTableView.hpp"
 #include "ai/OllamaClient.hpp"
 #include "util/Logger.hpp"
 #include "config/Config.hpp"
@@ -28,10 +29,12 @@ namespace ui::qt
 
 AIAnalysisPanel::AIAnalysisPanel(std::shared_ptr<ai::IAIService> aiService,
                                  std::shared_ptr<ai::LogAnalyzer> analyzer,
+                                 EventsTableView* eventsView,
                                  QWidget* parent)
     : QWidget(parent)
     , m_aiService(std::move(aiService))
     , m_analyzer(std::move(analyzer))
+    , m_eventsView(eventsView)
 {
     BuildUi();
     UpdateStatusLabel();
@@ -203,6 +206,10 @@ void AIAnalysisPanel::OnAnalyzeClicked()
 
     const size_t maxEvents = static_cast<size_t>(m_maxEventsSpin->value());
     
+    // Get filtered indices if any filters are active
+    const std::vector<unsigned long>* filteredIndices = 
+        m_eventsView ? m_eventsView->GetFilteredIndices() : nullptr;
+    
     // Check if using custom prompt
     const bool useCustomPrompt = m_useCustomPromptCheckbox->isChecked();
     const QString customPrompt = m_customPromptEdit->toPlainText().trimmed();
@@ -216,21 +223,22 @@ void AIAnalysisPanel::OnAnalyzeClicked()
     }
 
     // Run analysis asynchronously to avoid blocking UI
-    auto future = QtConcurrent::run([this, useCustomPrompt, customPrompt, maxEvents]() -> std::string {
+    auto future = QtConcurrent::run([this, useCustomPrompt, customPrompt, maxEvents, filteredIndices]() -> std::string {
         try
         {
             if (useCustomPrompt)
             {
-                util::Logger::Info("Starting custom AI analysis: maxEvents={}", maxEvents);
-                return m_analyzer->AnalyzeWithCustomPrompt(customPrompt.toStdString(), maxEvents);
+                util::Logger::Info("Starting custom AI analysis: maxEvents={}, filtered={}", 
+                    maxEvents, filteredIndices != nullptr);
+                return m_analyzer->AnalyzeWithCustomPrompt(customPrompt.toStdString(), maxEvents, filteredIndices);
             }
             else
             {
                 const int typeIndex = m_analysisTypeCombo->currentData().toInt();
                 const auto analysisType = static_cast<ai::LogAnalyzer::AnalysisType>(typeIndex);
-                util::Logger::Info("Starting AI analysis: type={}, maxEvents={}",
-                    ai::LogAnalyzer::GetAnalysisTypeName(analysisType), maxEvents);
-                return m_analyzer->Analyze(analysisType, maxEvents);
+                util::Logger::Info("Starting AI analysis: type={}, maxEvents={}, filtered={}",
+                    ai::LogAnalyzer::GetAnalysisTypeName(analysisType), maxEvents, filteredIndices != nullptr);
+                return m_analyzer->Analyze(analysisType, maxEvents, filteredIndices);
             }
         }
         catch (const std::exception& e)

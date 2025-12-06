@@ -31,17 +31,21 @@ public:
      * @brief Perform analysis on current log data
      * @param type Type of analysis to perform
      * @param maxEvents Maximum number of events to include (0 = all)
+     * @param filteredIndices Optional: specific event indices to analyze (respects user filters)
      * @return Analysis results as text
      */
-    std::string Analyze(AnalysisType type, size_t maxEvents = 100);
+    std::string Analyze(AnalysisType type, size_t maxEvents = 100,
+                       const std::vector<unsigned long>* filteredIndices = nullptr);
 
     /**
      * @brief Perform analysis with custom user-defined prompt
      * @param customPrompt User-provided analysis prompt
      * @param maxEvents Maximum number of events to include (0 = all)
+     * @param filteredIndices Optional: specific event indices to analyze (respects user filters)
      * @return Analysis results as text
      */
-    std::string AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents = 100);
+    std::string AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents = 100,
+                                       const std::vector<unsigned long>* filteredIndices = nullptr);
 
     /**
      * @brief Check if AI service is ready
@@ -57,7 +61,8 @@ private:
     std::shared_ptr<IAIService> m_aiService;
     db::EventsContainer& m_events;
 
-    std::string FormatEventsForAI(size_t maxEvents) const;
+    std::string FormatEventsForAI(size_t maxEvents, const std::vector<unsigned long>* filteredIndices) const;
+    void FormatSingleEvent(std::ostringstream& oss, size_t index, const db::LogEvent& event) const;
     std::string BuildPrompt(AnalysisType type, const std::string& logData) const;
 };
 

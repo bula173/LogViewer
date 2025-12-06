@@ -92,6 +92,7 @@ private:
     QWidget* m_generalTab {nullptr};
     QLineEdit* m_xmlRootEdit {nullptr};
     QLineEdit* m_xmlEventEdit {nullptr};
+    QLineEdit* m_typeFilterFieldEdit {nullptr};
     QComboBox* m_logLevelCombo {nullptr};
     QLabel* m_configPathLabel {nullptr};
     

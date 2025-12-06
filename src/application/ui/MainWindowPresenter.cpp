@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "config/Config.hpp"
 #include "error/Error.hpp"
 #include "util/Logger.hpp"
 
@@ -145,12 +146,13 @@ void MainWindowPresenter::UpdateTypeFilters()
     const std::string previousStatus = m_view.CurrentStatusText();
     m_view.UpdateStatusText("Updating filters...");
 
+    auto& config = config::GetConfig();
     std::set<std::string> types;
     const std::size_t total = m_events.Size();
     for (std::size_t i = 0; i < total; ++i)
     {
         const auto& event = m_events.GetEvent(ClampToInt(i));
-        types.insert(event.findByKey("type"));
+        types.insert(event.findByKey(config.typeFilterField));
 
         if ((i % kProgressYieldInterval) == 0)
             m_view.ProcessPendingEvents();
@@ -183,6 +185,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     const std::string previousStatus = m_view.CurrentStatusText();
     m_view.UpdateStatusText("Applying filters...");
 
+    auto& config = config::GetConfig();
     const auto checkedTypes = m_typeFilterView->CheckedTypes();
     const std::set<std::string> selectedTypeStrings(
         checkedTypes.begin(), checkedTypes.end());
@@ -194,7 +197,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     for (std::size_t i = 0; i < total; ++i)
     {
         const auto& event = m_events.GetEvent(ClampToInt(i));
-        const std::string eventType = event.findByKey("type");
+        const std::string eventType = event.findByKey(config.typeFilterField);
         const bool typeMatch = selectedTypeStrings.empty() ||
             selectedTypeStrings.count(eventType) > 0;
 

@@ -30,6 +30,7 @@ class EventsTableModel : public QAbstractTableModel
     void RefreshColumns();
     void UpdateColors();
     void SetFilteredIndices(const std::vector<unsigned long>& indices);
+    const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
 
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;

@@ -13,7 +13,8 @@ LogAnalyzer::LogAnalyzer(std::shared_ptr<IAIService> aiService,
 {
 }
 
-std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents)
+std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
+                                const std::vector<unsigned long>* filteredIndices)
 {
     if (!m_aiService || !m_aiService->IsAvailable())
     {
@@ -27,11 +28,13 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents)
         return "No log data available to analyze.";
     }
 
-    util::Logger::Info("Starting {} analysis on {} events",
-        GetAnalysisTypeName(type), 
-        maxEvents > 0 ? std::min(maxEvents, m_events.Size()) : m_events.Size());
+    const size_t eventCount = filteredIndices ? filteredIndices->size() : m_events.Size();
+    util::Logger::Info("Starting {} analysis on {} {} events",
+        GetAnalysisTypeName(type),
+        maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
+        filteredIndices ? "filtered" : "total");
 
-    const std::string logData = FormatEventsForAI(maxEvents);
+    const std::string logData = FormatEventsForAI(maxEvents, filteredIndices);
     const std::string prompt = BuildPrompt(type, logData);
 
     try
@@ -48,7 +51,8 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents)
     }
 }
 
-std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents)
+std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents,
+                                                const std::vector<unsigned long>* filteredIndices)
 {
     if (!m_aiService || !m_aiService->IsAvailable())
     {
@@ -62,10 +66,12 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
         return "No log data available to analyze.";
     }
 
-    util::Logger::Info("Starting custom prompt analysis on {} events",
-        maxEvents > 0 ? std::min(maxEvents, m_events.Size()) : m_events.Size());
+    const size_t eventCount = filteredIndices ? filteredIndices->size() : m_events.Size();
+    util::Logger::Info("Starting custom prompt analysis on {} {} events",
+        maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
+        filteredIndices ? "filtered" : "total");
 
-    const std::string logData = FormatEventsForAI(maxEvents);
+    const std::string logData = FormatEventsForAI(maxEvents, filteredIndices);
     
     // Build prompt with custom user request
     std::ostringstream prompt;
@@ -106,44 +112,94 @@ std::string LogAnalyzer::GetAnalysisTypeName(AnalysisType type)
     }
 }
 
-std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents) const
+std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents, 
+                                          const std::vector<unsigned long>* filteredIndices) const
 {
     std::ostringstream oss;
     
     const size_t totalEvents = m_events.Size();
-    const size_t eventsToInclude = (maxEvents > 0) ? 
-        std::min(maxEvents, totalEvents) : totalEvents;
+    const size_t availableEvents = filteredIndices ? filteredIndices->size() : totalEvents;
+    size_t eventsToInclude = (maxEvents > 0) ? 
+        std::min(maxEvents, availableEvents) : availableEvents;
 
     oss << "Total events in log: " << totalEvents << "\n";
-    oss << "Showing " << eventsToInclude << " events:\n\n";
-
-    for (size_t i = 0; i < eventsToInclude; ++i)
+    
+    if (filteredIndices)
     {
-        const auto& event = m_events.GetEvent(static_cast<int>(i));
+        oss << "Filtered events: " << filteredIndices->size() << "\n";
+        oss << "Note: Analysis respects active filters (type, search, etc.)\n";
+    }
+    
+    // For large datasets, use smart sampling to stay within limits
+    if (eventsToInclude > 5000)
+    {
+        oss << "Using intelligent sampling for large dataset...\n";
+        eventsToInclude = 5000;
+        oss << "Sampled " << eventsToInclude << " representative events:\n\n";
         
-        oss << "[" << i << "] ID=" << event.getId();
+        if (filteredIndices)
+        {
+            // Sample from filtered indices
+            const size_t step = filteredIndices->size() / eventsToInclude;
+            for (size_t i = 0; i < eventsToInclude; ++i)
+            {
+                const size_t filteredIndex = i * step;
+                const unsigned long eventIndex = (*filteredIndices)[filteredIndex];
+                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+            }
+        }
+        else
+        {
+            // Sample from all events
+            const size_t step = totalEvents / eventsToInclude;
+            for (size_t i = 0; i < eventsToInclude; ++i)
+            {
+                const size_t eventIndex = i * step;
+                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+            }
+        }
+    }
+    else
+    {
+        oss << "Showing " << eventsToInclude << " events:\n\n";
         
-        // Include key fields
-        const std::string type = event.findByKey("type");
-        if (!type.empty())
-            oss << " type=" << type;
-            
-        const std::string level = event.findByKey("level");
-        if (!level.empty())
-            oss << " level=" << level;
-            
-        const std::string message = event.findByKey("message");
-        if (!message.empty())
-            oss << " msg=\"" << message << "\"";
-            
-        const std::string timestamp = event.findByKey("timestamp");
-        if (!timestamp.empty())
-            oss << " time=" << timestamp;
-        
-        oss << "\n";
+        if (filteredIndices)
+        {
+            // Use only filtered indices
+            for (size_t i = 0; i < eventsToInclude; ++i)
+            {
+                const unsigned long eventIndex = (*filteredIndices)[i];
+                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+            }
+        }
+        else
+        {
+            // Send events sequentially from the start
+            for (size_t i = 0; i < eventsToInclude; ++i)
+            {
+                FormatSingleEvent(oss, i, m_events.GetEvent(static_cast<int>(i)));
+            }
+        }
     }
 
     return oss.str();
+}
+
+void LogAnalyzer::FormatSingleEvent(std::ostringstream& oss, size_t index, const db::LogEvent& event) const
+{
+    oss << "Event[" << index << "] ID=" << event.getId() << "\n";
+    
+    // Include ALL fields from the event
+    const auto& items = event.getEventItems();
+    for (const auto& [key, value] : items)
+    {
+        if (!value.empty())
+        {
+            oss << "  " << key << ": " << value << "\n";
+        }
+    }
+    
+    oss << "\n";
 }
 
 std::string LogAnalyzer::BuildPrompt(AnalysisType type, 

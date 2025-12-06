@@ -64,6 +64,7 @@ class Config
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
     void GetLoggingConfig(const json& j);
+    void GetFilterConfig(const json& j);
     void GetAIConfig(const json& j);
     std::filesystem::path GetDefaultConfigPath();
     std::filesystem::path GetDefaultLogPath();
@@ -82,6 +83,9 @@ class Config
     std::vector<ColumnConfig> columns;
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
+    
+    // Filter configuration
+    std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")
     
     // AI configuration
     std::string aiProvider {"ollama"};  // "ollama", "lmstudio", "openai", "anthropic", "google", "xai"

@@ -15,6 +15,8 @@ class QCheckBox;
 namespace ui::qt
 {
 
+class EventsTableView;
+
 /**
  * @brief Panel for AI-powered log analysis
  */
@@ -25,6 +27,7 @@ class AIAnalysisPanel : public QWidget
 public:
     explicit AIAnalysisPanel(std::shared_ptr<ai::IAIService> aiService,
                             std::shared_ptr<ai::LogAnalyzer> analyzer,
+                            EventsTableView* eventsView,
                             QWidget* parent = nullptr);
 
 signals:
@@ -50,6 +53,7 @@ private:
 
     std::shared_ptr<ai::IAIService> m_aiService;
     std::shared_ptr<ai::LogAnalyzer> m_analyzer;
+    EventsTableView* m_eventsView{nullptr};
     
     QComboBox* m_modelCombo{nullptr};
     QComboBox* m_analysisTypeCombo{nullptr};

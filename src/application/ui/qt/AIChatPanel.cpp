@@ -1,5 +1,6 @@
 #include "ui/qt/AIChatPanel.hpp"
 #include "ai/OllamaClient.hpp"
+#include "config/Config.hpp"
 #include "util/Logger.hpp"
 
 #include <QVBoxLayout>
@@ -214,9 +215,10 @@ std::string AIChatPanel::FormatEventsForContext(size_t maxEvents) const
     for (size_t i = startIdx; i < totalEvents; ++i)
     {
         const auto& event = m_events.GetEvent(static_cast<int>(i));
+        const auto& config = config::GetConfig();
         formatted += "[" + std::to_string(i + 1) + "] ";
         formatted += event.findByKey("timestamp") + " ";
-        formatted += event.findByKey("type") + ": ";
+        formatted += event.findByKey(config.typeFilterField) + ": ";
         formatted += event.findByKey("message") + "\n";
     }
     

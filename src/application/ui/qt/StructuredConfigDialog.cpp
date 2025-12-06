@@ -88,6 +88,8 @@ void StructuredConfigDialog::InitGeneralTab()
     auto* form = new QFormLayout();
     m_xmlRootEdit = new QLineEdit(m_generalTab);
     m_xmlEventEdit = new QLineEdit(m_generalTab);
+    m_typeFilterFieldEdit = new QLineEdit(m_generalTab);
+    m_typeFilterFieldEdit->setPlaceholderText(tr("e.g., type, level, severity"));
     m_logLevelCombo = new QComboBox(m_generalTab);
 
     m_logLevelCombo->addItems(
@@ -98,6 +100,7 @@ void StructuredConfigDialog::InitGeneralTab()
 
     form->addRow(tr("xmlRootElement"), m_xmlRootEdit);
     form->addRow(tr("xmlEventElement"), m_xmlEventEdit);
+    form->addRow(tr("Type Filter Field"), m_typeFilterFieldEdit);
     form->addRow(tr("logLevel"), m_logLevelCombo);
 
     layout->addLayout(form);
@@ -186,7 +189,7 @@ void StructuredConfigDialog::InitColorsTab()
     columnRow->addWidget(m_colorColumnCombo, 1);
     layout->addLayout(columnRow);
 
-    m_colorColumnCombo->addItem(QString::fromLatin1("type"));
+    // Column combo will be populated in LoadConfigToUi
     connect(m_colorColumnCombo, &QComboBox::currentIndexChanged, this,
         &StructuredConfigDialog::OnColorColumnChanged);
 
@@ -361,6 +364,7 @@ void StructuredConfigDialog::LoadConfigToUi()
 
     m_xmlRootEdit->setText(QString::fromStdString(cfg.xmlRootElement));
     m_xmlEventEdit->setText(QString::fromStdString(cfg.xmlEventElement));
+    m_typeFilterFieldEdit->setText(QString::fromStdString(cfg.typeFilterField));
 
     const QString logLevel = QString::fromStdString(cfg.logLevel);
     const int idx = m_logLevelCombo->findText(logLevel);
@@ -378,6 +382,31 @@ void StructuredConfigDialog::LoadConfigToUi()
     m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
     m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
 
+    // Populate color column combo with available columns
+    m_colorColumnCombo->clear();
+    m_colorColumnCombo->addItem(QString::fromStdString(cfg.typeFilterField));
+    for (const auto& col : cfg.columns)
+    {
+        const QString colName = QString::fromStdString(col.name);
+        if (colName != QString::fromStdString(cfg.typeFilterField))
+        {
+            m_colorColumnCombo->addItem(colName);
+        }
+    }
+    // Add any columns from existing color config that aren't in the columns list
+    for (const auto& [colName, mappings] : cfg.columnColors)
+    {
+        const QString qColName = QString::fromStdString(colName);
+        if (m_colorColumnCombo->findText(qColName) == -1)
+        {
+            m_colorColumnCombo->addItem(qColName);
+        }
+    }
+    // Default to typeFilterField if it exists in the combo
+    const int typeFilterIdx = m_colorColumnCombo->findText(QString::fromStdString(cfg.typeFilterField));
+    if (typeFilterIdx >= 0)
+        m_colorColumnCombo->setCurrentIndex(typeFilterIdx);
+
     RefreshColumnsList();
     RefreshColorMappings();
 }
@@ -388,6 +417,7 @@ void StructuredConfigDialog::OnSaveClicked()
 
     cfg.xmlRootElement = m_xmlRootEdit->text().toStdString();
     cfg.xmlEventElement = m_xmlEventEdit->text().toStdString();
+    cfg.typeFilterField = m_typeFilterFieldEdit->text().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
     cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
     cfg.aiApiKey = m_aiApiKeyEdit->text().toStdString();

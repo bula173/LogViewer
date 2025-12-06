@@ -34,7 +34,7 @@ void EventsTableView::InitializeView()
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    horizontalHeader()->setStretchLastSection(false);
+    horizontalHeader()->setStretchLastSection(true);
     horizontalHeader()->setSectionsMovable(false);
     horizontalHeader()->setSectionsClickable(true);
     verticalHeader()->setVisible(false);
@@ -145,6 +145,15 @@ void EventsTableView::SetFilteredEvents(
 
     m_model->SetFilteredIndices(filteredIndices);
     viewport()->update();
+}
+
+const std::vector<unsigned long>* EventsTableView::GetFilteredIndices() const
+{
+    if (!m_model)
+        return nullptr;
+    
+    const auto& indices = m_model->GetFilteredIndices();
+    return indices.empty() ? nullptr : &indices;
 }
 
 void EventsTableView::UpdateColors()

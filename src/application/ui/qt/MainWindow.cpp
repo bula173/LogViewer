@@ -95,7 +95,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         config.ollamaDefaultModel
     );
     auto aiAnalyzer = std::make_shared<ai::LogAnalyzer>(aiService, events);
-    m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, contentTabs);
+    m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, m_eventsView, contentTabs);
     contentTabs->addTab(m_aiPanel, "AI Analysis");
     
     setCentralWidget(contentTabs);

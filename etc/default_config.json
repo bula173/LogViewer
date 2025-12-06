@@ -3,6 +3,9 @@
   "logging": {
     "level": "debug"
   },
+  "filters": {
+    "typeFilterField": "level"
+  },
   "aiConfig": {
     "provider": "ollama",
     "baseUrl": "http://localhost:11434",
@@ -15,15 +18,17 @@
       "columns": [
         { "name": "id", "visible":true, "width": 50 },
         { "name": "timestamp", "visible":true, "width": 150 },
-        { "name": "message", "visible":true, "width": 100 },
-        { "name": "type", "visible":true, "width": 200 },
+        { "name": "level", "visible":true, "width": 200 },
         { "name": "info", "visible":true, "width": 300 }
       ]
     }
   },
   "columnColors": {
-    "type": {
-      "alarm":                   ["#f0f090", "#ff4200"]
+    "level": {
+      "ERROR":   ["#ffffff", "#ff4200"],
+      "WARN":    ["#000000", "#ffcc00"],
+      "INFO":    ["#000000", "#90ee90"],
+      "DEBUG":   ["#000000", "#d3d3d3"]
     }
   }
 }

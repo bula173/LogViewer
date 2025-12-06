@@ -107,6 +107,7 @@ void Config::LoadConfig()
 
         GetColorConfig(j);
         GetLoggingConfig(j);
+        GetFilterConfig(j);
         GetAIConfig(j);
         ParseXmlConfig(j);
 
@@ -154,6 +155,7 @@ void Config::SaveConfig()
                 {"visible", col.isVisible}, {"width", col.width}});
         }
         j["logging"]["level"] = logLevel;
+        j["filters"]["typeFilterField"] = typeFilterField;
         j["aiConfig"]["provider"] = aiProvider;
         if (!aiApiKey.empty())
             j["aiConfig"]["apiKey"] = aiApiKey;
@@ -280,6 +282,27 @@ void Config::GetLoggingConfig(const json& j)
     else
     {
         util::Logger::Warn("Missing 'logging' in config file.");
+    }
+}
+
+void Config::GetFilterConfig(const json& j)
+{
+    if (j.contains("filters"))
+    {
+        const auto& filterConfig = j["filters"];
+        if (filterConfig.contains("typeFilterField"))
+        {
+            typeFilterField = filterConfig["typeFilterField"].get<std::string>();
+            util::Logger::Info("Type filter field set to: {}", typeFilterField);
+        }
+        else
+        {
+            util::Logger::Info("No 'typeFilterField' in filter config, using default: type");
+        }
+    }
+    else
+    {
+        util::Logger::Info("No 'filters' config found, using default type filter field: type");
     }
 }
 
