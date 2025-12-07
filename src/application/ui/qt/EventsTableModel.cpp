@@ -28,8 +28,9 @@ int EventsTableModel::rowCount(const QModelIndex& parent) const
     if (parent.isValid())
         return 0;
 
-    const std::size_t sourceSize = m_filteredIndices.empty() ? m_events.Size() :
-        m_filteredIndices.size();
+    // If filtering is active, use filtered indices (even if empty)
+    // If filtering is not active, show all events
+    const std::size_t sourceSize = m_filteringActive ? m_filteredIndices.size() : m_events.Size();
     const auto maxInt = static_cast<std::size_t>(std::numeric_limits<int>::max());
     return static_cast<int>(std::min(sourceSize, maxInt));
 }
@@ -193,6 +194,14 @@ void EventsTableModel::SetFilteredIndices(
     const std::vector<unsigned long>& indices)
 {
     m_filteredIndices = indices;
+    m_filteringActive = true; // Mark that filtering is now active
+    RefreshAll();
+}
+
+void EventsTableModel::ClearFilter()
+{
+    m_filteredIndices.clear();
+    m_filteringActive = false; // Mark that filtering is no longer active
     RefreshAll();
 }
 
@@ -201,7 +210,7 @@ int EventsTableModel::ResolveToActualIndex(int row) const
     if (row < 0)
         return -1;
 
-    if (!m_filteredIndices.empty())
+    if (m_filteringActive)
     {
         if (row >= static_cast<int>(m_filteredIndices.size()))
             return -1;
@@ -216,7 +225,7 @@ int EventsTableModel::RowFromActualIndex(int actualIndex) const
     if (actualIndex < 0)
         return -1;
 
-    if (m_filteredIndices.empty())
+    if (!m_filteringActive)
         return actualIndex;
 
     const auto it = std::find(
