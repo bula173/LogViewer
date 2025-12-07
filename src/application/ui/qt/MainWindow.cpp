@@ -551,7 +551,7 @@ void MainWindow::OnOpenFileRequested()
     #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     #endif
-    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv);;All files (*.*)"));
     if (dialog.exec() != QDialog::Accepted) {
         util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
         return;

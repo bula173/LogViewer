@@ -15,6 +15,7 @@ set(APP_CORE_SRCS
     mvc/MainController.cpp
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
+    csv/CsvParser.cpp
     ai/OllamaClient.cpp
     ai/OpenAIClient.cpp
     ai/AnthropicClient.cpp
