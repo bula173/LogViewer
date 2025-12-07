@@ -53,6 +53,11 @@ public:
     bool IsReady() const;
 
     /**
+     * @brief Update the AI service (for provider changes)
+     */
+    void SetAIService(std::shared_ptr<IAIService> aiService);
+
+    /**
      * @brief Get human-readable name for analysis type
      */
     static std::string GetAnalysisTypeName(AnalysisType type);

@@ -10,6 +10,7 @@
 #include "ui/qt/SearchResultsView.hpp"
 #include "ui/qt/TypeFilterView.hpp"
 #include "ui/qt/AIAnalysisPanel.hpp"
+#include "ui/qt/AIConfigPanel.hpp"
 #include "ui/qt/AIChatPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
 #include "ai/AIServiceFactory.hpp"
@@ -34,6 +35,7 @@
 #include <QMimeData>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QSettings>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QString>
@@ -60,9 +62,20 @@ MainWindow::MainWindow(mvc::IController& controller,
     SetupMenus();
     InitializePresenter(controller, events);
     util::Logger::Info("[MainWindow] Main window initialized");
+    
+    // Restore window layout
+    QSettings settings("LogViewer", "LogViewerQt");
+    restoreGeometry(settings.value("windowGeometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow()
+{
+    // Save window layout
+    QSettings settings("LogViewer", "LogViewerQt");
+    settings.setValue("windowGeometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+}
 
 void MainWindow::InitializeUi(db::EventsContainer& events)
 {
@@ -88,19 +101,24 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     
     // AI Analysis tab - use factory to create appropriate client
     auto& config = config::GetConfig();
-    auto aiService = ai::AIServiceFactory::CreateClient(
+    m_aiService = ai::AIServiceFactory::CreateClient(
         config.aiProvider,
-        config.aiApiKey,
+        config.GetApiKeyForProvider(config.aiProvider),
         config.ollamaBaseUrl,
         config.ollamaDefaultModel
     );
-    auto aiAnalyzer = std::make_shared<ai::LogAnalyzer>(aiService, events);
-    m_aiPanel = new AIAnalysisPanel(aiService, aiAnalyzer, m_eventsView, contentTabs);
+    m_aiAnalyzer = std::make_shared<ai::LogAnalyzer>(m_aiService, events);
+    m_aiPanel = new AIAnalysisPanel(m_aiService, m_aiAnalyzer, m_eventsView, contentTabs);
     contentTabs->addTab(m_aiPanel, "AI Analysis");
+    
+    // Create AI configuration panel (shared references with AI Analysis)
+    m_aiConfigPanel = new AIConfigPanel(m_aiService, m_aiAnalyzer, this);
+    m_aiPanel->SetConfigPanel(m_aiConfigPanel);
     
     setCentralWidget(contentTabs);
 
-    // ===== LEFT DOCK: Filters Panel =====
+    // ===== LEFT DOCK: Filters and AI Configuration =====
+    // Filters dock
     m_filtersDock = new QDockWidget("Filters", this);
     m_filtersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable | 
@@ -129,6 +147,15 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
+    
+    // AI Configuration dock
+    m_aiConfigDock = new QDockWidget("AI Configuration", this);
+    m_aiConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_aiConfigDock->setFeatures(QDockWidget::DockWidgetMovable | 
+                                QDockWidget::DockWidgetFloatable | 
+                                QDockWidget::DockWidgetClosable);
+    m_aiConfigDock->setWidget(m_aiConfigPanel);
+    addDockWidget(Qt::LeftDockWidgetArea, m_aiConfigDock);
 
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
@@ -172,7 +199,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     bottomTabs->addTab(searchPanel, "Search");
     
     // AI Chat tab
-    auto* chatPanel = new AIChatPanel(aiService, events, bottomTabs);
+    auto* chatPanel = new AIChatPanel(m_aiService, events, bottomTabs);
     bottomTabs->addTab(chatPanel, "AI Chat");
     
     m_bottomDock->setWidget(bottomTabs);
@@ -472,7 +499,9 @@ void MainWindow::OnOpenFileRequested()
     util::Logger::Debug("[MainWindow] OnOpenFileRequested: opening QFileDialog");
 
     QFileDialog dialog(this, tr("Open Log File"));
+    #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
     dialog.setNameFilter(tr("Log files (*.log *.txt *.xml);;All files (*.*)"));
     if (dialog.exec() != QDialog::Accepted) {
         util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
@@ -591,6 +620,10 @@ void MainWindow::OnConfigChanged()
     
     if (m_itemDetailsView)
         m_itemDetailsView->RefreshView();
+    
+    // Refresh AI client if provider changed
+    if (m_aiConfigPanel)
+        m_aiConfigPanel->RefreshAIClient();
 }
 
 } // namespace ui::qt

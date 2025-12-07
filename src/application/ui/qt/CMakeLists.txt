@@ -22,6 +22,7 @@ set(APP_QT_SRCS
     ConfigEditorDialog.cpp
     StructuredConfigDialog.cpp
     AIAnalysisPanel.cpp
+    AIConfigPanel.cpp
     AIChatPanel.cpp
     OllamaSetupDialog.cpp)
 

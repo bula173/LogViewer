@@ -65,6 +65,12 @@ bool AnthropicClient::IsAvailable() const
     return !m_apiKey.empty();
 }
 
+void AnthropicClient::SetModel(const std::string& model)
+{
+    m_model = model;
+    util::Logger::Info("Anthropic model changed to: {}", m_model);
+}
+
 std::string AnthropicClient::SendHttpPost(const std::string& endpoint,
                                           const std::string& jsonBody,
                                           const std::string& apiKeyHeader) const

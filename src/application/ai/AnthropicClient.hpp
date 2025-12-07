@@ -27,7 +27,7 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override { return m_model; }
 
-    void SetModel(const std::string& model) { m_model = model; }
+    void SetModel(const std::string& model);
 
 private:
     std::string m_apiKey;

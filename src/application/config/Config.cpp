@@ -1,5 +1,6 @@
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
+#include "util/KeyEncryption.hpp"
 #include <fstream>
 
 namespace config
@@ -87,6 +88,56 @@ void Config::LoadConfig()
     else
     {
         util::Logger::Info("Config file exists at: {}", m_configFilePath);
+        
+        // Check if config needs migration (has all new fields)
+        try
+        {
+            std::ifstream userFile(m_configFilePath);
+            json userConfig;
+            userFile >> userConfig;
+            userFile.close();
+            
+            // Load default config template
+            std::filesystem::path cwd = std::filesystem::current_path();
+            std::vector<std::filesystem::path> searchPaths = {
+                cwd / "etc" / "default_config.json",
+                cwd / "config" / "default_config.json",
+                cwd / "default_config.json"};
+            
+            std::filesystem::path defaultPath;
+            for (const auto& path : searchPaths)
+            {
+                if (std::filesystem::exists(path))
+                {
+                    defaultPath = path;
+                    break;
+                }
+            }
+            
+            if (!defaultPath.empty())
+            {
+                std::ifstream defaultFile(defaultPath);
+                json defaultConfig;
+                defaultFile >> defaultConfig;
+                defaultFile.close();
+                
+                // Merge configs (user settings take precedence, new fields added)
+                json merged = MergeConfigs(userConfig, defaultConfig);
+                
+                // Save merged config back if it changed
+                if (merged != userConfig)
+                {
+                    std::ofstream outFile(m_configFilePath);
+                    outFile << merged.dump(4);
+                    outFile.close();
+                    util::Logger::Info("Config migrated with new fields from default template");
+                }
+            }
+        }
+        catch (const std::exception& e)
+        {
+            util::Logger::Warn("Config migration check failed: {}", e.what());
+        }
     }
 
 
@@ -157,8 +208,45 @@ void Config::SaveConfig()
         j["logging"]["level"] = logLevel;
         j["filters"]["typeFilterField"] = typeFilterField;
         j["aiConfig"]["provider"] = aiProvider;
-        if (!aiApiKey.empty())
-            j["aiConfig"]["apiKey"] = aiApiKey;
+        
+        // Save provider-specific API keys (encrypted)
+        if (!openaiApiKey.empty())
+        {
+            std::string keyToSave = openaiApiKey;
+            if (!util::KeyEncryption::IsEncrypted(keyToSave))
+            {
+                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
+            }
+            j["aiConfig"]["openaiApiKey"] = keyToSave;
+        }
+        if (!anthropicApiKey.empty())
+        {
+            std::string keyToSave = anthropicApiKey;
+            if (!util::KeyEncryption::IsEncrypted(keyToSave))
+            {
+                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
+            }
+            j["aiConfig"]["anthropicApiKey"] = keyToSave;
+        }
+        if (!googleApiKey.empty())
+        {
+            std::string keyToSave = googleApiKey;
+            if (!util::KeyEncryption::IsEncrypted(keyToSave))
+            {
+                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
+            }
+            j["aiConfig"]["googleApiKey"] = keyToSave;
+        }
+        if (!xaiApiKey.empty())
+        {
+            std::string keyToSave = xaiApiKey;
+            if (!util::KeyEncryption::IsEncrypted(keyToSave))
+            {
+                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
+            }
+            j["aiConfig"]["xaiApiKey"] = keyToSave;
+        }
+        
         j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
         j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
         j["aiConfig"]["timeoutSeconds"] = aiTimeoutSeconds;
@@ -317,10 +405,47 @@ void Config::GetAIConfig(const json& j)
             aiProvider = aiConfig["provider"].get<std::string>();
             util::Logger::Info("AI provider set to: {}", aiProvider);
         }
+        // Load provider-specific API keys (backward compatibility with old "apiKey" field)
         if (aiConfig.contains("apiKey"))
         {
-            aiApiKey = aiConfig["apiKey"].get<std::string>();
-            util::Logger::Info("AI API key configured (length: {})", aiApiKey.length());
+            const std::string storedKey = aiConfig["apiKey"].get<std::string>();
+            // Decrypt old generic key and migrate based on provider
+            const std::string decryptedKey = util::KeyEncryption::Decrypt(storedKey);
+            if (aiProvider == "openai") openaiApiKey = decryptedKey;
+            else if (aiProvider == "anthropic") anthropicApiKey = decryptedKey;
+            else if (aiProvider == "google") googleApiKey = decryptedKey;
+            else if (aiProvider == "xai") xaiApiKey = decryptedKey;
+            util::Logger::Info("Migrated legacy API key for provider: {}", aiProvider);
+        }
+        
+        // Load new provider-specific keys
+        if (aiConfig.contains("openaiApiKey"))
+        {
+            const std::string storedKey = aiConfig["openaiApiKey"].get<std::string>();
+            openaiApiKey = util::KeyEncryption::Decrypt(storedKey);
+            util::Logger::Info("OpenAI API key loaded (encrypted: {})", 
+                             util::KeyEncryption::IsEncrypted(storedKey));
+        }
+        if (aiConfig.contains("anthropicApiKey"))
+        {
+            const std::string storedKey = aiConfig["anthropicApiKey"].get<std::string>();
+            anthropicApiKey = util::KeyEncryption::Decrypt(storedKey);
+            util::Logger::Info("Anthropic API key loaded (encrypted: {})", 
+                             util::KeyEncryption::IsEncrypted(storedKey));
+        }
+        if (aiConfig.contains("googleApiKey"))
+        {
+            const std::string storedKey = aiConfig["googleApiKey"].get<std::string>();
+            googleApiKey = util::KeyEncryption::Decrypt(storedKey);
+            util::Logger::Info("Google API key loaded (encrypted: {})", 
+                             util::KeyEncryption::IsEncrypted(storedKey));
+        }
+        if (aiConfig.contains("xaiApiKey"))
+        {
+            const std::string storedKey = aiConfig["xaiApiKey"].get<std::string>();
+            xaiApiKey = util::KeyEncryption::Decrypt(storedKey);
+            util::Logger::Info("xAI API key loaded (encrypted: {})", 
+                             util::KeyEncryption::IsEncrypted(storedKey));
         }
         if (aiConfig.contains("baseUrl"))
         {
@@ -459,6 +584,76 @@ void Config::GetPrintConfig() const {
         configFile >> j;
         util::Logger::Info("Loaded config from: {}", j.dump());
     }
+}
+
+std::string Config::GetApiKeyForProvider(const std::string& provider) const
+{
+    if (provider == "openai")
+        return openaiApiKey;
+    else if (provider == "anthropic")
+        return anthropicApiKey;
+    else if (provider == "google")
+        return googleApiKey;
+    else if (provider == "xai")
+        return xaiApiKey;
+    else
+        return ""; // Local providers don't need API keys
+}
+
+json Config::MergeConfigs(const json& userConfig, const json& defaultConfig)
+{
+    json merged = defaultConfig; // Start with default structure
+    
+    // Recursively merge user values
+    std::function<void(json&, const json&, const json&)> deepMerge = 
+        [&deepMerge](json& target, const json& user, const json& defaults) {
+        
+        if (!user.is_object() || !defaults.is_object())
+        {
+            // If user has a value, use it; otherwise keep default
+            if (!user.is_null())
+                target = user;
+            return;
+        }
+        
+        // Merge object fields
+        for (auto it = defaults.begin(); it != defaults.end(); ++it)
+        {
+            const std::string& key = it.key();
+            
+            // Skip comment fields
+            if (key.find("_comment") != std::string::npos)
+                continue;
+            
+            if (user.contains(key))
+            {
+                // User has this field - recurse or copy
+                if (user[key].is_object() && defaults[key].is_object())
+                {
+                    deepMerge(target[key], user[key], defaults[key]);
+                }
+                else
+                {
+                    // Use user's value (preserve user settings)
+                    target[key] = user[key];
+                }
+            }
+            // else: keep default value (new field added in this version)
+        }
+        
+        // Preserve user fields that don't exist in defaults (for backward compat)
+        for (auto it = user.begin(); it != user.end(); ++it)
+        {
+            const std::string& key = it.key();
+            if (!defaults.contains(key))
+            {
+                target[key] = user[key];
+            }
+        }
+    };
+    
+    deepMerge(merged, userConfig, defaultConfig);
+    return merged;
 }
 
 } // namespace config

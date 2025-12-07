@@ -87,7 +87,7 @@ std::string AIServiceFactory::GetDefaultModel(const std::string& provider)
     if (provider == "ollama" || provider == "lmstudio")
         return "qwen2.5-coder:7b";
     else if (provider == "openai")
-        return "gpt-4";
+        return "gpt-3.5-turbo";
     else if (provider == "anthropic")
         return "claude-3-sonnet-20240229";
     else if (provider == "google")

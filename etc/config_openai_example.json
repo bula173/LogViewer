@@ -1,21 +1,17 @@
 {
   "default_parser": "xml",
   "logging": {
-    "level": "debug"
+    "level": "info"
   },
   "filters": {
     "typeFilterField": "level"
   },
   "aiConfig": {
-    "provider": "ollama",
-    "baseUrl": "http://localhost:11434",
-    "defaultModel": "qwen2.5-coder:7b",
-    "timeoutSeconds": 300,
-    "_comment": "API keys are stored encrypted. Add them using the UI or manually as plain text (will be encrypted on save)",
-    "openaiApiKey": "",
-    "anthropicApiKey": "",
-    "googleApiKey": "",
-    "xaiApiKey": ""
+    "provider": "openai",
+    "baseUrl": "https://api.openai.com",
+    "defaultModel": "gpt-4",
+    "apiKey": "sk-your-api-key-here",
+    "timeoutSeconds": 60
   },
   "parsers": {
     "xml": {

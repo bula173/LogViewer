@@ -20,6 +20,7 @@ set(APP_CORE_SRCS
     ai/GeminiClient.cpp
     ai/AIServiceFactory.cpp
     ai/LogAnalyzer.cpp
+    util/KeyEncryption.cpp
 )
 
 add_library(application_core STATIC ${APP_CORE_SRCS})

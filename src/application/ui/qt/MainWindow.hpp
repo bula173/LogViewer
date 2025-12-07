@@ -28,6 +28,12 @@ namespace db
 class EventsContainer;
 }
 
+namespace ai
+{
+class IAIService;
+class LogAnalyzer;
+}
+
 namespace ui
 {
 class MainWindowPresenter;
@@ -42,6 +48,7 @@ class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
 class AIAnalysisPanel;
+class AIConfigPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -111,12 +118,18 @@ class MainWindow : public QMainWindow,
     QDockWidget* m_filtersDock {nullptr};
     QDockWidget* m_detailsDock {nullptr};
     QDockWidget* m_bottomDock {nullptr};
+    QDockWidget* m_aiConfigDock {nullptr};
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
     AIAnalysisPanel* m_aiPanel {nullptr};
+    AIConfigPanel* m_aiConfigPanel {nullptr};
     db::EventsContainer* m_events {nullptr};
+    
+    // AI service shared between panels
+    std::shared_ptr<ai::IAIService> m_aiService;
+    std::shared_ptr<ai::LogAnalyzer> m_aiAnalyzer;
 };
 
 } // namespace ui::qt

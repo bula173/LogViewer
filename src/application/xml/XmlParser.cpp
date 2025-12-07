@@ -52,7 +52,7 @@ namespace parser
 // expat static handler functions
 
 static void StartElementHandler(
-    void* userData, const XML_Char* name, const XML_Char**)
+    void* userData, const XML_Char* name, const XML_Char** atts)
 {
     ParserState* state = static_cast<ParserState*>(userData);
     const auto& config = config::GetConfig();
@@ -81,6 +81,17 @@ static void StartElementHandler(
         state->insideEvent = true;
         state->eventItems.clear();
         state->eventItems.reserve(10);
+        
+        // Parse attributes if present (e.g., <event id="1" timestamp="..." />)
+        if (atts != nullptr)
+        {
+            for (int i = 0; atts[i]; i += 2)
+            {
+                std::string attrName(atts[i]);
+                std::string attrValue(atts[i + 1]);
+                state->eventItems.emplace_back(std::move(attrName), std::move(attrValue));
+            }
+        }
     }
     else if (state->insideEvent)
     {
