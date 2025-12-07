@@ -180,6 +180,11 @@ install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
     RENAME config.json
     COMPONENT common)
 
+# Install field dictionary file to common component
+install(FILES ${CMAKE_SOURCE_DIR}/etc/field_dictionary.json
+    DESTINATION etc
+    COMPONENT common)
+
 # Install predefined AI prompts to common component
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/etc/prompts
     DESTINATION etc

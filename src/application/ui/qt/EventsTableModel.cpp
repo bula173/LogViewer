@@ -357,4 +357,121 @@ QColor EventsTableModel::ResolveColor(const std::string& column,
     return color.isValid() ? color : QColor {};
 }
 
+QVariant EventsTableModel::GetSortValue(const db::LogEvent& event,
+    const std::string& columnName) const
+{
+    if (columnName == "id")
+        return QVariant::fromValue(event.getId());
+    
+    if (columnName == "source")
+        return QString::fromStdString(event.GetSource());
+
+    const auto values = event.findAllByKey(columnName);
+    if (values.empty())
+        return QString();
+
+    const std::string& value = values[0];
+    
+    // Try to parse as number (for timestamps and numeric fields)
+    bool ok = false;
+    long long numValue = QString::fromStdString(value).toLongLong(&ok);
+    if (ok)
+        return QVariant::fromValue(numValue);
+    
+    // Try as double
+    double doubleValue = QString::fromStdString(value).toDouble(&ok);
+    if (ok)
+        return QVariant::fromValue(doubleValue);
+    
+    // Fall back to string comparison
+    return QString::fromStdString(value);
+}
+
+void EventsTableModel::sort(int column, Qt::SortOrder order)
+{
+    if (column < 0 || column >= static_cast<int>(m_visibleColumnIndices.size()))
+        return;
+
+    const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(column)];
+    
+    // Determine column name
+    std::string columnName;
+    if (columnConfigIndex == -1)
+    {
+        columnName = "source";
+    }
+    else
+    {
+        const auto& columns = m_config.GetColumns();
+        if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
+            return;
+        columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
+    }
+
+    emit layoutAboutToBeChanged();
+
+    // Get the list of indices to sort
+    std::vector<unsigned long> indicesToSort;
+    if (m_filteredIndices.empty())
+    {
+        // Sort all events
+        indicesToSort.resize(m_events.Size());
+        std::iota(indicesToSort.begin(), indicesToSort.end(), 0UL);
+    }
+    else
+    {
+        // Sort only filtered events
+        indicesToSort = m_filteredIndices;
+    }
+
+    // Sort the indices based on the column values
+    std::sort(indicesToSort.begin(), indicesToSort.end(),
+        [this, &columnName, order](unsigned long a, unsigned long b) {
+            const auto& eventA = m_events.GetEvent(static_cast<int>(a));
+            const auto& eventB = m_events.GetEvent(static_cast<int>(b));
+            
+            QVariant valA = GetSortValue(eventA, columnName);
+            QVariant valB = GetSortValue(eventB, columnName);
+            
+            // Handle different types
+            if (valA.typeId() == QMetaType::LongLong && valB.typeId() == QMetaType::LongLong)
+            {
+                long long aNum = valA.toLongLong();
+                long long bNum = valB.toLongLong();
+                return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+            }
+            else if (valA.typeId() == QMetaType::Double && valB.typeId() == QMetaType::Double)
+            {
+                double aNum = valA.toDouble();
+                double bNum = valB.toDouble();
+                return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+            }
+            else
+            {
+                // String comparison
+                QString aStr = valA.toString();
+                QString bStr = valB.toString();
+                int cmp = aStr.compare(bStr, Qt::CaseInsensitive);
+                return order == Qt::AscendingOrder ? cmp < 0 : cmp > 0;
+            }
+        });
+
+    // Update the filtered indices with sorted order
+    if (m_filteredIndices.empty())
+    {
+        // We sorted all events, but we don't set m_filteredIndices
+        // because empty m_filteredIndices means "show all"
+        // Instead, we need to actually reorder the container
+        // However, we can't reorder the container itself as it may break other references
+        // So we set the filtered indices to the sorted order
+        m_filteredIndices = indicesToSort;
+    }
+    else
+    {
+        m_filteredIndices = indicesToSort;
+    }
+
+    emit layoutChanged();
+}
+
 } // namespace ui::qt

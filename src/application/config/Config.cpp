@@ -161,6 +161,19 @@ void Config::LoadConfig()
         GetFilterConfig(j);
         GetAIConfig(j);
         ParseXmlConfig(j);
+        
+        // Load dictionary file path if specified
+        if (j.contains("dictionaryFilePath") && j["dictionaryFilePath"].is_string())
+        {
+            m_dictionaryFilePath = j["dictionaryFilePath"].get<std::string>();
+            util::Logger::Info("Dictionary file path: {}", m_dictionaryFilePath);
+            
+            // Load dictionary from the specified file
+            if (!m_dictionaryFilePath.empty())
+            {
+                m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
+            }
+        }
 
 
         // Example: m_someParameter = j["someParameter"].get<std::string>();
@@ -250,6 +263,10 @@ void Config::SaveConfig()
         j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
         j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
         j["aiConfig"]["timeoutSeconds"] = aiTimeoutSeconds;
+        
+        // Save dictionary file path
+        j["dictionaryFilePath"] = m_dictionaryFilePath;
+        
         for (const auto& [col, valMap] : columnColors)
         {
             for (const auto& [val, colors] : valMap)
@@ -598,6 +615,36 @@ std::string Config::GetApiKeyForProvider(const std::string& provider) const
         return xaiApiKey;
     else
         return ""; // Local providers don't need API keys
+}
+
+const FieldTranslator& Config::GetFieldTranslator() const
+{
+    return m_fieldTranslator;
+}
+
+FieldTranslator& Config::GetMutableFieldTranslator()
+{
+    return m_fieldTranslator;
+}
+
+const std::string& Config::GetDictionaryFilePath() const
+{
+    return m_dictionaryFilePath;
+}
+
+void Config::SetDictionaryFilePath(const std::string& path)
+{
+    m_dictionaryFilePath = path;
+    
+    // Reload dictionary from new file
+    if (m_fieldTranslator.LoadFromFile(path))
+    {
+        util::Logger::Info("Reloaded field dictionary from: {}", path);
+    }
+    else
+    {
+        util::Logger::Warn("Failed to load field dictionary from: {}", path);
+    }
 }
 
 json Config::MergeConfigs(const json& userConfig, const json& defaultConfig)

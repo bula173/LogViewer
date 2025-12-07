@@ -38,6 +38,7 @@ private slots:
     void OnLoadConfigClicked();
     void OnSaveConfigAsClicked();
     void OnLogLevelChanged(int index);
+    void OnBrowseDictionaryFileClicked();
     
     // AI tab
     void OnAIProviderChanged(int index);
@@ -51,6 +52,14 @@ private slots:
     void OnApplyColumnChanges();
     void OnMoveColumnUp();
     void OnMoveColumnDown();
+
+    // Dictionary tab
+    void OnDictionarySelectionChanged();
+    void OnAddDictionary();
+    void OnRemoveDictionary();
+    void OnApplyDictionaryChanges();
+    void OnLoadDictionaryFile();
+    void OnSaveDictionaryFile();
 
     // Colors tab
     void OnColorColumnChanged(int index);
@@ -68,6 +77,7 @@ private:
 
     void InitGeneralTab();
     void InitColumnsTab();
+    void InitDictionaryTab();
     void InitColorsTab();
     void InitAITab();
 
@@ -76,6 +86,9 @@ private:
     void RefreshColumnsList();
     void LoadSelectedColumnToEditors();
     void SwapColumns(int sourceRow, int targetRow);
+
+    void RefreshDictionaryList();
+    void LoadSelectedDictionaryToEditors();
 
     void RefreshColorMappings();
     void UpdateColorEditorsFromSelection(int row);
@@ -97,6 +110,8 @@ private:
     QLineEdit* m_typeFilterFieldEdit {nullptr};
     QComboBox* m_logLevelCombo {nullptr};
     QLabel* m_configPathLabel {nullptr};
+    QLineEdit* m_dictionaryFileEdit {nullptr};
+    QPushButton* m_browseDictionaryButton {nullptr};
     
     // AI tab widgets
     QWidget* m_aiTab {nullptr};
@@ -121,6 +136,22 @@ private:
     QPushButton* m_removeColumnButton {nullptr};
     QPushButton* m_applyColumnChangesButton {nullptr};
     int m_selectedColumnRow {-1};
+
+    // Dictionary tab widgets
+    QWidget* m_dictionaryTab {nullptr};
+    QTableWidget* m_dictionaryTable {nullptr};
+    QLineEdit* m_dictKeyEdit {nullptr};
+    QComboBox* m_dictConversionCombo {nullptr};
+    QLineEdit* m_dictTooltipEdit {nullptr};
+    QTableWidget* m_dictValueMapTable {nullptr};
+    QPushButton* m_addDictValueButton {nullptr};
+    QPushButton* m_removeDictValueButton {nullptr};
+    QPushButton* m_addDictionaryButton {nullptr};
+    QPushButton* m_removeDictionaryButton {nullptr};
+    QPushButton* m_applyDictionaryChangesButton {nullptr};
+    QPushButton* m_loadDictionaryFileButton {nullptr};
+    QPushButton* m_saveDictionaryFileButton {nullptr};
+    int m_selectedDictionaryRow {-1};
 
     // Colors tab widgets
     QWidget* m_colorsTab {nullptr};
