@@ -21,6 +21,7 @@ set(APP_QT_SRCS
     TypeFilterView.cpp
     ConfigEditorDialog.cpp
     StructuredConfigDialog.cpp
+    LogFileLoadDialog.cpp
     AIAnalysisPanel.cpp
     AIConfigPanel.cpp
     AIChatPanel.cpp

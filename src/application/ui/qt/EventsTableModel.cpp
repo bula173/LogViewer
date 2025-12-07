@@ -61,10 +61,22 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
         return {};
 
     const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(index.column())];
-    if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
+    
+    // Handle dynamic source column (index -1)
+    std::string columnName;
+    if (columnConfigIndex == -1)
+    {
+        columnName = "source";
+    }
+    else if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
+    {
         return {};
-
-    const auto& columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
+    }
+    else
+    {
+        columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
+    }
+    
     const auto& event = m_events.GetEvent(actualIndex);
 
     switch (role)
@@ -109,8 +121,15 @@ QVariant EventsTableModel::headerData(int section,
             section >= static_cast<int>(m_visibleColumnIndices.size()))
             return {};
 
-        const auto& columns = m_config.GetColumns();
         const int columnIndex = m_visibleColumnIndices[static_cast<std::size_t>(section)];
+        
+        // Handle dynamic source column
+        if (columnIndex == -1)
+        {
+            return QString("Source");
+        }
+        
+        const auto& columns = m_config.GetColumns();
         if (columnIndex < 0 || columnIndex >=
                 static_cast<int>(columns.size()))
             return {};
@@ -135,8 +154,26 @@ void EventsTableModel::RefreshAll()
 
 void EventsTableModel::RefreshColumns()
 {
+    // Store old column count
+    const int oldColumnCount = static_cast<int>(m_visibleColumnIndices.size());
+    
+    // Rebuild the visible columns list based on current config
     RebuildVisibleColumns();
-    RefreshAll();
+    
+    const int newColumnCount = static_cast<int>(m_visibleColumnIndices.size());
+    
+    // If column count changed, notify the view properly
+    if (newColumnCount != oldColumnCount)
+    {
+        // Model structure changed - need to reset
+        beginResetModel();
+        endResetModel();
+    }
+    else
+    {
+        // Just refresh the data
+        RefreshAll();
+    }
 }
 
 void EventsTableModel::UpdateColors()
@@ -198,7 +235,12 @@ std::vector<int> EventsTableModel::ColumnWidths() const
     const auto& columns = m_config.GetColumns();
     for (const int idx : m_visibleColumnIndices)
     {
-        if (idx >= 0 && idx < static_cast<int>(columns.size()))
+        if (idx == -1)
+        {
+            // Source column default width
+            widths.push_back(100);
+        }
+        else if (idx >= 0 && idx < static_cast<int>(columns.size()))
         {
             widths.push_back(columns[static_cast<std::size_t>(idx)].width);
         }
@@ -210,11 +252,52 @@ void EventsTableModel::RebuildVisibleColumns()
 {
     m_visibleColumnIndices.clear();
     const auto& columns = m_config.GetColumns();
-    for (std::size_t i = 0; i < columns.size(); ++i)
+    
+    // Check if we should show source column
+    const bool needsSourceColumn = ShouldShowSourceColumn();
+    
+    // First, add id column if visible (index 0)
+    if (!columns.empty() && columns[0].isVisible)
+    {
+        m_visibleColumnIndices.push_back(0);
+    }
+    
+    // Add source column dynamically (virtual index -1)
+    if (needsSourceColumn)
+    {
+        m_visibleColumnIndices.push_back(-1); // -1 indicates dynamic source column
+        m_hasSourceColumn = true;
+    }
+    else
+    {
+        m_hasSourceColumn = false;
+    }
+    
+    // Add remaining columns (skip index 0 as it's already added)
+    for (std::size_t i = 1; i < columns.size(); ++i)
     {
         if (columns[i].isVisible)
             m_visibleColumnIndices.push_back(static_cast<int>(i));
     }
+}
+
+bool EventsTableModel::ShouldShowSourceColumn() const
+{
+    // Check if any event has a source set
+    const size_t count = m_events.Size();
+    // Check first few events for performance (or check all if small dataset)
+    const size_t samplesToCheck = std::min(count, size_t(100));
+    
+    for (size_t i = 0; i < samplesToCheck; ++i)
+    {
+        const auto& event = m_events.GetEvent(static_cast<int>(i));
+        if (!event.GetSource().empty())
+        {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
@@ -222,6 +305,9 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
 {
     if (columnName == "id")
         return QString::number(event.getId());
+    
+    if (columnName == "source")
+        return QString::fromStdString(event.GetSource());
 
     const auto values = event.findAllByKey(columnName);
     if (values.empty())

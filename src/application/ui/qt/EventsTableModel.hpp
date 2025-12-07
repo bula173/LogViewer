@@ -38,6 +38,7 @@ class EventsTableModel : public QAbstractTableModel
 
   private:
     void RebuildVisibleColumns();
+    bool ShouldShowSourceColumn() const;
     QString ComposeCellText(const db::LogEvent& event,
         const std::string& columnName) const;
     QColor ResolveColor(const std::string& column,
@@ -47,6 +48,7 @@ class EventsTableModel : public QAbstractTableModel
     std::vector<unsigned long> m_filteredIndices;
     std::vector<int> m_visibleColumnIndices;
     const config::Config& m_config;
+    bool m_hasSourceColumn {false}; // Track if source column is currently shown
 };
 
 } // namespace ui::qt

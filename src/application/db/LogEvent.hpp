@@ -166,10 +166,23 @@ class LogEvent
     {
         return m_id == other.getId();
     }
+    
+    /**
+     * @brief Gets the source identifier for this event
+     * @return const std::string& The source identifier (empty for legacy events)
+     */
+    const std::string& GetSource() const { return m_source; }
+    
+    /**
+     * @brief Sets the source identifier for this event
+     * @param source The source identifier (e.g., file name or alias)
+     */
+    void SetSource(const std::string& source) { m_source = source; }
 
   private:
     int m_id;                ///< Unique event identifier
     EventItems m_eventItems; ///< The structured data of the event
+    std::string m_source;    ///< Source identifier for multi-file merge
 };
 
 } // namespace db

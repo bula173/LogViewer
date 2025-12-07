@@ -176,4 +176,99 @@ size_t EventsContainer::Size() const
     util::Logger::Trace("EventsContainer::Size called, returning {}", m_data.size());
     return m_data.size();
 }
+
+void EventsContainer::MergeEvents(EventsContainer& other, 
+                                  const std::string& existingAlias,
+                                  const std::string& newAlias,
+                                  const std::string& timestampField)
+{
+    /**
+     * @brief Merges events from another container, sorted by timestamp.
+     *
+     * This method combines events from both containers and sorts them by the
+     * specified timestamp field. Events from this container get existingAlias,
+     * and events from the 'other' container get newAlias as their source.
+     * Events without a valid timestamp will be appended at the end.
+     *
+     * @param other The container to merge from
+     * @param existingAlias The source identifier for existing events
+     * @param newAlias The source identifier for new events
+     * @param timestampField The field name containing the timestamp
+     *
+     * Thread-safe: Uses exclusive lock for modification.
+     */
+    util::Logger::Debug("EventsContainer::MergeEvents called with existingAlias='{}', newAlias='{}', timestampField='{}'", 
+                        existingAlias, newAlias, timestampField);
+
+    // First, set source on existing events
+    {
+        std::unique_lock<std::shared_mutex> lock(m_mutex);
+        for (auto& event : m_data)
+        {
+            if (event.GetSource().empty())
+            {
+                event.SetSource(existingAlias);
+            }
+        }
+    }
+
+    // Set source on events being merged
+    {
+        std::unique_lock<std::shared_mutex> otherLock(other.m_mutex);
+        for (auto& event : other.m_data)
+        {
+            event.SetSource(newAlias);
+        }
+    }
+
+    // Create merged vector
+    std::vector<LogEvent> mergedEvents;
+    
+    {
+        std::shared_lock<std::shared_mutex> lock(m_mutex);
+        std::shared_lock<std::shared_mutex> otherLock(other.m_mutex);
+        
+        // Reserve space for all events
+        mergedEvents.reserve(m_data.size() + other.m_data.size());
+        
+        // Copy all events to temporary vector
+        mergedEvents.insert(mergedEvents.end(), m_data.begin(), m_data.end());
+        mergedEvents.insert(mergedEvents.end(), other.m_data.begin(), other.m_data.end());
+    }
+    
+    // Sort by timestamp field
+    std::sort(mergedEvents.begin(), mergedEvents.end(),
+        [&timestampField](const LogEvent& a, const LogEvent& b) -> bool
+        {
+            const std::string timestampA = a.findByKey(timestampField);
+            const std::string timestampB = b.findByKey(timestampField);
+            
+            // Events without timestamp go to the end
+            if (timestampA.empty() && timestampB.empty()) return false;
+            if (timestampA.empty()) return false; // a goes after b
+            if (timestampB.empty()) return true;  // a goes before b
+            
+            // String comparison (works for ISO 8601 format like "2025-01-01T12:00:00")
+            return timestampA < timestampB;
+        });
+    
+    util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}", 
+                       other.m_data.size(), mergedEvents.size());
+    
+    // Replace data with merged result
+    {
+        std::unique_lock<std::shared_mutex> lock(m_mutex);
+        m_data = std::move(mergedEvents);
+        m_currentItem = -1; // Reset selection after merge
+    }
+    
+    // Notify views
+    for (auto v : m_views)
+    {
+        util::Logger::Trace("EventsContainer::MergeEvents notifying view of current index update: -1");
+        v->OnCurrentIndexUpdated(-1);
+    }
+    
+    this->NotifyDataChanged();
+}
 } // db namespace

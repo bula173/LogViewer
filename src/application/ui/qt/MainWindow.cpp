@@ -13,6 +13,7 @@
 #include "ui/qt/AIConfigPanel.hpp"
 #include "ui/qt/AIChatPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
+#include "ui/qt/LogFileLoadDialog.hpp"
 #include "ai/AIServiceFactory.hpp"
 #include "ai/LogAnalyzer.hpp"
 #include "application/util/Logger.hpp"
@@ -462,10 +463,48 @@ void MainWindow::HandleDroppedFile(const QString& path)
 
     try
     {
-        UpdateStatusText(QString("Loading %1 ...").arg(path).toStdString());
-        m_presenter->LoadLogFile(filePath);
-        m_presenter->SetItemDetailsVisible(true);
-        UpdateStatusText(QString("Data ready. Path: %1").arg(path).toStdString());
+        // Check if there's existing data
+        if (m_events->Size() > 0)
+        {
+            // Show dialog to ask user what to do
+            LogFileLoadDialog dialog(QString::fromStdString(filePath.filename().string()), this);
+            
+#ifdef __APPLE__
+            // Workaround for macOS native dialog issues
+            dialog.setWindowModality(Qt::WindowModal);
+#endif
+            
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Replace)
+                {
+                    // Replace existing data
+                    UpdateStatusText(QString("Loading %1 ...").arg(path).toStdString());
+                    m_presenter->LoadLogFile(filePath);
+                    m_presenter->SetItemDetailsVisible(true);
+                    UpdateStatusText(QString("Data ready. Path: %1").arg(path).toStdString());
+                }
+                else // Merge
+                {
+                    // Merge with existing data
+                    const std::string existingAlias = dialog.GetExistingFileAlias().toStdString();
+                    const std::string newFileAlias = dialog.GetNewFileAlias().toStdString();
+                    UpdateStatusText(QString("Merging %1 ...").arg(path).toStdString());
+                    m_presenter->MergeLogFile(filePath, existingAlias, newFileAlias);
+                    m_presenter->SetItemDetailsVisible(true);
+                    UpdateStatusText(QString("Merge complete. Path: %1").arg(path).toStdString());
+                }
+            }
+            // If dialog was canceled, do nothing
+        }
+        else
+        {
+            // No existing data, just load normally
+            UpdateStatusText(QString("Loading %1 ...").arg(path).toStdString());
+            m_presenter->LoadLogFile(filePath);
+            m_presenter->SetItemDetailsVisible(true);
+            UpdateStatusText(QString("Data ready. Path: %1").arg(path).toStdString());
+        }
     }
     catch (const std::exception& ex)
     {
