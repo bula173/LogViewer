@@ -35,6 +35,8 @@ private slots:
 
     // General tab
     void OnOpenConfigFileClicked();
+    void OnLoadConfigClicked();
+    void OnSaveConfigAsClicked();
     void OnLogLevelChanged(int index);
     
     // AI tab
