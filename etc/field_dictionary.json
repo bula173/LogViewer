@@ -1,0 +1,383 @@
+{
+  "_comment": "ERTMS/ETCS Field Dictionary - Based on Subset-026 Chapter 7",
+  "translations": [
+    {
+      "key": "NID_PACKET",
+      "conversion": "value_map",
+      "tooltip": "Packet ID: {converted}\nSubset-026 §7.4",
+      "value_map": {
+        "0": "Position Report",
+        "1": "Position Report based on two balise groups",
+        "3": "Onboard telephone numbers",
+        "5": "Linking",
+        "6": "Virtual Balise Cover marker",
+        "12": "Level 1 Movement Authority",
+        "13": "Staff Responsible distance Information",
+        "15": "Level 2/3 Movement Authority",
+        "16": "Repositioning Information",
+        "21": "Gradient Profile",
+        "27": "International Static Speed Profile",
+        "39": "Track Condition Change of traction system",
+        "40": "Track Condition Change of allowed current consumption",
+        "41": "Level Transition Order",
+        "42": "Session Management",
+        "44": "Data used by applications outside the ERTMS/ETCS system",
+        "45": "Radio Network registration",
+        "46": "Conditional Level Transition Order",
+        "49": "List of Balises for SH Area",
+        "51": "Axle Load Speed Profile",
+        "52": "Permitted Braking Distance Information",
+        "57": "Movement Authority Request Parameters",
+        "58": "Position Report Parameters",
+        "63": "List of Balises in SR Authority",
+        "64": "Inhibition of revocable TSRs",
+        "65": "Temporary Speed Restriction",
+        "66": "Temporary Speed Restriction Revocation",
+        "67": "Track Condition Big Metal Masses",
+        "68": "Track Condition",
+        "69": "Track Condition Station Platforms",
+        "70": "Route Suitability Data",
+        "71": "Adhesion Factor",
+        "72": "Packet for sending plain text messages",
+        "79": "Geographical Position Information",
+        "80": "Mode profile",
+        "88": "Level Crossing information",
+        "90": "Track Ahead Free up to level 2/3 transition location",
+        "131": "RBC transition order",
+        "132": "Danger for Shunting information",
+        "133": "Radio infill area information",
+        "134": "EOLM Packet",
+        "135": "Stop if in Staff Responsible",
+        "136": "Infill location reference",
+        "137": "Stop if in Shunting",
+        "138": "Reversing area information",
+        "139": "Reversing supervision information",
+        "140": "Train running number from RBC",
+        "141": "Default Gradient for Temporary Speed Restriction",
+        "143": "Session Management with neighbouring Radio Infill Unit",
+        "145": "Inhibition of balise group message consistency reaction",
+        "180": "Default balise or Loop information"
+      }
+    },
+    {
+      "key": "Q_DIR",
+      "conversion": "value_map",
+      "tooltip": "Direction: {converted}\nSubset-026 §7.4.2.1",
+      "value_map": {
+        "0": "Reverse",
+        "1": "Nominal",
+        "2": "Both directions"
+      }
+    },
+    {
+      "key": "Q_SCALE",
+      "conversion": "value_map",
+      "tooltip": "Scale: {converted}\nSubset-026 §7.4.2.2",
+      "value_map": {
+        "0": "10 cm scale",
+        "1": "1 m scale",
+        "2": "10 m scale"
+      }
+    },
+    {
+      "key": "M_VERSION",
+      "conversion": "value_map",
+      "tooltip": "ETCS Version: {converted}\nSubset-026 §7.4.2.4",
+      "value_map": {
+        "16": "Version 1.0 (Class 1)",
+        "17": "Version 1.1",
+        "32": "Version 2.0",
+        "33": "Version 2.1",
+        "34": "Version 2.2"
+      }
+    },
+    {
+      "key": "M_LEVEL",
+      "conversion": "value_map",
+      "tooltip": "ETCS Level: {converted}\nSubset-026 §7.4.2.5",
+      "value_map": {
+        "0": "Level 0",
+        "1": "Level NTC",
+        "2": "Level 1",
+        "3": "Level 2",
+        "4": "Level 3"
+      }
+    },
+    {
+      "key": "M_MODE",
+      "conversion": "value_map",
+      "tooltip": "Mode: {converted}\nSubset-026 §7.4.2.6",
+      "value_map": {
+        "0": "Full Supervision",
+        "1": "On Sight",
+        "2": "Staff Responsible",
+        "3": "Shunting",
+        "4": "Unfitted",
+        "5": "Sleeping",
+        "6": "Stand By",
+        "7": "Trip",
+        "8": "Post Trip",
+        "9": "System Failure",
+        "10": "Isolation",
+        "11": "Non Leading",
+        "12": "Limited Supervision",
+        "13": "National System",
+        "14": "Reversing",
+        "15": "Passive Shunting"
+      }
+    },
+    {
+      "key": "Q_UPDOWN",
+      "conversion": "value_map",
+      "tooltip": "Up/Down: {converted}\nSubset-026 §7.4.2.8",
+      "value_map": {
+        "0": "Down link",
+        "1": "Up link"
+      }
+    },
+    {
+      "key": "Q_MEDIA",
+      "conversion": "value_map",
+      "tooltip": "Media: {converted}\nSubset-026 §7.4.2.9",
+      "value_map": {
+        "0": "Balise",
+        "1": "Loop"
+      }
+    },
+    {
+      "key": "N_PIG",
+      "conversion": "tooltip_only",
+      "tooltip": "Position in Group: {original}\nSubset-026 §7.4.2.10"
+    },
+    {
+      "key": "N_TOTAL",
+      "conversion": "tooltip_only",
+      "tooltip": "Total Messages: {original}\nSubset-026 §7.4.2.11"
+    },
+    {
+      "key": "M_DUP",
+      "conversion": "value_map",
+      "tooltip": "Duplicate: {converted}\nSubset-026 §7.4.2.12",
+      "value_map": {
+        "0": "No duplicates",
+        "1": "This message is a duplicate"
+      }
+    },
+    {
+      "key": "M_MCOUNT",
+      "conversion": "tooltip_only",
+      "tooltip": "Message Counter: {original}\nSubset-026 §7.4.2.13"
+    },
+    {
+      "key": "NID_C",
+      "conversion": "tooltip_only",
+      "tooltip": "Country/Region ID: {original}\nSubset-026 §7.4.2.14"
+    },
+    {
+      "key": "NID_BG",
+      "conversion": "tooltip_only",
+      "tooltip": "Balise Group ID: {original}\nSubset-026 §7.4.2.15"
+    },
+    {
+      "key": "Q_LINK",
+      "conversion": "value_map",
+      "tooltip": "Linking: {converted}\nSubset-026 §7.4.2.16",
+      "value_map": {
+        "0": "Unlinked",
+        "1": "Linked"
+      }
+    },
+    {
+      "key": "NID_LRBG",
+      "conversion": "tooltip_only",
+      "tooltip": "Last Relevant Balise Group ID: {original}\nSubset-026 §7.4.2.17"
+    },
+    {
+      "key": "D_LINK",
+      "conversion": "tooltip_only",
+      "tooltip": "Distance to linking point: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.18"
+    },
+    {
+      "key": "Q_NEWCOUNTRY",
+      "conversion": "value_map",
+      "tooltip": "New Country: {converted}\nSubset-026 §7.4.2.19",
+      "value_map": {
+        "0": "Same country/region",
+        "1": "Different country/region"
+      }
+    },
+    {
+      "key": "NID_XUSER",
+      "conversion": "tooltip_only",
+      "tooltip": "External User ID: {original}\nSubset-026 §7.4.2.20"
+    },
+    {
+      "key": "Q_LINKORIENTATION",
+      "conversion": "value_map",
+      "tooltip": "Link Orientation: {converted}\nSubset-026 §7.4.2.21",
+      "value_map": {
+        "0": "Reverse",
+        "1": "Nominal"
+      }
+    },
+    {
+      "key": "Q_LINKREACTION",
+      "conversion": "value_map",
+      "tooltip": "Link Reaction: {converted}\nSubset-026 §7.4.2.22",
+      "value_map": {
+        "0": "Train trip",
+        "1": "Apply service brake",
+        "2": "No reaction"
+      }
+    },
+    {
+      "key": "Q_LOCACC",
+      "conversion": "tooltip_only",
+      "tooltip": "Location Accuracy: {original} m\nSubset-026 §7.4.2.23"
+    },
+    {
+      "key": "M_POSITION",
+      "conversion": "value_map",
+      "tooltip": "Position Report: {converted}\nSubset-026 §7.4.2.24",
+      "value_map": {
+        "0": "Unknown position",
+        "1": "Known position"
+      }
+    },
+    {
+      "key": "Q_FRONT",
+      "conversion": "value_map",
+      "tooltip": "Train Position: {converted}\nSubset-026 §7.4.2.25",
+      "value_map": {
+        "0": "Train front not in expected location",
+        "1": "Train front in expected location"
+      }
+    },
+    {
+      "key": "L_PACKET",
+      "conversion": "tooltip_only",
+      "tooltip": "Packet Length: {original} bits\nSubset-026 §7.4.2.26"
+    },
+    {
+      "key": "V_MAIN",
+      "conversion": "tooltip_only",
+      "tooltip": "Main Speed: {original} km/h\nSubset-026 §7.4.2.27"
+    },
+    {
+      "key": "V_LOA",
+      "conversion": "tooltip_only",
+      "tooltip": "Permitted Speed: {original} km/h\nSubset-026 §7.4.2.28"
+    },
+    {
+      "key": "T_LOA",
+      "conversion": "tooltip_only",
+      "tooltip": "Timeout: {original} s\nSubset-026 §7.4.2.29"
+    },
+    {
+      "key": "L_SECTION",
+      "conversion": "tooltip_only",
+      "tooltip": "Section Length: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.30"
+    },
+    {
+      "key": "Q_SECTIONTIMER",
+      "conversion": "value_map",
+      "tooltip": "Section Timer: {converted}\nSubset-026 §7.4.2.31",
+      "value_map": {
+        "0": "No Section Timer information",
+        "1": "Section Timer information follows"
+      }
+    },
+    {
+      "key": "T_SECTIONTIMER",
+      "conversion": "tooltip_only",
+      "tooltip": "Section Timer: {original} s\nSubset-026 §7.4.2.32"
+    },
+    {
+      "key": "D_SECTIONTIMERSTOPLOC",
+      "conversion": "tooltip_only",
+      "tooltip": "Section Timer Stop Location: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.33"
+    },
+    {
+      "key": "L_ENDSECTION",
+      "conversion": "tooltip_only",
+      "tooltip": "End Section Length: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.34"
+    },
+    {
+      "key": "Q_ENDTIMER",
+      "conversion": "value_map",
+      "tooltip": "End Timer: {converted}\nSubset-026 §7.4.2.35",
+      "value_map": {
+        "0": "No End section timer information",
+        "1": "End section timer information follows"
+      }
+    },
+    {
+      "key": "T_ENDTIMER",
+      "conversion": "tooltip_only",
+      "tooltip": "End Timer: {original} s\nSubset-026 §7.4.2.36"
+    },
+    {
+      "key": "D_ENDTIMERSTARTLOC",
+      "conversion": "tooltip_only",
+      "tooltip": "End Timer Start Location: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.37"
+    },
+    {
+      "key": "Q_DANGERPOINT",
+      "conversion": "value_map",
+      "tooltip": "Danger Point: {converted}\nSubset-026 §7.4.2.38",
+      "value_map": {
+        "0": "No Danger Point information",
+        "1": "Danger Point information follows"
+      }
+    },
+    {
+      "key": "D_DP",
+      "conversion": "tooltip_only",
+      "tooltip": "Danger Point Distance: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.39"
+    },
+    {
+      "key": "V_RELEASEDP",
+      "conversion": "tooltip_only",
+      "tooltip": "Release Speed at Danger Point: {original} km/h\nSubset-026 §7.4.2.40"
+    },
+    {
+      "key": "Q_OVERLAP",
+      "conversion": "value_map",
+      "tooltip": "Overlap: {converted}\nSubset-026 §7.4.2.41",
+      "value_map": {
+        "0": "No Overlap information",
+        "1": "Overlap information follows"
+      }
+    },
+    {
+      "key": "D_STARTOL",
+      "conversion": "tooltip_only",
+      "tooltip": "Overlap Start Distance: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.42"
+    },
+    {
+      "key": "T_OL",
+      "conversion": "tooltip_only",
+      "tooltip": "Overlap Timeout: {original} s\nSubset-026 §7.4.2.43"
+    },
+    {
+      "key": "D_OL",
+      "conversion": "tooltip_only",
+      "tooltip": "Overlap Length: {original}\nUse Q_SCALE for units\nSubset-026 §7.4.2.44"
+    },
+    {
+      "key": "V_RELEASEOL",
+      "conversion": "tooltip_only",
+      "tooltip": "Release Speed at Overlap: {original} km/h\nSubset-026 §7.4.2.45"
+    },
+    {
+      "key": "timestamp",
+      "conversion": "unix_to_date",
+      "tooltip": "Unix: {original}\nDate: {converted}"
+    },
+    {
+      "key": "x_text",
+      "conversion": "hex_to_ascii",
+      "tooltip": "Hex: {original}\nASCII: {converted}"
+    }
+  ]
+}

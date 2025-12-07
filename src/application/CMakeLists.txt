@@ -6,6 +6,7 @@ message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 
 set(APP_CORE_SRCS
     config/Config.cpp
+    config/FieldTranslator.cpp
     db/EventsContainer.cpp
     db/LogEvent.cpp
     filters/Filter.cpp

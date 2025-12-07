@@ -121,6 +121,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // ===== LEFT DOCK: Filters and AI Configuration =====
     // Filters dock
     m_filtersDock = new QDockWidget("Filters", this);
+    m_filtersDock->setObjectName("FiltersDockWidget");
     m_filtersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable | 
                                QDockWidget::DockWidgetFloatable | 
@@ -151,6 +152,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     
     // AI Configuration dock
     m_aiConfigDock = new QDockWidget("AI Configuration", this);
+    m_aiConfigDock->setObjectName("AIConfigurationDockWidget");
     m_aiConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_aiConfigDock->setFeatures(QDockWidget::DockWidgetMovable | 
                                 QDockWidget::DockWidgetFloatable | 
@@ -160,6 +162,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
+    m_detailsDock->setObjectName("ItemDetailsDockWidget");
     m_detailsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_detailsDock->setFeatures(QDockWidget::DockWidgetMovable | 
                                QDockWidget::DockWidgetFloatable | 
@@ -171,6 +174,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     // ===== BOTTOM DOCK: Search & AI Chat =====
     m_bottomDock = new QDockWidget("Tools", this);
+    m_bottomDock->setObjectName("ToolsDockWidget");
     m_bottomDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
     m_bottomDock->setFeatures(QDockWidget::DockWidgetMovable | 
                               QDockWidget::DockWidgetFloatable | 
@@ -303,6 +307,7 @@ void MainWindow::SetupMenus()
     // View menu for dock widgets
     auto* viewMenu = bar->addMenu(tr("&View"));
     viewMenu->addAction(m_filtersDock->toggleViewAction());
+    viewMenu->addAction(m_aiConfigDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
     
@@ -315,6 +320,11 @@ void MainWindow::SetupMenus()
             m_filtersDock->setFloating(false);
             addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
             m_filtersDock->show();
+        }
+        if (m_aiConfigDock) {
+            m_aiConfigDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_aiConfigDock);
+            m_aiConfigDock->show();
         }
         if (m_detailsDock) {
             m_detailsDock->setFloating(false);

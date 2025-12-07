@@ -24,6 +24,7 @@ class EventsTableModel : public QAbstractTableModel
     QVariant data(const QModelIndex& index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation,
         int role) const override;
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
     void SyncWithContainer();
     void RefreshAll();
@@ -43,6 +44,8 @@ class EventsTableModel : public QAbstractTableModel
         const std::string& columnName) const;
     QColor ResolveColor(const std::string& column,
         const std::string& value, bool background) const;
+    QVariant GetSortValue(const db::LogEvent& event,
+        const std::string& columnName) const;
 
     db::EventsContainer& m_events;
     std::vector<unsigned long> m_filteredIndices;

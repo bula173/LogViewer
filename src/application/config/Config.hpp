@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config/FieldTranslator.hpp"
 #include <nlohmann/json.hpp>
 // std
 #include <filesystem>
@@ -66,6 +67,30 @@ class Config
      * @return The API key for that provider, or empty string if not set
      */
     std::string GetApiKeyForProvider(const std::string& provider) const;
+    
+    /**
+     * @brief Get the field translator for value conversions
+     * @return Reference to the FieldTranslator instance
+     */
+    const FieldTranslator& GetFieldTranslator() const;
+    
+    /**
+     * @brief Get mutable field translator for editing dictionary
+     * @return Mutable reference to the FieldTranslator instance
+     */
+    FieldTranslator& GetMutableFieldTranslator();
+    
+    /**
+     * @brief Get the dictionary file path
+     * @return Path to the field dictionary file
+     */
+    const std::string& GetDictionaryFilePath() const;
+    
+    /**
+     * @brief Set the dictionary file path and reload dictionary
+     * @param path Path to the field dictionary file
+     */
+    void SetDictionaryFilePath(const std::string& path);
 
   private:
     const json& GetParserConfig(const json& j);
@@ -90,6 +115,8 @@ class Config
   private:
     std::string m_configFilePath {"etc/config.json"}; // Default path
     std::string m_logPath {"log.txt"};                // Default log file path
+    std::string m_dictionaryFilePath {"etc/field_dictionary.json"}; // Dictionary config path
+    FieldTranslator m_fieldTranslator;                // Field value translator
 
   public: // xml config
     std::string appName {"LogViewer"};

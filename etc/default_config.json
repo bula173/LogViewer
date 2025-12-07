@@ -6,6 +6,7 @@
   "filters": {
     "typeFilterField": "level"
   },
+  "dictionaryFilePath": "etc/field_dictionary.json",
   "aiConfig": {
     "provider": "ollama",
     "baseUrl": "http://localhost:11434",

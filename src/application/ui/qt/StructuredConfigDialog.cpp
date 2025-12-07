@@ -50,6 +50,7 @@ void StructuredConfigDialog::BuildUi()
 
     InitGeneralTab();
     InitColumnsTab();
+    InitDictionaryTab();
     InitColorsTab();
     InitAITab();
 
@@ -115,6 +116,18 @@ void StructuredConfigDialog::InitGeneralTab()
     form->addRow(tr("xmlEventElement"), m_xmlEventEdit);
     form->addRow(tr("Type Filter Field"), m_typeFilterFieldEdit);
     form->addRow(tr("logLevel"), m_logLevelCombo);
+    
+    // Dictionary file configuration
+    auto* dictionaryLayout = new QHBoxLayout();
+    m_dictionaryFileEdit = new QLineEdit(m_generalTab);
+    m_dictionaryFileEdit->setPlaceholderText(tr("Path to field_dictionary.json"));
+    m_dictionaryFileEdit->setReadOnly(true);
+    auto* browseDictButton = new QPushButton(tr("Browse..."), m_generalTab);
+    connect(browseDictButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnBrowseDictionaryFileClicked);
+    dictionaryLayout->addWidget(m_dictionaryFileEdit);
+    dictionaryLayout->addWidget(browseDictButton);
+    form->addRow(tr("Dictionary File"), dictionaryLayout);
 
     layout->addLayout(form);
     layout->addStretch();
@@ -189,6 +202,125 @@ void StructuredConfigDialog::InitColumnsTab()
     layout->addLayout(buttonRow);
 
     m_tabs->addTab(m_columnsTab, tr("Columns"));
+}
+
+void StructuredConfigDialog::InitDictionaryTab()
+{
+    m_dictionaryTab = new QWidget(this);
+    auto* layout = new QVBoxLayout(m_dictionaryTab);
+
+    m_dictionaryTable = new QTableWidget(m_dictionaryTab);
+    m_dictionaryTable->setColumnCount(3);
+    QStringList headers;
+    headers << tr("Key") << tr("Conversion") << tr("Tooltip Template");
+    m_dictionaryTable->setHorizontalHeaderLabels(headers);
+    m_dictionaryTable->horizontalHeader()->setStretchLastSection(true);
+    m_dictionaryTable->verticalHeader()->setVisible(false);
+    m_dictionaryTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_dictionaryTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    connect(m_dictionaryTable, &QTableWidget::itemSelectionChanged, this,
+        &StructuredConfigDialog::OnDictionarySelectionChanged);
+
+    layout->addWidget(m_dictionaryTable, 1);
+
+    auto* detailGroup = new QGroupBox(tr("Dictionary Entry Details"), m_dictionaryTab);
+    auto* detailLayout = new QFormLayout(detailGroup);
+
+    m_dictKeyEdit = new QLineEdit(detailGroup);
+    detailLayout->addRow(tr("Key"), m_dictKeyEdit);
+
+    m_dictConversionCombo = new QComboBox(detailGroup);
+    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date"});
+    detailLayout->addRow(tr("Conversion Type"), m_dictConversionCombo);
+    
+    connect(m_dictConversionCombo, &QComboBox::currentTextChanged, this, 
+        [this](const QString& text) {
+            // Show/hide value map table based on conversion type
+            bool isValueMap = (text == "value_map");
+            if (m_dictValueMapTable)
+                m_dictValueMapTable->setVisible(isValueMap);
+            if (m_addDictValueButton)
+                m_addDictValueButton->setVisible(isValueMap);
+            if (m_removeDictValueButton)
+                m_removeDictValueButton->setVisible(isValueMap);
+        });
+
+    m_dictTooltipEdit = new QLineEdit(detailGroup);
+    m_dictTooltipEdit->setPlaceholderText(tr("Use {original} and {converted} as placeholders"));
+    detailLayout->addRow(tr("Tooltip Template"), m_dictTooltipEdit);
+
+    // Value map section (only visible for value_map conversion type)
+    auto* valueMapLabel = new QLabel(tr("Value Mappings:"), detailGroup);
+    detailLayout->addRow(valueMapLabel);
+    
+    m_dictValueMapTable = new QTableWidget(detailGroup);
+    m_dictValueMapTable->setColumnCount(2);
+    QStringList vmHeaders;
+    vmHeaders << tr("From") << tr("To");
+    m_dictValueMapTable->setHorizontalHeaderLabels(vmHeaders);
+    m_dictValueMapTable->horizontalHeader()->setStretchLastSection(true);
+    m_dictValueMapTable->verticalHeader()->setVisible(false);
+    m_dictValueMapTable->setMaximumHeight(150);
+    detailLayout->addRow(m_dictValueMapTable);
+    
+    auto* vmButtonRow = new QHBoxLayout();
+    m_addDictValueButton = new QPushButton(tr("Add Mapping"), detailGroup);
+    m_removeDictValueButton = new QPushButton(tr("Remove Selected"), detailGroup);
+    connect(m_addDictValueButton, &QPushButton::clicked, this, [this]() {
+        int row = m_dictValueMapTable->rowCount();
+        m_dictValueMapTable->insertRow(row);
+        m_dictValueMapTable->setItem(row, 0, new QTableWidgetItem(""));
+        m_dictValueMapTable->setItem(row, 1, new QTableWidgetItem(""));
+    });
+    connect(m_removeDictValueButton, &QPushButton::clicked, this, [this]() {
+        int row = m_dictValueMapTable->currentRow();
+        if (row >= 0)
+            m_dictValueMapTable->removeRow(row);
+    });
+    vmButtonRow->addWidget(m_addDictValueButton);
+    vmButtonRow->addWidget(m_removeDictValueButton);
+    vmButtonRow->addStretch();
+    detailLayout->addRow(vmButtonRow);
+    
+    // Initially hide value map controls
+    m_dictValueMapTable->setVisible(false);
+    m_addDictValueButton->setVisible(false);
+    m_removeDictValueButton->setVisible(false);
+
+    m_applyDictionaryChangesButton = new QPushButton(tr("Apply Changes"), detailGroup);
+    connect(m_applyDictionaryChangesButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnApplyDictionaryChanges);
+    detailLayout->addRow(m_applyDictionaryChangesButton);
+
+    layout->addWidget(detailGroup);
+
+    auto* fileButtonRow = new QHBoxLayout();
+    m_loadDictionaryFileButton = new QPushButton(tr("Load Dictionary..."), m_dictionaryTab);
+    m_saveDictionaryFileButton = new QPushButton(tr("Save Dictionary..."), m_dictionaryTab);
+    connect(m_loadDictionaryFileButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnLoadDictionaryFile);
+    connect(m_saveDictionaryFileButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnSaveDictionaryFile);
+    fileButtonRow->addWidget(m_loadDictionaryFileButton);
+    fileButtonRow->addWidget(m_saveDictionaryFileButton);
+    fileButtonRow->addStretch();
+    layout->addLayout(fileButtonRow);
+
+    auto* buttonRow = new QHBoxLayout();
+    m_addDictionaryButton = new QPushButton(tr("Add Entry"), m_dictionaryTab);
+    m_removeDictionaryButton = new QPushButton(tr("Remove Selected"), m_dictionaryTab);
+    connect(m_addDictionaryButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnAddDictionary);
+    connect(m_removeDictionaryButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnRemoveDictionary);
+    buttonRow->addWidget(m_addDictionaryButton);
+    buttonRow->addWidget(m_removeDictionaryButton);
+    buttonRow->addStretch();
+
+    layout->addLayout(buttonRow);
+
+    m_tabs->addTab(m_dictionaryTab, tr("Dictionary"));
 }
 
 void StructuredConfigDialog::InitColorsTab()
@@ -411,6 +543,16 @@ void StructuredConfigDialog::LoadConfigToUi()
         m_logLevelCombo->setCurrentIndex(idx);
     else
         m_logLevelCombo->setCurrentText(QString::fromLatin1("info"));
+    
+    // Load dictionary file path
+    m_dictionaryFileEdit->setText(QString::fromStdString(cfg.GetDictionaryFilePath()));
+    
+    // Ensure dictionary file is loaded
+    const std::string& dictPath = cfg.GetDictionaryFilePath();
+    if (!dictPath.empty() && QFile::exists(QString::fromStdString(dictPath)))
+    {
+        cfg.GetMutableFieldTranslator().LoadFromFile(dictPath);
+    }
 
     // Load AI config
     const int providerIdx = m_aiProviderCombo->findData(QString::fromStdString(cfg.aiProvider));
@@ -453,6 +595,7 @@ void StructuredConfigDialog::LoadConfigToUi()
         m_colorColumnCombo->setCurrentIndex(typeFilterIdx);
 
     RefreshColumnsList();
+    RefreshDictionaryList();
     RefreshColorMappings();
 }
 
@@ -464,6 +607,20 @@ void StructuredConfigDialog::OnSaveClicked()
     cfg.xmlEventElement = m_xmlEventEdit->text().toStdString();
     cfg.typeFilterField = m_typeFilterFieldEdit->text().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
+    
+    // Save dictionary file path
+    cfg.SetDictionaryFilePath(m_dictionaryFileEdit->text().toStdString());
+    
+    // Save dictionary entries to file
+    const std::string& dictPath = cfg.GetDictionaryFilePath();
+    if (!dictPath.empty())
+    {
+        if (!cfg.GetMutableFieldTranslator().SaveToFile(dictPath))
+        {
+            util::Logger::Warn("Failed to save dictionary file: {}", dictPath);
+        }
+    }
+    
     cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
     
     // Save all provider API keys
@@ -551,6 +708,34 @@ void StructuredConfigDialog::OnLoadConfigClicked()
         QMessageBox::critical(this, tr("Load Config Failed"), 
             tr("Failed to load configuration:\n%1").arg(ex.what()));
     }
+}
+
+void StructuredConfigDialog::OnBrowseDictionaryFileClicked()
+{
+    QFileDialog dialog(this, tr("Select Dictionary File"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    
+    // Start from current dictionary file directory or config directory
+    QString currentPath = m_dictionaryFileEdit->text();
+    if (currentPath.isEmpty() || !QFile::exists(currentPath))
+    {
+        currentPath = QString::fromStdString(config::GetConfig().GetConfigFilePath());
+    }
+    
+    dialog.setDirectory(QFileInfo(currentPath).absolutePath());
+    dialog.setNameFilter(tr("JSON Files (*.json);;All Files (*)"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    QString fileName = dialog.selectedFiles().value(0);
+    if (fileName.isEmpty())
+        return;
+    
+    m_dictionaryFileEdit->setText(fileName);
 }
 
 void StructuredConfigDialog::OnSaveConfigAsClicked()
@@ -1208,6 +1393,289 @@ void StructuredConfigDialog::NotifyObservers()
     {
         if (observer)
             observer->OnConfigChanged();
+    }
+}
+
+void StructuredConfigDialog::RefreshDictionaryList()
+{
+    m_dictionaryTable->setRowCount(0);
+    
+    auto& cfg = config::GetConfig();
+    const auto& translations = cfg.GetMutableFieldTranslator().GetAllTranslations();
+    
+    int row = 0;
+    for (const auto& [key, trans] : translations)
+    {
+        m_dictionaryTable->insertRow(row);
+        m_dictionaryTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(trans.key)));
+        m_dictionaryTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(trans.conversionType)));
+        m_dictionaryTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(trans.tooltipTemplate)));
+        ++row;
+    }
+}
+
+void StructuredConfigDialog::LoadSelectedDictionaryToEditors()
+{
+    int row = m_dictionaryTable->currentRow();
+    if (row < 0)
+        return;
+    
+    auto* keyItem = m_dictionaryTable->item(row, 0);
+    if (!keyItem)
+        return;
+    
+    std::string key = keyItem->text().toStdString();
+    
+    auto& cfg = config::GetConfig();
+    const auto& translations = cfg.GetMutableFieldTranslator().GetAllTranslations();
+    auto it = translations.find(key);
+    
+    if (it == translations.end())
+        return;
+    
+    const auto& trans = it->second;
+    
+    m_dictKeyEdit->setText(QString::fromStdString(trans.key));
+    
+    int convIdx = m_dictConversionCombo->findText(QString::fromStdString(trans.conversionType));
+    if (convIdx >= 0)
+        m_dictConversionCombo->setCurrentIndex(convIdx);
+    
+    m_dictTooltipEdit->setText(QString::fromStdString(trans.tooltipTemplate));
+    
+    // Load value map
+    m_dictValueMapTable->setRowCount(0);
+    int vmRow = 0;
+    for (const auto& [from, to] : trans.valueMap)
+    {
+        m_dictValueMapTable->insertRow(vmRow);
+        m_dictValueMapTable->setItem(vmRow, 0, new QTableWidgetItem(QString::fromStdString(from)));
+        m_dictValueMapTable->setItem(vmRow, 1, new QTableWidgetItem(QString::fromStdString(to)));
+        ++vmRow;
+    }
+}
+
+void StructuredConfigDialog::OnDictionarySelectionChanged()
+{
+    m_selectedDictionaryRow = m_dictionaryTable->currentRow();
+    if (m_selectedDictionaryRow >= 0)
+    {
+        LoadSelectedDictionaryToEditors();
+    }
+}
+
+void StructuredConfigDialog::OnAddDictionary()
+{
+    config::FieldDictionary newTrans;
+    newTrans.key = "new_field";
+    newTrans.conversionType = "hex_to_ascii";
+    newTrans.tooltipTemplate = "Hex: {original}\\nASCII: {converted}";
+    
+    auto& cfg = config::GetConfig();
+    cfg.GetMutableFieldTranslator().SetTranslation(newTrans);
+    
+    RefreshDictionaryList();
+    
+    // Select the new entry
+    for (int i = 0; i < m_dictionaryTable->rowCount(); ++i)
+    {
+        auto* item = m_dictionaryTable->item(i, 0);
+        if (item && item->text() == "new_field")
+        {
+            m_dictionaryTable->selectRow(i);
+            break;
+        }
+    }
+}
+
+void StructuredConfigDialog::OnRemoveDictionary()
+{
+    int row = m_dictionaryTable->currentRow();
+    if (row < 0)
+        return;
+    
+    auto* keyItem = m_dictionaryTable->item(row, 0);
+    if (!keyItem)
+        return;
+    
+    std::string key = keyItem->text().toStdString();
+    
+    auto reply = QMessageBox::question(this, tr("Remove Dictionary Entry"),
+        tr("Are you sure you want to remove the dictionary entry for '%1'?")
+            .arg(QString::fromStdString(key)),
+        QMessageBox::Yes | QMessageBox::No);
+    
+    if (reply == QMessageBox::Yes)
+    {
+        auto& cfg = config::GetConfig();
+        cfg.GetMutableFieldTranslator().RemoveTranslation(key);
+        RefreshDictionaryList();
+    }
+}
+
+void StructuredConfigDialog::OnApplyDictionaryChanges()
+{
+    int row = m_dictionaryTable->currentRow();
+    if (row < 0)
+        return;
+    
+    auto* keyItem = m_dictionaryTable->item(row, 0);
+    if (!keyItem)
+        return;
+    
+    std::string oldKey = keyItem->text().toStdString();
+    std::string newKey = m_dictKeyEdit->text().toStdString();
+    
+    if (newKey.empty())
+    {
+        QMessageBox::warning(this, tr("Invalid Key"),
+            tr("Key cannot be empty."));
+        return;
+    }
+    
+    // Check if key changed and new key already exists
+    if (oldKey != newKey)
+    {
+        const auto& translations = config::GetConfig().GetMutableFieldTranslator().GetAllTranslations();
+        if (translations.find(newKey) != translations.end())
+        {
+            QMessageBox::warning(this, tr("Duplicate Key"),
+                tr("A dictionary entry with this key already exists."));
+            return;
+        }
+    }
+    
+    config::FieldDictionary trans;
+    trans.key = newKey;
+    trans.conversionType = m_dictConversionCombo->currentText().toStdString();
+    trans.tooltipTemplate = m_dictTooltipEdit->text().toStdString();
+    
+    // Collect value map
+    for (int i = 0; i < m_dictValueMapTable->rowCount(); ++i)
+    {
+        auto* fromItem = m_dictValueMapTable->item(i, 0);
+        auto* toItem = m_dictValueMapTable->item(i, 1);
+        if (fromItem && toItem)
+        {
+            std::string from = fromItem->text().toStdString();
+            std::string to = toItem->text().toStdString();
+            if (!from.empty())
+            {
+                trans.valueMap[from] = to;
+            }
+        }
+    }
+    
+    auto& cfg = config::GetConfig();
+    
+    // If key changed, remove old entry
+    if (oldKey != newKey)
+    {
+        cfg.GetMutableFieldTranslator().RemoveTranslation(oldKey);
+    }
+    
+    cfg.GetMutableFieldTranslator().SetTranslation(trans);
+    
+    RefreshDictionaryList();
+    
+    // Reselect the row
+    for (int i = 0; i < m_dictionaryTable->rowCount(); ++i)
+    {
+        auto* item = m_dictionaryTable->item(i, 0);
+        if (item && item->text() == QString::fromStdString(newKey))
+        {
+            m_dictionaryTable->selectRow(i);
+            break;
+        }
+    }
+}
+
+void StructuredConfigDialog::OnLoadDictionaryFile()
+{
+    QFileDialog dialog(this, tr("Load Dictionary File"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    
+    QString currentPath = m_dictionaryFileEdit->text();
+    if (currentPath.isEmpty() || !QFile::exists(currentPath))
+    {
+        currentPath = QString::fromStdString(config::GetConfig().GetConfigFilePath());
+    }
+    
+    dialog.setDirectory(QFileInfo(currentPath).absolutePath());
+    dialog.setNameFilter(tr("JSON Files (*.json);;All Files (*)"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    QString fileName = dialog.selectedFiles().value(0);
+    if (fileName.isEmpty())
+        return;
+    
+    // Load dictionary from selected file
+    auto& cfg = config::GetConfig();
+    if (cfg.GetMutableFieldTranslator().LoadFromFile(fileName.toStdString()))
+    {
+        m_dictionaryFileEdit->setText(fileName);
+        cfg.SetDictionaryFilePath(fileName.toStdString());
+        RefreshDictionaryList();
+        
+        QMessageBox::information(this, tr("Dictionary Loaded"),
+            tr("Dictionary loaded successfully from:\n%1").arg(fileName));
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Load Failed"),
+            tr("Failed to load dictionary from:\n%1").arg(fileName));
+    }
+}
+
+void StructuredConfigDialog::OnSaveDictionaryFile()
+{
+    QFileDialog dialog(this, tr("Save Dictionary File"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    
+    QString currentPath = m_dictionaryFileEdit->text();
+    if (currentPath.isEmpty())
+    {
+        currentPath = QString::fromStdString(config::GetConfig().GetDictionaryFilePath());
+    }
+    
+    dialog.setDirectory(QFileInfo(currentPath).absolutePath());
+    dialog.setNameFilter(tr("JSON Files (*.json);;All Files (*)"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("json");
+    
+    if (!currentPath.isEmpty())
+    {
+        dialog.selectFile(currentPath);
+    }
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    QString fileName = dialog.selectedFiles().value(0);
+    if (fileName.isEmpty())
+        return;
+    
+    // Save dictionary to selected file
+    auto& cfg = config::GetConfig();
+    if (cfg.GetMutableFieldTranslator().SaveToFile(fileName.toStdString()))
+    {
+        m_dictionaryFileEdit->setText(fileName);
+        cfg.SetDictionaryFilePath(fileName.toStdString());
+        
+        QMessageBox::information(this, tr("Dictionary Saved"),
+            tr("Dictionary saved successfully to:\n%1").arg(fileName));
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Save Failed"),
+            tr("Failed to save dictionary to:\n%1").arg(fileName));
     }
 }
 
