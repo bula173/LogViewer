@@ -327,9 +327,10 @@ void AIConfigPanel::PopulateModelList()
     }
     else if (cfg.aiProvider == "google")
     {
-        m_modelCombo->addItem("Gemini 1.5 Pro", "gemini-1.5-pro");
-        m_modelCombo->addItem("Gemini 1.5 Flash", "gemini-1.5-flash");
-        m_modelCombo->addItem("Gemini Pro", "gemini-pro");
+        m_modelCombo->addItem("Gemini 2.5 Pro", "gemini-2.5-pro");
+        m_modelCombo->addItem("Gemini 2.5 Lite", "gemini-2.5-flash-lite");
+        m_modelCombo->addItem("Gemini 2.5 Flash", "gemini-2.5-flash");
+        m_modelCombo->addItem("Gemini 3 Pro", "gemini-3-pro");
     }
     else if (cfg.aiProvider == "xai")
     {

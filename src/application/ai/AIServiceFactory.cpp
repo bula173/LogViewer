@@ -91,7 +91,7 @@ std::string AIServiceFactory::GetDefaultModel(const std::string& provider)
     else if (provider == "anthropic")
         return "claude-3-sonnet-20240229";
     else if (provider == "google")
-        return "gemini-pro";
+        return "gemini-2.5-flash";  // Free tier, fast and good quality
     else if (provider == "xai")
         return "grok-beta";
     else

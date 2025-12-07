@@ -520,7 +520,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
     {
         util::Logger::Error("[MainWindow] Failed to load file '{}': {}",
             filePath.string(), ex.what());
-        UpdateStatusText("Failed to load file");
+        UpdateStatusText(QString("Failed to load  complete file Path: %1").arg(path).toStdString());
         QMessageBox::critical(this, "File Drop Error",
             QString("Unable to load %1\n%2").arg(path).arg(ex.what()));
     }
