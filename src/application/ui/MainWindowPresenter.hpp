@@ -32,6 +32,17 @@ class MainWindowPresenter : public parser::IDataParserObserver
     /** @brief Parses and loads a log file, updating shared UI state. */
     void LoadLogFile(const std::filesystem::path& path);
 
+    /** @brief Parses and merges a log file with existing data, sorted by timestamp. 
+     *  @param path Path to the log file to merge
+     *  @param existingAlias User-friendly name for existing log data
+     *  @param newFileAlias User-friendly name for new log file
+     *  @param timestampField Name of the field containing timestamps
+     */
+    void MergeLogFile(const std::filesystem::path& path, 
+                      const std::string& existingAlias,
+                      const std::string& newFileAlias,
+                      const std::string& timestampField = "timestamp");
+
     /** @brief Allows views to query whether parsing is active. */
     bool IsParsing() const { return m_isParsing; }
 

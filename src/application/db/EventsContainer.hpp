@@ -138,6 +138,24 @@ class EventsContainer : public mvc::IModel
     * O(n) where n is the number of stored events
      */
     void Clear() override;
+    
+    /**
+     * @brief Merges events from another container, sorted by timestamp.
+     * 
+     * Events are merged in timestamp order. If a timestamp field is not found,
+     * events are appended at the end in their original order.
+     * 
+     * @param other Container with events to merge
+     * @param existingAlias Identifier for events already in this container
+     * @param newAlias Identifier for events from the 'other' container
+     * @param timestampField Name of the field containing timestamp (e.g., "timestamp", "time")
+     * @note All existing events will have their source set to existingAlias
+     * @note All events from 'other' will have their source set to newAlias
+     */
+    void MergeEvents(EventsContainer& other, 
+                     const std::string& existingAlias,
+                     const std::string& newAlias,
+                     const std::string& timestampField = "timestamp");
 
     /**
      * @brief Gets an event by index.

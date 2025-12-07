@@ -604,9 +604,55 @@ json Config::MergeConfigs(const json& userConfig, const json& defaultConfig)
 {
     json merged = defaultConfig; // Start with default structure
     
+    // Helper to merge columns arrays by name
+    auto mergeColumnsArray = [](const json& userCols, const json& defaultCols) -> json {
+        if (!userCols.is_array() || !defaultCols.is_array())
+            return defaultCols;
+        
+        json result = json::array();
+        std::map<std::string, json> userColMap;
+        
+        // Build map of user columns by name
+        for (const auto& col : userCols)
+        {
+            if (col.contains("name") && col["name"].is_string())
+            {
+                userColMap[col["name"]] = col;
+            }
+        }
+        
+        // Merge: keep user settings for existing columns, add new columns from default
+        for (const auto& defaultCol : defaultCols)
+        {
+            if (defaultCol.contains("name") && defaultCol["name"].is_string())
+            {
+                std::string colName = defaultCol["name"];
+                if (userColMap.count(colName))
+                {
+                    // Use user's column settings (preserves visibility, width, etc.)
+                    result.push_back(userColMap[colName]);
+                    userColMap.erase(colName); // Mark as processed
+                }
+                else
+                {
+                    // New column from default config
+                    result.push_back(defaultCol);
+                }
+            }
+        }
+        
+        // Add any user columns that don't exist in defaults (backward compat)
+        for (const auto& [name, col] : userColMap)
+        {
+            result.push_back(col);
+        }
+        
+        return result;
+    };
+    
     // Recursively merge user values
     std::function<void(json&, const json&, const json&)> deepMerge = 
-        [&deepMerge](json& target, const json& user, const json& defaults) {
+        [&deepMerge, &mergeColumnsArray](json& target, const json& user, const json& defaults) {
         
         if (!user.is_object() || !defaults.is_object())
         {
@@ -627,8 +673,13 @@ json Config::MergeConfigs(const json& userConfig, const json& defaultConfig)
             
             if (user.contains(key))
             {
+                // Special handling for columns array
+                if (key == "columns" && user[key].is_array() && defaults[key].is_array())
+                {
+                    target[key] = mergeColumnsArray(user[key], defaults[key]);
+                }
                 // User has this field - recurse or copy
-                if (user[key].is_object() && defaults[key].is_object())
+                else if (user[key].is_object() && defaults[key].is_object())
                 {
                     deepMerge(target[key], user[key], defaults[key]);
                 }

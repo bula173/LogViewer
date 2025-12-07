@@ -11,6 +11,7 @@
 #include "config/Config.hpp"
 #include "error/Error.hpp"
 #include "util/Logger.hpp"
+#include "parser/ParserFactory.hpp"
 
 namespace ui
 {
@@ -129,6 +130,103 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         UpdateTypeFilters();
         if (m_eventsListView)
             m_eventsListView->RefreshView();
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        
+        m_isParsing = false;
+        m_progressConfigured = false;
+        throw;
+    }
+}
+
+void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
+                                       const std::string& existingAlias,
+                                       const std::string& newFileAlias,
+                                       const std::string& timestampField)
+{
+    if (m_isParsing)
+        throw error::Error("A file is already being processed");
+
+    const std::string previousStatus = m_view.CurrentStatusText();
+    m_isParsing = true;
+    m_progressConfigured = false;
+    
+    // Create temporary container for new events
+    db::EventsContainer tempEvents;
+    
+    m_view.SetSearchControlsEnabled(false);
+    m_view.ToggleProgressVisibility(true);
+    m_view.ConfigureProgressRange(100);
+    m_view.UpdateProgressValue(0);
+    m_view.UpdateStatusText("Merging ...");
+
+    try
+    {
+        // Parse into temporary container using a temporary observer
+        // For now, we'll use a simpler approach: parse and collect events manually
+        auto parserResult = parser::ParserFactory::CreateFromFile(path);
+        if (!parserResult.isOk())
+        {
+            throw parserResult.error();
+        }
+        
+        auto parser = parserResult.unwrap();
+        
+        // Register a simple observer that adds events to tempEvents
+        class TempObserver : public parser::IDataParserObserver
+        {
+        public:
+            db::EventsContainer& container;
+            explicit TempObserver(db::EventsContainer& c) : container(c) {}
+            void ProgressUpdated() override {}
+            void NewEventFound(db::LogEvent&& event) override
+            {
+                container.AddEvent(std::move(event));
+            }
+            void NewEventBatchFound(std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch) override
+            {
+                container.AddEventBatch(std::move(eventBatch));
+            }
+        };
+        
+        TempObserver tempObserver(tempEvents);
+        parser->RegisterObserver(&tempObserver);
+        
+        parser->ParseData(path);
+        
+        parser->UnregisterObserver(&tempObserver);
+        
+        // Now merge the temporary container into main events
+        // Pass both aliases: existing data gets existingAlias, new data gets newFileAlias
+        m_events.MergeEvents(tempEvents, existingAlias, newFileAlias, timestampField);
+        
+        m_view.UpdateStatusText("Merge complete. Path: " + path.string());
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        UpdateTypeFilters();
+        if (m_eventsListView)
+        {
+            m_eventsListView->RefreshColumns(); // Refresh columns to show source column
+            m_eventsListView->RefreshView();
+        }
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+        m_isParsing = false;
+        m_progressConfigured = false;
+        m_view.ProcessPendingEvents();
+    }
+    catch (...)
+    {
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        m_view.UpdateStatusText(previousStatus);
+        
+        UpdateTypeFilters();
+        if (m_eventsListView)
+        {
+            m_eventsListView->RefreshColumns(); // Refresh columns even on error
+            m_eventsListView->RefreshView();
+        }
         if (m_itemDetailsView)
             m_itemDetailsView->RefreshView();
         
