@@ -22,6 +22,7 @@
 #include <QUrl>
 #include <QColorDialog>
 #include <QFrame>
+#include <QFileDialog>
 
 #include <QGroupBox>
 
@@ -67,7 +68,7 @@ void StructuredConfigDialog::InitGeneralTab()
     m_generalTab = new QWidget(this);
     auto* layout = new QVBoxLayout(m_generalTab);
 
-    // Config path + Open button
+    // Config path + buttons
     auto* pathLayout = new QHBoxLayout();
     auto* pathLabel = new QLabel(tr("Config file:"), m_generalTab);
     m_configPathLabel = new QLabel(m_generalTab);
@@ -78,10 +79,22 @@ void StructuredConfigDialog::InitGeneralTab()
     auto* openButton = new QPushButton(tr("Open"), m_generalTab);
     connect(openButton, &QPushButton::clicked, this,
         &StructuredConfigDialog::OnOpenConfigFileClicked);
+    
+    auto* loadButton = new QPushButton(tr("Load..."), m_generalTab);
+    loadButton->setToolTip(tr("Load configuration from another file"));
+    connect(loadButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnLoadConfigClicked);
+    
+    auto* saveAsButton = new QPushButton(tr("Save As..."), m_generalTab);
+    saveAsButton->setToolTip(tr("Save configuration to a new file"));
+    connect(saveAsButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnSaveConfigAsClicked);
 
     pathLayout->addWidget(pathLabel);
     pathLayout->addWidget(m_configPathLabel, 1);
     pathLayout->addWidget(openButton);
+    pathLayout->addWidget(loadButton);
+    pathLayout->addWidget(saveAsButton);
 
     layout->addLayout(pathLayout);
 
@@ -496,6 +509,96 @@ void StructuredConfigDialog::OnOpenConfigFileClicked()
 
     QDesktopServices::openUrl(
         QUrl::fromLocalFile(QString::fromStdString(path)));
+}
+
+void StructuredConfigDialog::OnLoadConfigClicked()
+{
+    QFileDialog dialog(this, tr("Load Configuration File"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    dialog.setDirectory(QString::fromStdString(config::GetConfig().GetConfigFilePath()));
+    dialog.setNameFilter(tr("JSON Files (*.json);;All Files (*)"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    QString fileName = dialog.selectedFiles().value(0);
+    if (fileName.isEmpty())
+        return;
+    
+    try
+    {
+        auto& cfg = config::GetConfig();
+        cfg.SetConfigFilePath(fileName.toStdString());
+        cfg.LoadConfig();
+        
+        // Reload dialog with new config
+        LoadConfigToUi();
+        
+        util::Logger::Info("Loaded configuration from: {}", fileName.toStdString());
+        
+        QMessageBox::information(this, tr("Config Loaded"),
+            tr("Configuration loaded successfully from:\n%1\n\n"
+               "The dialog has been refreshed with the loaded settings.")
+                .arg(fileName));
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("Failed to load config from {}: {}", 
+            fileName.toStdString(), ex.what());
+        QMessageBox::critical(this, tr("Load Config Failed"), 
+            tr("Failed to load configuration:\n%1").arg(ex.what()));
+    }
+}
+
+void StructuredConfigDialog::OnSaveConfigAsClicked()
+{
+    QFileDialog dialog(this, tr("Save Configuration As"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    dialog.setDirectory(QString::fromStdString(config::GetConfig().GetConfigFilePath()));
+    dialog.setNameFilter(tr("JSON Files (*.json);;All Files (*)"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("json");
+    
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    
+    QString fileName = dialog.selectedFiles().value(0);
+    if (fileName.isEmpty())
+        return;
+    
+    try
+    {
+        auto& cfg = config::GetConfig();
+        
+        // Save current dialog state to config first
+        OnSaveClicked();
+        
+        // Then save to new location
+        cfg.SetConfigFilePath(fileName.toStdString());
+        cfg.SaveConfig();
+        
+        // Update the displayed path
+        m_configPathLabel->setText(QString::fromStdString(fileName.toStdString()));
+        
+        util::Logger::Info("Saved configuration to: {}", fileName.toStdString());
+        
+        QMessageBox::information(this, tr("Config Saved"),
+            tr("Configuration saved successfully to:\n%1\n\n"
+               "The application will now use this configuration file.")
+                .arg(fileName));
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("Failed to save config to {}: {}", 
+            fileName.toStdString(), ex.what());
+        QMessageBox::critical(this, tr("Save Config Failed"), 
+            tr("Failed to save configuration:\n%1").arg(ex.what()));
+    }
 }
 
 void StructuredConfigDialog::OnLogLevelChanged(int)
