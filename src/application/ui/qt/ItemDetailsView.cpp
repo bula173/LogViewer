@@ -12,8 +12,63 @@
 #include <QVBoxLayout>
 #include <QTableWidgetItem>
 
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
+
 namespace ui::qt
 {
+
+namespace {
+
+/**
+ * @brief Convert hex string to ASCII representation
+ * @param hexStr Hex string (e.g., "48656c6c6f")
+ * @return ASCII string or original if not valid hex
+ */
+QString HexToAscii(const std::string& hexStr)
+{
+    // Check if string looks like hex (even length, only hex chars)
+    if (hexStr.empty() || hexStr.length() % 2 != 0)
+        return QString::fromStdString(hexStr);
+    
+    // Check if all characters are hex digits
+    bool isHex = std::all_of(hexStr.begin(), hexStr.end(), 
+        [](char c) { return std::isxdigit(static_cast<unsigned char>(c)); });
+    
+    if (!isHex)
+        return QString::fromStdString(hexStr);
+    
+    // Convert hex to ASCII
+    std::string ascii;
+    ascii.reserve(hexStr.length() / 2);
+    
+    for (size_t i = 0; i < hexStr.length(); i += 2)
+    {
+        std::string byteStr = hexStr.substr(i, 2);
+        char byte = static_cast<char>(std::stoi(byteStr, nullptr, 16));
+        
+        // Only include printable ASCII characters
+        if (byte >= 32 && byte <= 126)
+            ascii += byte;
+        else
+            ascii += '.'; // Replace non-printable with dot
+    }
+    
+    return QString::fromStdString(ascii);
+}
+
+/**
+ * @brief Check if key name indicates hex-encoded text
+ */
+bool IsHexTextField(const std::string& key)
+{
+    return key.find("_text") != std::string::npos ||
+           key.find("Text") != std::string::npos ||
+           key.find("x_text") != std::string::npos;
+}
+
+} // anonymous namespace
 
 ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
     : QWidget(parent)
@@ -113,16 +168,42 @@ void ItemDetailsView::DisplayEvent(int actualRow)
     {
         auto* keyItem =
             new QTableWidgetItem(QString::fromStdString(key));
-        auto* valueItem =
-            new QTableWidgetItem(QString::fromStdString(value));
-
-        keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
-        valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
-        keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
-        valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
-
-        m_details->setItem(row, 0, keyItem);
-        m_details->setItem(row, 1, valueItem);
+        
+        // Convert hex to ASCII if key name indicates hex-encoded text
+        QString displayValue;
+        if (IsHexTextField(key))
+        {
+            displayValue = HexToAscii(value);
+            // Show both hex and ASCII in tooltip
+            QString tooltip = QString("Hex: %1\nASCII: %2")
+                .arg(QString::fromStdString(value))
+                .arg(displayValue);
+            
+            auto* valueItem = new QTableWidgetItem(displayValue);
+            valueItem->setToolTip(tooltip);
+            valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
+            valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            
+            keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
+            keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            
+            m_details->setItem(row, 0, keyItem);
+            m_details->setItem(row, 1, valueItem);
+        }
+        else
+        {
+            auto* valueItem =
+                new QTableWidgetItem(QString::fromStdString(value));
+            
+            keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
+            valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
+            keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            
+            m_details->setItem(row, 0, keyItem);
+            m_details->setItem(row, 1, valueItem);
+        }
+        
         ++row;
     }
     m_details->resizeColumnsToContents();

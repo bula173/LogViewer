@@ -38,7 +38,7 @@ void EventsTableView::InitializeView()
     horizontalHeader()->setSectionsMovable(true);
     horizontalHeader()->setSectionsClickable(true);
     verticalHeader()->setVisible(false);
-    setSortingEnabled(false);
+    setSortingEnabled(true);
     ResizeColumnsToConfiguration();
 
     auto* copyAction = new QAction(tr("Copy"), this);
