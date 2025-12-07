@@ -10,6 +10,7 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QTextStream>
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include <filesystem>
@@ -127,8 +128,15 @@ bool ConfigEditorDialog::SaveConfig()
 void ConfigEditorDialog::OnSaveClicked()
 {
     if (SaveConfig())
-        QMessageBox::information(this, tr("Config"),
-            tr("Configuration saved successfully."));
+    {
+        // Update window title to show save was successful
+        setWindowTitle(tr("Edit Config - Saved"));
+        
+        // Reset title after 2 seconds
+        QTimer::singleShot(2000, this, [this]() {
+            setWindowTitle(tr("Edit Config"));
+        });
+    }
 }
 
 void ConfigEditorDialog::OnReloadClicked()

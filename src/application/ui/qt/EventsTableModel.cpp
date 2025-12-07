@@ -256,29 +256,42 @@ void EventsTableModel::RebuildVisibleColumns()
     // Check if we should show source column
     const bool needsSourceColumn = ShouldShowSourceColumn();
     
-    // First, add id column if visible (index 0)
-    if (!columns.empty() && columns[0].isVisible)
-    {
-        m_visibleColumnIndices.push_back(0);
-    }
-    
-    // Add source column dynamically (virtual index -1)
-    if (needsSourceColumn)
-    {
-        m_visibleColumnIndices.push_back(-1); // -1 indicates dynamic source column
-        m_hasSourceColumn = true;
-    }
-    else
-    {
-        m_hasSourceColumn = false;
-    }
-    
-    // Add remaining columns (skip index 0 as it's already added)
-    for (std::size_t i = 1; i < columns.size(); ++i)
+    // Build list of visible columns
+    for (std::size_t i = 0; i < columns.size(); ++i)
     {
         if (columns[i].isVisible)
+        {
             m_visibleColumnIndices.push_back(static_cast<int>(i));
+            
+            // Insert source column after id column (if id is first visible column)
+            if (i == 0 && needsSourceColumn && columns[i].name == "id")
+            {
+                m_visibleColumnIndices.push_back(-1); // -1 indicates dynamic source column
+            }
+        }
     }
+    
+    // If source column should be shown but id wasn't first, add source at the beginning
+    if (needsSourceColumn)
+    {
+        bool sourceAdded = false;
+        for (int idx : m_visibleColumnIndices)
+        {
+            if (idx == -1)
+            {
+                sourceAdded = true;
+                break;
+            }
+        }
+        
+        if (!sourceAdded)
+        {
+            // Insert source at the beginning
+            m_visibleColumnIndices.insert(m_visibleColumnIndices.begin(), -1);
+        }
+    }
+    
+    m_hasSourceColumn = needsSourceColumn;
 }
 
 bool EventsTableModel::ShouldShowSourceColumn() const

@@ -126,6 +126,10 @@ void EventsTableView::RefreshColumns()
 
     m_model->RefreshColumns();
     ResizeColumnsToConfiguration();
+    
+    // Force header to recalculate stretch section
+    horizontalHeader()->setStretchLastSection(false);
+    horizontalHeader()->setStretchLastSection(true);
 }
 
 void EventsTableView::RefreshView()
