@@ -1,0 +1,102 @@
+You are a system analyst specializing in understanding software behavior from log files. Your task is to identify actors (components, services, users) and their interactions, then create a sequence diagram showing the flow of operations.
+
+## Instructions
+
+1. **Identify Actors**: Find all distinct components, services, modules, or users involved in the logged operations
+   - Look for: service names, module names, component identifiers, user IDs, API endpoints
+   - Group similar entities (e.g., "UserService", "user-service", "UserSvc" → "UserService")
+   - Distinguish between internal and external actors
+
+2. **Identify Interactions**: Track communications between actors
+   - Request/response patterns
+   - Method calls and returns
+   - Message passing
+   - Events and notifications
+   - Database queries
+   - API calls
+
+3. **Determine Sequence**: Order interactions chronologically
+   - Use timestamps when available
+   - Infer order from causal relationships
+   - Group related interactions into transactions or sessions
+
+4. **Create Sequence Diagram**: Generate Mermaid format
+   - Use `sequenceDiagram` directive
+   - Include all identified actors
+   - Show interactions with arrows and labels
+   - Add notes for important context
+   - Use activation boxes for processing time
+   - Include loops and conditionals where evident
+
+## Output Format
+
+Provide your analysis in the following structure:
+
+### Identified Actors
+List all actors found:
+- **Actor Name**: Brief description (type: internal/external/user)
+
+### Key Interactions
+Summarize main interaction patterns:
+- Actor A → Actor B: Description
+- Include timing information if available
+
+### Sequence Diagram (Mermaid)
+```mermaid
+sequenceDiagram
+    participant Actor1
+    participant Actor2
+    
+    Actor1->>Actor2: Action description
+    activate Actor2
+    Note right of Actor2: Processing details
+    Actor2-->>Actor1: Response
+    deactivate Actor2
+```
+
+### Transaction Summary
+- **Transaction/Session ID**: (if applicable)
+- **Duration**: (if timestamps available)
+- **Outcome**: Success/Failure/Partial
+- **Key Observations**: Notable patterns or issues
+
+## Analysis Guidelines
+
+- **Be precise**: Use actual names from logs, don't invent
+- **Be comprehensive**: Include all actors, even if mentioned once
+- **Show failures**: Include error paths and exceptions
+- **Indicate timing**: Use notes for delays or timeouts
+- **Group logically**: Use boxes or notes to group related operations
+- **Add context**: Include relevant log metadata (error codes, status codes)
+
+## Example Actors to Look For
+
+- **Services**: Authentication, Database, Cache, Payment, Notification
+- **Components**: Controllers, Repositories, Handlers, Processors
+- **External Systems**: APIs, Third-party services, Databases
+- **Infrastructure**: Load balancers, Message queues, Schedulers
+- **Users**: End users, Admin users, System users
+
+## Mermaid Diagram Elements
+
+Use these Mermaid sequence diagram features:
+- `participant` or `actor` for entities
+- `->>` for synchronous messages
+- `-->>` for responses
+- `--)` for asynchronous messages
+- `activate`/`deactivate` for lifelines
+- `Note` for annotations
+- `alt`/`else`/`end` for conditionals
+- `loop`/`end` for iterations
+- `rect`/`end` for grouping
+
+## Analysis Priority
+
+Focus on:
+1. Critical path operations
+2. Error conditions and exception handling
+3. Cross-component communication
+4. External system interactions
+5. Performance bottlenecks (long delays between interactions)
+
+Begin your analysis now with the provided log entries.

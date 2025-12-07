@@ -310,12 +310,31 @@ void StructuredConfigDialog::InitAITab()
         &StructuredConfigDialog::OnAIProviderChanged);
     form->addRow(tr("AI Provider:"), m_aiProviderCombo);
     
-    // API Key (for cloud providers)
-    m_aiApiKeyEdit = new QLineEdit(m_aiTab);
-    m_aiApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_aiApiKeyEdit->setPlaceholderText(tr("Enter API key for cloud providers"));
-    m_aiApiKeyEdit->setEnabled(false);
-    form->addRow(tr("API Key:"), m_aiApiKeyEdit);
+    // API Keys section for cloud providers
+    auto* apiKeysGroup = new QGroupBox(tr("Cloud Provider API Keys"), m_aiTab);
+    auto* apiKeysLayout = new QFormLayout(apiKeysGroup);
+    
+    m_openaiApiKeyEdit = new QLineEdit(apiKeysGroup);
+    m_openaiApiKeyEdit->setEchoMode(QLineEdit::Password);
+    m_openaiApiKeyEdit->setPlaceholderText(tr("Enter OpenAI API key from platform.openai.com"));
+    apiKeysLayout->addRow(tr("OpenAI API Key:"), m_openaiApiKeyEdit);
+    
+    m_anthropicApiKeyEdit = new QLineEdit(apiKeysGroup);
+    m_anthropicApiKeyEdit->setEchoMode(QLineEdit::Password);
+    m_anthropicApiKeyEdit->setPlaceholderText(tr("Enter Anthropic API key from console.anthropic.com"));
+    apiKeysLayout->addRow(tr("Anthropic API Key:"), m_anthropicApiKeyEdit);
+    
+    m_googleApiKeyEdit = new QLineEdit(apiKeysGroup);
+    m_googleApiKeyEdit->setEchoMode(QLineEdit::Password);
+    m_googleApiKeyEdit->setPlaceholderText(tr("Enter Google API key from makersuite.google.com"));
+    apiKeysLayout->addRow(tr("Google API Key:"), m_googleApiKeyEdit);
+    
+    m_xaiApiKeyEdit = new QLineEdit(apiKeysGroup);
+    m_xaiApiKeyEdit->setEchoMode(QLineEdit::Password);
+    m_xaiApiKeyEdit->setPlaceholderText(tr("Enter xAI API key from console.x.ai"));
+    apiKeysLayout->addRow(tr("xAI API Key:"), m_xaiApiKeyEdit);
+    
+    layout->addWidget(apiKeysGroup);
     
     // Base URL
     m_ollamaBaseUrlEdit = new QLineEdit(m_aiTab);
@@ -385,7 +404,12 @@ void StructuredConfigDialog::LoadConfigToUi()
     if (providerIdx >= 0)
         m_aiProviderCombo->setCurrentIndex(providerIdx);
     
-    m_aiApiKeyEdit->setText(QString::fromStdString(cfg.aiApiKey));
+    // Load all provider API keys
+    m_openaiApiKeyEdit->setText(QString::fromStdString(cfg.openaiApiKey));
+    m_anthropicApiKeyEdit->setText(QString::fromStdString(cfg.anthropicApiKey));
+    m_googleApiKeyEdit->setText(QString::fromStdString(cfg.googleApiKey));
+    m_xaiApiKeyEdit->setText(QString::fromStdString(cfg.xaiApiKey));
+    
     m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
     m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
     m_aiTimeoutSpin->setValue(cfg.aiTimeoutSeconds);
@@ -428,7 +452,13 @@ void StructuredConfigDialog::OnSaveClicked()
     cfg.typeFilterField = m_typeFilterFieldEdit->text().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
     cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
-    cfg.aiApiKey = m_aiApiKeyEdit->text().toStdString();
+    
+    // Save all provider API keys
+    cfg.openaiApiKey = m_openaiApiKeyEdit->text().toStdString();
+    cfg.anthropicApiKey = m_anthropicApiKeyEdit->text().toStdString();
+    cfg.googleApiKey = m_googleApiKeyEdit->text().toStdString();
+    cfg.xaiApiKey = m_xaiApiKeyEdit->text().toStdString();
+    
     cfg.ollamaBaseUrl = m_ollamaBaseUrlEdit->text().toStdString();
     cfg.ollamaDefaultModel = m_ollamaDefaultModelEdit->text().toStdString();
     cfg.aiTimeoutSeconds = m_aiTimeoutSpin->value();
@@ -486,11 +516,6 @@ void StructuredConfigDialog::OnAIProviderChanged(int index)
         return;
     
     const QString provider = m_aiProviderCombo->currentData().toString();
-    
-    // Enable/disable API key field based on provider
-    const bool isCloudProvider = (provider == "openai" || provider == "anthropic" || 
-                                   provider == "google" || provider == "xai");
-    m_aiApiKeyEdit->setEnabled(isCloudProvider);
     
     // Update base URL and model suggestions based on provider
     if (provider == "ollama")

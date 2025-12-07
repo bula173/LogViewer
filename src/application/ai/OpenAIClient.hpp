@@ -17,7 +17,7 @@ class OpenAIClient : public IAIService
 {
 public:
     explicit OpenAIClient(const std::string& apiKey,
-                         const std::string& model = "gpt-4",
+                         const std::string& model = "gpt-3.5-turbo",
                          const std::string& baseUrl = "https://api.openai.com/v1");
     ~OpenAIClient() override = default;
 
@@ -27,7 +27,7 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override { return m_model; }
 
-    void SetModel(const std::string& model) { m_model = model; }
+    void SetModel(const std::string& model);
 
 private:
     std::string m_apiKey;

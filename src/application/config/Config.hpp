@@ -59,6 +59,13 @@ class Config
     // Mutable access for configuration
     std::vector<ColumnConfig>& GetMutableColumns();
     void GetPrintConfig() const;
+    
+    /**
+     * @brief Get the API key for a specific provider
+     * @param provider The provider name ("openai", "anthropic", "google", "xai")
+     * @return The API key for that provider, or empty string if not set
+     */
+    std::string GetApiKeyForProvider(const std::string& provider) const;
 
   private:
     const json& GetParserConfig(const json& j);
@@ -71,6 +78,14 @@ class Config
     std::filesystem::path GetDefaultAppPath();
     void SetupLogPath();
     void GetColorConfig(const json& j);
+    
+    /**
+     * @brief Merge new fields from default config into user config
+     * @param userConfig User's existing config
+     * @param defaultConfig Default config from application
+     * @return Merged config with user values preserved and new fields added
+     */
+    json MergeConfigs(const json& userConfig, const json& defaultConfig);
 
   private:
     std::string m_configFilePath {"etc/config.json"}; // Default path
@@ -89,7 +104,13 @@ class Config
     
     // AI configuration
     std::string aiProvider {"ollama"};  // "ollama", "lmstudio", "openai", "anthropic", "google", "xai"
-    std::string aiApiKey;  // API key for cloud providers
+    
+    // API keys for cloud providers (encrypted in config file)
+    std::string openaiApiKey;
+    std::string anthropicApiKey;
+    std::string googleApiKey;
+    std::string xaiApiKey;
+    
     std::string ollamaBaseUrl {"http://localhost:11434"};
     std::string ollamaDefaultModel {"qwen2.5-coder:7b"};
     int aiTimeoutSeconds {300};  // Timeout for AI requests in seconds (default 5 minutes)

@@ -99,6 +99,12 @@ bool LogAnalyzer::IsReady() const
     return m_aiService && m_aiService->IsAvailable();
 }
 
+void LogAnalyzer::SetAIService(std::shared_ptr<IAIService> aiService)
+{
+    m_aiService = std::move(aiService);
+    util::Logger::Info("LogAnalyzer AI service updated");
+}
+
 std::string LogAnalyzer::GetAnalysisTypeName(AnalysisType type)
 {
     switch (type)

@@ -249,7 +249,9 @@ void FiltersPanel::HandleSaveAs()
 {
 
     QFileDialog dialog(this, tr("Save Filters"));
+    #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
     dialog.setNameFilter(tr("Filters (*.json)"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.selectFile("filters.json");
@@ -278,8 +280,9 @@ void FiltersPanel::HandleLoad()
 {
 
     QFileDialog dialog(this, tr("Open Log File"));
+    #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-
+    #endif
     dialog.setNameFilter(tr("Filter files (*.json);;All files (*.*)"));
     if (dialog.exec() != QDialog::Accepted) {
         util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");

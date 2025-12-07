@@ -72,6 +72,12 @@ bool GeminiClient::IsAvailable() const
     return !m_apiKey.empty();
 }
 
+void GeminiClient::SetModel(const std::string& model)
+{
+    m_model = model;
+    util::Logger::Info("Gemini model changed to: {}", m_model);
+}
+
 std::string GeminiClient::SendHttpPost(const std::string& endpoint,
                                       const std::string& jsonBody) const
 {
