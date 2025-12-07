@@ -93,7 +93,7 @@ class Config
      */
     void SetDictionaryFilePath(const std::string& path);
 
-    std::string GetAppName() const { return appName; }
+    const std::string& GetAppName() const { return appName; }
 
     /**
      * @brief Get the current config version
@@ -107,6 +107,12 @@ class Config
      */
     void SetConfigVersion(const Version::Version& version) { m_configVersion = version; }
 
+    /**
+     * @brief Get the default application path
+     * @return Path to the default application directory
+     */
+    std::filesystem::path GetDefaultAppPath();
+
   private:
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
@@ -115,7 +121,6 @@ class Config
     void GetAIConfig(const json& j);
     std::filesystem::path GetDefaultConfigPath();
     std::filesystem::path GetDefaultLogPath();
-    std::filesystem::path GetDefaultAppPath();
     void SetupLogPath();
     void GetColorConfig(const json& j);
     

@@ -24,6 +24,7 @@ option(MEASURE_ALL "When enabled all commands will be passed through time comman
 option(ENABLE_CLANG_TIDY "Enable clang-tidy during compilation" OFF)
 option(ENABLE_CPPCHECK "Enable cppcheck static analysis during compilation" OFF)
 option(ENABLE_COVERAGE "Enable code coverage (Debug builds only)" OFF)
+option(ENABLE_SSH_PARSER "Enable SSH parser library (requires libssh)" OFF)
 
 # GUI Framework selection
 set(GUI_FRAMEWORK "WX" CACHE STRING "Choose GUI framework: WX or QT")

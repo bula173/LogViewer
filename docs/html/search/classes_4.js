@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mainwindow_0',['MainWindow',['../df/d15/classgui_1_1_main_window.html',1,'gui']]],
-  ['myapp_1',['MyApp',['../dd/da7/class_my_app.html',1,'']]]
+  ['geminiclient_0',['GeminiClient',['../d3/da5/classai_1_1_gemini_client.html',1,'ai']]]
 ];

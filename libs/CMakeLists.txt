@@ -1,5 +1,0 @@
-if(USE_WXWIDGETS)
-    add_subdirectory(wx)
-elseif(USE_QT)
-    add_subdirectory(qt)
-endif()

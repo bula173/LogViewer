@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['icontrloler_0',['IContrloler',['../dd/ddf/class_i_contrloler.html',1,'']]],
-  ['icontroller_1',['IController',['../d9/dd6/classmvc_1_1_i_controller.html',1,'mvc']]],
-  ['idataparser_2',['IDataParser',['../d8/ddd/classparser_1_1_i_data_parser.html',1,'parser']]],
-  ['idataparserobserver_3',['IDataParserObserver',['../d0/dfb/classparser_1_1_i_data_parser_observer.html',1,'parser']]],
-  ['imodel_4',['IModel',['../d5/d21/classmvc_1_1_i_model.html',1,'mvc']]],
-  ['itemvirtuallistcontrol_5',['ItemVirtualListControl',['../da/d38/classgui_1_1_item_virtual_list_control.html',1,'gui']]],
-  ['iview_6',['IView',['../d8/dee/classmvc_1_1_i_view.html',1,'mvc']]]
+  ['error_0',['Error',['../d0/dfe/classerror_1_1_error.html',1,'error']]],
+  ['eventscontainer_1',['EventsContainer',['../db/d71/classdb_1_1_events_container.html',1,'db']]],
+  ['eventscontaineradapter_2',['EventsContainerAdapter',['../d8/d26/classui_1_1wx_1_1_events_container_adapter.html',1,'ui::wx']]],
+  ['eventstablemodel_3',['EventsTableModel',['../d0/d13/classui_1_1qt_1_1_events_table_model.html',1,'ui::qt']]],
+  ['eventstableview_4',['EventsTableView',['../d2/d07/classui_1_1qt_1_1_events_table_view.html',1,'ui::qt']]],
+  ['eventsvirtuallistcontrol_5',['EventsVirtualListControl',['../d9/dd3/classui_1_1wx_1_1_events_virtual_list_control.html',1,'ui::wx']]],
+  ['exactmatchstrategy_6',['ExactMatchStrategy',['../d5/d2e/classfilters_1_1_exact_match_strategy.html',1,'filters']]],
+  ['exampleparserplugin_7',['ExampleParserPlugin',['../d9/df2/classexample_1_1_example_parser_plugin.html',1,'example']]]
 ];

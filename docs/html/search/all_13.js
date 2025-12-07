@@ -1,6 +1,30 @@
 var searchData=
 [
-  ['unregisterobserver_0',['UnregisterObserver',['../d8/ddd/classparser_1_1_i_data_parser.html#ac2b109cb3475dc7dec15198f1a184963',1,'parser::IDataParser']]],
-  ['updatefilters_1',['UpdateFilters',['../df/d15/classgui_1_1_main_window.html#a3de2f8d0bce9c281eaba9ddb5dec45d8',1,'gui::MainWindow']]],
-  ['use_2',['How to Use',['../index.html#usage_sec',1,'']]]
+  ['kcolumnfilterindex_0',['kColumnFilterIndex',['../db/d63/namespaceui_1_1qt_1_1anonymous__namespace_02_filter_editor_dialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190',1,'ui::qt::anonymous_namespace{FilterEditorDialog.cpp}']]],
+  ['kenabledcolumn_1',['kEnabledColumn',['../d2/d76/namespaceui_1_1qt_1_1anonymous__namespace_02_filters_panel_8cpp_03.html#ad722549d69b7f1543b506ba7ac39eb69',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
+  ['keventidcolumn_2',['kEventIdColumn',['../d7/de9/classui_1_1qt_1_1_search_results_view.html#a193c5d3ffb94aa847501ad5695c58af9',1,'ui::qt::SearchResultsView']]],
+  ['key_3',['1. Get API Key',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md131',1,'']]],
+  ['key_4',['key',['../df/d02/structconfig_1_1_field_dictionary.html#aee6836f17d7dd9537331bf407d23231f',1,'config::FieldDictionary']]],
+  ['key_20components_5',['Key Components',['../d6/d41/md_docs_2_a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md59',1,'']]],
+  ['key_20concepts_6',['Key Concepts',['../dir_77c33839815b7c6c2ca556064fb28352.html#autotoc_md280',1,'']]],
+  ['key_20configuration_20options_7',['Key Configuration Options',['../index.html#autotoc_md18',1,'Key Configuration Options'],['../d6/d41/md_docs_2_a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md85',1,'Key Configuration Options']]],
+  ['key_20features_8',['Key Features',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md441',1,'3. Key Features'],['../db/d95/md_docs_2_o_p_e_n_a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md293',1,'Key Features'],['..//Users/Marcin/workspace/cpp/LogViewer/src/dox/overview.dox#features_sec',1,'Key Features']]],
+  ['key_20header_9',['Anthropic (x-api-key Header)',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md125',1,'']]],
+  ['key_20in_20url_10',['Google (API Key in URL)',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md126',1,'']]],
+  ['key_20invalid_11',['&quot;API key invalid&quot;',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md139',1,'']]],
+  ['key_20point_12',['Key Point',['../d7/d89/md_docs_2_w_i_n_d_o_w_s___c_r_a_s_h___a_c_t_i_o_n___p_l_a_n.html#autotoc_md506',1,'']]],
+  ['key_20required_13',['Key Required',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md115',1,'Cloud Providers (API Key Required)'],['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md114',1,'Local Providers (No API Key Required)']]],
+  ['keyboard_20shortcuts_14',['Keyboard Shortcuts',['../d8/d11/md_docs_2_u_i___i_m_p_r_o_v_e_m_e_n_t_s.html#autotoc_md478',1,'']]],
+  ['keyencryption_15',['KeyEncryption',['../d4/dde/classutil_1_1_key_encryption.html',1,'util']]],
+  ['keyencryption_2ecpp_16',['KeyEncryption.cpp',['../d1/dfe/_key_encryption_8cpp.html',1,'']]],
+  ['keyencryption_2ehpp_17',['KeyEncryption.hpp',['../d7/d0e/_key_encryption_8hpp.html',1,'']]],
+  ['kmatchedkeycolumn_18',['kMatchedKeyColumn',['../d7/de9/classui_1_1qt_1_1_search_results_view.html#aab7bb0eff910af0237e3cdc7c997fc20',1,'ui::qt::SearchResultsView']]],
+  ['kmatchtextcolumn_19',['kMatchTextColumn',['../d7/de9/classui_1_1qt_1_1_search_results_view.html#aede444450be94c44cedfeeea63b83987',1,'ui::qt::SearchResultsView']]],
+  ['knamecolumn_20',['kNameColumn',['../d2/d76/namespaceui_1_1qt_1_1anonymous__namespace_02_filters_panel_8cpp_03.html#af7c2a59790efbde0976900d4d9e3de72',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
+  ['known_20limitations_21',['Known Limitations',['../d1/df6/md_docs_2_p_l_u_g_i_n___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md337',1,'']]],
+  ['kparameterfilterindex_22',['kParameterFilterIndex',['../db/d63/namespaceui_1_1qt_1_1anonymous__namespace_02_filter_editor_dialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf',1,'ui::qt::anonymous_namespace{FilterEditorDialog.cpp}']]],
+  ['kpatterncolumn_23',['kPatternColumn',['../d2/d76/namespaceui_1_1qt_1_1anonymous__namespace_02_filters_panel_8cpp_03.html#ae2b5640c7782b4cfefb7944256db1981',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
+  ['kprogressyieldinterval_24',['kProgressYieldInterval',['../d1/d55/namespaceui_1_1anonymous__namespace_02_main_window_presenter_8cpp_03.html#ac3ed6e071f5f0fe2f82bb9366eccd306',1,'ui::anonymous_namespace{MainWindowPresenter.cpp}']]],
+  ['kqtappname_25',['kQtAppName',['../d8/d72/namespaceanonymous__namespace_02_my_app_qt_8cpp_03.html#a2ffd91e89808a06ae22db64e0737d21c',1,'anonymous_namespace{MyAppQt.cpp}']]],
+  ['ktargetcolumn_26',['kTargetColumn',['../d2/d76/namespaceui_1_1qt_1_1anonymous__namespace_02_filters_panel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]]
 ];

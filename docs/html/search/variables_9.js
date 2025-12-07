@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['parser_0',['parser',['../de/db3/structparser_1_1_parser_state.html#aa8a064ea4bcef0d4541cb3c2d6e83af0',1,'parser::ParserState']]],
-  ['parserhandle_1',['parserHandle',['../de/db3/structparser_1_1_parser_state.html#a5621f8e4502bc191b55f18de5e9f917d',1,'parser::ParserState']]]
+  ['lastprogressbytes_0',['lastProgressBytes',['../de/db3/structparser_1_1_parser_state.html#a18b3dab6126d72d5ffaa67f5de3932ad',1,'parser::ParserState']]],
+  ['libraryhandle_1',['libraryHandle',['../d4/de1/structplugin_1_1_plugin_load_info.html#ac685faa09e99caef266217b3747337d3',1,'plugin::PluginLoadInfo']]],
+  ['loglevel_2',['logLevel',['../d7/dcc/classconfig_1_1_config.html#ac55f71159fe016525e5a277903b3c526',1,'config::Config']]]
 ];

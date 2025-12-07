@@ -1,4 +1,5 @@
 #include "config/FieldTranslator.hpp"
+#include "config/FieldConversionPluginRegistry.hpp"
 #include "application/util/Logger.hpp"
 #include "config/Config.hpp"
 
@@ -105,68 +106,26 @@ TranslationResult FieldTranslator::Translate(std::string_view key, std::string_v
     const auto& translation = m_dictionary.at(cacheIt->second);
     std::string converted = std::string(value);
 
-    // Apply conversion based on type
-    if (translation.conversionType == "tooltip_only")
+    // Apply conversion using plugin system
+    if (translation.conversionType != "tooltip_only")
     {
-        // No conversion, just provide tooltip
+        auto& registry = FieldConversionPluginRegistry::GetInstance();
+        std::string pluginResult = registry.ApplyConversion(translation.conversionType, value, translation.valueMap);
+
+        if (pluginResult != std::string(value))
+        {
+            converted = std::string(value) + " -> " + pluginResult;
+            result.wasConverted = true;
+        }
+        else
+        {
+            result.wasConverted = false;
+        }
+    }
+    else
+    {
+        // tooltip_only - no conversion, just provide tooltip
         result.wasConverted = false;
-    }
-    else if (translation.conversionType == "hex_to_ascii")
-    {
-        converted = HexToAscii(value);
-        if (converted != std::string(value))
-        {
-            converted = std::string(value) + " -> " + converted;
-        }
-        result.wasConverted = true;
-    }
-    else if (translation.conversionType == "unix_to_date")
-    {
-        converted = UnixToDate(value);
-        if (converted != std::string(value))
-        {
-            converted = std::string(value) + " -> " + converted;
-        }
-        result.wasConverted = true;
-    }
-    else if (translation.conversionType == "value_map")
-    {
-        converted = ApplyValueMap(value, translation.valueMap);
-        if (converted != std::string(value))
-        {
-            converted = std::string(value) + " -> " + converted;
-            result.wasConverted = true;
-        }
-        else
-        {
-            result.wasConverted = false;
-        }
-    }
-    else if (translation.conversionType == "nid_lrbg")
-    {
-        converted = NidLrbg(value);
-        if (converted != std::string(value))
-        {
-            converted = std::string(value) + " -> " + converted;
-            result.wasConverted = true;
-        }
-        else
-        {
-            result.wasConverted = false;
-        }
-    }
-    else if (translation.conversionType == "iso_latin")
-    {
-        converted = IsoLatin1ToUtf8(value);
-        if (converted != std::string(value))
-        {
-            converted = std::string(value) + " -> " + converted;
-            result.wasConverted = true;
-        }
-        else
-        {
-            result.wasConverted = false;
-        }
     }
 
     result.convertedValue = converted;
@@ -187,106 +146,6 @@ void FieldTranslator::RebuildLowercaseCache() const
     {
         m_lowercaseKeyCache[ToLower(key)] = key;
     }
-}
-std::string FieldTranslator::HexToAscii(std::string_view hexStr) const
-{
-    if (hexStr.empty() || hexStr.length() % 2 != 0)
-        return std::string(hexStr);
-
-    // Check if all characters are hex digits
-    bool isHex = std::all_of(hexStr.begin(), hexStr.end(),
-        [](char c) { return std::isxdigit(static_cast<unsigned char>(c)); });
-
-    if (!isHex)
-        return std::string(hexStr);
-
-    std::string ascii;
-    ascii.reserve(hexStr.length() / 2);
-
-    for (size_t i = 0; i < hexStr.length(); i += 2)
-    {
-        std::string byteStr(hexStr.substr(i, 2));
-        try
-        {
-            char byte = static_cast<char>(std::stoi(byteStr, nullptr, 16));
-
-            // Only include printable ASCII characters
-            if (byte >= 32 && byte <= 126)
-                ascii += byte;
-            else
-                ascii += '.';
-        }
-        catch (...)
-        {
-            return std::string(hexStr); // Return original on error
-        }
-    }
-
-    return ascii;
-}
-
-std::string FieldTranslator::UnixToDate(std::string_view unixStr) const
-{
-    try
-    {
-        long long timestamp = std::stoll(std::string(unixStr));
-        std::time_t time = static_cast<std::time_t>(timestamp);
-        std::tm* tm = std::localtime(&time);
-
-        if (tm)
-        {
-            std::ostringstream oss;
-            oss << std::put_time(tm, "%Y-%m-%d %H:%M:%S");
-            return oss.str();
-        }
-    }
-    catch (...)
-    {
-        // Return original on error
-    }
-
-    return std::string(unixStr);
-}
-
-std::string FieldTranslator::NidLrbg(std::string_view text) const
-{
-    int nid = std::stoi(std::string(text));
-    int nid_bg = (nid & 0x3fff);
-    int nid_c = nid >> 14;
-
-    return "nid_c=" + std::to_string(nid_c) + " nid_bg=" + std::to_string(nid_bg);
-}
-
-std::string FieldTranslator::IsoLatin1ToUtf8(std::string_view text) const
-{
-    int codepoint = std::stoi(std::string(text));
-    
-    // ISO Latin-1 codepoints are 0-255
-    if (codepoint < 0 || codepoint > 255)
-        return std::string(text); // Return original on invalid input
-    
-    // For UTF-8 encoding of codepoints 0-127, it's the same as ASCII/Latin-1
-    if (codepoint <= 127)
-        return std::string(1, static_cast<char>(codepoint));
-    
-    // For codepoints 128-255, UTF-8 uses 2 bytes
-    // Format: 110xxxxx 10xxxxxx
-    char utf8[3];
-    utf8[0] = static_cast<char>(0xC0 | (codepoint >> 6));   // 110xxxxx
-    utf8[1] = static_cast<char>(0x80 | (codepoint & 0x3F));  // 10xxxxxx
-    utf8[2] = '\0';
-    
-    return std::string(utf8);
-}
-
-std::string FieldTranslator::ApplyValueMap(std::string_view value,
-    const std::map<std::string, std::string>& valueMap) const
-{
-    auto it = valueMap.find(std::string(value));
-    if (it != valueMap.end())
-        return it->second;
-
-    return std::string(value); // Return original if not found in map
 }
 
 std::string FieldTranslator::FormatTooltip(const std::string& templateStr,

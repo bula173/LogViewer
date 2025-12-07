@@ -72,6 +72,16 @@ private slots:
     void OnUpdateColorMapping();
     void OnDeleteColorMapping();
 
+    // Plugins tab
+    void OnPluginSelectionChanged();
+    void OnBrowsePluginClicked();
+    void OnLoadPluginClicked();
+    void OnUnloadPluginClicked();
+    void OnEnablePluginClicked();
+    void OnAutoLoadPluginToggled(bool checked);
+    void OnSetLicenseClicked();
+    void OnRefreshPluginsClicked();
+
 private:
     void BuildUi();
 
@@ -80,6 +90,7 @@ private:
     void InitDictionaryTab();
     void InitColorsTab();
     void InitAITab();
+    void InitPluginsTab();
 
     void LoadConfigToUi();
 
@@ -89,11 +100,13 @@ private:
 
     void RefreshDictionaryList();
     void LoadSelectedDictionaryToEditors();
-
     void RefreshColorMappings();
     void UpdateColorEditorsFromSelection(int row);
     void UpdateColorSwatches();
     void UpdateColorPreview();
+
+    void RefreshPluginsList();
+    void UpdatePluginDetails();
 
     QString ColorToHex(const QColor& color) const;
     QColor HexToColor(const QString& hex) const;
@@ -172,6 +185,28 @@ private:
 
     QColor m_bgColor;
     QColor m_fgColor;
+
+    // Plugins tab widgets
+    QWidget* m_pluginsTab {nullptr};
+    QTableWidget* m_pluginsTable {nullptr};
+    QLabel* m_pluginIdLabel {nullptr};
+    QLabel* m_pluginNameLabel {nullptr};
+    QLabel* m_pluginVersionLabel {nullptr};
+    QLabel* m_pluginAuthorLabel {nullptr};
+    QLabel* m_pluginTypeLabel {nullptr};
+    QLabel* m_pluginStatusLabel {nullptr};
+    QLabel* m_pluginLicenseLabel {nullptr};
+    QLabel* m_pluginPathLabel {nullptr};
+    QLineEdit* m_pluginPathEdit {nullptr};
+    QLineEdit* m_pluginLicenseEdit {nullptr};
+    QPushButton* m_browsePluginButton {nullptr};
+    QPushButton* m_loadPluginButton {nullptr};
+    QPushButton* m_unloadPluginButton {nullptr};
+    QPushButton* m_enablePluginButton {nullptr};
+    QPushButton* m_setLicenseButton {nullptr};
+    QPushButton* m_refreshPluginsButton {nullptr};
+    QCheckBox* m_autoLoadPluginCheck {nullptr};
+    int m_selectedPluginRow {-1};
 
     std::vector<config::ConfigObserver*> m_observers;
 };

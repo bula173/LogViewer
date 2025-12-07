@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config/FieldConversionPluginRegistry.hpp"
 #include <nlohmann/json.hpp>
 #include <map>
 #include <string>
@@ -91,13 +92,8 @@ public:
 
 private:
 
-    std::string HexToAscii(std::string_view hexStr) const;
-    std::string UnixToDate(std::string_view unixStr) const;
-    std::string ApplyValueMap(std::string_view value, const std::map<std::string, std::string>& valueMap) const;
-    std::string IsoLatin1ToUtf8(std::string_view text) const;
     std::string FormatTooltip(const std::string& templateStr, std::string_view original, std::string_view converted) const;
     std::string ToLower(std::string_view str) const;
-    std::string NidLrbg(std::string_view text) const;
     
     // Rebuild the lowercase key cache for fast case-insensitive lookups
     void RebuildLowercaseCache() const;

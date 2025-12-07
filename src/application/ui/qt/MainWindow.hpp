@@ -4,6 +4,7 @@
 #include "ui/IUiPanels.hpp"
 #include "config/ConfigObserver.hpp"
 #include "ai/AIServiceFactory.hpp"
+#include "plugins/IPluginObserver.hpp"
 
 #include <QMainWindow>
 #include <memory>
@@ -35,6 +36,11 @@ class IAIService;
 class LogAnalyzer;
 }
 
+namespace plugin
+{
+class IPlugin;
+}
+
 namespace ui
 {
 class MainWindowPresenter;
@@ -54,7 +60,8 @@ class AIConfigPanel;
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
                    public ui::ISearchResultsViewObserver,
-                   public config::ConfigObserver
+                   public config::ConfigObserver,
+                   public plugin::IPluginObserver
 {
     Q_OBJECT
 
@@ -80,6 +87,11 @@ class MainWindow : public QMainWindow,
     // IConfigObserver
     void OnConfigChanged() override;
 
+    // IPluginObserver
+    void OnPluginEvent(plugin::PluginEvent event, 
+                      const std::string& pluginId,
+                      plugin::IPlugin* plugin) override;
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -102,6 +114,11 @@ class MainWindow : public QMainWindow,
     void ApplyExtendedFilters();
     void SetupMenus();
     void ShowError(const QString& title, const QString& message);
+    void setupPluginManager();
+    void loadPlugins();
+    void reloadPlugins();
+    void createPluginTab(const std::string& pluginId, plugin::IPlugin* plugin);
+    void removePluginTab(const std::string& pluginId);
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
@@ -113,6 +130,7 @@ class MainWindow : public QMainWindow,
     QSplitter* m_leftSplitter {nullptr};
     QSplitter* m_rightSplitter {nullptr};
     QTabWidget* m_filterTabs {nullptr};
+    QTabWidget* m_contentTabs {nullptr};
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
 
@@ -132,6 +150,9 @@ class MainWindow : public QMainWindow,
     // AI service shared between panels
     std::shared_ptr<ai::AIServiceWrapper> m_aiService;
     std::shared_ptr<ai::LogAnalyzer> m_aiAnalyzer;
+    
+    // Plugin management
+    std::map<std::string, int> m_pluginTabIndices;  // Maps plugin ID to tab index
 };
 
 } // namespace ui::qt

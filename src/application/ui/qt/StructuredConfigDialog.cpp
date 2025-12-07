@@ -1,7 +1,9 @@
 #include "ui/qt/StructuredConfigDialog.hpp"
 
 #include "config/Config.hpp"
+#include "config/FieldConversionPluginRegistry.hpp"
 #include "util/Logger.hpp"
+#include "plugins/PluginManager.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -53,6 +55,7 @@ void StructuredConfigDialog::BuildUi()
     InitDictionaryTab();
     InitColorsTab();
     InitAITab();
+    InitPluginsTab();
 
     auto* buttonBox = new QDialogButtonBox(
         QDialogButtonBox::Save | QDialogButtonBox::Cancel, this);
@@ -231,7 +234,16 @@ void StructuredConfigDialog::InitDictionaryTab()
     detailLayout->addRow(tr("Key"), m_dictKeyEdit);
 
     m_dictConversionCombo = new QComboBox(detailGroup);
-    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date", "iso_latin", "nid_lrbg"});
+    // Populate conversion types from plugin registry
+    auto& registry = config::FieldConversionPluginRegistry::GetInstance();
+    auto conversions = registry.GetAvailableConversions();
+    QStringList conversionItems;
+    conversionItems << "tooltip_only"; // Always include tooltip_only
+    for (const auto& conv : conversions)
+    {
+        conversionItems << QString::fromStdString(conv);
+    }
+    m_dictConversionCombo->addItems(conversionItems);
     detailLayout->addRow(tr("Conversion Type"), m_dictConversionCombo);
     
     connect(m_dictConversionCombo, &QComboBox::currentTextChanged, this, 
@@ -1738,6 +1750,471 @@ void StructuredConfigDialog::OnSaveDictionaryFile()
         QMessageBox::critical(this, tr("Save Failed"),
             tr("Failed to save dictionary to:\n%1").arg(fileName));
     }
+}
+
+void StructuredConfigDialog::InitPluginsTab()
+{
+    // Set plugins directory
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    auto& config = config::GetConfig();
+
+    m_pluginsTab = new QWidget(this);
+    auto* mainLayout = new QVBoxLayout(m_pluginsTab);
+
+    // Top section: Plugins list
+    auto* listGroup = new QGroupBox(tr("Available Plugins"), m_pluginsTab);
+    auto* listLayout = new QVBoxLayout(listGroup);
+
+    m_pluginsTable = new QTableWidget(listGroup);
+    m_pluginsTable->setColumnCount(6);
+    m_pluginsTable->setHorizontalHeaderLabels({
+        tr("Name"), tr("ID"), tr("Version"), tr("Type"), tr("Status"), tr("Enabled")
+    });
+    m_pluginsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_pluginsTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_pluginsTable->horizontalHeader()->setStretchLastSection(true);
+    connect(m_pluginsTable, &QTableWidget::itemSelectionChanged,
+        this, &StructuredConfigDialog::OnPluginSelectionChanged);
+    listLayout->addWidget(m_pluginsTable);
+
+    auto* buttonLayout = new QHBoxLayout();
+    m_refreshPluginsButton = new QPushButton(tr("Refresh"), listGroup);
+    connect(m_refreshPluginsButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnRefreshPluginsClicked);
+    buttonLayout->addWidget(m_refreshPluginsButton);
+    buttonLayout->addStretch();
+    listLayout->addLayout(buttonLayout);
+
+    mainLayout->addWidget(listGroup);
+
+    // Middle section: Plugin details
+    auto* detailsGroup = new QGroupBox(tr("Plugin Details"), m_pluginsTab);
+    auto* detailsLayout = new QFormLayout(detailsGroup);
+
+    m_pluginIdLabel = new QLabel(detailsGroup);
+    m_pluginNameLabel = new QLabel(detailsGroup);
+    m_pluginVersionLabel = new QLabel(detailsGroup);
+    m_pluginAuthorLabel = new QLabel(detailsGroup);
+    m_pluginTypeLabel = new QLabel(detailsGroup);
+    m_pluginStatusLabel = new QLabel(detailsGroup);
+    m_pluginLicenseLabel = new QLabel(detailsGroup);
+    m_pluginPathLabel = new QLabel(detailsGroup);
+    m_pluginPathLabel->setWordWrap(true);
+    m_pluginPathLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    detailsLayout->addRow(tr("ID:"), m_pluginIdLabel);
+    detailsLayout->addRow(tr("Name:"), m_pluginNameLabel);
+    detailsLayout->addRow(tr("Version:"), m_pluginVersionLabel);
+    detailsLayout->addRow(tr("Author:"), m_pluginAuthorLabel);
+    detailsLayout->addRow(tr("Type:"), m_pluginTypeLabel);
+    detailsLayout->addRow(tr("Status:"), m_pluginStatusLabel);
+    detailsLayout->addRow(tr("License Required:"), m_pluginLicenseLabel);
+    detailsLayout->addRow(tr("Location:"), m_pluginPathLabel);
+
+    mainLayout->addWidget(detailsGroup);
+
+    // Bottom section: Plugin management
+    auto* manageGroup = new QGroupBox(tr("Plugin Management"), m_pluginsTab);
+    auto* manageLayout = new QVBoxLayout(manageGroup);
+
+    // Load new plugin
+    auto* loadLayout = new QHBoxLayout();
+    loadLayout->addWidget(new QLabel(tr("Plugin File:"), manageGroup));
+    m_pluginPathEdit = new QLineEdit(manageGroup);
+    loadLayout->addWidget(m_pluginPathEdit, 1);
+    m_browsePluginButton = new QPushButton(tr("Browse..."), manageGroup);
+    connect(m_browsePluginButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnBrowsePluginClicked);
+    loadLayout->addWidget(m_browsePluginButton);
+    m_loadPluginButton = new QPushButton(tr("Register Plugin"), manageGroup);
+    connect(m_loadPluginButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnLoadPluginClicked);
+    loadLayout->addWidget(m_loadPluginButton);
+    manageLayout->addLayout(loadLayout);
+
+    // License management
+    auto* licenseLayout = new QHBoxLayout();
+    licenseLayout->addWidget(new QLabel(tr("License Key:"), manageGroup));
+    m_pluginLicenseEdit = new QLineEdit(manageGroup);
+    m_pluginLicenseEdit->setEchoMode(QLineEdit::Password);
+    licenseLayout->addWidget(m_pluginLicenseEdit, 1);
+    m_setLicenseButton = new QPushButton(tr("Set License"), manageGroup);
+    connect(m_setLicenseButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnSetLicenseClicked);
+    licenseLayout->addWidget(m_setLicenseButton);
+    manageLayout->addLayout(licenseLayout);
+
+    // Plugin controls
+    auto* controlLayout = new QHBoxLayout();
+    m_autoLoadPluginCheck = new QCheckBox(tr("Auto-load on startup"), manageGroup);
+    connect(m_autoLoadPluginCheck, &QCheckBox::toggled,
+        this, &StructuredConfigDialog::OnAutoLoadPluginToggled);
+    controlLayout->addWidget(m_autoLoadPluginCheck);
+    m_enablePluginButton = new QPushButton(tr("Enable/Disable"), manageGroup);
+    connect(m_enablePluginButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnEnablePluginClicked);
+    controlLayout->addWidget(m_enablePluginButton);
+    m_unloadPluginButton = new QPushButton(tr("Unregister Plugin"), manageGroup);
+    connect(m_unloadPluginButton, &QPushButton::clicked,
+        this, &StructuredConfigDialog::OnUnloadPluginClicked);
+    controlLayout->addWidget(m_unloadPluginButton);
+    controlLayout->addStretch();
+    manageLayout->addLayout(controlLayout);
+
+    mainLayout->addWidget(manageGroup);
+
+    m_tabs->addTab(m_pluginsTab, tr("Plugins"));
+
+    // Load initial plugins list
+    RefreshPluginsList();
+}
+
+void StructuredConfigDialog::RefreshPluginsList()
+{
+    m_pluginsTable->setRowCount(0);
+    
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    const auto& plugins = pluginMgr.GetLoadedPlugins();
+
+    int row = 0;
+    for (const auto& [id, info] : plugins)
+    {
+        if (!info.instance) continue;
+
+        auto metadata = info.instance->GetMetadata();
+        
+        m_pluginsTable->insertRow(row);
+        m_pluginsTable->setItem(row, 0, new QTableWidgetItem(
+            QString::fromStdString(metadata.name)));
+        m_pluginsTable->setItem(row, 1, new QTableWidgetItem(
+            QString::fromStdString(metadata.id)));
+        m_pluginsTable->setItem(row, 2, new QTableWidgetItem(
+            QString::fromStdString(metadata.version)));
+        
+        QString typeStr;
+        switch (metadata.type)
+        {
+            case plugin::PluginType::Parser: typeStr = "Parser"; break;
+            case plugin::PluginType::Filter: typeStr = "Filter"; break;
+            case plugin::PluginType::FieldConversion: typeStr = "Field Conversion"; break;
+            case plugin::PluginType::Exporter: typeStr = "Exporter"; break;
+            case plugin::PluginType::Analyzer: typeStr = "Analyzer"; break;
+            case plugin::PluginType::Connector: typeStr = "Connector"; break;
+            case plugin::PluginType::Visualizer: typeStr = "Visualizer"; break;
+            case plugin::PluginType::Custom: typeStr = "Custom"; break;
+        }
+        m_pluginsTable->setItem(row, 3, new QTableWidgetItem(typeStr));
+        
+        QString statusStr;
+        switch (info.instance->GetStatus())
+        {
+            case plugin::PluginStatus::Unloaded: statusStr = "Unloaded"; break;
+            case plugin::PluginStatus::Loaded: statusStr = "Loaded"; break;
+            case plugin::PluginStatus::Initialized: statusStr = "Initialized"; break;
+            case plugin::PluginStatus::Active: statusStr = "Active"; break;
+            case plugin::PluginStatus::Error: statusStr = "Error"; break;
+            case plugin::PluginStatus::Disabled: statusStr = "Disabled"; break;
+        }
+        m_pluginsTable->setItem(row, 4, new QTableWidgetItem(statusStr));
+        
+        m_pluginsTable->setItem(row, 5, new QTableWidgetItem(
+            info.enabled ? tr("Yes") : tr("No")));
+        
+        row++;
+    }
+    
+    m_pluginsTable->resizeColumnsToContents();
+}
+
+void StructuredConfigDialog::UpdatePluginDetails()
+{
+    int row = m_pluginsTable->currentRow();
+    if (row < 0)
+    {
+        m_pluginIdLabel->clear();
+        m_pluginNameLabel->clear();
+        m_pluginVersionLabel->clear();
+        m_pluginAuthorLabel->clear();
+        m_pluginTypeLabel->clear();
+        m_pluginStatusLabel->clear();
+        m_pluginLicenseLabel->clear();
+        m_pluginPathLabel->clear();
+        m_autoLoadPluginCheck->setChecked(false);
+        m_autoLoadPluginCheck->setEnabled(false);
+        m_enablePluginButton->setEnabled(false);
+        m_unloadPluginButton->setEnabled(false);
+        m_setLicenseButton->setEnabled(false);
+        return;
+    }
+
+    QString pluginId = m_pluginsTable->item(row, 1)->text();
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    auto* pluginInstance = pluginMgr.GetPlugin(pluginId.toStdString());
+    
+    if (!pluginInstance)
+    {
+        UpdatePluginDetails(); // Clear
+        return;
+    }
+
+    auto metadata = pluginInstance->GetMetadata();
+    
+    m_pluginIdLabel->setText(QString::fromStdString(metadata.id));
+    m_pluginNameLabel->setText(QString::fromStdString(metadata.name));
+    m_pluginVersionLabel->setText(QString::fromStdString(metadata.version));
+    m_pluginAuthorLabel->setText(QString::fromStdString(metadata.author));
+    
+    QString typeStr;
+    switch (metadata.type)
+    {
+        case plugin::PluginType::Parser: typeStr = "Parser (IDataParser)"; break;
+        case plugin::PluginType::Filter: typeStr = "Filter (IFilterStrategy)"; break;
+        case plugin::PluginType::FieldConversion: typeStr = "Field Conversion (IFieldConversionPlugin)"; break;
+        case plugin::PluginType::Exporter: typeStr = "Exporter"; break;
+        case plugin::PluginType::Analyzer: typeStr = "Analyzer"; break;
+        case plugin::PluginType::Connector: typeStr = "Connector"; break;
+        case plugin::PluginType::Visualizer: typeStr = "Visualizer"; break;
+        case plugin::PluginType::Custom: typeStr = "Custom"; break;
+    }
+    m_pluginTypeLabel->setText(typeStr);
+    
+    QString statusStr;
+    auto status = pluginInstance->GetStatus();
+    switch (status)
+    {
+        case plugin::PluginStatus::Unloaded: statusStr = "Unloaded"; break;
+        case plugin::PluginStatus::Loaded: statusStr = "Loaded"; break;
+        case plugin::PluginStatus::Initialized: statusStr = "Initialized"; break;
+        case plugin::PluginStatus::Active: statusStr = "Active"; break;
+        case plugin::PluginStatus::Error: 
+            statusStr = QString("Error: %1").arg(
+                QString::fromStdString(pluginInstance->GetLastError())); 
+            break;
+        case plugin::PluginStatus::Disabled: statusStr = "Disabled"; break;
+    }
+    m_pluginStatusLabel->setText(statusStr);
+    
+    m_pluginLicenseLabel->setText(metadata.requiresLicense ? 
+        (pluginInstance->IsLicensed() ? tr("Yes (Licensed)") : tr("Yes (Not Licensed)")) : 
+        tr("No"));
+    
+    // Get plugin load info to show path and auto-load status
+    const auto& loadedPlugins = pluginMgr.GetLoadedPlugins();
+    auto it = loadedPlugins.find(pluginId.toStdString());
+    if (it != loadedPlugins.end()) {
+        m_pluginPathLabel->setText(QString::fromStdString(it->second.path.string()));
+        m_autoLoadPluginCheck->setChecked(it->second.autoLoad);
+        m_autoLoadPluginCheck->setEnabled(true);
+    } else {
+        m_pluginPathLabel->setText(tr("N/A"));
+        m_autoLoadPluginCheck->setChecked(false);
+        m_autoLoadPluginCheck->setEnabled(false);
+    }
+    
+    m_enablePluginButton->setEnabled(true);
+    m_unloadPluginButton->setEnabled(true);
+    m_setLicenseButton->setEnabled(metadata.requiresLicense);
+}
+
+void StructuredConfigDialog::OnPluginSelectionChanged()
+{
+    UpdatePluginDetails();
+}
+
+void StructuredConfigDialog::OnBrowsePluginClicked()
+{
+    QString filter;
+#ifdef _WIN32
+    filter = tr("Plugin Files (*.dll);;All Files (*)");
+#elif defined(__APPLE__)
+    filter = tr("Plugin Files (*.dylib);;All Files (*)");
+#else
+    filter = tr("Plugin Files (*.so);;All Files (*)");
+#endif
+
+    QFileDialog dialog(this, tr("Select Plugin"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    
+    dialog.setNameFilter(filter);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    QString fileName = dialog.selectedFiles().value(0);
+    
+    if (!fileName.isEmpty())
+    {
+        m_pluginPathEdit->setText(fileName);
+    }
+}
+
+void StructuredConfigDialog::OnLoadPluginClicked()
+{
+    QString path = m_pluginPathEdit->text();
+    if (path.isEmpty())
+    {
+        QMessageBox::warning(this, tr("No Plugin Selected"),
+            tr("Please select a plugin file to register."));
+        return;
+    }
+
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    
+    // Register plugin (copies to user directory and loads it)
+    std::filesystem::path sourcePath(path.toStdString());
+    auto result = pluginMgr.RegisterPlugin(sourcePath);
+    
+    if (result.isOk())
+    {
+        QMessageBox::information(this, tr("Plugin Registered"),
+            tr("Plugin registered and enabled successfully: %1")
+            .arg(QString::fromStdString(result.unwrap())));
+        RefreshPluginsList();
+        m_pluginPathEdit->clear();
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Registration Failed"),
+            tr("Failed to register plugin:\n%1")
+            .arg(QString::fromStdString(result.error().what())));
+    }
+}
+
+void StructuredConfigDialog::OnUnloadPluginClicked()
+{
+    int row = m_pluginsTable->currentRow();
+    if (row < 0) return;
+
+    QString pluginId = m_pluginsTable->item(row, 1)->text();
+    QString pluginName = m_pluginsTable->item(row, 0)->text();
+    
+    auto reply = QMessageBox::question(this, tr("Unregister Plugin"),
+        tr("Are you sure you want to unregister plugin '%1'?\nThis will remove it permanently from your system.").arg(pluginName),
+        QMessageBox::Yes | QMessageBox::No);
+    
+    if (reply == QMessageBox::Yes)
+    {
+        auto& pluginMgr = plugin::PluginManager::GetInstance();
+        auto result = pluginMgr.UnregisterPlugin(pluginId.toStdString());
+        
+        if (result.isOk())
+        {
+            QMessageBox::information(this, tr("Plugin Unregistered"),
+                tr("Plugin unregistered successfully."));
+            RefreshPluginsList();
+        }
+        else
+        {
+            QMessageBox::critical(this, tr("Unregister Failed"),
+                tr("Failed to unregister plugin:\n%1")
+                .arg(QString::fromStdString(result.error().what())));
+        }
+    }
+}
+
+void StructuredConfigDialog::OnEnablePluginClicked()
+{
+    int row = m_pluginsTable->currentRow();
+    if (row < 0) return;
+
+    QString pluginId = m_pluginsTable->item(row, 1)->text();
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    
+    const auto& plugins = pluginMgr.GetLoadedPlugins();
+    auto it = plugins.find(pluginId.toStdString());
+    if (it == plugins.end()) return;
+    
+    bool currentlyEnabled = it->second.enabled;
+    
+    if (currentlyEnabled)
+    {
+        pluginMgr.DisablePlugin(pluginId.toStdString());
+    }
+    else
+    {
+        pluginMgr.EnablePlugin(pluginId.toStdString());
+    }
+    
+    RefreshPluginsList();
+    UpdatePluginDetails();
+}
+
+void StructuredConfigDialog::OnAutoLoadPluginToggled(bool checked)
+{
+    int row = m_pluginsTable->currentRow();
+    if (row < 0) return;
+
+    QString pluginId = m_pluginsTable->item(row, 1)->text();
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    
+    pluginMgr.SetPluginAutoLoad(pluginId.toStdString(), checked);
+    
+    util::Logger::Info("[StructuredConfigDialog] Plugin {} auto-load set to: {}",
+        pluginId.toStdString(), checked);
+}
+
+void StructuredConfigDialog::OnSetLicenseClicked()
+{
+    int row = m_pluginsTable->currentRow();
+    if (row < 0) return;
+
+    QString licenseKey = m_pluginLicenseEdit->text();
+    if (licenseKey.isEmpty())
+    {
+        QMessageBox::warning(this, tr("No License Key"),
+            tr("Please enter a license key."));
+        return;
+    }
+
+    QString pluginId = m_pluginsTable->item(row, 1)->text();
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    auto* pluginInstance = pluginMgr.GetPlugin(pluginId.toStdString());
+    
+    if (!pluginInstance) return;
+    
+    if (pluginInstance->SetLicense(licenseKey.toStdString()))
+    {
+        QMessageBox::information(this, tr("License Set"),
+            tr("License key accepted successfully."));
+        m_pluginLicenseEdit->clear();
+        UpdatePluginDetails();
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Invalid License"),
+            tr("License key was rejected:\n%1")
+            .arg(QString::fromStdString(pluginInstance->GetLastError())));
+    }
+}
+
+void StructuredConfigDialog::OnRefreshPluginsClicked()
+{
+    auto& pluginMgr = plugin::PluginManager::GetInstance();
+    auto discoveredPlugins = pluginMgr.DiscoverPlugins();
+    
+    int loadedCount = 0;
+    for (const auto& pluginPath : discoveredPlugins)
+    {
+        auto result = pluginMgr.LoadPlugin(pluginPath);
+        if (result.isOk())
+        {
+            loadedCount++;
+        }
+        else
+        {
+            util::Logger::Error("Failed to load plugin {}: {}", 
+                pluginPath.string(), result.error().what());
+        }
+    }
+    
+    QMessageBox::information(this, tr("Plugins Loaded"),
+        tr("Discovered %1 plugin(s), successfully loaded %2.")
+        .arg(discoveredPlugins.size()).arg(loadedCount));
+    
+    RefreshPluginsList();
 }
 
 } // namespace ui::qt

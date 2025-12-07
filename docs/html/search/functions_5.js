@@ -1,7 +1,26 @@
 var searchData=
 [
-  ['icontroller_0',['IController',['../d9/dd6/classmvc_1_1_i_controller.html#a1fb97e7a90d897a16c2d287be2938c62',1,'mvc::IController']]],
-  ['imodel_1',['IModel',['../d5/d21/classmvc_1_1_i_model.html#a8fa71a57f92461eb590a80852cfa7c03',1,'mvc::IModel']]],
-  ['itemvirtuallistcontrol_2',['ItemVirtualListControl',['../da/d38/classgui_1_1_item_virtual_list_control.html#ab997a6e1b947490f62e749cb06dc2e9e',1,'gui::ItemVirtualListControl']]],
-  ['iview_3',['IView',['../d8/dee/classmvc_1_1_i_view.html#ab42dc481fea35a652d0581f1889bed49',1,'mvc::IView']]]
+  ['fieldconversionpluginregistry_0',['FieldConversionPluginRegistry',['../de/d4f/classconfig_1_1_field_conversion_plugin_registry.html#a800fd7497f69455167b4aa29c4db86ac',1,'config::FieldConversionPluginRegistry']]],
+  ['fieldtranslator_1',['FieldTranslator',['../d7/d27/classconfig_1_1_field_translator.html#aa554257b09b738866c33bad01860b953',1,'config::FieldTranslator']]],
+  ['filter_2',['Filter',['../d3/dad/classfilters_1_1_filter.html#aab16f1527da3e16b2b574c365af3c075',1,'filters::Filter::Filter(const std::string &amp;name=&quot;&quot;, const std::string &amp;columnName=&quot;&quot;, const std::string &amp;pattern=&quot;&quot;, bool caseSensitive=false, bool inverted=false, bool parameterFilter=false, const std::string &amp;paramKey=&quot;&quot;, int depth=0)'],['../d3/dad/classfilters_1_1_filter.html#a26f42e8bbf67e8bb4ca89389bc681d41',1,'filters::Filter::Filter(const Filter &amp;other)'],['../d3/dad/classfilters_1_1_filter.html#a85a17e19c525593b8577854a403cf877',1,'filters::Filter::Filter(Filter &amp;&amp;)=default']]],
+  ['filtercondition_3',['FilterCondition',['../dd/de7/structfilters_1_1_filter_condition.html#a651031bdce902e75525f60e69b1e0ac4',1,'filters::FilterCondition::FilterCondition()=default'],['../dd/de7/structfilters_1_1_filter_condition.html#a4190bd03a3ce140630011fecea3520a9',1,'filters::FilterCondition::FilterCondition(const std::string &amp;col, const std::string &amp;pat, bool paramFilter=false, const std::string &amp;paramKey=&quot;&quot;, int depth=0, bool caseSensitive=false)'],['../dd/de7/structfilters_1_1_filter_condition.html#ad403c4d22c90ce6129ac1f811fe93b7e',1,'filters::FilterCondition::FilterCondition(const FilterCondition &amp;other)'],['../dd/de7/structfilters_1_1_filter_condition.html#a24e40285c97754ea4cddc514b57574c9',1,'filters::FilterCondition::FilterCondition(FilterCondition &amp;&amp;)=default']]],
+  ['filtereditordialog_4',['FilterEditorDialog',['../db/d58/classui_1_1qt_1_1_filter_editor_dialog.html#a2cce5d94c7e6df9f2fbfd782993fbc4c',1,'ui::qt::FilterEditorDialog::FilterEditorDialog()'],['../d8/d5c/classui_1_1wx_1_1_filter_editor_dialog.html#a096dc0da1c554bca00a778e5a797fa9f',1,'ui::wx::FilterEditorDialog::FilterEditorDialog()']]],
+  ['filtermanager_5',['FilterManager',['../d1/dbb/classfilters_1_1_filter_manager.html#a24177957250a75765322630b5c4f76de',1,'filters::FilterManager']]],
+  ['filterspanel_6',['FiltersPanel',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#ab30a8d4594a0de102b55bbbd076f6949',1,'ui::qt::FiltersPanel::FiltersPanel()'],['../d1/d56/classui_1_1wx_1_1_filters_panel.html#ad21c54a51aaaf353a9d8dd34b96ffe29',1,'ui::wx::FiltersPanel::FiltersPanel()']]],
+  ['filtertargettext_7',['FilterTargetText',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a9666523d2dbd1e1e1445c5212d2ed19d',1,'ui::qt::FiltersPanel']]],
+  ['findallbykey_8',['findAllByKey',['../de/db7/classdb_1_1_log_event.html#a8eb2e3b1aa43ad40d4c8db9861b0b542',1,'db::LogEvent']]],
+  ['findbykey_9',['findByKey',['../de/db7/classdb_1_1_log_event.html#af4455982dc04b3468bacf909c46c60a7',1,'db::LogEvent']]],
+  ['findheaderindex_10',['FindHeaderIndex',['../d7/de1/classparser_1_1_csv_parser.html#a5ef747ef640cf67e0c5dc143fcc12dfe',1,'parser::CsvParser']]],
+  ['findinevent_11',['findInEvent',['../de/db7/classdb_1_1_log_event.html#a3127be5b344071f7b8d1cd0f55f8f8e5',1,'db::LogEvent']]],
+  ['formateventsforai_12',['FormatEventsForAI',['../d6/d8e/classai_1_1_log_analyzer.html#a73f39af62691ff74ed90d1f2e776cbb5',1,'ai::LogAnalyzer']]],
+  ['formateventsforcontext_13',['FormatEventsForContext',['../df/def/classui_1_1qt_1_1_a_i_chat_panel.html#ab104639f4bcb31b18bef768db2a607c7',1,'ui::qt::AIChatPanel']]],
+  ['formatsingleevent_14',['FormatSingleEvent',['../d6/d8e/classai_1_1_log_analyzer.html#a81273057bb3bccb19f0a10cf10da910f',1,'ai::LogAnalyzer']]],
+  ['formattooltip_15',['FormatTooltip',['../d7/d27/classconfig_1_1_field_translator.html#ae2a364373843ce7bfa46f633aed83197',1,'config::FieldTranslator']]],
+  ['from_5fwx_5fint_16',['from_wx_int',['../dd/d4f/namespacewx__utils.html#a54a5c636961ca8aa21d7444cb422a538',1,'wx_utils']]],
+  ['from_5fwx_5flong_17',['from_wx_long',['../dd/d4f/namespacewx__utils.html#af7a397ded8b943908fa21647cd7fb965',1,'wx_utils']]],
+  ['from_5fwx_5fuint_18',['from_wx_uint',['../dd/d4f/namespacewx__utils.html#a1e4dc95330d9f0f2e3e6e4417c40613e',1,'wx_utils']]],
+  ['fromjson_19',['fromJson',['../dd/de7/structfilters_1_1_filter_condition.html#a81df0ab310533811533e9a4b9d1f934f',1,'filters::FilterCondition::fromJson()'],['../d3/dad/classfilters_1_1_filter.html#ab892c9971d317364cb232b1854183eda',1,'filters::Filter::fromJson()']]],
+  ['fromspdloglevel_20',['fromSpdlogLevel',['../d1/d25/classutil_1_1_spd_logger.html#a8b3dc8e3c1276b29af7d403be3710ced',1,'util::SpdLogger']]],
+  ['fromstrlevel_21',['fromStrLevel',['../da/d3b/classutil_1_1_logger.html#ae38b041410e7e3e3794dc95dc8f3be91',1,'util::Logger']]],
+  ['fuzzymatchstrategy_22',['FuzzyMatchStrategy',['../d5/d11/classfilters_1_1_fuzzy_match_strategy.html#a1fed16bfc3968e81e29f7fd813058ed1',1,'filters::FuzzyMatchStrategy']]]
 ];

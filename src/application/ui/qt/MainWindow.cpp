@@ -21,6 +21,8 @@
 #include "ui/qt/ConfigEditorDialog.hpp"
 #include "ui/qt/StructuredConfigDialog.hpp"
 #include "main/version.h"
+#include "plugins/PluginManager.hpp"
+#include "plugins/IAnalysisPlugin.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -70,6 +72,14 @@ MainWindow::MainWindow(mvc::IController& controller,
         InitializePresenter(controller, events);
         util::Logger::Debug("[MainWindow] Presenter initialization completed");
 
+        // Setup plugin manager with callback
+        setupPluginManager();
+        util::Logger::Debug("[MainWindow] Plugin manager setup completed");
+
+        // Load plugins and create plugin tabs
+        loadPlugins();
+        util::Logger::Debug("[MainWindow] Plugin initialization completed");
+
         util::Logger::Info("[MainWindow] Main window initialized successfully");
 
         // Restore window layout
@@ -117,17 +127,17 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         statusBar()->addPermanentWidget(m_progressBar, 0);
 
         // ===== CENTRAL WIDGET: Main content area with tabs =====
-        auto* contentTabs = new QTabWidget(this);
-        if (!contentTabs) {
+        m_contentTabs = new QTabWidget(this);
+        if (!m_contentTabs) {
             throw std::runtime_error("Failed to create content tabs");
         }
 
         // Events view tab
-        m_eventsView = new EventsTableView(events, contentTabs);
+        m_eventsView = new EventsTableView(events, m_contentTabs);
         if (!m_eventsView) {
             throw std::runtime_error("Failed to create events view");
         }
-        contentTabs->addTab(m_eventsView, "Events");
+        m_contentTabs->addTab(m_eventsView, "Events");
 
         // AI Analysis tab - use factory to create appropriate client
         auto& config = config::GetConfig();
@@ -139,11 +149,11 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             config.ollamaDefaultModel
         );
         m_aiAnalyzer = std::make_shared<ai::LogAnalyzer>(m_aiService, events);
-        m_aiPanel = new AIAnalysisPanel(m_aiService, m_aiAnalyzer, m_eventsView, contentTabs);
+        m_aiPanel = new AIAnalysisPanel(m_aiService, m_aiAnalyzer, m_eventsView, m_contentTabs);
         if (!m_aiPanel) {
             throw std::runtime_error("Failed to create AI analysis panel");
         }
-        contentTabs->addTab(m_aiPanel, "AI Analysis");
+        m_contentTabs->addTab(m_aiPanel, "AI Analysis");
 
         // Create AI configuration panel (shared references with AI Analysis)
         m_aiConfigPanel = new AIConfigPanel(m_aiService, m_aiAnalyzer, this);
@@ -152,7 +162,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         }
         m_aiPanel->SetConfigPanel(m_aiConfigPanel);
 
-        setCentralWidget(contentTabs);
+        setCentralWidget(m_contentTabs);
 
     // ===== LEFT DOCK: Filters and AI Configuration =====
     // Filters dock
@@ -394,6 +404,15 @@ void MainWindow::SetupMenus()
     connect(aiSetupAction, &QAction::triggered, this, [this]() {
         ui::qt::OllamaSetupDialog dlg(this);
         dlg.exec();
+    });
+    
+    toolsMenu->addSeparator();
+    
+    auto* reloadPluginsAction = toolsMenu->addAction(tr("&Reload Plugins"));
+    reloadPluginsAction->setShortcut(QKeySequence(tr("Ctrl+Shift+P")));
+    connect(reloadPluginsAction, &QAction::triggered, this, [this]() {
+        reloadPlugins();
+        QMessageBox::information(this, tr("Plugins"), tr("Plugins reloaded successfully"));
     });
 
     // View menu for dock widgets
@@ -826,6 +845,194 @@ void MainWindow::OnAboutRequested()
          QString::fromStdString(QT_VERSION_STR));
     
     QMessageBox::about(this, tr("About LogViewer"), aboutText);
+}
+
+void MainWindow::setupPluginManager() {
+    auto& pluginManager = plugin::PluginManager::GetInstance();
+    
+    // Register this window as an observer for plugin events
+    pluginManager.RegisterObserver(this);
+    
+    // Set plugins directory relative to application
+    std::filesystem::path pluginsDir = config::GetConfig().GetDefaultAppPath() / "plugins";
+    
+    pluginManager.SetPluginsDirectory(pluginsDir);
+    util::Logger::Info("[MainWindow] Plugin directory set to: {}", pluginsDir.string());
+}
+
+void MainWindow::loadPlugins() {
+    auto& pluginManager = plugin::PluginManager::GetInstance();
+    
+    // Load plugin configuration (states, auto-load settings)
+    auto configResult = pluginManager.LoadConfiguration();
+    if (configResult.isErr()) {
+        util::Logger::Warn("[MainWindow] Failed to load plugin configuration: {}", 
+            configResult.error().what());
+    }
+    
+    // Discover plugins from the plugins directory
+    auto discoveredPlugins = pluginManager.DiscoverPlugins();
+    util::Logger::Info("[MainWindow] Discovered {} plugins", discoveredPlugins.size());
+    
+    for (const auto& pluginPath : discoveredPlugins) {
+        // Load the plugin
+        auto loadResult = pluginManager.LoadPlugin(pluginPath);
+        if (loadResult.isErr()) {
+            util::Logger::Error("[MainWindow] Failed to load plugin: {}",
+                pluginPath.string());
+            continue;
+        }
+        
+        std::string pluginId = loadResult.unwrap();
+        
+        // Check if plugin should be auto-enabled based on autoLoad setting
+        const auto& loadedPlugins = pluginManager.GetLoadedPlugins();
+        auto it = loadedPlugins.find(pluginId);
+        if (it != loadedPlugins.end() && it->second.autoLoad) {
+            util::Logger::Info("[MainWindow] Auto-enabling plugin: {} (autoLoad=true)", pluginId);
+            auto enableResult = pluginManager.EnablePlugin(pluginId);
+            if (enableResult.isErr()) {
+                util::Logger::Error("[MainWindow] Failed to enable plugin {}: {}",
+                    pluginId, enableResult.error().what());
+            }
+        }
+    }
+}
+
+void MainWindow::OnPluginEvent(plugin::PluginEvent event, 
+                              const std::string& pluginId,
+                              plugin::IPlugin* plugin) {
+    using plugin::PluginEvent;
+    
+    switch (event) {
+        case PluginEvent::Loaded:
+            util::Logger::Debug("[MainWindow] Plugin loaded: {}", pluginId);
+            break;
+            
+        case PluginEvent::Unloaded:
+            util::Logger::Debug("[MainWindow] Plugin unloaded: {}", pluginId);
+            break;
+            
+        case PluginEvent::Enabled:
+            util::Logger::Info("[MainWindow] Plugin enabled: {}", pluginId);
+            createPluginTab(pluginId, plugin);
+            break;
+            
+        case PluginEvent::Disabled:
+            util::Logger::Info("[MainWindow] Plugin disabled: {}", pluginId);
+            removePluginTab(pluginId);
+            break;
+            
+        case PluginEvent::Registered:
+            util::Logger::Info("[MainWindow] Plugin registered: {}", pluginId);
+            break;
+            
+        case PluginEvent::Unregistered:
+            util::Logger::Info("[MainWindow] Plugin unregistered: {}", pluginId);
+            break;
+    }
+}
+
+void MainWindow::createPluginTab(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!plugin) {
+        util::Logger::Warn("[MainWindow] createPluginTab called with null plugin");
+        return;
+    }
+    
+    if (!m_contentTabs) {
+        util::Logger::Error("[MainWindow] createPluginTab called but m_contentTabs is null");
+        return;
+    }
+    
+    util::Logger::Info("[MainWindow] Creating tab for plugin: {}", pluginId);
+    
+    // Try to create a tab from the plugin
+    QWidget* tab = plugin->CreateTab(this);
+    if (!tab) {
+        util::Logger::Info("[MainWindow] Plugin {} does not provide a tab widget", pluginId);
+        return;
+    }
+    
+    auto metadata = plugin->GetMetadata();
+    QString tabName = QString::fromStdString(metadata.name);
+    int tabIndex = m_contentTabs->addTab(tab, tabName);
+    m_pluginTabIndices[pluginId] = tabIndex;
+    util::Logger::Info("[MainWindow] Created plugin tab: {} at index {}", metadata.name, tabIndex);
+    
+    // If this is an analysis plugin, set up events container
+    if (metadata.type == plugin::PluginType::Analyzer) {
+        auto* analysisPlugin = plugin->GetAnalysisInterface();
+        if (analysisPlugin && m_events) {
+            analysisPlugin->SetEventsContainer(
+                std::shared_ptr<db::EventsContainer>(m_events, [](db::EventsContainer*){}));
+            util::Logger::Info("[MainWindow] Set events container for analysis plugin: {}", 
+                metadata.name);
+        }
+    }
+}
+
+void MainWindow::removePluginTab(const std::string& pluginId) {
+    util::Logger::Info("[MainWindow] Removing tab for plugin: {}", pluginId);
+    
+    // Find and remove the tab for this plugin
+    auto it = m_pluginTabIndices.find(pluginId);
+    if (it != m_pluginTabIndices.end()) {
+        int tabIndex = it->second;
+        
+        // Remove the tab
+        if (tabIndex >= 0 && tabIndex < m_contentTabs->count()) {
+            QWidget* widget = m_contentTabs->widget(tabIndex);
+            m_contentTabs->removeTab(tabIndex);
+            if (widget) {
+                widget->deleteLater();
+            }
+            util::Logger::Info("[MainWindow] Removed plugin tab at index {}", tabIndex);
+        }
+        
+        // Update indices for tabs that came after this one
+        m_pluginTabIndices.erase(it);
+        for (auto& [id, idx] : m_pluginTabIndices) {
+            if (idx > tabIndex) {
+                idx--;
+            }
+        }
+    }
+}
+
+void MainWindow::reloadPlugins() {
+    if (!m_contentTabs) {
+        util::Logger::Warn("[MainWindow] Content tabs not initialized");
+        return;
+    }
+    
+    util::Logger::Info("[MainWindow] Reloading plugins...");
+    
+    // Clear plugin tab tracking
+    m_pluginTabIndices.clear();
+    
+    // Remove all plugin tabs (keep the first 2: Events and AI Analysis)
+    while (m_contentTabs->count() > 2) {
+        QWidget* widget = m_contentTabs->widget(2);
+        m_contentTabs->removeTab(2);
+        if (widget) {
+            widget->deleteLater();
+        }
+    }
+    
+    // Unload all plugins
+    auto& pluginManager = plugin::PluginManager::GetInstance();
+    const auto& loadedPlugins = pluginManager.GetLoadedPlugins();
+    std::vector<std::string> pluginIds;
+    for (const auto& [id, info] : loadedPlugins) {
+        pluginIds.push_back(id);
+    }
+    for (const auto& id : pluginIds) {
+        pluginManager.UnloadPlugin(id);
+    }
+    
+    // Reload all plugins (callback will create tabs)
+    loadPlugins();
+    util::Logger::Info("[MainWindow] Plugins reloaded");
 }
 
 } // namespace ui::qt

@@ -605,9 +605,12 @@ void MainWindow::OnOpenFile(wxCommandEvent& WXUNUSED(event))
 
                     wxFileDialog openFileDialog(this, _("Open log file"),
                         lastDir, "",
-                        "XML files (*.xml)|*.xml|Log files "
-                        "(*.log)|*.log|All "
-                        "files (*.*)|*.*",
+                        "Log files (*.xml *.csv *.log *.txt)|*.xml;*.csv;*.log;*.txt|"
+                        "XML files (*.xml)|*.xml|"
+                        "CSV files (*.csv)|*.csv|"
+                        "Log files (*.log)|*.log|"
+                        "Text files (*.txt)|*.txt|"
+                        "All files (*.*)|*.*",
                         wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
                     if (openFileDialog.ShowModal() == wxID_OK)

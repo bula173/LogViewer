@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['eventbatch_0',['eventBatch',['../de/db3/structparser_1_1_parser_state.html#a284e91d89bcf9681823aed7d4e8e2a37',1,'parser::ParserState']]],
-  ['eventid_1',['eventId',['../de/db3/structparser_1_1_parser_state.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState']]],
-  ['eventitems_2',['eventItems',['../de/db3/structparser_1_1_parser_state.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
-  ['eventssincelastnotify_3',['eventsSinceLastNotify',['../de/db3/structparser_1_1_parser_state.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]]
+  ['dependencies_0',['dependencies',['../d4/d67/structplugin_1_1_plugin_metadata.html#a5b8a40efe86fe2b2e2dd2dc53632d2de',1,'plugin::PluginMetadata']]],
+  ['description_1',['description',['../d4/d67/structplugin_1_1_plugin_metadata.html#af5e0581688e02a48a48454c6b227a19f',1,'plugin::PluginMetadata']]]
 ];
