@@ -1,12 +1,19 @@
 var searchData=
 [
-  ['_7econfig_0',['~Config',['../d7/dcc/classconfig_1_1_config.html#ae961675b6c43c49f7db0c0e11d781642',1,'config::Config']]],
-  ['_7eeventscontainer_1',['~EventsContainer',['../db/d71/classdb_1_1_events_container.html#a8df14cfc9ac8e78ae73931216b79b798',1,'db::EventsContainer']]],
-  ['_7eicontroller_2',['~IController',['../d9/dd6/classmvc_1_1_i_controller.html#ab683a0ef6debdaa191f51c5c440c611a',1,'mvc::IController']]],
-  ['_7eidataparser_3',['~IDataParser',['../d8/ddd/classparser_1_1_i_data_parser.html#a9b39377303663519b50e33e44ca20418',1,'parser::IDataParser']]],
-  ['_7eidataparserobserver_4',['~IDataParserObserver',['../d0/dfb/classparser_1_1_i_data_parser_observer.html#a2c6307e3179ef62d90ff17e0842b3d80',1,'parser::IDataParserObserver']]],
-  ['_7eimodel_5',['~IModel',['../d5/d21/classmvc_1_1_i_model.html#a6a478f5602c9e7a62180ee82000ccc9d',1,'mvc::IModel']]],
-  ['_7eiview_6',['~IView',['../d8/dee/classmvc_1_1_i_view.html#aa90b0409cb5cf98e72ab84a355e0ee67',1,'mvc::IView']]],
-  ['_7emyapp_7',['~MyApp',['../dd/da7/class_my_app.html#abc1e3c653451070649f6016892bedaf2',1,'MyApp']]],
-  ['_7exmlparser_8',['~XmlParser',['../d7/dd4/classparser_1_1_xml_parser.html#addb45cd542a284075b15a60216fa00cf',1,'parser::XmlParser']]]
+  ['to_5fmodel_5findex_0',['to_model_index',['../dd/d4f/namespacewx__utils.html#a369da87ab1c7a1f85a692c6da88338c7',1,'wx_utils']]],
+  ['to_5fwx_5fint_1',['to_wx_int',['../dd/d4f/namespacewx__utils.html#af7da5964cc215a1700284471fe0dec71',1,'wx_utils']]],
+  ['to_5fwx_5flong_2',['to_wx_long',['../dd/d4f/namespacewx__utils.html#a34e170371cb20a9a3262f8ed16ad7cef',1,'wx_utils']]],
+  ['to_5fwx_5fuint_3',['to_wx_uint',['../dd/d4f/namespacewx__utils.html#a6895a761f844a3e96b9745d2e3309094',1,'wx_utils']]],
+  ['togglecontrols_4',['ToggleControls',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a2a0d5e9ad07e4ff85e247b1017c03075',1,'ui::qt::FiltersPanel']]],
+  ['toggleprogressvisibility_5',['ToggleProgressVisibility',['../d5/d88/classui_1_1_i_main_window_view.html#aa3eb789780586310c3de35dfe7f1d940',1,'ui::IMainWindowView::ToggleProgressVisibility()'],['../d0/d38/classui_1_1qt_1_1_main_window.html#aac2910da54baa2889506b51142246c2f',1,'ui::qt::MainWindow::ToggleProgressVisibility()'],['../d1/df4/classui_1_1wx_1_1_main_window.html#abbc09a5875828a60cad344e5f9724fda',1,'ui::wx::MainWindow::ToggleProgressVisibility()']]],
+  ['tojson_6',['toJson',['../dd/de7/structfilters_1_1_filter_condition.html#a1c2d24049f5f321e8d8338e5e1992787',1,'filters::FilterCondition::toJson()'],['../d3/dad/classfilters_1_1_filter.html#a8738f37f78cb6a2f549bf9135788ca3e',1,'filters::Filter::toJson()']]],
+  ['tolower_7',['ToLower',['../d7/d27/classconfig_1_1_field_translator.html#a9b86abf4d2f3678d6dee8d429c0eddd6',1,'config::FieldTranslator']]],
+  ['tolowercase_8',['toLowerCase',['../d6/d0b/namespacefilters_1_1anonymous__namespace_02_i_filter_strategy_8cpp_03.html#a869dfd739ec4eabed946037218159a39',1,'filters::anonymous_namespace{IFilterStrategy.cpp}']]],
+  ['tospdloglevel_9',['toSpdlogLevel',['../d1/d25/classutil_1_1_spd_logger.html#a6b1db445e8dbd72552c49fd7fb0afada',1,'util::SpdLogger']]],
+  ['trace_10',['Trace',['../da/d3b/classutil_1_1_logger.html#ab219048f3c627c62fa41e3b0f0745993',1,'util::Logger']]],
+  ['trace_11',['trace',['../d7/d62/classutil_1_1_i_logger.html#a1315ba9159219be77b501d9880ede56e',1,'util::ILogger::trace()'],['../d1/d25/classutil_1_1_spd_logger.html#ab23dd250d02a77313a92eb2b1aac0013',1,'util::SpdLogger::trace()']]],
+  ['translate_12',['Translate',['../d7/d27/classconfig_1_1_field_translator.html#a76e2bd03acaa42929e2036811ae535f7',1,'config::FieldTranslator']]],
+  ['trim_13',['Trim',['../d7/de1/classparser_1_1_csv_parser.html#a3efda6906ed45b161766bb7283ff61da',1,'parser::CsvParser']]],
+  ['tryextracteventid_14',['TryExtractEventId',['../d0/d63/classui_1_1wx_1_1_search_results_view.html#ac873a0fb7164b2886dd37f0b50c313ef',1,'ui::wx::SearchResultsView']]],
+  ['typefilterview_15',['TypeFilterView',['../d2/dba/classui_1_1qt_1_1_type_filter_view.html#a505b844ead2826e43afccbe00149bd32',1,'ui::qt::TypeFilterView::TypeFilterView()'],['../d8/d37/classui_1_1wx_1_1_type_filter_view.html#aa38b35f9604fc2d81ce85c69050fd9bb',1,'ui::wx::TypeFilterView::TypeFilterView()']]]
 ];

@@ -7,7 +7,7 @@ var classparser_1_1_xml_parser =
     [ "NotifyNewEvent", "d7/dd4/classparser_1_1_xml_parser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "d7/dd4/classparser_1_1_xml_parser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],
     [ "NotifyProgressUpdated", "d7/dd4/classparser_1_1_xml_parser.html#a596df39e4d90cad4eb364aa5382ab51c", null ],
-    [ "ParseData", "d7/dd4/classparser_1_1_xml_parser.html#a7445604294d0fd34c7eabb9bb439af4f", null ],
+    [ "ParseData", "d7/dd4/classparser_1_1_xml_parser.html#a8fd2bb3e889f5993db1871e8dae12327", null ],
     [ "ParseData", "d7/dd4/classparser_1_1_xml_parser.html#aee2be66af3c95e746abd98d2d6ba856e", null ],
     [ "RegisterObserver", "d7/dd4/classparser_1_1_xml_parser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],
     [ "UnregisterObserver", "d7/dd4/classparser_1_1_xml_parser.html#ac2b109cb3475dc7dec15198f1a184963", null ],

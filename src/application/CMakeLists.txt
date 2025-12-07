@@ -7,6 +7,9 @@ message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 set(APP_CORE_SRCS
     config/Config.cpp
     config/FieldTranslator.cpp
+    config/BuiltinCOnversionPlugins.cpp
+    config/FieldConversionPluginRegistry.cpp
+    config/StringReversePlugin.cpp
     db/EventsContainer.cpp
     db/LogEvent.cpp
     filters/Filter.cpp
@@ -24,6 +27,7 @@ set(APP_CORE_SRCS
     ai/LogAnalyzer.cpp
     util/KeyEncryption.cpp
     ${CMAKE_BINARY_DIR}/src/main/version.cpp
+    plugins/PluginManager.cpp
 )
 
 add_library(application_core STATIC ${APP_CORE_SRCS})

@@ -1,8 +1,25 @@
 var searchData=
 [
-  ['wxapp_0',['wxApp',['../d0/dd8/classwx_app.html',1,'']]],
-  ['wxdataviewctrl_1',['wxDataViewCtrl',['../d7/d5c/classwx_data_view_ctrl.html',1,'']]],
-  ['wxdataviewlistctrl_2',['wxDataViewListCtrl',['../d0/d74/classwx_data_view_list_ctrl.html',1,'']]],
-  ['wxdataviewvirtuallistmodel_3',['wxDataViewVirtualListModel',['../dc/d63/classwx_data_view_virtual_list_model.html',1,'']]],
-  ['wxframe_4',['wxFrame',['../d7/d1e/classwx_frame.html',1,'']]]
+  ['iaiservice_0',['IAIService',['../d1/d58/classai_1_1_i_a_i_service.html',1,'ai']]],
+  ['icontrloler_1',['IContrloler',['../dd/ddf/class_i_contrloler.html',1,'']]],
+  ['icontroller_2',['IController',['../d9/dd6/classmvc_1_1_i_controller.html',1,'mvc']]],
+  ['idataparser_3',['IDataParser',['../d8/ddd/classparser_1_1_i_data_parser.html',1,'parser']]],
+  ['idataparserobserver_4',['IDataParserObserver',['../d0/dfb/classparser_1_1_i_data_parser_observer.html',1,'parser']]],
+  ['ierrorpresenter_5',['IErrorPresenter',['../dc/db2/classui_1_1_i_error_presenter.html',1,'ui']]],
+  ['ieventdetailsview_6',['IEventDetailsView',['../db/d85/classui_1_1_i_event_details_view.html',1,'ui']]],
+  ['ieventslistview_7',['IEventsListView',['../d1/de7/classui_1_1_i_events_list_view.html',1,'ui']]],
+  ['ifieldconversionplugin_8',['IFieldConversionPlugin',['../d2/de7/classconfig_1_1_i_field_conversion_plugin.html',1,'config']]],
+  ['ifilterstrategy_9',['IFilterStrategy',['../d0/dad/classfilters_1_1_i_filter_strategy.html',1,'filters']]],
+  ['iitemdetailsview_10',['IItemDetailsView',['../d8/d26/classui_1_1_i_item_details_view.html',1,'ui']]],
+  ['ilogger_11',['ILogger',['../d7/d62/classutil_1_1_i_logger.html',1,'util']]],
+  ['imainwindowview_12',['IMainWindowView',['../d5/d88/classui_1_1_i_main_window_view.html',1,'ui']]],
+  ['imodel_13',['IModel',['../d5/d21/classmvc_1_1_i_model.html',1,'mvc']]],
+  ['iplugin_14',['IPlugin',['../d3/d76/classplugin_1_1_i_plugin.html',1,'plugin']]],
+  ['isearchresultsview_15',['ISearchResultsView',['../d1/dbb/classui_1_1_i_search_results_view.html',1,'ui']]],
+  ['isearchresultsviewobserver_16',['ISearchResultsViewObserver',['../de/db6/classui_1_1_i_search_results_view_observer.html',1,'ui']]],
+  ['isolatinplugin_17',['IsoLatinPlugin',['../d2/d7d/classconfig_1_1_iso_latin_plugin.html',1,'config']]],
+  ['itemdetailsview_18',['ItemDetailsView',['../db/d40/classui_1_1qt_1_1_item_details_view.html',1,'ui::qt']]],
+  ['itemvirtuallistcontrol_19',['ItemVirtualListControl',['../d4/d25/classui_1_1wx_1_1_item_virtual_list_control.html',1,'ui::wx']]],
+  ['itypefilterview_20',['ITypeFilterView',['../d4/dff/classui_1_1_i_type_filter_view.html',1,'ui']]],
+  ['iview_21',['IView',['../d8/dee/classmvc_1_1_i_view.html',1,'mvc']]]
 ];

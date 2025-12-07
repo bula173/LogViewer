@@ -143,6 +143,23 @@ jobs:
           export PATH="/mingw64/bin:$PATH"
           cpack -G NSIS -C ${{ matrix.build_type }} --config CPackConfig.cmake
 
+      - name: Collect plugins
+        if: matrix.build_type == 'Release'
+        shell: msys2 {0}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          mkdir -p "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist"
+          find "$BUILD_DIR-${{ matrix.gui_framework }}/src/plugins" -name "*.dll" -type f -exec cp {} "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/" \;
+          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/"
+
+      - name: Upload plugins
+        if: matrix.build_type == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
+          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\plugins-dist\*.dll
+          if-no-files-found: warn
+
       - name: Upload tests artifact
         if: always()
         uses: actions/upload-artifact@v4

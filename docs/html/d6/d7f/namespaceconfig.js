@@ -1,8 +1,26 @@
 var namespaceconfig =
 [
-    [ "Columns", "d2/dd1/structconfig_1_1_columns.html", "d2/dd1/structconfig_1_1_columns" ],
+    [ "HexToAsciiPlugin", "dc/d2b/classconfig_1_1_hex_to_ascii_plugin.html", "dc/d2b/classconfig_1_1_hex_to_ascii_plugin" ],
+    [ "UnixToDatePlugin", "dc/dfd/classconfig_1_1_unix_to_date_plugin.html", "dc/dfd/classconfig_1_1_unix_to_date_plugin" ],
+    [ "ValueMapPlugin", "dd/dd4/classconfig_1_1_value_map_plugin.html", "dd/dd4/classconfig_1_1_value_map_plugin" ],
+    [ "IsoLatinPlugin", "d2/d7d/classconfig_1_1_iso_latin_plugin.html", "d2/d7d/classconfig_1_1_iso_latin_plugin" ],
+    [ "NidLrbgPlugin", "d4/d67/classconfig_1_1_nid_lrbg_plugin.html", "d4/d67/classconfig_1_1_nid_lrbg_plugin" ],
+    [ "ColumnConfig", "d0/de1/structconfig_1_1_column_config.html", "d0/de1/structconfig_1_1_column_config" ],
+    [ "ColumnColor", "df/d28/structconfig_1_1_column_color.html", "df/d28/structconfig_1_1_column_color" ],
     [ "Config", "d7/dcc/classconfig_1_1_config.html", "d7/dcc/classconfig_1_1_config" ],
+    [ "ConfigObserver", "d4/d65/classconfig_1_1_config_observer.html", "d4/d65/classconfig_1_1_config_observer" ],
+    [ "FieldDictionary", "df/d02/structconfig_1_1_field_dictionary.html", "df/d02/structconfig_1_1_field_dictionary" ],
+    [ "TranslationResult", "d9/d0e/structconfig_1_1_translation_result.html", "d9/d0e/structconfig_1_1_translation_result" ],
+    [ "FieldTranslator", "d7/d27/classconfig_1_1_field_translator.html", "d7/d27/classconfig_1_1_field_translator" ],
+    [ "IFieldConversionPlugin", "d2/de7/classconfig_1_1_i_field_conversion_plugin.html", "d2/de7/classconfig_1_1_i_field_conversion_plugin" ],
+    [ "FieldConversionPluginRegistry", "de/d4f/classconfig_1_1_field_conversion_plugin_registry.html", "de/d4f/classconfig_1_1_field_conversion_plugin_registry" ],
+    [ "StringReversePlugin", "d3/d48/classconfig_1_1_string_reverse_plugin.html", "d3/d48/classconfig_1_1_string_reverse_plugin" ],
+    [ "ColumnColorMap", "d6/d7f/namespaceconfig.html#a60eb14753cd65565c9a3a32f2ad5d1fc", null ],
+    [ "ConversionPluginFactory", "d6/d7f/namespaceconfig.html#acd36e40aa3e63819692bcb92a81e0052", null ],
     [ "json", "d6/d7f/namespaceconfig.html#a0cfa873add8bc2d7ada9f759a1af375b", null ],
+    [ "ValueColorMap", "d6/d7f/namespaceconfig.html#ad155ad4dfae01e420a15dfe0f27d8baf", null ],
     [ "GetConfig", "d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab", null ],
+    [ "RegisterBuiltinConversionPlugins", "d6/d7f/namespaceconfig.html#a791ae9fbbde9f4b8949bbf47968f7a05", null ],
+    [ "RegisterStringReversePlugin", "d6/d7f/namespaceconfig.html#a3f9af80a1ac296bc6a234ccf69827a22", null ],
     [ "configInstance", "d6/d7f/namespaceconfig.html#a48ae5137390f6f43c531ab73a99a7296", null ]
 ];

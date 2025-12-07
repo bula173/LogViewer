@@ -1,20 +1,11 @@
 var searchData=
 [
-  ['endelementhandler_0',['EndElementHandler',['../d0/dd5/namespaceparser.html#a0e019323b587d204f1c323b648e49069',1,'parser']]],
-  ['eventbatch_1',['eventBatch',['../de/db3/structparser_1_1_parser_state.html#a284e91d89bcf9681823aed7d4e8e2a37',1,'parser::ParserState']]],
-  ['eventid_2',['eventId',['../de/db3/structparser_1_1_parser_state.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState']]],
-  ['eventitems_3',['EventItems',['../de/db7/classdb_1_1_log_event.html#a5eb43981a1c2d3c936cd9b96fc0b9534',1,'db::LogEvent']]],
-  ['eventitems_4',['eventItems',['../de/db3/structparser_1_1_parser_state.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
-  ['eventitemsconstiterator_5',['EventItemsConstIterator',['../de/db7/classdb_1_1_log_event.html#a1de0f0bed5289cc3bd077fb3fe688181',1,'db::LogEvent']]],
-  ['eventitemsiterator_6',['EventItemsIterator',['../de/db7/classdb_1_1_log_event.html#abd88d16bac9ece677923f0bd73ff1311',1,'db::LogEvent']]],
-  ['eventscontainer_7',['EventsContainer',['../db/d71/classdb_1_1_events_container.html',1,'db::EventsContainer'],['../db/d71/classdb_1_1_events_container.html#ad0c0ae27055a4b711fad53e95e592166',1,'db::EventsContainer::EventsContainer()']]],
-  ['eventscontainer_2ecpp_8',['EventsContainer.cpp',['../d9/d51/_events_container_8cpp.html',1,'']]],
-  ['eventscontainer_2ehpp_9',['EventsContainer.hpp',['../d3/d7b/_events_container_8hpp.html',1,'']]],
-  ['eventscontaineradapter_10',['EventsContainerAdapter',['../d9/d23/classgui_1_1_events_container_adapter.html',1,'gui::EventsContainerAdapter'],['../d9/d23/classgui_1_1_events_container_adapter.html#af6e63a9b77484b84bb879b86719c28d2',1,'gui::EventsContainerAdapter::EventsContainerAdapter()']]],
-  ['eventscontaineradapter_2ecpp_11',['EventsContainerAdapter.cpp',['../d7/d91/_events_container_adapter_8cpp.html',1,'']]],
-  ['eventscontaineradapter_2ehpp_12',['EventsContainerAdapter.hpp',['../d2/db3/_events_container_adapter_8hpp.html',1,'']]],
-  ['eventssincelastnotify_13',['eventsSinceLastNotify',['../de/db3/structparser_1_1_parser_state.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
-  ['eventsvirtuallistcontrol_14',['EventsVirtualListControl',['../dd/d92/classgui_1_1_events_virtual_list_control.html',1,'gui::EventsVirtualListControl'],['../dd/d92/classgui_1_1_events_virtual_list_control.html#a2497f4abd95945914cec74d19537e3e3',1,'gui::EventsVirtualListControl::EventsVirtualListControl()']]],
-  ['eventsvirtuallistcontrol_2ecpp_15',['EventsVirtualListControl.cpp',['../d2/d80/_events_virtual_list_control_8cpp.html',1,'']]],
-  ['eventsvirtuallistcontrol_2ehpp_16',['EventsVirtualListControl.hpp',['../d5/dda/_events_virtual_list_control_8hpp.html',1,'']]]
+  ['5_20architecture_0',['5. Architecture',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md446',1,'']]],
+  ['5_20configure_20timeout_20for_20slow_20machines_1',['5. Configure Timeout (For Slow Machines)',['../d7/d71/md_docs_2_a_i___a_n_a_l_y_s_i_s___g_u_i_d_e.html#autotoc_md44',1,'']]],
+  ['5_20documentation_2',['5. Documentation',['../d1/df6/md_docs_2_p_l_u_g_i_n___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md323',1,'']]],
+  ['5_20load_20via_20config_20dialog_3',['5. Load via Config Dialog',['../d4/d31/md_docs_2_p_l_u_g_i_n___t_y_p_e___i_n_t_e_r_f_a_c_e_s.html#autotoc_md406',1,'']]],
+  ['5_20machine_20specific_20issue_201_20probability_4',['5. Machine-Specific Issue (1% probability)',['../d7/d89/md_docs_2_w_i_n_d_o_w_s___c_r_a_s_h___a_c_t_i_o_n___p_l_a_n.html#autotoc_md503',1,'']]],
+  ['5_20probability_5',['2. Qt DLL Version Conflict (5% probability)',['../d7/d89/md_docs_2_w_i_n_d_o_w_s___c_r_a_s_h___a_c_t_i_o_n___p_l_a_n.html#autotoc_md500',1,'']]],
+  ['5_20process_20monitor_20advanced_6',['5. Process Monitor (Advanced)',['../d6/d54/md_docs_2_w_i_n_d_o_w_s___t_r_o_u_b_l_e_s_h_o_o_t_i_n_g.html#autotoc_md539',1,'']]],
+  ['5_3a_20antivirus_20security_20software_20interference_7',['Issue 5: Antivirus/Security Software Interference',['../d6/d54/md_docs_2_w_i_n_d_o_w_s___t_r_o_u_b_l_e_s_h_o_o_t_i_n_g.html#autotoc_md533',1,'']]]
 ];

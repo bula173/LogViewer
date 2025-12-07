@@ -118,6 +118,21 @@ jobs:
         if: matrix.build_type == 'Release'
         run: cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
 
+      - name: Collect plugins
+        if: matrix.build_type == 'Release'
+        run: |
+          mkdir -p "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist"
+          find "$BUILD_DIR-${{ matrix.gui_framework }}/src/plugins" -name "*.dylib" -type f -exec cp {} "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/" \;
+          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/"
+
+      - name: Upload plugins
+        if: matrix.build_type == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
+          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/plugins-dist/*.dylib
+          if-no-files-found: warn
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,4 +1,6 @@
 #include "config/Config.hpp"
+#include "BuiltinConversionPlugins.hpp"
+#include "StringReversePlugin.hpp"
 #include "util/Logger.hpp"
 #include "util/KeyEncryption.hpp"
 #include <fstream>
@@ -29,6 +31,12 @@ Config::Config()
     SetupLogPath();
     m_configFilePath = (GetDefaultAppPath() / "config.json").string();
     m_dictionaryFilePath = (GetDefaultAppPath() / "field_dictionary.json").string();
+    
+    // Register built-in field conversion plugins
+    RegisterBuiltinConversionPlugins();
+    
+    // Register example plugin
+    RegisterStringReversePlugin();
 }
 
 void Config::SetAppName(const std::string& name)

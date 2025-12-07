@@ -68,3 +68,4 @@ endif()
 
 add_subdirectory(application)
 add_subdirectory(main)
+add_subdirectory(plugins)

@@ -1,25 +1,5 @@
 var searchData=
 [
-  ['icontrloler_0',['IContrloler',['../dd/ddf/class_i_contrloler.html',1,'']]],
-  ['icontroler_2ehpp_1',['IControler.hpp',['../d8/d65/_i_controler_8hpp.html',1,'']]],
-  ['icontroller_2',['IController',['../d9/dd6/classmvc_1_1_i_controller.html',1,'mvc::IController'],['../d9/dd6/classmvc_1_1_i_controller.html#a1fb97e7a90d897a16c2d287be2938c62',1,'mvc::IController::IController()']]],
-  ['id_5fapplogviewer_3',['ID_AppLogViewer',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532da559ac5e2fbb15131422a3b1481b2e675',1,'gui::MainWindow']]],
-  ['id_5fconfigeditor_4',['ID_ConfigEditor',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532da7f6cc49c8a11df39ffb02dbe1f973d8c',1,'gui::MainWindow']]],
-  ['id_5fparserclear_5',['ID_ParserClear',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532dab592b8d940c0118060e86b0f81214b23',1,'gui::MainWindow']]],
-  ['id_5fpopulatedummydata_6',['ID_PopulateDummyData',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532dac723ed99238769e862709f88886d84d7',1,'gui::MainWindow']]],
-  ['id_5fviewleftpanel_7',['ID_ViewLeftPanel',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532dab713e6208be33a938d4e613e6021499c',1,'gui::MainWindow']]],
-  ['id_5fviewrightpanel_8',['ID_ViewRightPanel',['../df/d15/classgui_1_1_main_window.html#ae2575dc0c06ceb13b9630746ff96532dad27325944777723be8f7bb0354ce4f3f',1,'gui::MainWindow']]],
-  ['idataparser_9',['IDataParser',['../d8/ddd/classparser_1_1_i_data_parser.html',1,'parser']]],
-  ['idataparser_2ehpp_10',['IDataParser.hpp',['../dc/d1b/_i_data_parser_8hpp.html',1,'']]],
-  ['idataparserobserver_11',['IDataParserObserver',['../d0/dfb/classparser_1_1_i_data_parser_observer.html',1,'parser']]],
-  ['imodel_12',['IModel',['../d5/d21/classmvc_1_1_i_model.html',1,'mvc::IModel'],['../d5/d21/classmvc_1_1_i_model.html#a8fa71a57f92461eb590a80852cfa7c03',1,'mvc::IModel::IModel()']]],
-  ['imodel_2ehpp_13',['IModel.hpp',['../d6/d1b/_i_model_8hpp.html',1,'']]],
-  ['insideevent_14',['insideEvent',['../de/db3/structparser_1_1_parser_state.html#a436a0cc6fa4d79f4755bd72f404dc036',1,'parser::ParserState']]],
-  ['insideroot_15',['insideRoot',['../de/db3/structparser_1_1_parser_state.html#aec43918efb0c11c70ee11087e94c140b',1,'parser::ParserState']]],
-  ['introduction_16',['Introduction',['../index.html#intro_sec',1,'']]],
-  ['itemvirtuallistcontrol_17',['ItemVirtualListControl',['../da/d38/classgui_1_1_item_virtual_list_control.html',1,'gui::ItemVirtualListControl'],['../da/d38/classgui_1_1_item_virtual_list_control.html#ab997a6e1b947490f62e749cb06dc2e9e',1,'gui::ItemVirtualListControl::ItemVirtualListControl()']]],
-  ['itemvirtuallistcontrol_2ecpp_18',['ItemVirtualListControl.cpp',['../d4/d99/_item_virtual_list_control_8cpp.html',1,'']]],
-  ['itemvirtuallistcontrol_2ehpp_19',['ItemVirtualListControl.hpp',['../d8/ded/_item_virtual_list_control_8hpp.html',1,'']]],
-  ['iview_20',['IView',['../d8/dee/classmvc_1_1_i_view.html',1,'mvc::IView'],['../d8/dee/classmvc_1_1_i_view.html#ab42dc481fea35a652d0581f1889bed49',1,'mvc::IView::IView()']]],
-  ['iview_2ehpp_21',['IView.hpp',['../de/d47/_i_view_8hpp.html',1,'']]]
+  ['9_20documentation_0',['9. Documentation',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md452',1,'']]],
+  ['90_20probability_1',['1. Missing qwindows.dll (90% probability)',['../d7/d89/md_docs_2_w_i_n_d_o_w_s___c_r_a_s_h___a_c_t_i_o_n___p_l_a_n.html#autotoc_md499',1,'']]]
 ];

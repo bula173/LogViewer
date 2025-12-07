@@ -1,4 +1,32 @@
 var searchData=
 [
-  ['software_20architecture_0',['Software Architecture',['../dc/da6/architecture.html',1,'']]]
+  ['basic_20connection_0',['Basic Connection',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md448',1,'']]],
+  ['basic_20workflow_20both_20qt_20and_20wxwidgets_1',['Basic Workflow (Both Qt and wxWidgets)',['../index.html#autotoc_md23',1,'']]],
+  ['bearer_20token_2',['OpenAI, xAI (Bearer Token)',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md124',1,'']]],
+  ['before_20committing_3',['Before Committing',['../d0/da6/md_docs_2_d_e_v_e_l_o_p_m_e_n_t.html#autotoc_md227',1,'']]],
+  ['benefits_4',['Benefits',['../d7/db0/md_docs_2_c_o_n_f_i_g_u_r_a_b_l_e___t_y_p_e___f_i_l_t_e_r.html#autotoc_md154',1,'Benefits'],['../d4/d31/md_docs_2_p_l_u_g_i_n___t_y_p_e___i_n_t_e_r_f_a_c_e_s.html#autotoc_md413',1,'Benefits']]],
+  ['best_20practices_5',['Best Practices',['../dir_77c33839815b7c6c2ca556064fb28352.html#autotoc_md287',1,'Best Practices'],['../de/d17/md_docs_2_p_l_u_g_i_n___s_y_s_t_e_m.html#autotoc_md388',1,'Best Practices'],['../d0/da6/md_docs_2_d_e_v_e_l_o_p_m_e_n_t.html#autotoc_md247',1,'Performance Best Practices'],['../d8/d11/md_docs_2_u_i___i_m_p_r_o_v_e_m_e_n_t_s.html#autotoc_md488',1,'Tips and Best Practices']]],
+  ['best_20practices_3a_6',['Best Practices:',['../d6/d47/md_docs_2_c_l_o_u_d___a_i___i_n_t_e_g_r_a_t_i_o_n.html#autotoc_md136',1,'']]],
+  ['both_20frameworks_7',['Essential (Both Frameworks)',['../index.html#autotoc_md7',1,'']]],
+  ['both_20qt_20and_20wxwidgets_8',['Basic Workflow (Both Qt and wxWidgets)',['../index.html#autotoc_md23',1,'']]],
+  ['branch_20naming_9',['Branch Naming',['../d0/da6/md_docs_2_d_e_v_e_l_o_p_m_e_n_t.html#autotoc_md269',1,'']]],
+  ['build_10',['Build',['../d5/d93/md_docs_2_w_i_n_d_o_w_s___d_e_b_u_g___d_e_p_l_o_y_m_e_n_t.html#autotoc_md512',1,'Rebuild Debug Build'],['../d5/d93/md_docs_2_w_i_n_d_o_w_s___d_e_b_u_g___d_e_p_l_o_y_m_e_n_t.html#autotoc_md514',1,'Run Debug Build']]],
+  ['build_20as_20shared_20library_11',['Build as Shared Library',['../de/d17/md_docs_2_p_l_u_g_i_n___s_y_s_t_e_m.html#autotoc_md362',1,'3. Build as Shared Library'],['../d4/d31/md_docs_2_p_l_u_g_i_n___t_y_p_e___i_n_t_e_r_f_a_c_e_s.html#autotoc_md405',1,'4. Build as Shared Library']]],
+  ['build_20commands_12',['Build Commands',['../d4/d4e/md_docs_2_b_u_i_l_d_i_n_g___d_o_c_u_m_e_n_t_a_t_i_o_n.html#autotoc_md97',1,'Build Commands'],['../d1/df6/md_docs_2_p_l_u_g_i_n___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md342',1,'Build Commands']]],
+  ['build_20dll_20deployment_20fix_13',['Windows Debug Build DLL Deployment Fix',['../d5/d93/md_docs_2_w_i_n_d_o_w_s___d_e_b_u_g___d_e_p_l_o_y_m_e_n_t.html',1,'']]],
+  ['build_20issues_14',['Build Issues',['../index.html#autotoc_md31',1,'']]],
+  ['build_20presets_20recommended_15',['Using Build Presets (Recommended)',['../de/d18/md_docs_2_c_p_p_c_h_e_c_k.html#autotoc_md160',1,'']]],
+  ['build_20system_16',['Creating Plugins Outside the Build System',['../de/d17/md_docs_2_p_l_u_g_i_n___s_y_s_t_e_m.html#autotoc_md364',1,'']]],
+  ['build_20system_20integration_17',['2. Build System Integration',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md440',1,'']]],
+  ['build_20system_20updates_18',['4. Build System Updates',['../d1/df6/md_docs_2_p_l_u_g_i_n___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md322',1,'']]],
+  ['build_20targets_20alternative_19',['Using Build Targets (Alternative)',['../de/d18/md_docs_2_c_p_p_c_h_e_c_k.html#autotoc_md161',1,'']]],
+  ['build_20verification_20',['Build Verification',['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md463',1,'']]],
+  ['building_21',['Building',['../index.html#autotoc_md10',1,'Building'],['../dir_77c33839815b7c6c2ca556064fb28352.html#autotoc_md282',1,'Building']]],
+  ['building_20documentation_22',['Building Documentation',['../d4/d4e/md_docs_2_b_u_i_l_d_i_n_g___d_o_c_u_m_e_n_t_a_t_i_o_n.html',1,'']]],
+  ['building_20locally_23',['Building Locally',['../d4/d4e/md_docs_2_b_u_i_l_d_i_n_g___d_o_c_u_m_e_n_t_a_t_i_o_n.html#autotoc_md95',1,'']]],
+  ['building_20with_20asan_24',['Building with ASAN',['../df/daf/md_docs_2_s_a_n_i_t_i_z_e_r_s.html#autotoc_md422',1,'']]],
+  ['builds_25',['Builds',['../d4/d4e/md_docs_2_b_u_i_l_d_i_n_g___d_o_c_u_m_e_n_t_a_t_i_o_n.html#autotoc_md98',1,'Automatic GitHub Builds'],['../d8/d57/md_docs_2_s_s_h___p_a_r_s_e_r___i_m_p_l_e_m_e_n_t_a_t_i_o_n.html#autotoc_md458',1,'Customer-Specific Builds']]],
+  ['built_20documentation_26',['Viewing Built Documentation',['../d4/d4e/md_docs_2_b_u_i_l_d_i_n_g___d_o_c_u_m_e_n_t_a_t_i_o_n.html#autotoc_md100',1,'']]],
+  ['business_20logic_20layer_27',['2. Business Logic Layer',['../d6/d41/md_docs_2_a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md61',1,'']]],
+  ['but_20recommended_28',['Optional but Recommended',['../d0/da6/md_docs_2_d_e_v_e_l_o_p_m_e_n_t.html#autotoc_md219',1,'']]]
 ];

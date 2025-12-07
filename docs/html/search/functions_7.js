@@ -1,5 +1,23 @@
 var searchData=
 [
-  ['mainwindow_0',['MainWindow',['../df/d15/classgui_1_1_main_window.html#adcbddcb2df928fe50df27ccc44c661f9',1,'gui::MainWindow']]],
-  ['myapp_1',['MyApp',['../dd/da7/class_my_app.html#a86ea542a02ce532ccf4a91ea57e136e1',1,'MyApp']]]
+  ['handleaccept_0',['HandleAccept',['../db/d58/classui_1_1qt_1_1_filter_editor_dialog.html#adf6057ee33b6b8d2931608e084fef279',1,'ui::qt::FilterEditorDialog']]],
+  ['handleactivation_1',['HandleActivation',['../d7/de9/classui_1_1qt_1_1_search_results_view.html#ae562ca311c8d7c2c7cf2a7673ae29b26',1,'ui::qt::SearchResultsView']]],
+  ['handleadd_2',['HandleAdd',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#ab8b81c5cb3f7bb4e0942269b14b25a39',1,'ui::qt::FiltersPanel']]],
+  ['handleapply_3',['HandleApply',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a0860c6438b4c6830aa87e500dec99c22',1,'ui::qt::FiltersPanel']]],
+  ['handleclear_4',['HandleClear',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a5dbf17922b9439575729b1495ec71f4a',1,'ui::qt::FiltersPanel']]],
+  ['handledroppedfile_5',['HandleDroppedFile',['../d0/d38/classui_1_1qt_1_1_main_window.html#ad1f7b94dd084cbf5622aca816132b069',1,'ui::qt::MainWindow']]],
+  ['handleedit_6',['HandleEdit',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#aa5937f5d461059c58bfec0426bedd4b7',1,'ui::qt::FiltersPanel']]],
+  ['handlefilterresult_7',['HandleFilterResult',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a9fa591486bd568278d73acebe4d37274',1,'ui::qt::FiltersPanel::HandleFilterResult()'],['../d0/d61/namespaceanonymous__namespace_02_filters_panel_8cpp_03.html#ace2488527d87312179b3f875035401f9',1,'anonymous_namespace{FiltersPanel.cpp}::HandleFilterResult()']]],
+  ['handleitemchanged_8',['HandleItemChanged',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#af8e00e1d62b7d7f4457bb66b0ed2b700',1,'ui::qt::FiltersPanel']]],
+  ['handleload_9',['HandleLoad',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a03cfaa7fbb0824871b8b60cb7fefd13f',1,'ui::qt::FiltersPanel']]],
+  ['handleremove_10',['HandleRemove',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a140e1c44f5d2529913cc06e89c440ccd',1,'ui::qt::FiltersPanel']]],
+  ['handlesaveas_11',['HandleSaveAs',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#a4f5a113882ab9832ab32596c55b3fc02',1,'ui::qt::FiltersPanel']]],
+  ['handleselectionchanged_12',['HandleSelectionChanged',['../d6/da9/classui_1_1qt_1_1_filters_panel.html#aad4d9b1b3d553ca387f080323819748b',1,'ui::qt::FiltersPanel']]],
+  ['handletypefilterchanged_13',['HandleTypeFilterChanged',['../d0/d38/classui_1_1qt_1_1_main_window.html#a6a8fbb8ff82219c01b0477613b2c9ff5',1,'ui::qt::MainWindow::HandleTypeFilterChanged()'],['../d1/df4/classui_1_1wx_1_1_main_window.html#af6fbe7ae24df0ca2873d108420f4de65',1,'ui::wx::MainWindow::HandleTypeFilterChanged()']]],
+  ['haseditorctrl_14',['HasEditorCtrl',['../d3/dc9/classui_1_1wx_1_1_wrapping_text_renderer.html#ad8d02c525b5ddcf3c0b6902a23575bcb',1,'ui::wx::WrappingTextRenderer']]],
+  ['hasfilteredindices_15',['HasFilteredIndices',['../d8/d26/classui_1_1wx_1_1_events_container_adapter.html#a05e62ff07690e0af002d0e9346f8da24',1,'ui::wx::EventsContainerAdapter']]],
+  ['hasmultipleconditions_16',['hasMultipleConditions',['../d3/dad/classfilters_1_1_filter.html#a54da5ec20c57d3887b6121ac862ccc74',1,'filters::Filter']]],
+  ['hastranslation_17',['HasTranslation',['../d7/d27/classconfig_1_1_field_translator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
+  ['headerdata_18',['headerData',['../d0/d13/classui_1_1qt_1_1_events_table_model.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
+  ['hextocolor_19',['HexToColor',['../df/d08/classui_1_1qt_1_1_structured_config_dialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog::HexToColor()'],['../d5/d9f/class_config_editor_dialog.html#a83fa70e887ecd36153a8586ad367e728',1,'ConfigEditorDialog::HexToColor()']]]
 ];
