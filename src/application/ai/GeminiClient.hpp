@@ -9,16 +9,29 @@ namespace ai
 /**
  * @brief Client for Google Gemini API
  * 
- * Supports: gemini-pro, gemini-1.5-pro, gemini-1.5-flash
- * API: https://generativelanguage.googleapis.com/v1
- * Authentication: API key in URL parameter
+ * Supported models (latest):
+ * - gemini-2.5-flash (recommended for free tier - fast, efficient, 1M context)
+ * - gemini-2.5-flash-lite (fastest, most economical for high-frequency tasks)
+ * - gemini-2.5-pro (advanced reasoning, excellent for coding)
+ * - gemini-3-pro (most intelligent, best multimodal understanding)
+ * 
+ * Legacy models:
+ * - gemini-1.5-flash, gemini-1.5-pro (still supported)
+ * 
+ * Free tier limits:
+ * - 15 requests per minute
+ * - 1500 requests per day
+ * 
+ * API: https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
+ * Authentication: x-goog-api-key header
+ * Get API key: https://aistudio.google.com/app/apikey
  */
 class GeminiClient : public IAIService
 {
 public:
     explicit GeminiClient(const std::string& apiKey,
-                         const std::string& model = "gemini-pro",
-                         const std::string& baseUrl = "https://generativelanguage.googleapis.com/v1");
+                         const std::string& model = "gemini-2.5-flash",
+                         const std::string& baseUrl = "https://generativelanguage.googleapis.com");
     ~GeminiClient() override = default;
 
     std::string SendPrompt(const std::string& prompt,
