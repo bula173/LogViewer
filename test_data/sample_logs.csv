@@ -1,0 +1,51 @@
+id,timestamp,level,info,source,thread
+1,2025-12-07 10:30:15,INFO,Application started successfully,Main,1
+2,2025-12-07 10:30:16,DEBUG,Initializing configuration module,Config,1
+3,2025-12-07 10:30:16,DEBUG,Loading configuration from /etc/app/config.json,Config,1
+4,2025-12-07 10:30:17,INFO,Configuration loaded successfully,Config,1
+5,2025-12-07 10:30:17,DEBUG,Connecting to database,Database,2
+6,2025-12-07 10:30:18,INFO,Database connection established,Database,2
+7,2025-12-07 10:30:18,DEBUG,Starting worker threads,ThreadPool,1
+8,2025-12-07 10:30:19,INFO,Worker threads started: count=4,ThreadPool,1
+9,2025-12-07 10:30:19,DEBUG,Initializing network module,Network,3
+10,2025-12-07 10:30:20,INFO,Network module initialized on port 8080,Network,3
+11,2025-12-07 10:30:21,INFO,Received HTTP request: GET /api/status,HttpServer,4
+12,2025-12-07 10:30:21,DEBUG,Processing status request,RequestHandler,4
+13,2025-12-07 10:30:21,DEBUG,Querying system health metrics,HealthCheck,4
+14,2025-12-07 10:30:22,INFO,System health: OK (CPU: 45% MEM: 62%),HealthCheck,4
+15,2025-12-07 10:30:22,DEBUG,Sending response: status=200,HttpServer,4
+16,2025-12-07 10:30:25,WARN,High memory usage detected: 85%,Monitor,5
+17,2025-12-07 10:30:26,INFO,Triggering garbage collection,MemoryManager,5
+18,2025-12-07 10:30:27,INFO,Garbage collection completed: freed 250MB,MemoryManager,5
+19,2025-12-07 10:30:30,INFO,Received HTTP request: POST /api/data,HttpServer,6
+20,2025-12-07 10:30:30,DEBUG,"Processing data with payload: {""size"": 1024, ""format"": ""json""}",RequestHandler,6
+21,2025-12-07 10:30:31,DEBUG,Validating input data,Validator,6
+22,2025-12-07 10:30:31,INFO,Input validation passed,Validator,6
+23,2025-12-07 10:30:31,DEBUG,Storing data in database,Database,6
+24,2025-12-07 10:30:32,INFO,Data stored successfully with ID: 12345,Database,6
+25,2025-12-07 10:30:32,DEBUG,Sending response: status=201,HttpServer,6
+26,2025-12-07 10:30:35,ERROR,Failed to connect to external service: timeout after 5s,ExternalAPI,7
+27,2025-12-07 10:30:36,WARN,Retrying connection to external service (attempt 1/3),ExternalAPI,7
+28,2025-12-07 10:30:41,ERROR,Failed to connect to external service: timeout after 5s,ExternalAPI,7
+29,2025-12-07 10:30:42,WARN,Retrying connection to external service (attempt 2/3),ExternalAPI,7
+30,2025-12-07 10:30:47,INFO,Successfully connected to external service,ExternalAPI,7
+31,2025-12-07 10:30:48,DEBUG,Fetching data from external API,ExternalAPI,7
+32,2025-12-07 10:30:49,INFO,Received 150 records from external service,ExternalAPI,7
+33,2025-12-07 10:30:50,DEBUG,Processing external data batch,DataProcessor,8
+34,2025-12-07 10:30:51,INFO,Processed 50/150 records,DataProcessor,8
+35,2025-12-07 10:30:52,INFO,Processed 100/150 records,DataProcessor,8
+36,2025-12-07 10:30:53,INFO,Processed 150/150 records,DataProcessor,8
+37,2025-12-07 10:30:54,INFO,Data processing completed successfully,DataProcessor,8
+38,2025-12-07 10:31:00,INFO,Received HTTP request: GET /api/users/123,HttpServer,9
+39,2025-12-07 10:31:00,DEBUG,Querying user data for ID: 123,UserService,9
+40,2025-12-07 10:31:01,INFO,User found: john.doe@example.com,UserService,9
+41,2025-12-07 10:31:01,DEBUG,Sending response: status=200,HttpServer,9
+42,2025-12-07 10:31:05,WARN,Slow query detected: 3.5s for SELECT * FROM logs,Database,2
+43,2025-12-07 10:31:06,INFO,Database query completed: returned 5000 rows,Database,2
+44,2025-12-07 10:31:10,INFO,Scheduled task started: backup,Scheduler,10
+45,2025-12-07 10:31:11,DEBUG,Creating backup of database,Backup,10
+46,2025-12-07 10:31:15,INFO,Database backup created: backup_20251207_103115.sql,Backup,10
+47,2025-12-07 10:31:16,DEBUG,Compressing backup file,Backup,10
+48,2025-12-07 10:31:20,INFO,Backup compressed: size reduced by 75%,Backup,10
+49,2025-12-07 10:31:21,INFO,Scheduled task completed: backup,Scheduler,10
+50,2025-12-07 10:31:25,INFO,Application running normally: uptime=70s,Monitor,5

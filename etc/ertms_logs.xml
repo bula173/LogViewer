@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+    <!-- ERTMS System Initialization -->
+    <event>
+        <id>1</id>
+        <timestamp>2025-01-15 08:00:00.000</timestamp>
+        <level>INFO</level>
+        <info>RBC: System initialization complete - ERTMS Level 2 operational</info>
+    </event>
+    <event>
+        <id>2</id>
+        <timestamp>2025-01-15 08:00:01.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route locking system initialized - all signals at danger</info>
+    </event>
+    <event>
+        <id>3</id>
+        <timestamp>2025-01-15 08:00:02.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: ETCS onboard system powered on - establishing RBC communication</info>
+    </event>
+
+    <!-- Train Registration and Position Report -->
+    <event>
+        <id>4</id>
+        <timestamp>2025-01-15 08:00:05.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Position Report - NID_PACKET=0, Q_DIR=1, M_POSITION=125000</info>
+    </event>
+    <event>
+        <id>5</id>
+        <timestamp>2025-01-15 08:00:05.100</timestamp>
+        <level>INFO</level>
+        <info>RBC: Acknowledged position report from Train T001</info>
+    </event>
+
+    <!-- Route Request from Interlocking -->
+    <event>
+        <id>6</id>
+        <timestamp>2025-01-15 08:01:00.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route request for Track 1 to Track 3 via Platform A</info>
+    </event>
+    <event>
+        <id>7</id>
+        <timestamp>2025-01-15 08:01:01.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route elements locked - signals S1, S2, S3 set to proceed</info>
+    </event>
+    <event>
+        <id>8</id>
+        <timestamp>2025-01-15 08:01:02.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route 1 established - overlap protection active</info>
+    </event>
+
+    <!-- RBC Movement Authority Generation -->
+    <event>
+        <id>9</id>
+        <timestamp>2025-01-15 08:01:03.000</timestamp>
+        <level>INFO</level>
+        <info>RBC: Movement Authority calculated for Route 1 - NID_PACKET=15, Q_DIR=1</info>
+    </event>
+    <event>
+        <id>10</id>
+        <timestamp>2025-01-15 08:01:03.100</timestamp>
+        <level>INFO</level>
+        <info>RBC: MA includes sections: KM125.0-KM127.5, Max speed 160 km/h</info>
+    </event>
+    <event>
+        <id>11</id>
+        <timestamp>2025-01-15 08:01:03.200</timestamp>
+        <level>INFO</level>
+        <info>RBC: End of Authority at KM127.5 - protected by signal S3</info>
+    </event>
+
+    <!-- Train Movement Authority Reception -->
+    <event>
+        <id>12</id>
+        <timestamp>2025-01-15 08:01:04.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Movement Authority received - valid for 5 minutes</info>
+    </event>
+    <event>
+        <id>13</id>
+        <timestamp>2025-01-15 08:01:04.100</timestamp>
+        <level>INFO</level>
+        <info>Train T001: ETCS supervision active - target speed 160 km/h</info>
+    </event>
+
+    <!-- Train Movement -->
+    <event>
+        <id>14</id>
+        <timestamp>2025-01-15 08:01:10.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Departing from Platform A - speed 0 to 40 km/h</info>
+    </event>
+    <event>
+        <id>15</id>
+        <timestamp>2025-01-15 08:01:15.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Position Report - NID_PACKET=0, position KM125.2</info>
+    </event>
+    <event>
+        <id>16</id>
+        <timestamp>2025-01-15 08:01:20.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Speed 80 km/h - within MA limits</info>
+    </event>
+    <event>
+        <id>17</id>
+        <timestamp>2025-01-15 08:01:25.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Position Report - NID_PACKET=0, position KM125.8</info>
+    </event>
+
+    <!-- Second Route Request -->
+    <event>
+        <id>18</id>
+        <timestamp>2025-01-15 08:02:00.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route request for Track 2 to Track 4 via Platform B</info>
+    </event>
+    <event>
+        <id>19</id>
+        <timestamp>2025-01-15 08:02:01.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route elements locked - signals S4, S5, S6 set to proceed</info>
+    </event>
+    <event>
+        <id>20</id>
+        <timestamp>2025-01-15 08:02:02.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route 2 established - overlap protection active</info>
+    </event>
+
+    <!-- RBC Movement Authority for Route 2 -->
+    <event>
+        <id>21</id>
+        <timestamp>2025-01-15 08:02:03.000</timestamp>
+        <level>INFO</level>
+        <info>RBC: Movement Authority calculated for Route 2 - NID_PACKET=15, Q_DIR=1</info>
+    </event>
+    <event>
+        <id>22</id>
+        <timestamp>2025-01-15 08:02:03.100</timestamp>
+        <level>INFO</level>
+        <info>RBC: MA includes sections: KM127.5-KM130.0, Max speed 140 km/h</info>
+    </event>
+    <event>
+        <id>23</id>
+        <timestamp>2025-01-15 08:02:03.200</timestamp>
+        <level>INFO</level>
+        <info>RBC: End of Authority at KM130.0 - protected by signal S6</info>
+    </event>
+
+    <!-- Train T001 completes Route 1 -->
+    <event>
+        <id>24</id>
+        <timestamp>2025-01-15 08:02:30.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Position Report - NID_PACKET=0, position KM127.4</info>
+    </event>
+    <event>
+        <id>25</id>
+        <timestamp>2025-01-15 08:02:35.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Approaching End of Authority - braking initiated</info>
+    </event>
+    <event>
+        <id>26</id>
+        <timestamp>2025-01-15 08:02:40.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Stopped at Platform B - position KM127.5</info>
+    </event>
+
+    <!-- Train T002 Registration -->
+    <event>
+        <id>27</id>
+        <timestamp>2025-01-15 08:03:00.000</timestamp>
+        <level>INFO</level>
+        <info>Train T002: ETCS onboard system powered on - establishing RBC communication</info>
+    </event>
+    <event>
+        <id>28</id>
+        <timestamp>2025-01-15 08:03:05.000</timestamp>
+        <level>INFO</level>
+        <info>Train T002: Position Report - NID_PACKET=0, Q_DIR=1, M_POSITION=120000</info>
+    </event>
+    <event>
+        <id>29</id>
+        <timestamp>2025-01-15 08:03:05.100</timestamp>
+        <level>INFO</level>
+        <info>RBC: Acknowledged position report from Train T002</info>
+    </event>
+
+    <!-- Third Route Request -->
+    <event>
+        <id>30</id>
+        <timestamp>2025-01-15 08:03:30.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route request for Track 3 to Track 5 via Platform C</info>
+    </event>
+    <event>
+        <id>31</id>
+        <timestamp>2025-01-15 08:03:31.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route elements locked - signals S7, S8, S9 set to proceed</info>
+    </event>
+    <event>
+        <id>32</id>
+        <timestamp>2025-01-15 08:03:32.000</timestamp>
+        <level>INFO</level>
+        <info>Interlocking: Route 3 established - overlap protection active</info>
+    </event>
+
+    <!-- RBC Movement Authority for Route 3 -->
+    <event>
+        <id>33</id>
+        <timestamp>2025-01-15 08:03:33.000</timestamp>
+        <level>INFO</level>
+        <info>RBC: Movement Authority calculated for Route 3 - NID_PACKET=15, Q_DIR=1</info>
+    </event>
+    <event>
+        <id>34</id>
+        <timestamp>2025-01-15 08:03:33.100</timestamp>
+        <level>INFO</level>
+        <info>RBC: MA includes sections: KM130.0-KM132.5, Max speed 120 km/h</info>
+    </event>
+    <event>
+        <id>35</id>
+        <timestamp>2025-01-15 08:03:33.200</timestamp>
+        <level>INFO</level>
+        <info>RBC: End of Authority at KM132.5 - protected by signal S9</info>
+    </event>
+
+    <!-- Train T001 receives MA for Route 2 -->
+    <event>
+        <id>36</id>
+        <timestamp>2025-01-15 08:03:40.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Movement Authority received for Route 2 - valid for 5 minutes</info>
+    </event>
+    <event>
+        <id>37</id>
+        <timestamp>2025-01-15 08:03:40.100</timestamp>
+        <level>INFO</level>
+        <info>Train T001: ETCS supervision active - target speed 140 km/h</info>
+    </event>
+
+    <!-- Train T001 departs Platform B -->
+    <event>
+        <id>38</id>
+        <timestamp>2025-01-15 08:03:45.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Departing from Platform B - speed 0 to 40 km/h</info>
+    </event>
+    <event>
+        <id>39</id>
+        <timestamp>2025-01-15 08:03:50.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Position Report - NID_PACKET=0, position KM127.7</info>
+    </event>
+    <event>
+        <id>40</id>
+        <timestamp>2025-01-15 08:03:55.000</timestamp>
+        <level>INFO</level>
+        <info>Train T001: Speed 100 km/h - within MA limits</info>
+    </event>
+
+    <!-- Train T002 receives MA for Route 1 -->
+    <event>
+        <id>41</id>
+        <timestamp>2025-01-15 08:04:00.000</timestamp>
+        <level>INFO</level>
+        <info>Train T002: Movement Authority received for Route 1 - valid for 5 minutes</info>
+    </event>
+    <event>
+        <id>42</id>
+        <timestamp>2025-01-15 08:04:00.100</timestamp>
+        <level>INFO</level>
+        <info>Train T002: ETCS supervision active - target speed 160 km/h</info>
+    </event>
+
+    <!-- Train T002 departs -->
+    <event>
+        <id>43</id>
+        <timestamp>2025-01-15 08:04:05.000</timestamp>
+        <level>INFO</level>
+        <info>Train T002: Departing from Platform A - speed 0 to 40 km/h</info>
+    </event>
+    <event>
+        <id>44</id>
+        <timestamp>2025-01-15 08:04:10.000</timestamp>
+        <level>INFO</level>
+        <info>Train T002: Position Report - NID_PACKET=0, position KM120.2</info>
+    </event>
+
+    <!-- Continue with more events... -->
+</events>

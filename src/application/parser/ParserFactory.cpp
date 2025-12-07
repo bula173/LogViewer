@@ -7,6 +7,7 @@
 
 #include "parser/ParserFactory.hpp"
 #include "xml/xmlParser.hpp"
+#include "csv/CsvParser.hpp"
 #include "util/Logger.hpp"
 #include <algorithm>
 
@@ -25,9 +26,14 @@ void ParserFactory::InitializeDefaults()
         return std::make_unique<XmlParser>();
     });
 
+    // Register CSV parser
+    Register(".csv", []() {
+        util::Logger::Debug("Creating CsvParser instance");
+        return std::make_unique<CsvParser>();
+    });
+
     // Future parsers can be registered here:
     // Register(".json", []() { return std::make_unique<JsonParser>(); });
-    // Register(".csv", []() { return std::make_unique<CsvParser>(); });
     // Register(".log", []() { return std::make_unique<TextParser>(); });
 }
 
@@ -93,9 +99,9 @@ util::Result<std::unique_ptr<IDataParser>, error::Error> ParserFactory::Create(P
             error::Error(error::ErrorCode::NotImplemented, "JSON parser not yet implemented"));
 
     case ParserType::CSV:
-        util::Logger::Error("ParserFactory::Create - CSV parser not yet implemented");
-        return util::Result<std::unique_ptr<IDataParser>, error::Error>::Err(
-            error::Error(error::ErrorCode::NotImplemented, "CSV parser not yet implemented"));
+        util::Logger::Debug("ParserFactory::Create - Creating CSV parser");
+        return util::Result<std::unique_ptr<IDataParser>, error::Error>::Ok(
+            std::make_unique<CsvParser>());
 
     case ParserType::Custom:
         util::Logger::Error("ParserFactory::Create - Custom parser must be accessed via extension");
