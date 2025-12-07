@@ -31,6 +31,7 @@ class EventsTableModel : public QAbstractTableModel
     void RefreshColumns();
     void UpdateColors();
     void SetFilteredIndices(const std::vector<unsigned long>& indices);
+    void ClearFilter(); // Clear filtering and show all events
     const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
 
     int ResolveToActualIndex(int row) const;
@@ -52,6 +53,7 @@ class EventsTableModel : public QAbstractTableModel
     std::vector<int> m_visibleColumnIndices;
     const config::Config& m_config;
     bool m_hasSourceColumn {false}; // Track if source column is currently shown
+    bool m_filteringActive {false}; // Track if filtering is active (distinguish empty from no filter)
 };
 
 } // namespace ui::qt

@@ -40,7 +40,12 @@ bool RegexFilterStrategy::matches(const std::string& value,
         }
 
         std::regex regex(pattern, flags);
-        return std::regex_search(value, regex);
+        bool result = std::regex_search(value, regex);
+        
+        util::Logger::Debug("RegexFilterStrategy::matches - pattern='{}', value='{}', caseSensitive={}, result={}",
+            pattern, value, caseSensitive, result);
+        
+        return result;
 
     } catch (const std::regex_error& e) {
         util::Logger::Error("RegexFilterStrategy::matches - Invalid regex '{}': {}",
