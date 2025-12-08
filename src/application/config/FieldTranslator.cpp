@@ -170,6 +170,19 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
             result.wasConverted = false;
         }
     }
+    else if (translation.conversionType == "iso_latin")
+    {
+        converted = ToIsoLatin(value);
+        if (converted != value)
+        {
+            converted = value + " -> " + converted;
+            result.wasConverted = true;
+        }
+        else
+        {
+            result.wasConverted = false;
+        }
+    }
 
     result.convertedValue = converted;
 
@@ -240,6 +253,113 @@ std::string FieldTranslator::UnixToDate(const std::string& unixStr) const
     }
 
     return unixStr;
+}
+
+std::string FieldTranslator::ToIsoLatin(const std::string& text) const
+{
+    // Map of common UTF-8 encoded characters to ASCII equivalents
+    static const std::map<std::string, std::string> latinToAscii = {
+        // Polish characters
+        {"ą", "a"}, {"Ą", "A"},
+        {"ć", "c"}, {"Ć", "C"},
+        {"ę", "e"}, {"Ę", "E"},
+        {"ł", "l"}, {"Ł", "L"},
+        {"ń", "n"}, {"Ń", "N"},
+        {"ó", "o"}, {"Ó", "O"},
+        {"ś", "s"}, {"Ś", "S"},
+        {"ź", "z"}, {"Ź", "Z"},
+        {"ż", "z"}, {"Ż", "Z"},
+        
+        // German characters
+        {"ä", "ae"}, {"Ä", "Ae"},
+        {"ö", "oe"}, {"Ö", "Oe"},
+        {"ü", "ue"}, {"Ü", "Ue"},
+        {"ß", "ss"},
+        
+        // French characters
+        {"à", "a"}, {"À", "A"},
+        {"â", "a"}, {"Â", "A"},
+        {"æ", "ae"}, {"Æ", "Ae"},
+        {"ç", "c"}, {"Ç", "C"},
+        {"é", "e"}, {"É", "E"},
+        {"è", "e"}, {"È", "E"},
+        {"ê", "e"}, {"Ê", "E"},
+        {"ë", "e"}, {"Ë", "E"},
+        {"î", "i"}, {"Î", "I"},
+        {"ï", "i"}, {"Ï", "I"},
+        {"ô", "o"}, {"Ô", "O"},
+        {"œ", "oe"}, {"Œ", "Oe"},
+        {"ù", "u"}, {"Ù", "U"},
+        {"û", "u"}, {"Û", "U"},
+        {"ü", "u"}, {"Ü", "U"},
+        {"ÿ", "y"}, {"Ÿ", "Y"},
+        
+        // Spanish characters
+        {"á", "a"}, {"Á", "A"},
+        {"í", "i"}, {"Í", "I"},
+        {"ñ", "n"}, {"Ñ", "N"},
+        {"ú", "u"}, {"Ú", "U"},
+        {"¿", "?"}, {"¡", "!"},
+        
+        // Italian characters
+        {"ì", "i"}, {"Ì", "I"},
+        {"ò", "o"}, {"Ò", "O"},
+        
+        // Scandinavian characters
+        {"å", "a"}, {"Å", "A"},
+        {"ø", "o"}, {"Ø", "O"},
+        
+        // Czech characters
+        {"č", "c"}, {"Č", "C"},
+        {"ď", "d"}, {"Ď", "D"},
+        {"ě", "e"}, {"Ě", "E"},
+        {"ň", "n"}, {"Ň", "N"},
+        {"ř", "r"}, {"Ř", "R"},
+        {"š", "s"}, {"Š", "S"},
+        {"ť", "t"}, {"Ť", "T"},
+        {"ů", "u"}, {"Ů", "U"},
+        {"ý", "y"}, {"Ý", "Y"},
+        {"ž", "z"}, {"Ž", "Z"},
+        
+        // Other common characters
+        {"–", "-"}, {"—", "-"},  // dashes
+        {"\xE2\x80\x98", "'"}, {"\xE2\x80\x99", "'"}, // single quotes
+        {"\xE2\x80\x9C", "\""}, {"\xE2\x80\x9D", "\""}, // double quotes
+        {"…", "..."}, // ellipsis
+    };
+    
+    std::string result;
+    result.reserve(text.length());
+    
+    size_t i = 0;
+    while (i < text.length())
+    {
+        // Try to match multi-byte UTF-8 sequences
+        bool matched = false;
+        
+        // Try matching 2, 3, or 4 byte sequences
+        for (size_t len = 4; len >= 2 && i + len <= text.length(); --len)
+        {
+            std::string substring = text.substr(i, len);
+            auto it = latinToAscii.find(substring);
+            if (it != latinToAscii.end())
+            {
+                result += it->second;
+                i += len;
+                matched = true;
+                break;
+            }
+        }
+        
+        if (!matched)
+        {
+            // No match found, copy the byte as-is
+            result += text[i];
+            ++i;
+        }
+    }
+    
+    return result;
 }
 
 std::string FieldTranslator::ApplyValueMap(const std::string& value,

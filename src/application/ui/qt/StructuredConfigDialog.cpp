@@ -231,7 +231,7 @@ void StructuredConfigDialog::InitDictionaryTab()
     detailLayout->addRow(tr("Key"), m_dictKeyEdit);
 
     m_dictConversionCombo = new QComboBox(detailGroup);
-    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date"});
+    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date", "iso_latin"});
     detailLayout->addRow(tr("Conversion Type"), m_dictConversionCombo);
     
     connect(m_dictConversionCombo, &QComboBox::currentTextChanged, this, 
@@ -611,14 +611,26 @@ void StructuredConfigDialog::OnSaveClicked()
     // Save dictionary file path
     cfg.SetDictionaryFilePath(m_dictionaryFileEdit->text().toStdString());
     
-    // Save dictionary entries to file
+    // Save dictionary entries to file FIRST - abort if this fails
     const std::string& dictPath = cfg.GetDictionaryFilePath();
     if (!dictPath.empty())
     {
+        util::Logger::Info("Saving dictionary to: {}", dictPath);
         if (!cfg.GetMutableFieldTranslator().SaveToFile(dictPath))
         {
-            util::Logger::Warn("Failed to save dictionary file: {}", dictPath);
+            util::Logger::Error("Failed to save dictionary file: {}", dictPath);
+            QMessageBox::critical(this, tr("Dictionary Save Failed"),
+                tr("Failed to save dictionary to file:\n%1\n\nConfiguration changes were NOT saved.\nPlease check the file path and permissions.").arg(QString::fromStdString(dictPath)));
+            return; // Abort save and keep dialog open
         }
+        else
+        {
+            util::Logger::Info("Dictionary saved successfully to: {}", dictPath);
+        }
+    }
+    else
+    {
+        util::Logger::Warn("No dictionary file path configured, skipping dictionary save");
     }
     
     cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
@@ -640,8 +652,8 @@ void StructuredConfigDialog::OnSaveClicked()
         // that were made through the UI but haven't been persisted yet
         NotifyObservers();
         QMessageBox::information(this, tr("Config"),
-            tr("Configuration saved successfully."));
-        accept();
+            tr("Configuration and dictionary saved successfully."));
+        accept(); // Only close dialog after everything saved successfully
     }
     catch (const std::exception& ex)
     {
@@ -1474,6 +1486,22 @@ void StructuredConfigDialog::OnAddDictionary()
     auto& cfg = config::GetConfig();
     cfg.GetMutableFieldTranslator().SetTranslation(newTrans);
     
+    // Save dictionary to file immediately
+    const std::string& dictPath = cfg.GetDictionaryFilePath();
+    if (!dictPath.empty())
+    {
+        if (cfg.GetMutableFieldTranslator().SaveToFile(dictPath))
+        {
+            util::Logger::Info("Dictionary saved to: {}", dictPath);
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Save Failed"),
+                tr("Failed to save dictionary changes to file:\n%1")
+                .arg(QString::fromStdString(dictPath)));
+        }
+    }
+    
     RefreshDictionaryList();
     
     // Select the new entry
@@ -1509,6 +1537,23 @@ void StructuredConfigDialog::OnRemoveDictionary()
     {
         auto& cfg = config::GetConfig();
         cfg.GetMutableFieldTranslator().RemoveTranslation(key);
+        
+        // Save dictionary to file immediately
+        const std::string& dictPath = cfg.GetDictionaryFilePath();
+        if (!dictPath.empty())
+        {
+            if (cfg.GetMutableFieldTranslator().SaveToFile(dictPath))
+            {
+                util::Logger::Info("Dictionary saved to: {}", dictPath);
+            }
+            else
+            {
+                QMessageBox::warning(this, tr("Save Failed"),
+                    tr("Failed to save dictionary changes to file:\n%1")
+                    .arg(QString::fromStdString(dictPath)));
+            }
+        }
+        
         RefreshDictionaryList();
     }
 }
@@ -1575,6 +1620,22 @@ void StructuredConfigDialog::OnApplyDictionaryChanges()
     }
     
     cfg.GetMutableFieldTranslator().SetTranslation(trans);
+    
+    // Save dictionary to file immediately
+    const std::string& dictPath = cfg.GetDictionaryFilePath();
+    if (!dictPath.empty())
+    {
+        if (cfg.GetMutableFieldTranslator().SaveToFile(dictPath))
+        {
+            util::Logger::Info("Dictionary saved to: {}", dictPath);
+        }
+        else
+        {
+            QMessageBox::warning(this, tr("Save Failed"),
+                tr("Failed to save dictionary changes to file:\n%1")
+                .arg(QString::fromStdString(dictPath)));
+        }
+    }
     
     RefreshDictionaryList();
     
