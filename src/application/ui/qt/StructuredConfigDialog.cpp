@@ -231,7 +231,7 @@ void StructuredConfigDialog::InitDictionaryTab()
     detailLayout->addRow(tr("Key"), m_dictKeyEdit);
 
     m_dictConversionCombo = new QComboBox(detailGroup);
-    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date", "iso_latin"});
+    m_dictConversionCombo->addItems({"tooltip_only", "hex_to_ascii", "value_map", "unix_to_date", "iso_latin", "nid_lrbg"});
     detailLayout->addRow(tr("Conversion Type"), m_dictConversionCombo);
     
     connect(m_dictConversionCombo, &QComboBox::currentTextChanged, this, 

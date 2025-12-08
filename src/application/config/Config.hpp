@@ -92,6 +92,8 @@ class Config
      */
     void SetDictionaryFilePath(const std::string& path);
 
+    std::string GetAppName() const { return appName; }
+
   private:
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
