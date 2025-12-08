@@ -8,6 +8,7 @@
 #include <ctime>
 #include <cctype>
 #include <filesystem>
+#include <vector>
 
 namespace config
 {
@@ -166,7 +167,7 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     }
     else if (translation.conversionType == "iso_latin")
     {
-        converted = ToIsoLatin(value);
+        converted = IsoLatin1ToUtf8(value);
         if (converted != value)
         {
             converted = value + " -> " + converted;
@@ -249,110 +250,85 @@ std::string FieldTranslator::UnixToDate(const std::string& unixStr) const
     return unixStr;
 }
 
-std::string FieldTranslator::ToIsoLatin(const std::string& text) const
+std::string FieldTranslator::IsoLatin1ToUtf8(const std::string& text) const
 {
-    // Map of common UTF-8 encoded characters to ASCII equivalents
-    static const std::map<std::string, std::string> latinToAscii = {
-        // Polish characters
-        {"ą", "a"}, {"Ą", "A"},
-        {"ć", "c"}, {"Ć", "C"},
-        {"ę", "e"}, {"Ę", "E"},
-        {"ł", "l"}, {"Ł", "L"},
-        {"ń", "n"}, {"Ń", "N"},
-        {"ó", "o"}, {"Ó", "O"},
-        {"ś", "s"}, {"Ś", "S"},
-        {"ź", "z"}, {"Ź", "Z"},
-        {"ż", "z"}, {"Ż", "Z"},
-        
-        // German characters
-        {"ä", "ae"}, {"Ä", "Ae"},
-        {"ö", "oe"}, {"Ö", "Oe"},
-        {"ü", "ue"}, {"Ü", "Ue"},
-        {"ß", "ss"},
-        
-        // French characters
-        {"à", "a"}, {"À", "A"},
-        {"â", "a"}, {"Â", "A"},
-        {"æ", "ae"}, {"Æ", "Ae"},
-        {"ç", "c"}, {"Ç", "C"},
-        {"é", "e"}, {"É", "E"},
-        {"è", "e"}, {"È", "E"},
-        {"ê", "e"}, {"Ê", "E"},
-        {"ë", "e"}, {"Ë", "E"},
-        {"î", "i"}, {"Î", "I"},
-        {"ï", "i"}, {"Ï", "I"},
-        {"ô", "o"}, {"Ô", "O"},
-        {"œ", "oe"}, {"Œ", "Oe"},
-        {"ù", "u"}, {"Ù", "U"},
-        {"û", "u"}, {"Û", "U"},
-        {"ü", "u"}, {"Ü", "U"},
-        {"ÿ", "y"}, {"Ÿ", "Y"},
-        
-        // Spanish characters
-        {"á", "a"}, {"Á", "A"},
-        {"í", "i"}, {"Í", "I"},
-        {"ñ", "n"}, {"Ñ", "N"},
-        {"ú", "u"}, {"Ú", "U"},
-        {"¿", "?"}, {"¡", "!"},
-        
-        // Italian characters
-        {"ì", "i"}, {"Ì", "I"},
-        {"ò", "o"}, {"Ò", "O"},
-        
-        // Scandinavian characters
-        {"å", "a"}, {"Å", "A"},
-        {"ø", "o"}, {"Ø", "O"},
-        
-        // Czech characters
-        {"č", "c"}, {"Č", "C"},
-        {"ď", "d"}, {"Ď", "D"},
-        {"ě", "e"}, {"Ě", "E"},
-        {"ň", "n"}, {"Ň", "N"},
-        {"ř", "r"}, {"Ř", "R"},
-        {"š", "s"}, {"Š", "S"},
-        {"ť", "t"}, {"Ť", "T"},
-        {"ů", "u"}, {"Ů", "U"},
-        {"ý", "y"}, {"Ý", "Y"},
-        {"ž", "z"}, {"Ž", "Z"},
-        
-        // Other common characters
-        {"–", "-"}, {"—", "-"},  // dashes
-        {"\xE2\x80\x98", "'"}, {"\xE2\x80\x99", "'"}, // single quotes
-        {"\xE2\x80\x9C", "\""}, {"\xE2\x80\x9D", "\""}, // double quotes
-        {"…", "..."}, // ellipsis
-    };
-    
-    std::string result;
-    result.reserve(text.length());
-    
-    size_t i = 0;
-    while (i < text.length())
+    // Convert numeric values or hex strings to ISO-8859-1 bytes, then to UTF-8
+    // Supports formats like:
+    // - "225" (decimal byte value)
+    // - "E1" (hex byte value)
+    // - "225 233 237" (space-separated decimal values)
+    // - "E1 E9 ED" (space-separated hex values)
+
+    std::vector<unsigned char> bytes;
+    std::istringstream iss(text);
+    std::string token;
+
+    while (iss >> token)
     {
-        // Try to match multi-byte UTF-8 sequences
-        bool matched = false;
-        
-        // Try matching 2, 3, or 4 byte sequences
-        for (size_t len = 4; len >= 2 && i + len <= text.length(); --len)
+        try
         {
-            std::string substring = text.substr(i, len);
-            auto it = latinToAscii.find(substring);
-            if (it != latinToAscii.end())
+            unsigned long value;
+            bool isHex = (token.length() > 0 && token[0] == '0' && token.length() > 1 && (token[1] == 'x' || token[1] == 'X')) ||
+                        (token.length() > 1 && token.find_first_not_of("0123456789ABCDEFabcdef") == std::string::npos && token.length() <= 2);
+
+            if (isHex && token.length() <= 2)
             {
-                result += it->second;
-                i += len;
-                matched = true;
-                break;
+                // Hex value like "E1" or "0xE1"
+                value = std::stoul(token, nullptr, 16);
+            }
+            else
+            {
+                // Decimal value like "225"
+                value = std::stoul(token, nullptr, 10);
+            }
+
+            if (value <= 0xFF)
+            {
+                bytes.push_back(static_cast<unsigned char>(value));
             }
         }
-        
-        if (!matched)
+        catch (const std::exception&)
         {
-            // No match found, copy the byte as-is
-            result += text[i];
-            ++i;
+            // If parsing fails, treat as direct ISO-8859-1 bytes
+            for (char c : token)
+            {
+                bytes.push_back(static_cast<unsigned char>(c));
+            }
         }
     }
-    
+
+    // If no numeric parsing succeeded, treat the entire string as ISO-8859-1 bytes
+    if (bytes.empty())
+    {
+        for (char c : text)
+        {
+            bytes.push_back(static_cast<unsigned char>(c));
+        }
+    }
+
+    // Convert bytes to UTF-8
+    std::string result;
+    result.reserve(bytes.size() * 2);
+
+    for (unsigned char byte : bytes)
+    {
+        if (byte < 0x80)
+        {
+            // ASCII character (0x00-0x7F) - copy as-is
+            result += static_cast<char>(byte);
+        }
+        else
+        {
+            // ISO-8859-1 character (0x80-0xFF) - convert to UTF-8
+            char utf8[3];
+            utf8[0] = static_cast<char>(0xC0 | (byte >> 6));   // First byte: 110xxxxx
+            utf8[1] = static_cast<char>(0x80 | (byte & 0x3F));  // Second byte: 10xxxxxx
+            utf8[2] = '\0';
+            result += utf8[0];
+            result += utf8[1];
+        }
+    }
+
     return result;
 }
 

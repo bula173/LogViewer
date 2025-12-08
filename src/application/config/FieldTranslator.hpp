@@ -92,7 +92,7 @@ private:
     std::string HexToAscii(const std::string& hexStr) const;
     std::string UnixToDate(const std::string& unixStr) const;
     std::string ApplyValueMap(const std::string& value, const std::map<std::string, std::string>& valueMap) const;
-    std::string ToIsoLatin(const std::string& text) const;
+    std::string IsoLatin1ToUtf8(const std::string& text) const;
     std::string FormatTooltip(const std::string& templateStr, const std::string& original, const std::string& converted) const;
     std::string ToLower(const std::string& str) const;
 
