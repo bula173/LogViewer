@@ -27,13 +27,11 @@ FieldTranslator::FieldTranslator()
         {
             if (LoadFromFile(path.string()))
             {
-                util::Logger::Info("Loaded field dictionary from: {}", path.string());
                 return;
             }
         }
     }
 
-    util::Logger::Warn("No field_dictionary.json found, field conversions disabled");
 }
 
 bool FieldTranslator::LoadFromFile(const std::string& filePath)
@@ -43,7 +41,6 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
         std::ifstream file(filePath);
         if (!file.is_open())
         {
-            util::Logger::Error("Failed to open field dictionary file: {}", filePath);
             return false;
         }
 
@@ -52,7 +49,6 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
 
         if (!j.contains("translations") || !j["translations"].is_array())
         {
-            util::Logger::Error("Invalid field dictionary file format");
             return false;
         }
 
@@ -80,12 +76,10 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
             m_dictionary[ft.key] = ft;
         }
 
-        util::Logger::Info("Loaded {} field dictionary entrie(s)", m_dictionary.size());
         return true;
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("Failed to parse field dictionary: {}", ex.what());
         return false;
     }
 }

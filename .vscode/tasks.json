@@ -5,27 +5,27 @@
         // Configure Tasks (using CMake Presets)
         // ========================================================================
         {
-            "label": "Configure Debug",
+            "label": "Configure QT Debug",
             "type": "shell",
             "windows": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "windows-msys-debug"
+                    "windows-msys-debug-qt"
                 ]
             },
             "linux": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "linux-debug"
+                    "linux-debug-qt"
                 ]
             },
             "osx": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "macOS Debug (QT)"
+                    "macos-debug-qt"
                 ]
             },
             "problemMatcher": [],
@@ -35,27 +35,27 @@
             }
         },
         {
-            "label": "Configure Release",
+            "label": "Configure QT Release",
             "type": "shell",
             "windows": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "windows-msys-release"
+                    "windows-msys-release-qt"
                 ]
             },
             "linux": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "linux-release"
+                    "linux-release-qt"
                 ]
             },
             "osx": {
                 "command": "cmake",
                 "args": [
                     "--preset",
-                    "macos-release"
+                    "macos-release-qt"
                 ]
             },
             "problemMatcher": [],
@@ -69,14 +69,14 @@
         // Build Tasks (using CMake Presets)
         // ========================================================================
         {
-            "label": "Build Debug",
+            "label": "Build QT Debug",
             "type": "shell",
             "windows": {
                 "command": "cmake",
                 "args": [
                     "--build",
                     "--preset",
-                    "windows-msys-debug-build"
+                    "windows-msys-debug-build-qt"
                 ]
             },
             "linux": {
@@ -84,7 +84,7 @@
                 "args": [
                     "--build",
                     "--preset",
-                    "linux-debug-build"
+                    "linux-debug-build-qt"
                 ]
             },
             "osx": {
@@ -92,11 +92,11 @@
                 "args": [
                     "--build",
                     "--preset",
-                    "macos-debug-build"
+                    "macos-debug-build-qt"
                 ]
             },
             "dependsOn": [
-                "Configure Debug"
+                "Configure QT Debug"
             ],
             "group": {
                 "kind": "build",
@@ -111,14 +111,14 @@
             }
         },
         {
-            "label": "Build Release",
+            "label": "Build QT Release",
             "type": "shell",
             "windows": {
                 "command": "cmake",
                 "args": [
                     "--build",
                     "--preset",
-                    "windows-msys-release-build"
+                    "windows-msys-release-build-qt"
                 ]
             },
             "linux": {
@@ -126,7 +126,7 @@
                 "args": [
                     "--build",
                     "--preset",
-                    "linux-release-build"
+                    "linux-release-build-qt"
                 ]
             },
             "osx": {
@@ -134,11 +134,11 @@
                 "args": [
                     "--build",
                     "--preset",
-                    "macos-release-build"
+                    "macos-release-build-qt"
                 ]
             },
             "dependsOn": [
-                "Configure Release"
+                "Configure QT Release"
             ],
             "group": "build",
             "problemMatcher": [
@@ -154,26 +154,26 @@
         // Compatibility Alias Tasks
         // ========================================================================
         {
-            "label": "Build release with CMake",
+            "label": "Build QT release with CMake",
             "type": "shell",
             "dependsOn": [
-                "Build Release"
+                "Build QT Release"
             ],
             "command": "echo",
             "args": [
-                "Build Release completed"
+                "Build QT Release completed"
             ],
             "problemMatcher": []
         },
         {
-            "label": "Build debug with CMake",
+            "label": "Build QT debug with CMake",
             "type": "shell",
             "dependsOn": [
-                "Build Debug"
+                "Build QT Debug"
             ],
             "command": "echo",
             "args": [
-                "Build Debug completed"
+                "Build QT Debug completed"
             ],
             "problemMatcher": []
         },
@@ -182,31 +182,31 @@
         // Test Tasks (using CMake Presets)
         // ========================================================================
         {
-            "label": "Test Debug",
+            "label": "Test QT Debug",
             "type": "shell",
             "windows": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "windows-msys-debug-test"
+                    "windows-msys-debug-test-qt"
                 ]
             },
             "linux": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "linux-debug-test"
+                    "linux-debug-test-qt"
                 ]
             },
             "osx": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "macos-debug-test"
+                    "macos-debug-test-qt"
                 ]
             },
             "dependsOn": [
-                "Build Debug"
+                "Build QT Debug"
             ],
             "presentation": {
                 "reveal": "always",
@@ -214,31 +214,31 @@
             }
         },
         {
-            "label": "Test Release",
+            "label": "Test QT Release",
             "type": "shell",
             "windows": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "windows-msys-release-test"
+                    "windows-msys-release-test-qt"
                 ]
             },
             "linux": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "linux-release-test"
+                    "linux-release-test-qt"
                 ]
             },
             "osx": {
                 "command": "ctest",
                 "args": [
                     "--preset",
-                    "macos-release-test"
+                    "macos-release-test-qt"
                 ]
             },
             "dependsOn": [
-                "Build Release"
+                "Build QT Release"
             ],
             "presentation": {
                 "reveal": "always",
@@ -277,31 +277,31 @@
             ]
         },
         {
-            "label": "Package Release",
+            "label": "Package QT Release",
             "type": "shell",
             "windows": {
                 "command": "cpack",
                 "args": [
                     "--preset",
-                    "windows-msys-release-package"
+                    "windows-msys-release-package-qt"
                 ]
             },
             "linux": {
                 "command": "cpack",
                 "args": [
                     "--preset",
-                    "linux-release-package"
+                    "linux-release-package-qt"
                 ]
             },
             "osx": {
                 "command": "cpack",
                 "args": [
                     "--preset",
-                    "macos-release-package"
+                    "macos-release-package-qt"
                 ]
             },
             "dependsOn": [
-                "Build Release"
+                "Build QT Release"
             ]
         },
         // ========================================================================
@@ -337,7 +337,7 @@
                 }
             },
             "dependsOn": [
-                "Build Debug"
+                "Build QT Debug"
             ],
             "isBackground": true
         },
@@ -371,7 +371,7 @@
                 }
             },
             "dependsOn": [
-                "Build Debug"
+                "Build QT Debug"
             ]
         },
         // ========================================================================
