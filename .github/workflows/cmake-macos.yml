@@ -35,7 +35,9 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache wxwidgets expat cppcheck qt
+          brew install ninja ccache expat cppcheck
+          ${{ matrix.gui_framework == 'wx' && 'brew install wxwidgets' || '' }}
+          ${{ matrix.gui_framework == 'qt' && 'brew install qt' || '' }}
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -51,7 +53,7 @@ jobs:
         run: |
           which clang++
           clang++ --version
-          wx-config --version
+          ${{ matrix.gui_framework == 'wx' && 'wx-config --version' || 'echo "Qt build - skipping wx-config"' }}
 
       - name: Configure
         run: |

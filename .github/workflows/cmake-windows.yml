@@ -22,8 +22,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release]
-        gui_framework: [wx, qt]
+        include:
+          # On demand build Release versions
+          - build_type: Release
+            gui_framework: wx
+            on_demand_only: true
+          - build_type: Release
+            gui_framework: qt
+          # On demand build Debug wx
+          - build_type: Debug
+            gui_framework: wx
+            on_demand_only: true
+          # Qt Debug only on demand (manual dispatch)
+          - build_type: Debug
+            gui_framework: qt
+            on_demand_only: true
 
     env:
       BUILD_DIR: ${{ github.workspace }}\build
@@ -35,6 +48,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Skip Qt Debug on automatic builds
+        if: matrix.on_demand_only == true && github.event_name != 'workflow_dispatch'
+        run: |
+          echo "Skipping Qt Debug build on automatic trigger. Use manual dispatch to run Qt Debug builds."
+          exit 0
 
       - name: Set up MSYS2
         uses: msys2/setup-msys2@v2
@@ -52,19 +71,19 @@ jobs:
             mingw-w64-x86_64-ccache
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gtest
-            mingw-w64-x86_64-wxwidgets3.2-msw
-            mingw-w64-x86_64-qt6-base
-            mingw-w64-x86_64-qt6-tools
             mingw-w64-x86_64-libtiff
             mingw-w64-x86_64-cppcheck
             mingw-w64-x86_64-nsis
+            ${{ matrix.gui_framework == 'wx' && 'mingw-w64-x86_64-wxwidgets3.2-msw' || '' }}
+            ${{ matrix.gui_framework == 'qt' && 'mingw-w64-x86_64-qt6-base' || '' }}
+            ${{ matrix.gui_framework == 'qt' && 'mingw-w64-x86_64-qt6-tools' || '' }}
 
       - name: Toolchain info
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           clang++ --version
-          wx-config --version
+          ${{ matrix.gui_framework == 'wx' && 'wx-config --version' || 'echo "Qt build - skipping wx-config"' }}
 
       - name: Cache ccache
         uses: actions/cache@v4
