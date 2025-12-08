@@ -139,11 +139,6 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
-        // Set Qt attributes before creating QApplication
-        // This can help prevent crashes with certain Qt versions
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-        QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-
         // Create QApplication on the stack for proper cleanup
         QApplication app(argc, argv);
         util::Logger::Info("QApplication created successfully");
