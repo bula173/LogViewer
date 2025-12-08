@@ -5,8 +5,8 @@ IDI_ICON1 ICON "LogViewer.ico"
 
 // Version information
 1 VERSIONINFO
-FILEVERSION     @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
-PRODUCTVERSION  @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+FILEVERSION     0,1,1,0
+PRODUCTVERSION  0,1,1,0
 FILEFLAGSMASK   0x3fL
 FILEFLAGS       0x0L
 FILEOS          VOS_NT_WINDOWS32
@@ -19,12 +19,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "LogViewer"
             VALUE "FileDescription",  "LogViewer Application"
-            VALUE "FileVersion",      "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0"
+            VALUE "FileVersion",      "0.1.1.0"
             VALUE "InternalName",     "LogViewer"
             VALUE "LegalCopyright",   "Copyright (C) 2025"
             VALUE "OriginalFilename", "LogViewerQt.exe"
             VALUE "ProductName",      "LogViewer"
-            VALUE "ProductVersion",   "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.0"
+            VALUE "ProductVersion",   "0.1.1.0"
         END
     END
     BLOCK "VarFileInfo"
