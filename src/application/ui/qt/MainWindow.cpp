@@ -59,15 +59,28 @@ MainWindow::MainWindow(mvc::IController& controller,
 {
     m_events = &events;
     util::Logger::Info("[MainWindow] Initializing main window");
-    InitializeUi(events);
-    SetupMenus();
-    InitializePresenter(controller, events);
-    util::Logger::Info("[MainWindow] Main window initialized");
-    
-    // Restore window layout
-    QSettings settings("LogViewer", "LogViewerQt");
-    restoreGeometry(settings.value("windowGeometry").toByteArray());
-    restoreState(settings.value("windowState").toByteArray());
+
+    try {
+        InitializeUi(events);
+        util::Logger::Debug("[MainWindow] UI initialization completed");
+
+        SetupMenus();
+        util::Logger::Debug("[MainWindow] Menu setup completed");
+
+        InitializePresenter(controller, events);
+        util::Logger::Debug("[MainWindow] Presenter initialization completed");
+
+        util::Logger::Info("[MainWindow] Main window initialized successfully");
+
+        // Restore window layout
+        QSettings settings("LogViewer", "LogViewerQt");
+        restoreGeometry(settings.value("windowGeometry").toByteArray());
+        restoreState(settings.value("windowState").toByteArray());
+
+    } catch (const std::exception& ex) {
+        util::Logger::Error("[MainWindow] Initialization failed: {}", ex.what());
+        throw; // Re-throw to let the application handle it
+    }
 }
 
 MainWindow::~MainWindow()
@@ -86,130 +99,200 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     util::Logger::Debug("[MainWindow] InitializeUi: events size={}",
         events.Size());
 
-    // ===== STATUS BAR =====
-    m_statusLabel = new QLabel("Ready", this);
-    statusBar()->addWidget(m_statusLabel, 1);
+    try {
+        // ===== STATUS BAR =====
+        m_statusLabel = new QLabel("Ready", this);
+        if (!m_statusLabel) {
+            throw std::runtime_error("Failed to create status label");
+        }
+        statusBar()->addWidget(m_statusLabel, 1);
 
-    m_progressBar = new QProgressBar(this);
-    m_progressBar->setVisible(false);
-    m_progressBar->setTextVisible(false);
-    m_progressBar->setFixedHeight(12);
-    statusBar()->addPermanentWidget(m_progressBar, 0);
+        m_progressBar = new QProgressBar(this);
+        if (!m_progressBar) {
+            throw std::runtime_error("Failed to create progress bar");
+        }
+        m_progressBar->setVisible(false);
+        m_progressBar->setTextVisible(false);
+        m_progressBar->setFixedHeight(12);
+        statusBar()->addPermanentWidget(m_progressBar, 0);
 
-    // ===== CENTRAL WIDGET: Main content area with tabs =====
-    auto* contentTabs = new QTabWidget(this);
-    
-    // Events view tab
-    m_eventsView = new EventsTableView(events, contentTabs);
-    contentTabs->addTab(m_eventsView, "Events");
-    
-    // AI Analysis tab - use factory to create appropriate client
-    auto& config = config::GetConfig();
-    m_aiService = ai::AIServiceFactory::CreateClient(
-        config.aiProvider,
-        config.GetApiKeyForProvider(config.aiProvider),
-        config.ollamaBaseUrl,
-        config.ollamaDefaultModel
-    );
-    m_aiAnalyzer = std::make_shared<ai::LogAnalyzer>(m_aiService, events);
-    m_aiPanel = new AIAnalysisPanel(m_aiService, m_aiAnalyzer, m_eventsView, contentTabs);
-    contentTabs->addTab(m_aiPanel, "AI Analysis");
-    
-    // Create AI configuration panel (shared references with AI Analysis)
-    m_aiConfigPanel = new AIConfigPanel(m_aiService, m_aiAnalyzer, this);
-    m_aiPanel->SetConfigPanel(m_aiConfigPanel);
-    
-    setCentralWidget(contentTabs);
+        // ===== CENTRAL WIDGET: Main content area with tabs =====
+        auto* contentTabs = new QTabWidget(this);
+        if (!contentTabs) {
+            throw std::runtime_error("Failed to create content tabs");
+        }
+
+        // Events view tab
+        m_eventsView = new EventsTableView(events, contentTabs);
+        if (!m_eventsView) {
+            throw std::runtime_error("Failed to create events view");
+        }
+        contentTabs->addTab(m_eventsView, "Events");
+
+        // AI Analysis tab - use factory to create appropriate client
+        auto& config = config::GetConfig();
+        m_aiService = ai::AIServiceFactory::CreateClient(
+            config.aiProvider,
+            config.GetApiKeyForProvider(config.aiProvider),
+            config.ollamaBaseUrl,
+            config.ollamaDefaultModel
+        );
+        m_aiAnalyzer = std::make_shared<ai::LogAnalyzer>(m_aiService, events);
+        m_aiPanel = new AIAnalysisPanel(m_aiService, m_aiAnalyzer, m_eventsView, contentTabs);
+        if (!m_aiPanel) {
+            throw std::runtime_error("Failed to create AI analysis panel");
+        }
+        contentTabs->addTab(m_aiPanel, "AI Analysis");
+
+        // Create AI configuration panel (shared references with AI Analysis)
+        m_aiConfigPanel = new AIConfigPanel(m_aiService, m_aiAnalyzer, this);
+        if (!m_aiConfigPanel) {
+            throw std::runtime_error("Failed to create AI config panel");
+        }
+        m_aiPanel->SetConfigPanel(m_aiConfigPanel);
+
+        setCentralWidget(contentTabs);
 
     // ===== LEFT DOCK: Filters and AI Configuration =====
     // Filters dock
     m_filtersDock = new QDockWidget("Filters", this);
+    if (!m_filtersDock) {
+        throw std::runtime_error("Failed to create filters dock");
+    }
     m_filtersDock->setObjectName("FiltersDockWidget");
     m_filtersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable | 
-                               QDockWidget::DockWidgetFloatable | 
+    m_filtersDock->setFeatures(QDockWidget::DockWidgetMovable |
+                               QDockWidget::DockWidgetFloatable |
                                QDockWidget::DockWidgetClosable);
-    
+
     m_filterTabs = new QTabWidget(m_filtersDock);
-    
+    if (!m_filterTabs) {
+        throw std::runtime_error("Failed to create filter tabs");
+    }
+
     auto* filtersTab = new QWidget(m_filterTabs);
+    if (!filtersTab) {
+        throw std::runtime_error("Failed to create filters tab");
+    }
     auto* filtersLayout = new QVBoxLayout(filtersTab);
     m_filtersPanel = new FiltersPanel(filtersTab);
+    if (!m_filtersPanel) {
+        throw std::runtime_error("Failed to create filters panel");
+    }
     filtersLayout->addWidget(m_filtersPanel);
     filtersTab->setLayout(filtersLayout);
 
     auto* typeTab = new QWidget(m_filterTabs);
+    if (!typeTab) {
+        throw std::runtime_error("Failed to create type tab");
+    }
     auto* typeLayout = new QVBoxLayout(typeTab);
     typeLayout->addWidget(new QLabel("Type:", typeTab));
     m_typeFilterView = new TypeFilterView(typeTab);
+    if (!m_typeFilterView) {
+        throw std::runtime_error("Failed to create type filter view");
+    }
     typeLayout->addWidget(m_typeFilterView);
     m_applyFilterButton = new QPushButton("Apply Filter", typeTab);
+    if (!m_applyFilterButton) {
+        throw std::runtime_error("Failed to create apply filter button");
+    }
     typeLayout->addWidget(m_applyFilterButton);
     typeTab->setLayout(typeLayout);
 
     m_filterTabs->addTab(filtersTab, "Extended Filters");
     m_filterTabs->addTab(typeTab, "Type Filters");
-    
+
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
-    
+
     // AI Configuration dock
     m_aiConfigDock = new QDockWidget("AI Configuration", this);
+    if (!m_aiConfigDock) {
+        throw std::runtime_error("Failed to create AI config dock");
+    }
     m_aiConfigDock->setObjectName("AIConfigurationDockWidget");
     m_aiConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_aiConfigDock->setFeatures(QDockWidget::DockWidgetMovable | 
-                                QDockWidget::DockWidgetFloatable | 
+    m_aiConfigDock->setFeatures(QDockWidget::DockWidgetMovable |
+                                QDockWidget::DockWidgetFloatable |
                                 QDockWidget::DockWidgetClosable);
     m_aiConfigDock->setWidget(m_aiConfigPanel);
     addDockWidget(Qt::LeftDockWidgetArea, m_aiConfigDock);
 
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
+    if (!m_detailsDock) {
+        throw std::runtime_error("Failed to create details dock");
+    }
     m_detailsDock->setObjectName("ItemDetailsDockWidget");
     m_detailsDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_detailsDock->setFeatures(QDockWidget::DockWidgetMovable | 
-                               QDockWidget::DockWidgetFloatable | 
+    m_detailsDock->setFeatures(QDockWidget::DockWidgetMovable |
+                               QDockWidget::DockWidgetFloatable |
                                QDockWidget::DockWidgetClosable);
-    
+
     m_itemDetailsView = new ItemDetailsView(events, m_detailsDock);
+    if (!m_itemDetailsView) {
+        throw std::runtime_error("Failed to create item details view");
+    }
     m_detailsDock->setWidget(m_itemDetailsView);
     addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
 
     // ===== BOTTOM DOCK: Search & AI Chat =====
     m_bottomDock = new QDockWidget("Tools", this);
+    if (!m_bottomDock) {
+        throw std::runtime_error("Failed to create bottom dock");
+    }
     m_bottomDock->setObjectName("ToolsDockWidget");
     m_bottomDock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
-    m_bottomDock->setFeatures(QDockWidget::DockWidgetMovable | 
-                              QDockWidget::DockWidgetFloatable | 
+    m_bottomDock->setFeatures(QDockWidget::DockWidgetMovable |
+                              QDockWidget::DockWidgetFloatable |
                               QDockWidget::DockWidgetClosable);
-    
+
     auto* bottomTabs = new QTabWidget(m_bottomDock);
-    
+    if (!bottomTabs) {
+        throw std::runtime_error("Failed to create bottom tabs");
+    }
+
     // Search tab
     auto* searchPanel = new QWidget(bottomTabs);
+    if (!searchPanel) {
+        throw std::runtime_error("Failed to create search panel");
+    }
     auto* searchLayout = new QVBoxLayout(searchPanel);
     searchLayout->setContentsMargins(4, 4, 4, 4);
     searchLayout->setSpacing(8);
 
     auto* searchRow = new QHBoxLayout();
     m_searchEdit = new QLineEdit(searchPanel);
+    if (!m_searchEdit) {
+        throw std::runtime_error("Failed to create search edit");
+    }
     m_searchEdit->setPlaceholderText("Enter search query");
     m_searchButton = new QPushButton("Search", searchPanel);
+    if (!m_searchButton) {
+        throw std::runtime_error("Failed to create search button");
+    }
     searchRow->addWidget(m_searchEdit);
     searchRow->addWidget(m_searchButton);
 
     m_searchResults = new SearchResultsView(searchPanel);
+    if (!m_searchResults) {
+        throw std::runtime_error("Failed to create search results view");
+    }
 
     searchLayout->addLayout(searchRow);
     searchLayout->addWidget(m_searchResults, 1);
     searchPanel->setLayout(searchLayout);
-    
+
     bottomTabs->addTab(searchPanel, "Search");
-    
+
     // AI Chat tab
     auto* chatPanel = new AIChatPanel(m_aiService, events, bottomTabs);
+    if (!chatPanel) {
+        throw std::runtime_error("Failed to create AI chat panel");
+    }
     bottomTabs->addTab(chatPanel, "AI Chat");
-    
+
     m_bottomDock->setWidget(bottomTabs);
     addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
 
@@ -246,6 +329,11 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     }
 
     util::Logger::Debug("[MainWindow] UI initialized");
+
+    } catch (const std::exception& ex) {
+        util::Logger::Error("[MainWindow] UI initialization failed: {}", ex.what());
+        throw;
+    }
 }
 
 void MainWindow::SetupMenus()
@@ -346,6 +434,20 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     db::EventsContainer& events)
 {
     util::Logger::Debug("[MainWindow] InitializePresenter");
+
+    // Validate that all required UI components are properly initialized
+    if (!m_eventsView) {
+        throw std::runtime_error("Events view not initialized");
+    }
+    if (!m_searchResults) {
+        throw std::runtime_error("Search results view not initialized");
+    }
+    if (!m_typeFilterView) {
+        throw std::runtime_error("Type filter view not initialized");
+    }
+    if (!m_itemDetailsView) {
+        throw std::runtime_error("Item details view not initialized");
+    }
 
     // Create the presenter with all required interfaces
     m_presenter = std::make_unique<ui::MainWindowPresenter>(

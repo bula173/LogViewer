@@ -1,6 +1,7 @@
 #include "config/Config.hpp"
 #include "db/EventsContainer.hpp"
 #include "error/Error.hpp"
+#include "main/version.h"
 #include "mvc/MainController.hpp"
 #include "ui/qt/MainWindow.hpp"
 #include "util/Logger.hpp"
@@ -27,6 +28,7 @@ bool SetupConfig()
 bool SetupLogging()
 {
     auto& config = config::GetConfig();
+    config.SetAppName(kQtAppName);
     util::Logger::Initialize(
         util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
     util::Logger::Info("Logging initialized for Qt UI");
@@ -50,6 +52,12 @@ bool CheckQtLibraries()
         // Try to access Qt version info
         QString qtVersion = qVersion();
         util::Logger::Info("Qt version: {}", qtVersion.toStdString());
+
+        // Check for known problematic Qt versions
+        if (qtVersion.startsWith("6.10.")) {
+            util::Logger::Warn("Qt version 6.10.x detected. This version may have known issues with widget initialization.");
+            util::Logger::Warn("Consider downgrading to Qt 6.9.x or upgrading to a newer version if available.");
+        }
 
         // Check application directory for Qt libraries
         QString appDir = QCoreApplication::applicationDirPath();
@@ -131,15 +139,36 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
+        // Set Qt attributes before creating QApplication
+        // This can help prevent crashes with certain Qt versions
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+        QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
         // Create QApplication on the stack for proper cleanup
         QApplication app(argc, argv);
         util::Logger::Info("QApplication created successfully");
+
+        // Set application properties
+        app.setApplicationName(kQtAppName);
+        app.setApplicationVersion(QString::fromStdString(Version::current().asShortStr()));
+        app.setOrganizationName("LogViewer");
+        app.setOrganizationDomain("logviewer.app");
+
+        // Verify QApplication is properly initialized
+        if (!QApplication::instance()) {
+            ShowFatalMessage("Failed to create QApplication instance");
+            return EXIT_FAILURE;
+        }
+
+        util::Logger::Info("Qt application properties set successfully");
 
         db::EventsContainer events;
         mvc::MainController controller(events);
 
         ui::qt::MainWindow window(controller, events);
         window.show();
+
+        util::Logger::Info("Main window shown successfully");
 
         return app.exec();
     } catch (const error::Error& ex)

@@ -112,6 +112,53 @@ if(WIN32 AND NOT UNIX)
         message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")
     endif()
 
+    # Code Signing Configuration
+    # To enable code signing, set these CMake variables:
+    # - CODE_SIGN_CERTIFICATE: Path to your .pfx certificate file
+    # - CODE_SIGN_PASSWORD: Password for the certificate
+    # - CODE_SIGN_TIMESTAMP_URL: Timestamp server (default: DigiCert)
+    #
+    # For self-signed certificates, see CODE_SIGNING_README.md
+    #
+    # Example usage:
+    # cmake -DCODE_SIGN_CERTIFICATE="C:/path/to/cert.pfx" -DCODE_SIGN_PASSWORD="password" ..
+    #
+    # To create a self-signed certificate for development:
+    # Run: packaging\create_self_signed_cert.bat (Windows)
+    # Then configure with the generated .pfx file
+    set(CODE_SIGN_CERTIFICATE "" CACHE FILEPATH "Path to code signing certificate (.pfx file)")
+    set(CODE_SIGN_PASSWORD "" CACHE STRING "Password for code signing certificate")
+    set(CODE_SIGN_TIMESTAMP_URL "http://timestamp.digicert.com" CACHE STRING "Timestamp server URL")
+    
+    if(CODE_SIGN_CERTIFICATE)
+        find_program(SIGNTOOL_EXECUTABLE signtool PATHS "C:/Program Files (x86)/Windows Kits/10/bin" "C:/Program Files/Windows Kits/10/bin")
+        if(SIGNTOOL_EXECUTABLE)
+            message(STATUS "   + Code Signing                        YES (${SIGNTOOL_EXECUTABLE})")
+            
+            # Sign the executable after building
+            if(USE_QT)
+                set(TARGET_TO_SIGN "${PROJECT_NAME}Qt")
+            elseif(USE_WXWIDGETS)
+                set(TARGET_TO_SIGN "${PROJECT_NAME}Wx")
+            endif()
+            
+            add_custom_command(TARGET ${TARGET_TO_SIGN} POST_BUILD
+                COMMAND ${SIGNTOOL_EXECUTABLE} sign /f "${CODE_SIGN_CERTIFICATE}" 
+                        /p "${CODE_SIGN_PASSWORD}" 
+                        /t "${CODE_SIGN_TIMESTAMP_URL}"
+                        /d "LogViewer Application"
+                        /du "https://github.com/bula173/LogViewer"
+                        "$<TARGET_FILE:${TARGET_TO_SIGN}>"
+                COMMENT "Signing executable with code signing certificate..."
+                VERBATIM
+            )
+        else()
+            message(WARNING "Code signing certificate specified but signtool.exe not found. Install Windows SDK.")
+        endif()
+    else()
+        message(STATUS "   + Code Signing                        NO (certificate not specified)")
+    endif()
+
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.png")
 
 
@@ -132,7 +179,7 @@ if(WIN32 AND NOT UNIX)
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.manifest
         ${PROJECT_BINARY_DIR}/packaging/LogViewer.manifest
-        COPYONLY
+        @ONLY
     )
 elseif(APPLE)
     #--------------------------------------------------------------------------

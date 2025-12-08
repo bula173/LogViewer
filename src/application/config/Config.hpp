@@ -119,7 +119,7 @@ class Config
     FieldTranslator m_fieldTranslator;                // Field value translator
 
   public: // xml config
-    std::string appName {"LogViewer"};
+    std::string appName {"LogViewerQT"};
     std::string xmlRootElement;
     std::string xmlEventElement;
     std::vector<ColumnConfig> columns;
