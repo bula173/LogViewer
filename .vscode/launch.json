@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Debug",
+            "name": "Launch QT Debug",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -10,19 +10,19 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "Build Debug",
+            "preLaunchTask": "Build QT Debug",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
+                "program": "${workspaceFolder}/dist/Debug/LogViewerQT"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
+                "program": "${workspaceFolder}/dist/Debug/LogViewerQT.app/Contents/MacOS/LogViewerQT"
             },
             "windows": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
+                "program": "${workspaceFolder}/dist/Debug/LogViewerQT.exe",
                 "setupCommands": [
                     {
                         "description": "Enable pretty-printing for gdb",
@@ -33,7 +33,7 @@
             }
         },
         {
-            "name": "Launch Release",
+            "name": "Launch QT Release",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -41,174 +41,21 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "Build Release",
+            "preLaunchTask": "Build QT Release",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Release/LogViewer"
+                "program": "${workspaceFolder}/dist/Release/LogViewerQT"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Release/LogViewer.app/Contents/MacOS/LogViewer"
+                "program": "${workspaceFolder}/dist/Release/LogViewerQT.app/Contents/MacOS/LogViewer"
             },
             "windows": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Release/LogViewer.exe"
+                "program": "${workspaceFolder}/dist/Release/LogViewerQT.exe"
             }
         },
-        {
-            "name": "Run (Debug Build)",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe"
-            }
-        },
-        {
-            "name": "Launch Tests (All)",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [
-                { "name": "GTEST_COLOR", "value": "1" }
-            ],
-            "externalConsole": false,
-            "preLaunchTask": "Build Debug",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/build/linux-debug/tests/LogViewer_tests"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/build/macos-debug/tests/LogViewer_tests"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/build/windows-debug/tests/LogViewer_tests.exe",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Launch Tests (Verbose)",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": ["--gtest_print_time=1", "--gtest_color=yes"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [
-                { "name": "GTEST_COLOR", "value": "1" }
-            ],
-            "externalConsole": false,
-            "preLaunchTask": "Build Debug",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/build/linux-debug/tests/LogViewer_tests"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/build/macos-debug/tests/LogViewer_tests"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/build/windows-debug/tests/LogViewer_tests.exe",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Launch Single Test",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": ["--gtest_filter=${input:gtestFilter}", "--gtest_color=yes"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [
-                { "name": "GTEST_COLOR", "value": "1" }
-            ],
-            "externalConsole": false,
-            "preLaunchTask": "Build Debug",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/build/linux-debug/tests/LogViewer_tests"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/build/macos-debug/tests/LogViewer_tests"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/build/windows-debug/tests/LogViewer_tests.exe",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
-        },
-        {
-            "name": "Launch with File Argument",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": ["${input:logFilePath}"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "preLaunchTask": "Build Debug",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
-        }
     ],
     "inputs": [
         {

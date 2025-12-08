@@ -1,44 +1,16 @@
 {
     "version": 6,
     "configurePresets": [
-        {
-            "name": "linux-debug",
-            "displayName": "Linux Debug",
+                {
+            "name": "macos-debug-wx",
+            "displayName": "macOS Debug (wxWidgets)",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-debug",
+            "binaryDir": "${sourceDir}/build/macos-debug-wx",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
-        },
-        {
-            "name": "linux-release",
-            "displayName": "Linux Release",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-release",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
-        },
-        {
-            "name": "macos-debug",
-            "displayName": "macOS Debug",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
             },
             "condition": {
                 "type": "equals",
@@ -47,15 +19,55 @@
             }
         },
         {
-            "name": "macos-release",
-            "displayName": "macOS Release",
+            "name": "macos-debug-qt",
+            "displayName": "macOS Debug (Qt)",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-release",
+            "binaryDir": "${sourceDir}/build/macos-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "GUI_FRAMEWORK": "QT",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-release-wx",
+            "displayName": "macOS Release (wxWidgets)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-release-wx",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "GUI_FRAMEWORK": "WX",
+                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "macos-release-qt",
+            "displayName": "macOS Release (Qt)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/macos-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "GUI_FRAMEWORK": "QT",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
             },
             "condition": {
                 "type": "equals",
@@ -222,102 +234,39 @@
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
             }
-        },
-        {
-            "name": "macos-debug-wx",
-            "displayName": "macOS Debug (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-debug-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
-        },
-        {
-            "name": "macos-debug-qt",
-            "displayName": "macOS Debug (Qt)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-debug-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "QT",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
-        },
-        {
-            "name": "macos-release-wx",
-            "displayName": "macOS Release (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-release-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
-        },
-        {
-            "name": "macos-release-qt",
-            "displayName": "macOS Release (Qt)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-release-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "GUI_FRAMEWORK": "QT",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
         }
+
     ],
     "buildPresets": [
         {
-            "name": "linux-debug-build",
-            "displayName": "Linux Debug Build",
-            "configurePreset": "linux-debug"
+            "name": "linux-debug-build-qt",
+            "displayName": "Linux QT Debug Build",
+            "configurePreset": "linux-debug-qt"
         },
         {
-            "name": "linux-release-build",
-            "displayName": "Linux Release Build",
-            "configurePreset": "linux-release"
+            "name": "linux-release-build-qt",
+            "displayName": "Linux QT Release Build",
+            "configurePreset": "linux-release-qt"
         },
         {
-            "name": "macos-debug-build",
-            "displayName": "macOS Debug Build",
-            "configurePreset": "macos-debug"
+            "name": "macos-debug-build-qt",
+            "displayName": "macOS QT Debug Build",
+            "configurePreset": "macos-debug-qt"
         },
         {
-            "name": "macos-release-build",
-            "displayName": "macOS Release Build",
-            "configurePreset": "macos-release"
+            "name": "macos-release-build-qt",
+            "displayName": "macOS QT Release Build",
+            "configurePreset": "macos-release-qt"
+        },
+        {
+            "name": "macos-debug-build-wx",
+            "displayName": "macOS WX Debug Build",
+            "configurePreset": "macos-debug-wx"
+        },
+        {
+            "name": "macos-release-build-wx",
+            "displayName": "macOS WX Release Build",
+            "configurePreset": "macos-release-wx"
         },
         {
             "name": "windows-msys-debug-wx-build",
@@ -342,33 +291,33 @@
     ],
     "testPresets": [
         {
-            "name": "linux-debug-test",
-            "displayName": "Linux Debug Test",
-            "configurePreset": "linux-debug",
+            "name": "linux-debug-test-qt",
+            "displayName": "Linux QT Debug Test",
+            "configurePreset": "linux-debug-qt",
             "output": {
                 "outputOnFailure": true
             }
         },
         {
-            "name": "linux-release-test",
-            "displayName": "Linux Release Test",
-            "configurePreset": "linux-release",
+            "name": "linux-release-test-qt",
+            "displayName": "Linux QT Release Test",
+            "configurePreset": "linux-release-qt",
             "output": {
                 "outputOnFailure": true
             }
         },
         {
-            "name": "macos-debug-test",
-            "displayName": "macOS Debug Test",
-            "configurePreset": "macos-debug",
+            "name": "macos-debug-test-qt",
+            "displayName": "macOS QT Debug Test",
+            "configurePreset": "macos-debug-qt",
             "output": {
                 "outputOnFailure": true
             }
         },
         {
-            "name": "macos-release-test",
-            "displayName": "macOS Release Test",
-            "configurePreset": "macos-release",
+            "name": "macos-release-test-qt",
+            "displayName": "macOS QT Release Test",
+            "configurePreset": "macos-release-qt",
             "output": {
                 "outputOnFailure": true
             }
@@ -408,15 +357,15 @@
     ],
     "packagePresets": [
         {
-            "name": "linux-release-package",
-            "displayName": "Linux Release Package",
-            "configurePreset": "linux-release",
+            "name": "linux-release-package-qt",
+            "displayName": "Linux QT Release Package",
+            "configurePreset": "linux-release-qt",
             "generators": ["DEB", "TBZ2", "TXZ"]
         },
         {
-            "name": "macos-release-package",
-            "displayName": "macOS Release Package",
-            "configurePreset": "macos-release",
+            "name": "macos-release-package-qt",
+            "displayName": "macOS QT Release Package",
+            "configurePreset": "macos-release-qt",
             "generators": ["DragNDrop"]
         },
         {
@@ -434,82 +383,82 @@
     ],
     "workflowPresets": [
         {
-            "name": "linux-debug-workflow",
-            "displayName": "Linux Debug Workflow",
+            "name": "linux-debug-workflow-qt",
+            "displayName": "Linux QT Debug Workflow",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "linux-debug"
+                    "name": "linux-debug-qt"
                 },
                 {
                     "type": "build",
-                    "name": "linux-debug-build"
+                    "name": "linux-debug-build-qt"
                 },
                 {
                     "type": "test",
-                    "name": "linux-debug-test"
+                    "name": "linux-debug-test-qt"
                 }
             ]
         },
         {
-            "name": "linux-release-workflow",
-            "displayName": "Linux Release Workflow",
+            "name": "linux-release-workflow-qt",
+            "displayName": "Linux QT Release Workflow",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "linux-release"
+                    "name": "linux-release-qt"
                 },
                 {
                     "type": "build",
-                    "name": "linux-release-build"
+                    "name": "linux-release-build-qt"
                 },
                 {
                     "type": "test",
-                    "name": "linux-release-test"
+                    "name": "linux-release-test-qt"
                 },
                 {
                     "type": "package",
-                    "name": "linux-release-package"
+                    "name": "linux-release-package-qt"
                 }
             ]
         },
         {
-            "name": "macos-debug-workflow",
-            "displayName": "macOS Debug Workflow",
+            "name": "macos-debug-workflow-qt",
+            "displayName": "macOS QT Debug Workflow",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "macos-debug"
+                    "name": "macos-debug-qt"
                 },
                 {
                     "type": "build",
-                    "name": "macos-debug-build"
+                    "name": "macos-debug-build-qt"
                 },
                 {
                     "type": "test",
-                    "name": "macos-debug-test"
+                    "name": "macos-debug-test-qt"
                 }
             ]
         },
         {
-            "name": "macos-release-workflow",
-            "displayName": "macOS Release Workflow",
+            "name": "macos-release-workflow-qt",
+            "displayName": "macOS QT Release Workflow",
             "steps": [
                 {
                     "type": "configure",
-                    "name": "macos-release"
+                    "name": "macos-release-qt"
                 },
                 {
                     "type": "build",
-                    "name": "macos-release-build"
+                    "name": "macos-release-build-qt"
                 },
                 {
                     "type": "test",
-                    "name": "macos-release-test"
+                    "name": "macos-release-test-qt"
                 },
                 {
                     "type": "package",
-                    "name": "macos-release-package"
+                    "name": "macos-release-package-qt"
                 }
             ]
         },

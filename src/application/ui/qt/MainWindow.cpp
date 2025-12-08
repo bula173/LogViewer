@@ -72,6 +72,9 @@ MainWindow::MainWindow(mvc::IController& controller,
 
 MainWindow::~MainWindow()
 {
+    // Clean up presenter first to ensure proper disconnection before Qt widgets are destroyed
+    m_presenter.reset();
+
     // Save window layout
     QSettings settings("LogViewer", "LogViewerQt");
     settings.setValue("windowGeometry", saveGeometry());
@@ -339,14 +342,26 @@ void MainWindow::SetupMenus()
     });
 }
 
-void MainWindow::InitializePresenter(
-    mvc::IController& controller, db::EventsContainer& events)
+void MainWindow::InitializePresenter(mvc::IController& controller,
+    db::EventsContainer& events)
 {
     util::Logger::Debug("[MainWindow] InitializePresenter");
+
+    // Create the presenter with all required interfaces
+    m_presenter = std::make_unique<ui::MainWindowPresenter>(
+        *this,                    // IMainWindowView
+        controller,               // IController
+        events,                   // EventsContainer
+        *m_searchResults,         // ISearchResultsView
+        m_eventsView,             // IEventsListView
+        m_typeFilterView,         // ITypeFilterView
+        m_itemDetailsView         // IItemDetailsView
+    );
+
+    // Set up observers
     m_searchResults->SetObserver(this);
-    m_presenter = std::make_unique<ui::MainWindowPresenter>(*this, controller,
-        events, *m_searchResults, m_eventsView, m_typeFilterView,
-        m_itemDetailsView);
+
+    util::Logger::Debug("[MainWindow] Presenter initialized successfully");
 }
 
 std::string MainWindow::ReadSearchQuery() const
