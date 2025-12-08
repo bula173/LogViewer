@@ -37,6 +37,8 @@ void Config::SetAppName(const std::string& name)
 
 void Config::LoadConfig()
 {
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::filesystem::path defaultInstalled = cwd /"etc"/ "config.json";
 
     if (!std::filesystem::exists(m_configFilePath))
     {
@@ -47,25 +49,7 @@ void Config::LoadConfig()
 
     if (!std::filesystem::exists(m_configFilePath))
     {
-        std::filesystem::path cwd = std::filesystem::current_path();
-        std::filesystem::path defaultInstalled = cwd / "default_config.json";
-
-        std::vector<std::filesystem::path> searchPaths = {
-            cwd / "etc" / "default_config.json",
-            cwd / "config" / "default_config.json",
-            cwd / "default_config.json"};
-
-        for (const auto& path : searchPaths)
-        {
-            if (std::filesystem::exists(path))
-            {
-                defaultInstalled = path;
-                util::Logger::Info("Default config template found at: {}",
-                    defaultInstalled.string());
-                break;
-            }
-        }
-
+        
         if (!std::filesystem::exists(defaultInstalled))
         {
             util::Logger::Error(
@@ -97,26 +81,10 @@ void Config::LoadConfig()
             userFile >> userConfig;
             userFile.close();
             
-            // Load default config template
-            std::filesystem::path cwd = std::filesystem::current_path();
-            std::vector<std::filesystem::path> searchPaths = {
-                cwd / "etc" / "default_config.json",
-                cwd / "config" / "default_config.json",
-                cwd / "default_config.json"};
             
-            std::filesystem::path defaultPath;
-            for (const auto& path : searchPaths)
+            if (!defaultInstalled.empty())
             {
-                if (std::filesystem::exists(path))
-                {
-                    defaultPath = path;
-                    break;
-                }
-            }
-            
-            if (!defaultPath.empty())
-            {
-                std::ifstream defaultFile(defaultPath);
+                std::ifstream defaultFile(defaultInstalled);
                 json defaultConfig;
                 defaultFile >> defaultConfig;
                 defaultFile.close();
@@ -191,6 +159,38 @@ void Config::LoadConfig()
     {
         util::Logger::Error("Could not open config file: {}", m_configFilePath);
     }
+
+
+    if (m_dictionaryFilePath.empty())
+    {
+        // Use default dictionary path if not set
+        m_dictionaryFilePath = (std::filesystem::path(m_configFilePath).parent_path() /
+                                "field_dictionary.json")
+                                   .string();
+        util::Logger::Info("Using default dictionary file path: {}", m_dictionaryFilePath);
+    }
+
+    //If not config then coppy default
+    if (!std::filesystem::exists(m_dictionaryFilePath))
+    {
+        std::filesystem::path defaultDictPath = cwd / "etc" / "field_dictionary.json";
+        if (std::filesystem::exists(defaultDictPath))
+        {
+            try
+            {
+                std::filesystem::copy_file(defaultDictPath, m_dictionaryFilePath,
+                    std::filesystem::copy_options::overwrite_existing);
+                util::Logger::Info(
+                    "Copied default dictionary to user path: {}", m_dictionaryFilePath);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                util::Logger::Error("Failed to copy default dictionary: {}", e.what());
+            }
+        }
+    }
+    util::Logger::Info("Loading field dictionary from: {}", m_dictionaryFilePath);
+    m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
 }
 
 void Config::SetupLogPath()

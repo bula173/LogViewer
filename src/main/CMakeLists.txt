@@ -80,7 +80,7 @@ add_dependencies(${GUI_TARGET_NAME} versionFileTouchForRebuild ${GUI_LIBRARY})
 # Copy config file to build directory for development
 configure_file(
     ${CMAKE_SOURCE_DIR}/etc/default_config.json
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/etc/config.json
     COPYONLY
 )
 
@@ -100,7 +100,7 @@ if(WIN32)
                 "${DIST_RELEASE}/"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${CMAKE_SOURCE_DIR}/etc/default_config.json"
-                "${DIST_RELEASE}/config.json"
+                "${DIST_RELEASE}/etc/config.json"
         COMMENT "Copying executable to dist/Release"
     )
     
@@ -176,7 +176,7 @@ install(TARGETS ${GUI_TARGET_NAME}
 
 # Install config file to common component
 install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
-    DESTINATION "."
+    DESTINATION "etc"
     RENAME config.json
     COMPONENT common)
 

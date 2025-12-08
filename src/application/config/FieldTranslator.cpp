@@ -1,5 +1,6 @@
 #include "config/FieldTranslator.hpp"
 #include "application/util/Logger.hpp"
+#include "config/Config.hpp"
 
 #include <fstream>
 #include <algorithm>
@@ -10,28 +11,12 @@
 #include <filesystem>
 #include <vector>
 
+
 namespace config
 {
 
 FieldTranslator::FieldTranslator()
 {
-    // Try to load default dictionary file
-    std::vector<std::filesystem::path> searchPaths = {
-        std::filesystem::current_path() / "etc" / "field_dictionary.json",
-        std::filesystem::current_path() / "field_dictionary.json",
-        std::filesystem::current_path() / "config" / "field_dictionary.json"
-    };
-
-    for (const auto& path : searchPaths)
-    {
-        if (std::filesystem::exists(path))
-        {
-            if (LoadFromFile(path.string()))
-            {
-                return;
-            }
-        }
-    }
 
 }
 
@@ -42,6 +27,7 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
         std::ifstream file(filePath);
         if (!file.is_open())
         {
+            util::Logger::Error("Could not open dictionary file: {}", filePath);
             return false;
         }
 
@@ -50,6 +36,7 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
 
         if (!j.contains("translations") || !j["translations"].is_array())
         {
+            util::Logger::Error("Invalid dictionary file format: missing 'translations' array");
             return false;
         }
 
@@ -81,6 +68,7 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
     }
     catch (const std::exception& ex)
     {
+        util::Logger::Error("Error loading dictionary from file '{}': {}", filePath, ex.what());
         return false;
     }
 }
@@ -155,6 +143,19 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     else if (translation.conversionType == "value_map")
     {
         converted = ApplyValueMap(value, translation.valueMap);
+        if (converted != value)
+        {
+            converted = value + " -> " + converted;
+            result.wasConverted = true;
+        }
+        else
+        {
+            result.wasConverted = false;
+        }
+    }
+    else if (translation.conversionType == "nid_lrbg")
+    {
+        converted = NidLrbg(value);
         if (converted != value)
         {
             converted = value + " -> " + converted;
@@ -250,86 +251,35 @@ std::string FieldTranslator::UnixToDate(const std::string& unixStr) const
     return unixStr;
 }
 
+std::string FieldTranslator::NidLrbg(const std::string& text) const
+{
+    int nid = std::stoi(text);
+    int nid_bg = (nid & 0x3fff);
+    int nid_c = nid >> 14;
+
+    return "nid_c=" + std::to_string(nid_c) + " nid_bg=" + std::to_string(nid_bg);
+}
+
 std::string FieldTranslator::IsoLatin1ToUtf8(const std::string& text) const
 {
-    // Convert numeric values or hex strings to ISO-8859-1 bytes, then to UTF-8
-    // Supports formats like:
-    // - "225" (decimal byte value)
-    // - "E1" (hex byte value)
-    // - "225 233 237" (space-separated decimal values)
-    // - "E1 E9 ED" (space-separated hex values)
-
-    std::vector<unsigned char> bytes;
-    std::istringstream iss(text);
-    std::string token;
-
-    while (iss >> token)
-    {
-        try
-        {
-            unsigned long value;
-            bool isHex = (token.length() > 0 && token[0] == '0' && token.length() > 1 && (token[1] == 'x' || token[1] == 'X')) ||
-                        (token.length() > 1 && token.find_first_not_of("0123456789ABCDEFabcdef") == std::string::npos && token.length() <= 2);
-
-            if (isHex && token.length() <= 2)
-            {
-                // Hex value like "E1" or "0xE1"
-                value = std::stoul(token, nullptr, 16);
-            }
-            else
-            {
-                // Decimal value like "225"
-                value = std::stoul(token, nullptr, 10);
-            }
-
-            if (value <= 0xFF)
-            {
-                bytes.push_back(static_cast<unsigned char>(value));
-            }
-        }
-        catch (const std::exception&)
-        {
-            // If parsing fails, treat as direct ISO-8859-1 bytes
-            for (char c : token)
-            {
-                bytes.push_back(static_cast<unsigned char>(c));
-            }
-        }
-    }
-
-    // If no numeric parsing succeeded, treat the entire string as ISO-8859-1 bytes
-    if (bytes.empty())
-    {
-        for (char c : text)
-        {
-            bytes.push_back(static_cast<unsigned char>(c));
-        }
-    }
-
-    // Convert bytes to UTF-8
-    std::string result;
-    result.reserve(bytes.size() * 2);
-
-    for (unsigned char byte : bytes)
-    {
-        if (byte < 0x80)
-        {
-            // ASCII character (0x00-0x7F) - copy as-is
-            result += static_cast<char>(byte);
-        }
-        else
-        {
-            // ISO-8859-1 character (0x80-0xFF) - convert to UTF-8
-            char utf8[3];
-            utf8[0] = static_cast<char>(0xC0 | (byte >> 6));   // First byte: 110xxxxx
-            utf8[1] = static_cast<char>(0x80 | (byte & 0x3F));  // Second byte: 10xxxxxx
-            utf8[2] = '\0';
-            result += utf8[0];
-            result += utf8[1];
-        }
-    }
-
-    return result;
+    int codepoint = std::stoi(text);
+    
+    // ISO Latin-1 codepoints are 0-255
+    if (codepoint < 0 || codepoint > 255)
+        return text; // Return original on invalid input
+    
+    // For UTF-8 encoding of codepoints 0-127, it's the same as ASCII/Latin-1
+    if (codepoint <= 127)
+        return std::string(1, static_cast<char>(codepoint));
+    
+    // For codepoints 128-255, UTF-8 uses 2 bytes
+    // Format: 110xxxxx 10xxxxxx
+    char utf8[3];
+    utf8[0] = static_cast<char>(0xC0 | (codepoint >> 6));   // 110xxxxx
+    utf8[1] = static_cast<char>(0x80 | (codepoint & 0x3F));  // 10xxxxxx
+    utf8[2] = '\0';
+    
+    return std::string(utf8);
 }
 
 std::string FieldTranslator::ApplyValueMap(const std::string& value,
