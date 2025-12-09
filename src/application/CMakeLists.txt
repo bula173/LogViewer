@@ -23,6 +23,7 @@ set(APP_CORE_SRCS
     ai/AIServiceFactory.cpp
     ai/LogAnalyzer.cpp
     util/KeyEncryption.cpp
+    ${CMAKE_BINARY_DIR}/src/main/version.cpp
 )
 
 add_library(application_core STATIC ${APP_CORE_SRCS})
@@ -41,7 +42,10 @@ target_link_libraries(application_core
 target_include_directories(application_core
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        "${CMAKE_CURRENT_SOURCE_DIR}/../")
+        "${CMAKE_CURRENT_SOURCE_DIR}/../"
+        "${CMAKE_BINARY_DIR}/src/main"
+        "${CMAKE_SOURCE_DIR}/src/main"
+)
 
 target_include_directories(application_core SYSTEM PUBLIC
     ${nlohmann_json_SOURCE_DIR}/include
