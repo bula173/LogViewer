@@ -115,9 +115,9 @@ class Config
     json MergeConfigs(const json& userConfig, const json& defaultConfig);
 
   private:
-    std::string m_configFilePath {"etc/config.json"}; // Default path
+    std::string m_configFilePath {"config.json"}; // Default path
     std::string m_logPath {"log.txt"};                // Default log file path
-    std::string m_dictionaryFilePath {"etc/field_dictionary.json"}; // Dictionary config path
+    std::string m_dictionaryFilePath {"field_dictionary.json"}; // Dictionary config path
     FieldTranslator m_fieldTranslator;                // Field value translator
 
   public: // xml config
