@@ -146,6 +146,10 @@ void ItemDetailsView::DisplayEvent(int actualRow)
         {
             keyItem->setText(keyStr);
         }
+
+        QFont font = keyItem->font();
+        font.setBold(true);
+        keyItem->setFont(font);
         
         // Try to look up value in dictionary if configured
         QString displayValue = QString::fromStdString(value);

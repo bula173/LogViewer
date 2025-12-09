@@ -126,8 +126,20 @@ void FiltersPanel::RefreshFilters()
         auto* targetItem = new QTableWidgetItem(FilterTargetText(*filter));
         m_table->setItem(row, kTargetColumn, targetItem);
 
-        auto* patternItem = new QTableWidgetItem(
-            QString::fromStdString(filter->pattern));
+        auto* patternItem = new QTableWidgetItem();
+        if (filter->conditions.size() > 1)
+        {
+            patternItem->setText(tr("%1 conditions").arg(filter->conditions.size()));
+            patternItem->setToolTip(tr("Complex filter with multiple AND conditions"));
+        }
+        else if (!filter->conditions.empty())
+        {
+            patternItem->setText(QString::fromStdString(filter->conditions[0].pattern));
+        }
+        else
+        {
+            patternItem->setText(QString::fromStdString(filter->pattern));
+        }
         m_table->setItem(row, kPatternColumn, patternItem);
 
         if (!filter->isEnabled)
@@ -145,7 +157,21 @@ void FiltersPanel::RefreshFilters()
 
 QString FiltersPanel::FilterTargetText(const filters::Filter& filter) const
 {
-    if (filter.isParameterFilter)
+    if (filter.conditions.size() > 1)
+    {
+        return tr("Multiple conditions (%1)").arg(filter.conditions.size());
+    }
+    else if (!filter.conditions.empty())
+    {
+        const auto& condition = filter.conditions[0];
+        if (condition.isParameterFilter)
+        {
+            return tr("Parameter: %1").arg(
+                QString::fromStdString(condition.parameterKey));
+        }
+        return tr("Column: %1").arg(QString::fromStdString(condition.columnName));
+    }
+    else if (filter.isParameterFilter)
     {
         return tr("Parameter: %1").arg(
             QString::fromStdString(filter.parameterKey));

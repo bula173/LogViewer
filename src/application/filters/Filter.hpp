@@ -7,6 +7,7 @@
 
 #include "db/LogEvent.hpp"
 #include "filters/IFilterStrategy.hpp"
+#include "mvc/IModel.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -14,14 +15,52 @@ namespace filters
 {
 
 /**
+ * @struct FilterCondition
+ * @brief Represents a single condition within a filter
+ *
+ * A filter can have multiple conditions that are combined with AND logic.
+ */
+struct FilterCondition
+{
+    std::string columnName;
+    std::string pattern;
+    bool isParameterFilter = false;
+    std::string parameterKey;
+    int parameterDepth = 0;
+    bool isCaseSensitive = false;
+    std::unique_ptr<IFilterStrategy> strategy;
+
+    FilterCondition() = default;
+    FilterCondition(const std::string& col, const std::string& pat,
+                   bool paramFilter = false, const std::string& paramKey = "",
+                   int depth = 0, bool caseSensitive = false)
+        : columnName(col), pattern(pat), isParameterFilter(paramFilter),
+          parameterKey(paramKey), parameterDepth(depth), isCaseSensitive(caseSensitive)
+    {
+        strategy = std::make_unique<RegexFilterStrategy>();
+    }
+
+    FilterCondition(const FilterCondition& other);
+    FilterCondition& operator=(const FilterCondition& other);
+    FilterCondition(FilterCondition&&) = default;
+    FilterCondition& operator=(FilterCondition&&) = default;
+
+    bool matches(const db::LogEvent& event) const;
+    nlohmann::json toJson() const;
+    static FilterCondition fromJson(const nlohmann::json& j);
+
+  private:
+    bool searchParameterRecursive(
+        const std::vector<std::pair<std::string, std::string>>& items,
+        const std::string& key, int currentDepth) const;
+};
+
+/**
  * @class Filter
  * @brief Filter for log events with pluggable matching strategies
  *
- * Uses Strategy pattern for flexible matching algorithms:
- * - Regex (default)
- * - Exact match
- * - Fuzzy match
- * - Wildcard match
+ * Supports multiple conditions combined with AND logic.
+ * Uses Strategy pattern for flexible matching algorithms.
  *
  * @par Thread Safety:
  * Filter instances should not be modified during concurrent matching.
@@ -43,10 +82,10 @@ class Filter
     Filter(Filter&&) = default;
     Filter& operator=(Filter&&) = default;
 
-    // Core properties
+    // Core properties (kept for backward compatibility)
     std::string name;
-    std::string columnName;
-    std::string pattern;
+    std::string columnName;  // Primary column for single-condition filters
+    std::string pattern;     // Primary pattern for single-condition filters
     bool isEnabled = true;
     bool isInverted = false;
     bool isCaseSensitive = false;
@@ -58,13 +97,25 @@ class Filter
     int parameterDepth; // How deep to search in nested objects (0 = top level
                         // only)
 
+    // Multiple conditions support (AND logic)
+    std::vector<FilterCondition> conditions;
+
     // Methods
     bool matches(const std::string& value) const;
+    bool matches(const db::LogEvent& event) const;
     bool matchesParameter(const db::LogEvent& event) const;
+    std::vector<unsigned long> applyToIndices(const std::vector<unsigned long>& inputIndices, const mvc::IModel& model) const;
     void compile();
     bool searchParameterRecursive(
         const std::vector<std::pair<std::string, std::string>>& items,
         const std::string& key, int currentDepth) const;
+
+    // Condition management
+    void addCondition(const FilterCondition& condition);
+    void removeCondition(size_t index);
+    void clearConditions();
+    const std::vector<FilterCondition>& getConditions() const;
+    bool hasMultipleConditions() const { return conditions.size() > 1; }
 
     /**
      * @brief Set matching strategy

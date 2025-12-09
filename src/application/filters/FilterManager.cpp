@@ -3,8 +3,10 @@
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <unordered_set>
 #include <nlohmann/json.hpp>
 
 namespace filters
@@ -120,10 +122,7 @@ void FilterManager::enableAllFilters(bool enable)
 std::vector<unsigned long> FilterManager::applyFilters(
     const mvc::IModel& model) const
 {
-    std::vector<unsigned long> result;
-    result.reserve(model.Size());
-
-    // Count enabled filters
+    // If no filters enabled, include all events
     size_t enabledFilters = 0;
     for (const auto& filter : m_filters)
     {
@@ -131,74 +130,45 @@ std::vector<unsigned long> FilterManager::applyFilters(
             enabledFilters++;
     }
 
-    // If no filters enabled, include all events
     if (enabledFilters == 0)
     {
+        std::vector<unsigned long> result(model.Size());
         for (unsigned long i = 0; i < model.Size(); ++i)
         {
-            result.push_back(i);
+            result[i] = i;
         }
         return result;
     }
 
-    // Apply filters to each event using OR logic
-    const auto total = model.Size();
-    for (unsigned long i = 0; i < total; ++i)
+    // Create list of all indices
+    std::vector<unsigned long> allIndices(model.Size());
+    for (unsigned long i = 0; i < model.Size(); ++i)
     {
-        const auto& event = model.GetItem(static_cast<int>(i));
-        bool passesAnyFilter = false;
+        allIndices[i] = i;
+    }
 
-        for (const auto& filter : m_filters)
+    // Apply each filter and collect matching indices (OR logic between filters)
+    std::vector<unsigned long> result;
+    std::unordered_set<unsigned long> seen; // To avoid duplicates
+
+    for (const auto& filter : m_filters)
+    {
+        if (!filter || !filter->isEnabled)
+            continue;
+
+        auto filteredIndices = filter->applyToIndices(allIndices, model);
+        for (unsigned long idx : filteredIndices)
         {
-            if (!filter || !filter->isEnabled)
-                continue;
-
-            // Handle parameter filter differently
-            if (filter->isParameterFilter)
+            if (seen.find(idx) == seen.end())
             {
-                if (filter->matchesParameter(event))
-                {
-                    passesAnyFilter = true;
-                    break;
-                }
-                continue;
+                seen.insert(idx);
+                result.push_back(idx);
             }
-
-            // Regular column filter processing
-            // Special case for wildcard column - check all fields
-            if (filter->columnName == "*")
-            {
-                for (const auto& field : event.getEventItems())
-                {
-                    const std::string& value = event.findByKey(field.first);
-                    if (filter->matches(value))
-                    {
-                        passesAnyFilter = true;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                // Check specific field
-                std::string valueToCheck = event.findByKey(filter->columnName);
-                if (filter->matches(valueToCheck))
-                {
-                    passesAnyFilter = true;
-                    break; // Found one match, no need to check other filters
-                }
-            }
-
-            // If any filter passes, we can stop checking
-            if (passesAnyFilter)
-                break;
-        }
-
-        if (passesAnyFilter)
-        {
-            result.push_back(i);
         }
     }
+
+    // Sort indices to maintain original event order
+    std::sort(result.begin(), result.end());
 
     return result;
 }
