@@ -187,12 +187,22 @@ void EventsTableModel::SetFilteredIndices(
 {
     m_filteredIndices = indices;
     m_filteringActive = true; // Mark that filtering is now active
+    
+    // Build reverse lookup map for O(1) RowFromActualIndex lookups
+    m_reverseFilteredIndices.clear();
+    m_reverseFilteredIndices.reserve(indices.size());
+    for (int row = 0; row < static_cast<int>(indices.size()); ++row)
+    {
+        m_reverseFilteredIndices[indices[static_cast<std::size_t>(row)]] = row;
+    }
+    
     RefreshAll();
 }
 
 void EventsTableModel::ClearFilter()
 {
     m_filteredIndices.clear();
+    m_reverseFilteredIndices.clear();
     m_filteringActive = false; // Mark that filtering is no longer active
     RefreshAll();
 }
@@ -220,13 +230,12 @@ int EventsTableModel::RowFromActualIndex(int actualIndex) const
     if (!m_filteringActive)
         return actualIndex;
 
-    const auto it = std::find(
-        m_filteredIndices.begin(), m_filteredIndices.end(),
-        static_cast<unsigned long>(actualIndex));
-    if (it == m_filteredIndices.end())
+    // Use reverse lookup map for O(1) performance instead of O(n) linear search
+    const auto it = m_reverseFilteredIndices.find(static_cast<unsigned long>(actualIndex));
+    if (it == m_reverseFilteredIndices.end())
         return -1;
 
-    return static_cast<int>(std::distance(m_filteredIndices.begin(), it));
+    return it->second;
 }
 
 std::vector<int> EventsTableModel::ColumnWidths() const

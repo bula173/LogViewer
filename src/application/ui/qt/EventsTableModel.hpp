@@ -8,6 +8,8 @@
 
 #include <vector>
 
+#include <unordered_map>
+
 namespace ui::qt
 {
 
@@ -50,6 +52,7 @@ class EventsTableModel : public QAbstractTableModel
 
     db::EventsContainer& m_events;
     std::vector<unsigned long> m_filteredIndices;
+    std::unordered_map<unsigned long, int> m_reverseFilteredIndices; // actual index -> filtered row
     std::vector<int> m_visibleColumnIndices;
     const config::Config& m_config;
     bool m_hasSourceColumn {false}; // Track if source column is currently shown
