@@ -27,8 +27,8 @@ Config& GetConfig()
 Config::Config()
 {
     SetupLogPath();
-    m_configFilePath = GetDefaultAppPath() / "config.json";
-    m_dictionaryFilePath = GetDefaultAppPath() / "/field_dictionary.json";
+    m_configFilePath = (GetDefaultAppPath() / "config.json").string();
+    m_dictionaryFilePath = (GetDefaultAppPath() / "field_dictionary.json").string();
 }
 
 void Config::SetAppName(const std::string& name)
