@@ -47,7 +47,11 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
     try
     {
         // Gemini uses x-goog-api-key header for authentication (not URL parameter)
-        const std::string endpoint = "/v1beta/models/" + m_model + ":generateContent";
+        std::string endpoint;
+        endpoint.reserve(20 + m_model.length()); // Pre-allocate memory
+        endpoint = "/v1beta/models/";
+        endpoint += m_model;
+        endpoint += ":generateContent";
         
         util::Logger::Debug("Gemini endpoint: {}", endpoint);
         util::Logger::Debug("Gemini base URL: {}", m_baseUrl);
@@ -132,7 +136,10 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     }
 
     std::string responseData;
-    const std::string fullUrl = m_baseUrl + endpoint;
+    std::string fullUrl;
+    fullUrl.reserve(m_baseUrl.length() + endpoint.length()); // Pre-allocate memory
+    fullUrl = m_baseUrl;
+    fullUrl += endpoint;
 
     curl_easy_setopt(curl, CURLOPT_URL, fullUrl.c_str());
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
@@ -146,7 +153,10 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     // Set headers (Gemini uses x-goog-api-key header for authentication)
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
-    const std::string apiKeyHeader = "x-goog-api-key: " + m_apiKey;
+    std::string apiKeyHeader;
+    apiKeyHeader.reserve(15 + m_apiKey.length()); // Pre-allocate memory
+    apiKeyHeader = "x-goog-api-key: ";
+    apiKeyHeader += m_apiKey;
     headers = curl_slist_append(headers, apiKeyHeader.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 

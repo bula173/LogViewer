@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <string_view>
 
 /**
  * @namespace db
@@ -120,7 +121,7 @@ class LogEvent
     * @par Complexity
     * O(n) where n is the number of items in the event
      */
-    const std::string findByKey(const std::string& key) const;
+    const std::string findByKey(std::string_view key) const;
 
 
     /**
@@ -136,7 +137,7 @@ class LogEvent
     * @par Complexity
     * O(n) where n is the number of items in the event
      */
-    const std::vector<std::string> findAllByKey(const std::string& key) const;
+    const std::vector<std::string> findAllByKey(std::string_view key) const;
 
 
     /**

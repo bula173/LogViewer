@@ -64,6 +64,9 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
             m_dictionary[ft.key] = ft;
         }
 
+        // Rebuild the lowercase cache for fast lookups
+        RebuildLowercaseCache();
+
         return true;
     }
     catch (const std::exception& ex)
@@ -73,48 +76,34 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
     }
 }
 
-std::string FieldTranslator::ToLower(const std::string& str) const
+std::string FieldTranslator::ToLower(std::string_view str) const
 {
-    std::string result = str;
+    std::string result(str);
     std::transform(result.begin(), result.end(), result.begin(),
         [](unsigned char c) { return std::tolower(c); });
     return result;
 }
 
-bool FieldTranslator::HasTranslation(const std::string& key) const
+bool FieldTranslator::HasTranslation(std::string_view key) const
 {
     std::string lowerKey = ToLower(key);
-    for (const auto& [dictKey, _] : m_dictionary)
-    {
-        if (ToLower(dictKey) == lowerKey)
-            return true;
-    }
-    return false;
+    return m_lowercaseKeyCache.find(lowerKey) != m_lowercaseKeyCache.end();
 }
 
-TranslationResult FieldTranslator::Translate(const std::string& key, const std::string& value) const
+TranslationResult FieldTranslator::Translate(std::string_view key, std::string_view value) const
 {
     TranslationResult result;
-    result.convertedValue = value;
+    result.convertedValue = std::string(value);
     result.wasConverted = false;
 
-    // Case-insensitive key lookup
+    // Case-insensitive key lookup using cache
     std::string lowerKey = ToLower(key);
-    auto it = m_dictionary.end();
-    for (auto iter = m_dictionary.begin(); iter != m_dictionary.end(); ++iter)
-    {
-        if (ToLower(iter->first) == lowerKey)
-        {
-            it = iter;
-            break;
-        }
-    }
-    
-    if (it == m_dictionary.end())
+    auto cacheIt = m_lowercaseKeyCache.find(lowerKey);
+    if (cacheIt == m_lowercaseKeyCache.end())
         return result;
 
-    const auto& translation = it->second;
-    std::string converted = value;
+    const auto& translation = m_dictionary.at(cacheIt->second);
+    std::string converted = std::string(value);
 
     // Apply conversion based on type
     if (translation.conversionType == "tooltip_only")
@@ -125,27 +114,27 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     else if (translation.conversionType == "hex_to_ascii")
     {
         converted = HexToAscii(value);
-        if (converted != value)
+        if (converted != std::string(value))
         {
-            converted = value + " -> " + converted;
+            converted = std::string(value) + " -> " + converted;
         }
         result.wasConverted = true;
     }
     else if (translation.conversionType == "unix_to_date")
     {
         converted = UnixToDate(value);
-        if (converted != value)
+        if (converted != std::string(value))
         {
-            converted = value + " -> " + converted;
+            converted = std::string(value) + " -> " + converted;
         }
         result.wasConverted = true;
     }
     else if (translation.conversionType == "value_map")
     {
         converted = ApplyValueMap(value, translation.valueMap);
-        if (converted != value)
+        if (converted != std::string(value))
         {
-            converted = value + " -> " + converted;
+            converted = std::string(value) + " -> " + converted;
             result.wasConverted = true;
         }
         else
@@ -156,9 +145,9 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     else if (translation.conversionType == "nid_lrbg")
     {
         converted = NidLrbg(value);
-        if (converted != value)
+        if (converted != std::string(value))
         {
-            converted = value + " -> " + converted;
+            converted = std::string(value) + " -> " + converted;
             result.wasConverted = true;
         }
         else
@@ -169,9 +158,9 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     else if (translation.conversionType == "iso_latin")
     {
         converted = IsoLatin1ToUtf8(value);
-        if (converted != value)
+        if (converted != std::string(value))
         {
-            converted = value + " -> " + converted;
+            converted = std::string(value) + " -> " + converted;
             result.wasConverted = true;
         }
         else
@@ -191,24 +180,32 @@ TranslationResult FieldTranslator::Translate(const std::string& key, const std::
     return result;
 }
 
-std::string FieldTranslator::HexToAscii(const std::string& hexStr) const
+void FieldTranslator::RebuildLowercaseCache() const
+{
+    m_lowercaseKeyCache.clear();
+    for (const auto& [key, _] : m_dictionary)
+    {
+        m_lowercaseKeyCache[ToLower(key)] = key;
+    }
+}
+std::string FieldTranslator::HexToAscii(std::string_view hexStr) const
 {
     if (hexStr.empty() || hexStr.length() % 2 != 0)
-        return hexStr;
+        return std::string(hexStr);
 
     // Check if all characters are hex digits
     bool isHex = std::all_of(hexStr.begin(), hexStr.end(),
         [](char c) { return std::isxdigit(static_cast<unsigned char>(c)); });
 
     if (!isHex)
-        return hexStr;
+        return std::string(hexStr);
 
     std::string ascii;
     ascii.reserve(hexStr.length() / 2);
 
     for (size_t i = 0; i < hexStr.length(); i += 2)
     {
-        std::string byteStr = hexStr.substr(i, 2);
+        std::string byteStr(hexStr.substr(i, 2));
         try
         {
             char byte = static_cast<char>(std::stoi(byteStr, nullptr, 16));
@@ -221,18 +218,18 @@ std::string FieldTranslator::HexToAscii(const std::string& hexStr) const
         }
         catch (...)
         {
-            return hexStr; // Return original on error
+            return std::string(hexStr); // Return original on error
         }
     }
 
     return ascii;
 }
 
-std::string FieldTranslator::UnixToDate(const std::string& unixStr) const
+std::string FieldTranslator::UnixToDate(std::string_view unixStr) const
 {
     try
     {
-        long long timestamp = std::stoll(unixStr);
+        long long timestamp = std::stoll(std::string(unixStr));
         std::time_t time = static_cast<std::time_t>(timestamp);
         std::tm* tm = std::localtime(&time);
 
@@ -248,25 +245,25 @@ std::string FieldTranslator::UnixToDate(const std::string& unixStr) const
         // Return original on error
     }
 
-    return unixStr;
+    return std::string(unixStr);
 }
 
-std::string FieldTranslator::NidLrbg(const std::string& text) const
+std::string FieldTranslator::NidLrbg(std::string_view text) const
 {
-    int nid = std::stoi(text);
+    int nid = std::stoi(std::string(text));
     int nid_bg = (nid & 0x3fff);
     int nid_c = nid >> 14;
 
     return "nid_c=" + std::to_string(nid_c) + " nid_bg=" + std::to_string(nid_bg);
 }
 
-std::string FieldTranslator::IsoLatin1ToUtf8(const std::string& text) const
+std::string FieldTranslator::IsoLatin1ToUtf8(std::string_view text) const
 {
-    int codepoint = std::stoi(text);
+    int codepoint = std::stoi(std::string(text));
     
     // ISO Latin-1 codepoints are 0-255
     if (codepoint < 0 || codepoint > 255)
-        return text; // Return original on invalid input
+        return std::string(text); // Return original on invalid input
     
     // For UTF-8 encoding of codepoints 0-127, it's the same as ASCII/Latin-1
     if (codepoint <= 127)
@@ -282,18 +279,18 @@ std::string FieldTranslator::IsoLatin1ToUtf8(const std::string& text) const
     return std::string(utf8);
 }
 
-std::string FieldTranslator::ApplyValueMap(const std::string& value,
+std::string FieldTranslator::ApplyValueMap(std::string_view value,
     const std::map<std::string, std::string>& valueMap) const
 {
-    auto it = valueMap.find(value);
+    auto it = valueMap.find(std::string(value));
     if (it != valueMap.end())
         return it->second;
 
-    return value; // Return original if not found in map
+    return std::string(value); // Return original if not found in map
 }
 
 std::string FieldTranslator::FormatTooltip(const std::string& templateStr,
-    const std::string& original, const std::string& converted) const
+    std::string_view original, std::string_view converted) const
 {
     std::string result = templateStr;
 

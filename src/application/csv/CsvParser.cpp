@@ -291,21 +291,21 @@ int CsvParser::FindHeaderIndex(const std::vector<std::string>& headers, const st
     return -1;
 }
 
-std::string CsvParser::Trim(const std::string& str)
+std::string CsvParser::Trim(std::string_view str)
 {
     if (str.empty())
     {
-        return str;
+        return std::string{};
     }
     
     size_t start = str.find_first_not_of(" \t\r\n");
-    if (start == std::string::npos)
+    if (start == std::string_view::npos)
     {
-        return "";
+        return std::string{};
     }
     
     size_t end = str.find_last_not_of(" \t\r\n");
-    return str.substr(start, end - start + 1);
+    return std::string(str.substr(start, end - start + 1));
 }
 
 uint32_t CsvParser::GetCurrentProgress() const

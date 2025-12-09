@@ -13,6 +13,7 @@
 #include <filesystem>
 #include <istream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "parser/IDataParser.hpp"
@@ -135,7 +136,7 @@ class CsvParser : public IDataParser
      * @param str String to trim
      * @return Trimmed string
      */
-    std::string Trim(const std::string& str);
+    std::string Trim(std::string_view str);
 
     char m_delimiter = ',';        ///< Field delimiter character
     bool m_hasHeaders = true;      ///< Whether first line contains headers

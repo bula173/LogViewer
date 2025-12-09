@@ -335,12 +335,23 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
     if (values.empty())
         return {};
 
-    std::string combined;
+    if (values.size() == 1)
+        return QString::fromStdString(values[0]);
+
+    // Pre-calculate size for all values plus separators
+    size_t totalSize = 0;
     for (const auto& value : values)
+        totalSize += value.length();
+    totalSize += (values.size() - 1) * 2; // ", " separators
+
+    std::string combined;
+    combined.reserve(totalSize);
+
+    for (size_t i = 0; i < values.size(); ++i)
     {
-        if (!combined.empty())
+        if (i > 0)
             combined += ", ";
-        combined += value;
+        combined += values[i];
     }
 
     return QString::fromStdString(combined);
