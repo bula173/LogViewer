@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <map>
 #include <string>
+#include <string_view>
 #include <optional>
 #include <functional>
 
@@ -53,7 +54,7 @@ public:
      * @param key The field key name
      * @return true if dictionary entry exists for this key
      */
-    bool HasTranslation(const std::string& key) const;
+    bool HasTranslation(std::string_view key) const;
 
     /**
      * @brief Apply dictionary lookup/conversion to a field value
@@ -61,7 +62,7 @@ public:
      * @param value The original value
      * @return TranslationResult with converted value and tooltip
      */
-    TranslationResult Translate(const std::string& key, const std::string& value) const;
+    TranslationResult Translate(std::string_view key, std::string_view value) const;
     
     /**
      * @brief Get all dictionary entries
@@ -90,13 +91,19 @@ public:
 
 private:
 
-    std::string HexToAscii(const std::string& hexStr) const;
-    std::string UnixToDate(const std::string& unixStr) const;
-    std::string ApplyValueMap(const std::string& value, const std::map<std::string, std::string>& valueMap) const;
-    std::string IsoLatin1ToUtf8(const std::string& text) const;
-    std::string FormatTooltip(const std::string& templateStr, const std::string& original, const std::string& converted) const;
-    std::string ToLower(const std::string& str) const;
-    std::string NidLrbg(const std::string& text) const;
+    std::string HexToAscii(std::string_view hexStr) const;
+    std::string UnixToDate(std::string_view unixStr) const;
+    std::string ApplyValueMap(std::string_view value, const std::map<std::string, std::string>& valueMap) const;
+    std::string IsoLatin1ToUtf8(std::string_view text) const;
+    std::string FormatTooltip(const std::string& templateStr, std::string_view original, std::string_view converted) const;
+    std::string ToLower(std::string_view str) const;
+    std::string NidLrbg(std::string_view text) const;
+    
+    // Rebuild the lowercase key cache for fast case-insensitive lookups
+    void RebuildLowercaseCache() const;
+    
+    // Cache for case-insensitive lookups (maps lowercase key to original key)
+    mutable std::map<std::string, std::string> m_lowercaseKeyCache;
     std::map<std::string, FieldDictionary> m_dictionary;
 };
 

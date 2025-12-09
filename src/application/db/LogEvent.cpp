@@ -25,13 +25,13 @@ const LogEvent::EventItems& LogEvent::getEventItems() const
     return m_eventItems;
 }
 
-const std::string LogEvent::findByKey(const std::string& key) const
+const std::string LogEvent::findByKey(std::string_view key) const
 {
-    util::Logger::Trace("LogEvent::findByKey called with key: {}", key);
+    util::Logger::Trace("LogEvent::findByKey called with key: {}", std::string(key));
 
     std::string result {""};
     auto pair = std::ranges::find_if(
-        m_eventItems, [&key](const auto& item) { return item.first == key; });
+        m_eventItems, [key](const auto& item) { return item.first == key; });
 
     if (pair != m_eventItems.end())
     {
@@ -40,14 +40,14 @@ const std::string LogEvent::findByKey(const std::string& key) const
     }
     else
     {
-        util::Logger::Trace("LogEvent::findByKey did not find key: {}", key);
+        util::Logger::Trace("LogEvent::findByKey did not find key: {}", std::string(key));
     }
 
     return result;
 }
 
-const std::vector<std::string> LogEvent::findAllByKey(const std::string& key) const {
-    util::Logger::Trace("LogEvent::findAllByKey called with key: {}", key);
+const std::vector<std::string> LogEvent::findAllByKey(std::string_view key) const {
+    util::Logger::Trace("LogEvent::findAllByKey called with key: {}", std::string(key));
 
     std::vector<std::string> results;
     for (const auto& item : m_eventItems) {
@@ -58,7 +58,7 @@ const std::vector<std::string> LogEvent::findAllByKey(const std::string& key) co
     }
 
     if (results.empty()) {
-        util::Logger::Trace("LogEvent::findAllByKey did not find key: {}", key);
+        util::Logger::Trace("LogEvent::findAllByKey did not find key: {}", std::string(key));
     }
 
     return results;

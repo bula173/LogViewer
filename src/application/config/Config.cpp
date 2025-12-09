@@ -162,17 +162,6 @@ void Config::LoadConfig()
         util::Logger::Error("Could not open config file: {}", m_configFilePath);
     }
 
-
-    if (m_dictionaryFilePath.empty())
-    {
-        // Use default dictionary path if not set
-        m_dictionaryFilePath = (std::filesystem::path(m_configFilePath).parent_path() /
-                                "field_dictionary.json")
-                                   .string();
-        util::Logger::Info("Using default dictionary file path: {}", m_dictionaryFilePath);
-    }
-
-    //If not config then coppy default
     if (!std::filesystem::exists(m_dictionaryFilePath))
     {
         std::filesystem::path defaultDictPath = cwd / "etc" / "field_dictionary.json";
