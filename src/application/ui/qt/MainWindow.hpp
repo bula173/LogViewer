@@ -88,6 +88,7 @@ class MainWindow : public QMainWindow,
     void OnClearDataRequested();
     void OnOpenAppLogRequested();
     void OnExitRequested();
+    void OnAboutRequested();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;

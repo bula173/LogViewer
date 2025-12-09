@@ -428,6 +428,13 @@ void MainWindow::SetupMenus()
             m_bottomDock->show();
         }
     });
+
+    // Help menu
+    auto* helpMenu = bar->addMenu(tr("&Help"));
+    auto* aboutAction = helpMenu->addAction(tr("&About"));
+    connect(aboutAction, &QAction::triggered, this, [this]() {
+        OnAboutRequested();
+    });
 }
 
 void MainWindow::InitializePresenter(mvc::IController& controller,
@@ -781,6 +788,7 @@ void MainWindow::OnConfigChanged()
     if (m_eventsView)
     {
         m_eventsView->UpdateColors();
+        m_eventsView->RefreshColumns();
         m_eventsView->RefreshView();
     }
     
@@ -790,6 +798,26 @@ void MainWindow::OnConfigChanged()
     // Refresh AI client if provider changed
     if (m_aiConfigPanel)
         m_aiConfigPanel->RefreshAIClient();
+}
+
+void MainWindow::OnAboutRequested()
+{
+    const auto& version = Version::current();
+    
+    QString aboutText = tr(
+        "<h2>LogViewer</h2>"
+        "<p>A modern, cross-platform log viewer with AI-assisted analysis, flexible filtering, and customizable visualization.</p>"
+        "<p><b>Version:</b> %1</p>"
+        "<p><b>Build Date:</b> %2</p>"
+        "<p><b>Author:</b> LogViewer Development Team</p>"
+        "<p><b>Copyright:</b> © 2022-2025 LogViewer Contributors</p>"
+        "<p><b>Qt Version:</b> %3</p>"
+        "<p><br/>Licensed under Proprietary License</p>"
+    ).arg(QString::fromStdString(version.asShortStr()),
+         QString::fromStdString(version.datetime),
+         QString::fromStdString(QT_VERSION_STR));
+    
+    QMessageBox::about(this, tr("About LogViewer"), aboutText);
 }
 
 } // namespace ui::qt
