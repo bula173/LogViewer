@@ -43,6 +43,9 @@ class LogEvent
      * (eventFieldName, data). */
     using EventItems = std::vector<std::pair<std::string, std::string>>;
 
+    /** @brief Fast lookup index for key-value pairs */
+    using LookupIndex = std::unordered_map<std::string, size_t>;
+
     /** @brief Iterator type for traversing event items. */
     using EventItemsIterator =
         std::vector<std::pair<std::string, std::string>>::iterator;
@@ -70,6 +73,7 @@ class LogEvent
         : m_id(id)
         , m_eventItems(std::forward<Args>(args)...)
     {
+        buildLookupIndex();
     }
 
     /**
@@ -90,6 +94,7 @@ class LogEvent
         : m_id(id)
         , m_eventItems(items)
     {
+        buildLookupIndex();
     }
 
     /**
@@ -181,8 +186,14 @@ class LogEvent
     void SetSource(const std::string& source) { m_source = source; }
 
   private:
+    /**
+     * @brief Builds the fast lookup index from the event items
+     */
+    void buildLookupIndex();
+
     int m_id;                ///< Unique event identifier
     EventItems m_eventItems; ///< The structured data of the event
+    LookupIndex m_lookupIndex; ///< Fast lookup index for keys
     std::string m_source;    ///< Source identifier for multi-file merge
 };
 

@@ -168,48 +168,101 @@ void CsvParser::ParseData(std::istream& input)
 std::vector<std::string> CsvParser::ParseLine(const std::string& line)
 {
     std::vector<std::string> fields;
-    std::string field;
+    std::string_view lineView(line);
+    size_t pos = 0;
     bool inQuotes = false;
     
-    for (size_t i = 0; i < line.length(); ++i)
+    while (pos < lineView.length())
     {
-        char c = line[i];
-        
-        // Handle quotes
-        if (c == '"')
+        // Skip leading whitespace for unquoted fields
+        if (!inQuotes)
         {
-            if (inQuotes && i + 1 < line.length() && line[i + 1] == '"')
+            while (pos < lineView.length() && (lineView[pos] == ' ' || lineView[pos] == '\t'))
+                ++pos;
+        }
+        
+        if (pos >= lineView.length())
+            break;
+            
+        size_t fieldStart = pos;
+        bool fieldHasQuotes = false;
+        
+        // Parse field
+        while (pos < lineView.length())
+        {
+            char c = lineView[pos];
+            
+            if (c == '"')
             {
-                // Escaped quote within quoted field
-                field += '"';
-                ++i; // Skip next quote
+                if (!inQuotes)
+                {
+                    // Start of quoted field
+                    inQuotes = true;
+                    fieldHasQuotes = true;
+                    fieldStart = pos + 1; // Skip opening quote
+                }
+                else if (pos + 1 < lineView.length() && lineView[pos + 1] == '"')
+                {
+                    // Escaped quote - skip it
+                    ++pos;
+                }
+                else
+                {
+                    // End of quoted field
+                    inQuotes = false;
+                    size_t fieldEnd = pos;
+                    pos++; // Skip closing quote
+                    
+                    // Skip whitespace after closing quote
+                    while (pos < lineView.length() && (lineView[pos] == ' ' || lineView[pos] == '\t'))
+                        ++pos;
+                        
+                    // Expect delimiter or end of line
+                    if (pos >= lineView.length() || lineView[pos] == m_delimiter)
+                    {
+                        if (pos < lineView.length())
+                            ++pos; // Skip delimiter
+                        fields.emplace_back(lineView.substr(fieldStart, fieldEnd - fieldStart));
+                        break;
+                    }
+                    else
+                    {
+                        // Invalid format - treat as regular character
+                        continue;
+                    }
+                }
+            }
+            else if (c == m_delimiter && !inQuotes)
+            {
+                // End of unquoted field
+                fields.emplace_back(Trim(std::string(lineView.substr(fieldStart, pos - fieldStart))));
+                ++pos; // Skip delimiter
+                break;
+            }
+            else if (c == '\r' && pos + 1 == lineView.length())
+            {
+                // Skip trailing \r
+                break;
+            }
+            
+            ++pos;
+        }
+        
+        // Handle case where we reached end of line
+        if (pos >= lineView.length() && fieldStart < lineView.length())
+        {
+            if (fieldHasQuotes && inQuotes)
+            {
+                // Unterminated quoted field - include everything from fieldStart
+                fields.emplace_back(lineView.substr(fieldStart));
             }
             else
             {
-                // Toggle quote state
-                inQuotes = !inQuotes;
+                // Regular field
+                fields.emplace_back(Trim(std::string(lineView.substr(fieldStart))));
             }
-        }
-        // Handle delimiter
-        else if (c == m_delimiter && !inQuotes)
-        {
-            fields.push_back(Trim(field));
-            field.clear();
-        }
-        // Regular character
-        else
-        {
-            // Skip \r at end of line (for Windows line endings)
-            if (c == '\r' && i + 1 == line.length())
-            {
-                continue;
-            }
-            field += c;
         }
     }
-    
-    // Add the last field
-    fields.push_back(Trim(field));
     
     return fields;
 }

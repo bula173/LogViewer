@@ -86,19 +86,11 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
         case Qt::EditRole:
             return ComposeCellText(event, columnName);
         case Qt::ForegroundRole:
-        {
-            // Apply color to entire row based on configured typeFilterField
-            const std::string typeValue = event.findByKey(m_config.typeFilterField);
-            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, false);
-            if (color.isValid())
-                return QBrush(color);
-            break;
-        }
         case Qt::BackgroundRole:
         {
             // Apply color to entire row based on configured typeFilterField
             const std::string typeValue = event.findByKey(m_config.typeFilterField);
-            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, true);
+            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, role == Qt::BackgroundRole);
             if (color.isValid())
                 return QBrush(color);
             break;

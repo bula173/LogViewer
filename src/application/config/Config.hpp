@@ -1,6 +1,7 @@
 #pragma once
 
 #include "config/FieldTranslator.hpp"
+#include "main/version.h"
 #include <nlohmann/json.hpp>
 // std
 #include <filesystem>
@@ -94,6 +95,18 @@ class Config
 
     std::string GetAppName() const { return appName; }
 
+    /**
+     * @brief Get the current config version
+     * @return The version of the config file
+     */
+    const Version::Version& GetConfigVersion() const { return m_configVersion; }
+
+    /**
+     * @brief Set the config version
+     * @param version The version to set
+     */
+    void SetConfigVersion(const Version::Version& version) { m_configVersion = version; }
+
   private:
     const json& GetParserConfig(const json& j);
     void ParseXmlConfig(const json& j);
@@ -119,6 +132,7 @@ class Config
     std::string m_logPath {"log.txt"};                // Default log file path
     std::string m_dictionaryFilePath {"field_dictionary.json"}; // Dictionary config path
     FieldTranslator m_fieldTranslator;                // Field value translator
+    Version::Version m_configVersion;                 // Version of the config file
 
   public: // xml config
     std::string appName {"LogViewerQT"};

@@ -82,25 +82,60 @@ void Config::LoadConfig()
             json userConfig;
             userFile >> userConfig;
             userFile.close();
-            
-            
+
+
             if (!defaultInstalled.empty())
             {
                 std::ifstream defaultFile(defaultInstalled);
                 json defaultConfig;
                 defaultFile >> defaultConfig;
                 defaultFile.close();
-                
-                // Merge configs (user settings take precedence, new fields added)
-                json merged = MergeConfigs(userConfig, defaultConfig);
-                
-                // Save merged config back if it changed
-                if (merged != userConfig)
+
+                // Get current application version
+                Version::Version currentVersion = Version::current();
+
+                // Check if user config has version
+                Version::Version userVersion;
+                if (userConfig.contains("version") && userConfig["version"].is_object())
                 {
+                    userVersion.major = userConfig["version"].value("major", 0);
+                    userVersion.minor = userConfig["version"].value("minor", 0);
+                    userVersion.patch = userConfig["version"].value("patch", 0);
+                    userVersion.type = userConfig["version"].value("type", "");
+                }
+                else
+                {
+                    // No version in user config, assume it needs migration
+                    userVersion = Version::Version(); // Version 0.0.0
+                }
+
+                util::Logger::Info("User config version: {}, Current app version: {}",
+                    userVersion.asShortStr(), currentVersion.asShortStr());
+
+                // Only merge if versions differ
+                if (userVersion != currentVersion)
+                {
+                    // Merge configs (user settings take precedence, new fields added)
+                    json merged = MergeConfigs(userConfig, defaultConfig);
+
+                    // Add current version to merged config
+                    merged["version"] = {
+                        {"major", currentVersion.major},
+                        {"minor", currentVersion.minor},
+                        {"patch", currentVersion.patch},
+                        {"type", currentVersion.type}
+                    };
+
+                    // Save merged config back
                     std::ofstream outFile(m_configFilePath);
                     outFile << merged.dump(4);
                     outFile.close();
-                    util::Logger::Info("Config migrated with new fields from default template");
+                    util::Logger::Info("Config migrated from {} to {} with new fields",
+                        userVersion.asShortStr(), currentVersion.asShortStr());
+                }
+                else
+                {
+                    util::Logger::Info("Config version matches application version, no migration needed");
                 }
             }
         }
@@ -131,6 +166,22 @@ void Config::LoadConfig()
         GetFilterConfig(j);
         GetAIConfig(j);
         ParseXmlConfig(j);
+        
+        // Load config version if present
+        if (j.contains("version") && j["version"].is_object())
+        {
+            m_configVersion.major = j["version"].value("major", 0);
+            m_configVersion.minor = j["version"].value("minor", 0);
+            m_configVersion.patch = j["version"].value("patch", 0);
+            m_configVersion.type = j["version"].value("type", "");
+            util::Logger::Info("Loaded config version: {}", m_configVersion.asShortStr());
+        }
+        else
+        {
+            // No version in config, assume current version
+            m_configVersion = Version::current();
+            util::Logger::Info("No version in config, assuming current: {}", m_configVersion.asShortStr());
+        }
         
         // Load dictionary file path if specified
         if (j.contains("dictionaryFilePath") && j["dictionaryFilePath"].is_string())
@@ -198,6 +249,14 @@ void Config::SaveConfig()
     if (configFile.is_open())
     {
         json j;
+
+        // Add version information
+        j["version"] = {
+            {"major", m_configVersion.major},
+            {"minor", m_configVersion.minor},
+            {"patch", m_configVersion.patch},
+            {"type", m_configVersion.type}
+        };
 
         // Set the JSON data from the configuration parameters
         // Example: j["someParameter"] = m_someParameter;
