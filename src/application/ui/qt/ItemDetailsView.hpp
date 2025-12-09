@@ -40,6 +40,7 @@ class ItemDetailsView : public QWidget,
 
     db::EventsContainer& m_events;
     QTableWidget* m_details {nullptr};
+    int m_currentlyDisplayedRow {-1}; // Track which event is currently displayed
 };
 
 } // namespace ui::qt

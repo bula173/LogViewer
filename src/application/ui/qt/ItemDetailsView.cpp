@@ -103,15 +103,26 @@ void ItemDetailsView::DisplayEvent(int actualRow)
     if (!m_details)
         return;
 
+    // If we're already displaying this event, no need to update
+    if (actualRow == m_currentlyDisplayedRow)
+        return;
+
     if (actualRow < 0 || actualRow >= static_cast<int>(m_events.Size()))
     {
         m_details->setRowCount(0);
+        m_currentlyDisplayedRow = -1;
         return;
     }
 
     const auto& event = m_events.GetItem(actualRow);
     const auto& items = event.getEventItems();
-    m_details->setRowCount(static_cast<int>(items.size()));
+    const int itemCount = static_cast<int>(items.size());
+    
+    // Only update row count if it changed
+    if (m_details->rowCount() != itemCount)
+    {
+        m_details->setRowCount(itemCount);
+    }
 
     // Get field dictionary from config
     const auto& dictionary = config::GetConfig().GetFieldTranslator();
@@ -119,9 +130,22 @@ void ItemDetailsView::DisplayEvent(int actualRow)
     int row = 0;
     for (const auto& [key, value] : items)
     {
-        auto* keyItem = new QTableWidgetItem(QString::fromStdString(key));
-        keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
-        keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+        // Reuse existing items if possible
+        QTableWidgetItem* keyItem = m_details->item(row, 0);
+        QTableWidgetItem* valueItem = m_details->item(row, 1);
+        
+        const QString keyStr = QString::fromStdString(key);
+        if (!keyItem)
+        {
+            keyItem = new QTableWidgetItem(keyStr);
+            keyItem->setFlags(keyItem->flags() & ~Qt::ItemIsEditable);
+            keyItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            m_details->setItem(row, 0, keyItem);
+        }
+        else if (keyItem->text() != keyStr)
+        {
+            keyItem->setText(keyStr);
+        }
         
         // Try to look up value in dictionary if configured
         QString displayValue = QString::fromStdString(value);
@@ -141,22 +165,33 @@ void ItemDetailsView::DisplayEvent(int actualRow)
             }
         }
         
-        auto* valueItem = new QTableWidgetItem(displayValue);
-        valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
-        valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+        if (!valueItem)
+        {
+            valueItem = new QTableWidgetItem(displayValue);
+            valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
+            valueItem->setTextAlignment(Qt::AlignLeft | Qt::AlignTop);
+            m_details->setItem(row, 1, valueItem);
+        }
+        else if (valueItem->text() != displayValue)
+        {
+            valueItem->setText(displayValue);
+        }
         
         if (!tooltip.isEmpty())
         {
             valueItem->setToolTip(tooltip);
         }
-        
-        m_details->setItem(row, 0, keyItem);
-        m_details->setItem(row, 1, valueItem);
+        else if (!valueItem->toolTip().isEmpty())
+        {
+            valueItem->setToolTip(QString());
+        }
         
         ++row;
     }
     m_details->resizeColumnsToContents();
     m_details->resizeRowsToContents();
+    
+    m_currentlyDisplayedRow = actualRow;
 }
 
 } // namespace ui::qt
