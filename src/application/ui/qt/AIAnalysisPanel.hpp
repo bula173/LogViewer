@@ -2,6 +2,7 @@
 
 #include "ai/LogAnalyzer.hpp"
 #include "ai/IAIService.hpp"
+#include "ai/AIServiceFactory.hpp"
 #include <QWidget>
 #include <memory>
 
@@ -26,8 +27,8 @@ class AIAnalysisPanel : public QWidget
     Q_OBJECT
 
 public:
-    explicit AIAnalysisPanel(std::shared_ptr<ai::IAIService>& aiService,
-                            std::shared_ptr<ai::LogAnalyzer>& analyzer,
+    explicit AIAnalysisPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
+                            std::shared_ptr<ai::LogAnalyzer> analyzer,
                             EventsTableView* eventsView,
                             QWidget* parent = nullptr);
 
@@ -49,8 +50,8 @@ private:
     void LoadPredefinedPrompts();
     QString LoadPromptFromFile(const QString& filePath);
 
-    std::shared_ptr<ai::IAIService>& m_aiService;
-    std::shared_ptr<ai::LogAnalyzer>& m_analyzer;
+    std::shared_ptr<ai::AIServiceWrapper> m_aiService;
+    std::shared_ptr<ai::LogAnalyzer> m_analyzer;
     EventsTableView* m_eventsView{nullptr};
     AIConfigPanel* m_configPanel{nullptr};
     

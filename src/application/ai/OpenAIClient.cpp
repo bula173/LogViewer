@@ -137,7 +137,7 @@ bool OpenAIClient::IsAvailable() const
     }
 }
 
-void OpenAIClient::SetModel(const std::string& model)
+void OpenAIClient::SetModelName(const std::string& model)
 {
     m_model = model;
     util::Logger::Info("OpenAI model changed to: {}", m_model);

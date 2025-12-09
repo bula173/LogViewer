@@ -19,8 +19,8 @@
 namespace ui::qt
 {
 
-AIConfigPanel::AIConfigPanel(std::shared_ptr<ai::IAIService>& aiService,
-                             std::shared_ptr<ai::LogAnalyzer>& analyzer,
+AIConfigPanel::AIConfigPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
+                             std::shared_ptr<ai::LogAnalyzer> analyzer,
                              QWidget* parent)
     : QWidget(parent)
     , m_aiService(aiService)
@@ -169,24 +169,8 @@ void AIConfigPanel::OnModelChanged(int index)
     // Update config
     auto& config = config::GetConfig();
     config.ollamaDefaultModel = modelName.toStdString();
-    
-    // Set model on the appropriate client
-    if (auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService.get()))
-    {
-        ollamaClient->SetModel(modelName.toStdString());
-    }
-    else if (auto* openaiClient = dynamic_cast<ai::OpenAIClient*>(m_aiService.get()))
-    {
-        openaiClient->SetModel(modelName.toStdString());
-    }
-    else if (auto* anthropicClient = dynamic_cast<ai::AnthropicClient*>(m_aiService.get()))
-    {
-        anthropicClient->SetModel(modelName.toStdString());
-    }
-    else if (auto* geminiClient = dynamic_cast<ai::GeminiClient*>(m_aiService.get()))
-    {
-        geminiClient->SetModel(modelName.toStdString());
-    }
+
+    m_aiService->service->SetModelName(modelName.toStdString());
     
     UpdateStatusLabel();
     emit ConfigurationChanged();
@@ -206,7 +190,7 @@ void AIConfigPanel::OnShowInstalledModels()
         return;
     }
     
-    auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService.get());
+    auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService->service.get());
     if (!ollamaClient)
     {
         QMessageBox::information(this, tr("AI Models"),
@@ -284,7 +268,7 @@ void AIConfigPanel::PopulateModelList()
     
     const auto& cfg = config::GetConfig();
     
-    auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService.get());
+    auto* ollamaClient = dynamic_cast<ai::OllamaClient*>(m_aiService->service.get());
     if (ollamaClient)
     {
         try
@@ -340,11 +324,27 @@ void AIConfigPanel::PopulateModelList()
     
     m_modelCombo->blockSignals(false);
     
-    // Always select the first available model for the current provider
-    if (m_modelCombo->count() > 0)
+    // Select the configured model if it exists, otherwise select the first one
+    bool modelFound = false;
+    for (int i = 0; i < m_modelCombo->count(); ++i)
+    {
+        if (m_modelCombo->itemData(i).toString().toStdString() == cfg.ollamaDefaultModel)
+        {
+            m_modelCombo->setCurrentIndex(i);
+            modelFound = true;
+            break;
+        }
+    }
+    
+    if (!modelFound && m_modelCombo->count() > 0)
     {
         m_modelCombo->setCurrentIndex(0);
-        OnModelChanged(0);
+    }
+    
+    // Apply the selected model
+    if (m_modelCombo->count() > 0)
+    {
+        OnModelChanged(m_modelCombo->currentIndex());
     }
 }
 
@@ -353,22 +353,17 @@ void AIConfigPanel::RefreshAIClient()
     auto& config = config::GetConfig();
     try
     {
-        // Create client without a specific model first
-        m_aiService = ai::AIServiceFactory::CreateClient(
+        m_aiService->service = ai::AIServiceFactory::CreateClient(
             config.aiProvider,
             config.GetApiKeyForProvider(config.aiProvider),
             config.ollamaBaseUrl,
             ""  // Empty model - will be set by PopulateModelList
-        );
-        
-        if (m_analyzer && m_analyzer.get())
-            m_analyzer->SetAIService(m_aiService);
-        
+        );        
         // PopulateModelList will automatically select and apply the first available model
         PopulateModelList();
         
         UpdateStatusLabel();
-        util::Logger::Info("AI client refreshed");
+        util::Logger::Info("AI client refreshed: provider={}", m_aiService->service->GetProviderName());
     }
     catch (const std::exception& e)
     {

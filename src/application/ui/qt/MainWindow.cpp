@@ -131,7 +131,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
         // AI Analysis tab - use factory to create appropriate client
         auto& config = config::GetConfig();
-        m_aiService = ai::AIServiceFactory::CreateClient(
+        m_aiService = std::make_shared<ai::AIServiceWrapper>();
+        m_aiService->service = ai::AIServiceFactory::CreateClient(
             config.aiProvider,
             config.GetApiKeyForProvider(config.aiProvider),
             config.ollamaBaseUrl,

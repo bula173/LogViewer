@@ -3,6 +3,7 @@
 #include "ui/IMainWindowView.hpp"
 #include "ui/IUiPanels.hpp"
 #include "config/ConfigObserver.hpp"
+#include "ai/AIServiceFactory.hpp"
 
 #include <QMainWindow>
 #include <memory>
@@ -129,7 +130,7 @@ class MainWindow : public QMainWindow,
     db::EventsContainer* m_events {nullptr};
     
     // AI service shared between panels
-    std::shared_ptr<ai::IAIService> m_aiService;
+    std::shared_ptr<ai::AIServiceWrapper> m_aiService;
     std::shared_ptr<ai::LogAnalyzer> m_aiAnalyzer;
 };
 

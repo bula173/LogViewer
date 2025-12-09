@@ -27,7 +27,12 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override { return m_model; }
 
-    void SetModel(const std::string& model);
+    void SetModelName(const std::string& model) override;
+
+    /**
+     * @brief Get the name of the AI provider
+     */
+    virtual std::string GetProviderName() const override { return "anthropic"; }
 
 private:
     std::string m_apiKey;

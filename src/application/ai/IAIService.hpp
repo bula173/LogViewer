@@ -33,6 +33,13 @@ public:
      * @brief Get the name of the model being used
      */
     virtual std::string GetModelName() const = 0;
+
+    virtual void SetModelName(const std::string& modelName) = 0;
+
+    /**
+     * @brief Get the name of the AI provider
+     */
+    virtual std::string GetProviderName() const = 0;
 };
 
 } // namespace ai

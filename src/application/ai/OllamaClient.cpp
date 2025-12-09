@@ -186,7 +186,7 @@ std::string OllamaClient::GetModelName() const
     return m_model;
 }
 
-void OllamaClient::SetModel(const std::string& model)
+void OllamaClient::SetModelName(const std::string& model)
 {
     m_model = model;
     util::Logger::Info("Ollama model changed to: {}", m_model);

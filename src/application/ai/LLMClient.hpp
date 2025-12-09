@@ -52,7 +52,7 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override;
 
-    void SetModel(const std::string& model);
+    void SetModelName(const std::string& model);
     void SetBaseUrl(const std::string& url);
     void SetProvider(LLMProvider provider);
     void SetApiKey(const std::string& apiKey); // For OpenAI

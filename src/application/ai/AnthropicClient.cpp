@@ -78,7 +78,7 @@ bool AnthropicClient::IsAvailable() const
     return !m_apiKey.empty();
 }
 
-void AnthropicClient::SetModel(const std::string& model)
+void AnthropicClient::SetModelName(const std::string& model)
 {
     m_model = model;
     util::Logger::Info("Anthropic model changed to: {}", m_model);
