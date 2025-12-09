@@ -6,7 +6,7 @@
 namespace ai
 {
 
-LogAnalyzer::LogAnalyzer(std::shared_ptr<IAIService> aiService,
+LogAnalyzer::LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService,
                          db::EventsContainer& events)
     : m_aiService(std::move(aiService))
     , m_events(events)
@@ -16,7 +16,7 @@ LogAnalyzer::LogAnalyzer(std::shared_ptr<IAIService> aiService,
 std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
                                 const std::vector<unsigned long>* filteredIndices)
 {
-    if (!m_aiService || !m_aiService->IsAvailable())
+    if (!m_aiService || !m_aiService->service->IsAvailable())
     {
         return "Error: AI service not available. Please ensure Ollama is running.\n\n"
                "Install Ollama: https://ollama.ai\n"
@@ -39,7 +39,7 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
 
     try
     {
-        const std::string result = m_aiService->SendPrompt(prompt);
+        const std::string result = m_aiService->service->SendPrompt(prompt);
         util::Logger::Info("Analysis completed successfully");
         return result;
     }
@@ -54,7 +54,7 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
 std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents,
                                                 const std::vector<unsigned long>* filteredIndices)
 {
-    if (!m_aiService || !m_aiService->IsAvailable())
+    if (!m_aiService || !m_aiService->service->IsAvailable())
     {
         return "Error: AI service not available. Please ensure Ollama is running.\n\n"
                "Install Ollama: https://ollama.ai\n"
@@ -82,7 +82,7 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
 
     try
     {
-        const std::string result = m_aiService->SendPrompt(prompt.str());
+        const std::string result = m_aiService->service->SendPrompt(prompt.str());
         util::Logger::Info("Custom analysis completed successfully");
         return result;
     }
@@ -96,13 +96,7 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
 
 bool LogAnalyzer::IsReady() const
 {
-    return m_aiService && m_aiService->IsAvailable();
-}
-
-void LogAnalyzer::SetAIService(std::shared_ptr<IAIService> aiService)
-{
-    m_aiService = std::move(aiService);
-    util::Logger::Info("LogAnalyzer AI service updated");
+    return m_aiService && m_aiService->service->IsAvailable();
 }
 
 std::string LogAnalyzer::GetAnalysisTypeName(AnalysisType type)

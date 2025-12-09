@@ -37,7 +37,7 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override;
 
-    void SetModel(const std::string& model);
+    void SetModelName(const std::string& model) override;
     void SetBaseUrl(const std::string& url);
     
     /**
@@ -45,6 +45,11 @@ public:
      * @return Vector of model information
      */
     std::vector<ModelInfo> GetInstalledModels() const;
+
+    /**
+     * @brief Get the name of the AI provider
+     */
+    virtual std::string GetProviderName() const override { return "Ollama"; }
 
 private:
     std::string m_model;

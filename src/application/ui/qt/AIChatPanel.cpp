@@ -18,11 +18,11 @@
 namespace ui::qt
 {
 
-AIChatPanel::AIChatPanel(std::shared_ptr<ai::IAIService> aiService,
+AIChatPanel::AIChatPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
                          db::EventsContainer& events,
                          QWidget* parent)
     : QWidget(parent)
-    , m_aiService(std::move(aiService))
+    , m_aiService(aiService)
     , m_events(events)
 {
     BuildUi();
@@ -140,7 +140,10 @@ void AIChatPanel::SendMessage(const QString& message)
             util::Logger::Debug("Sending chat message with {} events context", m_maxContextEvents);
 
             // Send to AI service
-            return m_aiService->SendPrompt(prompt);
+            util::Logger::Debug("Model used: {}", 
+                m_aiService->service->GetModelName().empty() ? "default" : m_aiService->service->GetModelName());
+            util::Logger::Debug("AI Chat Prompt: {}", prompt);
+            return m_aiService->service->SendPrompt(prompt);
         }
         catch (const std::exception& e)
         {
@@ -156,7 +159,7 @@ void AIChatPanel::SendMessage(const QString& message)
         
         // Remove "Thinking..." message (last message in history)
         QString html = m_chatHistory->toHtml();
-        int lastPIndex = html.lastIndexOf("<p");
+        qsizetype lastPIndex = html.lastIndexOf("<p");
         if (lastPIndex != -1)
         {
             html = html.left(lastPIndex);

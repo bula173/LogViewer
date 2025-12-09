@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ai/IAIService.hpp"
+#include "util/Logger.hpp"
 #include <string>
 
 namespace ai
@@ -32,7 +33,7 @@ public:
     explicit GeminiClient(const std::string& apiKey,
                          const std::string& model = "gemini-2.5-flash",
                          const std::string& baseUrl = "https://generativelanguage.googleapis.com");
-    ~GeminiClient() override = default;
+    ~GeminiClient() override {util::Logger::Debug("GeminiClient destroyed");};
 
     std::string SendPrompt(const std::string& prompt,
         std::function<void(const std::string&)> callback = nullptr) override;
@@ -40,7 +41,12 @@ public:
     bool IsAvailable() const override;
     std::string GetModelName() const override { return m_model; }
 
-    void SetModel(const std::string& model);
+    void SetModelName(const std::string& model) override;
+
+    /**
+     * @brief Get the name of the AI provider
+     */
+    virtual std::string GetProviderName() const override { return "google"; }
 
 private:
     std::string m_apiKey;

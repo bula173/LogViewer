@@ -27,8 +27,8 @@
 namespace ui::qt
 {
 
-AIAnalysisPanel::AIAnalysisPanel(std::shared_ptr<ai::IAIService>& aiService,
-                                 std::shared_ptr<ai::LogAnalyzer>& analyzer,
+AIAnalysisPanel::AIAnalysisPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
+                                 std::shared_ptr<ai::LogAnalyzer> analyzer,
                                  EventsTableView* eventsView,
                                  QWidget* parent)
     : QWidget(parent)

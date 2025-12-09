@@ -7,6 +7,11 @@
 namespace ai
 {
 
+    class AIServiceWrapper {
+    public:
+        std::shared_ptr<IAIService> service;
+    };
+
 /**
  * @brief Factory for creating AI service clients based on provider
  * 

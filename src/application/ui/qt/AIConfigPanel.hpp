@@ -2,6 +2,7 @@
 
 #include "ai/LogAnalyzer.hpp"
 #include "ai/IAIService.hpp"
+#include "ai/AIServiceFactory.hpp"
 #include <QWidget>
 #include <memory>
 
@@ -21,13 +22,13 @@ class AIConfigPanel : public QWidget
     Q_OBJECT
 
 public:
-    explicit AIConfigPanel(std::shared_ptr<ai::IAIService>& aiService,
-                          std::shared_ptr<ai::LogAnalyzer>& analyzer,
+    explicit AIConfigPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
+                          std::shared_ptr<ai::LogAnalyzer> analyzer,
                           QWidget* parent = nullptr);
 
     ai::LogAnalyzer::AnalysisType GetAnalysisType() const;
     int GetMaxEvents() const;
-    std::shared_ptr<ai::IAIService> GetAIService() const { return m_aiService; }
+    std::shared_ptr<ai::AIServiceWrapper> GetAIService() const { return m_aiService; }
     std::shared_ptr<ai::LogAnalyzer> GetAnalyzer() const { return m_analyzer; }
     
     void RefreshAIClient();
@@ -46,8 +47,8 @@ private:
     void UpdateStatusLabel();
     void PopulateModelList();
 
-    std::shared_ptr<ai::IAIService>& m_aiService;
-    std::shared_ptr<ai::LogAnalyzer>& m_analyzer;
+    std::shared_ptr<ai::AIServiceWrapper> m_aiService;
+    std::shared_ptr<ai::LogAnalyzer> m_analyzer;
     
     QComboBox* m_providerCombo{nullptr};
     QComboBox* m_modelCombo{nullptr};

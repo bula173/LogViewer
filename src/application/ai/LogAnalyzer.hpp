@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ai/IAIService.hpp"
+#include "ai/AIServiceFactory.hpp"
 #include "db/EventsContainer.hpp"
 #include <string>
 #include <memory>
@@ -24,7 +25,7 @@ public:
         Timeline          // Create timeline narrative
     };
 
-    explicit LogAnalyzer(std::shared_ptr<IAIService> aiService,
+    explicit LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService,
                         db::EventsContainer& events);
 
     /**
@@ -53,17 +54,12 @@ public:
     bool IsReady() const;
 
     /**
-     * @brief Update the AI service (for provider changes)
-     */
-    void SetAIService(std::shared_ptr<IAIService> aiService);
-
-    /**
      * @brief Get human-readable name for analysis type
      */
     static std::string GetAnalysisTypeName(AnalysisType type);
 
 private:
-    std::shared_ptr<IAIService> m_aiService;
+    std::shared_ptr<AIServiceWrapper> m_aiService;
     db::EventsContainer& m_events;
 
     std::string FormatEventsForAI(size_t maxEvents, const std::vector<unsigned long>* filteredIndices) const;

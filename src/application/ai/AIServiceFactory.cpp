@@ -29,7 +29,9 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
             util::Logger::Error("API key required for provider: {}", provider);
             throw std::runtime_error("API key required for " + provider);
         }
-        return std::make_shared<OpenAIClient>(apiKey, model, baseUrl);
+        // OpenAI has a fixed base URL
+        const std::string openaiBaseUrl = "https://api.openai.com/v1";
+        return std::make_shared<OpenAIClient>(apiKey, model, openaiBaseUrl);
     }
     else if (provider == "anthropic")
     {
@@ -38,7 +40,9 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
             util::Logger::Error("API key required for Anthropic");
             throw std::runtime_error("API key required for Anthropic/Claude");
         }
-        return std::make_shared<AnthropicClient>(apiKey, model, baseUrl);
+        // Anthropic has a fixed base URL
+        const std::string anthropicBaseUrl = "https://api.anthropic.com/v1";
+        return std::make_shared<AnthropicClient>(apiKey, model, anthropicBaseUrl);
     }
     else if (provider == "google")
     {
@@ -47,7 +51,9 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
             util::Logger::Error("API key required for Google");
             throw std::runtime_error("API key required for Google/Gemini");
         }
-        return std::make_shared<GeminiClient>(apiKey, model, baseUrl);
+        // Gemini has a fixed base URL
+        const std::string geminiBaseUrl = "https://generativelanguage.googleapis.com";
+        return std::make_shared<GeminiClient>(apiKey, model, geminiBaseUrl);
     }
     else
     {

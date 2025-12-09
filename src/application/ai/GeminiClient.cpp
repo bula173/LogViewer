@@ -120,7 +120,7 @@ bool GeminiClient::IsAvailable() const
     return !m_apiKey.empty();
 }
 
-void GeminiClient::SetModel(const std::string& model)
+void GeminiClient::SetModelName(const std::string& model)
 {
     m_model = model;
     util::Logger::Info("Gemini model changed to: {}", m_model);

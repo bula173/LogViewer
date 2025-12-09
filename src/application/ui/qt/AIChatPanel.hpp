@@ -2,6 +2,7 @@
 
 #include "ai/LogAnalyzer.hpp"
 #include "ai/IAIService.hpp"
+#include "ai/AIServiceFactory.hpp"
 #include "db/EventsContainer.hpp"
 #include <QWidget>
 #include <memory>
@@ -22,7 +23,7 @@ class AIChatPanel : public QWidget
     Q_OBJECT
 
 public:
-    explicit AIChatPanel(std::shared_ptr<ai::IAIService> aiService,
+    explicit AIChatPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
                         db::EventsContainer& events,
                         QWidget* parent = nullptr);
 
@@ -41,7 +42,7 @@ private:
     void SendMessage(const QString& message);
     std::string FormatEventsForContext(size_t maxEvents) const;
 
-    std::shared_ptr<ai::IAIService> m_aiService;
+    std::shared_ptr<ai::AIServiceWrapper> m_aiService;
     db::EventsContainer& m_events;
     
     QTextEdit* m_chatHistory{nullptr};
