@@ -1,3 +1,9 @@
+find_package(EXPAT QUIET)
+if (EXPAT_FOUND)
+    message(STATUS "Using system-installed Expat library")
+    return()
+endif()
+
 set(FETCHCONTENT_QUIET FALSE)
 
 FetchContent_Declare(
@@ -18,3 +24,5 @@ set(EXPAT_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "" FORCE)
 
 FetchContent_MakeAvailable(expat)
+set_target_properties(expat PROPERTIES DEBUG_POSTFIX "")
+
