@@ -127,7 +127,7 @@ macro(addMiscTargets)
                 cppcheck
                 COMMAND ${CPPCHECK_PATH}
                 --enable=warning,performance,portability,information,missingInclude
-                --std=c++11
+                --std=c++20
                 --template=gcc
                 --verbose
                 --quiet
