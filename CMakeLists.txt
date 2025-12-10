@@ -121,8 +121,32 @@ add_subdirectory(thirdparty)
 include(cmake/sanitizers.cmake)
 add_subdirectory(src)
 
-if (NOT LOGVIEWER_SANITIZER STREQUAL "None")
-    target_enable_sanitizer(LogViewer)
+# Global compiler settings
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # Ensure debug symbols are enabled in Debug builds
+    if(MSVC)
+        add_compile_options(/Zi)
+        add_link_options(/DEBUG)
+    else()
+        add_compile_options(-g -O0)
+    endif()
+endif()
+
+# Enable clang-tidy if available and requested
+option(ENABLE_CLANG_TIDY "Enable clang-tidy checks" ON)
+if(ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE clang-tidy)
+    if(CLANG_TIDY_EXE)
+        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};--warnings-as-errors=*")
+        message(STATUS "Clang-tidy enabled: ${CLANG_TIDY_EXE}")
+    else()
+        message(WARNING "Clang-tidy not found, skipping")
+    endif()
+endif()
+
+# Sanitizer setup (moved to src/main/CMakeLists.txt for target-specific application)
+if(NOT DEFINED LOGVIEWER_SANITIZER)
+    set(LOGVIEWER_SANITIZER "None")
 endif()
 
 add_subdirectory(packaging)
@@ -167,4 +191,9 @@ elseif(UNIX)
   # Linux-specific settings
   message(STATUS "Building on Linux")
 endif()
+
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
+# If using clang: keep frame pointers for sanitizers/backtraces:
+add_compile_options(-fno-omit-frame-pointer)
+
 

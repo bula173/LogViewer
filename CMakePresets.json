@@ -1,7 +1,7 @@
 {
     "version": 6,
     "configurePresets": [
-                {
+        {
             "name": "macos-debug-wx",
             "displayName": "macOS Debug (wxWidgets)",
             "generator": "Ninja",
@@ -110,15 +110,12 @@
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
                 "GUI_FRAMEWORK": "QT",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6"
+                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
+                "ENABLE_CLANG_TIDY": "OFF",
+                "LOGVIEWER_SANITIZER": "None"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
@@ -133,7 +130,8 @@
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
                 "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
+                "ENABLE_CLANG_TIDY": "OFF",
+                "LOGVIEWER_SANITIZER": "None"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
@@ -156,15 +154,12 @@
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
                 "GUI_FRAMEWORK": "QT",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6"
+                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
+                "ENABLE_CLANG_TIDY": "OFF",
+                "LOGVIEWER_SANITIZER": "None"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
