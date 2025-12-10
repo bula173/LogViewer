@@ -1,3 +1,8 @@
+if (WIN32)
+    message(STATUS "Tests are disabled on Windows")
+    return()
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/bin)
 
 message(STATUS "Building LogViewer::tests")
