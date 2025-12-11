@@ -22,6 +22,7 @@ include(useGoldLinker)
 
 option(MEASURE_ALL "When enabled all commands will be passed through time command" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy during compilation" OFF)
+option(ENABLE_CPPCHECK "Enable cppcheck static analysis during compilation" OFF)
 option(ENABLE_COVERAGE "Enable code coverage (Debug builds only)" OFF)
 
 # GUI Framework selection
@@ -89,6 +90,31 @@ if(ENABLE_CLANG_TIDY)
     endif()
 else()
     message(STATUS "clang-tidy: DISABLED (use -DENABLE_CLANG_TIDY=ON to enable)")
+endif()
+
+#------------------------------------------------------------------------------
+# cppcheck integration (optional)
+
+if(ENABLE_CPPCHECK)
+    find_program(CPPCHECK_EXE cppcheck)
+    if(CPPCHECK_EXE)
+        set(CMAKE_CXX_CPPCHECK 
+            ${CPPCHECK_EXE}
+            --enable=warning,performance,portability
+            --inline-suppr
+            --suppress=unusedFunction
+            --suppress=missingIncludeSystem
+            --suppress=unmatchedSuppression
+            --std=c++20
+            --template=gcc
+            --quiet
+        )
+        message(STATUS "cppcheck: ENABLED at compile time (${CPPCHECK_EXE})")
+    else()
+        message(WARNING "cppcheck: REQUESTED but NOT FOUND")
+    endif()
+else()
+    message(STATUS "cppcheck: DISABLED (use -DENABLE_CPPCHECK=ON to enable)")
 endif()
 
 #------------------------------------------------------------------------------

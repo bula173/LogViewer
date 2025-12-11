@@ -32,6 +32,8 @@ endif()
 if(EXISTS "${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
     message(STATUS "Using cleanCppExtensions.cmake from ${CMAKE_SOURCE_DIR}/cmake")
     include("${CMAKE_SOURCE_DIR}/cmake/cleanCppExtensions.cmake")
+    # Create convenience targets for formatting and static analysis
+    addMiscTargets()
 else()
     message(ERROR "cleanCppExtensions.cmake not found at ${CMAKE_SOURCE_DIR}/cmake, run and debug targets not available")
 endif()
@@ -45,11 +47,10 @@ else()
 endif()
 
 # Custom target to run all useful tools (format, cppcheck, etc.)
+# Note: cppcheck, format, and tidy targets are provided by cleanCppExtensions.cmake via addMiscTargets()
 add_custom_target(run_tools
-    COMMAND ${CMAKE_COMMAND} -E echo "Running clang-format..."
-    COMMAND find ${CMAKE_SOURCE_DIR}/src -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i --style=file
-    COMMAND ${CMAKE_COMMAND} -E echo "Running cppcheck..."
-    COMMAND cppcheck --enable=all --std=c++17 --language=c++ --platform=win64 ${CMAKE_SOURCE_DIR}/src
+    COMMAND ${CMAKE_COMMAND} -E echo "=== Running Code Quality Tools ==="
+    DEPENDS format cppcheck
     COMMENT "Running code formatting and static analysis tools"
 )
 
@@ -64,8 +65,6 @@ if(MINGW)
 endif()
 
 #------------------------------------------------------------------------------
-# Other MISC targets
-addMiscTargets()
 
 add_subdirectory(application)
 add_subdirectory(main)

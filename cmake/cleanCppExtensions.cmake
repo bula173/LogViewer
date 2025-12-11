@@ -123,15 +123,27 @@ macro(addMiscTargets)
     find_program(CPPCHECK_PATH cppcheck)
     if(CPPCHECK_PATH)
         message(STATUS "cppcheck - static analysis                YES ")
+        # Ensure dist/logs directory exists
+        file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/logs)
         add_custom_target(
                 cppcheck
+                COMMAND ${CMAKE_COMMAND} -E echo "Running cppcheck static analysis..."
                 COMMAND ${CPPCHECK_PATH}
-                --enable=warning,performance,portability,information,missingInclude
+                --enable=warning,performance,portability,style
+                --inline-suppr
+                --suppress=unusedFunction
+                --suppress=missingIncludeSystem
+                --suppress=unmatchedSuppression
                 --std=c++20
                 --template=gcc
+                -I ${CMAKE_SOURCE_DIR}/src
+                -I ${CMAKE_SOURCE_DIR}/include
                 --verbose
-                --quiet
                 ${ALL_SOURCE_FILES}
+                2>&1 | tee ${CMAKE_SOURCE_DIR}/dist/logs/cppcheck-report.txt
+                COMMAND ${CMAKE_COMMAND} -E echo "Cppcheck report saved to: ${CMAKE_SOURCE_DIR}/dist/logs/cppcheck-report.txt"
+                COMMENT "Running cppcheck static analysis"
+                VERBATIM
         )
     else()
         message(STATUS "cppcheck - static analysis                NO ")

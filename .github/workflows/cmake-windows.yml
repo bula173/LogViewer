@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release]
+        build_type: [Release, Debug]
         gui_framework: [qt]
 
     env:
@@ -103,7 +103,27 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }}
+          mkdir -p dist/logs
+          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-qt-${{ matrix.build_type }}.log
+
+      - name: Run Code Quality Tools
+        if: matrix.build_type == 'Debug'
+        shell: msys2 {0}
+        continue-on-error: true
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          mkdir -p dist/logs
+          echo "Running cppcheck..."
+          cppcheck \
+            --enable=warning,performance,portability \
+            --inline-suppr \
+            --suppress=normalCheckLevelMaxBranches \
+            --template=gcc \
+            -I src -I include \
+            src 2> dist/logs/cppcheck-report.txt || true
+          echo "---- cppcheck report ----"
+          cat dist/logs/cppcheck-report.txt || true
+          echo "-------------------------"
 
       - name: Run tests
         shell: msys2 {0}
@@ -151,3 +171,12 @@ jobs:
           path: |
             ${{ github.workspace }}/dist/packages/*.exe
           if-no-files-found: warn
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-logs
+          path: |
+            dist/logs/**
+          if-no-files-found: ignore
