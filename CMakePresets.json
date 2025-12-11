@@ -10,7 +10,8 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
+                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config",
+                "LOGVIEWER_SANITIZER": "Address"
             },
             "condition": {
                 "type": "equals",
@@ -29,7 +30,8 @@
                 "GUI_FRAMEWORK": "QT",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
+                "LOGVIEWER_SANITIZER": "Address"
             },
             "condition": {
                 "type": "equals",
@@ -171,7 +173,8 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config"
+                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config",
+                "LOGVIEWER_SANITIZER": "Address"
             },
             "condition": {
                 "type": "equals",
@@ -188,7 +191,8 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "QT",
-                "Qt6_DIR": "/usr/lib/cmake/Qt6"
+                "Qt6_DIR": "/usr/lib/cmake/Qt6",
+                "LOGVIEWER_SANITIZER": "Address"
             },
             "condition": {
                 "type": "equals",

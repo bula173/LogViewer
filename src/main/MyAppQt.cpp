@@ -10,8 +10,13 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QStandardPaths>
+#include <QLibraryInfo>
 #include <cstdlib>
 #include <string>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace
 {
@@ -62,6 +67,38 @@ bool CheckQtLibraries()
         // Check application directory for Qt libraries
         QString appDir = QCoreApplication::applicationDirPath();
         util::Logger::Info("Application directory: {}", appDir.toStdString());
+
+        // Windows-specific DLL checks
+        #ifdef _WIN32
+        // Check if Qt DLLs are in system PATH (can cause version conflicts)
+        const char* pathEnv = std::getenv("PATH");
+        if (pathEnv) {
+            std::string pathStr(pathEnv);
+            if (pathStr.find("Qt") != std::string::npos || pathStr.find("qt") != std::string::npos) {
+                util::Logger::Warn("Qt directories found in system PATH - this may cause DLL conflicts");
+                util::Logger::Warn("PATH contains: {}", pathStr);
+            }
+        }
+
+        // Check for Qt plugin directory
+        QString pluginPath = QLibraryInfo::path(QLibraryInfo::PluginsPath);
+        util::Logger::Info("Qt plugins path: {}", pluginPath.toStdString());
+        
+        QDir platformsDir(appDir + "/platforms");
+        if (!platformsDir.exists()) {
+            util::Logger::Error("CRITICAL: platforms directory not found at: {}", platformsDir.absolutePath().toStdString());
+            util::Logger::Error("The application will crash without qwindows.dll plugin!");
+            return false;
+        } else {
+            QStringList plugins = platformsDir.entryList(QStringList() << "*.dll", QDir::Files);
+            if (plugins.isEmpty()) {
+                util::Logger::Error("CRITICAL: No platform plugins found in platforms directory!");
+                return false;
+            } else {
+                util::Logger::Info("Found platform plugins: {}", plugins.join(", ").toStdString());
+            }
+        }
+        #endif
 
         // On macOS, Qt libraries are in frameworks
         #ifdef Q_OS_MAC
