@@ -614,20 +614,24 @@ void MainWindow::HandleDroppedFile(const QString& path)
                 if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Replace)
                 {
                     // Replace existing data
-                    UpdateStatusText(QString("Loading %1 ...").arg(path).toStdString());
+                    const QString message = QString("Loading %1 ...").arg(path);
+                    UpdateStatusText(message.toStdString());
                     m_presenter->LoadLogFile(filePath);
                     m_presenter->SetItemDetailsVisible(true);
-                    UpdateStatusText(QString("Data ready. Path: %1").arg(path).toStdString());
+                    const QString readyMsg = QString("Data ready. Path: %1").arg(path);
+                    UpdateStatusText(readyMsg.toStdString());
                 }
                 else // Merge
                 {
                     // Merge with existing data
                     const std::string existingAlias = dialog.GetExistingFileAlias().toStdString();
                     const std::string newFileAlias = dialog.GetNewFileAlias().toStdString();
-                    UpdateStatusText(QString("Merging %1 ...").arg(path).toStdString());
+                    const QString mergingMsg = QString("Merging %1 ...").arg(path);
+                    UpdateStatusText(mergingMsg.toStdString());
                     m_presenter->MergeLogFile(filePath, existingAlias, newFileAlias);
                     m_presenter->SetItemDetailsVisible(true);
-                    UpdateStatusText(QString("Merge complete. Path: %1").arg(path).toStdString());
+                    const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
+                    UpdateStatusText(completeMsg.toStdString());
                 }
             }
             // If dialog was canceled, do nothing
@@ -635,19 +639,22 @@ void MainWindow::HandleDroppedFile(const QString& path)
         else
         {
             // No existing data, just load normally
-            UpdateStatusText(QString("Loading %1 ...").arg(path).toStdString());
+            const QString message = QString("Loading %1 ...").arg(path);
+            UpdateStatusText(message.toStdString());
             m_presenter->LoadLogFile(filePath);
             m_presenter->SetItemDetailsVisible(true);
-            UpdateStatusText(QString("Data ready. Path: %1").arg(path).toStdString());
+            const QString readyMsg = QString("Data ready. Path: %1").arg(path);
+            UpdateStatusText(readyMsg.toStdString());
         }
     }
     catch (const std::exception& ex)
     {
         util::Logger::Error("[MainWindow] Failed to load file '{}': {}",
             filePath.string(), ex.what());
-        UpdateStatusText(QString("Failed to load  complete file Path: %1").arg(path).toStdString());
-        QMessageBox::critical(this, "File Drop Error",
-            QString("Unable to load %1\n%2").arg(path).arg(ex.what()));
+        const QString failedMsg = QString("Failed to load  complete file Path: %1").arg(path);
+        UpdateStatusText(failedMsg.toStdString());
+        const QString errorMsg = QString("Unable to load %1\n%2").arg(path).arg(ex.what());
+        QMessageBox::critical(this, "File Drop Error", errorMsg);
     }
 }
 
