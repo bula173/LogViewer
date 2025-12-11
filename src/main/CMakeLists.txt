@@ -22,6 +22,11 @@ message(STATUS "CPACK_COMPONENT: ${CPACK_COMPONENT}")
 
 # Distribution directories
 set(DIST_ROOT "${PROJECT_SOURCE_DIR}/dist")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(DIST_BUILD "${DIST_ROOT}/Debug")
+else()
+    set(DIST_BUILD "${DIST_ROOT}/Release")
+endif()
 set(DIST_RELEASE "${DIST_ROOT}/Release")
 set(DIST_LIB "${DIST_ROOT}/lib")
 set(DIST_PACKAGE "${DIST_ROOT}/package")
@@ -91,22 +96,22 @@ addRunAndDebugTargets(${GUI_TARGET_NAME})
 # POST_BUILD: Collect all runtime dependencies to dist/
 
 if(WIN32)
-    # Step 1: Copy executable and config to dist/Release
+    # Step 1: Copy executable and config to dist/Debug or dist/Release
     add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${DIST_RELEASE}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${DIST_BUILD}"
         COMMAND ${CMAKE_COMMAND} -E make_directory "${DIST_LIB}"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "$<TARGET_FILE:${GUI_TARGET_NAME}>"
-                "${DIST_RELEASE}/"
+                "${DIST_BUILD}/"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${CMAKE_SOURCE_DIR}/etc/default_config.json"
-                "${DIST_RELEASE}/etc/config.json"
-        COMMENT "Copying executable to dist/Release"
+                "${DIST_BUILD}/etc/config.json"
+        COMMENT "Copying executable to dist/${CMAKE_BUILD_TYPE}"
     )
     
     # Step 2: Qt-specific deployment
     if(USE_QT)
-        set(QT_DEPLOY_DIR "${DIST_ROOT}/qt_deploy")
+        set(QT_DEPLOY_DIR "${DIST_ROOT}/qt_deploy_${CMAKE_BUILD_TYPE}")
         find_program(WINDEPLOYQT_EXECUTABLE windeployqt-qt6 HINTS ${Qt6_DIR}/../../../bin)
         
         if(WINDEPLOYQT_EXECUTABLE)
@@ -116,15 +121,17 @@ if(WIN32)
                         --verbose 1
                         --no-compiler-runtime
                         --no-translations
+                        $<$<CONFIG:Debug>:--debug>
+                        $<$<CONFIG:Release>:--release>
                         --dir "${QT_DEPLOY_DIR}"
-                        "${DIST_RELEASE}/${GUI_TARGET_NAME}.exe"
+                        "${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                         "${QT_DEPLOY_DIR}"
-                        "${DIST_RELEASE}"
+                        "${DIST_BUILD}"
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                         "${QT_DEPLOY_DIR}"
                         "$<TARGET_FILE_DIR:${GUI_TARGET_NAME}>"
-                COMMENT "Deploying Qt runtime to dist/"
+                COMMENT "Deploying Qt runtime to dist/${CMAKE_BUILD_TYPE}"
             )
         else()
             message(WARNING "windeployqt not found. Qt DLLs must be copied manually.")
@@ -136,21 +143,21 @@ if(WIN32)
         # Copy to dist/lib for packaging
         add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND}
-                -DARGV0="${DIST_RELEASE}/${GUI_TARGET_NAME}.exe"
+                -DARGV0="${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
                 -DARGV1="${DIST_LIB}"
                 -DARGV2="${CMAKE_C_COMPILER}"
                 -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
             COMMENT "Collecting MinGW runtime DLLs to dist/lib"
         )
         
-        # Copy to dist/Release for complete package
+        # Copy to dist/Debug or dist/Release for complete package
         add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND}
-                -DARGV0="${DIST_RELEASE}/${GUI_TARGET_NAME}.exe"
-                -DARGV1="${DIST_RELEASE}"
+                -DARGV0="${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
+                -DARGV1="${DIST_BUILD}"
                 -DARGV2="${CMAKE_C_COMPILER}"
                 -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
-            COMMENT "Copying MinGW runtime DLLs to dist/Release"
+            COMMENT "Copying MinGW runtime DLLs to dist/${CMAKE_BUILD_TYPE}"
         )
         
         # Copy to build dir for local testing
@@ -205,16 +212,18 @@ install(FILES
 if(USE_QT)
     # Install all Qt runtime files (DLLs, plugins, etc.) to qt_app component
     install(CODE "
-        set(DIST_RELEASE \"${DIST_RELEASE}\")
+        set(DIST_BUILD \"${DIST_BUILD}\")
+        set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")
         set(COMPONENT_NAME \"${CPACK_COMPONENT}\")
         
         message(STATUS \"=== Installing Qt application (component: \${COMPONENT_NAME}) ===\")
-        message(STATUS \"Source: \${DIST_RELEASE}\")
+        message(STATUS \"Build Type: \${BUILD_TYPE}\")
+        message(STATUS \"Source: \${DIST_BUILD}\")
         message(STATUS \"Destination: \${CMAKE_INSTALL_PREFIX}\")
         
-        if(EXISTS \"\${DIST_RELEASE}\")
-            # Get all files recursively from dist/Release
-            file(GLOB_RECURSE ALL_FILES RELATIVE \"\${DIST_RELEASE}\" \"\${DIST_RELEASE}/*\")
+        if(EXISTS \"\${DIST_BUILD}\")
+            # Get all files recursively from dist/Debug or dist/Release
+            file(GLOB_RECURSE ALL_FILES RELATIVE \"\${DIST_BUILD}\" \"\${DIST_BUILD}/*\")
             
             set(FILE_COUNT 0)
             foreach(FILE \${ALL_FILES})
@@ -228,7 +237,7 @@ if(USE_QT)
                     endif()
                     
                     # Install the file
-                    file(INSTALL \"\${DIST_RELEASE}/\${FILE}\" 
+                    file(INSTALL \"\${DIST_BUILD}/\${FILE}\" 
                          DESTINATION \"\${CMAKE_INSTALL_PREFIX}/\${FILE_DIR}\")
                     
                     math(EXPR FILE_COUNT \"\${FILE_COUNT} + 1\")
@@ -238,7 +247,7 @@ if(USE_QT)
             message(STATUS \"Installed \${FILE_COUNT} Qt runtime files\")
             message(STATUS \"=== Installation complete ===\")
         else()
-            message(FATAL_ERROR \"Qt release directory not found: \${DIST_RELEASE}\")
+            message(FATAL_ERROR \"Qt build directory not found: \${DIST_BUILD} (Build type: \${BUILD_TYPE})\")
         endif()
     " COMPONENT ${CPACK_COMPONENT})
     
