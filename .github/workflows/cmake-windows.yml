@@ -133,12 +133,10 @@ jobs:
           ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
-        if: matrix.build_type == 'Release'
         shell: msys2 {0}
         run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
 
       - name: run CPack NSIS directly
-        if: matrix.build_type == 'Release'
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
         run: |
@@ -164,7 +162,7 @@ jobs:
             if-no-files-found: ignore
 
       - name: Upload installer artifact
-        if: matrix.build_type == 'Release' && always()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: windows-Release-${{ matrix.gui_framework }}-installer
