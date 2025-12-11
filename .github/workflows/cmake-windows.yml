@@ -133,15 +133,17 @@ jobs:
           ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
+        if: matrix.build_type == 'Release'
         shell: msys2 {0}
-        run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
+        run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
 
       - name: run CPack NSIS directly
+        if: matrix.build_type == 'Release'
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          cpack -G NSIS -C Release --config CPackConfig.cmake
+          cpack -G NSIS -C ${{ matrix.build_type }} --config CPackConfig.cmake
 
       - name: Upload tests artifact
         if: always()
@@ -154,18 +156,18 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload staging artifact
-        if:  always()
+        if: matrix.build_type == 'Release' && always()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-Release-${{ matrix.gui_framework }}-staging
+            name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-staging
             path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\_staging\**
             if-no-files-found: ignore
 
       - name: Upload installer artifact
-        if: always()
+        if: matrix.build_type == 'Release' && always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-Release-${{ matrix.gui_framework }}-installer
+          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-installer
           path: |
             ${{ github.workspace }}/dist/packages/*.exe
           if-no-files-found: warn
