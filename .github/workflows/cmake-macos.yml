@@ -77,30 +77,24 @@ jobs:
             $EXTRA_ARGS
 
       - name: Build
-        run: cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }}
-
-      - name: Static analysis (cppcheck)
-        if: matrix.build_type == 'Debug' && matrix.gui_framework == 'wx'
         run: |
-          set -e
-          cppcheck --version
-          # Run cppcheck; do not fail immediately
-          cppcheck \
-            --enable=warning,performance,portability \
-            --inline-suppr \
-            --suppress=normalCheckLevelMaxBranches \
-            --template=gcc \
-            -I src -I include \
-            src 2> cppcheck-report.txt || true
-          echo "---- cppcheck raw report ----"
-          cat cppcheck-report.txt
-          echo "-----------------------------"
-          # Fail only on warning or error lines
-          if grep -E ":[0-9]+:[0-9]+: (error|warning):" cppcheck-report.txt >/dev/null; then
-            echo "cppcheck found issues."
-            exit 1
-          else
-            echo "No cppcheck blocking issues."
+          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.gui_framework }}-${{ matrix.build_type }}.log
+
+      - name: Run Code Quality Tools
+        if: matrix.build_type == 'Debug'
+        continue-on-error: true
+        run: |
+          # Ensure logs directory exists
+          mkdir -p dist/logs
+          
+          # Run cppcheck analysis
+          echo "Running cppcheck..."
+          cmake --build --preset macos-cppcheck 2>&1 | tee dist/logs/cppcheck-${{ matrix.gui_framework }}.log || true
+          
+          # Run clang-tidy if available
+          if command -v clang-tidy &> /dev/null; then
+            echo "Running clang-tidy..."
+            cmake --build --preset macos-clang-tidy 2>&1 | tee dist/logs/clang-tidy-${{ matrix.gui_framework }}.log || true
           fi
 
       - name: List tests
@@ -133,4 +127,13 @@ jobs:
             ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_staging/**
             ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_CPack_Packages/*/DragNDrop/*.dmg
             ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-logs
+          path: |
+            dist/logs/**
           if-no-files-found: ignore

@@ -11,7 +11,8 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "WX",
                 "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config",
-                "LOGVIEWER_SANITIZER": "Address"
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK": "ON"
             },
             "condition": {
                 "type": "equals",
@@ -31,7 +32,8 @@
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
-                "LOGVIEWER_SANITIZER": "Address"
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK": "ON"
             },
             "condition": {
                 "type": "equals",
@@ -174,7 +176,8 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "WX",
                 "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config",
-                "LOGVIEWER_SANITIZER": "Address"
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK": "ON"
             },
             "condition": {
                 "type": "equals",
@@ -192,7 +195,8 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "GUI_FRAMEWORK": "QT",
                 "Qt6_DIR": "/usr/lib/cmake/Qt6",
-                "LOGVIEWER_SANITIZER": "Address"
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK": "ON"
             },
             "condition": {
                 "type": "equals",
@@ -286,6 +290,54 @@
             "name": "windows-msys-release-qt-build",
             "displayName": "Windows MSYS2 Release Build (Qt)",
             "configurePreset": "windows-msys-release-qt"
+        },
+        {
+            "name": "macos-cppcheck",
+            "displayName": "macOS: Run Cppcheck Analysis",
+            "configurePreset": "macos-debug-qt",
+            "targets": ["cppcheck"]
+        },
+        {
+            "name": "linux-cppcheck",
+            "displayName": "Linux: Run Cppcheck Analysis",
+            "configurePreset": "linux-debug-qt",
+            "targets": ["cppcheck"]
+        },
+        {
+            "name": "macos-clang-tidy",
+            "displayName": "macOS: Run Clang-Tidy Analysis",
+            "configurePreset": "macos-debug-qt",
+            "targets": ["tidy"]
+        },
+        {
+            "name": "linux-clang-tidy",
+            "displayName": "Linux: Run Clang-Tidy Analysis",
+            "configurePreset": "linux-debug-qt",
+            "targets": ["tidy"]
+        },
+        {
+            "name": "macos-format",
+            "displayName": "macOS: Format Code (clang-format)",
+            "configurePreset": "macos-debug-qt",
+            "targets": ["format"]
+        },
+        {
+            "name": "linux-format",
+            "displayName": "Linux: Format Code (clang-format)",
+            "configurePreset": "linux-debug-qt",
+            "targets": ["format"]
+        },
+        {
+            "name": "macos-quality-tools",
+            "displayName": "macOS: Run All Code Quality Tools",
+            "configurePreset": "macos-debug-qt",
+            "targets": ["run_tools"]
+        },
+        {
+            "name": "linux-quality-tools",
+            "displayName": "Linux: Run All Code Quality Tools",
+            "configurePreset": "linux-debug-qt",
+            "targets": ["run_tools"]
         }
     ],
     "testPresets": [
