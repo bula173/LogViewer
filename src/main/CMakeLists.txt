@@ -121,8 +121,6 @@ if(WIN32)
                         --verbose 1
                         --no-compiler-runtime
                         --no-translations
-                        $<$<CONFIG:Debug>:--debug>
-                        $<$<CONFIG:Release>:--release>
                         --dir "${QT_DEPLOY_DIR}"
                         "${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
