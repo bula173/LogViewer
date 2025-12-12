@@ -9,6 +9,8 @@ if (USE_QT)
     # Event metrics analyzer plugin - frequency analysis
     add_subdirectory(event_metrics)
 
+    add_subdirectory(ssh_parser)
+
 
     # Custom target to build all plugins
     add_custom_target(plugins_all
@@ -19,5 +21,6 @@ if (USE_QT)
     add_dependencies(plugins_all 
         field_converter_example
         event_metrics
+        ssh_parser_plugin
     )
 endif()

@@ -93,7 +93,6 @@ public:
      */
     void SetMultiLineEnabled(bool enabled);
 
-private:
     /**
      * @brief Parses a single text line
      * @param line Text line to parse
@@ -101,6 +100,8 @@ private:
      * @return Parsed event items or empty if no match
      */
     db::LogEvent::EventItems ParseLine(const std::string& line, int lineNumber);
+
+private:
 
     /**
      * @brief Tries to match line against all patterns

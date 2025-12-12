@@ -121,16 +121,17 @@ jobs:
       - name: Collect plugins
         if: matrix.build_type == 'Release'
         run: |
-          mkdir -p "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist"
-          find "$BUILD_DIR-${{ matrix.gui_framework }}/src/plugins" -name "*.dylib" -type f -exec cp {} "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/" \;
-          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins-dist/"
+          echo "Listing plugins in dist/plugins:"
+          ls -lh "$GITHUB_WORKSPACE/dist/plugins/" || echo "dist/plugins not found"
+          echo "Plugin files:"
+          find "$GITHUB_WORKSPACE/dist/plugins" -name "*.dylib" -type f || echo "No .dylib files found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/plugins-dist/*.dylib
+          path: ${{ github.workspace }}/dist/plugins/*.dylib
           if-no-files-found: warn
 
       - name: Upload artifacts

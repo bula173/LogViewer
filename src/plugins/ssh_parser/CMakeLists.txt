@@ -3,11 +3,15 @@ message(STATUS "Building LogViewer::ssh_parser_plugin (optional)")
 # SSH parser plugin - optional feature for specific customers
 # This plugin provides SSH connectivity and text log parsing capabilities
 
+# Find Qt6 for UI components
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+
 set(SSH_PARSER_SRCS
     SSHConnection.cpp
     SSHTextParser.cpp
     SSHLogSource.cpp
     SSHParserPlugin.cpp
+    SSHConnectionWidget.cpp
 )
 
 set(SSH_PARSER_HEADERS
@@ -15,6 +19,7 @@ set(SSH_PARSER_HEADERS
     SSHTextParser.hpp
     SSHLogSource.hpp
     SSHParserPlugin.hpp
+    SSHConnectionWidget.hpp
 )
 
 # Create the SSH parser as a shared library plugin
@@ -24,6 +29,18 @@ add_library(ssh_parser_plugin SHARED ${SSH_PARSER_SRCS} ${SSH_PARSER_HEADERS})
 find_package(PkgConfig QUIET)
 if(PKG_CONFIG_FOUND)
     pkg_check_modules(LIBSSH libssh)
+    
+    # pkg-config returns -lssh which needs full path
+    if(LIBSSH_FOUND AND LIBSSH_LIBRARIES)
+        find_library(LIBSSH_LIBRARY_PATH
+            NAMES ${LIBSSH_LIBRARIES}
+            PATHS ${LIBSSH_LIBRARY_DIRS}
+            NO_DEFAULT_PATH
+        )
+        if(LIBSSH_LIBRARY_PATH)
+            set(LIBSSH_LIBRARIES ${LIBSSH_LIBRARY_PATH})
+        endif()
+    endif()
 endif()
 
 if(NOT LIBSSH_FOUND)
@@ -39,11 +56,18 @@ if(NOT LIBSSH_FOUND)
     find_library(LIBSSH_LIBRARY
         NAMES ssh libssh
         PATHS
-            /usr/lib
-            /usr/local/lib
             /opt/homebrew/lib
+            /usr/local/lib
+            /usr/lib
             ${CMAKE_PREFIX_PATH}/lib
+        NO_DEFAULT_PATH
     )
+    
+    if(NOT LIBSSH_LIBRARY)
+        find_library(LIBSSH_LIBRARY
+            NAMES ssh libssh
+        )
+    endif()
     
     if(LIBSSH_INCLUDE_DIR AND LIBSSH_LIBRARY)
         set(LIBSSH_FOUND TRUE)
@@ -70,8 +94,15 @@ target_link_libraries(ssh_parser_plugin
     PUBLIC
         application_core
         ${LIBSSH_LIBRARIES}
+        Qt6::Core
+        Qt6::Widgets
     PRIVATE
         spdlog::spdlog_header_only
+)
+
+# Enable Qt MOC for widget processing
+set_target_properties(ssh_parser_plugin PROPERTIES
+    AUTOMOC ON
 )
 
 # Add preprocessor definition to enable SSH features
@@ -96,11 +127,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
     set(PLUGIN_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/plugins")
     file(MAKE_DIRECTORY ${PLUGIN_OUTPUT_DIR})
 
-    add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+    add_custom_command(TARGET ssh_parser_plugin POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-            $<TARGET_FILE:${PLUGIN_NAME}>
-            ${PLUGIN_OUTPUT_DIR}/field_converter_example.dylib
-        COMMENT "Copying ${PLUGIN_NAME} to ${PLUGIN_OUTPUT_DIR}"
+            $<TARGET_FILE:ssh_parser_plugin>
+            ${PLUGIN_OUTPUT_DIR}/$<TARGET_FILE_NAME:ssh_parser_plugin>
+        COMMENT "Copying ssh_parser_plugin to ${PLUGIN_OUTPUT_DIR}"
     )
 endif()
 
