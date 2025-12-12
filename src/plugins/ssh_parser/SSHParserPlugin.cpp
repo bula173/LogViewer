@@ -6,7 +6,10 @@
  */
 
 #include "SSHParserPlugin.hpp"
+#include "SSHConnectionWidget.hpp"
 #include "util/Logger.hpp"
+#include <QWidget>
+#include <algorithm>
 
 namespace ssh
 {
@@ -30,6 +33,9 @@ bool SSHParserPlugin::Initialize()
     {
         // Initialize libssh if needed
         // ssh_init() is called automatically in libssh 0.8+
+        
+        // Create parser instance
+        m_parser = std::make_unique<SSHTextParser>();
         
         m_status = plugin::PluginStatus::Initialized;
         util::Logger::Info("SSHParserPlugin: Initialization successful");
@@ -116,10 +122,44 @@ bool SSHParserPlugin::SetLicense(const std::string& licenseKey)
     return true;
 }
 
+bool SSHParserPlugin::ValidateConfiguration() const
+{
+    // SSH parser has minimal configuration requirements
+    // It's valid if initialized
+    return m_status == plugin::PluginStatus::Initialized || 
+           m_status == plugin::PluginStatus::Active;
+}
+
+parser::IDataParser* SSHParserPlugin::GetParserInterface()
+{
+    return m_parser.get();
+}
+
+bool SSHParserPlugin::SupportsExtension(const std::string& extension) const
+{
+    // SSH parser supports text-based log files
+    static const std::vector<std::string> supportedExtensions = {
+        ".log", ".txt", ".ssh", ".auth"
+    };
+    
+    return std::find(supportedExtensions.begin(), 
+                    supportedExtensions.end(), 
+                    extension) != supportedExtensions.end();
+}
+
+std::vector<std::string> SSHParserPlugin::GetSupportedExtensions() const
+{
+    return {".log", ".txt", ".ssh", ".auth"};
+}
+
+QWidget* SSHParserPlugin::CreateTab(QWidget* parent)
+{
+    util::Logger::Info("SSHParserPlugin: Creating SSH connection tab");
+    return new ssh::SSHConnectionWidget(parent);
+}
+
 std::unique_ptr<SSHConnection> SSHParserPlugin::CreateConnection(
-    const std::string& hostname,
-    int port,
-    const std::string& username)
+    const SSHConnectionConfig& config)
 {
     if (!m_isLicensed)
     {
@@ -138,7 +178,7 @@ std::unique_ptr<SSHConnection> SSHParserPlugin::CreateConnection(
 
     try
     {
-        auto connection = std::make_unique<SSHConnection>(hostname, port, username);
+        auto connection = std::make_unique<SSHConnection>(config);
         m_status = plugin::PluginStatus::Active;
         return connection;
     }
@@ -182,9 +222,7 @@ std::unique_ptr<SSHTextParser> SSHParserPlugin::CreateTextParser()
 }
 
 std::unique_ptr<SSHLogSource> SSHParserPlugin::CreateLogSource(
-    std::unique_ptr<SSHConnection> connection,
-    std::unique_ptr<SSHTextParser> parser,
-    SSHLogSource::MonitorMode mode)
+    const SSHLogSourceConfig& config)
 {
     if (!m_isLicensed)
     {
@@ -201,18 +239,9 @@ std::unique_ptr<SSHLogSource> SSHParserPlugin::CreateLogSource(
         return nullptr;
     }
 
-    if (!connection || !parser)
-    {
-        m_lastError = "Connection and parser cannot be null";
-        return nullptr;
-    }
-
     try
     {
-        auto logSource = std::make_unique<SSHLogSource>(
-            std::move(connection), 
-            std::move(parser), 
-            mode);
+        auto logSource = std::make_unique<SSHLogSource>(config);
         m_status = plugin::PluginStatus::Active;
         return logSource;
     }
@@ -227,7 +256,7 @@ std::unique_ptr<SSHLogSource> SSHParserPlugin::CreateLogSource(
 } // namespace ssh
 
 // Plugin factory function implementation
-extern "C" EXPORT_PLUGIN std::unique_ptr<plugin::IPlugin> CreatePlugin()
+extern "C" EXPORT_PLUGIN_SYMBOL std::unique_ptr<plugin::IPlugin> CreatePlugin()
 {
     return std::make_unique<ssh::SSHParserPlugin>();
 }

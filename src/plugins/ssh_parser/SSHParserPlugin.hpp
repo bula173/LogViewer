@@ -11,8 +11,11 @@
 #include "SSHConnection.hpp"
 #include "SSHTextParser.hpp"
 #include "SSHLogSource.hpp"
+#include "SSHConnectionWidget.hpp"
 #include <memory>
 #include <string>
+
+class QWidget;
 
 namespace ssh
 {
@@ -38,18 +41,21 @@ public:
     std::string GetLastError() const override;
     bool IsLicensed() const override;
     bool SetLicense(const std::string& licenseKey) override;
+    bool ValidateConfiguration() const override;
+    
+    // Parser plugin interface
+    parser::IDataParser* GetParserInterface() override;
+    bool SupportsExtension(const std::string& extension) const override;
+    std::vector<std::string> GetSupportedExtensions() const override;
+    QWidget* CreateTab(QWidget* parent) override;
 
     /**
      * @brief Create SSH connection
-     * @param hostname Remote host address
-     * @param port SSH port (default: 22)
-     * @param username Username for authentication
+     * @param config SSH connection configuration
      * @return Unique pointer to SSH connection
      */
     std::unique_ptr<SSHConnection> CreateConnection(
-        const std::string& hostname,
-        int port,
-        const std::string& username);
+        const SSHConnectionConfig& config);
 
     /**
      * @brief Create SSH text parser
@@ -59,24 +65,18 @@ public:
 
     /**
      * @brief Create SSH log source
-     * @param connection SSH connection
-     * @param parser Text parser
-     * @param mode Monitoring mode
+     * @param config SSH log source configuration
      * @return Unique pointer to SSH log source
      */
     std::unique_ptr<SSHLogSource> CreateLogSource(
-        std::unique_ptr<SSHConnection> connection,
-        std::unique_ptr<SSHTextParser> parser,
-        SSHLogSource::MonitorMode mode);
+        const SSHLogSourceConfig& config);
 
 private:
     plugin::PluginStatus m_status;
     std::string m_lastError;
     std::string m_licenseKey;
     bool m_isLicensed;
+    std::unique_ptr<SSHTextParser> m_parser;
 };
 
 } // namespace ssh
-
-// Plugin factory function
-extern "C" EXPORT_PLUGIN std::unique_ptr<plugin::IPlugin> CreatePlugin();

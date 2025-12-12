@@ -72,7 +72,7 @@ bool SSHLogSource::Start()
     if (!m_connection->Connect())
     {
         m_lastError = "Failed to connect: " + m_connection->GetLastError();
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
@@ -157,7 +157,7 @@ void SSHLogSource::MonitoringThread()
     catch (const std::exception& e)
     {
         m_lastError = std::string("Monitoring error: ") + e.what();
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
     }
 
     m_running = false;
@@ -180,7 +180,7 @@ void SSHLogSource::MonitorCommandOutput()
     else
     {
         m_lastError = "Command failed with exit code: " + std::to_string(exitCode);
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
     }
 }
 
@@ -194,7 +194,7 @@ void SSHLogSource::MonitorTailFile()
     if (!m_connection->OpenShell())
     {
         m_lastError = "Failed to open shell: " + m_connection->GetLastError();
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return;
     }
 
@@ -256,7 +256,7 @@ void SSHLogSource::MonitorInteractiveShell()
     if (!m_connection->OpenShell())
     {
         m_lastError = "Failed to open shell: " + m_connection->GetLastError();
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return;
     }
 

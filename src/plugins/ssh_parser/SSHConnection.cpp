@@ -63,7 +63,7 @@ bool SSHConnection::Connect()
     if (!m_session)
     {
         m_lastError = "Failed to create SSH session";
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
@@ -80,7 +80,7 @@ bool SSHConnection::Connect()
     if (rc != SSH_OK)
     {
         m_lastError = std::string("SSH connection failed: ") + ssh_get_error(m_session);
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         ssh_free(m_session);
         m_session = nullptr;
         return false;
@@ -94,7 +94,7 @@ bool SSHConnection::Connect()
         if (rc != SSH_OK)
         {
             m_lastError = "Failed to get server public key";
-            util::Logger::Error(m_lastError);
+            util::Logger::Error("{}", m_lastError);
             Disconnect();
             return false;
         }
@@ -176,7 +176,7 @@ bool SSHConnection::AuthenticateWithPassword()
     if (rc != SSH_AUTH_SUCCESS)
     {
         m_lastError = std::string("Password authentication failed: ") + ssh_get_error(m_session);
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
@@ -197,7 +197,7 @@ bool SSHConnection::AuthenticateWithPublicKey()
     if (rc != SSH_OK)
     {
         m_lastError = "Failed to load private key";
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
@@ -207,7 +207,7 @@ bool SSHConnection::AuthenticateWithPublicKey()
     if (rc != SSH_AUTH_SUCCESS)
     {
         m_lastError = std::string("Public key authentication failed: ") + ssh_get_error(m_session);
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
@@ -223,7 +223,7 @@ bool SSHConnection::AuthenticateWithAgent()
     if (rc != SSH_AUTH_SUCCESS)
     {
         m_lastError = std::string("Agent authentication failed: ") + ssh_get_error(m_session);
-        util::Logger::Error(m_lastError);
+        util::Logger::Error("{}", m_lastError);
         return false;
     }
 
