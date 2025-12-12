@@ -46,100 +46,9 @@ bool SetupLogging()
 
 void ShowFatalMessage(const QString& text)
 {
-    QMessageBox::critical(nullptr, "LogViewer Qt", text);
+    util::Logger::Error("Fatal error: {}", text.toStdString());
 }
 
-bool CheckQtLibraries()
-{
-    // Check if QtCore library is available
-    // This helps catch DLL loading issues early
-    try {
-        // Try to access Qt version info
-        QString qtVersion = qVersion();
-        util::Logger::Info("Qt version: {}", qtVersion.toStdString());
-
-        // Check for known problematic Qt versions
-        if (qtVersion.startsWith("6.10.")) {
-            util::Logger::Warn("Qt version 6.10.x detected. This version may have known issues with widget initialization.");
-            util::Logger::Warn("Consider downgrading to Qt 6.9.x or upgrading to a newer version if available.");
-        }
-
-        // Check application directory for Qt libraries
-        QString appDir = QCoreApplication::applicationDirPath();
-        util::Logger::Info("Application directory: {}", appDir.toStdString());
-
-        // Windows-specific DLL checks
-        #ifdef _WIN32
-        // Check if Qt DLLs are in system PATH (can cause version conflicts)
-        const char* pathEnv = std::getenv("PATH");
-        if (pathEnv) {
-            std::string pathStr(pathEnv);
-            if (pathStr.find("Qt") != std::string::npos || pathStr.find("qt") != std::string::npos) {
-                util::Logger::Warn("Qt directories found in system PATH - this may cause DLL conflicts");
-                util::Logger::Warn("PATH contains: {}", pathStr);
-            }
-        }
-
-        // Check for Qt plugin directory
-        QString pluginPath = QLibraryInfo::path(QLibraryInfo::PluginsPath);
-        util::Logger::Info("Qt plugins path: {}", pluginPath.toStdString());
-        
-        QDir platformsDir(appDir + "/platforms");
-        if (!platformsDir.exists()) {
-            util::Logger::Error("CRITICAL: platforms directory not found at: {}", platformsDir.absolutePath().toStdString());
-            util::Logger::Error("The application will crash without qwindows.dll plugin!");
-            return false;
-        } else {
-            QStringList plugins = platformsDir.entryList(QStringList() << "*.dll", QDir::Files);
-            if (plugins.isEmpty()) {
-                util::Logger::Error("CRITICAL: No platform plugins found in platforms directory!");
-                return false;
-            } else {
-                util::Logger::Info("Found platform plugins: {}", plugins.join(", ").toStdString());
-            }
-        }
-        #endif
-
-        // On macOS, Qt libraries are in frameworks
-        #ifdef Q_OS_MAC
-        QDir frameworksDir(appDir + "/../Frameworks");
-        if (!frameworksDir.exists()) {
-            util::Logger::Warn("Frameworks directory not found: {}", frameworksDir.absolutePath().toStdString());
-        } else {
-            QStringList frameworks = frameworksDir.entryList(QStringList() << "QtCore.framework", QDir::Dirs);
-            if (frameworks.isEmpty()) {
-                util::Logger::Warn("QtCore.framework not found in Frameworks directory");
-            } else {
-                util::Logger::Info("QtCore.framework found");
-            }
-        }
-        #endif
-
-        // Check Qt plugins path
-        QStringList pluginPaths = QCoreApplication::libraryPaths();
-        util::Logger::Info("Qt library paths:");
-        for (const QString& path : pluginPaths) {
-            util::Logger::Info("  {}", path.toStdString());
-            QDir pluginDir(path);
-            if (pluginDir.exists()) {
-                QStringList plugins = pluginDir.entryList(QStringList() << "*qt*", QDir::Files);
-                if (!plugins.isEmpty()) {
-                    util::Logger::Info("    Found Qt plugins: {}", plugins.join(", ").toStdString());
-                }
-            }
-        }
-
-        return true;
-    }
-    catch (const std::exception& ex) {
-        util::Logger::Error("Qt library check failed: {}", ex.what());
-        return false;
-    }
-    catch (...) {
-        util::Logger::Error("Qt library check failed with unknown error");
-        return false;
-    }
-}
 } // namespace
 
 int main(int argc, char** argv)
@@ -170,12 +79,6 @@ int main(int argc, char** argv)
 
     try
     {
-        // Check Qt libraries before creating QApplication
-        if (!CheckQtLibraries()) {
-            ShowFatalMessage("Qt library check failed. Please ensure Qt is properly installed and the Qt bin directory is in your PATH.");
-            return EXIT_FAILURE;
-        }
-
         // Create QApplication on the stack for proper cleanup
         QApplication app(argc, argv);
         util::Logger::Info("QApplication created successfully");
