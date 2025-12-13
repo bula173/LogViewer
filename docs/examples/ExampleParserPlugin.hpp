@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "application/plugins/IPlugin.hpp"
-#include "application/parser/IDataParser.hpp"
+#include "plugins/IPlugin.hpp"
+#include "parser/IDataParser.hpp"
 #include <memory>
 #include <string>
 #include <vector>
