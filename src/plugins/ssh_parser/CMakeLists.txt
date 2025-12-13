@@ -22,10 +22,7 @@ set(SSH_PARSER_HEADERS
     SSHConnectionWidget.hpp
 )
 
-# Create the SSH parser as a shared library plugin
-add_library(ssh_parser_plugin SHARED ${SSH_PARSER_SRCS} ${SSH_PARSER_HEADERS})
-
-# Find libssh - required dependency
+# Find libssh - required dependency (check BEFORE creating target)
 find_package(PkgConfig QUIET)
 if(PKG_CONFIG_FOUND)
     pkg_check_modules(LIBSSH libssh)
@@ -80,6 +77,9 @@ if(NOT LIBSSH_FOUND)
         return()
     endif()
 endif()
+
+# Create the SSH parser as a shared library plugin (only if libssh found)
+add_library(ssh_parser_plugin SHARED ${SSH_PARSER_SRCS} ${SSH_PARSER_HEADERS})
 
 target_include_directories(ssh_parser_plugin
     PUBLIC

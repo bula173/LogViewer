@@ -1,6 +1,6 @@
-#include "application/plugins/IPlugin.hpp"
-#include "application/plugins/IAnalysisPlugin.hpp"
-#include "application/db/EventsContainer.hpp"
+#include "plugins/IPlugin.hpp"
+#include "plugins/IAnalysisPlugin.hpp"
+#include "db/EventsContainer.hpp"
 #include "EventMetricsConfigWidget.hpp"
 #include <QWidget>
 #include <QVBoxLayout>
