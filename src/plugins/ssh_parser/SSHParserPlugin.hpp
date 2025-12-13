@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "application/plugins/IPlugin.hpp"
+#include "plugins/IPlugin.hpp"
 #include "SSHConnection.hpp"
 #include "SSHTextParser.hpp"
 #include "SSHLogSource.hpp"

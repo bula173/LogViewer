@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache expat cppcheck
+          brew install ninja ccache expat cppcheck libssh
           ${{ matrix.gui_framework == 'wx' && 'brew install wxwidgets' || '' }}
           ${{ matrix.gui_framework == 'qt' && 'brew install qt' || '' }}
 

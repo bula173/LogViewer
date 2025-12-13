@@ -1,5 +1,5 @@
-#include "application/plugins/IPlugin.hpp"
-#include "application/plugins/IFieldConversionPlugin.hpp"
+#include "plugins/IPlugin.hpp"
+#include "plugins/IFieldConversionPlugin.hpp"
 #include <algorithm>
 #include <cctype>
 
