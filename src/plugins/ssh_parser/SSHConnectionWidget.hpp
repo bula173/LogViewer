@@ -9,7 +9,7 @@
 
 #include "SSHConnection.hpp"
 #include "SSHLogSource.hpp"
-#include "parser/IDataParser.hpp"
+#include "application/parser/IDataParser.hpp"
 #include <QWidget>
 #include <QLineEdit>
 #include <QSpinBox>

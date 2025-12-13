@@ -10,7 +10,7 @@
 
 #include "SSHConnection.hpp"
 #include "SSHTextParser.hpp"
-#include "parser/IDataParser.hpp"
+#include "application/parser/IDataParser.hpp"
 #include <atomic>
 #include <memory>
 #include <thread>

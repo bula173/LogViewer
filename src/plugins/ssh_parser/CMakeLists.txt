@@ -84,7 +84,7 @@ endif()
 target_include_directories(ssh_parser_plugin
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${PROJECT_SOURCE_DIR}/src/application
+        ${PROJECT_SOURCE_DIR}/include
         ${LIBSSH_INCLUDE_DIRS}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}

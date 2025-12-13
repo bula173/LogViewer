@@ -61,4 +61,42 @@ target_precompile_headers(application_core
         <nlohmann/json.hpp>
         <spdlog/spdlog.h>)
 
+# Create symlinks for plugin API headers in include directory
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/application/plugins")
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/application/parser")
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/include/application/db")
+
+# List of headers needed by plugins
+set(PLUGIN_API_HEADERS
+    # Plugin interfaces
+    "plugins/IPlugin.hpp"
+    "plugins/IAnalysisPlugin.hpp"
+    "plugins/IFieldConversionPlugin.hpp"
+    "plugins/IPluginObserver.hpp"
+    # Parser interface
+    "parser/IDataParser.hpp"
+    # Database/Event interfaces
+    "db/LogEvent.hpp"
+    "db/EventsContainer.hpp"
+)
+
+# Create symlinks (or copy on Windows) for plugin development headers
+if(UNIX)
+    foreach(HEADER ${PLUGIN_API_HEADERS})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+            "${CMAKE_CURRENT_SOURCE_DIR}/${HEADER}"
+            "${CMAKE_SOURCE_DIR}/include/application/${HEADER}"
+        )
+    endforeach()
+else()
+    # Windows: use file copy
+    foreach(HEADER ${PLUGIN_API_HEADERS})
+        configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/${HEADER}"
+            "${CMAKE_SOURCE_DIR}/include/application/${HEADER}"
+            COPYONLY
+        )
+    endforeach()
+endif()
+
 add_subdirectory(ui)

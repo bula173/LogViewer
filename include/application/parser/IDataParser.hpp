@@ -1,0 +1,1 @@
+/Users/Marcin/workspace/cpp/LogViewer/src/application/parser/IDataParser.hpp
