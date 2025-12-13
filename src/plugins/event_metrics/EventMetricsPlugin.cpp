@@ -1,6 +1,7 @@
 #include "application/plugins/IPlugin.hpp"
 #include "application/plugins/IAnalysisPlugin.hpp"
 #include "application/db/EventsContainer.hpp"
+#include "EventMetricsConfigWidget.hpp"
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -11,6 +12,8 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QTextEdit>
+#include <QPointer>
+#include <QList>
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -342,7 +345,7 @@ private:
         auto* layout = new QVBoxLayout(this);
 
         // Title
-        auto* titleLabel = new QLabel("<h2>Event Metrics & Anomaly Detection</h2>");
+        auto* titleLabel = new QLabel("<h2>Event Metrics</h2>");
         layout->addWidget(titleLabel);
 
         // Statistics label
@@ -420,44 +423,52 @@ class EventMetricsAnalyzer : public IAnalysisPlugin
 {
 public:
     EventMetricsAnalyzer()
-        : m_widget(nullptr)
     {
     }
 
     void SetEventsContainer(std::shared_ptr<db::EventsContainer> eventsContainer) override
     {
         m_eventsContainer = eventsContainer;
-        if (m_widget) {
-            m_widget->setEventsContainer(eventsContainer);
+        // Notify all existing widgets
+        for (const auto& widgetPtr : m_widgets) {
+            if (widgetPtr) {
+                widgetPtr->setEventsContainer(eventsContainer);
+            }
         }
     }
 
     void OnEventsUpdated() override
     {
-        if (m_widget) {
-            m_widget->refreshMetrics();
+        // Refresh all existing widgets
+        for (const auto& widgetPtr : m_widgets) {
+            if (widgetPtr) {
+                widgetPtr->refreshMetrics();
+            }
         }
     }
 
     std::string GetAnalysisName() const override
     {
-        return "Event Metrics & Anomaly Detection";
+        return "Event Metrics";
     }
 
     QWidget* createWidget(QWidget* parent)
     {
-        if (!m_widget) {
-            m_widget = new EventMetricsWidget(parent);
-            if (m_eventsContainer) {
-                m_widget->setEventsContainer(m_eventsContainer);
-            }
+        // Always create a new widget
+        auto* widget = new EventMetricsWidget(parent);
+        if (m_eventsContainer) {
+            widget->setEventsContainer(m_eventsContainer);
         }
-        return m_widget;
+        
+        // Track widget with QPointer (auto-nulls when widget is deleted)
+        m_widgets.append(QPointer<EventMetricsWidget>(widget));
+        
+        return widget;
     }
 
 private:
     std::shared_ptr<db::EventsContainer> m_eventsContainer;
-    EventMetricsWidget* m_widget;
+    QList<QPointer<EventMetricsWidget>> m_widgets;  // Track all created widgets
 };
 
 /**
@@ -533,6 +544,20 @@ public:
     QWidget* CreateTab(QWidget* parent) override
     {
         return m_analyzer->createWidget(parent);
+    }
+
+    QWidget* CreateFilterTab(QWidget* parent) override
+    {
+        auto* configWidget = new EventMetricsConfigWidget(parent);
+        
+        // Connect configuration changes to analyzer refresh
+        QObject::connect(configWidget, &EventMetricsConfigWidget::rulesChanged,
+                        [this]() {
+                            // Rules changed - could trigger metrics recalculation
+                            // For now just log it
+                        });
+        
+        return configWidget;
     }
 
     bool ValidateConfiguration() const override

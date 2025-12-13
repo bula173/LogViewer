@@ -9,6 +9,8 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Concurrent)
 # Create the plugin library
 add_library(${PLUGIN_NAME} SHARED
     EventMetricsPlugin.cpp
+    EventMetricsConfigWidget.cpp
+    EventMetricsConfigWidget.hpp
 )
 
 # Enable Qt MOC for this plugin

@@ -196,6 +196,14 @@ public:
      * @note This method is optional and may not be supported by all plugins
      */
     virtual QWidget* CreateTab(QWidget* parent) { return nullptr; }
+
+    /**
+     * @brief Creates a new filter tab for the plugin
+     * @param parent Parent widget for the filter tab
+     * @return Pointer to the created filter tab widget, or nullptr if not supported
+     * @note This allows plugins to add custom filter/configuration panels
+     */
+    virtual QWidget* CreateFilterTab(QWidget* parent) { return nullptr; }
 };
 
 /**

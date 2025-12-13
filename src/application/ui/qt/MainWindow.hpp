@@ -119,6 +119,8 @@ class MainWindow : public QMainWindow,
     void reloadPlugins();
     void createPluginTab(const std::string& pluginId, plugin::IPlugin* plugin);
     void removePluginTab(const std::string& pluginId);
+    void createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin);
+    void removePluginFilterTab(const std::string& pluginId);
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
@@ -152,7 +154,8 @@ class MainWindow : public QMainWindow,
     std::shared_ptr<ai::LogAnalyzer> m_aiAnalyzer;
     
     // Plugin management
-    std::map<std::string, int> m_pluginTabIndices;  // Maps plugin ID to tab index
+    std::map<std::string, int> m_pluginTabIndices;  // Maps plugin ID to content tab index
+    std::map<std::string, int> m_pluginFilterTabIndices;  // Maps plugin ID to filter tab index
 };
 
 } // namespace ui::qt

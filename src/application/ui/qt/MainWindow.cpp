@@ -916,11 +916,13 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
         case PluginEvent::Enabled:
             util::Logger::Info("[MainWindow] Plugin enabled: {}", pluginId);
             createPluginTab(pluginId, plugin);
+            createPluginFilterTab(pluginId, plugin);
             break;
             
         case PluginEvent::Disabled:
             util::Logger::Info("[MainWindow] Plugin disabled: {}", pluginId);
             removePluginTab(pluginId);
+            removePluginFilterTab(pluginId);
             break;
             
         case PluginEvent::Registered:
@@ -999,6 +1001,61 @@ void MainWindow::removePluginTab(const std::string& pluginId) {
     }
 }
 
+void MainWindow::createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!plugin) {
+        util::Logger::Error("[MainWindow] createPluginFilterTab called with null plugin");
+        return;
+    }
+    
+    if (!m_filterTabs) {
+        util::Logger::Error("[MainWindow] createPluginFilterTab called but m_filterTabs is null");
+        return;
+    }
+    
+    util::Logger::Info("[MainWindow] Creating filter tab for plugin: {}", pluginId);
+    
+    // Try to create a filter tab from the plugin
+    QWidget* filterTab = plugin->CreateFilterTab(this);
+    if (!filterTab) {
+        util::Logger::Info("[MainWindow] Plugin {} does not provide a filter tab widget", pluginId);
+        return;
+    }
+    
+    auto metadata = plugin->GetMetadata();
+    QString tabName = QString::fromStdString(metadata.name + " Config");
+    int tabIndex = m_filterTabs->addTab(filterTab, tabName);
+    m_pluginFilterTabIndices[pluginId] = tabIndex;
+    util::Logger::Info("[MainWindow] Created plugin filter tab: {} at index {}", metadata.name, tabIndex);
+}
+
+void MainWindow::removePluginFilterTab(const std::string& pluginId) {
+    util::Logger::Info("[MainWindow] Removing filter tab for plugin: {}", pluginId);
+    
+    // Find and remove the filter tab for this plugin
+    auto it = m_pluginFilterTabIndices.find(pluginId);
+    if (it != m_pluginFilterTabIndices.end()) {
+        int tabIndex = it->second;
+        
+        // Remove the tab
+        if (tabIndex >= 0 && tabIndex < m_filterTabs->count()) {
+            QWidget* widget = m_filterTabs->widget(tabIndex);
+            m_filterTabs->removeTab(tabIndex);
+            if (widget) {
+                widget->deleteLater();
+            }
+            util::Logger::Info("[MainWindow] Removed plugin filter tab at index {}", tabIndex);
+        }
+        
+        // Update indices for tabs that came after this one
+        m_pluginFilterTabIndices.erase(it);
+        for (auto& [id, idx] : m_pluginFilterTabIndices) {
+            if (idx > tabIndex) {
+                idx--;
+            }
+        }
+    }
+}
+
 void MainWindow::reloadPlugins() {
     if (!m_contentTabs) {
         util::Logger::Warn("[MainWindow] Content tabs not initialized");
@@ -1009,6 +1066,7 @@ void MainWindow::reloadPlugins() {
     
     // Clear plugin tab tracking
     m_pluginTabIndices.clear();
+    m_pluginFilterTabIndices.clear();
     
     // Remove all plugin tabs (keep the first 2: Events and AI Analysis)
     while (m_contentTabs->count() > 2) {

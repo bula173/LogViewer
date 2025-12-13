@@ -8,7 +8,7 @@
 #ifndef SSH_TEXT_PARSER_HPP
 #define SSH_TEXT_PARSER_HPP
 
-#include "parser/IDataParser.hpp"
+#include "application/parser/IDataParser.hpp"
 #include <regex>
 #include <string>
 #include <vector>
