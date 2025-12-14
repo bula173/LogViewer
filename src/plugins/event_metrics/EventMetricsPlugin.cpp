@@ -116,7 +116,7 @@ public:
         m_typeTable->setRowCount(static_cast<int>(sortedTypes.size()));
         int row = 0;
         for (const auto& [type, count] : sortedTypes) {
-            double percentage = (count * 100.0 / totalEvents);
+            double percentage = (count * 100.0 / static_cast<double>(totalEvents));
 
             m_typeTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(type)));
             m_typeTable->setItem(row, 1, new QTableWidgetItem(QString::number(count)));
@@ -151,9 +151,9 @@ public:
         }
 
         // Update statistics
-        double errorRate = (totalEvents > 0) ? (errorCount * 100.0 / totalEvents) : 0.0;
-        double warningRate = (totalEvents > 0) ? (warningCount * 100.0 / totalEvents) : 0.0;
-        
+        double errorRate = (totalEvents > 0) ? (errorCount * 100.0 / static_cast<double>(totalEvents)) : 0.0;
+        double warningRate = (totalEvents > 0) ? (warningCount * 100.0 / static_cast<double>(totalEvents)) : 0.0;
+
         QString stats = QString("Total Events: %1 | Unique Types: %2 | Errors: %3 (%4%) | Warnings: %5 (%6%)")
             .arg(totalEvents)
             .arg(typeFrequency.size())
@@ -173,12 +173,12 @@ public:
         std::vector<AnomalyDetection> anomalies;
         
         // Calculate mean and standard deviation for event frequencies
-        double mean = totalEvents / static_cast<double>(typeFrequency.size());
+        double mean = static_cast<double>(totalEvents) / static_cast<double>(typeFrequency.size());
         double variance = 0.0;
         for (const auto& [type, count] : typeFrequency) {
             variance += std::pow(count - mean, 2);
         }
-        variance /= typeFrequency.size();
+        variance /= static_cast<double>(typeFrequency.size());
         double stdDev = std::sqrt(variance);
         
         // 1. Detect frequency anomalies (events that occur too often or too rarely)
@@ -237,7 +237,7 @@ public:
             std::string typeLower = type;
             std::transform(typeLower.begin(), typeLower.end(), typeLower.begin(), ::tolower);
             
-            double percentage = (count * 100.0) / totalEvents;
+            double percentage = (count * 100.0) / static_cast<double>(totalEvents);
             
             if ((typeLower.find("error") != std::string::npos || 
                  typeLower.find("fatal") != std::string::npos) && 
@@ -487,7 +487,7 @@ public:
     {
         return PluginMetadata{
             "event_metrics_analyzer",
-            "Event Metrics & Anomaly Detector",
+            "Event Metrics",
             "2.0.0",
             "LogViewer Team",
             "Analyzes event patterns and detects anomalies using statistical analysis",
@@ -552,7 +552,7 @@ public:
         
         // Connect configuration changes to analyzer refresh
         QObject::connect(configWidget, &EventMetricsConfigWidget::rulesChanged,
-                        [this]() {
+                        []() {
                             // Rules changed - could trigger metrics recalculation
                             // For now just log it
                         });
@@ -574,7 +574,9 @@ private:
 } // namespace plugin
 
 // Export plugin
-EXPORT_PLUGIN(plugin::EventMetricsPlugin)
+extern "C" {
+    EXPORT_PLUGIN(plugin::EventMetricsPlugin)
+}
 
 // Include MOC for Qt signals/slots
 #include "EventMetricsPlugin.moc"

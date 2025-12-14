@@ -300,7 +300,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
             selectedTypeStrings.count(eventType) > 0;
 
         if (typeMatch)
-            filteredIndices.push_back(i);
+            filteredIndices.push_back(ClampToInt(i));
 
         if ((i % kProgressYieldInterval) == 0)
             m_view.ProcessPendingEvents();

@@ -12,6 +12,8 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <algorithm>
+#include <archive.h>
+#include <archive_entry.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -21,6 +23,67 @@
 
 namespace plugin
 {
+
+// Helper functions - must be defined before use
+namespace {
+    std::optional<nlohmann::json> ParseManifest(const std::filesystem::path& manifestPath) {
+        try {
+            std::ifstream file(manifestPath);
+            if (!file.is_open()) {
+                return std::nullopt;
+            }
+            nlohmann::json manifest;
+            file >> manifest;
+            return manifest;
+        } catch (const std::exception& e) {
+            util::Logger::Error("Failed to parse manifest {}: {}", manifestPath.string(), e.what());
+            return std::nullopt;
+        }
+    }
+
+    void* LoadLibraryHelper(const std::string& path) {
+#ifdef _WIN32
+        return LoadLibraryA(path.c_str());
+#else
+        return dlopen(path.c_str(), RTLD_LAZY);
+#endif
+    }
+
+    bool ExtractZipPlugin(const std::filesystem::path& zipPath, 
+                         const std::filesystem::path& extractDir) {
+        // Create extraction directory
+        std::filesystem::create_directories(extractDir);
+        
+        struct archive* a = archive_read_new();
+        archive_read_support_format_zip(a);
+        
+        if (archive_read_open_filename(a, zipPath.string().c_str(), 10240) != ARCHIVE_OK) {
+            util::Logger::Error("Failed to open ZIP: {}", zipPath.string());
+            archive_read_free(a);
+            return false;
+        }
+        
+        struct archive_entry* entry;
+        while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
+            std::filesystem::path outputPath = extractDir / archive_entry_pathname(entry);
+            
+            // Extract file
+            std::ofstream outFile(outputPath, std::ios::binary);
+            const void* buff;
+            size_t size;
+            int64_t offset;
+            
+            while (archive_read_data_block(a, &buff, &size, &offset) == ARCHIVE_OK) {
+                outFile.write(static_cast<const char*>(buff), size);
+            }
+            outFile.close();
+        }
+        
+        archive_read_free(a);
+        util::Logger::Info("Extracted plugin from: {}", zipPath.string());
+        return true;
+    }
+}
 
 PluginManager& PluginManager::GetInstance()
 {
@@ -114,17 +177,75 @@ std::vector<std::filesystem::path> PluginManager::DiscoverPlugins()
 util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     const std::filesystem::path& pluginPath)
 {
-    util::Logger::Info("PluginManager: Loading plugin from: {}", pluginPath.string());
+    std::filesystem::path actualPluginPath = pluginPath;
+    
+    // Check if it's a ZIP file
+    if (pluginPath.extension() == ".zip") {
+        // Extract to temporary directory
+        auto extractDir = pluginPath.parent_path() / pluginPath.stem();
+        
+        if (!ExtractZipPlugin(pluginPath, extractDir)) {
+            return util::Result<std::string, error::Error>::Err(
+                error::Error("Failed to extract plugin ZIP: " + pluginPath.string()));
+        }
+        
+        // Find the main plugin DLL in extracted directory
+        actualPluginPath = extractDir / (pluginPath.stem().string() + ".dll");
+        
+        if (!std::filesystem::exists(actualPluginPath)) {
+            return util::Result<std::string, error::Error>::Err(
+                error::Error("Plugin DLL not found in ZIP: " + actualPluginPath.string()));
+        }
+    }
+    
+    util::Logger::Info("PluginManager: Loading plugin from: {}", actualPluginPath.string());
 
-    if (!std::filesystem::exists(pluginPath))
+    if (!std::filesystem::exists(actualPluginPath))
     {
         return util::Result<std::string, error::Error>::Err(
             error::Error(error::ErrorCode::InvalidArgument,
-                "Plugin file does not exist: " + pluginPath.string()));
+                "Plugin file does not exist: " + actualPluginPath.string()));
     }
 
+    // Check for manifest file
+    auto manifestPath = actualPluginPath.parent_path() / (actualPluginPath.stem().string() + ".json");
+    
+    if (std::filesystem::exists(manifestPath))
+    {
+        // Parse manifest and load dependencies
+        auto manifest = ParseManifest(manifestPath);
+        if (!manifest) {
+            return util::Result<std::string, error::Error>::Err(
+                error::Error("Failed to parse manifest: " + manifestPath.string()));
+        }
+
+        // Load dependencies if specified in manifest
+        if (manifest->contains("dependencies")) {
+            for (const auto& dep : (*manifest)["dependencies"]) {
+                std::string depName = dep.get<std::string>();
+                auto depPath = actualPluginPath.parent_path() / depName;
+                
+                if (std::filesystem::exists(depPath)) {
+                    // Load the dependency library
+                    void* handle = LoadLibraryHelper(depPath.string());
+                    if (!handle) {
+                        util::Logger::Error("Failed to load dependency: {}", depPath.string());
+                        return util::Result<std::string, error::Error>::Err(
+                            error::Error("Failed to load dependency: " + depPath.string()));
+                    }
+                    m_dependencyHandles.push_back(handle);
+                    util::Logger::Info("Loaded dependency: {}", depName);
+                } else {
+                    util::Logger::Error("Dependency not found: {}", depPath.string());
+                    return util::Result<std::string, error::Error>::Err(
+                        error::Error("Dependency not found: " + depPath.string()));
+                }
+            }
+        }
+    }
+    
     // Load the plugin library
-    auto result = LoadPluginLibrary(pluginPath);
+    auto result = LoadPluginLibrary(actualPluginPath);
     if (result.isErr())
     {
         return util::Result<std::string, error::Error>::Err(result.error());
@@ -152,7 +273,7 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     // Store plugin info
     PluginLoadInfo info;
     info.pluginId = metadata.id;
-    info.path = pluginPath;
+    info.path = actualPluginPath;
     info.instance = std::move(plugin);
     info.enabled = false;  // Plugins start disabled, must be explicitly enabled
     info.autoLoad = false; // Default to not auto-load

@@ -34,6 +34,8 @@ add_library(application_core STATIC ${APP_CORE_SRCS})
 
 # Find CURL for AI HTTP requests
 find_package(CURL REQUIRED)
+# Find libarchive for ZIP support
+find_package(LibArchive REQUIRED)
 
 target_link_libraries(application_core
     PUBLIC
@@ -41,6 +43,7 @@ target_link_libraries(application_core
         spdlog::spdlog_header_only
         expat
         CURL::libcurl
+        LibArchive::LibArchive
 )
 
 target_include_directories(application_core

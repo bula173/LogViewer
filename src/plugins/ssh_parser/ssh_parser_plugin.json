@@ -1,0 +1,18 @@
+{
+    "name": "ssh_parser_plugin",
+    "version": "1.0.0",
+    "description": "SSH log parser plugin with remote connection support",
+    "author": "LogViewer Team",
+    "dependencies": [
+        {
+            "name": "libssh",
+            "version": ">=0.9.0",
+            "files": [
+                "libssh.dll"  // or "libssh.so" on Linux, "libssh.dylib" on macOS
+            ]
+        }
+    ],
+    "files": [
+        "ssh_parser_plugin.dll"
+    ]
+}

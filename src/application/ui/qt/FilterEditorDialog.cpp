@@ -315,7 +315,7 @@ void FilterEditorDialog::LoadConditionIntoEditor(int conditionIndex)
     if (conditionIndex < 0 || conditionIndex >= static_cast<int>(m_conditions.size()))
         return;
 
-    const auto& condition = m_conditions[conditionIndex];
+    const auto& condition = m_conditions[static_cast<size_t>(conditionIndex)];
 
     if (condition.isParameterFilter)
     {
@@ -343,7 +343,7 @@ void FilterEditorDialog::SaveConditionFromEditor(int conditionIndex)
     if (conditionIndex < 0 || conditionIndex >= static_cast<int>(m_conditions.size()))
         return;
 
-    auto& condition = m_conditions[conditionIndex];
+    auto& condition = m_conditions[static_cast<size_t>(conditionIndex)];
     condition = CreateConditionFromEditor();
 }
 

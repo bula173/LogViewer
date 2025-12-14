@@ -21,7 +21,7 @@ public:
      * @return Complete response text
      */
     virtual std::string SendPrompt(const std::string& prompt,
-        std::function<void(const std::string&)> callback = nullptr) = 0;
+       [[maybe_unused]] std::function<void(const std::string&)> callback = nullptr) = 0;
 
     /**
      * @brief Check if the AI service is available

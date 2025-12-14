@@ -26,6 +26,6 @@ if (USE_QT)
     
     # Add ssh_parser_plugin only if it was successfully created
     if(TARGET ssh_parser_plugin)
-        add_dependencies(plugins_all ssh_parser_plugin)
+        add_dependencies(plugins_all ssh_parser_plugin package_ssh_parser)
     endif()
 endif()

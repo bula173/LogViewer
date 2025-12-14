@@ -256,7 +256,6 @@ std::unique_ptr<SSHLogSource> SSHParserPlugin::CreateLogSource(
 } // namespace ssh
 
 // Plugin factory function implementation
-extern "C" EXPORT_PLUGIN_SYMBOL std::unique_ptr<plugin::IPlugin> CreatePlugin()
-{
-    return std::make_unique<ssh::SSHParserPlugin>();
+extern "C" {
+    EXPORT_PLUGIN(ssh::SSHParserPlugin)
 }

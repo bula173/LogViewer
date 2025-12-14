@@ -316,7 +316,7 @@ void Filter::addCondition(const FilterCondition& condition)
 void Filter::removeCondition(size_t index)
 {
     if (index < conditions.size()) {
-        conditions.erase(conditions.begin() + index);
+        conditions.erase(conditions.begin() + static_cast<size_t>(index));
     }
 }
 

@@ -44,7 +44,7 @@ std::string KeyEncryption::GetDeviceKey()
         char guid[256] = {0};
         DWORD guidLen = sizeof(guid);
         if (RegQueryValueExA(hKey, "MachineGuid", nullptr, nullptr,
-                            (LPBYTE)guid, &guidLen) == ERROR_SUCCESS)
+                            reinterpret_cast<LPBYTE>(guid), &guidLen) == ERROR_SUCCESS)
         {
             deviceId = guid;
         }
@@ -102,9 +102,9 @@ std::string KeyEncryption::Base64Encode(const std::string& input)
     int val = 0;
     int valb = -6;
     
-    for (unsigned char c : input)
+    for (char c : input)
     {
-        val = (val << 8) + c;
+        val = (val << 8) + static_cast<unsigned char>(c);
         valb += 8;
         while (valb >= 0)
         {

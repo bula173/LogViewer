@@ -37,10 +37,18 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
     set(PLUGIN_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/plugins")
     file(MAKE_DIRECTORY ${PLUGIN_OUTPUT_DIR})
 
+    if(WIN32)
+        set(PLUGIN_EXTENSION ".dll")
+    elseif(APPLE)
+        set(PLUGIN_EXTENSION ".dylib")
+    else()
+        set(PLUGIN_EXTENSION ".so")
+    endif()
+
     add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
             $<TARGET_FILE:${PLUGIN_NAME}>
-            ${PLUGIN_OUTPUT_DIR}/field_converter_example.dylib
+            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_NAME}${PLUGIN_EXTENSION}
         COMMENT "Copying ${PLUGIN_NAME} to ${PLUGIN_OUTPUT_DIR}"
     )
 endif()
