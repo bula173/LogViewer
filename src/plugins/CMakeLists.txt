@@ -22,10 +22,11 @@ if (USE_QT)
     add_dependencies(plugins_all 
         field_converter_example
         event_metrics
+        ssh_parser_plugin
     )
     
     # Add ssh_parser_plugin only if it was successfully created
     if(TARGET ssh_parser_plugin)
-        add_dependencies(plugins_all ssh_parser_plugin package_ssh_parser)
+        add_dependencies(plugins_all ssh_parser_plugin)
     endif()
 endif()
