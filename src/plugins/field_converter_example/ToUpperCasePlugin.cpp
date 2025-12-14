@@ -115,4 +115,6 @@ private:
 } // namespace plugin
 
 // Export C function for plugin loading
+extern "C" {
 EXPORT_PLUGIN(plugin::ToUpperCasePlugin)
+}

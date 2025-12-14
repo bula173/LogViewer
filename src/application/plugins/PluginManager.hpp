@@ -216,6 +216,8 @@ private:
         bool autoLoad;
     };
     std::map<std::string, PluginConfigCache> m_configCache;
+
+    std::vector<void*> m_dependencyHandles;  // Store handles to loaded dependencies
 };
 
 } // namespace plugin

@@ -1755,9 +1755,6 @@ void StructuredConfigDialog::OnSaveDictionaryFile()
 void StructuredConfigDialog::InitPluginsTab()
 {
     // Set plugins directory
-    auto& pluginMgr = plugin::PluginManager::GetInstance();
-    auto& config = config::GetConfig();
-
     m_pluginsTab = new QWidget(this);
     auto* mainLayout = new QVBoxLayout(m_pluginsTab);
 

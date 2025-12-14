@@ -195,7 +195,7 @@ public:
      * @return Pointer to the created tab widget, or nullptr on failure
      * @note This method is optional and may not be supported by all plugins
      */
-    virtual QWidget* CreateTab(QWidget* parent) { return nullptr; }
+    virtual QWidget* CreateTab([[maybe_unused]] QWidget* parent) { return nullptr; }
 
     /**
      * @brief Creates a new filter tab for the plugin
@@ -203,7 +203,7 @@ public:
      * @return Pointer to the created filter tab widget, or nullptr if not supported
      * @note This allows plugins to add custom filter/configuration panels
      */
-    virtual QWidget* CreateFilterTab(QWidget* parent) { return nullptr; }
+    virtual QWidget* CreateFilterTab([[maybe_unused]]QWidget* parent) { return nullptr; }
 };
 
 /**

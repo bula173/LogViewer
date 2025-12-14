@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache expat cppcheck libssh
+          brew install ninja ccache expat cppcheck libssh libarchive zip
           ${{ matrix.gui_framework == 'wx' && 'brew install wxwidgets' || '' }}
           ${{ matrix.gui_framework == 'qt' && 'brew install qt' || '' }}
 
@@ -124,14 +124,14 @@ jobs:
           echo "Listing plugins in dist/plugins:"
           ls -lh "$GITHUB_WORKSPACE/dist/plugins/" || echo "dist/plugins not found"
           echo "Plugin files:"
-          find "$GITHUB_WORKSPACE/dist/plugins" -name "*.dylib" -type f || echo "No .dylib files found"
+          find "$GITHUB_WORKSPACE/dist/plugins" -name "*.dylib | *.zip"  -type f || echo "No .dylib files found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ github.workspace }}/dist/plugins/*.dylib
+          path: ${{ github.workspace }}/dist/plugins/*
           if-no-files-found: warn
 
       - name: Upload artifacts
