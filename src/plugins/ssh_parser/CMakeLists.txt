@@ -200,16 +200,17 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # Add custom target to create plugin package
-add_custom_target(package_ssh_parser
+add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E tar "cf"
         "${PLUGIN_OUTPUT_DIR}/ssh_parser_plugin.zip" --format=zip
         "${PLUGIN_NAME}${PLUGIN_EXTENSION}"
         "libssh.dll"
         "ssh_parser_plugin.json"
     WORKING_DIRECTORY ${PLUGIN_OUTPUT_DIR}
-    DEPENDS ${PLUGIN_NAME}
-    COMMENT "Creating ssh_parser_plugin package in ${PLUGIN_OUTPUT_DIR}"
+    COMMENT "Packaging ssh_parser_plugin.zip"
+    VERBATIM
 )
+message(STATUS "SSH Parser Plugin: Auto-packaging enabled for Release builds")
 
 message(STATUS "SSH Parser Plugin: ENABLED")
 message(STATUS "  libssh include: ${LIBSSH_INCLUDE_DIRS}")
