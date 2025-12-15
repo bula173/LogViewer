@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ai/LogAnalyzer.hpp"
-#include "ai/IAIService.hpp"
-#include "ai/AIServiceFactory.hpp"
+#include "plugins/ai/LogAnalyzer.hpp"
+#include "plugins/ai/IAIService.hpp"
+#include "plugins/ai/AIServiceFactory.hpp"
 #include <QWidget>
 #include <memory>
 
@@ -29,7 +29,7 @@ class AIAnalysisPanel : public QWidget
 public:
     explicit AIAnalysisPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
                             std::shared_ptr<ai::LogAnalyzer> analyzer,
-                            EventsTableView* eventsView,
+                            EventsTableView* eventsView = nullptr,
                             QWidget* parent = nullptr);
 
     void SetConfigPanel(AIConfigPanel* configPanel);

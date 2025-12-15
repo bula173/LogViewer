@@ -15,6 +15,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <string_view>
+#include <cstdio>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -25,7 +26,37 @@
 namespace plugin
 {
 
-static constexpr std::string_view kSupportedPluginApiVersion = "1.0.0";
+static constexpr int kSupportedApiMajor = 1;
+static constexpr int kSupportedApiMinMinor = 0;
+static constexpr int kSupportedApiMaxMinor = 1;
+
+namespace {
+    struct VersionParts {
+        int major {0};
+        int minor {0};
+        int patch {0};
+        bool ok {false};
+    };
+
+    VersionParts ParseVersion(std::string_view v) {
+        VersionParts parts;
+        int a = 0, b = 0, c = 0;
+        if (std::sscanf(std::string(v).c_str(), "%d.%d.%d", &a, &b, &c) == 3) {
+            parts.major = a;
+            parts.minor = b;
+            parts.patch = c;
+            parts.ok = true;
+        }
+        return parts;
+    }
+
+    bool IsApiVersionCompatible(std::string_view version) {
+        auto parts = ParseVersion(version);
+        if (!parts.ok) return false;
+        if (parts.major != kSupportedApiMajor) return false;
+        return parts.minor >= kSupportedApiMinMinor && parts.minor <= kSupportedApiMaxMinor;
+    }
+}
 
 // Helper functions - must be defined before use
 namespace {
@@ -213,11 +244,10 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     }
 
     const std::string manifestApiVersion = (*manifest)["apiVersion"].get<std::string>();
-    if (manifestApiVersion != kSupportedPluginApiVersion) {
+    if (!IsApiVersionCompatible(manifestApiVersion)) {
         return util::Result<std::string, error::Error>::Err(
             error::Error(
-                "Plugin API version mismatch. Expected " + std::string(kSupportedPluginApiVersion) +
-                ", found " + manifestApiVersion));
+                "Plugin API version mismatch. Expected compatible 1.x minor (1.0-1.1), found " + manifestApiVersion));
     }
 
     std::filesystem::path actualPluginPath = extractDir / (*manifest)["entry"].get<std::string>();
@@ -305,10 +335,9 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
                 " vs " + manifestApiVersion));
     }
 
-    if (metadata.apiVersion != kSupportedPluginApiVersion) {
+    if (!IsApiVersionCompatible(metadata.apiVersion)) {
         return util::Result<std::string, error::Error>::Err(
-            error::Error("Plugin API version incompatible with application. Expected " +
-                std::string(kSupportedPluginApiVersion) + ", got " + metadata.apiVersion));
+            error::Error("Plugin API version incompatible with application. Expected 1.x minor (1.0-1.1), got " + metadata.apiVersion));
     }
 
     // Check if plugin already loaded
@@ -888,6 +917,18 @@ util::Result<bool, error::Error> PluginManager::ValidateDependencies() const
     }
 
     return util::Result<bool, error::Error>::Ok(true);
+}
+
+std::filesystem::path PluginManager::GetPluginConfigDirectory(const std::string& pluginId) const
+{
+    // Return path: ~/Library/Application Support/LogViewerQt/plugins/<plugin_id>/
+    return m_pluginsDirectory / pluginId;
+}
+
+std::filesystem::path PluginManager::GetPluginConfigPath(const std::string& pluginId) const
+{
+    // Return path: ~/Library/Application Support/LogViewerQt/plugins/<plugin_id>/config.json
+    return GetPluginConfigDirectory(pluginId) / "config.json";
 }
 
 } // namespace plugin

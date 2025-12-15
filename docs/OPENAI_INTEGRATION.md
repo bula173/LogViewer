@@ -8,7 +8,7 @@ The OpenAI integration provides access to ChatGPT and other OpenAI models throug
 
 ### Class: `OpenAIClient`
 
-**Location**: `src/application/ai/OpenAIClient.{hpp,cpp}`
+**Location**: `src/plugins/ai/OpenAIClient.{hpp,cpp}`
 
 **Dependencies**:
 - CURL for HTTP communication

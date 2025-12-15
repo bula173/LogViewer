@@ -1,4 +1,4 @@
-#include "ai/LogAnalyzer.hpp"
+#include "plugins/ai/LogAnalyzer.hpp"
 #include "util/Logger.hpp"
 #include <sstream>
 #include <algorithm>
@@ -18,9 +18,7 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
 {
     if (!m_aiService || !m_aiService->service->IsAvailable())
     {
-        return "Error: AI service not available. Please ensure Ollama is running.\n\n"
-               "Install Ollama: https://ollama.ai\n"
-               "Run: ollama pull llama3.2";
+        return "Error: AI service not available. Please setup the AI provider.";
     }
 
     if (m_events.Size() == 0)
@@ -56,9 +54,7 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
 {
     if (!m_aiService || !m_aiService->service->IsAvailable())
     {
-        return "Error: AI service not available. Please ensure Ollama is running.\n\n"
-               "Install Ollama: https://ollama.ai\n"
-               "Run: ollama pull llama3.2";
+        return "Error: AI service not available. Please setup the AI provider.";
     }
 
     if (m_events.Size() == 0)

@@ -1,4 +1,4 @@
-#include "ai/GeminiClient.hpp"
+#include "plugins/ai/GeminiClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 #include <curl/curl.h>
@@ -31,6 +31,13 @@ GeminiClient::GeminiClient(const std::string& apiKey,
 std::string GeminiClient::SendPrompt(const std::string& prompt,
     std::function<void(const std::string&)> callback)
 {
+    // Validate API key before sending request
+    if (m_apiKey.empty())
+    {
+        util::Logger::Error("Google API key not configured");
+        return "Error: API key required for Google Gemini. Please configure it in the AI Configuration panel.";
+    }
+    
     util::Logger::Info("Sending prompt to Gemini API (model: {})", m_model);
 
     // Build Gemini API request

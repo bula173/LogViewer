@@ -1,4 +1,4 @@
-#include "ai/OllamaClient.hpp"
+#include "plugins/ai/OllamaClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 

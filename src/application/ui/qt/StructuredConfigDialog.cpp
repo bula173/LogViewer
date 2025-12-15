@@ -54,7 +54,6 @@ void StructuredConfigDialog::BuildUi()
     InitColumnsTab();
     InitDictionaryTab();
     InitColorsTab();
-    InitAITab();
     InitPluginsTab();
 
     auto* buttonBox = new QDialogButtonBox(
@@ -447,96 +446,8 @@ void StructuredConfigDialog::InitColorsTab()
     UpdateColorPreview();
 }
 
-void StructuredConfigDialog::InitAITab()
-{
-    m_aiTab = new QWidget(this);
-    auto* layout = new QVBoxLayout(m_aiTab);
-
-    auto* form = new QFormLayout();
-    
-    // AI Provider Selection
-    m_aiProviderCombo = new QComboBox(m_aiTab);
-    m_aiProviderCombo->addItem(tr("Ollama (Local)"), "ollama");
-    m_aiProviderCombo->addItem(tr("LM Studio (Local)"), "lmstudio");
-    m_aiProviderCombo->addItem(tr("OpenAI / ChatGPT"), "openai");
-    m_aiProviderCombo->addItem(tr("Anthropic / Claude"), "anthropic");
-    m_aiProviderCombo->addItem(tr("Google / Gemini"), "google");
-    m_aiProviderCombo->addItem(tr("xAI / Grok"), "xai");
-    m_aiProviderCombo->addItem(tr("Custom Endpoint"), "custom");
-    connect(m_aiProviderCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
-        &StructuredConfigDialog::OnAIProviderChanged);
-    form->addRow(tr("AI Provider:"), m_aiProviderCombo);
-    
-    // API Keys section for cloud providers
-    auto* apiKeysGroup = new QGroupBox(tr("Cloud Provider API Keys"), m_aiTab);
-    auto* apiKeysLayout = new QFormLayout(apiKeysGroup);
-    
-    m_openaiApiKeyEdit = new QLineEdit(apiKeysGroup);
-    m_openaiApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_openaiApiKeyEdit->setPlaceholderText(tr("Enter OpenAI API key from platform.openai.com"));
-    apiKeysLayout->addRow(tr("OpenAI API Key:"), m_openaiApiKeyEdit);
-    
-    m_anthropicApiKeyEdit = new QLineEdit(apiKeysGroup);
-    m_anthropicApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_anthropicApiKeyEdit->setPlaceholderText(tr("Enter Anthropic API key from console.anthropic.com"));
-    apiKeysLayout->addRow(tr("Anthropic API Key:"), m_anthropicApiKeyEdit);
-    
-    m_googleApiKeyEdit = new QLineEdit(apiKeysGroup);
-    m_googleApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_googleApiKeyEdit->setPlaceholderText(tr("Enter Google API key from makersuite.google.com"));
-    apiKeysLayout->addRow(tr("Google API Key:"), m_googleApiKeyEdit);
-    
-    m_xaiApiKeyEdit = new QLineEdit(apiKeysGroup);
-    m_xaiApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_xaiApiKeyEdit->setPlaceholderText(tr("Enter xAI API key from console.x.ai"));
-    apiKeysLayout->addRow(tr("xAI API Key:"), m_xaiApiKeyEdit);
-    
-    layout->addWidget(apiKeysGroup);
-    
-    // Base URL
-    m_ollamaBaseUrlEdit = new QLineEdit(m_aiTab);
-    m_ollamaBaseUrlEdit->setPlaceholderText("http://localhost:11434");
-    connect(m_ollamaBaseUrlEdit, &QLineEdit::textChanged, this,
-        &StructuredConfigDialog::OnOllamaBaseUrlChanged);
-    form->addRow(tr("Base URL:"), m_ollamaBaseUrlEdit);
-    
-    // Default Model
-    m_ollamaDefaultModelEdit = new QLineEdit(m_aiTab);
-    m_ollamaDefaultModelEdit->setPlaceholderText("qwen2.5-coder:7b");
-    connect(m_ollamaDefaultModelEdit, &QLineEdit::textChanged, this,
-        &StructuredConfigDialog::OnOllamaDefaultModelChanged);
-    form->addRow(tr("Default Model:"), m_ollamaDefaultModelEdit);
-    
-    // Timeout
-    m_aiTimeoutSpin = new QSpinBox(m_aiTab);
-    m_aiTimeoutSpin->setRange(30, 3600);  // 30 seconds to 1 hour
-    m_aiTimeoutSpin->setSuffix(" seconds");
-    m_aiTimeoutSpin->setToolTip(tr("Timeout for AI requests. Increase for slower machines or complex queries."));
-    form->addRow(tr("Request Timeout:"), m_aiTimeoutSpin);
-    
-    layout->addLayout(form);
-    
-    // Add information label
-    auto* infoLabel = new QLabel(
-        tr("Configure AI provider for log analysis.\n\n"
-           "Local Providers (Free):\n"
-           "• Ollama: ollama.ai - Models: qwen2.5-coder, llama3.2, deepseek-coder\n"
-           "• LM Studio: lmstudio.ai - Run any GGUF model locally\n\n"
-           "Cloud Providers (Require API Key):\n"
-           "• OpenAI: platform.openai.com - Models: gpt-4, gpt-3.5-turbo\n"
-           "• Anthropic: claude.ai - Models: claude-3-opus, claude-3-sonnet\n"
-           "• Google: ai.google.dev - Models: gemini-pro, gemini-1.5-pro\n"
-           "• xAI: x.ai/api - Models: grok-beta\n\n"
-           "For cloud providers, you need to sign up and get an API key."), 
-        m_aiTab);
-    infoLabel->setWordWrap(true);
-    infoLabel->setStyleSheet("QLabel { color: gray; font-style: italic; font-size: 10pt; }");
-    layout->addWidget(infoLabel);
-    
-    layout->addStretch();
-
-    m_tabs->addTab(m_aiTab, tr("AI Configuration"));
-}
+// AI configuration removed - plugins now manage their own config
+// Use the AI Configuration dock widget provided by the active AI plugin
 
 void StructuredConfigDialog::LoadConfigToUi()
 {
@@ -566,20 +477,7 @@ void StructuredConfigDialog::LoadConfigToUi()
         cfg.GetMutableFieldTranslator().LoadFromFile(dictPath);
     }
 
-    // Load AI config
-    const int providerIdx = m_aiProviderCombo->findData(QString::fromStdString(cfg.aiProvider));
-    if (providerIdx >= 0)
-        m_aiProviderCombo->setCurrentIndex(providerIdx);
-    
-    // Load all provider API keys
-    m_openaiApiKeyEdit->setText(QString::fromStdString(cfg.openaiApiKey));
-    m_anthropicApiKeyEdit->setText(QString::fromStdString(cfg.anthropicApiKey));
-    m_googleApiKeyEdit->setText(QString::fromStdString(cfg.googleApiKey));
-    m_xaiApiKeyEdit->setText(QString::fromStdString(cfg.xaiApiKey));
-    
-    m_ollamaBaseUrlEdit->setText(QString::fromStdString(cfg.ollamaBaseUrl));
-    m_ollamaDefaultModelEdit->setText(QString::fromStdString(cfg.ollamaDefaultModel));
-    m_aiTimeoutSpin->setValue(cfg.aiTimeoutSeconds);
+    // Note: AI configuration is now managed by plugins via their own config panels
 
     // Populate color column combo with available columns
     m_colorColumnCombo->clear();
@@ -645,17 +543,7 @@ void StructuredConfigDialog::OnSaveClicked()
         util::Logger::Warn("No dictionary file path configured, skipping dictionary save");
     }
     
-    cfg.aiProvider = m_aiProviderCombo->currentData().toString().toStdString();
-    
-    // Save all provider API keys
-    cfg.openaiApiKey = m_openaiApiKeyEdit->text().toStdString();
-    cfg.anthropicApiKey = m_anthropicApiKeyEdit->text().toStdString();
-    cfg.googleApiKey = m_googleApiKeyEdit->text().toStdString();
-    cfg.xaiApiKey = m_xaiApiKeyEdit->text().toStdString();
-    
-    cfg.ollamaBaseUrl = m_ollamaBaseUrlEdit->text().toStdString();
-    cfg.ollamaDefaultModel = m_ollamaDefaultModelEdit->text().toStdString();
-    cfg.aiTimeoutSeconds = m_aiTimeoutSpin->value();
+    // Note: AI configuration is now managed by plugins
 
     try
     {
@@ -822,71 +710,7 @@ void StructuredConfigDialog::OnLogLevelChanged(int)
     util::Logger::Info("Log level changed to: {}", levelStr);
 }
 
-void StructuredConfigDialog::OnAIProviderChanged(int index)
-{
-    if (index < 0)
-        return;
-    
-    const QString provider = m_aiProviderCombo->currentData().toString();
-    
-    // Update base URL and model suggestions based on provider
-    if (provider == "ollama")
-    {
-        m_ollamaBaseUrlEdit->setText("http://localhost:11434");
-        m_ollamaBaseUrlEdit->setEnabled(true);
-        m_ollamaDefaultModelEdit->setPlaceholderText("qwen2.5-coder:7b, llama3.2, deepseek-coder");
-    }
-    else if (provider == "lmstudio")
-    {
-        m_ollamaBaseUrlEdit->setText("http://localhost:1234");
-        m_ollamaBaseUrlEdit->setEnabled(true);
-        m_ollamaDefaultModelEdit->setPlaceholderText("local-model");
-    }
-    else if (provider == "openai")
-    {
-        m_ollamaBaseUrlEdit->setText("https://api.openai.com/v1");
-        m_ollamaBaseUrlEdit->setEnabled(false);
-        m_ollamaDefaultModelEdit->setPlaceholderText("gpt-4, gpt-4-turbo, gpt-3.5-turbo");
-    }
-    else if (provider == "anthropic")
-    {
-        m_ollamaBaseUrlEdit->setText("https://api.anthropic.com/v1");
-        m_ollamaBaseUrlEdit->setEnabled(false);
-        m_ollamaDefaultModelEdit->setPlaceholderText("claude-3-opus-20240229, claude-3-sonnet-20240229");
-    }
-    else if (provider == "google")
-    {
-        m_ollamaBaseUrlEdit->setText("https://generativelanguage.googleapis.com/v1");
-        m_ollamaBaseUrlEdit->setEnabled(false);
-        m_ollamaDefaultModelEdit->setPlaceholderText("gemini-pro, gemini-1.5-pro");
-    }
-    else if (provider == "xai")
-    {
-        m_ollamaBaseUrlEdit->setText("https://api.x.ai/v1");
-        m_ollamaBaseUrlEdit->setEnabled(false);
-        m_ollamaDefaultModelEdit->setPlaceholderText("grok-beta");
-    }
-    else // custom
-    {
-        m_ollamaBaseUrlEdit->setEnabled(true);
-        m_ollamaDefaultModelEdit->setPlaceholderText("model-name");
-    }
-    
-    util::Logger::Info("AI provider changed to: {}", provider.toStdString());
-}
-
-void StructuredConfigDialog::OnOllamaBaseUrlChanged()
-{
-    // URL validation could be added here if needed
-    util::Logger::Debug("AI base URL changed to: {}", 
-        m_ollamaBaseUrlEdit->text().toStdString());
-}
-
-void StructuredConfigDialog::OnOllamaDefaultModelChanged()
-{
-    util::Logger::Debug("AI default model changed to: {}", 
-        m_ollamaDefaultModelEdit->text().toStdString());
-}
+// AI configuration handlers removed - plugins now manage their own config
 
 void StructuredConfigDialog::RefreshColumnsList()
 {

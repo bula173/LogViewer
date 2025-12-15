@@ -22,9 +22,6 @@ set(APP_QT_SRCS
     ConfigEditorDialog.cpp
     StructuredConfigDialog.cpp
     LogFileLoadDialog.cpp
-    AIAnalysisPanel.cpp
-    AIConfigPanel.cpp
-    AIChatPanel.cpp
     OllamaSetupDialog.cpp)
 
 add_library(application_qt STATIC ${APP_QT_SRCS})

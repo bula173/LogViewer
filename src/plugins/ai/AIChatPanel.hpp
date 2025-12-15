@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ai/LogAnalyzer.hpp"
-#include "ai/IAIService.hpp"
-#include "ai/AIServiceFactory.hpp"
+#include "plugins/ai/LogAnalyzer.hpp"
+#include "plugins/ai/IAIService.hpp"
+#include "plugins/ai/AIServiceFactory.hpp"
 #include "db/EventsContainer.hpp"
 #include <QWidget>
 #include <memory>

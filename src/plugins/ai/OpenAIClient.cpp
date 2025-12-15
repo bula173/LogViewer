@@ -1,4 +1,4 @@
-#include "ai/OpenAIClient.hpp"
+#include "plugins/ai/OpenAIClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 #include <curl/curl.h>
@@ -31,6 +31,13 @@ OpenAIClient::OpenAIClient(const std::string& apiKey,
 std::string OpenAIClient::SendPrompt(const std::string& prompt,
     [[maybe_unused]] std::function<void(const std::string&)> callback)
 {
+    // Validate API key before sending request
+    if (m_apiKey.empty())
+    {
+        util::Logger::Error("OpenAI API key not configured");
+        return "Error: API key required for OpenAI. Please configure it in the AI Configuration panel.";
+    }
+    
     util::Logger::Info("Sending prompt to OpenAI API");
 
     // Build OpenAI API request

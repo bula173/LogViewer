@@ -15,10 +15,13 @@
 // Forward declarations for type-specific interfaces
 namespace parser { class IDataParser; }
 namespace filters { class IFilterStrategy; }
+namespace ai { class IAIService; }
+namespace db { class EventsContainer; }
 
 namespace plugin { 
     class IAnalysisPlugin; 
     class IFieldConversionPlugin;
+    class IAIPlugin;
 }
 
 // Forward declare QWidget for GUI plugins
@@ -38,6 +41,7 @@ enum class PluginType
     FieldConversion, ///< Field conversion/transformation plugin
     Exporter,      ///< Data export functionality
     Analyzer,      ///< Log analysis tool
+    AIProvider,    ///< Provides AI service and UI
     Connector,     ///< Remote connection (SSH, network, etc.)
     Visualizer,    ///< Custom visualization component
     Custom         ///< Generic custom plugin
@@ -159,6 +163,13 @@ public:
     virtual IAnalysisPlugin* GetAnalysisInterface() { return nullptr; }
 
     /**
+     * @brief Gets AI provider interface (for AIProvider plugins)
+     * @return Pointer to IAIPlugin interface or nullptr if not an AI provider
+     * @note Only valid when GetMetadata().type == PluginType::AIProvider
+     */
+    virtual IAIPlugin* GetAIPluginInterface() { return nullptr; }
+
+    /**
      * @brief Gets type-specific field conversion interface (for FieldConversion plugins)
      * @return Pointer to IFieldConversionPlugin interface or nullptr if not a field converter
      * @note Only valid when GetMetadata().type == PluginType::FieldConversion
@@ -182,7 +193,7 @@ public:
      * @brief Gets plugin configuration UI (optional)
      * @return Pointer to configuration widget/dialog, nullptr if not supported
      */
-    virtual void* GetConfigurationUI() { return nullptr; }
+    virtual QWidget* GetConfigurationUI() { return nullptr; }
 
     /**
      * @brief Validates plugin configuration
@@ -205,6 +216,18 @@ public:
      * @note This allows plugins to add custom filter/configuration panels
      */
     virtual QWidget* CreateFilterTab([[maybe_unused]]QWidget* parent) { return nullptr; }
+
+    /**
+     * @brief Creates a bottom dock widget (e.g., AI chat) for this plugin
+     * @param parent Parent widget for ownership
+     * @param service Optional AI service for AIProvider plugins
+     * @param events Optional events container for context
+     * @return QWidget to embed in the bottom dock, or nullptr if not provided
+     */
+    virtual QWidget* CreateBottomPanel(
+        [[maybe_unused]] QWidget* parent,
+        [[maybe_unused]] ai::IAIService* service,
+        [[maybe_unused]] db::EventsContainer* events) { return nullptr; }
 };
 
 /**

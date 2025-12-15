@@ -19,12 +19,12 @@ set(APP_CORE_SRCS
     parser/ParserFactory.cpp
     xml/xmlParser.cpp
     csv/CsvParser.cpp
-    ai/OllamaClient.cpp
-    ai/OpenAIClient.cpp
-    ai/AnthropicClient.cpp
-    ai/GeminiClient.cpp
-    ai/AIServiceFactory.cpp
-    ai/LogAnalyzer.cpp
+    ../plugins/ai/OllamaClient.cpp
+    ../plugins/ai/OpenAIClient.cpp
+    ../plugins/ai/AnthropicClient.cpp
+    ../plugins/ai/GeminiClient.cpp
+    ../plugins/ai/AIServiceFactory.cpp
+    ../plugins/ai/LogAnalyzer.cpp
     util/KeyEncryption.cpp
     ${CMAKE_BINARY_DIR}/src/main/version.cpp
     plugins/PluginManager.cpp
@@ -53,6 +53,7 @@ target_include_directories(application_core
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         "${CMAKE_CURRENT_SOURCE_DIR}/../"
+        "${CMAKE_SOURCE_DIR}/src/plugins"
         "${CMAKE_BINARY_DIR}/src/main"
         "${CMAKE_SOURCE_DIR}/src/main"
 )
@@ -78,6 +79,7 @@ set(PLUGIN_API_HEADERS
     "plugins/IPlugin.hpp"
     "plugins/IAnalysisPlugin.hpp"
     "plugins/IFieldConversionPlugin.hpp"
+    "plugins/IAIPlugin.hpp"
     "plugins/IPluginObserver.hpp"
     # Parser interface
     "parser/IDataParser.hpp"

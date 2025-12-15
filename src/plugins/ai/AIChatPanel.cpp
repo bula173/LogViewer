@@ -1,5 +1,5 @@
-#include "ui/qt/AIChatPanel.hpp"
-#include "ai/OllamaClient.hpp"
+#include "plugins/ai/AIChatPanel.hpp"
+#include "plugins/ai/OllamaClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ai/IAIService.hpp"
+#include "plugins/ai/IAIService.hpp"
 #include "util/Logger.hpp"
 #include <string>
 
