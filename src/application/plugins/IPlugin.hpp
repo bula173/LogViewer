@@ -66,6 +66,7 @@ struct PluginMetadata
     std::string id;              ///< Unique plugin identifier
     std::string name;            ///< Display name
     std::string version;         ///< Plugin version (e.g., "1.0.0")
+    std::string apiVersion {"1.0.0"}; ///< Plugin API compatibility version
     std::string author;          ///< Plugin author
     std::string description;     ///< Brief description
     std::string website;         ///< Plugin website/documentation

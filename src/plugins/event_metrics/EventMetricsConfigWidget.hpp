@@ -24,6 +24,7 @@ class EventMetricsConfigWidget : public QWidget
 {
     Q_OBJECT
 
+    // cppcheck-suppress unknownMacro
 public:
     explicit EventMetricsConfigWidget(QWidget* parent = nullptr);
 
@@ -39,6 +40,7 @@ public:
 signals:
     void rulesChanged();
 
+    // cppcheck-suppress unknownMacro
 private slots:
     void onAddRuleClicked();
     void onRemoveRuleClicked();

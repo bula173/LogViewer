@@ -2,6 +2,8 @@
 #include "plugins/IPlugin.hpp"
 #include "util/Logger.hpp"
 
+#include <algorithm>
+
 namespace config
 {
 
@@ -13,10 +15,14 @@ FieldConversionPluginRegistry& FieldConversionPluginRegistry::GetInstance()
 
 void FieldConversionPluginRegistry::RegisterPlugin(ConversionPluginFactory factory)
 {
-    m_factories.push_back(std::move(factory));
+    RegisterPlugin(std::move(factory), "");
+}
+
+void FieldConversionPluginRegistry::RegisterPlugin(ConversionPluginFactory factory, std::string pluginId)
+{
+    m_factories.emplace_back(std::move(pluginId), std::move(factory));
     // Clear cached instances so they'll be recreated with new plugin
     m_instances.clear();
-    util::Logger::Info("Registered new field conversion plugin");
 }
 
 std::vector<std::string> FieldConversionPluginRegistry::GetAvailableConversions() const
@@ -65,11 +71,11 @@ void FieldConversionPluginRegistry::EnsureInstancesLoaded() const
         return;
 
     m_instances.clear();
-    for (const auto& factory : m_factories)
+    for (const auto& entry : m_factories)
     {
         try
         {
-            m_instances.push_back(factory());
+            m_instances.push_back(entry.second());
         }
         catch (const std::exception& ex)
         {
@@ -155,7 +161,7 @@ void FieldConversionPluginRegistry::RegisterFieldConversionPlugin(plugin::IPlugi
         return std::make_unique<FieldConversionWrapper>(converter);
     };
     
-    RegisterPlugin(factory);
+    RegisterPlugin(factory, metadata.id);
     util::Logger::Info("FieldConversionPluginRegistry: Registered field conversion plugin: {} ({})",
         metadata.name, converter->GetConversionType());
 }
@@ -168,7 +174,14 @@ void FieldConversionPluginRegistry::UnregisterFieldConversionPlugin(const std::s
         
     // Remove from tracking map
     m_pluginConverters.erase(it);
-    
+
+    // Remove factories tied to this pluginId
+    m_factories.erase(
+        std::remove_if(m_factories.begin(), m_factories.end(), [&](const auto& entry) {
+            return entry.first == pluginId;
+        }),
+        m_factories.end());
+
     // Force reload of instances on next access
     m_instances.clear();
     

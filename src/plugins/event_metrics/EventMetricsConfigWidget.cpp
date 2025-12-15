@@ -162,4 +162,3 @@ void EventMetricsConfigWidget::updateRulesList()
 
 } // namespace plugin
 
-#include "EventMetricsConfigWidget.moc"

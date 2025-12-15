@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <archive.h>
 #include <archive_entry.h>
+#include <string_view>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -23,6 +24,8 @@
 
 namespace plugin
 {
+
+static constexpr std::string_view kSupportedPluginApiVersion = "1.0.0";
 
 // Helper functions - must be defined before use
 namespace {
@@ -41,7 +44,7 @@ namespace {
         }
     }
 
-    void* LoadLibraryHelper(const std::string& path) {
+        void* LoadLibraryHelper(const std::string& path) {
 #ifdef _WIN32
         return LoadLibraryA(path.c_str());
 #else
@@ -52,6 +55,9 @@ namespace {
     bool ExtractZipPlugin(const std::filesystem::path& zipPath, 
                          const std::filesystem::path& extractDir) {
         // Create extraction directory
+        if (std::filesystem::exists(extractDir)) {
+            std::filesystem::remove_all(extractDir);
+        }
         std::filesystem::create_directories(extractDir);
         
         struct archive* a = archive_read_new();
@@ -66,17 +72,23 @@ namespace {
         struct archive_entry* entry;
         while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
             std::filesystem::path outputPath = extractDir / archive_entry_pathname(entry);
-            
-            // Extract file
-            std::ofstream outFile(outputPath, std::ios::binary);
-            const void* buff;
-            size_t size;
-            int64_t offset;
-            
-            while (archive_read_data_block(a, &buff, &size, &offset) == ARCHIVE_OK) {
-                outFile.write(static_cast<const char*>(buff), size);
+
+            if (archive_entry_filetype(entry) == AE_IFDIR) {
+                std::filesystem::create_directories(outputPath);
+            } else {
+                if (auto parent = outputPath.parent_path(); !parent.empty()) {
+                    std::filesystem::create_directories(parent);
+                }
+                std::ofstream outFile(outputPath, std::ios::binary);
+                const void* buff;
+                size_t size;
+                int64_t offset;
+                
+                while (archive_read_data_block(a, &buff, &size, &offset) == ARCHIVE_OK) {
+                    outFile.write(static_cast<const char*>(buff), size);
+                }
+                outFile.close();
             }
-            outFile.close();
         }
         
         archive_read_free(a);
@@ -150,18 +162,10 @@ std::vector<std::filesystem::path> PluginManager::DiscoverPlugins()
                 continue;
 
             const auto& path = entry.path();
-            std::string extension = path.extension().string();
-
-#ifdef _WIN32
-            if (extension == ".dll")
-#elif defined(__APPLE__)
-            if (extension == ".dylib")
-#else
-            if (extension == ".so")
-#endif
+            if (path.extension() == ".zip")
             {
                 plugins.push_back(path);
-                util::Logger::Debug("PluginManager: Found plugin: {}", path.string());
+                util::Logger::Debug("PluginManager: Found plugin package: {}", path.string());
             }
         }
     }
@@ -177,27 +181,53 @@ std::vector<std::filesystem::path> PluginManager::DiscoverPlugins()
 util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     const std::filesystem::path& pluginPath)
 {
-    std::filesystem::path actualPluginPath = pluginPath;
-    
-    // Check if it's a ZIP file
-    if (pluginPath.extension() == ".zip") {
-        // Extract to temporary directory
-        auto extractDir = pluginPath.parent_path() / pluginPath.stem();
-        
-        if (!ExtractZipPlugin(pluginPath, extractDir)) {
-            return util::Result<std::string, error::Error>::Err(
-                error::Error("Failed to extract plugin ZIP: " + pluginPath.string()));
-        }
-        
-        // Find the main plugin DLL in extracted directory
-        actualPluginPath = extractDir / (pluginPath.stem().string() + ".dll");
-        
-        if (!std::filesystem::exists(actualPluginPath)) {
-            return util::Result<std::string, error::Error>::Err(
-                error::Error("Plugin DLL not found in ZIP: " + actualPluginPath.string()));
-        }
+    if (pluginPath.extension() != ".zip") {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error(error::ErrorCode::InvalidArgument,
+                "Only zipped plugins are supported. Expected .zip: " + pluginPath.string()));
     }
-    
+
+    // Extract to a folder named after the zip
+    auto extractDir = pluginPath.parent_path() / pluginPath.stem();
+    if (!ExtractZipPlugin(pluginPath, extractDir)) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("Failed to extract plugin ZIP: " + pluginPath.string()));
+    }
+
+    // Parse config.json inside the extracted folder
+    auto manifestPath = extractDir / "config.json";
+    auto manifest = ParseManifest(manifestPath);
+    if (!manifest) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("Missing or invalid config.json in plugin: " + manifestPath.string()));
+    }
+
+    if (!manifest->contains("entry") || !(*manifest)["entry"].is_string()) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("config.json missing required 'entry' field"));
+    }
+
+    if (!manifest->contains("apiVersion") || !(*manifest)["apiVersion"].is_string()) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("config.json missing required 'apiVersion' field"));
+    }
+
+    const std::string manifestApiVersion = (*manifest)["apiVersion"].get<std::string>();
+    if (manifestApiVersion != kSupportedPluginApiVersion) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error(
+                "Plugin API version mismatch. Expected " + std::string(kSupportedPluginApiVersion) +
+                ", found " + manifestApiVersion));
+    }
+
+    std::filesystem::path actualPluginPath = extractDir / (*manifest)["entry"].get<std::string>();
+
+    // Optional: validate metadata id/version if present
+    if (manifest->contains("id") && !(*manifest)["id"].is_string()) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("config.json field 'id' must be string"));
+    }
+
     util::Logger::Info("PluginManager: Loading plugin from: {}", actualPluginPath.string());
 
     if (!std::filesystem::exists(actualPluginPath))
@@ -207,39 +237,54 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
                 "Plugin file does not exist: " + actualPluginPath.string()));
     }
 
-    // Check for manifest file
-    auto manifestPath = actualPluginPath.parent_path() / (actualPluginPath.stem().string() + ".json");
-    
-    if (std::filesystem::exists(manifestPath))
-    {
-        // Parse manifest and load dependencies
-        auto manifest = ParseManifest(manifestPath);
-        if (!manifest) {
-            return util::Result<std::string, error::Error>::Err(
-                error::Error("Failed to parse manifest: " + manifestPath.string()));
-        }
+    // Handle dependencies: array of strings paths relative to zip or absolute
+    if (manifest->contains("dependencies")) {
+        for (const auto& dep : (*manifest)["dependencies"]) {
+            if (!dep.is_string()) continue;
+            const std::string depStr = dep.get<std::string>();
+            std::filesystem::path depPath(depStr);
+            bool satisfied = false;
 
-        // Load dependencies if specified in manifest
-        if (manifest->contains("dependencies")) {
-            for (const auto& dep : (*manifest)["dependencies"]) {
-                std::string depName = dep.get<std::string>();
-                auto depPath = actualPluginPath.parent_path() / depName;
-                
-                if (std::filesystem::exists(depPath)) {
-                    // Load the dependency library
-                    void* handle = LoadLibraryHelper(depPath.string());
-                    if (!handle) {
-                        util::Logger::Error("Failed to load dependency: {}", depPath.string());
+            if (depPath.is_absolute() && std::filesystem::exists(depPath)) {
+                satisfied = true;
+            }
+
+            if (!satisfied) {
+                auto packagedDep = extractDir / depStr;
+                if (std::filesystem::exists(packagedDep)) {
+                    auto target = m_pluginsDirectory / packagedDep.filename();
+                    try {
+                        if (!std::filesystem::exists(target)) {
+                            std::filesystem::copy_file(packagedDep, target,
+                                std::filesystem::copy_options::overwrite_existing);
+                        }
+                        satisfied = true;
+                        util::Logger::Info("Installed dependency {} to {}", packagedDep.string(), target.string());
+                    } catch (const std::exception& ex) {
                         return util::Result<std::string, error::Error>::Err(
-                            error::Error("Failed to load dependency: " + depPath.string()));
+                            error::Error(std::string("Failed to install dependency ") + depStr + ": " + ex.what()));
                     }
-                    m_dependencyHandles.push_back(handle);
-                    util::Logger::Info("Loaded dependency: {}", depName);
-                } else {
-                    util::Logger::Error("Dependency not found: {}", depPath.string());
-                    return util::Result<std::string, error::Error>::Err(
-                        error::Error("Dependency not found: " + depPath.string()));
                 }
+            }
+
+            if (!satisfied) {
+                return util::Result<std::string, error::Error>::Err(
+                    error::Error("Dependency not found: " + depStr));
+            }
+
+            // Load dependency from install folder if present
+            auto depResolved = m_pluginsDirectory / std::filesystem::path(depStr).filename();
+            if (std::filesystem::exists(depResolved)) {
+                void* handle = LoadLibraryHelper(depResolved.string());
+                if (!handle) {
+                    util::Logger::Error("Failed to load dependency: {}", depResolved.string());
+                    return util::Result<std::string, error::Error>::Err(
+                        error::Error("Failed to load dependency: " + depResolved.string()));
+                }
+                m_dependencyHandles.push_back(handle);
+            } else {
+                return util::Result<std::string, error::Error>::Err(
+                    error::Error("Dependency not installed: " + depResolved.string()));
             }
         }
     }
@@ -253,6 +298,18 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
 
     auto plugin = result.unwrap();
     auto metadata = plugin->GetMetadata();
+
+    if (metadata.apiVersion != manifestApiVersion) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("Plugin binary API version does not match manifest: " + metadata.apiVersion +
+                " vs " + manifestApiVersion));
+    }
+
+    if (metadata.apiVersion != kSupportedPluginApiVersion) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error("Plugin API version incompatible with application. Expected " +
+                std::string(kSupportedPluginApiVersion) + ", got " + metadata.apiVersion));
+    }
 
     // Check if plugin already loaded
     if (m_plugins.find(metadata.id) != m_plugins.end())
@@ -287,6 +344,9 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
         util::Logger::Info("PluginManager: Applied cached config to {}: autoLoad={}", 
             metadata.id, info.autoLoad);
     }
+
+    // Remember package path so unregister can remove it after restart
+    m_registeredPlugins[metadata.id] = pluginPath;
 
     m_plugins[metadata.id] = std::move(info);
 
@@ -404,8 +464,6 @@ util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& 
     // Notify observers before unloading
     NotifyObservers(PluginEvent::Unloaded, pluginId, nullptr);
 
-    m_plugins.erase(it);
-
     util::Logger::Info("PluginManager: Plugin unloaded: {}", pluginId);
     return util::Result<bool, error::Error>::Ok(true);
 }
@@ -420,6 +478,13 @@ util::Result<std::string, error::Error> PluginManager::RegisterPlugin(
         return util::Result<std::string, error::Error>::Err(
             error::Error(error::ErrorCode::InvalidArgument,
                 "Plugin file does not exist: " + sourcePath.string()));
+    }
+
+    if (sourcePath.extension() != ".zip")
+    {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error(error::ErrorCode::InvalidArgument,
+                "Only zipped plugins are supported. Expected .zip: " + sourcePath.string()));
     }
 
     try {
@@ -466,6 +531,7 @@ util::Result<bool, error::Error> PluginManager::UnregisterPlugin(const std::stri
     
     bool wasLoaded = false;
     bool wasRegistered = false;
+    std::filesystem::path pluginPackagePath;
     
     // First disable/unload if currently loaded
     if (m_plugins.find(pluginId) != m_plugins.end()) {
@@ -489,6 +555,7 @@ util::Result<bool, error::Error> PluginManager::UnregisterPlugin(const std::stri
     if (it != m_registeredPlugins.end()) {
         wasRegistered = true;
         std::filesystem::path pluginPath = it->second;
+        pluginPackagePath = pluginPath;
         
         try {
             if (std::filesystem::exists(pluginPath)) {
@@ -501,12 +568,39 @@ util::Result<bool, error::Error> PluginManager::UnregisterPlugin(const std::stri
             // Continue anyway - we'll still remove from registry and notify
         }
     }
+
+    auto itPlugin = m_plugins.find(pluginId);
+    if (itPlugin != m_plugins.end()) {
+        m_plugins.erase(itPlugin);
+    }
+
+    // Drop cached configuration so it is not re-applied to a future plugin with the same id
+    m_configCache.erase(pluginId);
     
     // If the plugin was neither loaded nor registered, return error
     if (!wasLoaded && !wasRegistered) {
         return util::Result<bool, error::Error>::Err(
             error::Error(error::ErrorCode::InvalidArgument,
                 "Plugin not found: " + pluginId));
+    }
+    
+    // Clean extracted payload if present
+    if (!pluginPackagePath.empty()) {
+        auto extractDir = pluginPackagePath.parent_path() / pluginPackagePath.stem();
+        try {
+            if (std::filesystem::exists(extractDir)) {
+                std::filesystem::remove_all(extractDir);
+                util::Logger::Info("PluginManager: Removed extracted plugin folder: {}", extractDir.string());
+            }
+        } catch (const std::exception& ex) {
+            util::Logger::Warn("PluginManager: Failed to remove extracted plugin folder: {}", ex.what());
+        }
+    }
+
+    // Persist removal so the plugin does not reappear on next launch
+    auto saveResult = SaveConfiguration();
+    if (saveResult.isErr()) {
+        util::Logger::Warn("PluginManager: Failed to save configuration after unregister: {}", saveResult.error().what());
     }
     
     // Notify observers about plugin unregistration

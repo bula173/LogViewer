@@ -1,7 +1,10 @@
 message(STATUS "Building LogViewer::ssh_parser_plugin (optional)")
 
 set(PLUGIN_NAME ssh_parser_plugin)
-
+set(PLUGIN_ID "ssh_parser")
+set(PLUGIN_VERSION "1.0.0")
+set(PLUGIN_DISPLAY_NAME "SSH Parser Plugin")
+set(PLUGIN_API_VERSION "1.0.0")
 
 # SSH parser plugin - optional feature for specific customers
 # This plugin provides SSH connectivity and text log parsing capabilities
@@ -108,18 +111,14 @@ target_link_libraries(${PLUGIN_NAME}
 # Enable Qt MOC for widget processing
 set_target_properties(${PLUGIN_NAME} PROPERTIES
     AUTOMOC ON
-)
-
-# Add preprocessor definition to enable SSH features
-target_compile_definitions(${PLUGIN_NAME} PUBLIC LOGVIEWER_ENABLE_SSH_PARSER)
-
-# Set plugin output properties
-set_target_properties(${PLUGIN_NAME} PROPERTIES
     PREFIX ""  # Don't add 'lib' prefix
     OUTPUT_NAME "${PLUGIN_NAME}"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
 )
+
+# Add preprocessor definition to enable SSH features
+target_compile_definitions(${PLUGIN_NAME} PUBLIC LOGVIEWER_ENABLE_SSH_PARSER)
 
 # Install the plugin to the plugins directory
 install(TARGETS ${PLUGIN_NAME}
@@ -127,35 +126,46 @@ install(TARGETS ${PLUGIN_NAME}
     RUNTIME DESTINATION plugins
 )
 
-# Copy to dist/plugins for development
+# Packaging and config generation
+set(PLUGIN_DEPENDENCIES_JSON "[]")
+
+if(WIN32)
+    set(PLUGIN_EXTENSION ".dll")
+elseif(APPLE)
+    set(PLUGIN_EXTENSION ".dylib")
+else()
+    set(PLUGIN_EXTENSION ".so")
+endif()
+
+set(PLUGIN_ENTRY "${PLUGIN_NAME}${PLUGIN_EXTENSION}")
+
+if(LIBSSH_LIBRARIES)
+    get_filename_component(LIBSSH_DIR ${LIBSSH_LIBRARIES} DIRECTORY)
+    get_filename_component(LIBSSH_BASENAME ${LIBSSH_LIBRARIES} NAME)
+    set(PLUGIN_DEPENDENCIES_JSON "[\"${LIBSSH_BASENAME}\"]")
+endif()
+
+set(PLUGIN_CONFIG_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/config.json.in")
+set(PLUGIN_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/config.json")
+configure_file(${PLUGIN_CONFIG_TEMPLATE} ${PLUGIN_CONFIG} @ONLY)
+
+# Copy to dist/plugins for development and package zip with config
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
     set(PLUGIN_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/plugins")
     file(MAKE_DIRECTORY ${PLUGIN_OUTPUT_DIR})
 
-    if(WIN32)
-        set(PLUGIN_EXTENSION ".dll")
-    elseif(APPLE)
-        set(PLUGIN_EXTENSION ".dylib")
-    else()
-        set(PLUGIN_EXTENSION ".so")
-    endif()
-
-    # Copy the plugin
     add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
             $<TARGET_FILE:${PLUGIN_NAME}>
-            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_NAME}${PLUGIN_EXTENSION}
-        COMMENT "Copying ${PLUGIN_NAME} to ${PLUGIN_OUTPUT_DIR}"
+            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_ENTRY}
+        COMMAND ${CMAKE_COMMAND} -E copy
+            ${PLUGIN_CONFIG}
+            ${PLUGIN_OUTPUT_DIR}/config.json
+        COMMENT "Preparing ${PLUGIN_NAME} artifacts"
     )
 
-    # Copy libssh dependency
     if(LIBSSH_LIBRARIES)
-        # Find the actual library file (handle both .dll.a and .dll on Windows)
-        get_filename_component(LIBSSH_DIR ${LIBSSH_LIBRARIES} DIRECTORY)
-        get_filename_component(LIBSSH_NAME ${LIBSSH_LIBRARIES} NAME_WE)
-        
         if(WIN32)
-            # On Windows, find the actual .dll (not the import library .dll.a)
             find_file(LIBSSH_DLL
                 NAMES libssh.dll ssh.dll
                 PATHS ${LIBSSH_DIR} ${LIBSSH_DIR}/../bin
@@ -171,16 +181,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
             else()
                 message(WARNING "libssh.dll not found for packaging")
             endif()
-        elseif(APPLE)
-            # On macOS, copy the dylib
-            add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${LIBSSH_LIBRARIES}
-                    ${PLUGIN_OUTPUT_DIR}/
-                COMMENT "Copying libssh to ${PLUGIN_OUTPUT_DIR}"
-            )
         else()
-            # On Linux, copy the .so
             add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${LIBSSH_LIBRARIES}
@@ -190,29 +191,22 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
         endif()
     endif()
 
-    # Copy plugin manifest
+    set(PACKAGE_FILES "${PLUGIN_ENTRY}" "config.json")
+    if(LIBSSH_BASENAME)
+        list(APPEND PACKAGE_FILES "${LIBSSH_BASENAME}")
+    endif()
+
     add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/ssh_parser_plugin.json
-            ${PLUGIN_OUTPUT_DIR}/ssh_parser_plugin.json
-        COMMENT "Copying plugin manifest to ${PLUGIN_OUTPUT_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E tar "cf"
+            "${PLUGIN_OUTPUT_DIR}/${PLUGIN_NAME}.zip" --format=zip
+            ${PACKAGE_FILES}
+        COMMAND ${CMAKE_COMMAND} -E rm -f
+            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_ENTRY}
+            ${PLUGIN_OUTPUT_DIR}/config.json
+            ${PLUGIN_OUTPUT_DIR}/${LIBSSH_BASENAME}
+        WORKING_DIRECTORY ${PLUGIN_OUTPUT_DIR}
+        COMMENT "Packaging ${PLUGIN_NAME}.zip"
+        VERBATIM
     )
+    message(STATUS "SSH Parser Plugin: Auto-packaging enabled for Release/Debug builds")
 endif()
-
-# Add custom target to create plugin package
-add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E tar "cf"
-        "${PLUGIN_OUTPUT_DIR}/ssh_parser_plugin.zip" --format=zip
-        "${PLUGIN_NAME}${PLUGIN_EXTENSION}"
-        "libssh.dll"
-        "ssh_parser_plugin.json"
-    WORKING_DIRECTORY ${PLUGIN_OUTPUT_DIR}
-    COMMENT "Packaging ssh_parser_plugin.zip"
-    VERBATIM
-)
-message(STATUS "SSH Parser Plugin: Auto-packaging enabled for Release builds")
-
-message(STATUS "SSH Parser Plugin: ENABLED")
-message(STATUS "  libssh include: ${LIBSSH_INCLUDE_DIRS}")
-message(STATUS "  libssh library: ${LIBSSH_LIBRARIES}")
-message(STATUS "  Plugin output: ${CMAKE_BINARY_DIR}/plugins")

@@ -33,6 +33,7 @@ class SSHConnectionWidget : public QWidget
 {
     Q_OBJECT
 
+    // cppcheck-suppress unknownMacro
 public:
     explicit SSHConnectionWidget(QWidget* parent = nullptr);
     ~SSHConnectionWidget() override;

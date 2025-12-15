@@ -39,8 +39,8 @@ void SSHConnectionWidget::SetParserObserver(parser::IDataParserObserver* observe
 
 void SSHConnectionWidget::setupUI()
 {
-    auto* mainLayout = new QVBoxLayout(this);
-    
+    new QVBoxLayout(this);
+
     setupConnectionGroup();
     setupAuthenticationGroup();
     setupLogSourceGroup();
@@ -279,4 +279,3 @@ void SSHConnectionWidget::stopLogMonitoring()
 
 } // namespace ssh
 
-#include "SSHConnectionWidget.moc"

@@ -1,3 +1,4 @@
+#include <QObject>
 #include "plugins/IPlugin.hpp"
 #include "plugins/IAnalysisPlugin.hpp"
 #include "db/EventsContainer.hpp"
@@ -489,6 +490,7 @@ public:
             "event_metrics_analyzer",
             "Event Metrics",
             "2.0.0",
+            "1.0.0",
             "LogViewer Team",
             "Analyzes event patterns and detects anomalies using statistical analysis",
             "",
@@ -574,9 +576,7 @@ private:
 } // namespace plugin
 
 // Export plugin
-extern "C" {
-    EXPORT_PLUGIN(plugin::EventMetricsPlugin)
-}
+EXPORT_PLUGIN(plugin::EventMetricsPlugin)
 
 // Include MOC for Qt signals/slots
 #include "EventMetricsPlugin.moc"

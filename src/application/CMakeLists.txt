@@ -35,7 +35,10 @@ add_library(application_core STATIC ${APP_CORE_SRCS})
 # Find CURL for AI HTTP requests
 find_package(CURL REQUIRED)
 # Find libarchive for ZIP support
-find_package(LibArchive REQUIRED)
+find_package(LibArchive CONFIG QUIET)
+if (NOT LibArchive_FOUND)
+    find_package(LibArchive REQUIRED)
+endif()
 
 target_link_libraries(application_core
     PUBLIC
