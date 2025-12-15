@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update
-          brew install ninja ccache expat cppcheck libssh libarchive zip
+          brew install ninja ccache expat cppcheck libssh libarchive zip eigen boost
           ${{ matrix.gui_framework == 'wx' && 'brew install wxwidgets' || '' }}
           ${{ matrix.gui_framework == 'qt' && 'brew install qt' || '' }}
 
@@ -74,6 +74,7 @@ jobs:
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DGUI_FRAMEWORK="$GUI_FRAMEWORK" \
+            -DLibArchive_ROOT=/opt/homebrew/opt/libarchive 
             $EXTRA_ARGS
 
       - name: Build
@@ -123,15 +124,15 @@ jobs:
         run: |
           echo "Listing plugins in dist/plugins:"
           ls -lh "$GITHUB_WORKSPACE/dist/plugins/" || echo "dist/plugins not found"
-          echo "Plugin files:"
-          find "$GITHUB_WORKSPACE/dist/plugins" -name "*.dylib | *.zip"  -type f || echo "No .dylib files found"
+          echo "Plugin zip files:"
+          find "$GITHUB_WORKSPACE/dist/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ github.workspace }}/dist/plugins/*
+          path: ${{ github.workspace }}/dist/plugins/*.zip
           if-no-files-found: warn
 
       - name: Upload artifacts

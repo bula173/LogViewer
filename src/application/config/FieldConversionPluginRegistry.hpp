@@ -35,6 +35,7 @@ public:
      * @param factory Function that creates the plugin instance
      */
     void RegisterPlugin(ConversionPluginFactory factory);
+    void RegisterPlugin(ConversionPluginFactory factory, std::string pluginId);
 
     /**
      * @brief Get all registered conversion types
@@ -71,7 +72,7 @@ private:
     void UnregisterFieldConversionPlugin(const std::string& pluginId);
 
     FieldConversionPluginRegistry() = default;
-    std::vector<ConversionPluginFactory> m_factories;
+    std::vector<std::pair<std::string, ConversionPluginFactory>> m_factories;
     mutable std::vector<std::unique_ptr<plugin::IFieldConversionPlugin>> m_instances;
     
     // Track which plugins are registered by plugin ID

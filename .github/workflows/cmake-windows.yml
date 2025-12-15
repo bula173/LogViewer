@@ -59,6 +59,8 @@ jobs:
             mingw-w64-x86_64-nsis
             mingw-w64-x86_64-libssh
             mingw-w64-x86_64-libarchive
+            mingw-w64-x86_64-eigen3
+            mingw-w64-x86_64-boost
             tar
 
 
@@ -153,15 +155,15 @@ jobs:
         run: |
           echo "Listing plugins in dist/plugins:"
           ls -lh "$GITHUB_WORKSPACE/dist/plugins/" || echo "dist/plugins not found"
-          echo "Listing plugins in build directory:"
-          find "$BUILD_DIR-${{ matrix.gui_framework }}/src/plugins" -name "*.dll" -o -name "*.zip" -type f || echo "No .dll or .zip files found"
+          echo "Plugin zip files:"
+          find "$GITHUB_WORKSPACE/dist/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ github.workspace }}/dist/plugins/*
+          path: ${{ github.workspace }}/dist/plugins/*.zip
           if-no-files-found: warn
 
       - name: Upload tests artifact

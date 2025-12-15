@@ -50,6 +50,7 @@ public:
             "field_converter_to_uppercase",  // id
             "To Uppercase Field Converter",  // name
             "1.0.0",                        // version
+            "1.0.0",                        // apiVersion
             "LogViewer Team",               // author
             "Converts text field values to uppercase", // description
             "",                             // website

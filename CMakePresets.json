@@ -32,6 +32,7 @@
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
+                "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
                 "LOGVIEWER_SANITIZER": "Address",
                 "ENABLE_CPPCHECK": "ON"
             },
@@ -71,7 +72,9 @@
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
                 "GUI_FRAMEWORK": "QT",
+                "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
+                
             },
             "condition": {
                 "type": "equals",

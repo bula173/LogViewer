@@ -146,7 +146,7 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
     // Update progress calculation
     uint32_t newProgress = (state->totalBytes > 0)
         ? static_cast<uint32_t>(
-              (static_cast<double>(state->bytesProcessed) / state->totalBytes) *
+              (static_cast<double>(state->bytesProcessed) / static_cast<double>(state->totalBytes)) *
               100)
         : 100;
 

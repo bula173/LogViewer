@@ -2021,13 +2021,7 @@ void StructuredConfigDialog::OnPluginSelectionChanged()
 void StructuredConfigDialog::OnBrowsePluginClicked()
 {
     QString filter;
-#ifdef _WIN32
-    filter = tr("Plugin Files (*.dll);;All Files (*)");
-#elif defined(__APPLE__)
-    filter = tr("Plugin Files (*.dylib);;All Files (*)");
-#else
-    filter = tr("Plugin Files (*.so);;All Files (*)");
-#endif
+    filter = tr("Plugin Files (*.zip);;All Files (*)");
 
     QFileDialog dialog(this, tr("Select Plugin"));
     #ifdef __APPLE__
