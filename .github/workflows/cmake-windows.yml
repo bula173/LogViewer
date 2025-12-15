@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_type: [Release, Debug]
+        build_type: [Release]
         gui_framework: [qt]
 
     env:

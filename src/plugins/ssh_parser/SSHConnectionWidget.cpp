@@ -7,45 +7,46 @@
 
 #include "SSHConnectionWidget.hpp"
 #include "SSHTextParser.hpp"
+#include "plugins/PluginManager.hpp"
+#include "util/Logger.hpp"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTime>
+#include <QDir>
+#include <nlohmann/json.hpp>
+#include <filesystem>
+#include <fstream>
 
 namespace ssh
 {
 
 SSHConnectionWidget::SSHConnectionWidget(QWidget* parent)
     : QWidget(parent)
-    , m_parserObserver(nullptr)
-    , m_isConnected(false)
 {
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     setupUI();
+    LoadConfiguration();
 }
 
 SSHConnectionWidget::~SSHConnectionWidget()
 {
-    if (m_isConnected) {
-        stopLogMonitoring();
-    }
-}
-
-void SSHConnectionWidget::SetParserObserver(parser::IDataParserObserver* observer)
-{
-    m_parserObserver = observer;
 }
 
 void SSHConnectionWidget::setupUI()
 {
-    new QVBoxLayout(this);
+    auto* mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(5, 5, 5, 5);
+    mainLayout->setSpacing(5);
 
     setupConnectionGroup();
     setupAuthenticationGroup();
-    setupLogSourceGroup();
     setupControlButtons();
-    setupLogViewGroup();
+    
+    mainLayout->addStretch();  // Push content to top
 }
 
 void SSHConnectionWidget::setupConnectionGroup()
@@ -57,18 +58,21 @@ void SSHConnectionWidget::setupConnectionGroup()
     hostLayout->addWidget(new QLabel("Hostname:", this));
     m_hostnameEdit = new QLineEdit(this);
     m_hostnameEdit->setPlaceholderText("e.g., server.example.com");
+    connect(m_hostnameEdit, &QLineEdit::editingFinished, this, &SSHConnectionWidget::SaveConfiguration);
     hostLayout->addWidget(m_hostnameEdit);
     
     hostLayout->addWidget(new QLabel("Port:", this));
     m_portSpinBox = new QSpinBox(this);
     m_portSpinBox->setRange(1, 65535);
     m_portSpinBox->setValue(22);
+    connect(m_portSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SSHConnectionWidget::SaveConfiguration);
     hostLayout->addWidget(m_portSpinBox);
     layout->addLayout(hostLayout);
     
     auto* userLayout = new QHBoxLayout();
     userLayout->addWidget(new QLabel("Username:", this));
     m_usernameEdit = new QLineEdit(this);
+    connect(m_usernameEdit, &QLineEdit::editingFinished, this, &SSHConnectionWidget::SaveConfiguration);
     userLayout->addWidget(m_usernameEdit);
     layout->addLayout(userLayout);
     
@@ -106,47 +110,22 @@ void SSHConnectionWidget::setupAuthenticationGroup()
     m_privateKeyPathEdit = new QLineEdit(this);
     m_privateKeyPathEdit->setPlaceholderText("~/.ssh/id_rsa");
     m_privateKeyPathEdit->setEnabled(false);
+    connect(m_privateKeyPathEdit, &QLineEdit::editingFinished, this, &SSHConnectionWidget::SaveConfiguration);
     keyLayout->addWidget(m_privateKeyPathEdit);
     
     m_browseKeyButton = new QPushButton("Browse...", this);
     m_browseKeyButton->setEnabled(false);
+    connect(m_browseKeyButton, &QPushButton::clicked, [this]() {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Select Private Key"), 
+                                                        QDir::homePath() + "/.ssh",
+                                                        tr("Key Files (*)"));
+        if (!fileName.isEmpty()) {
+            m_privateKeyPathEdit->setText(fileName);
+            SaveConfiguration();
+        }
+    });
     keyLayout->addWidget(m_browseKeyButton);
     layout->addLayout(keyLayout);
-    
-    group->setLayout(layout);
-    
-    auto* parentLayout = qobject_cast<QVBoxLayout*>(this->layout());
-    if (parentLayout) {
-        parentLayout->addWidget(group);
-    }
-}
-
-void SSHConnectionWidget::setupLogSourceGroup()
-{
-    auto* group = new QGroupBox("Log Source", this);
-    auto* layout = new QVBoxLayout();
-    
-    auto* modeLayout = new QHBoxLayout();
-    modeLayout->addWidget(new QLabel("Mode:", this));
-    m_logSourceModeCombo = new QComboBox(this);
-    m_logSourceModeCombo->addItems({"Execute Command", "Monitor File"});
-    modeLayout->addWidget(m_logSourceModeCombo);
-    layout->addLayout(modeLayout);
-    
-    auto* commandLayout = new QHBoxLayout();
-    commandLayout->addWidget(new QLabel("Command:", this));
-    m_commandEdit = new QLineEdit(this);
-    m_commandEdit->setPlaceholderText("e.g., tail -f /var/log/syslog");
-    commandLayout->addWidget(m_commandEdit);
-    layout->addLayout(commandLayout);
-    
-    auto* fileLayout = new QHBoxLayout();
-    fileLayout->addWidget(new QLabel("Log File:", this));
-    m_logFilePathEdit = new QLineEdit(this);
-    m_logFilePathEdit->setPlaceholderText("/var/log/application.log");
-    m_logFilePathEdit->setEnabled(false);
-    fileLayout->addWidget(m_logFilePathEdit);
-    layout->addLayout(fileLayout);
     
     group->setLayout(layout);
     
@@ -159,10 +138,6 @@ void SSHConnectionWidget::setupLogSourceGroup()
 void SSHConnectionWidget::setupControlButtons()
 {
     auto* layout = new QHBoxLayout();
-    
-    m_statusLabel = new QLabel("Not connected", this);
-    layout->addWidget(m_statusLabel);
-    layout->addStretch();
     
     m_testButton = new QPushButton("Test Connection", this);
     connect(m_testButton, &QPushButton::clicked, this, &SSHConnectionWidget::onTestConnectionClicked);
@@ -183,30 +158,32 @@ void SSHConnectionWidget::setupControlButtons()
     }
 }
 
-void SSHConnectionWidget::setupLogViewGroup()
-{
-    auto* group = new QGroupBox("Live Log Stream", this);
-    auto* layout = new QVBoxLayout();
-    
-    m_logView = new QTextEdit(this);
-    m_logView->setReadOnly(true);
-    m_logView->setMinimumHeight(300);
-    layout->addWidget(m_logView);
-    
-    group->setLayout(layout);
-    
-    auto* parentLayout = qobject_cast<QVBoxLayout*>(this->layout());
-    if (parentLayout) {
-        parentLayout->addWidget(group);
-    }
-}
-
 void SSHConnectionWidget::onAuthMethodChanged(int index)
 {
     bool isPublicKey = (index == 1);
     m_privateKeyPathEdit->setEnabled(isPublicKey);
     m_browseKeyButton->setEnabled(isPublicKey);
     m_passwordEdit->setEnabled(!isPublicKey);
+}
+
+SSHConnectionConfig SSHConnectionWidget::GetConnectionConfig() const
+{
+    SSHConnectionConfig config;
+    config.hostname = m_hostnameEdit->text().toStdString();
+    config.port = m_portSpinBox->value();
+    config.username = m_usernameEdit->text().toStdString();
+    config.timeoutSeconds = 30;
+    config.strictHostKeyChecking = false;
+    
+    if (m_authMethodCombo->currentIndex() == 0) {
+        config.authMethod = SSHAuthMethod::Password;
+        config.password = m_passwordEdit->text().toStdString();
+    } else {
+        config.authMethod = SSHAuthMethod::PublicKey;
+        config.privateKeyPath = m_privateKeyPathEdit->text().toStdString();
+    }
+    
+    return config;
 }
 
 void SSHConnectionWidget::onConnectClicked()
@@ -217,22 +194,39 @@ void SSHConnectionWidget::onConnectClicked()
         return;
     }
     
-    updateConnectionStatus("Connecting...", false);
-    appendLog(QString("Attempting to connect to %1:%2...")
-        .arg(hostname).arg(m_portSpinBox->value()));
+    QString username = m_usernameEdit->text();
+    if (username.isEmpty()) {
+        QMessageBox::warning(this, "Connection Error", "Please enter a username");
+        return;
+    }
     
-    // TODO: Implement actual SSH connection
-    appendLog("SSH connection not yet implemented");
-    updateConnectionStatus("Not implemented", false);
+    // Validate authentication
+    if (m_authMethodCombo->currentIndex() == 0) {
+        if (m_passwordEdit->text().isEmpty()) {
+            QMessageBox::warning(this, "Connection Error", "Please enter a password");
+            return;
+        }
+    } else {
+        if (m_privateKeyPathEdit->text().isEmpty()) {
+            QMessageBox::warning(this, "Connection Error", "Please select a private key file");
+            return;
+        }
+    }
+    
+    // Get configuration and emit signal
+    SSHConnectionConfig config = GetConnectionConfig();
+    emit connectionRequested(config);
+    
+    m_connectButton->setEnabled(false);
+    m_disconnectButton->setEnabled(true);
 }
 
 void SSHConnectionWidget::onDisconnectClicked()
 {
-    stopLogMonitoring();
-    m_logSource.reset();
-    m_isConnected = false;
-    updateConnectionStatus("Disconnected", false);
-    appendLog("Disconnected from server");
+    emit disconnectionRequested();
+    
+    m_connectButton->setEnabled(true);
+    m_disconnectButton->setEnabled(false);
 }
 
 void SSHConnectionWidget::onTestConnectionClicked()
@@ -243,37 +237,134 @@ void SSHConnectionWidget::onTestConnectionClicked()
         return;
     }
     
-    appendLog("Testing connection...");
-    appendLog("Connection test not yet implemented");
-    QMessageBox::information(this, "Test Result", "Connection test not yet implemented");
+    QString username = m_usernameEdit->text();
+    if (username.isEmpty()) {
+        QMessageBox::warning(this, "Test Error", "Please enter a username");
+        return;
+    }
+    
+    // Validate authentication
+    if (m_authMethodCombo->currentIndex() == 0) {
+        if (m_passwordEdit->text().isEmpty()) {
+            QMessageBox::warning(this, "Test Error", "Please enter a password");
+            return;
+        }
+    } else {
+        if (m_privateKeyPathEdit->text().isEmpty()) {
+            QMessageBox::warning(this, "Test Error", "Please select a private key file");
+            return;
+        }
+    }
+    
+    // Get configuration and test
+    SSHConnectionConfig config = GetConnectionConfig();
+    config.timeoutSeconds = 10;  // Shorter timeout for test
+    
+    try {
+        SSHConnection testConnection(config);
+        
+        if (testConnection.Connect()) {
+            QMessageBox::information(this, "Test Result", 
+                "Connection test successful!\n\nSSH connection to " + hostname + " is working.");
+            testConnection.Disconnect();
+        } else {
+            QString error = QString::fromStdString(testConnection.GetLastError());
+            QMessageBox::warning(this, "Test Result", 
+                "Connection test failed:\n\n" + error);
+        }
+    }
+    catch (const std::exception& e) {
+        QMessageBox::warning(this, "Test Result", 
+            QString("Connection test error:\n\n%1").arg(e.what()));
+    }
 }
 
-void SSHConnectionWidget::updateConnectionStatus(const QString& status, bool isConnected)
+void SSHConnectionWidget::LoadConfiguration()
 {
-    m_statusLabel->setText(status);
-    m_connectButton->setEnabled(!isConnected);
-    m_disconnectButton->setEnabled(isConnected);
-    m_testButton->setEnabled(!isConnected);
+    auto& pluginManager = plugin::PluginManager::GetInstance();
+    std::filesystem::path configPath = pluginManager.GetPluginConfigPath("ssh_parser");
+    
+    if (!std::filesystem::exists(configPath))
+    {
+        util::Logger::Debug("[SSHConnectionWidget] No plugin config file found, using defaults");
+        return;
+    }
+
+    try
+    {
+        std::ifstream file(configPath);
+        if (!file.is_open())
+        {
+            util::Logger::Warn("[SSHConnectionWidget] Failed to open plugin config file");
+            return;
+        }
+
+        nlohmann::json config;
+        file >> config;
+        
+        // Load connection settings
+        if (config.contains("hostname"))
+            m_hostnameEdit->setText(QString::fromStdString(config["hostname"]));
+        if (config.contains("port"))
+            m_portSpinBox->setValue(config["port"]);
+        if (config.contains("username"))
+            m_usernameEdit->setText(QString::fromStdString(config["username"]));
+        
+        // Load authentication settings
+        if (config.contains("authMethod"))
+        {
+            QString authMethod = QString::fromStdString(config["authMethod"]);
+            int index = m_authMethodCombo->findText(authMethod);
+            if (index >= 0)
+                m_authMethodCombo->setCurrentIndex(index);
+        }
+        if (config.contains("privateKeyPath"))
+            m_privateKeyPathEdit->setText(QString::fromStdString(config["privateKeyPath"]));
+        
+        util::Logger::Info("[SSHConnectionWidget] Configuration loaded");
+        emit configurationChanged();
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("[SSHConnectionWidget] Failed to load plugin config: {}", ex.what());
+    }
 }
 
-void SSHConnectionWidget::appendLog(const QString& message)
+void SSHConnectionWidget::SaveConfiguration()
 {
-    m_logView->append(QString("[%1] %2")
-        .arg(QTime::currentTime().toString("HH:mm:ss"))
-        .arg(message));
-}
-
-void SSHConnectionWidget::startLogMonitoring()
-{
-    appendLog("Starting log monitoring...");
-    appendLog("Log monitoring not yet implemented");
-}
-
-void SSHConnectionWidget::stopLogMonitoring()
-{
-    if (m_logSource) {
-        m_logSource->Stop();
-        appendLog("Log monitoring stopped");
+    auto& pluginManager = plugin::PluginManager::GetInstance();
+    std::filesystem::path configPath = pluginManager.GetPluginConfigPath("ssh_parser");
+    
+    try
+    {
+        // Ensure parent directory exists
+        std::filesystem::create_directories(configPath.parent_path());
+        
+        nlohmann::json config;
+        
+        // Save connection settings
+        config["hostname"] = m_hostnameEdit->text().toStdString();
+        config["port"] = m_portSpinBox->value();
+        config["username"] = m_usernameEdit->text().toStdString();
+        
+        // Save authentication settings
+        config["authMethod"] = m_authMethodCombo->currentText().toStdString();
+        config["privateKeyPath"] = m_privateKeyPathEdit->text().toStdString();
+        // Note: Password is not saved for security reasons
+        
+        std::ofstream file(configPath);
+        if (!file.is_open())
+        {
+            util::Logger::Error("[SSHConnectionWidget] Failed to open config file for writing");
+            return;
+        }
+        
+        file << config.dump(4);
+        util::Logger::Info("[SSHConnectionWidget] Configuration saved");
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("[SSHConnectionWidget] Failed to save plugin config: {}", ex.what());
     }
 }
 

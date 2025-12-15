@@ -48,6 +48,7 @@ public:
     bool SupportsExtension(const std::string& extension) const override;
     std::vector<std::string> GetSupportedExtensions() const override;
     QWidget* CreateTab(QWidget* parent) override;
+    QWidget* GetConfigurationUI() override;
 
     /**
      * @brief Create SSH connection

@@ -134,6 +134,13 @@ QWidget* AIProviderPlugin::CreateTab(QWidget* parent)
 
 QWidget* AIProviderPlugin::GetConfigurationUI()
 {
+    // Ensure service and analyzer are created
+    if (!m_aiService) {
+        // Create a default service if not already created
+        nlohmann::json emptySettings;
+        CreateService(emptySettings);
+    }
+    
     ensureAnalyzer();
     if (!m_analyzer)
         return nullptr;

@@ -120,6 +120,8 @@ class MainWindow : public QMainWindow,
     void removePluginTab(const std::string& pluginId);
     void createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin);
     void removePluginFilterTab(const std::string& pluginId);
+    void createPluginConfigTab(const std::string& pluginId, plugin::IPlugin* plugin);
+    void removePluginConfigTab(const std::string& pluginId);
     void RefreshAIProvider();
     void UseBuiltInAIProvider();
     void UseAIPluginProvider(const std::string& pluginId, plugin::IAIPlugin* aiPlugin);
@@ -148,13 +150,13 @@ class MainWindow : public QMainWindow,
     QDockWidget* m_filtersDock {nullptr};
     QDockWidget* m_detailsDock {nullptr};
     QDockWidget* m_bottomDock {nullptr};
-    QDockWidget* m_aiConfigDock {nullptr};
+    QDockWidget* m_pluginConfigDock {nullptr};  // Generic plugin configuration dock
+    QTabWidget* m_pluginConfigTabs {nullptr};   // Tabs for multiple plugin configs
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
     QWidget* m_aiTabWidget {nullptr};
-    QWidget* m_aiConfigWidget {nullptr};
     int m_aiTabIndex {-1};
     db::EventsContainer* m_events {nullptr};
     
@@ -164,8 +166,9 @@ class MainWindow : public QMainWindow,
     std::string m_activeAiPluginId;
     
     // Plugin management
-    std::map<std::string, int> m_pluginTabIndices;  // Maps plugin ID to content tab index
+    std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index
     std::map<std::string, int> m_pluginFilterTabIndices;  // Maps plugin ID to filter tab index
+    std::map<std::string, int> m_pluginConfigTabIndices;  // Maps plugin ID to config tab index
 };
 
 } // namespace ui::qt
