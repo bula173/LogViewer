@@ -178,6 +178,20 @@ public:
      */
     util::Result<bool, error::Error> ValidateDependencies() const;
 
+    /**
+     * @brief Gets the configuration directory path for a specific plugin
+     * @param pluginId Plugin identifier
+     * @return Path to plugin's config directory (e.g., ~/Library/Application Support/LogViewerQt/plugins/<plugin_id>/)
+     */
+    std::filesystem::path GetPluginConfigDirectory(const std::string& pluginId) const;
+
+    /**
+     * @brief Gets the configuration file path for a specific plugin
+     * @param pluginId Plugin identifier
+     * @return Path to plugin's config file (e.g., ~/Library/Application Support/LogViewerQt/plugins/<plugin_id>/config.json)
+     */
+    std::filesystem::path GetPluginConfigPath(const std::string& pluginId) const;
+
 private:
     PluginManager() = default;
     ~PluginManager();

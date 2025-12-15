@@ -1,4 +1,4 @@
-#include "ai/AnthropicClient.hpp"
+#include "plugins/ai/AnthropicClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 #include <curl/curl.h>
@@ -31,6 +31,13 @@ AnthropicClient::AnthropicClient(const std::string& apiKey,
 std::string AnthropicClient::SendPrompt(const std::string& prompt,
     std::function<void(const std::string&)> callback)
 {
+    // Validate API key before sending request
+    if (m_apiKey.empty())
+    {
+        util::Logger::Error("Anthropic API key not configured");
+        return "Error: API key required for Anthropic. Please configure it in the AI Configuration panel.";
+    }
+    
     util::Logger::Info("Sending prompt to Anthropic API");
 
     // Build Anthropic API request (different format than OpenAI)

@@ -279,6 +279,7 @@ void Config::SaveConfig()
         j["logging"]["level"] = logLevel;
         j["filters"]["typeFilterField"] = typeFilterField;
         j["aiConfig"]["provider"] = aiProvider;
+        j["aiConfig"]["pluginId"] = aiPluginId;
         
         // Save provider-specific API keys (encrypted)
         if (!openaiApiKey.empty())
@@ -480,6 +481,12 @@ void Config::GetAIConfig(const json& j)
             aiProvider = aiConfig["provider"].get<std::string>();
             util::Logger::Info("AI provider set to: {}", aiProvider);
         }
+        if (aiConfig.contains("pluginId") && aiConfig["pluginId"].is_string())
+        {
+            aiPluginId = aiConfig["pluginId"].get<std::string>();
+            util::Logger::Info("AI plugin provider set to: {}", aiPluginId);
+        }
+        // Note: Plugin-specific settings are now stored in each plugin's own config file
         // Load provider-specific API keys (backward compatibility with old "apiKey" field)
         if (aiConfig.contains("apiKey"))
         {

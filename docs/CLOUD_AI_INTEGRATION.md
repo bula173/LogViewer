@@ -172,4 +172,4 @@ To fully implement cloud provider support, update `OllamaClient.cpp`:
 4. Add authentication headers based on provider
 5. Handle different error formats
 
-See `src/application/ai/LLMClient.hpp` for a proposed interface.
+See `src/plugins/ai/LLMClient.hpp` for a proposed interface.

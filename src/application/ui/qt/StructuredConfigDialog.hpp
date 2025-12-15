@@ -39,11 +39,6 @@ private slots:
     void OnSaveConfigAsClicked();
     void OnLogLevelChanged(int index);
     void OnBrowseDictionaryFileClicked();
-    
-    // AI tab
-    void OnAIProviderChanged(int index);
-    void OnOllamaBaseUrlChanged();
-    void OnOllamaDefaultModelChanged();
 
     // Columns tab
     void OnColumnSelectionChanged();
@@ -89,7 +84,6 @@ private:
     void InitColumnsTab();
     void InitDictionaryTab();
     void InitColorsTab();
-    void InitAITab();
     void InitPluginsTab();
 
     void LoadConfigToUi();
@@ -125,17 +119,6 @@ private:
     QLabel* m_configPathLabel {nullptr};
     QLineEdit* m_dictionaryFileEdit {nullptr};
     QPushButton* m_browseDictionaryButton {nullptr};
-    
-    // AI tab widgets
-    QWidget* m_aiTab {nullptr};
-    QComboBox* m_aiProviderCombo {nullptr};
-    QLineEdit* m_openaiApiKeyEdit {nullptr};
-    QLineEdit* m_anthropicApiKeyEdit {nullptr};
-    QLineEdit* m_googleApiKeyEdit {nullptr};
-    QLineEdit* m_xaiApiKeyEdit {nullptr};
-    QLineEdit* m_ollamaBaseUrlEdit {nullptr};
-    QLineEdit* m_ollamaDefaultModelEdit {nullptr};
-    QSpinBox* m_aiTimeoutSpin {nullptr};
 
     // Columns tab widgets
     QWidget* m_columnsTab {nullptr};

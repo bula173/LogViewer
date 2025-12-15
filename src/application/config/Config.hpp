@@ -152,6 +152,7 @@ class Config
     
     // AI configuration
     std::string aiProvider {"ollama"};  // "ollama", "lmstudio", "openai", "anthropic", "google", "xai"
+    std::string aiPluginId;              // Optional AI provider plugin id (each plugin has its own config file)
     
     // API keys for cloud providers (encrypted in config file)
     std::string openaiApiKey;

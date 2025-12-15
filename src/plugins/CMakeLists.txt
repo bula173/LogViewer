@@ -9,6 +9,9 @@ if (USE_QT)
     # Event metrics analyzer plugin - frequency analysis
     add_subdirectory(event_metrics)
 
+    # AI provider plugin (built-in)
+    add_subdirectory(ai)
+
     # Log anomaly metrics plugin - Eigen/Boost-based analyzer
     add_subdirectory(log_anomaly_metrics)
 
@@ -25,6 +28,7 @@ if (USE_QT)
     add_dependencies(plugins_all 
         field_converter_example
         event_metrics
+        ai_provider
     )
     
     # Add optional plugins only if successfully created

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ai/IAIService.hpp"
-#include "ai/AIServiceFactory.hpp"
+#include "plugins/ai/IAIService.hpp"
+#include "plugins/ai/AIServiceFactory.hpp"
 #include "db/EventsContainer.hpp"
 #include <string>
 #include <memory>

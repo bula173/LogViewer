@@ -1,10 +1,12 @@
 #pragma once
 
-#include "ai/LogAnalyzer.hpp"
-#include "ai/IAIService.hpp"
-#include "ai/AIServiceFactory.hpp"
+#include "plugins/ai/LogAnalyzer.hpp"
+#include "plugins/ai/IAIService.hpp"
+#include "plugins/ai/AIServiceFactory.hpp"
 #include <QWidget>
+#include <QLineEdit>
 #include <memory>
+#include <nlohmann/json.hpp>
 
 class QComboBox;
 class QSpinBox;
@@ -32,6 +34,8 @@ public:
     std::shared_ptr<ai::LogAnalyzer> GetAnalyzer() const { return m_analyzer; }
     
     void RefreshAIClient();
+    void SavePluginConfig();
+    nlohmann::json LoadPluginConfig();
 
 signals:
     void ConfigurationChanged();
@@ -55,6 +59,11 @@ private:
     QComboBox* m_analysisTypeCombo{nullptr};
     QSpinBox* m_maxEventsSpin{nullptr};
     QLabel* m_statusLabel{nullptr};
+    QLineEdit* m_baseUrlEdit{nullptr};
+    QLineEdit* m_openaiKeyEdit{nullptr};
+    QLineEdit* m_anthropicKeyEdit{nullptr};
+    QLineEdit* m_googleKeyEdit{nullptr};
+    QLineEdit* m_xaiKeyEdit{nullptr};
 };
 
 } // namespace ui::qt

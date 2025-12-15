@@ -652,7 +652,7 @@ The application uses a factory pattern for AI providers. To add a new provider:
 #### 1. Implement IAIService Interface
 
 ```cpp
-// src/application/ai/MyNewAIClient.hpp
+// src/plugins/ai/MyNewAIClient.hpp
 #pragma once
 
 #include "IAIService.hpp"
@@ -679,7 +679,7 @@ public:
 #### 2. Implement Chat Method with CURL
 
 ```cpp
-// src/application/ai/MyNewAIClient.cpp
+// src/plugins/ai/MyNewAIClient.cpp
 #include "MyNewAIClient.hpp"
 #include "config/Config.hpp"
 #include <curl/curl.h>
@@ -758,7 +758,7 @@ std::vector<std::string> MyNewAIClient::ListModels() {
 #### 3. Register in AIServiceFactory
 
 ```cpp
-// src/application/ai/AIServiceFactory.cpp
+// src/plugins/ai/AIServiceFactory.cpp
 #include "MyNewAIClient.hpp"
 
 std::unique_ptr<IAIService> AIServiceFactory::CreateService(

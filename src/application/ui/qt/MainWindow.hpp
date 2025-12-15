@@ -3,7 +3,7 @@
 #include "ui/IMainWindowView.hpp"
 #include "ui/IUiPanels.hpp"
 #include "config/ConfigObserver.hpp"
-#include "ai/AIServiceFactory.hpp"
+#include <memory>
 #include "plugins/IPluginObserver.hpp"
 
 #include <QMainWindow>
@@ -39,6 +39,7 @@ class LogAnalyzer;
 namespace plugin
 {
 class IPlugin;
+class IAIPlugin;
 }
 
 namespace ui
@@ -54,8 +55,6 @@ class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
-class AIAnalysisPanel;
-class AIConfigPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -121,6 +120,13 @@ class MainWindow : public QMainWindow,
     void removePluginTab(const std::string& pluginId);
     void createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin);
     void removePluginFilterTab(const std::string& pluginId);
+    void RefreshAIProvider();
+    void UseBuiltInAIProvider();
+    void UseAIPluginProvider(const std::string& pluginId, plugin::IAIPlugin* aiPlugin);
+    void RemoveAIPluginPanel();
+    void RemoveAITab();
+    void RemoveAIConfigWidget();
+    void RemoveAIChatWidget();
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
@@ -133,8 +139,10 @@ class MainWindow : public QMainWindow,
     QSplitter* m_rightSplitter {nullptr};
     QTabWidget* m_filterTabs {nullptr};
     QTabWidget* m_contentTabs {nullptr};
+    QTabWidget* m_bottomTabs {nullptr};
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
+    QWidget* m_aiChatWidget {nullptr};
 
     // Dock widgets for collapsible panels
     QDockWidget* m_filtersDock {nullptr};
@@ -145,13 +153,15 @@ class MainWindow : public QMainWindow,
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
-    AIAnalysisPanel* m_aiPanel {nullptr};
-    AIConfigPanel* m_aiConfigPanel {nullptr};
+    QWidget* m_aiTabWidget {nullptr};
+    QWidget* m_aiConfigWidget {nullptr};
+    int m_aiTabIndex {-1};
     db::EventsContainer* m_events {nullptr};
     
     // AI service shared between panels
-    std::shared_ptr<ai::AIServiceWrapper> m_aiService;
-    std::shared_ptr<ai::LogAnalyzer> m_aiAnalyzer;
+    std::shared_ptr<ai::IAIService> m_aiService;
+    QWidget* m_aiPluginPanel {nullptr};
+    std::string m_activeAiPluginId;
     
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;  // Maps plugin ID to content tab index

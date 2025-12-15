@@ -1,8 +1,8 @@
-#include "ai/AIServiceFactory.hpp"
-#include "ai/OllamaClient.hpp"
-#include "ai/OpenAIClient.hpp"
-#include "ai/AnthropicClient.hpp"
-#include "ai/GeminiClient.hpp"
+#include "plugins/ai/AIServiceFactory.hpp"
+#include "plugins/ai/OllamaClient.hpp"
+#include "plugins/ai/OpenAIClient.hpp"
+#include "plugins/ai/AnthropicClient.hpp"
+#include "plugins/ai/GeminiClient.hpp"
 #include "util/Logger.hpp"
 
 namespace ai
@@ -24,10 +24,10 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
     else if (provider == "openai" || provider == "xai")
     {
         // OpenAI and xAI use the same API format
+        // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Error("API key required for provider: {}", provider);
-            throw std::runtime_error("API key required for " + provider);
+            util::Logger::Warn("API key not configured for provider: {}", provider);
         }
         // OpenAI has a fixed base URL
         const std::string openaiBaseUrl = "https://api.openai.com/v1";
@@ -35,10 +35,10 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
     }
     else if (provider == "anthropic")
     {
+        // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Error("API key required for Anthropic");
-            throw std::runtime_error("API key required for Anthropic/Claude");
+            util::Logger::Warn("API key not configured for Anthropic");
         }
         // Anthropic has a fixed base URL
         const std::string anthropicBaseUrl = "https://api.anthropic.com/v1";
@@ -46,10 +46,10 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
     }
     else if (provider == "google")
     {
+        // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Error("API key required for Google");
-            throw std::runtime_error("API key required for Google/Gemini");
+            util::Logger::Warn("API key not configured for Google");
         }
         // Gemini has a fixed base URL
         const std::string geminiBaseUrl = "https://generativelanguage.googleapis.com";

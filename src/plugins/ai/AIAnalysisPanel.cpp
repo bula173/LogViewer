@@ -1,8 +1,8 @@
-#include "ui/qt/AIAnalysisPanel.hpp"
-#include "ui/qt/AIConfigPanel.hpp"
+#include "plugins/ai/AIAnalysisPanel.hpp"
+#include "plugins/ai/AIConfigPanel.hpp"
 #include "ui/qt/OllamaSetupDialog.hpp"
 #include "ui/qt/EventsTableView.hpp"
-#include "ai/OllamaClient.hpp"
+#include "plugins/ai/OllamaClient.hpp"
 #include "config/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -147,12 +147,22 @@ void AIAnalysisPanel::OnAnalyzeClicked()
 
     m_analyzeButton->setEnabled(false);
     
-    // Get current provider and model info
-    const auto& cfg = config::GetConfig();
-    QString providerInfo = QString("Provider: %1").arg(QString::fromStdString(cfg.aiProvider));
-    if (!cfg.ollamaDefaultModel.empty())
+    // Get current provider and model info from AIService
+    QString providerInfo;
+    if (m_aiService && m_aiService->service)
     {
-        providerInfo += QString(" | Model: %1").arg(QString::fromStdString(cfg.ollamaDefaultModel));
+        const std::string provider = m_aiService->service->GetProviderName();
+        const std::string model = m_aiService->service->GetModelName();
+        
+        providerInfo = QString("Provider: %1").arg(QString::fromStdString(provider));
+        if (!model.empty())
+        {
+            providerInfo += QString(" | Model: %1").arg(QString::fromStdString(model));
+        }
+    }
+    else
+    {
+        providerInfo = tr("AI Service not initialized");
     }
     
     m_resultsText->setPlainText(tr("Processing, please wait...\n\n%1").arg(providerInfo));
