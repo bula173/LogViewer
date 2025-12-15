@@ -143,7 +143,15 @@ set(PLUGIN_ENTRY "${PLUGIN_NAME}${PLUGIN_EXTENSION}")
 
 if(LIBSSH_LIBRARIES)
     get_filename_component(LIBSSH_DIR ${LIBSSH_LIBRARIES} DIRECTORY)
-    get_filename_component(LIBSSH_BASENAME ${LIBSSH_LIBRARIES} NAME)
+    
+    # On Windows, LIBSSH_LIBRARIES is the import lib (.dll.a), but we need the actual DLL
+    if(WIN32)
+        # Will be set later when we find the DLL
+        set(LIBSSH_BASENAME "libssh.dll")
+    else()
+        get_filename_component(LIBSSH_BASENAME ${LIBSSH_LIBRARIES} NAME)
+    endif()
+    
     set(PLUGIN_DEPENDENCIES_JSON "[\"${LIBSSH_BASENAME}\"]")
 endif()
 
@@ -168,11 +176,21 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
 
     if(LIBSSH_LIBRARIES)
         if(WIN32)
+            # Clear the cache variable to force a fresh search
+            unset(LIBSSH_DLL CACHE)
+            
+            # Search for libssh.dll in multiple locations
             find_file(LIBSSH_DLL
                 NAMES libssh.dll ssh.dll
-                PATHS ${LIBSSH_DIR} ${LIBSSH_DIR}/../bin
+                PATHS 
+                    ${LIBSSH_DIR}
+                    ${LIBSSH_DIR}/../bin
+                    ${LIBSSH_DIR}/../../bin
+                    /mingw64/bin
+                    $ENV{MINGW_PREFIX}/bin
                 NO_DEFAULT_PATH
             )
+            
             if(LIBSSH_DLL)
                 add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -180,8 +198,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
                         ${PLUGIN_OUTPUT_DIR}/
                     COMMENT "Copying libssh.dll to ${PLUGIN_OUTPUT_DIR}"
                 )
+                message(STATUS "Found libssh DLL at: ${LIBSSH_DLL}")
             else()
-                message(WARNING "libssh.dll not found for packaging")
+                message(WARNING "libssh.dll not found for packaging. Searched in: ${LIBSSH_DIR}, ${LIBSSH_DIR}/../bin")
             endif()
         else()
             add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
