@@ -27,7 +27,11 @@ namespace ssh
 {
 
 /**
- * @brief Widget for managing SSH connections and viewing live logs
+ * @brief Widget for SSH connection configuration
+ * 
+ * This widget provides connection and authentication configuration
+ * for SSH connections. It's designed to be placed in the plugin
+ * configuration dock.
  */
 class SSHConnectionWidget : public QWidget
 {
@@ -37,12 +41,38 @@ class SSHConnectionWidget : public QWidget
 public:
     explicit SSHConnectionWidget(QWidget* parent = nullptr);
     ~SSHConnectionWidget() override;
-
+    
     /**
-     * @brief Sets the data parser for streaming events
-     * @param observer Observer to receive parsed events
+     * @brief Load configuration from plugin config file
      */
-    void SetParserObserver(parser::IDataParserObserver* observer);
+    void LoadConfiguration();
+    
+    /**
+     * @brief Save configuration to plugin config file
+     */
+    void SaveConfiguration();
+    
+    /**
+     * @brief Get current connection configuration
+     */
+    SSHConnectionConfig GetConnectionConfig() const;
+
+signals:
+    /**
+     * @brief Emitted when connection is requested
+     * @param config Connection configuration to use
+     */
+    void connectionRequested(const SSHConnectionConfig& config);
+    
+    /**
+     * @brief Emitted when disconnection is requested
+     */
+    void disconnectionRequested();
+    
+    /**
+     * @brief Emitted when configuration changes
+     */
+    void configurationChanged();
 
 private slots:
     void onConnectClicked();
@@ -54,14 +84,7 @@ private:
     void setupUI();
     void setupConnectionGroup();
     void setupAuthenticationGroup();
-    void setupLogSourceGroup();
-    void setupLogViewGroup();
     void setupControlButtons();
-    
-    void updateConnectionStatus(const QString& status, bool isConnected);
-    void appendLog(const QString& message);
-    void startLogMonitoring();
-    void stopLogMonitoring();
 
     // UI Components - Connection
     QLineEdit* m_hostnameEdit;
@@ -74,22 +97,10 @@ private:
     QLineEdit* m_privateKeyPathEdit;
     QPushButton* m_browseKeyButton;
     
-    // UI Components - Log Source
-    QComboBox* m_logSourceModeCombo;
-    QLineEdit* m_commandEdit;
-    QLineEdit* m_logFilePathEdit;
-    
-    // UI Components - Status and Controls
-    QLabel* m_statusLabel;
+    // UI Components - Controls
     QPushButton* m_connectButton;
     QPushButton* m_disconnectButton;
     QPushButton* m_testButton;
-    QTextEdit* m_logView;
-    
-    // SSH Components
-    std::unique_ptr<SSHLogSource> m_logSource;
-    parser::IDataParserObserver* m_parserObserver;
-    bool m_isConnected;
 };
 
 } // namespace ssh

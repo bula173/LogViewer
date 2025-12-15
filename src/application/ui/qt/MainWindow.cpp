@@ -28,6 +28,7 @@
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QScrollArea>
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -89,6 +90,17 @@ MainWindow::MainWindow(mvc::IController& controller,
         const QByteArray state = settings.value("windowState").toByteArray();
         if (!state.isEmpty()) {
             restoreState(state);
+        }
+        
+        // Force plugin config dock to be properly positioned after state restoration
+        if (m_pluginConfigDock) {
+            m_pluginConfigDock->setFloating(false);
+            // Ensure it's in the left dock area
+            if (!dockWidgetArea(m_pluginConfigDock)) {
+                addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
+            }
+            // Tab with filters
+            tabifyDockWidget(m_filtersDock, m_pluginConfigDock);
         }
 
     } catch (const std::exception& ex) {
@@ -203,27 +215,31 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
-    // AI Configuration dock - hidden by default until plugin provides widget
-    m_aiConfigDock = new QDockWidget("AI Configuration", this);
-    if (!m_aiConfigDock) {
-        throw std::runtime_error("Failed to create AI config dock");
+    // Generic Plugin Configuration dock with tabs for multiple plugins
+    m_pluginConfigDock = new QDockWidget("Plugin Configuration", this);
+    if (!m_pluginConfigDock) {
+        throw std::runtime_error("Failed to create plugin config dock");
     }
-    m_aiConfigDock->setObjectName("AIConfigurationDockWidget");
-    m_aiConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_aiConfigDock->setFeatures(QDockWidget::DockWidgetMovable |
-                                QDockWidget::DockWidgetFloatable |
-                                QDockWidget::DockWidgetClosable);
+    m_pluginConfigDock->setObjectName("PluginConfigurationDockWidget");
+    m_pluginConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_pluginConfigDock->setFeatures(QDockWidget::DockWidgetMovable |
+                                    QDockWidget::DockWidgetFloatable |
+                                    QDockWidget::DockWidgetClosable);
     
-    // Create empty placeholder widget to avoid null widget issues
-    auto* placeholderWidget = new QWidget(m_aiConfigDock);
-    placeholderWidget->setObjectName("AIConfigPlaceholder");
-    auto* placeholderLayout = new QVBoxLayout(placeholderWidget);
-    placeholderLayout->addWidget(new QLabel("No AI plugin active", placeholderWidget));
-    placeholderWidget->setLayout(placeholderLayout);
-    m_aiConfigDock->setWidget(placeholderWidget);
+    // Create tab widget to hold multiple plugin configurations
+    m_pluginConfigTabs = new QTabWidget(m_pluginConfigDock);
+    m_pluginConfigTabs->setObjectName("PluginConfigTabs");
+    m_pluginConfigTabs->setTabsClosable(false);
     
-    addDockWidget(Qt::LeftDockWidgetArea, m_aiConfigDock);
-    m_aiConfigDock->hide(); // Hidden until AI plugin provides configuration UI
+    // Set size policy to allow the tab widget to shrink/expand with available space
+    m_pluginConfigTabs->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    
+    m_pluginConfigDock->setWidget(m_pluginConfigTabs);
+    
+    addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
+    m_pluginConfigDock->setFloating(false);  // Ensure it's docked, not floating
+    tabifyDockWidget(m_filtersDock, m_pluginConfigDock);  // Tab with filters in left panel
+    m_pluginConfigDock->hide(); // Hidden until plugins provide configuration UI
 
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
@@ -408,7 +424,7 @@ void MainWindow::SetupMenus()
     // View menu for dock widgets
     auto* viewMenu = bar->addMenu(tr("&View"));
     viewMenu->addAction(m_filtersDock->toggleViewAction());
-    viewMenu->addAction(m_aiConfigDock->toggleViewAction());
+    viewMenu->addAction(m_pluginConfigDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
     
@@ -422,10 +438,13 @@ void MainWindow::SetupMenus()
             addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
             m_filtersDock->show();
         }
-        if (m_aiConfigDock) {
-            m_aiConfigDock->setFloating(false);
-            addDockWidget(Qt::LeftDockWidgetArea, m_aiConfigDock);
-            m_aiConfigDock->show();
+        if (m_pluginConfigDock) {
+            m_pluginConfigDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
+            // Only show if there are config tabs
+            if (m_pluginConfigTabs && m_pluginConfigTabs->count() > 0) {
+                m_pluginConfigDock->show();
+            }
         }
         if (m_detailsDock) {
             m_detailsDock->setFloating(false);
@@ -924,17 +943,9 @@ void MainWindow::RemoveAITab()
 
 void MainWindow::RemoveAIConfigWidget()
 {
-    // Clear the member reference
-    if (m_aiConfigWidget)
-    {
-        m_aiConfigWidget = nullptr;
-    }
-    
-    // Just hide the dock - the dock widget will clean up the old widget itself when needed
-    if (m_aiConfigDock)
-    {
-        m_aiConfigDock->hide();
-    }
+    // Config tab removal is handled by generic removePluginConfigTab
+    // This function is kept for compatibility but does nothing now
+    util::Logger::Debug("[MainWindow] RemoveAIConfigWidget - config handled by generic plugin system");
 }
 
 void MainWindow::RemoveAIChatWidget()
@@ -1001,16 +1012,10 @@ void MainWindow::UseAIPluginProvider(const std::string& pluginId, plugin::IAIPlu
     {
         util::Logger::Debug("[MainWindow] Creating UI widgets for AI plugin: {}", pluginId);
         
-        // Create config dock widget first (plugin may need it for other widgets)
-        m_aiConfigWidget = plugin->GetConfigurationUI();
-        util::Logger::Debug("[MainWindow] Got config widget: {}", m_aiConfigWidget ? "yes" : "no");
-        if (m_aiConfigDock && m_aiConfigWidget)
-        {
-            // Replace the dock's widget with the plugin's config widget
-            // setWidget() will automatically delete the old widget
-            m_aiConfigDock->setWidget(m_aiConfigWidget);
-            m_aiConfigDock->show();
-            util::Logger::Debug("[MainWindow] Config widget added to dock");
+        // Ensure config tab is created for AI plugin
+        // Check if it already exists, if not create it
+        if (m_pluginConfigTabIndices.find(pluginId) == m_pluginConfigTabIndices.end()) {
+            createPluginConfigTab(pluginId, plugin);
         }
         
         // Create analysis tab
@@ -1114,6 +1119,7 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
             util::Logger::Info("[MainWindow] Plugin enabled: {}", pluginId);
             createPluginTab(pluginId, plugin);
             createPluginFilterTab(pluginId, plugin);
+            createPluginConfigTab(pluginId, plugin);
             if (plugin && plugin->GetMetadata().type == plugin::PluginType::AIProvider) {
                 // Directly activate this AI provider since user enabled it
                 if (auto* aiInterface = plugin->GetAIPluginInterface()) {
@@ -1126,6 +1132,7 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
             util::Logger::Info("[MainWindow] Plugin disabled: {}", pluginId);
             removePluginTab(pluginId);
             removePluginFilterTab(pluginId);
+            removePluginConfigTab(pluginId);
             if (pluginId == m_activeAiPluginId) {
                 RemoveAITab();
                 RemoveAIConfigWidget();
@@ -1269,6 +1276,81 @@ void MainWindow::removePluginFilterTab(const std::string& pluginId) {
         // Update indices for tabs that came after this one
         m_pluginFilterTabIndices.erase(it);
         for (auto& [id, idx] : m_pluginFilterTabIndices) {
+            if (idx > tabIndex) {
+                idx--;
+            }
+        }
+    }
+}
+
+void MainWindow::createPluginConfigTab(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!plugin) {
+        util::Logger::Error("[MainWindow] createPluginConfigTab called with null plugin");
+        return;
+    }
+    
+    if (!m_pluginConfigTabs) {
+        util::Logger::Error("[MainWindow] createPluginConfigTab called but m_pluginConfigTabs is null");
+        return;
+    }
+    
+    util::Logger::Info("[MainWindow] Creating config tab for plugin: {}", pluginId);
+    
+    // Try to get configuration UI from the plugin
+    QWidget* configWidget = plugin->GetConfigurationUI();
+    if (!configWidget) {
+        util::Logger::Info("[MainWindow] Plugin {} does not provide a configuration UI", pluginId);
+        return;
+    }
+    
+    // Wrap the config widget in a scroll area to prevent overlap with bottom panel
+    auto* scrollArea = new QScrollArea(m_pluginConfigTabs);
+    scrollArea->setWidget(configWidget);
+    scrollArea->setWidgetResizable(true);  // Allow widget to resize with available space
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setFrameShape(QFrame::NoFrame);  // Remove frame border for cleaner look
+    
+    auto metadata = plugin->GetMetadata();
+    QString tabName = QString::fromStdString(metadata.name.empty() ? pluginId : metadata.name);
+    int tabIndex = m_pluginConfigTabs->addTab(scrollArea, tabName);
+    m_pluginConfigTabIndices[pluginId] = tabIndex;
+    
+    // Show the dock when first config tab is added
+    if (m_pluginConfigDock && m_pluginConfigTabs->count() == 1) {
+        m_pluginConfigDock->setFloating(false);  // Ensure it's not floating
+        m_pluginConfigDock->show();
+        m_pluginConfigDock->raise();  // Bring to front if tabified
+    }
+    
+    util::Logger::Info("[MainWindow] Created plugin config tab: {} at index {}", tabName.toStdString(), tabIndex);
+}
+
+void MainWindow::removePluginConfigTab(const std::string& pluginId) {
+    util::Logger::Info("[MainWindow] Removing config tab for plugin: {}", pluginId);
+    
+    auto it = m_pluginConfigTabIndices.find(pluginId);
+    if (it != m_pluginConfigTabIndices.end()) {
+        int tabIndex = it->second;
+        
+        // Remove the tab
+        if (tabIndex >= 0 && tabIndex < m_pluginConfigTabs->count()) {
+            QWidget* widget = m_pluginConfigTabs->widget(tabIndex);
+            m_pluginConfigTabs->removeTab(tabIndex);
+            if (widget) {
+                widget->deleteLater();
+            }
+            util::Logger::Info("[MainWindow] Removed plugin config tab at index {}", tabIndex);
+        }
+        
+        // Hide dock if no more config tabs
+        if (m_pluginConfigDock && m_pluginConfigTabs->count() == 0) {
+            m_pluginConfigDock->hide();
+        }
+        
+        // Update indices for tabs that came after this one
+        m_pluginConfigTabIndices.erase(it);
+        for (auto& [id, idx] : m_pluginConfigTabIndices) {
             if (idx > tabIndex) {
                 idx--;
             }

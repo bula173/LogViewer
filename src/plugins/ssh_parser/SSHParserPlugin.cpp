@@ -7,6 +7,7 @@
 
 #include "SSHParserPlugin.hpp"
 #include "SSHConnectionWidget.hpp"
+#include "SSHTerminalWidget.hpp"
 #include "util/Logger.hpp"
 #include <QWidget>
 #include <algorithm>
@@ -154,8 +155,26 @@ std::vector<std::string> SSHParserPlugin::GetSupportedExtensions() const
 
 QWidget* SSHParserPlugin::CreateTab(QWidget* parent)
 {
-    util::Logger::Info("SSHParserPlugin: Creating SSH connection tab");
-    return new ssh::SSHConnectionWidget(parent);
+    util::Logger::Info("SSHParserPlugin: Creating SSH terminal tab");
+    // Return terminal widget for the main panel
+    auto* terminalWidget = new ssh::SSHTerminalWidget(parent);
+    
+    // TODO: Wire up signals from config widget to terminal widget
+    // This would typically be done by the MainWindow or a manager class
+    
+    return terminalWidget;
+}
+
+QWidget* SSHParserPlugin::GetConfigurationUI()
+{
+    util::Logger::Info("SSHParserPlugin: Creating SSH configuration UI");
+    // Return connection configuration widget for the left panel
+    auto* configWidget = new ssh::SSHConnectionWidget();
+    
+    // TODO: Store reference to config widget to wire up signals later
+    // or emit signals through plugin manager
+    
+    return configWidget;
 }
 
 std::unique_ptr<SSHConnection> SSHParserPlugin::CreateConnection(

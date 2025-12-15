@@ -31,6 +31,7 @@ AIConfigPanel::AIConfigPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
     , m_aiService(aiService)
     , m_analyzer(analyzer)
 {
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     BuildUi();
     UpdateStatusLabel();
 }
@@ -39,6 +40,7 @@ void AIConfigPanel::BuildUi()
 {
     auto* mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(5, 5, 5, 5);
+    mainLayout->setSpacing(5);
 
     // AI Configuration group
     auto* configGroup = new QGroupBox(tr("AI Configuration"), this);

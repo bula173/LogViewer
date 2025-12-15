@@ -278,50 +278,9 @@ void Config::SaveConfig()
         }
         j["logging"]["level"] = logLevel;
         j["filters"]["typeFilterField"] = typeFilterField;
-        j["aiConfig"]["provider"] = aiProvider;
-        j["aiConfig"]["pluginId"] = aiPluginId;
         
-        // Save provider-specific API keys (encrypted)
-        if (!openaiApiKey.empty())
-        {
-            std::string keyToSave = openaiApiKey;
-            if (!util::KeyEncryption::IsEncrypted(keyToSave))
-            {
-                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
-            }
-            j["aiConfig"]["openaiApiKey"] = keyToSave;
-        }
-        if (!anthropicApiKey.empty())
-        {
-            std::string keyToSave = anthropicApiKey;
-            if (!util::KeyEncryption::IsEncrypted(keyToSave))
-            {
-                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
-            }
-            j["aiConfig"]["anthropicApiKey"] = keyToSave;
-        }
-        if (!googleApiKey.empty())
-        {
-            std::string keyToSave = googleApiKey;
-            if (!util::KeyEncryption::IsEncrypted(keyToSave))
-            {
-                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
-            }
-            j["aiConfig"]["googleApiKey"] = keyToSave;
-        }
-        if (!xaiApiKey.empty())
-        {
-            std::string keyToSave = xaiApiKey;
-            if (!util::KeyEncryption::IsEncrypted(keyToSave))
-            {
-                keyToSave = util::KeyEncryption::Encrypt(keyToSave);
-            }
-            j["aiConfig"]["xaiApiKey"] = keyToSave;
-        }
-        
-        j["aiConfig"]["baseUrl"] = ollamaBaseUrl;
-        j["aiConfig"]["defaultModel"] = ollamaDefaultModel;
-        j["aiConfig"]["timeoutSeconds"] = aiTimeoutSeconds;
+        // Note: AI configuration is now managed by the AI provider plugin
+        // and stored in ~/Library/Application Support/LogViewerQt/plugins/ai_provider/config.json
         
         // Save dictionary file path
         j["dictionaryFilePath"] = m_dictionaryFilePath;

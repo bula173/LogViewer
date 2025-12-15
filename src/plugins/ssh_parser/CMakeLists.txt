@@ -18,6 +18,7 @@ set(SSH_PARSER_SRCS
     SSHLogSource.cpp
     SSHParserPlugin.cpp
     SSHConnectionWidget.cpp
+    SSHTerminalWidget.cpp
 )
 
 set(SSH_PARSER_HEADERS
@@ -26,6 +27,7 @@ set(SSH_PARSER_HEADERS
     SSHLogSource.hpp
     SSHParserPlugin.hpp
     SSHConnectionWidget.hpp
+    SSHTerminalWidget.hpp
 )
 
 # Find libssh - required dependency (check BEFORE creating target)
