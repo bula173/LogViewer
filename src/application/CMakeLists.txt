@@ -7,7 +7,7 @@ message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 set(APP_CORE_SRCS
     config/Config.cpp
     config/FieldTranslator.cpp
-    config/BuiltinCOnversionPlugins.cpp
+    config/BuiltinConversionPlugins.cpp
     config/FieldConversionPluginRegistry.cpp
     config/StringReversePlugin.cpp
     db/EventsContainer.cpp
