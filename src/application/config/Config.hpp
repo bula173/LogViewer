@@ -31,6 +31,15 @@ using ValueColorMap = std::map<std::string, ColumnColor>; // value -> color
 using ColumnColorMap =
     std::map<std::string, ValueColorMap>; // column -> (value -> color)
 
+struct ItemHighlight
+{
+    std::string backgroundColor;
+    std::string foregroundColor;
+    bool bold {false};
+    bool italic {false};
+};
+using ItemHighlightMap = std::map<std::string, ItemHighlight>; // item key -> highlight style
+
 class Config
 {
   public:
@@ -146,6 +155,7 @@ class Config
     std::vector<ColumnConfig> columns;
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
+    ItemHighlightMap itemHighlights;  // Item details view highlighting by key name
     
     // Filter configuration
     std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")

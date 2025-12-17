@@ -225,8 +225,12 @@ if(USE_QT)
             
             set(FILE_COUNT 0)
             foreach(FILE \${ALL_FILES})
-                # Skip the executable and config.json (they're installed separately)
-                if(NOT FILE MATCHES \"\\\\.exe$\" AND NOT FILE STREQUAL \"config.json\")
+                # Skip the executable, config.json, and plugin libraries (they're installed separately)
+                # Skip .exe files, plugin DLLs, plugin .so/.dylib, and config.json
+                if(NOT FILE MATCHES \"\\\\.exe$\" 
+                   AND NOT FILE STREQUAL \"config.json\"
+                   AND NOT FILE MATCHES \"plugins/.*\\\\.(dll|so|dylib)$\"
+                   AND NOT FILE MATCHES \"lib/plugins/.*\\\\.(dll|so|dylib)$\")
                     get_filename_component(FILE_DIR \"\${FILE}\" DIRECTORY)
                     
                     # Create destination directory if needed

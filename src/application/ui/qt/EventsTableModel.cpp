@@ -338,6 +338,7 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
 
     if (values.size() == 1)
         return QString::fromStdString(values[0]);
+        
 
     // Pre-calculate size for all values plus separators
     size_t totalSize = 0;

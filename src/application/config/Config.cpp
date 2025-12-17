@@ -5,6 +5,10 @@
 #include "util/KeyEncryption.hpp"
 #include <fstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace config
 {
 
@@ -292,6 +296,23 @@ void Config::SaveConfig()
                 j["columnColors"][col][val] = {colors.fg, colors.bg};
             }
         }
+        
+        // Save item highlights
+        for (const auto& [itemKey, highlight] : itemHighlights)
+        {
+            json highlightJson;
+            if (!highlight.backgroundColor.empty())
+                highlightJson["backgroundColor"] = highlight.backgroundColor;
+            if (!highlight.foregroundColor.empty())
+                highlightJson["foregroundColor"] = highlight.foregroundColor;
+            if (highlight.bold)
+                highlightJson["bold"] = highlight.bold;
+            if (highlight.italic)
+                highlightJson["italic"] = highlight.italic;
+            
+            if (!highlightJson.empty())
+                j["itemHighlights"][itemKey] = highlightJson;
+        }
 
         configFile << j.dump(4); // Pretty print with 4 spaces
         configFile.close();
@@ -569,7 +590,14 @@ std::filesystem::path Config::GetDefaultConfigPath()
 
 std::filesystem::path Config::GetDefaultLogPath()
 {
+#ifdef _WIN32
+    // On Windows, append process ID to allow multiple instances
+    auto pid = GetCurrentProcessId();
+    auto logFileName = "log_" + std::to_string(pid) + ".txt";
+#else
+    // On Unix systems, file locking is less restrictive
     auto logFileName = "log.txt";
+#endif
     auto logFilePath = GetDefaultAppPath() / logFileName;
     return logFilePath;
 }
@@ -591,6 +619,28 @@ void Config::GetColorConfig(const json& j)
     else
     {
         util::Logger::Warn("Missing 'columnColors' in config file.");
+    }
+    
+    // Load item highlights for ItemDetailsView
+    if (j.contains("itemHighlights"))
+    {
+        for (const auto& item : j["itemHighlights"].items())
+        {
+            ItemHighlight highlight;
+            const auto& config = item.value();
+            
+            if (config.contains("backgroundColor"))
+                highlight.backgroundColor = config["backgroundColor"].get<std::string>();
+            if (config.contains("foregroundColor"))
+                highlight.foregroundColor = config["foregroundColor"].get<std::string>();
+            if (config.contains("bold"))
+                highlight.bold = config["bold"].get<bool>();
+            if (config.contains("italic"))
+                highlight.italic = config["italic"].get<bool>();
+            
+            itemHighlights[item.key()] = highlight;
+        }
+        util::Logger::Info("Loaded {} item highlight rules", itemHighlights.size());
     }
 }
 

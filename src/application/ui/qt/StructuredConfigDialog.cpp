@@ -54,6 +54,7 @@ void StructuredConfigDialog::BuildUi()
     InitColumnsTab();
     InitDictionaryTab();
     InitColorsTab();
+    InitItemHighlightsTab();
     InitPluginsTab();
 
     auto* buttonBox = new QDialogButtonBox(
@@ -507,6 +508,7 @@ void StructuredConfigDialog::LoadConfigToUi()
     RefreshColumnsList();
     RefreshDictionaryList();
     RefreshColorMappings();
+    RefreshItemHighlights();
 }
 
 void StructuredConfigDialog::OnSaveClicked()
@@ -1213,6 +1215,236 @@ QColor StructuredConfigDialog::HexToColor(const QString& hex) const
     return c;
 }
 
+void StructuredConfigDialog::RefreshItemHighlights()
+{
+    m_itemHighlightsTable->setRowCount(0);
+    
+    const auto& itemHighlights = config::GetConfig().itemHighlights;
+    
+    for (const auto& [key, highlight] : itemHighlights)
+    {
+        const int row = m_itemHighlightsTable->rowCount();
+        m_itemHighlightsTable->insertRow(row);
+        
+        m_itemHighlightsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(key)));
+        m_itemHighlightsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(highlight.backgroundColor)));
+        m_itemHighlightsTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(highlight.foregroundColor)));
+        m_itemHighlightsTable->setItem(row, 3, new QTableWidgetItem(highlight.bold ? tr("Yes") : tr("No")));
+        m_itemHighlightsTable->setItem(row, 4, new QTableWidgetItem(highlight.italic ? tr("Yes") : tr("No")));
+    }
+    
+    m_selectedItemHighlightRow = -1;
+}
+
+void StructuredConfigDialog::OnItemHighlightSelectionChanged()
+{
+    const auto selected = m_itemHighlightsTable->selectionModel()->selectedRows();
+    if (selected.isEmpty())
+    {
+        m_selectedItemHighlightRow = -1;
+        m_itemKeyEdit->clear();
+        m_itemBoldCheck->setChecked(false);
+        m_itemItalicCheck->setChecked(false);
+        m_itemBgColor = QColor(Qt::white);
+        m_itemFgColor = QColor(Qt::black);
+        UpdateItemHighlightSwatches();
+        UpdateItemHighlightPreview();
+        return;
+    }
+    
+    const int row = selected.first().row();
+    m_selectedItemHighlightRow = row;
+    UpdateItemHighlightEditorsFromSelection(row);
+}
+
+void StructuredConfigDialog::UpdateItemHighlightEditorsFromSelection(int row)
+{
+    if (row < 0 || row >= m_itemHighlightsTable->rowCount())
+        return;
+    
+    auto* keyItem = m_itemHighlightsTable->item(row, 0);
+    auto* bgItem = m_itemHighlightsTable->item(row, 1);
+    auto* fgItem = m_itemHighlightsTable->item(row, 2);
+    auto* boldItem = m_itemHighlightsTable->item(row, 3);
+    auto* italicItem = m_itemHighlightsTable->item(row, 4);
+    
+    if (keyItem)
+        m_itemKeyEdit->setText(keyItem->text());
+    
+    if (bgItem)
+        m_itemBgColor = HexToColor(bgItem->text());
+    else
+        m_itemBgColor = QColor(Qt::white);
+    
+    if (fgItem)
+        m_itemFgColor = HexToColor(fgItem->text());
+    else
+        m_itemFgColor = QColor(Qt::black);
+    
+    if (boldItem)
+        m_itemBoldCheck->setChecked(boldItem->text() == tr("Yes"));
+    
+    if (italicItem)
+        m_itemItalicCheck->setChecked(italicItem->text() == tr("Yes"));
+    
+    UpdateItemHighlightSwatches();
+    UpdateItemHighlightPreview();
+}
+
+void StructuredConfigDialog::OnItemBgColorButton()
+{
+    QColor color = QColorDialog::getColor(m_itemBgColor, this, tr("Choose Background Color"));
+    if (color.isValid())
+    {
+        m_itemBgColor = color;
+        UpdateItemHighlightSwatches();
+        UpdateItemHighlightPreview();
+    }
+}
+
+void StructuredConfigDialog::OnItemFgColorButton()
+{
+    QColor color = QColorDialog::getColor(m_itemFgColor, this, tr("Choose Text Color"));
+    if (color.isValid())
+    {
+        m_itemFgColor = color;
+        UpdateItemHighlightSwatches();
+        UpdateItemHighlightPreview();
+    }
+}
+
+void StructuredConfigDialog::OnItemDefaultBgColor()
+{
+    m_itemBgColor = QColor(Qt::white);
+    UpdateItemHighlightSwatches();
+    UpdateItemHighlightPreview();
+}
+
+void StructuredConfigDialog::OnItemDefaultFgColor()
+{
+    m_itemFgColor = QColor(Qt::black);
+    UpdateItemHighlightSwatches();
+    UpdateItemHighlightPreview();
+}
+
+void StructuredConfigDialog::OnAddItemHighlight()
+{
+    const QString key = m_itemKeyEdit->text().trimmed();
+    if (key.isEmpty())
+    {
+        QMessageBox::information(this, tr("Missing Key"),
+            tr("Please enter a key name for the highlight."));
+        return;
+    }
+    
+    auto& itemHighlights = config::GetConfig().itemHighlights;
+    
+    if (itemHighlights.find(key.toStdString()) != itemHighlights.end())
+    {
+        QMessageBox::information(this, tr("Key Exists"),
+            tr("A highlight for this key already exists. Use Update instead."));
+        return;
+    }
+    
+    config::ItemHighlight highlight;
+    highlight.backgroundColor = ColorToHex(m_itemBgColor).toStdString();
+    highlight.foregroundColor = ColorToHex(m_itemFgColor).toStdString();
+    highlight.bold = m_itemBoldCheck->isChecked();
+    highlight.italic = m_itemItalicCheck->isChecked();
+    
+    itemHighlights[key.toStdString()] = highlight;
+    
+    RefreshItemHighlights();
+}
+
+void StructuredConfigDialog::OnUpdateItemHighlight()
+{
+    const QString key = m_itemKeyEdit->text().trimmed();
+    if (key.isEmpty())
+    {
+        QMessageBox::information(this, tr("Missing Key"),
+            tr("Please enter a key name for the highlight."));
+        return;
+    }
+    
+    auto& itemHighlights = config::GetConfig().itemHighlights;
+    
+    config::ItemHighlight highlight;
+    highlight.backgroundColor = ColorToHex(m_itemBgColor).toStdString();
+    highlight.foregroundColor = ColorToHex(m_itemFgColor).toStdString();
+    highlight.bold = m_itemBoldCheck->isChecked();
+    highlight.italic = m_itemItalicCheck->isChecked();
+    
+    itemHighlights[key.toStdString()] = highlight;
+    
+    RefreshItemHighlights();
+}
+
+void StructuredConfigDialog::OnDeleteItemHighlight()
+{
+    const auto selected = m_itemHighlightsTable->selectionModel()->selectedRows();
+    if (selected.isEmpty())
+    {
+        QMessageBox::information(this, tr("No Selection"),
+            tr("Please select an item highlight to delete."));
+        return;
+    }
+    
+    const int row = selected.first().row();
+    auto* keyItem = m_itemHighlightsTable->item(row, 0);
+    if (!keyItem)
+        return;
+    
+    const QString key = keyItem->text();
+    
+    const auto answer = QMessageBox::question(this, tr("Confirm Deletion"),
+        tr("Are you sure you want to delete the highlight for '%1'?").arg(key));
+    if (answer != QMessageBox::Yes)
+        return;
+    
+    auto& itemHighlights = config::GetConfig().itemHighlights;
+    itemHighlights.erase(key.toStdString());
+    
+    RefreshItemHighlights();
+}
+
+void StructuredConfigDialog::UpdateItemHighlightSwatches()
+{
+    if (m_itemBgColorSwatch)
+    {
+        m_itemBgColorSwatch->setStyleSheet(
+            QString::fromLatin1("background-color: %1;")
+                .arg(ColorToHex(m_itemBgColor)));
+    }
+    if (m_itemFgColorSwatch)
+    {
+        m_itemFgColorSwatch->setStyleSheet(
+            QString::fromLatin1("background-color: %1;")
+                .arg(ColorToHex(m_itemFgColor)));
+    }
+}
+
+void StructuredConfigDialog::UpdateItemHighlightPreview()
+{
+    if (!m_itemPreviewPanel || !m_itemPreviewLabel)
+        return;
+    
+    m_itemPreviewPanel->setStyleSheet(
+        QString::fromLatin1("background-color: %1;")
+            .arg(ColorToHex(m_itemBgColor)));
+    m_itemPreviewLabel->setStyleSheet(
+        QString::fromLatin1("color: %1;")
+            .arg(ColorToHex(m_itemFgColor)));
+    
+    QFont font = m_itemPreviewLabel->font();
+    font.setBold(m_itemBoldCheck->isChecked());
+    font.setItalic(m_itemItalicCheck->isChecked());
+    m_itemPreviewLabel->setFont(font);
+    
+    const QString key = m_itemKeyEdit->text().trimmed();
+    m_itemPreviewLabel->setText(key.isEmpty() ? tr("Sample Text") : key);
+}
+
 void StructuredConfigDialog::AddObserver(config::ConfigObserver* observer)
 {
     if (!observer)
@@ -1574,6 +1806,119 @@ void StructuredConfigDialog::OnSaveDictionaryFile()
         QMessageBox::critical(this, tr("Save Failed"),
             tr("Failed to save dictionary to:\n%1").arg(fileName));
     }
+}
+
+void StructuredConfigDialog::InitItemHighlightsTab()
+{
+    m_itemHighlightsTab = new QWidget(this);
+    auto* layout = new QVBoxLayout(m_itemHighlightsTab);
+
+    layout->addWidget(new QLabel(tr("Configure highlighting for item keys in the Item Details View:"), m_itemHighlightsTab));
+
+    m_itemHighlightsTable = new QTableWidget(m_itemHighlightsTab);
+    m_itemHighlightsTable->setColumnCount(5);
+    QStringList headers;
+    headers << tr("Key Name") << tr("Background") << tr("Foreground") << tr("Bold") << tr("Italic");
+    m_itemHighlightsTable->setHorizontalHeaderLabels(headers);
+    m_itemHighlightsTable->horizontalHeader()->setStretchLastSection(true);
+    m_itemHighlightsTable->verticalHeader()->setVisible(false);
+    m_itemHighlightsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_itemHighlightsTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    connect(m_itemHighlightsTable, &QTableWidget::itemSelectionChanged, this,
+        &StructuredConfigDialog::OnItemHighlightSelectionChanged);
+
+    layout->addWidget(m_itemHighlightsTable, 1);
+
+    auto* editGroup = new QGroupBox(tr("Add/Edit Item Highlight"), m_itemHighlightsTab);
+    auto* editLayout = new QFormLayout(editGroup);
+
+    m_itemKeyEdit = new QLineEdit(editGroup);
+    editLayout->addRow(tr("Key Name"), m_itemKeyEdit);
+
+    // Background controls
+    auto* bgRow = new QHBoxLayout();
+    m_itemBgColorSwatch = new QFrame(editGroup);
+    m_itemBgColorSwatch->setFrameShape(QFrame::Box);
+    m_itemBgColorSwatch->setFixedSize(30, 20);
+    m_itemBgColorButton = new QPushButton(tr("Choose..."), editGroup);
+    m_itemDefaultBgButton = new QPushButton(tr("Default"), editGroup);
+    bgRow->addWidget(m_itemBgColorSwatch);
+    bgRow->addWidget(m_itemBgColorButton);
+    bgRow->addWidget(m_itemDefaultBgButton);
+
+    connect(m_itemBgColorButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnItemBgColorButton);
+    connect(m_itemDefaultBgButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnItemDefaultBgColor);
+
+    editLayout->addRow(tr("Background"), bgRow);
+
+    // Foreground controls
+    auto* fgRow = new QHBoxLayout();
+    m_itemFgColorSwatch = new QFrame(editGroup);
+    m_itemFgColorSwatch->setFrameShape(QFrame::Box);
+    m_itemFgColorSwatch->setFixedSize(30, 20);
+    m_itemFgColorButton = new QPushButton(tr("Choose..."), editGroup);
+    m_itemDefaultFgButton = new QPushButton(tr("Default"), editGroup);
+    fgRow->addWidget(m_itemFgColorSwatch);
+    fgRow->addWidget(m_itemFgColorButton);
+    fgRow->addWidget(m_itemDefaultFgButton);
+
+    connect(m_itemFgColorButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnItemFgColorButton);
+    connect(m_itemDefaultFgButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnItemDefaultFgColor);
+
+    editLayout->addRow(tr("Foreground"), fgRow);
+
+    // Font style checkboxes
+    auto* styleRow = new QHBoxLayout();
+    m_itemBoldCheck = new QCheckBox(tr("Bold"), editGroup);
+    m_itemItalicCheck = new QCheckBox(tr("Italic"), editGroup);
+    styleRow->addWidget(m_itemBoldCheck);
+    styleRow->addWidget(m_itemItalicCheck);
+    styleRow->addStretch();
+
+    editLayout->addRow(tr("Font Style"), styleRow);
+
+    // Preview
+    m_itemPreviewPanel = new QFrame(editGroup);
+    m_itemPreviewPanel->setFrameShape(QFrame::StyledPanel);
+    auto* previewLayout = new QVBoxLayout(m_itemPreviewPanel);
+    m_itemPreviewLabel = new QLabel(tr("Sample Text"), m_itemPreviewPanel);
+    m_itemPreviewLabel->setAlignment(Qt::AlignCenter);
+    previewLayout->addWidget(m_itemPreviewLabel);
+
+    editLayout->addRow(tr("Preview"), m_itemPreviewPanel);
+
+    layout->addWidget(editGroup);
+
+    auto* buttonRow = new QHBoxLayout();
+    m_addItemHighlightButton = new QPushButton(tr("Add"), m_itemHighlightsTab);
+    m_updateItemHighlightButton = new QPushButton(tr("Update"), m_itemHighlightsTab);
+    m_deleteItemHighlightButton = new QPushButton(tr("Delete"), m_itemHighlightsTab);
+    connect(m_addItemHighlightButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnAddItemHighlight);
+    connect(m_updateItemHighlightButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnUpdateItemHighlight);
+    connect(m_deleteItemHighlightButton, &QPushButton::clicked, this,
+        &StructuredConfigDialog::OnDeleteItemHighlight);
+
+    buttonRow->addWidget(m_addItemHighlightButton);
+    buttonRow->addWidget(m_updateItemHighlightButton);
+    buttonRow->addWidget(m_deleteItemHighlightButton);
+    buttonRow->addStretch();
+
+    layout->addLayout(buttonRow);
+
+    m_tabs->addTab(m_itemHighlightsTab, tr("Item Highlights"));
+
+    // Default colors
+    m_itemBgColor = QColor(Qt::white);
+    m_itemFgColor = QColor(Qt::black);
+    UpdateItemHighlightSwatches();
+    UpdateItemHighlightPreview();
 }
 
 void StructuredConfigDialog::InitPluginsTab()

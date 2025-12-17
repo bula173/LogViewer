@@ -181,6 +181,57 @@ void ItemDetailsView::DisplayEvent(int actualRow)
             valueItem->setText(displayValue);
         }
         
+        // Check for item-specific highlighting configuration
+        const auto& itemHighlights = config::GetConfig().itemHighlights;
+        const auto highlightIt = itemHighlights.find(key);
+        
+        // Always clear previous highlighting first
+        keyItem->setBackground(QBrush());
+        keyItem->setForeground(QBrush());
+        valueItem->setBackground(QBrush());
+        valueItem->setForeground(QBrush());
+        
+        // Reset font styles
+        QFont valueFont = valueItem->font();
+        valueFont.setBold(false);
+        valueFont.setItalic(false);
+        valueItem->setFont(valueFont);
+        
+        // Apply highlighting if configured
+        if (highlightIt != itemHighlights.end())
+        {
+            const auto& highlight = highlightIt->second;
+            
+            // Apply font styling
+            if (highlight.bold)
+                valueFont.setBold(true);
+            if (highlight.italic)
+                valueFont.setItalic(true);
+            valueItem->setFont(valueFont);
+            
+            // Apply background color
+            if (!highlight.backgroundColor.empty())
+            {
+                QColor bgColor(QString::fromStdString(highlight.backgroundColor));
+                if (bgColor.isValid())
+                {
+                    keyItem->setBackground(QBrush(bgColor));
+                    valueItem->setBackground(QBrush(bgColor));
+                }
+            }
+            
+            // Apply foreground color
+            if (!highlight.foregroundColor.empty())
+            {
+                QColor fgColor(QString::fromStdString(highlight.foregroundColor));
+                if (fgColor.isValid())
+                {
+                    keyItem->setForeground(QBrush(fgColor));
+                    valueItem->setForeground(QBrush(fgColor));
+                }
+            }
+        }
+        
         if (!tooltip.isEmpty())
         {
             valueItem->setToolTip(tooltip);
