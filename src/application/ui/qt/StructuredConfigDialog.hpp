@@ -67,6 +67,16 @@ private slots:
     void OnUpdateColorMapping();
     void OnDeleteColorMapping();
 
+    // Item Highlights tab
+    void OnItemHighlightSelectionChanged();
+    void OnItemBgColorButton();
+    void OnItemFgColorButton();
+    void OnItemDefaultBgColor();
+    void OnItemDefaultFgColor();
+    void OnAddItemHighlight();
+    void OnUpdateItemHighlight();
+    void OnDeleteItemHighlight();
+
     // Plugins tab
     void OnPluginSelectionChanged();
     void OnBrowsePluginClicked();
@@ -84,6 +94,7 @@ private:
     void InitColumnsTab();
     void InitDictionaryTab();
     void InitColorsTab();
+    void InitItemHighlightsTab();
     void InitPluginsTab();
 
     void LoadConfigToUi();
@@ -98,6 +109,10 @@ private:
     void UpdateColorEditorsFromSelection(int row);
     void UpdateColorSwatches();
     void UpdateColorPreview();
+    void RefreshItemHighlights();
+    void UpdateItemHighlightEditorsFromSelection(int row);
+    void UpdateItemHighlightSwatches();
+    void UpdateItemHighlightPreview();
 
     void RefreshPluginsList();
     void UpdatePluginDetails();
@@ -168,6 +183,27 @@ private:
 
     QColor m_bgColor;
     QColor m_fgColor;
+
+    // Item Highlights tab widgets
+    QWidget* m_itemHighlightsTab {nullptr};
+    QTableWidget* m_itemHighlightsTable {nullptr};
+    QLineEdit* m_itemKeyEdit {nullptr};
+    QPushButton* m_itemBgColorButton {nullptr};
+    QPushButton* m_itemFgColorButton {nullptr};
+    QPushButton* m_itemDefaultBgButton {nullptr};
+    QPushButton* m_itemDefaultFgButton {nullptr};
+    QCheckBox* m_itemBoldCheck {nullptr};
+    QCheckBox* m_itemItalicCheck {nullptr};
+    QPushButton* m_addItemHighlightButton {nullptr};
+    QPushButton* m_updateItemHighlightButton {nullptr};
+    QPushButton* m_deleteItemHighlightButton {nullptr};
+    QFrame* m_itemBgColorSwatch {nullptr};
+    QFrame* m_itemFgColorSwatch {nullptr};
+    QFrame* m_itemPreviewPanel {nullptr};
+    QLabel* m_itemPreviewLabel {nullptr};
+    QColor m_itemBgColor;
+    QColor m_itemFgColor;
+    int m_selectedItemHighlightRow {-1};
 
     // Plugins tab widgets
     QWidget* m_pluginsTab {nullptr};

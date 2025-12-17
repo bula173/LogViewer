@@ -60,26 +60,15 @@ const std::vector<std::string> LogEvent::findAllByKey(std::string_view key) cons
 
     std::vector<std::string> results;
     
-    // Use fast lookup index first
-    auto it = m_lookupIndex.find(std::string(key));
-    if (it != m_lookupIndex.end())
-    {
-        results.push_back(m_eventItems[it->second].second);
-        util::Logger::Trace("LogEvent::findAllByKey found value: {}", results.back());
-    }
-    else
-    {
-        // Fallback to linear search for duplicates (rare case)
-        for (const auto& item : m_eventItems) {
-            if (item.first == key) {
-                results.push_back(item.second);
-                util::Logger::Trace("LogEvent::findAllByKey found value: {}", item.second);
-            }
+    for (const auto& item : m_eventItems) {
+        if (item.first == key) {
+            results.push_back(item.second);
+            util::Logger::Trace("LogEvent::findAllByKey found value: {}", item.second);
         }
     }
 
     if (results.empty()) {
-        util::Logger::Trace("LogEvent::findAllByKey did not find key: {}", std::string(key));
+        util::Logger::Trace("LogEvent::findAllByKey did not find key: {}", key);
     }
 
     return results;
