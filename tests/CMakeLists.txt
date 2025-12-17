@@ -3,7 +3,8 @@ if (WIN32)
     return()
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/bin)
+# Updated runtime output directory to align with default build directory structure
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/bin)
 
 message(STATUS "Building LogViewer::tests")
 
