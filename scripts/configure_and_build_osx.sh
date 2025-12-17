@@ -1,4 +1,5 @@
 #! /bin/bash
 
-cmake -DCMAKE_BUILD_TYPE=Debug -S. -Bbuild-debug 
-cmake --build build-debug -j
+# Configure and build using CMake presets
+cmake --preset macos-debug-qt
+cmake --build --preset macos-debug-build-qt -j

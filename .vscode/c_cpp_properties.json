@@ -2,23 +2,11 @@
     "configurations": [
         {
             "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}",
-                "${workspaceFolder}/src/application",
-                "${workspaceFolder}/build/_deps/googletest-src/googletest/include",
-                "${workspaceFolder}/build/_deps/googletest-src/googlemock/include",
-                "/opt/homebrew/include/wx-3.3"
-            ],
-            "defines": [
-                "__WXOSX_COCOA__",
-                "__WXMAC__",
-                "__WXOSX__"
-            ],
-            "macFrameworkPath": [],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64"
+            "intelliSenseMode": "macos-clang-arm64",
+            "configurationProvider": "ms-vscode.cmake-tools"
         },
         {
             "name": "Win32",

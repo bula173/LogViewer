@@ -197,17 +197,20 @@ elseif(APPLE)
     
     set(CPACK_DMG_VOLUME_NAME "LogViewer")
     
-    # Only use DS_Store setup script if not in CI environment
-    # The AppleScript fails in headless GitHub Actions runners
-    if(NOT DEFINED ENV{CI} AND NOT DEFINED ENV{GITHUB_ACTIONS})
-        set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt")
-        message(STATUS "DMG will use custom DS_Store layout (interactive mode)")
-    else()
-        message(STATUS "DMG will use default layout (CI mode - skipping AppleScript)")
-        # Use basic DMG settings for CI/headless environments
-        set(CPACK_DMG_FORMAT "UDZO")  # Compressed format
-        set(CPACK_DMG_BACKGROUND_IMAGE "")  # No background image in CI
-    endif()
+    # Disable DS_Store AppleScript - it's unreliable and fails frequently
+    # Use simple compressed DMG format instead
+    message(STATUS "DMG will use default layout (DS_Store script disabled for reliability)")
+    set(CPACK_DMG_FORMAT "UDZO")  # Compressed format
+    set(CPACK_DMG_BACKGROUND_IMAGE "")  # No background image
+    
+    # Keep this for future reference if needed:
+    # Only use DS_Store setup script for Release builds in interactive environment
+    # The AppleScript can fail in headless environments or with Debug builds
+    # if(CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT DEFINED ENV{CI} AND NOT DEFINED ENV{GITHUB_ACTIONS})
+    #     if(EXISTS "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt")
+    #         set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt")
+    #     endif()
+    # endif()
     
     # Common DMG settings
     set(CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE ON)
@@ -304,9 +307,17 @@ if(CMAKE_CPACK_COMMAND)
     endif()
 
     function(_add_split_package target component_list flavor)
+        # For single-config generators (Ninja, Make), use CMAKE_BUILD_TYPE
+        # For multi-config generators (Xcode, VS), use generator expression
+        if(CMAKE_BUILD_TYPE)
+            set(_config_arg "-C" "${CMAKE_BUILD_TYPE}")
+        else()
+            set(_config_arg "-C" "$<CONFIG>")
+        endif()
+        
         add_custom_target(${target}
             COMMAND "${CMAKE_CPACK_COMMAND}" --config "${_cpack_config}"
-                -C "$<CONFIG>"
+                ${_config_arg}
                 -G "${_split_generator}"
                 "-DCPACK_COMPONENTS_ALL=${component_list}"
                 "-DCPACK_PACKAGE_NAME=LogViewer-${flavor}"

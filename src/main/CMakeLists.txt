@@ -20,16 +20,10 @@ message(STATUS "QT_VERSION_MAJOR: ${QT_VERSION_MAJOR}")
 message(STATUS "GUI_TARGET_NAME: ${GUI_TARGET_NAME}")
 message(STATUS "CPACK_COMPONENT: ${CPACK_COMPONENT}")
 
-# Distribution directories
+# Distribution directories (only used for install/package phase)
 set(DIST_ROOT "${PROJECT_SOURCE_DIR}/dist")
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(DIST_BUILD "${DIST_ROOT}/Debug")
-else()
-    set(DIST_BUILD "${DIST_ROOT}/Release")
-endif()
-set(DIST_RELEASE "${DIST_ROOT}/Release")
-set(DIST_LIB "${DIST_ROOT}/lib")
-set(DIST_PACKAGE "${DIST_ROOT}/package")
+set(DIST_STAGING "${DIST_ROOT}/staging")
+set(DIST_PACKAGES "${DIST_ROOT}/packages")
 
 #-------------------------------------------------------------------------------
 # Version file configuration
@@ -82,10 +76,18 @@ target_link_libraries(${GUI_TARGET_NAME} PRIVATE ${GUI_LIBRARY})
 target_include_directories(${GUI_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 add_dependencies(${GUI_TARGET_NAME} versionFileTouchForRebuild ${GUI_LIBRARY})
 
-# Copy config file to build directory for development
+# Copy config and resources to build directory for development
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/etc)
 configure_file(
     ${CMAKE_SOURCE_DIR}/etc/default_config.json
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/etc/config.json
+    ${CMAKE_BINARY_DIR}/bin/etc/config.json
+    COPYONLY
+)
+
+# Copy field dictionary for development
+configure_file(
+    ${CMAKE_SOURCE_DIR}/etc/field_dictionary.json
+    ${CMAKE_BINARY_DIR}/bin/etc/field_dictionary.json
     COPYONLY
 )
 
@@ -93,79 +95,36 @@ configure_file(
 addRunAndDebugTargets(${GUI_TARGET_NAME})
 
 #-------------------------------------------------------------------------------
-# POST_BUILD: Collect all runtime dependencies to dist/
+# POST_BUILD: Copy runtime dependencies to build directory for development
 
 if(WIN32)
-    # Step 1: Copy executable and config to dist/Debug or dist/Release
-    add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${DIST_BUILD}"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${DIST_LIB}"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "$<TARGET_FILE:${GUI_TARGET_NAME}>"
-                "${DIST_BUILD}/"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${CMAKE_SOURCE_DIR}/etc/default_config.json"
-                "${DIST_BUILD}/etc/config.json"
-        COMMENT "Copying executable to dist/${CMAKE_BUILD_TYPE}"
-    )
-    
-    # Step 2: Qt-specific deployment
+    # Deploy Qt runtime to build directory for development
     if(USE_QT)
-        set(QT_DEPLOY_DIR "${DIST_ROOT}/qt_deploy_${CMAKE_BUILD_TYPE}")
         find_program(WINDEPLOYQT_EXECUTABLE windeployqt-qt6 HINTS ${Qt6_DIR}/../../../bin)
         
         if(WINDEPLOYQT_EXECUTABLE)
             add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E make_directory "${QT_DEPLOY_DIR}"
                 COMMAND "${WINDEPLOYQT_EXECUTABLE}"
                         --verbose 1
                         --no-compiler-runtime
                         --no-translations
-                        --dir "${QT_DEPLOY_DIR}"
-                        "${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                        "${QT_DEPLOY_DIR}"
-                        "${DIST_BUILD}"
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                        "${QT_DEPLOY_DIR}"
-                        "$<TARGET_FILE_DIR:${GUI_TARGET_NAME}>"
-                COMMENT "Deploying Qt runtime to dist/${CMAKE_BUILD_TYPE}"
+                        "$<TARGET_FILE:${GUI_TARGET_NAME}>"
+                COMMENT "Deploying Qt runtime to build directory"
             )
         else()
             message(WARNING "windeployqt not found. Qt DLLs must be copied manually.")
         endif()
     endif()
     
-    # Step 3: Collect MinGW/MSYS2 runtime DLLs
+    # Copy MinGW/MSYS2 runtime DLLs to build directory for development
     if(MINGW)
-        # Copy to dist/lib for packaging
-        add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND}
-                -DARGV0="${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
-                -DARGV1="${DIST_LIB}"
-                -DARGV2="${CMAKE_C_COMPILER}"
-                -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
-            COMMENT "Collecting MinGW runtime DLLs to dist/lib"
-        )
-        
-        # Copy to dist/Debug or dist/Release for complete package
-        add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND}
-                -DARGV0="${DIST_BUILD}/${GUI_TARGET_NAME}.exe"
-                -DARGV1="${DIST_BUILD}"
-                -DARGV2="${CMAKE_C_COMPILER}"
-                -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
-            COMMENT "Copying MinGW runtime DLLs to dist/${CMAKE_BUILD_TYPE}"
-        )
-        
-        # Copy to build dir for local testing
         add_custom_command(TARGET ${GUI_TARGET_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND}
                 -DARGV0="$<TARGET_FILE:${GUI_TARGET_NAME}>"
                 -DARGV1="$<TARGET_FILE_DIR:${GUI_TARGET_NAME}>"
                 -DARGV2="${CMAKE_C_COMPILER}"
                 -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
-            COMMENT "Copying runtime DLLs to build directory for testing"
+            COMMENT "Copying MinGW runtime DLLs to build directory"
         )
     endif()
 endif()
@@ -174,10 +133,17 @@ endif()
 # Installation rules (for CPack)
 
 # Install executable to the appropriate component
-install(TARGETS ${GUI_TARGET_NAME}
-    BUNDLE DESTINATION "."
-    RUNTIME DESTINATION "."
-    COMPONENT ${CPACK_COMPONENT})  # This is "qt_app" for Qt builds
+if(APPLE)
+    # For macOS bundles, install the entire .app bundle
+    install(TARGETS ${GUI_TARGET_NAME}
+        BUNDLE DESTINATION "."
+        COMPONENT ${CPACK_COMPONENT})
+else()
+    # For Windows/Linux, install the executable
+    install(TARGETS ${GUI_TARGET_NAME}
+        RUNTIME DESTINATION "."
+        COMPONENT ${CPACK_COMPONENT})
+endif()
 
 # Install config file to common component
 install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
@@ -207,74 +173,79 @@ install(FILES
     DESTINATION etc/examples
     COMPONENT common)
 
-if(USE_QT)
-    # Install all Qt runtime files (DLLs, plugins, etc.) to qt_app component
-    install(CODE "
-        set(DIST_BUILD \"${DIST_BUILD}\")
-        set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")
-        set(COMPONENT_NAME \"${CPACK_COMPONENT}\")
-        
-        message(STATUS \"=== Installing Qt application (component: \${COMPONENT_NAME}) ===\")
-        message(STATUS \"Build Type: \${BUILD_TYPE}\")
-        message(STATUS \"Source: \${DIST_BUILD}\")
-        message(STATUS \"Destination: \${CMAKE_INSTALL_PREFIX}\")
-        
-        if(EXISTS \"\${DIST_BUILD}\")
-            # Get all files recursively from dist/Debug or dist/Release
-            file(GLOB_RECURSE ALL_FILES RELATIVE \"\${DIST_BUILD}\" \"\${DIST_BUILD}/*\")
-            
-            set(FILE_COUNT 0)
-            foreach(FILE \${ALL_FILES})
-                # Skip the executable, config.json, and plugin libraries (they're installed separately)
-                # Skip .exe files, plugin DLLs, plugin .so/.dylib, and config.json
-                if(NOT FILE MATCHES \"\\\\.exe$\" 
-                   AND NOT FILE STREQUAL \"config.json\"
-                   AND NOT FILE MATCHES \"plugins/.*\\\\.(dll|so|dylib)$\"
-                   AND NOT FILE MATCHES \"lib/plugins/.*\\\\.(dll|so|dylib)$\")
-                    get_filename_component(FILE_DIR \"\${FILE}\" DIRECTORY)
-                    
-                    # Create destination directory if needed
-                    if(FILE_DIR)
-                        file(MAKE_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/\${FILE_DIR}\")
-                    endif()
-                    
-                    # Install the file
-                    file(INSTALL \"\${DIST_BUILD}/\${FILE}\" 
-                         DESTINATION \"\${CMAKE_INSTALL_PREFIX}/\${FILE_DIR}\")
-                    
-                    math(EXPR FILE_COUNT \"\${FILE_COUNT} + 1\")
+# Platform-specific runtime deployment during install
+if(WIN32)
+    if(USE_QT)
+        # Deploy Qt runtime DLLs during install
+        find_program(WINDEPLOYQT_EXECUTABLE windeployqt-qt6 HINTS ${Qt6_DIR}/../../../bin)
+        if(WINDEPLOYQT_EXECUTABLE)
+            install(CODE "
+                message(STATUS \"Deploying Qt runtime to install directory...\")
+                execute_process(
+                    COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+                            --verbose 1
+                            --no-compiler-runtime
+                            --no-translations
+                            \"\${CMAKE_INSTALL_PREFIX}/${GUI_TARGET_NAME}.exe\"
+                    RESULT_VARIABLE RESULT
+                )
+                if(NOT RESULT EQUAL 0)
+                    message(WARNING \"windeployqt failed with code \${RESULT}\")
                 endif()
-            endforeach()
-            
-            message(STATUS \"Installed \${FILE_COUNT} Qt runtime files\")
-            message(STATUS \"=== Installation complete ===\")
-        else()
-            message(FATAL_ERROR \"Qt build directory not found: \${DIST_BUILD} (Build type: \${BUILD_TYPE})\")
+            " COMPONENT ${CPACK_COMPONENT})
         endif()
-    " COMPONENT ${CPACK_COMPONENT})
+    endif()
     
-else()
-    # For non-Qt builds (wxWidgets): Install DLLs from dist/lib
-    install(CODE "
-        set(DIST_LIB \"${DIST_LIB}\")
-        set(COMPONENT_NAME \"${CPACK_COMPONENT}\")
-        
-        message(STATUS \"=== Installing runtime DLLs (component: \${COMPONENT_NAME}) ===\")
-        
-        if(EXISTS \"\${DIST_LIB}\")
-            file(GLOB RUNTIME_DLLS \"\${DIST_LIB}/*.dll\")
+    # Install MinGW runtime DLLs
+    if(MINGW)
+        install(CODE "
+            message(STATUS \"Copying MinGW runtime DLLs to install directory...\")
+            execute_process(
+                COMMAND ${CMAKE_COMMAND}
+                    -DARGV0=\"\${CMAKE_INSTALL_PREFIX}/${GUI_TARGET_NAME}.exe\"
+                    -DARGV1=\"\${CMAKE_INSTALL_PREFIX}\"
+                    -DARGV2=\"${CMAKE_C_COMPILER}\"
+                    -P \"${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake\"
+            )
+        " COMPONENT ${CPACK_COMPONENT})
+    endif()
+elseif(APPLE)
+    if(USE_QT)
+        # Deploy Qt frameworks into app bundle
+        find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS ${Qt6_DIR}/../../../bin)
+        if(MACDEPLOYQT_EXECUTABLE)
+            # Get Qt installation path for macdeployqt
+            get_target_property(QT_QMAKE_EXECUTABLE Qt6::qmake IMPORTED_LOCATION)
+            get_filename_component(QT_BIN_DIR "${QT_QMAKE_EXECUTABLE}" DIRECTORY)
+            get_filename_component(QT_INSTALL_PREFIX "${QT_BIN_DIR}" DIRECTORY)
             
-            set(DLL_COUNT 0)
-            foreach(DLL \${RUNTIME_DLLS})
-                file(INSTALL \"\${DLL}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}\")
-                math(EXPR DLL_COUNT \"\${DLL_COUNT} + 1\")
-            endforeach()
-            
-            message(STATUS \"Installed \${DLL_COUNT} runtime DLLs\")
+            install(CODE "
+                set(APP_BUNDLE \"\${CMAKE_INSTALL_PREFIX}/${GUI_TARGET_NAME}.app\")
+                if(EXISTS \"\${APP_BUNDLE}\")
+                    message(STATUS \"Deploying Qt frameworks to app bundle: \${APP_BUNDLE}\")
+                    execute_process(
+                        COMMAND \"${MACDEPLOYQT_EXECUTABLE}\"
+                                \"\${APP_BUNDLE}\"
+                                -verbose=1
+                                -qmldir=\"${CMAKE_SOURCE_DIR}\"
+                        RESULT_VARIABLE RESULT
+                        OUTPUT_VARIABLE OUTPUT
+                        ERROR_VARIABLE OUTPUT
+                    )
+                    if(NOT RESULT EQUAL 0)
+                        message(STATUS \"macdeployqt output: \${OUTPUT}\")
+                        message(WARNING \"macdeployqt failed with code \${RESULT} - DMG may not work standalone\")
+                    else()
+                        message(STATUS \"Qt frameworks deployed successfully\")
+                    endif()
+                else()
+                    message(WARNING \"App bundle not found at \${APP_BUNDLE}, skipping macdeployqt\")
+                endif()
+            " COMPONENT ${CPACK_COMPONENT})
         else()
-            message(WARNING \"Runtime DLL directory not found: \${DIST_LIB}\")
+            message(WARNING "macdeployqt not found - DMG will require Qt to be installed")
         endif()
-    " COMPONENT ${CPACK_COMPONENT})
+    endif()
 endif()
 
 # Apply sanitizer if requested (safe now that target exists)

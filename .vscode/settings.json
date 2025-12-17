@@ -45,5 +45,11 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    "cmake.buildDirectory": "${workspaceFolder}/build/${presetName}",
+    "cmake.configureOnOpen": false,
+    "cmake.useCMakePresets": "always",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.configurationWarnings": "disabled"
 }

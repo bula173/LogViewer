@@ -1,4 +1,5 @@
 #! /bin/bash
 
-cmake --build build-debug -j 4
+# Build using CMake presets
+cmake --build --preset macos-debug-build-qt -j 4
 

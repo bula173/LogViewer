@@ -157,77 +157,78 @@ endif()
 
 set(PLUGIN_CONFIG_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/config.json.in")
 set(PLUGIN_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/config.json")
+# Set plugin output to build/plugins directory
+set_target_properties(${PLUGIN_NAME} PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins
+)
+
 configure_file(${PLUGIN_CONFIG_TEMPLATE} ${PLUGIN_CONFIG} @ONLY)
 
-# Copy to dist/plugins for development and package zip with config
-if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(PLUGIN_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/dist/plugins")
-    file(MAKE_DIRECTORY ${PLUGIN_OUTPUT_DIR})
+# Create plugin package in build directory
+set(PLUGIN_PACKAGE_DIR "${CMAKE_BINARY_DIR}/plugins/${PLUGIN_NAME}_package")
+file(MAKE_DIRECTORY ${PLUGIN_PACKAGE_DIR})
 
-    add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-            $<TARGET_FILE:${PLUGIN_NAME}>
-            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_ENTRY}
-        COMMAND ${CMAKE_COMMAND} -E copy
-            ${PLUGIN_CONFIG}
-            ${PLUGIN_OUTPUT_DIR}/config.json
-        COMMENT "Preparing ${PLUGIN_NAME} artifacts"
-    )
+add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        $<TARGET_FILE:${PLUGIN_NAME}>
+        ${PLUGIN_PACKAGE_DIR}/${PLUGIN_ENTRY}
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${PLUGIN_CONFIG}
+        ${PLUGIN_PACKAGE_DIR}/config.json
+    COMMENT "Preparing ${PLUGIN_NAME} artifacts"
+)
 
-    if(LIBSSH_LIBRARIES)
-        if(WIN32)
-            # Clear the cache variable to force a fresh search
-            unset(LIBSSH_DLL CACHE)
-            
-            # Search for libssh.dll in multiple locations
-            find_file(LIBSSH_DLL
-                NAMES libssh.dll ssh.dll
-                PATHS 
-                    ${LIBSSH_DIR}
-                    ${LIBSSH_DIR}/../bin
-                    ${LIBSSH_DIR}/../../bin
-                    /mingw64/bin
-                    $ENV{MINGW_PREFIX}/bin
-                NO_DEFAULT_PATH
-            )
-            
-            if(LIBSSH_DLL)
-                add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                        ${LIBSSH_DLL}
-                        ${PLUGIN_OUTPUT_DIR}/
-                    COMMENT "Copying libssh.dll to ${PLUGIN_OUTPUT_DIR}"
-                )
-                message(STATUS "Found libssh DLL at: ${LIBSSH_DLL}")
-            else()
-                message(WARNING "libssh.dll not found for packaging. Searched in: ${LIBSSH_DIR}, ${LIBSSH_DIR}/../bin")
-            endif()
-        else()
+if(LIBSSH_LIBRARIES)
+    if(WIN32)
+        # Clear the cache variable to force a fresh search
+        unset(LIBSSH_DLL CACHE)
+        
+        # Search for libssh.dll in multiple locations
+        find_file(LIBSSH_DLL
+            NAMES libssh.dll ssh.dll
+            PATHS 
+                ${LIBSSH_DIR}
+                ${LIBSSH_DIR}/../bin
+                ${LIBSSH_DIR}/../../bin
+                /mingw64/bin
+                $ENV{MINGW_PREFIX}/bin
+            NO_DEFAULT_PATH
+        )
+        
+        if(LIBSSH_DLL)
             add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${LIBSSH_LIBRARIES}
-                    ${PLUGIN_OUTPUT_DIR}/
-                COMMENT "Copying libssh to ${PLUGIN_OUTPUT_DIR}"
+                    ${LIBSSH_DLL}
+                    ${PLUGIN_PACKAGE_DIR}/
+                COMMENT "Copying libssh.dll to package directory"
             )
+            message(STATUS "Found libssh DLL at: ${LIBSSH_DLL}")
+        else()
+            message(WARNING "libssh.dll not found for packaging. Searched in: ${LIBSSH_DIR}, ${LIBSSH_DIR}/../bin")
         endif()
+    else()
+        add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${LIBSSH_LIBRARIES}
+                ${PLUGIN_PACKAGE_DIR}/
+            COMMENT "Copying libssh to package directory"
+        )
     endif()
-
-    set(PACKAGE_FILES "${PLUGIN_ENTRY}" "config.json")
-    if(LIBSSH_BASENAME)
-        list(APPEND PACKAGE_FILES "${LIBSSH_BASENAME}")
-    endif()
-
-    add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E tar "cf"
-            "${PLUGIN_OUTPUT_DIR}/${PLUGIN_NAME}.zip" --format=zip
-            ${PACKAGE_FILES}
-        COMMAND ${CMAKE_COMMAND} -E rm -f
-            ${PLUGIN_OUTPUT_DIR}/${PLUGIN_ENTRY}
-            ${PLUGIN_OUTPUT_DIR}/config.json
-            ${PLUGIN_OUTPUT_DIR}/${LIBSSH_BASENAME}
-        WORKING_DIRECTORY ${PLUGIN_OUTPUT_DIR}
-        COMMENT "Packaging ${PLUGIN_NAME}.zip"
-        VERBATIM
-    )
-    message(STATUS "SSH Parser Plugin: Auto-packaging enabled for Release/Debug builds")
 endif()
+
+set(PACKAGE_FILES "${PLUGIN_ENTRY}" "config.json")
+if(LIBSSH_BASENAME)
+    list(APPEND PACKAGE_FILES "${LIBSSH_BASENAME}")
+endif()
+
+add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E tar "cf"
+        "${CMAKE_BINARY_DIR}/plugins/${PLUGIN_NAME}.zip" --format=zip
+        ${PACKAGE_FILES}
+    WORKING_DIRECTORY ${PLUGIN_PACKAGE_DIR}
+    COMMENT "Packaging ${PLUGIN_NAME}.zip"
+    VERBATIM
+)
+
+message(STATUS "SSH Parser Plugin: Build configured")

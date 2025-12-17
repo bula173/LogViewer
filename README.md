@@ -95,26 +95,29 @@ cmake --preset macos-debug -DGUI_FRAMEWORK=WX
 
 ```bash
 # Configure
-cmake --preset macos-debug
+cmake --preset macos-debug-qt
 
 # Build
-cmake --build --preset macos-debug-build
+cmake --build --preset macos-debug-build-qt
 
 # Run
-./build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer
+./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt
+
+# Or use the script
+./scripts/run_debug.sh
 ```
 
 ### Quick Start (wxWidgets - macOS)
 
 ```bash
 # Configure with wxWidgets
-cmake --preset macos-debug -DGUI_FRAMEWORK=WX
+cmake --preset macos-debug-wx
 
 # Build
-cmake --build --preset macos-debug-build
+cmake --build --preset macos-debug-build-wx
 
 # Run
-./build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer
+./build/macos-debug-wx/bin/LogViewerWx.app/Contents/MacOS/LogViewerWx
 ```
 
 ### Platform-Specific Presets
@@ -124,30 +127,30 @@ All presets support `-DGUI_FRAMEWORK=WX` or `-DGUI_FRAMEWORK=QT` (default).
 **macOS:**
 ```bash
 # Qt (default)
-cmake --preset macos-debug           # or macos-release
-cmake --build --preset macos-debug-build
+cmake --preset macos-debug-qt           # or macos-release-qt
+cmake --build --preset macos-debug-build-qt
 
 # wxWidgets
-cmake --preset macos-debug -DGUI_FRAMEWORK=WX
-cmake --build --preset macos-debug-build
+cmake --preset macos-debug-wx           # or macos-release-wx
+cmake --build --preset macos-debug-build-wx
 ```
 
 **Windows (MSYS2):**
 ```bash
 # Qt (default)
-cmake --preset windows-msys-debug    # or windows-msys-release
-cmake --build --preset windows-msys-debug-build
+cmake --preset windows-msys-debug-qt    # or windows-msys-release-qt
+cmake --build --preset windows-msys-debug-build-qt
 
 # wxWidgets
-cmake --preset windows-msys-debug -DGUI_FRAMEWORK=WX
-cmake --build --preset windows-msys-debug-build
+cmake --preset windows-msys-debug-wx    # or windows-msys-release-wx
+cmake --build --preset windows-msys-debug-build-wx
 ```
 
 **Linux:**
 ```bash
 # Qt (default)
-cmake --preset linux-debug           # or linux-release
-cmake --build --preset linux-debug-build
+cmake --preset linux-debug-qt           # or linux-release-qt
+cmake --build --preset linux-debug-build-qt
 
 # wxWidgets
 cmake --preset linux-debug -DGUI_FRAMEWORK=WX
@@ -274,21 +277,46 @@ Configure in Settings > AI:
 ```
 LogViewer/
 ├── src/
-│   ├── application/
+│   ├── application/         # Core application logic
 │   │   ├── ai/              # AI provider implementations (Qt only)
 │   │   ├── config/          # Configuration management
 │   │   ├── filters/         # Filtering system
+│   │   ├── plugins/         # Plugin system interfaces
 │   │   └── ui/
 │   │       ├── qt/          # Qt 6 UI components
 │   │       └── wx/          # wxWidgets UI components
 │   ├── db/                  # Data model (EventsContainer)
 │   ├── parser/              # Log parsers (XML, JSON)
+│   ├── plugins/             # Plugin implementations
+│   │   ├── ai/              # AI provider plugin
+│   │   ├── event_metrics/   # Event metrics plugin
+│   │   └── ssh_parser/      # SSH log parser plugin
 │   └── main/                # Application entry point
+├── build/                   # Build outputs (not in git)
+│   └── <preset-name>/
+│       ├── bin/             # Executables (development)
+│       ├── lib/             # Libraries
+│       └── plugins/         # Plugin shared libraries
+├── dist/                    # Distribution files
+│   ├── packages/            # Final installers (.dmg, .zip, .exe)
+│   └── staging/             # Install staging area (not in git)
 ├── tests/                   # Unit tests (Google Test)
 ├── docs/                    # Documentation
 ├── etc/                     # Default config and examples
-└── thirdparty/             # Third-party dependencies
+└── thirdparty/              # Third-party dependencies
 ```
+
+## Build Output Structure
+
+**Development (build directory):**
+- Build outputs go to `build/<preset-name>/bin/` and `build/<preset-name>/lib/`
+- Run directly from build directory for development
+- Plugins built to `build/<preset-name>/plugins/`
+
+**Distribution (dist directory):**
+- Run `cmake --install` to create deployable application in `dist/staging/`
+- Run `cpack` to create installers in `dist/packages/`
+- Only `dist/packages/` contents are suitable for distribution
 
 ## Framework Comparison
 
@@ -304,6 +332,78 @@ LogViewer/
 | **License** | LGPL v3 (dynamically linked) | wxWindows (LGPL-like) |
 
 **Recommendation:** Use Qt for new deployments (AI features, modern UI). Use wxWidgets for traditional native UI or specific platform requirements.
+
+## Installation and Packaging
+
+### Creating Distributable Packages
+
+After building, you can create distributable packages:
+
+**macOS (.dmg):**
+```bash
+# Build release
+cmake --preset macos-release-qt
+cmake --build --preset macos-release-build-qt
+
+# Install to staging
+cmake --install build/macos-release-qt --prefix dist/staging
+
+# Create DMG package
+cd build/macos-release-qt
+cpack --config CPackConfig.cmake
+
+# Package will be in dist/packages/
+```
+
+**Windows (.zip with installer):**
+```bash
+# Build release
+cmake --preset windows-msys-release-qt
+cmake --build --preset windows-msys-release-build-qt
+
+# Install to staging
+cmake --install build/windows-msys-release-qt --prefix dist/staging
+
+# Create package
+cd build/windows-msys-release-qt
+cpack --config CPackConfig.cmake
+
+# Package will be in dist/packages/
+```
+
+**Linux (.tar.gz, .deb):**
+```bash
+# Build release
+cmake --preset linux-release-qt
+cmake --build --preset linux-release-build-qt
+
+# Install to staging
+cmake --install build/linux-release-qt --prefix dist/staging
+
+# Create packages
+cd build/linux-release-qt
+cpack --config CPackConfig.cmake
+
+# Packages will be in dist/packages/
+```
+
+### Directory Structure After Build
+
+```
+build/macos-release-qt/     # Build artifacts
+  ├── bin/                  # Development executables
+  │   └── LogViewerQt.app/
+  ├── lib/                  # Static libraries
+  └── plugins/              # Plugin .dylib files & .zip packages
+
+dist/
+  ├── staging/              # Installed application (after cmake --install)
+  │   ├── LogViewerQt.app/
+  │   ├── etc/
+  │   └── plugins/
+  └── packages/             # Final distributable packages
+      └── LogViewerQt-1.0.0-Darwin.dmg
+```
 
 ## License
 
