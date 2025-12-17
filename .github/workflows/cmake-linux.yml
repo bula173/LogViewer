@@ -46,6 +46,7 @@ jobs:
             zip \
             libeigen3-dev \
             libboost-all-dev \
+            libcurl4-openssl-dev \
             ${{ matrix.compiler == 'gcc' && 'g++' || 'clang' }} \
             ${{ matrix.gui_framework == 'wx' && 'libwxgtk3.2-dev' || '' }} \
             ${{ matrix.gui_framework == 'qt' && 'qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev' || '' }}
