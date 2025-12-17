@@ -150,6 +150,12 @@ else()
         COMPONENT ${CPACK_COMPONENT})
 endif()
 
+# Ensure the executable is staged correctly during installation
+install(FILES "$<TARGET_FILE:${GUI_TARGET_NAME}>"
+    DESTINATION "_staging"
+    RENAME "${GUI_TARGET_NAME}.exe"
+    COMPONENT ${CPACK_COMPONENT})
+
 # Install config file to common component
 install(FILES ${CMAKE_SOURCE_DIR}/etc/default_config.json
     DESTINATION "etc"
