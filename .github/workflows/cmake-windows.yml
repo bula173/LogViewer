@@ -201,6 +201,6 @@ jobs:
             dist/logs/**
           if-no-files-found: ignore
 
-      - name: Debug: List CPack staging
+      - name: List CPack staging
         shell: msys2 {0}
         run: ls -lhR "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
