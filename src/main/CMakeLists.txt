@@ -143,13 +143,6 @@ elseif(WIN32)
     install(TARGETS ${GUI_TARGET_NAME}
         RUNTIME DESTINATION "."
         COMPONENT ${CPACK_COMPONENT})
-    # Extra: ensure exe is present in CPack staging root if built in bin/
-    install(CODE [[
-        file(GLOB BIN_EXE "${CMAKE_INSTALL_PREFIX}/../bin/${GUI_TARGET_NAME}.exe")
-        if(EXISTS BIN_EXE)
-            file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}" TYPE FILE FILES "${CMAKE_INSTALL_PREFIX}/../bin/${GUI_TARGET_NAME}.exe")
-        endif()
-    ]] COMPONENT ${CPACK_COMPONENT})
 else()
     # For Linux, install the executable
     install(TARGETS ${GUI_TARGET_NAME}
