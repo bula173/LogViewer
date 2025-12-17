@@ -74,7 +74,7 @@ jobs:
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DGUI_FRAMEWORK="$GUI_FRAMEWORK" \
-            -DLibArchive_ROOT=/opt/homebrew/opt/libarchive 
+            -DLibArchive_ROOT=$(brew --prefix libarchive) \
             $EXTRA_ARGS
 
       - name: Build
