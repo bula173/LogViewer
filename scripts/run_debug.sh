@@ -1,3 +1,4 @@
 #! /bin/bash
 
-./dist/Debug/LogViewer.app
+# Run from build directory
+./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt

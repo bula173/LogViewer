@@ -79,6 +79,7 @@ jobs:
 
       - name: Build
         run: |
+          mkdir -p dist/logs
           cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.gui_framework }}-${{ matrix.build_type }}.log
 
       - name: Run Code Quality Tools
@@ -122,17 +123,17 @@ jobs:
       - name: Collect plugins
         if: matrix.build_type == 'Release'
         run: |
-          echo "Listing plugins in dist/plugins:"
-          ls -lh "$GITHUB_WORKSPACE/dist/plugins/" || echo "dist/plugins not found"
+          echo "Listing plugins in build directory:"
+          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins/" || echo "plugins not found"
           echo "Plugin zip files:"
-          find "$GITHUB_WORKSPACE/dist/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
+          find "$BUILD_DIR-${{ matrix.gui_framework }}/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ github.workspace }}/dist/plugins/*.zip
+          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/plugins/*.zip
           if-no-files-found: warn
 
       - name: Upload artifacts
@@ -141,8 +142,8 @@ jobs:
         with:
           name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-artifacts
           path: |
-            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_staging/**
-            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/_CPack_Packages/*/DragNDrop/*.dmg
+            dist/staging/**
+            dist/packages/*.dmg
             ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
 

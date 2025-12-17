@@ -1,11 +1,19 @@
-# Set output directories based on build type
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Debug)
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Release)
+# Set standard CMake output directories - build outputs go to build/<preset>/bin and lib
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# For multi-config generators (Visual Studio, Xcode)
+foreach(CONFIG Debug Release RelWithDebInfo MinSizeRel)
+    string(TOUPPER ${CONFIG} CONFIG_UPPER)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${CMAKE_BINARY_DIR}/bin)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${CMAKE_BINARY_DIR}/lib)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_UPPER} ${CMAKE_BINARY_DIR}/lib)
+endforeach()
+
+# Set NDEBUG for release builds
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_definitions("NDEBUG")
-else()
-    message(WARNING "Unknown build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
 # Enable helpful warnings (C++ standard set globally in root CMakeLists.txt)

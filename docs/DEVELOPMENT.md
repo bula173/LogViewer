@@ -45,30 +45,29 @@ git clone https://github.com/bula173/LogViewer.git
 cd LogViewer
 
 # Configure and build (Debug) - macOS example with Qt (default)
-cmake --preset macos-debug
-cmake --build --preset macos-debug-build
+cmake --preset macos-debug-qt
+cmake --build --preset macos-debug-build-qt
 
 # Or configure with wxWidgets
-cmake --preset macos-debug -DGUI_FRAMEWORK=WX
-cmake --build --preset macos-debug-build
+cmake --preset macos-debug-wx
+cmake --build --preset macos-debug-build-wx
 
 # Run tests
-ctest --preset macos-debug-test
+ctest --preset macos-debug-test-qt
 
-# Run application (use bundle or binary)
-./build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer
-# or
-./build/macos-debug/src/LogViewer
+# Run application from build directory
+./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt
+# or use the script
+./scripts/run_debug.sh
 ```
 
 **Platform-specific presets:**
-- macOS: `macos-debug`, `macos-release`
-- Windows (MSYS2): `windows-msys-debug`, `windows-msys-release`
-- Linux: `linux-debug`, `linux-release`
-
-**Framework selection:**
-- Qt (default): `cmake --preset <platform>-debug` or `-DGUI_FRAMEWORK=QT`
-- wxWidgets: `cmake --preset <platform>-debug -DGUI_FRAMEWORK=WX`
+- macOS Qt: `macos-debug-qt`, `macos-release-qt`
+- macOS wxWidgets: `macos-debug-wx`, `macos-release-wx`
+- Windows (MSYS2) Qt: `windows-msys-debug-qt`, `windows-msys-release-qt`
+- Windows (MSYS2) wxWidgets: `windows-msys-debug-wx`, `windows-msys-release-wx`
+- Linux Qt: `linux-debug-qt`, `linux-release-qt`
+- Linux wxWidgets: `linux-debug-wx`, `linux-release-wx`
 
 **Using VS Code Tasks (Recommended):**
 
@@ -82,6 +81,64 @@ The project includes pre-configured tasks accessible via `Cmd+Shift+P` (macOS) o
 - **Package Release** - Create distributable package
 
 **Note:** VS Code tasks use Qt by default. For wxWidgets builds, use command line with `-DGUI_FRAMEWORK=WX`.
+
+## Build System Architecture
+
+### Directory Structure
+
+The build system separates build artifacts from distribution files:
+
+```
+LogViewer/
+├── build/                          # Build outputs (not in git)
+│   └── <preset-name>/              # e.g., macos-debug-qt
+│       ├── bin/                    # Executables for development
+│       │   ├── LogViewerQt.app/
+│       │   └── etc/                # Config files copied here
+│       ├── lib/                    # Static libraries
+│       ├── plugins/                # Plugin shared libraries (.dylib/.so/.dll)
+│       │   ├── ai_provider.dylib
+│       │   ├── ai_provider.zip     # Plugin packages
+│       │   └── *_package/          # Temporary packaging directories
+│       └── CMakeFiles/             # CMake internal files
+├── dist/                           # Distribution files
+│   ├── packages/                   # Final installers (.dmg, .zip, .exe)
+│   │   └── LogViewerQt-1.0.0-Darwin.dmg
+│   └── staging/                    # Install staging (not in git)
+│       ├── LogViewerQt.app/
+│       ├── etc/
+│       └── plugins/
+└── src/                            # Source code
+```
+
+### CMake Output Directories
+
+The build system uses standard CMake output directories:
+
+- `CMAKE_RUNTIME_OUTPUT_DIRECTORY`: `build/<preset>/bin` - Executables
+- `CMAKE_LIBRARY_OUTPUT_DIRECTORY`: `build/<preset>/lib` - Shared libraries  
+- `CMAKE_ARCHIVE_OUTPUT_DIRECTORY`: `build/<preset>/lib` - Static libraries
+
+**Development workflow:**
+1. Build: `cmake --build --preset <preset>`
+2. Run from build: `./build/<preset>/bin/LogViewerQt.app/...`
+3. All outputs stay in `build/` directory
+
+**Distribution workflow:**
+1. Install: `cmake --install build/<preset> --prefix dist/staging`
+2. Package: `cpack --config build/<preset>/CPackConfig.cmake`
+3. Installers go to `dist/packages/`
+
+### Scripts
+
+Convenience scripts in `scripts/` directory:
+
+- `build_debug.sh` - Build debug version
+- `configure_and_build_osx.sh` - Configure and build from scratch
+- `run_debug.sh` - Run debug application
+- Windows equivalents: `.bat` files
+
+All scripts updated to use new directory structure.
 
 ## Code Style Guide
 
