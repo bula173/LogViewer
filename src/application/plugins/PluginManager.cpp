@@ -6,9 +6,9 @@
  */
 
 #include "PluginManager.hpp"
-#include "config/Config.hpp"
-#include "config/FieldConversionPluginRegistry.hpp"
-#include "util/Logger.hpp"
+#include "Config.hpp"
+#include "FieldConversionPluginRegistry.hpp"
+#include "Logger.hpp"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <algorithm>

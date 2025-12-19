@@ -1,7 +1,7 @@
 #pragma once
 
-#include "filters/FilterManager.hpp"
-#include "filters/Filter.hpp"
+#include "FilterManager.hpp"
+#include "Filter.hpp"
 
 #include <QWidget>
 

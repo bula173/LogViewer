@@ -1,7 +1,7 @@
 #pragma once
 
-#include "plugins/IFieldConversionPlugin.hpp"
-#include "plugins/IPluginObserver.hpp"
+#include "IFieldConversionPlugin.hpp"
+#include "IPluginObserver.hpp"
 #include <string>
 #include <string_view>
 #include <map>

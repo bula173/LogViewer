@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Filter.hpp"
-#include "mvc/IModel.hpp"
-#include "error/Error.hpp"
-#include "util/Result.hpp"
+#include "IModel.hpp"
+#include "Error.hpp"
+#include "Result.hpp"
 
 #include <memory>
 #include <string>

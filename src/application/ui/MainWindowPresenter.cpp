@@ -1,4 +1,4 @@
-#include "ui/MainWindowPresenter.hpp"
+#include "MainWindowPresenter.hpp"
 
 #include <algorithm>
 #include <cstddef>
@@ -8,10 +8,10 @@
 #include <string>
 #include <vector>
 
-#include "config/Config.hpp"
-#include "error/Error.hpp"
-#include "util/Logger.hpp"
-#include "parser/ParserFactory.hpp"
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Logger.hpp"
+#include "ParserFactory.hpp"
 
 namespace ui
 {

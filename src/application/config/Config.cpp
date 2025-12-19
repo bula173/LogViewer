@@ -1,8 +1,8 @@
-#include "config/Config.hpp"
+#include "Config.hpp"
 #include "BuiltinConversionPlugins.hpp"
-#include "StringReversePlugin.hpp"
-#include "util/Logger.hpp"
-#include "util/KeyEncryption.hpp"
+//#include "StringReversePlugin.hpp"
+#include "Logger.hpp"
+#include "KeyEncryption.hpp"
 #include <fstream>
 
 #ifdef _WIN32
@@ -40,7 +40,7 @@ Config::Config()
     RegisterBuiltinConversionPlugins();
     
     // Register example plugin
-    RegisterStringReversePlugin();
+    //RegisterStringReversePlugin();
 }
 
 void Config::SetAppName(const std::string& name)

@@ -1,11 +1,11 @@
-#include "ui/qt/EventsTableModel.hpp"
+#include "EventsTableModel.hpp"
 
 #include <QBrush>
 #include <QModelIndex>
 #include <QString>
 #include <QVariant>
 
-#include "db/LogEvent.hpp"
+#include "LogEvent.hpp"
 
 #include <algorithm>
 #include <limits>

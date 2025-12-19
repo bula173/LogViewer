@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config/FieldTranslator.hpp"
-#include "main/version.h"
+#include "FieldTranslator.hpp"
+#include "version.h"
 #include <nlohmann/json.hpp>
 // std
 #include <filesystem>

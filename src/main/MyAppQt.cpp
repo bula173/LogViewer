@@ -1,10 +1,10 @@
-#include "config/Config.hpp"
-#include "db/EventsContainer.hpp"
-#include "error/Error.hpp"
-#include "main/version.h"
-#include "mvc/MainController.hpp"
-#include "ui/qt/MainWindow.hpp"
-#include "util/Logger.hpp"
+#include "Config.hpp"
+#include "EventsContainer.hpp"
+#include "Error.hpp"
+#include "version.h"
+#include "MainController.hpp"
+#include "qt/MainWindow.hpp"
+#include "Logger.hpp"
 
 #include <QApplication>
 #include <QMessageBox>

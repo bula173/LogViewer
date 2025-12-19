@@ -5,9 +5,9 @@
  * @date 2025
  */
 
-#include "db/LogEvent.hpp"
+#include "LogEvent.hpp"
 #include <regex>
-#include "util/Logger.hpp"
+#include "Logger.hpp"
 
 namespace db
 {

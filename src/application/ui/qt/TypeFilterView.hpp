@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui/IUiPanels.hpp"
+#include "IUiPanels.hpp"
 
 #include <QWidget>
 

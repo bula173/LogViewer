@@ -1,7 +1,7 @@
-#include "src/application/xml/xmlParser.hpp"
-#include "src/application/config/Config.hpp"
-#include "src/application/db/LogEvent.hpp"
-#include "src/application/error/Error.hpp"
+#include "xml/xmlParser.hpp"
+#include "Config.hpp"
+#include "LogEvent.hpp"
+#include "Error.hpp"
 #include <filesystem>
 #include <fstream>
 #include <gmock/gmock.h>

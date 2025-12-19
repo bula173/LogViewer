@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "src/application/db/LogEvent.hpp"
+#include "LogEvent.hpp"
 
 namespace db
 {

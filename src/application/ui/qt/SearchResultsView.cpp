@@ -1,4 +1,4 @@
-#include "ui/qt/SearchResultsView.hpp"
+#include "SearchResultsView.hpp"
 
 #include <QAbstractItemView>
 #include <QHeaderView>

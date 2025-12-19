@@ -8,7 +8,7 @@
 #ifndef PLUGIN_IANALYSISPLUGIN_HPP
 #define PLUGIN_IANALYSISPLUGIN_HPP
 
-#include "db/EventsContainer.hpp"
+#include "EventsContainer.hpp"
 #include <memory>
 
 namespace plugin

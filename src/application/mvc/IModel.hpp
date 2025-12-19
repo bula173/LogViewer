@@ -1,9 +1,9 @@
 #ifndef MVC_IMODEL_HPP
 #define MVC_IMODEL_HPP
 
-#include "db/LogEvent.hpp"
-#include "mvc/IView.hpp"
-#include "util/Logger.hpp"
+#include "LogEvent.hpp"
+#include "IView.hpp"
+#include "Logger.hpp"
 
 #include <vector>
 

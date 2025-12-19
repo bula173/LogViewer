@@ -1,6 +1,6 @@
 #pragma once
 
-#include "filters/Filter.hpp"
+#include "Filter.hpp"
 
 #include <QDialog>
 #include <memory>

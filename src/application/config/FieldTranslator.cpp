@@ -1,7 +1,7 @@
-#include "config/FieldTranslator.hpp"
-#include "config/FieldConversionPluginRegistry.hpp"
-#include "application/util/Logger.hpp"
-#include "config/Config.hpp"
+#include "FieldTranslator.hpp"
+#include "FieldConversionPluginRegistry.hpp"
+#include "Logger.hpp"
+#include "Config.hpp"
 
 #include <fstream>
 #include <algorithm>

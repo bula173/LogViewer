@@ -1,4 +1,4 @@
-#include "ui/qt/LogFileLoadDialog.hpp"
+#include "LogFileLoadDialog.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

@@ -1,4 +1,4 @@
-#include "ui/qt/TypeFilterView.hpp"
+#include "TypeFilterView.hpp"
 
 #include <QListWidget>
 #include <QListWidgetItem>

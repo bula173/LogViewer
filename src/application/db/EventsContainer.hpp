@@ -6,8 +6,8 @@
  */
 
 #pragma once
-#include "db/LogEvent.hpp"
-#include "mvc/IModel.hpp"
+#include "LogEvent.hpp"
+#include "IModel.hpp"
 #include <shared_mutex>
 #include <vector>
 

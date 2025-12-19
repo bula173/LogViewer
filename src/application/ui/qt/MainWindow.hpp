@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ui/IMainWindowView.hpp"
-#include "ui/IUiPanels.hpp"
-#include "config/ConfigObserver.hpp"
+#include "IMainWindowView.hpp"
+#include "IUiPanels.hpp"
+#include "ConfigObserver.hpp"
 #include <memory>
-#include "plugins/IPluginObserver.hpp"
+#include "IPluginObserver.hpp"
 
 #include <QMainWindow>
 #include <memory>

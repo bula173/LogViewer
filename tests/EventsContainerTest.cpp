@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "src/application/db/EventsContainer.hpp"
-#include "src/application/db/LogEvent.hpp"
+#include "EventsContainer.hpp"
+#include "LogEvent.hpp"
 
 TEST(EventsContainerTest, AddEvent)
 {

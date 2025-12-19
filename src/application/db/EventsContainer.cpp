@@ -6,7 +6,7 @@
  */
 
 #include "EventsContainer.hpp"
-#include "util/Logger.hpp"
+#include "Logger.hpp"
 
 #include <utility>
 

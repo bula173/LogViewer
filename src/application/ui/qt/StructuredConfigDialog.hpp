@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config/ConfigObserver.hpp"
+#include "ConfigObserver.hpp"
 
 #include <QDialog>
 #include <vector>

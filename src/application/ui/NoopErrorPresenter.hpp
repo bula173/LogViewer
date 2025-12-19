@@ -1,8 +1,7 @@
 #pragma once
 
-#include "ui/IErrorPresenter.hpp"
-#include "util/Logger.hpp"
-
+#include "IErrorPresenter.hpp"
+#include "Logger.hpp"
 #include <mutex>
 #include <string_view>
 

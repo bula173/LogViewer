@@ -1,8 +1,8 @@
-#include "ui/qt/ItemDetailsView.hpp"
+#include "ItemDetailsView.hpp"
 
-#include "db/EventsContainer.hpp"
-#include "db/LogEvent.hpp"
-#include "config/Config.hpp"
+#include "EventsContainer.hpp"
+#include "LogEvent.hpp"
+#include "Config.hpp"
 
 #include <QAction>
 #include <QClipboard>
