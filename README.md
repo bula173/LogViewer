@@ -101,7 +101,7 @@ cmake --preset macos-debug-qt
 cmake --build --preset macos-debug-build-qt
 
 # Run
-./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt
+./build/macos-debug-qt/bin/LogViewer.app/Contents/MacOS/LogViewer
 
 # Or use the script
 ./scripts/run_debug.sh
@@ -392,17 +392,17 @@ cpack --config CPackConfig.cmake
 ```
 build/macos-release-qt/     # Build artifacts
   ├── bin/                  # Development executables
-  │   └── LogViewerQt.app/
+  │   └── LogViewer.app/
   ├── lib/                  # Static libraries
   └── plugins/              # Plugin .dylib files & .zip packages
 
 dist/
   ├── staging/              # Installed application (after cmake --install)
-  │   ├── LogViewerQt.app/
+  │   ├── LogViewer.app/
   │   ├── etc/
   │   └── plugins/
   └── packages/             # Final distributable packages
-      └── LogViewerQt-1.0.0-Darwin.dmg
+      └── LogViewer-1.0.0-Darwin.dmg
 ```
 
 ## License

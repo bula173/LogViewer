@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch QT Debug",
+            "name": "Launch Debug",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -10,19 +10,19 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "Build QT Debug",
+            "preLaunchTask": "Build Debug",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt.app/Contents/MacOS/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
             },
             "windows": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt.exe",
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
                 "environment": [
                     {
                         "name": "PATH",
@@ -39,7 +39,7 @@
             }
         },
         {
-            "name": "Launch QT Debug -without preLaunchTask",
+            "name": "Launch Debug - without preLaunchTask",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -49,16 +49,16 @@
             "externalConsole": false,
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt.app/Contents/MacOS/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
             },
             "windows": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewerQt.exe",
+                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
                 "environment": [
                     {
                         "name": "PATH",
@@ -75,7 +75,7 @@
             }
         },
         {
-            "name": "Launch QT Release",
+            "name": "Launch Release",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -83,19 +83,19 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "Build QT Release",
+            "preLaunchTask": "Build Release",
             "linux": {
                 "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Release/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Release/LogViewer"
             },
             "osx": {
                 "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Release/LogViewerQt.app/Contents/MacOS/LogViewerQt"
+                "program": "${workspaceFolder}/dist/Release/LogViewer.app/Contents/MacOS/LogViewer"
             },
             "windows": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Release/LogViewerQt.exe",
+                "program": "${workspaceFolder}/dist/Release/LogViewer.exe",
                 "environment": [
                     {
                         "name": "PATH",
@@ -103,8 +103,27 @@
                     }
                 ]
             }
+        },
+        {
+            "name": "Debug LogViewer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/windows-debug-qt/src/main/LogViewer.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
-        // Add similar environment blocks to other Windows configurations as needed
     ],
     "inputs": []
 }

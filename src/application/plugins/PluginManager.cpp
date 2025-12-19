@@ -921,7 +921,7 @@ util::Result<bool, error::Error> PluginManager::ValidateDependencies() const
 
 std::filesystem::path PluginManager::GetPluginConfigDirectory(const std::string& pluginId) const
 {
-    // Return path: ~/Library/Application Support/LogViewerQt/plugin_configs/<plugin_id>/
+    // Return path: ~/Library/Application Support/LogViewer/plugin_configs/<plugin_id>/
     // Use the app config directory, not the plugins binary directory
     auto configDir = config::GetConfig().GetDefaultAppPath() / "plugin_configs" / pluginId;
     return configDir;
@@ -929,7 +929,7 @@ std::filesystem::path PluginManager::GetPluginConfigDirectory(const std::string&
 
 std::filesystem::path PluginManager::GetPluginConfigPath(const std::string& pluginId) const
 {
-    // Return path: ~/Library/Application Support/LogViewerQt/plugin_configs/<plugin_id>/config.json
+    // Return path: ~/Library/Application Support/LogViewer/plugin_configs/<plugin_id>/config.json
     return GetPluginConfigDirectory(pluginId) / "config.json";
 }
 

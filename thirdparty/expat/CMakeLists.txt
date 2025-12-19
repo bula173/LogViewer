@@ -1,15 +1,8 @@
-find_package(EXPAT QUIET)
-if (EXPAT_FOUND)
-    message(STATUS "Using system-installed Expat library")
-    return()
-endif()
-
-set(FETCHCONTENT_QUIET FALSE)
 
 FetchContent_Declare(
     expat
     GIT_REPOSITORY https://github.com/libexpat/libexpat/
-    GIT_TAG        R_2_7_1 # or latest stable
+    GIT_TAG        R_2_7_3 # or latest stable
     SOURCE_SUBDIR  expat/
 )
 

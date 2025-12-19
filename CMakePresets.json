@@ -43,29 +43,6 @@
             }
         },
         {
-            "name": "windows-msys-debug-wx",
-            "displayName": "Windows MSYS2 Debug (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/windows-debug-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "C:/msys64/mingw64/bin/wx-config"
-            },
-            "environment": {
-                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            }
-        },
-        {
             "name": "windows-msys-debug-qt",
             "displayName": "Windows MSYS2 Debug (Qt)",
             "generator": "Ninja",
@@ -82,30 +59,6 @@
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            }
-        },
-        {
-            "name": "windows-msys-release-wx",
-            "displayName": "Windows MSYS2 Release (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/windows-release-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "GUI_FRAMEWORK": "WX",
-                "ENABLE_CLANG_TIDY": "OFF",
-                "LOGVIEWER_SANITIZER": "None"
-            },
-            "environment": {
-                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
@@ -188,11 +141,6 @@
             "name": "windows-msys-debug-qt-build",
             "displayName": "Windows MSYS2 Debug Build (Qt)",
             "configurePreset": "windows-msys-debug-qt"
-        },
-        {
-            "name": "windows-msys-release-wx-build",
-            "displayName": "Windows MSYS2 Release Build (wxWidgets)",
-            "configurePreset": "windows-msys-release-wx"
         },
         {
             "name": "windows-msys-release-qt-build",

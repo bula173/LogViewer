@@ -29,7 +29,7 @@ cmake --preset macos-debug-qt
 cmake --build build/macos-debug-qt
 
 # Run (ASAN reports appear in terminal)
-./dist/Debug/LogViewerQt.app/Contents/MacOS/LogViewerQt
+./dist/Debug/LogViewer.app/Contents/MacOS/LogViewer
 ```
 
 ### Linux
@@ -41,7 +41,7 @@ cmake --preset linux-debug-qt
 cmake --build build/linux-debug-qt
 
 # Run with options
-ASAN_OPTIONS=halt_on_error=0:log_path=asan.log ./build/linux-debug-qt/src/LogViewerQt
+ASAN_OPTIONS=halt_on_error=0:log_path=asan.log ./build/linux-debug-qt/src/LogViewer
 ```
 
 ## ASAN Runtime Options

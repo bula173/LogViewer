@@ -432,9 +432,9 @@ std::exception
 
 ### JSON Configuration
 All configuration saved to platform-specific location:
-- **macOS**: `~/Library/Application Support/LogViewerQt/config.json`
-- **Linux**: `~/.config/LogViewerQt/config.json`
-- **Windows**: `%APPDATA%\LogViewerQt\config.json`
+- **macOS**: `~/Library/Application Support/LogViewer/config.json`
+- **Linux**: `~/.config/LogViewer/config.json`
+- **Windows**: `%APPDATA%\LogViewer\config.json`
 
 ### Configuration Structure
 ```json

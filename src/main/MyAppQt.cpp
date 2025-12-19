@@ -20,7 +20,7 @@
 
 namespace
 {
-constexpr const char* kQtAppName = "LogViewerQt";
+constexpr const char* kQtAppName = "LogViewer";
 
 bool SetupConfig()
 {
