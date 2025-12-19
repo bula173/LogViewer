@@ -2068,6 +2068,10 @@ void StructuredConfigDialog::RefreshPluginsList()
             case plugin::PluginType::Connector: typeStr = "Connector"; break;
             case plugin::PluginType::Visualizer: typeStr = "Visualizer"; break;
             case plugin::PluginType::Custom: typeStr = "Custom"; break;
+            case plugin::PluginType::AIProvider: typeStr = "AIProvider"; break;
+            default:
+            typeStr = "Unknown";
+            break;
         }
         m_pluginsTable->setItem(row, 3, new QTableWidgetItem(typeStr));
         
@@ -2141,6 +2145,10 @@ void StructuredConfigDialog::UpdatePluginDetails()
         case plugin::PluginType::Connector: typeStr = "Connector"; break;
         case plugin::PluginType::Visualizer: typeStr = "Visualizer"; break;
         case plugin::PluginType::Custom: typeStr = "Custom"; break;
+        case plugin::PluginType::AIProvider: typeStr = "AIProvider"; break;
+        default:
+            typeStr = "Unknown";
+            break;
     }
     m_pluginTypeLabel->setText(typeStr);
     

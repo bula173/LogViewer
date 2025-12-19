@@ -1,12 +1,3 @@
-# ============================================================
-# Version / resources
-# ============================================================
-
-configure_file(
-    version.cpp.in
-    ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
-)
-
 if (WIN32)
     configure_file(
         ${CMAKE_SOURCE_DIR}/packaging/LogViewer.rc.in
@@ -41,7 +32,6 @@ endif()
 target_sources(${PROJECT_NAME}
     PRIVATE
         MyAppQt.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
 )
 
 if (WIN32)
@@ -64,11 +54,12 @@ if (APPLE)
     install(
         TARGETS ${PROJECT_NAME}
         BUNDLE DESTINATION .
+        COMPONENT application
     )
 else()
     install(
         TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION .  # Changed to root
+        RUNTIME DESTINATION . COMPONENT application
     )
 endif()
 
@@ -127,13 +118,16 @@ if (WIN32)
                     --no-system-d3d-compiler
                     \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
         )
-    ")
+    "
+    COMPONENT application
+    )
 
     # Install dynamic DLLs to root
     install(FILES
         ${LIBARCHIVE_DLL}
         ${LIBEXPAT_DLL}
         DESTINATION .
+        COMPONENT application
     )
 endif()
 

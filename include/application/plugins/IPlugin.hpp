@@ -1,1 +1,0 @@
-/Users/Marcin/workspace/cpp/LogViewer/src/application/plugins/IPlugin.hpp

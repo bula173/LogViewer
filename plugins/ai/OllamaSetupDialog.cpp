@@ -1,5 +1,4 @@
 #include "OllamaSetupDialog.hpp"
-//#include "OllamaClient.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

@@ -94,7 +94,6 @@ LogViewer is a professional log file viewer application built with modern C++20 
 **Configuration Dialogs**:
 - **StructuredConfigDialog**: Tabbed configuration UI (General, Columns, Colors, AI)
 - **ConfigEditorDialog**: Raw JSON editor
-- **OllamaSetupDialog**: AI setup wizard
 
 ### 2. Business Logic Layer
 
