@@ -36,7 +36,7 @@ Run the application with full Qt debugging:
 ```cmd
 set QT_DEBUG_PLUGINS=1
 set QT_LOGGING_RULES="*.debug=true"
-dist\Debug\LogViewerQt.exe > crash_log.txt 2>&1
+dist\Debug\LogViewer.exe > crash_log.txt 2>&1
 ```
 
 Send me the contents of `crash_log.txt`.
@@ -46,7 +46,7 @@ Send me the contents of `crash_log.txt`.
 Look at the application's own log file:
 
 ```cmd
-notepad %APPDATA%\LogViewerQt\logs\logviewer.log
+notepad %APPDATA%\LogViewer\logs\logviewer.log
 ```
 
 The log should show exactly where it crashes.
@@ -59,7 +59,7 @@ eventvwr.msc
 
 Navigate to: **Windows Logs → Application**
 
-Look for recent "Application Error" events for LogViewerQt.exe.
+Look for recent "Application Error" events for LogViewer.exe.
 
 ## Most Likely Causes (In Order)
 
@@ -81,7 +81,7 @@ copy C:\Qt\6.x\msvc2019_64\plugins\platforms\qwindows.dll dist\Debug\platforms\
 ```cmd
 # Run from clean environment
 set PATH=C:\Windows\System32;C:\Windows
-dist\Debug\LogViewerQt.exe
+dist\Debug\LogViewer.exe
 ```
 
 ### 3. Missing VC++ Redistributable (3% probability)
@@ -93,7 +93,7 @@ Download and install: https://aka.ms/vs/17/release/vc_redist.x64.exe
 
 **Quick Fix:**
 ```cmd
-rd /s /q "%APPDATA%\LogViewerQt"
+rd /s /q "%APPDATA%\LogViewer"
 ```
 
 ### 5. Machine-Specific Issue (1% probability)
@@ -109,7 +109,7 @@ If the issue persists after trying the above:
 
 1. Output from `windows_debug.bat`
 2. Contents of `crash_log.txt` (with Qt debug enabled)
-3. Application log from `%APPDATA%\LogViewerQt\logs\logviewer.log`
+3. Application log from `%APPDATA%\LogViewer\logs\logviewer.log`
 4. Windows Event Viewer crash details
 5. System info:
    ```cmd

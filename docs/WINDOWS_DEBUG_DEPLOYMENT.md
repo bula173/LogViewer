@@ -45,7 +45,7 @@ cmake --build build/windows-debug-qt --config Debug
 Check that `dist/Debug` contains:
 ```
 dist/Debug/
-├── LogViewerQt.exe
+├── LogViewer.exe
 ├── Qt6Core.dll (Debug version - should be larger)
 ├── Qt6Cored.dll (Debug version with 'd' suffix)
 ├── Qt6Gui.dll
@@ -61,7 +61,7 @@ dist/Debug/
 ### Run Debug Build
 ```bash
 cd dist/Debug
-./LogViewerQt.exe
+./LogViewer.exe
 ```
 
 ## Diagnostics
@@ -73,7 +73,7 @@ The application has built-in diagnostics in `src/main/MyAppQt.cpp::CheckQtLibrar
 4. Check for Qt DLL conflicts in system PATH
 
 If the crash persists, check the log file in:
-- Windows: `%APPDATA%/LogViewerQt/logs/LogViewerQt.log`
+- Windows: `%APPDATA%/LogViewer/logs/LogViewer.log`
 
 ## Common Issues
 
@@ -96,7 +96,7 @@ Qt directories found in system PATH - this may cause DLL conflicts
 **Solution**: Run from clean PATH or use:
 ```batch
 set PATH=C:\Windows\System32;C:\Windows
-dist\Debug\LogViewerQt.exe
+dist\Debug\LogViewer.exe
 ```
 
 ### 4. Missing MSYS2 Runtime DLLs

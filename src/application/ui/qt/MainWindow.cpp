@@ -82,7 +82,7 @@ MainWindow::MainWindow(mvc::IController& controller,
         util::Logger::Info("[MainWindow] Main window initialized successfully");
 
         // Restore window layout disabled due to crashes with corrupted/legacy settings
-        QSettings settings("LogViewer", "LogViewerQt");
+        QSettings settings("LogViewer", "LogViewer");
         const QByteArray geom = settings.value("windowGeometry").toByteArray();
         if (!geom.isEmpty()) {
             restoreGeometry(geom);
@@ -115,7 +115,7 @@ MainWindow::~MainWindow()
     m_presenter.reset();
 
     // Save window layout
-    QSettings settings("LogViewer", "LogViewerQt");
+    QSettings settings("LogViewer", "LogViewer");
     settings.setValue("windowGeometry", saveGeometry());
     settings.setValue("windowState", saveState());
 }

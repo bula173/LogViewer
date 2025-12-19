@@ -114,7 +114,7 @@ All AI settings can be configured through the UI:
 2. **Edit → Config → General tab:**
    - Type Filter Field: Set which field to use for filtering/coloring (e.g., "level", "severity")
 
-Configuration is saved to `~/Library/Application Support/LogViewerQt/config.json` (macOS) or equivalent on other platforms.
+Configuration is saved to `~/Library/Application Support/LogViewer/config.json` (macOS) or equivalent on other platforms.
 
 ## Troubleshooting
 

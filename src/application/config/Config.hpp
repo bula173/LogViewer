@@ -149,7 +149,7 @@ class Config
     Version::Version m_configVersion;                 // Version of the config file
 
   public: // xml config
-    std::string appName {"LogViewerQT"};
+    std::string appName {"LogViewer"};
     std::string xmlRootElement;
     std::string xmlEventElement;
     std::vector<ColumnConfig> columns;

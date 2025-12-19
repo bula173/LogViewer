@@ -56,7 +56,7 @@ cmake --build --preset macos-debug-build-wx
 ctest --preset macos-debug-test-qt
 
 # Run application from build directory
-./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt
+./build/macos-debug-qt/bin/LogViewer.app/Contents/MacOS/LogViewer
 # or use the script
 ./scripts/run_debug.sh
 ```
@@ -93,7 +93,7 @@ LogViewer/
 ├── build/                          # Build outputs (not in git)
 │   └── <preset-name>/              # e.g., macos-debug-qt
 │       ├── bin/                    # Executables for development
-│       │   ├── LogViewerQt.app/
+│       │   ├── LogViewer.app/
 │       │   └── etc/                # Config files copied here
 │       ├── lib/                    # Static libraries
 │       ├── plugins/                # Plugin shared libraries (.dylib/.so/.dll)
@@ -103,9 +103,9 @@ LogViewer/
 │       └── CMakeFiles/             # CMake internal files
 ├── dist/                           # Distribution files
 │   ├── packages/                   # Final installers (.dmg, .zip, .exe)
-│   │   └── LogViewerQt-1.0.0-Darwin.dmg
+│   │   └── LogViewer-1.0.0-Darwin.dmg
 │   └── staging/                    # Install staging (not in git)
-│       ├── LogViewerQt.app/
+│       ├── LogViewer.app/
 │       ├── etc/
 │       └── plugins/
 └── src/                            # Source code
@@ -121,7 +121,7 @@ The build system uses standard CMake output directories:
 
 **Development workflow:**
 1. Build: `cmake --build --preset <preset>`
-2. Run from build: `./build/<preset>/bin/LogViewerQt.app/...`
+2. Run from build: `./build/<preset>/bin/LogViewer.app/...`
 3. All outputs stay in `build/` directory
 
 **Distribution workflow:**

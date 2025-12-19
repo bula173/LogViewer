@@ -2,7 +2,7 @@
 # CPACK
 
 set(CPACK_PACKAGE_VENDOR "mkwiatko")
-set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-Qt")
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_CONTACT "mkwiatko <marcinkwiatkowski173@gmail.com>")
 set(HOMEPAGE "https://github.com/bula173/LogViewer")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
@@ -47,13 +47,13 @@ if(WIN32 AND NOT UNIX)
         
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
 
-        set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Qt")
-        set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (Qt)")
+        set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}")
+        set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME}")
 
         # Icon of the installer
         set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
         set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
-        # Install/Uninstall icons: point to the right exe (Qt: LogViewerQt.exe, wx: LogViewerWx.exe)
+        # Install/Uninstall icons: point to the right exe (LogViewer.exe)
         set(CPACK_NSIS_INSTALLED_ICON_NAME "${CPACK_GUI_EXE_NAME}.exe")
 
         
@@ -198,7 +198,6 @@ else()
             /usr/bin
             /usr/share
             /usr/share/applications
-            /usr/share/doc
             /usr/share/icons
             /usr/share/icons/hicolor
             /usr/share/icons/hicolor/256x256
@@ -282,42 +281,6 @@ if(CMAKE_CPACK_COMMAND)
             COMMENT "Creating ${flavor} installer via CPack"
             VERBATIM)
     endfunction()
-
-    _add_split_package(package_qt "qt_app\;common" "qt")
     
 endif()
 
-#-------------------------------------------------------------------------------
-# Installation rules (for CPack)
-
-# Install the core application library (includes Qt UI)
-install(
-    TARGETS application_core
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-)
-
-# Install the main executable
-install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION .
-)
-
-if(NOT APPLE)
-    if(WIN32)
-        set(EXCLUDE_PATTERN "${PROJECT_NAME}.exe")
-    else()
-        set(EXCLUDE_PATTERN "${PROJECT_NAME}")
-    endif()
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION bin
-        PATTERN ${EXCLUDE_PATTERN} EXCLUDE)
-endif()
-
-# Install public headers
-install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/application/
-    DESTINATION include/application
-    FILES_MATCHING
-        PATTERN "*.hpp"
-        PATTERN "*.h"
-)

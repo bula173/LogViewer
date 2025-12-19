@@ -159,9 +159,9 @@ For large log files, the AI analysis uses intelligent sampling:
 
 ### Location
 
-**macOS:** `~/Library/Application Support/LogViewerQt/config.json`
-**Linux:** `~/.config/LogViewerQt/config.json`
-**Windows:** `%APPDATA%\LogViewerQt\config.json`
+**macOS:** `~/Library/Application Support/LogViewer/config.json`
+**Linux:** `~/.config/LogViewer/config.json`
+**Windows:** `%APPDATA%\LogViewer\config.json`
 
 ### Structure
 

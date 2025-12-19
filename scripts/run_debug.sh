@@ -1,4 +1,4 @@
 #! /bin/bash
 
 # Run from build directory
-./build/macos-debug-qt/bin/LogViewerQt.app/Contents/MacOS/LogViewerQt
+./build/macos-debug-qt/bin/LogViewer.app/Contents/MacOS/LogViewer

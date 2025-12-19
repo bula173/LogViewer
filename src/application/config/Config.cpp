@@ -284,7 +284,7 @@ void Config::SaveConfig()
         j["filters"]["typeFilterField"] = typeFilterField;
         
         // Note: AI configuration is now managed by the AI provider plugin
-        // and stored in ~/Library/Application Support/LogViewerQt/plugins/ai_provider/config.json
+        // and stored in ~/Library/Application Support/LogViewer/plugins/ai_provider/config.json
         
         // Save dictionary file path
         j["dictionaryFilePath"] = m_dictionaryFilePath;

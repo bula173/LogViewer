@@ -28,7 +28,7 @@ Run the application with detailed logging:
 set QT_DEBUG_PLUGINS=1
 set QT_LOGGING_RULES="*.debug=true"
 set QT_QPA_PLATFORM_PLUGIN_PATH=.\platforms
-dist\Debug\LogViewerQt.exe > debug_output.txt 2>&1
+dist\Debug\LogViewer.exe > debug_output.txt 2>&1
 ```
 
 Check `debug_output.txt` for error messages.
@@ -37,7 +37,7 @@ Check `debug_output.txt` for error messages.
 
 View the application's own log file:
 ```cmd
-notepad %APPDATA%\LogViewerQt\logs\logviewer.log
+notepad %APPDATA%\LogViewer\logs\logviewer.log
 ```
 
 ## Common Issues and Solutions
@@ -77,7 +77,7 @@ echo %PATH% | findstr /i "qt"
 3. Or set a clean PATH:
 ```cmd
 set PATH=C:\Windows\System32;C:\Windows
-dist\Debug\LogViewerQt.exe
+dist\Debug\LogViewer.exe
 ```
 
 ### Issue 3: Missing Visual C++ Redistributables
@@ -99,7 +99,7 @@ Download and install:
 **Solution:**
 ```cmd
 # Delete configuration directory
-rd /s /q "%APPDATA%\LogViewerQt"
+rd /s /q "%APPDATA%\LogViewer"
 # Restart application (will create fresh config)
 ```
 
@@ -112,7 +112,7 @@ rd /s /q "%APPDATA%\LogViewerQt"
 
 **Solution:**
 1. Temporarily disable antivirus
-2. Add exception for LogViewerQt.exe
+2. Add exception for LogViewer.exe
 3. Check Windows Defender logs:
    ```cmd
    powershell Get-MpThreatDetection
@@ -144,11 +144,11 @@ eventvwr.msc
 ```
 Look under:
 - Windows Logs → Application (for application crashes)
-- Look for "Application Error" events related to LogViewerQt.exe
+- Look for "Application Error" events related to LogViewer.exe
 
 ### 4. Dependency Walker
 1. Download Dependency Walker (depends.exe)
-2. Open LogViewerQt.exe
+2. Open LogViewer.exe
 3. Look for:
    - Missing DLLs (red highlight)
    - DLL version mismatches
@@ -216,7 +216,7 @@ If none of the above helps, collect:
 
 1. Output from `windows_debug.bat`
 2. Content of `debug_output.txt` (with Qt debug enabled)
-3. Application log file from `%APPDATA%\LogViewerQt\logs\`
+3. Application log file from `%APPDATA%\LogViewer\logs\`
 4. Windows Event Viewer crash details
 5. System information:
    ```cmd
@@ -230,7 +230,7 @@ Note: ASAN is **not supported on Windows with MSVC**. For memory debugging on Wi
 1. Use Windows Debug build with debug heap:
    ```cmd
    set _NO_DEBUG_HEAP=0
-   dist\Debug\LogViewerQt.exe
+   dist\Debug\LogViewer.exe
    ```
 
 2. Or use Application Verifier (Microsoft tool)

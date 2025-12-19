@@ -39,9 +39,9 @@ echo.
 
 echo [4/7] Checking APPDATA directory...
 echo   APPDATA=%APPDATA%
-if exist "%APPDATA%\LogViewerQt" (
+if exist "%APPDATA%\LogViewer" (
     echo   OK: Config directory exists
-    dir /b "%APPDATA%\LogViewerQt"
+    dir /b "%APPDATA%\LogViewer"
 ) else (
     echo   INFO: Config directory not created yet
 )
@@ -50,9 +50,9 @@ echo.
 echo [5/7] Checking application directory...
 cd /d "%~dp0.."
 echo   App directory: %CD%
-if exist "dist\Debug\LogViewerQt.exe" (
+if exist "dist\Debug\LogViewer.exe" (
     echo   OK: Debug executable found
-) else if exist "dist\Release\LogViewerQt.exe" (
+) else if exist "dist\Release\LogViewer.exe" (
     echo   OK: Release executable found
 ) else (
     echo   ERROR: Executable not found!
@@ -74,8 +74,8 @@ echo [7/7] Checking DLL dependencies...
 where dumpbin >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo   Running dependency check...
-    if exist "dist\Debug\LogViewerQt.exe" (
-        dumpbin /dependents "dist\Debug\LogViewerQt.exe" | findstr /i "Qt6"
+    if exist "dist\Debug\LogViewer.exe" (
+        dumpbin /dependents "dist\Debug\LogViewer.exe" | findstr /i "Qt6"
     )
 ) else (
     echo   INFO: dumpbin not available (install Visual Studio to get it)
@@ -89,6 +89,6 @@ echo.
 echo To run with detailed Qt debug output:
 echo   set QT_DEBUG_PLUGINS=1
 echo   set QT_LOGGING_RULES="*.debug=true"
-echo   dist\Debug\LogViewerQt.exe
+echo   dist\Debug\LogViewer.exe
 echo.
 pause
