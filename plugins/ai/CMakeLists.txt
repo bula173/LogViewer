@@ -4,7 +4,7 @@ set(PLUGIN_VERSION "1.0.0")
 set(PLUGIN_DISPLAY_NAME "AI Provider")
 set(PLUGIN_API_VERSION "1.0.0")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Concurrent)
+find_package(CURL REQUIRED)  # Changed to uppercase
 
 add_library(${PLUGIN_NAME} SHARED
     AIProviderPlugin.cpp
@@ -23,12 +23,20 @@ add_library(${PLUGIN_NAME} SHARED
     IAIService.hpp
     OllamaClient.cpp
     OllamaClient.hpp
+    OllamaSetupDialog.cpp
+    OllamaSetupDialog.hpp
     OpenAIClient.cpp
     OpenAIClient.hpp
     GeminiClient.cpp
     GeminiClient.hpp
     AnthropicClient.cpp
     AnthropicClient.hpp
+)
+
+target_link_libraries(${PLUGIN_NAME}
+    PRIVATE
+        application_core
+        CURL::libcurl  # Changed to standard target name
 )
 
 set_target_properties(${PLUGIN_NAME} PROPERTIES
@@ -38,19 +46,6 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
     PREFIX ""
 )
 
-target_include_directories(${PLUGIN_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/include
-)
-
-target_link_libraries(${PLUGIN_NAME} PRIVATE
-    application_core
-    application_qt
-    Qt6::Widgets
-    Qt6::Core
-    Qt6::Concurrent
-)
-
 if(WIN32)
     set(PLUGIN_EXTENSION ".dll")
 elseif(APPLE)
@@ -58,10 +53,6 @@ elseif(APPLE)
 else()
     set(PLUGIN_EXTENSION ".so")
 endif()
-
-install(TARGETS ${PLUGIN_NAME}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/plugins
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/plugins)
 
 set(PLUGIN_ENTRY "${PLUGIN_NAME}${PLUGIN_EXTENSION}")
 set(PLUGIN_CONFIG_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/config.json.in")
@@ -92,6 +83,12 @@ add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
         "${PLUGIN_ENTRY}" "config.json"
     WORKING_DIRECTORY ${PLUGIN_PACKAGE_DIR}
     COMMENT "Packaging ${PLUGIN_NAME}.zip"
+)
+
+install(FILES
+        "${CMAKE_BINARY_DIR}/plugins/${PLUGIN_NAME}.zip"
+        DESTINATION .
+        COMPONENT plugins
 )
 
 message(STATUS "Building ${PLUGIN_NAME} plugin")

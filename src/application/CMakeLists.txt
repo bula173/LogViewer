@@ -4,19 +4,21 @@ set(CMAKE_AUTOUIC ON)
 
 add_library(application_core)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Concurrent)
-find_package(LibArchive)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(LibArchive REQUIRED)
+find_package(EXPAT REQUIRED)
 
 # Link against required dependencies
 target_link_libraries(application_core
-    PUBLIC
-        spdlog::spdlog
-        nlohmann_json::nlohmann_json
-        fmt::fmt
-        expat
-        LibArchive::LibArchive
+    PRIVATE  # Changed internal libs to PRIVATE
+        EXPAT::EXPAT
+        LibArchive::LibArchive  # Assuming this is the correct target
+    PUBLIC   # Keep Qt public for plugins
+        Qt6::Core
         Qt6::Widgets
-        Qt6::Concurrent
+        nlohmann_json::nlohmann_json
+        spdlog::spdlog
+        fmt::fmt
 )
 
 # Set library properties
@@ -35,6 +37,7 @@ add_subdirectory(parsers)
 add_subdirectory(plugins)
 add_subdirectory(ui)
 add_subdirectory(util)
+add_subdirectory(version)
 
 # Public include interface
 target_include_directories(application_core
@@ -49,6 +52,52 @@ target_include_directories(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/plugins>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ui>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/util>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/version>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/main>
         $<INSTALL_INTERFACE:include>
 )
+
+
+if(BUILD_SDK)
+    # Install public headers
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/application/
+        DESTINATION include
+        COMPONENT sdk
+        FILES_MATCHING 
+            PATTERN "*.h" 
+            PATTERN "*.hpp"
+        PATTERN "*/private/*" EXCLUDE  # Exclude private headers
+    )
+
+    # Install library as file with component
+    install(FILES $<TARGET_FILE:application_core>
+        DESTINATION lib
+        COMPONENT sdk
+    )
+
+    # Manually create and install targets file
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/cmake/LogViewerTargets.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/LogViewerTargets.cmake
+        @ONLY
+    )
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerTargets.cmake
+        DESTINATION lib/cmake/LogViewer
+        COMPONENT sdk
+    )
+
+    # Generate and install config file
+    include(CMakePackageConfigHelpers)
+
+    configure_package_config_file(
+        ${CMAKE_SOURCE_DIR}/cmake/LogViewerConfigVersion.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
+        INSTALL_DESTINATION lib/cmake/LogViewer
+    )
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
+        DESTINATION lib/cmake/LogViewer
+        COMPONENT sdk
+    )
+endif()

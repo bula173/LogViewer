@@ -22,7 +22,6 @@ target_sources(application_core
         ConfigEditorDialog.cpp
         StructuredConfigDialog.cpp
         LogFileLoadDialog.cpp
-        OllamaSetupDialog.cpp
         ${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp
@@ -31,7 +30,6 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/ItemDetailsView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/LogFileLoadDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/MainWindow.hpp
-        ${CMAKE_CURRENT_LIST_DIR}/OllamaSetupDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/SearchResultsView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/StructuredConfigDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp
@@ -44,7 +42,6 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ItemDetailsView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/LogFileLoadDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/MainWindow.hpp>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OllamaSetupDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/SearchResultsView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StructuredConfigDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp>
@@ -56,7 +53,6 @@ target_sources(application_core
         $<INSTALL_INTERFACE:ItemDetailsView.hpp>
         $<INSTALL_INTERFACE:LogFileLoadDialog.hpp>
         $<INSTALL_INTERFACE:MainWindow.hpp>
-        $<INSTALL_INTERFACE:OllamaSetupDialog.hpp>
         $<INSTALL_INTERFACE:SearchResultsView.hpp>
         $<INSTALL_INTERFACE:StructuredConfigDialog.hpp>
         $<INSTALL_INTERFACE:TypeFilterView.hpp>

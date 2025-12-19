@@ -23,8 +23,17 @@ set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer")
 set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
 
-set(CPACK_COMPONENT_INSTALL OFF)
-set(CPACK_MONOLITHIC_INSTALL ON)
+# Enable component-based packaging
+set(CPACK_COMPONENT_INSTALL ON)
+set(CPACK_MONOLITHIC_INSTALL OFF)
+
+# Define components
+set(CPACK_COMPONENT_APPLICATION_DISPLAY_NAME "LogViewer Application")
+set(CPACK_COMPONENT_APPLICATION_DESCRIPTION "Main LogViewer executable and Qt libraries")
+set(CPACK_COMPONENT_PLUGINS_DISPLAY_NAME "LogViewer Plugins")
+set(CPACK_COMPONENT_PLUGINS_DESCRIPTION "Optional plugins for extended functionality")
+set(CPACK_COMPONENT_SDK_DISPLAY_NAME "LogViewer SDK")
+set(CPACK_COMPONENT_SDK_DESCRIPTION "Development SDK for creating plugins")
 
 set(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
 
@@ -282,5 +291,9 @@ if(CMAKE_CPACK_COMMAND)
             VERBATIM)
     endfunction()
     
+    # Create separate packages
+    _add_split_package(application_package "application" "Application")
+    _add_split_package(plugins_package "plugins" "Plugins")
+    _add_split_package(sdk_package "sdk" "SDK")
 endif()
 

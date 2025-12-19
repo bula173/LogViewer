@@ -1,0 +1,7 @@
+# LogViewerTargets.cmake.in
+add_library(LogViewer::application_core STATIC IMPORTED)
+set_target_properties(LogViewer::application_core PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_INSTALL_PREFIX}/lib/libapplication_core.a"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/include"
+    INTERFACE_LINK_LIBRARIES "Qt6::Core;Qt6::Widgets"
+)

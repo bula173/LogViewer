@@ -1,7 +1,7 @@
 #include "Config.hpp"
 #include "EventsContainer.hpp"
 #include "Error.hpp"
-#include "version.h"
+#include "Version.hpp"
 #include "MainController.hpp"
 #include "qt/MainWindow.hpp"
 #include "Logger.hpp"

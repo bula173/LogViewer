@@ -10,8 +10,12 @@ if(MINGW)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc -static")
 endif()
 
+# Option to build SDK for plugin development
+option(BUILD_SDK "Build SDK for plugin development" ON)
+
 add_subdirectory(thirdparty)
-add_subdirectory(src/application)
-add_subdirectory(src/main)
+add_subdirectory(src)
 add_subdirectory(tests)
+add_subdirectory(etc)
+add_subdirectory(plugins)
 add_subdirectory(packaging)

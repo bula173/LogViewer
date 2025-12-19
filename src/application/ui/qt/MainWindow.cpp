@@ -9,13 +9,12 @@
 #include "ItemDetailsView.hpp"
 #include "SearchResultsView.hpp"
 #include "TypeFilterView.hpp"
-#include "OllamaSetupDialog.hpp"
 #include "LogFileLoadDialog.hpp"
 #include "Logger.hpp"
 #include "Config.hpp"
 #include "ConfigEditorDialog.hpp"
 #include "StructuredConfigDialog.hpp"
-#include "version.h"
+#include "Version.hpp"
 #include "PluginManager.hpp"
 #include "IAnalysisPlugin.hpp"
 #include "IAIPlugin.hpp"
@@ -406,14 +405,6 @@ void MainWindow::SetupMenus()
 
     toolsMenu->addSeparator();
 
-    auto* aiSetupAction = toolsMenu->addAction(tr("AI Analysis &Setup..."));
-    connect(aiSetupAction, &QAction::triggered, this, [this]() {
-        ui::qt::OllamaSetupDialog dlg(this);
-        dlg.exec();
-    });
-    
-    toolsMenu->addSeparator();
-    
     auto* reloadPluginsAction = toolsMenu->addAction(tr("&Reload Plugins"));
     reloadPluginsAction->setShortcut(QKeySequence(tr("Ctrl+Shift+P")));
     connect(reloadPluginsAction, &QAction::triggered, this, [this]() {

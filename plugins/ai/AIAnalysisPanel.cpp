@@ -1,10 +1,9 @@
 #include "AIAnalysisPanel.hpp"
 #include "AIConfigPanel.hpp"
-#include "OllamaSetupDialog.hpp"
-#include "EventsTableView.hpp"
+#include "ui/qt/EventsTableView.hpp"
 #include "OllamaClient.hpp"
-#include "Config.hpp"
-#include "Logger.hpp"
+#include "OllamaSetupDialog.hpp"
+#include "util/Logger.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
