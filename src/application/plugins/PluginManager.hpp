@@ -10,8 +10,8 @@
 
 #include "IPlugin.hpp"
 #include "IPluginObserver.hpp"
-#include "util/Result.hpp"
-#include "error/Error.hpp"
+#include "Result.hpp"
+#include "Error.hpp"
 #include <filesystem>
 #include <map>
 #include <memory>

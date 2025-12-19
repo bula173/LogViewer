@@ -1,5 +1,5 @@
-#include "src/application/mvc/IModel.hpp"
-#include "src/application/mvc/IView.hpp"
+#include "IModel.hpp"
+#include "IView.hpp"
 #include <gmock/gmock.h>
 
 namespace mvc

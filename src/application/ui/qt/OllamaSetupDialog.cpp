@@ -1,5 +1,5 @@
-#include "ui/qt/OllamaSetupDialog.hpp"
-#include "ai/OllamaClient.hpp"
+#include "OllamaSetupDialog.hpp"
+//#include "OllamaClient.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -63,15 +63,8 @@ bool OllamaSetupDialog::CheckOllamaInstalled()
 
 bool OllamaSetupDialog::CheckOllamaRunning()
 {
-    try
-    {
-        ai::OllamaClient client;
-        return client.IsAvailable();
-    }
-    catch (...)
-    {
-        return false;
-    }
+    // TODO: Implement with OllamaClient
+    return false;
 }
 
 void OllamaSetupDialog::BuildUi()

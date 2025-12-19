@@ -1,9 +1,9 @@
-#include "mvc/MainController.hpp"
+#include "MainController.hpp"
 
-#include "config/Config.hpp"
-#include "error/Error.hpp"
-#include "parser/ParserFactory.hpp"
-#include "util/WxWidgetsUtils.hpp"
+#include "Config.hpp"
+#include "Error.hpp"
+#include "ParserFactory.hpp"
+#include "WxWidgetsUtils.hpp"
 
 #include <algorithm>
 #include <filesystem>

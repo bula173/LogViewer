@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "ui/UiServices.hpp"
-#include "util/Logger.hpp"
+#include "UiServices.hpp"
+#include "Logger.hpp"
 
 #include <atomic>
 #include <stdexcept>

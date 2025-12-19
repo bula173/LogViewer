@@ -1,11 +1,11 @@
 #pragma once
 
-#include "db/EventsContainer.hpp"
-#include "mvc/IControler.hpp"
-#include "parser/IDataParser.hpp"
-#include "ui/IEventsView.hpp"
-#include "ui/IMainWindowView.hpp"
-#include "ui/IUiPanels.hpp"
+#include "EventsContainer.hpp"
+#include "IControler.hpp"
+#include "IDataParser.hpp"
+#include "IEventsView.hpp"
+#include "IMainWindowView.hpp"
+#include "IUiPanels.hpp"
 
 #include <filesystem>
 #include <cstddef>

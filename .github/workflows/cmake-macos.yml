@@ -20,7 +20,6 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Release]
-        gui_framework: [qt]
 
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -36,16 +35,14 @@ jobs:
         run: |
           brew update
           brew install ninja ccache expat cppcheck libssh libarchive zip eigen boost
-          ${{ matrix.gui_framework == 'wx' && 'brew install wxwidgets' || '' }}
-          ${{ matrix.gui_framework == 'qt' && 'brew install qt' || '' }}
+          brew install qt
 
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-macos-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-${{ github.sha }}
+          key: ccache-macos-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-macos-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-
             ccache-macos-clang-${{ matrix.build_type }}-
             ccache-macos-clang-
 
@@ -53,34 +50,24 @@ jobs:
         run: |
           which clang++
           clang++ --version
-          ${{ matrix.gui_framework == 'wx' && 'wx-config --version' || 'echo "Qt build - skipping wx-config"' }}
 
       - name: Configure
         run: |
-          # Determine framework-specific settings
-          if [ "${{ matrix.gui_framework }}" = "wx" ]; then
-            GUI_FRAMEWORK="WX"
-            EXTRA_ARGS=""
-          else
-            GUI_FRAMEWORK="QT"
-            EXTRA_ARGS="-DCMAKE_PREFIX_PATH=$(brew --prefix qt)"
-          fi
-          
-          cmake -B "$BUILD_DIR-${{ matrix.gui_framework }}" -S "$GITHUB_WORKSPACE" \
+          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_C_COMPILER=/usr/bin/clang \
             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DGUI_FRAMEWORK="$GUI_FRAMEWORK" \
+            -DGUI_FRAMEWORK="QT" \
             -DLibArchive_ROOT=$(brew --prefix libarchive) \
-            $EXTRA_ARGS
+            -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
 
       - name: Build
         run: |
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.gui_framework }}-${{ matrix.build_type }}.log
+          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug'
@@ -91,67 +78,76 @@ jobs:
           
           # Run cppcheck analysis
           echo "Running cppcheck..."
-          cmake --build --preset macos-cppcheck 2>&1 | tee dist/logs/cppcheck-${{ matrix.gui_framework }}.log || true
+          cmake --build --preset macos-cppcheck 2>&1 | tee dist/logs/cppcheck.log || true
           
           # Run clang-tidy if available
           if command -v clang-tidy &> /dev/null; then
             echo "Running clang-tidy..."
-            cmake --build --preset macos-clang-tidy 2>&1 | tee dist/logs/clang-tidy-${{ matrix.gui_framework }}.log || true
+            cmake --build --preset macos-clang-tidy 2>&1 | tee dist/logs/clang-tidy.log || true
           fi
 
       - name: List tests
-        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
+        working-directory: ${{ env.BUILD_DIR }}
         run: ctest -N || true
 
       - name: Run tests
-        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
+        working-directory: ${{ env.BUILD_DIR }}
         run: ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
         run: |
-          cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
+          cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
       - name: Verify CPack config
         if: matrix.build_type == 'Release'
-        run: test -f "$BUILD_DIR-${{ matrix.gui_framework }}/CPackConfig.cmake"
+        run: test -f "$BUILD_DIR/CPackConfig.cmake"
 
-      - name: Package (CPack DMG)
+      - name: Package (CPack TGZ)
         if: matrix.build_type == 'Release'
-        run: cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config Release --target package_${{ matrix.gui_framework }}
+        run: |
+          cd "$BUILD_DIR"
+          cpack -G TGZ -C Release
+
+      - name: Move packages to dist
+        if: matrix.build_type == 'Release'
+        run: |
+          mkdir -p dist/packages
+          find "$BUILD_DIR" -maxdepth 1 -type f -name "*.tar.gz" -exec mv {} dist/packages/ \;
+          ls -lh dist/packages/
 
       - name: Collect plugins
         if: matrix.build_type == 'Release'
         run: |
           echo "Listing plugins in build directory:"
-          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins/" || echo "plugins not found"
+          ls -lh "$BUILD_DIR/plugins/" || echo "plugins not found"
           echo "Plugin zip files:"
-          find "$BUILD_DIR-${{ matrix.gui_framework }}/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
+          find "$BUILD_DIR/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
-          name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/plugins/*.zip
+          name: macos-${{ matrix.build_type }}-plugins
+          path: ${{ env.BUILD_DIR }}/plugins/*.zip
           if-no-files-found: warn
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-artifacts
+          name: macos-${{ matrix.build_type }}-artifacts
           path: |
             dist/staging/**
-            dist/packages/*.dmg
-            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/Testing/Temporary/LastTest.log
+            dist/packages/*.tar.gz
+            ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
 
       - name: Upload build logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: macos-${{ matrix.build_type }}-${{ matrix.gui_framework }}-logs
+          name: macos-${{ matrix.build_type }}-logs
           path: |
             dist/logs/**
           if-no-files-found: ignore

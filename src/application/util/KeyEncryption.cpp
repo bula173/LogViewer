@@ -1,5 +1,5 @@
-#include "util/KeyEncryption.hpp"
-#include "util/Logger.hpp"
+#include "KeyEncryption.hpp"
+#include "Logger.hpp"
 #include <array>
 #include <sstream>
 #include <iomanip>

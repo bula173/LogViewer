@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mvc/IView.hpp"
-#include "ui/IEventsView.hpp"
+#include "IView.hpp"
+#include "IEventsView.hpp"
 
 #include <QTableView>
 #include <vector>

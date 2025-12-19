@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mvc/IView.hpp"
-#include "ui/IUiPanels.hpp"
+#include "IView.hpp"
+#include "IUiPanels.hpp"
 
 #include <QWidget>
 

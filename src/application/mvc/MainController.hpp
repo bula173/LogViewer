@@ -1,9 +1,9 @@
 #pragma once
 
-#include "db/EventsContainer.hpp"
-#include "mvc/IControler.hpp"
+#include "EventsContainer.hpp"
+#include "IControler.hpp"
 
-#include "parser/IDataParser.hpp"
+#include "IDataParser.hpp"
 
 #include <filesystem>
 #include <memory>

@@ -1,7 +1,7 @@
 #include "FilterManager.hpp"
 
-#include "config/Config.hpp"
-#include "util/Logger.hpp"
+#include "Config.hpp"
+#include "Logger.hpp"
 
 #include <algorithm>
 #include <filesystem>

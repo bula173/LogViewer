@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 #include "csv/CsvParser.hpp"
-#include "db/LogEvent.hpp"
+#include "LogEvent.hpp"
 #include <sstream>
 #include <vector>
 

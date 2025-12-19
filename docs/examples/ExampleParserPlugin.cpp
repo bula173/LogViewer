@@ -6,7 +6,7 @@
  */
 
 #include "ExampleParserPlugin.hpp"
-#include "util/Logger.hpp"
+#include "Logger.hpp"
 #include <fstream>
 
 namespace example

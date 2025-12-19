@@ -1,9 +1,9 @@
-#include "ui/qt/StructuredConfigDialog.hpp"
+#include "StructuredConfigDialog.hpp"
 
-#include "config/Config.hpp"
-#include "config/FieldConversionPluginRegistry.hpp"
-#include "util/Logger.hpp"
-#include "plugins/PluginManager.hpp"
+#include "Config.hpp"
+#include "FieldConversionPluginRegistry.hpp"
+#include "Logger.hpp"
+#include "PluginManager.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

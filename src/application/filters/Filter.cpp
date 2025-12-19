@@ -1,6 +1,6 @@
 #include "Filter.hpp"
-#include "util/Logger.hpp"
-#include "error/Error.hpp"
+#include "Logger.hpp"
+#include "Error.hpp"
 
 namespace filters
 {

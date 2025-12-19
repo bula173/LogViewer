@@ -1,8 +1,8 @@
-#include "ui/qt/EventsTableView.hpp"
+#include "EventsTableView.hpp"
 
-#include "application/util/Logger.hpp"
-#include "db/EventsContainer.hpp"
-#include "ui/qt/EventsTableModel.hpp"
+#include "Logger.hpp"
+#include "EventsContainer.hpp"
+#include "EventsTableModel.hpp"
 
 #include <QHeaderView>
 #include <QItemSelectionModel>

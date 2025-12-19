@@ -1,7 +1,7 @@
-#include "ui/qt/FiltersPanel.hpp"
+#include "FiltersPanel.hpp"
 
-#include "ui/qt/FilterEditorDialog.hpp"
-#include "util/Logger.hpp"
+#include "FilterEditorDialog.hpp"
+#include "Logger.hpp"
 
 #include <QColor>
 #include <QFileDialog>

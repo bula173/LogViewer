@@ -13,6 +13,7 @@ file(GLOB TEST_SOURCES "*.cpp")
 add_executable(
   ${PROJECT_NAME}_tests
   ${TEST_SOURCES}
+  ${CMAKE_BINARY_DIR}/src/main/version.cpp
 )
 
 configure_file(

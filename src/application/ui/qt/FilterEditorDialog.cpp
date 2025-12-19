@@ -1,8 +1,8 @@
-#include "ui/qt/FilterEditorDialog.hpp"
+#include "FilterEditorDialog.hpp"
 
-#include "config/Config.hpp"
-#include "filters/FilterManager.hpp"
-#include "util/Logger.hpp"
+#include "Config.hpp"
+#include "FilterManager.hpp"
+#include "Logger.hpp"
 
 #include <QCheckBox>
 #include <QComboBox>

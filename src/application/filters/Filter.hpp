@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "db/LogEvent.hpp"
-#include "filters/IFilterStrategy.hpp"
-#include "mvc/IModel.hpp"
+#include "LogEvent.hpp"
+#include "IFilterStrategy.hpp"
+#include "IModel.hpp"
 
 #include <nlohmann/json.hpp>
 

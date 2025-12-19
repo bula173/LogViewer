@@ -23,7 +23,6 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Release]
-        gui_framework: [qt]
 
     env:
       BUILD_DIR: ${{ github.workspace }}\build
@@ -31,7 +30,7 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}\.ccache
       CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
-      GUI_FRAMEWORK: ${{ matrix.gui_framework }}
+      GUI_FRAMEWORK: QT
 
     steps:
       - uses: actions/checkout@v4
@@ -74,9 +73,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-win-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-${{ github.sha }}
+          key: ccache-win-clang-${{ matrix.build_type }}-${{ github.sha }}
           restore-keys: |
-            ccache-win-clang-${{ matrix.build_type }}-${{ matrix.gui_framework }}-
             ccache-win-clang-${{ matrix.build_type }}-
             ccache-win-clang-
 
@@ -85,32 +83,22 @@ jobs:
         run: |
           export PATH="/mingw64/bin:$PATH"
           
-          # Determine framework-specific settings
-          if [ "${{ matrix.gui_framework }}" = "wx" ]; then
-            GUI_FRAMEWORK="WX"
-            EXTRA_ARGS="-DwxWidgets_CONFIG_EXECUTABLE=/mingw64/bin/wx-config"
-          else
-            GUI_FRAMEWORK="QT"
-            EXTRA_ARGS="-DQt6_DIR=/mingw64/lib/cmake/Qt6"
-          fi
-          
-          cmake -B "$BUILD_DIR-${{ matrix.gui_framework }}" -S "$GITHUB_WORKSPACE" \
+          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
                 -G "$CMAKE_GENERATOR" \
                 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
                 -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
                 -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_PREFIX_PATH=/mingw64 \
-                -DGUI_FRAMEWORK="$GUI_FRAMEWORK" \
-                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-                $EXTRA_ARGS
+                -DGUI_FRAMEWORK="QT" \
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Build
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-qt-${{ matrix.build_type }}.log
+          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug'
@@ -133,18 +121,18 @@ jobs:
 
       - name: Run tests
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
+        working-directory: ${{ env.BUILD_DIR }}
         run: |
           export PATH="/mingw64/bin:$PATH"
           ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
 
       - name: Install (staging)
         shell: msys2 {0}
-        run: cmake --install "$BUILD_DIR-${{ matrix.gui_framework }}" --config ${{ matrix.build_type }} --prefix "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
+        run: cmake --install "$BUILD_DIR" --config ${{ matrix.build_type }} --prefix "$BUILD_DIR/_staging"
 
       - name: run CPack NSIS directly
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}
+        working-directory: ${{ env.BUILD_DIR }}
         run: |
           export PATH="/mingw64/bin:$PATH"
           cpack -G NSIS -C ${{ matrix.build_type }} --config CPackConfig.cmake
@@ -154,33 +142,33 @@ jobs:
         shell: msys2 {0}
         run: |
           echo "Listing plugins in build directory:"
-          ls -lh "$BUILD_DIR-${{ matrix.gui_framework }}/plugins/" || echo "plugins not found"
+          ls -lh "$BUILD_DIR/plugins/" || echo "plugins not found"
           echo "Plugin zip files:"
-          find "$BUILD_DIR-${{ matrix.gui_framework }}/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
+          find "$BUILD_DIR/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-plugins
-          path: ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}/plugins/*.zip
+          name: windows-${{ matrix.build_type }}-plugins
+          path: ${{ env.BUILD_DIR }}/plugins/*.zip
           if-no-files-found: warn
 
       - name: Upload tests artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-tests
+          name: windows-${{ matrix.build_type }}-tests
           path: |
-            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\Testing\Temporary\LastTest.log
-            ${{ env.BUILD_DIR }}-${{ matrix.gui_framework }}\tests\bin\LogViewer_tests.exe
+            ${{ env.BUILD_DIR }}\Testing\Temporary\LastTest.log
+            ${{ env.BUILD_DIR }}\tests\bin\LogViewer_tests.exe
           if-no-files-found: ignore
 
       - name: Upload staging artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-staging
+            name: windows-${{ matrix.build_type }}-staging
             path: dist/staging/**
             if-no-files-found: ignore
 
@@ -188,7 +176,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-installer
+          name: windows-${{ matrix.build_type }}-installer
           path: dist/packages/*.exe
           if-no-files-found: warn
 
@@ -196,11 +184,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ matrix.build_type }}-${{ matrix.gui_framework }}-logs
+          name: windows-${{ matrix.build_type }}-logs
           path: |
             dist/logs/**
           if-no-files-found: ignore
 
       - name: List CPack staging
         shell: msys2 {0}
-        run: ls -lhR "$BUILD_DIR-${{ matrix.gui_framework }}/_staging"
+        run: ls -lhR "$BUILD_DIR/_staging"

@@ -5,8 +5,8 @@
  * @date 2025
  */
 
-#include "filters/IFilterStrategy.hpp"
-#include "util/Logger.hpp"
+#include "IFilterStrategy.hpp"
+#include "Logger.hpp"
 #include <algorithm>
 #include <unordered_map>
 #include <regex>

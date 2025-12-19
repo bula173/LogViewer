@@ -3,8 +3,8 @@
 #include <QAbstractTableModel>
 #include <QColor>
 
-#include "config/Config.hpp"
-#include "db/EventsContainer.hpp"
+#include "Config.hpp"
+#include "EventsContainer.hpp"
 
 #include <vector>
 

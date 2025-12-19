@@ -1,7 +1,7 @@
-#include "ui/qt/ConfigEditorDialog.hpp"
+#include "ConfigEditorDialog.hpp"
 
-#include "application/util/Logger.hpp"
-#include "config/Config.hpp"
+#include "Logger.hpp"
+#include "Config.hpp"
 
 #include <QDialogButtonBox>
 #include <QFile>

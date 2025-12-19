@@ -1,4 +1,4 @@
-#include "config/BuiltinConversionPlugins.hpp"
+#include "BuiltinConversionPlugins.hpp"
 #include <algorithm>
 
 namespace config

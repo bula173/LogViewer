@@ -1,7 +1,4 @@
-if(USE_QT)
-    add_subdirectory(qt)
-elseif(USE_WXWIDGETS) 
-    add_subdirectory(wx)
-else()
-    message(FATAL_ERROR "No GUI framework selected! Set GUI_FRAMEWORK to WX or QT")
-endif()
+
+
+
+add_subdirectory(qt)

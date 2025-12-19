@@ -1,5 +1,5 @@
-#include "plugins/IFieldConversionPlugin.hpp"
-#include "config/FieldConversionPluginRegistry.hpp"
+#include "IFieldConversionPlugin.hpp"
+#include "FieldConversionPluginRegistry.hpp"
 #include <algorithm>
 #include <sstream>
 #include <iomanip>

@@ -2,19 +2,13 @@
 # CPACK
 
 set(CPACK_PACKAGE_VENDOR "mkwiatko")
-if(USE_QT)
-    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-Qt")
-elseif(USE_WXWIDGETS)
-    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-wx")
-else()
-    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-endif()
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}-Qt")
 set(CPACK_PACKAGE_CONTACT "mkwiatko <marcinkwiatkowski173@gmail.com>")
 set(HOMEPAGE "https://github.com/bula173/LogViewer")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
     "Log Viewer is a simple log viewer application.")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.md")
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/license.md")
+# set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.md")
+# set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/license.md")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
@@ -29,38 +23,10 @@ set(CPACK_PACKAGE_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/packages")
 set(CPACK_PACKAGE_EXECUTABLES "LogViewer" "LogViewer")
 set(CPACK_CREATE_DESKTOP_LINKS "LogViewer")
 
-set(CPACK_COMPONENT_INSTALL ON)
-set(CPACK_MONOLITHIC_INSTALL OFF)
+set(CPACK_COMPONENT_INSTALL OFF)
+set(CPACK_MONOLITHIC_INSTALL ON)
 
-# Set components based on what's actually being built
-set(CPACK_COMPONENTS_ALL common)
-
-# Add framework-specific components only if they're being built
-if(USE_WXWIDGETS)
-    list(APPEND CPACK_COMPONENTS_ALL wx_app)
-elseif(USE_QT)
-    list(APPEND CPACK_COMPONENTS_ALL qt_app)
-endif()
-
-set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Shared Resources")
-set(CPACK_COMPONENT_COMMON_DESCRIPTION
-    "Shared configuration, icons, and supporting files.")
-set(CPACK_COMPONENT_COMMON_HIDDEN TRUE)
-
-# Only define component descriptions if they're being built
-if(USE_WXWIDGETS)
-    set(CPACK_COMPONENT_WX_APP_DISPLAY_NAME "LogViewer (wxWidgets)")
-    set(CPACK_COMPONENT_WX_APP_DESCRIPTION
-        "Classic wxWidgets-based desktop application.")
-    set(CPACK_COMPONENT_WX_APP_DEPENDS common)
-endif()
-
-if(USE_QT)
-    set(CPACK_COMPONENT_QT_APP_DISPLAY_NAME "LogViewer (Qt)")
-    set(CPACK_COMPONENT_QT_APP_DESCRIPTION
-        "Modern Qt-based desktop application.")
-    set(CPACK_COMPONENT_QT_APP_DEPENDS common)
-endif()
+set(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
 
 # Disable automatic stripping on Windows (causes issues with MSYS2 paths)
 # Files are already optimized with -O3 in Release builds
@@ -81,13 +47,8 @@ if(WIN32 AND NOT UNIX)
         
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
 
-        if (USE_WXWIDGETS)
-            set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Wx")
-            set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (wxWidgets)")
-        elseif (USE_QT)
-            set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Qt")
-            set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (Qt)")
-        endif()
+        set(CPACK_GUI_EXE_NAME "${PROJECT_NAME}Qt")
+        set(CPACK_GUI_DISPLAY_NAME "${PROJECT_NAME} (Qt)")
 
         # Icon of the installer
         set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\LogViewer.ico")
@@ -136,11 +97,7 @@ if(WIN32 AND NOT UNIX)
             message(STATUS "   + Code Signing                        YES (${SIGNTOOL_EXECUTABLE})")
             
             # Sign the executable after building
-            if(USE_QT)
-                set(TARGET_TO_SIGN "${PROJECT_NAME}Qt")
-            elseif(USE_WXWIDGETS)
-                set(TARGET_TO_SIGN "${PROJECT_NAME}Wx")
-            endif()
+            set(TARGET_TO_SIGN "${PROJECT_NAME}")
             
             add_custom_command(TARGET ${TARGET_TO_SIGN} POST_BUILD
                 COMMAND ${SIGNTOOL_EXECUTABLE} sign /f "${CODE_SIGN_CERTIFICATE}" 
@@ -184,10 +141,13 @@ if(WIN32 AND NOT UNIX)
 elseif(APPLE)
     #--------------------------------------------------------------------------
     # Apple specific
-    set(CPACK_GENERATOR "DragNDrop")
+    set(CPACK_GENERATOR "Bundle")
     set(CPACK_PACKAGING_INSTALL_PREFIX "/")
 
     set(MACOSX_BUNDLE_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+    set(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
+    set(CPACK_BUNDLE_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
+    set(CPACK_BUNDLE_ICON ${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns)
     set(MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.LogViewer.LogViewer")
     set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_SOURCE_DIR}/packaging/LogViewer.icns)
     set(MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
@@ -263,22 +223,18 @@ else()
     # Note: .desktop file must have same name as executable
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.desktop
         DESTINATION share/applications/
-        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        COMPONENT common)
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png
         DESTINATION share/icons/hicolor/256x256/apps/
-        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        COMPONENT common)
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png
         DESTINATION share/icons/gnome/256x256/apps/
-        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        COMPONENT common)
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
     # License file
     install(FILES ${PROJECT_SOURCE_DIR}/license.md
         DESTINATION share/doc/${PROJECT_NAME}/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-        RENAME copyright
-        COMPONENT common)
+        RENAME copyright)
     # set package icon
     set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/LogViewer.png")
 endif()
@@ -327,16 +283,41 @@ if(CMAKE_CPACK_COMMAND)
             VERBATIM)
     endfunction()
 
-    # Only create packaging targets for frameworks that are being built
-    if(USE_WXWIDGETS)
-        _add_split_package(package_wx "wx_app\;common" "wx")
-    endif()
-    
-    if(USE_QT)
-        _add_split_package(package_qt "qt_app\;common" "qt")
-    endif()
+    _add_split_package(package_qt "qt_app\;common" "qt")
     
 endif()
 
 #-------------------------------------------------------------------------------
 # Installation rules (for CPack)
+
+# Install the core application library (includes Qt UI)
+install(
+    TARGETS application_core
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+
+# Install the main executable
+install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
+)
+
+if(NOT APPLE)
+    if(WIN32)
+        set(EXCLUDE_PATTERN "${PROJECT_NAME}.exe")
+    else()
+        set(EXCLUDE_PATTERN "${PROJECT_NAME}")
+    endif()
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION bin
+        PATTERN ${EXCLUDE_PATTERN} EXCLUDE)
+endif()
+
+# Install public headers
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/application/
+    DESTINATION include/application
+    FILES_MATCHING
+        PATTERN "*.hpp"
+        PATTERN "*.h"
+)

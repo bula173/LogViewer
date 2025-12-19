@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mvc/IControler.hpp"
-#include "ui/IEventsView.hpp"
+#include "IControler.hpp"
+#include "IEventsView.hpp"
 
 #include <functional>
 #include <string>

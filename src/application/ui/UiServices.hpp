@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ui/IErrorPresenter.hpp"
-#include "ui/NoopErrorPresenter.hpp"
+#include "IErrorPresenter.hpp"
+#include "NoopErrorPresenter.hpp"
 
 #include <memory>
 #include <mutex>

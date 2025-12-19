@@ -2,25 +2,6 @@
     "version": 6,
     "configurePresets": [
         {
-            "name": "macos-debug-wx",
-            "displayName": "macOS Debug (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-debug-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config",
-                "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
-        },
-        {
             "name": "macos-debug-qt",
             "displayName": "macOS Debug (Qt)",
             "generator": "Ninja",
@@ -28,32 +9,12 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "QT",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
                 "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
                 "LOGVIEWER_SANITIZER": "Address",
                 "ENABLE_CPPCHECK": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            }
-        },
-        {
-            "name": "macos-release-wx",
-            "displayName": "macOS Release (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-release-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/opt/homebrew/bin/wx-config"
             },
             "condition": {
                 "type": "equals",
@@ -71,7 +32,6 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "GUI_FRAMEWORK": "QT",
                 "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
                 
@@ -116,7 +76,6 @@
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "GUI_FRAMEWORK": "QT",
                 "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
                 "LOGVIEWER_SANITIZER": "None"
@@ -160,32 +119,12 @@
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "GUI_FRAMEWORK": "QT",
                 "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
                 "LOGVIEWER_SANITIZER": "None"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
-            }
-        },
-        {
-            "name": "linux-debug-wx",
-            "displayName": "Linux Debug (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-debug-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config",
-                "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
             }
         },
         {
@@ -196,27 +135,9 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "QT",
                 "Qt6_DIR": "/usr/lib/cmake/Qt6",
                 "LOGVIEWER_SANITIZER": "Address",
                 "ENABLE_CPPCHECK": "ON"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
-        },
-        {
-            "name": "linux-release-wx",
-            "displayName": "Linux Release (wxWidgets)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-release-wx",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "WX",
-                "wxWidgets_CONFIG_EXECUTABLE": "/usr/bin/wx-config"
             },
             "condition": {
                 "type": "equals",
@@ -232,7 +153,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "GUI_FRAMEWORK": "QT",
                 "Qt6_DIR": "/usr/lib/cmake/Qt6"
             },
             "condition": {
@@ -263,21 +183,6 @@
             "name": "macos-release-build-qt",
             "displayName": "macOS QT Release Build",
             "configurePreset": "macos-release-qt"
-        },
-        {
-            "name": "macos-debug-build-wx",
-            "displayName": "macOS WX Debug Build",
-            "configurePreset": "macos-debug-wx"
-        },
-        {
-            "name": "macos-release-build-wx",
-            "displayName": "macOS WX Release Build",
-            "configurePreset": "macos-release-wx"
-        },
-        {
-            "name": "windows-msys-debug-wx-build",
-            "displayName": "Windows MSYS2 Debug Build (wxWidgets)",
-            "configurePreset": "windows-msys-debug-wx"
         },
         {
             "name": "windows-msys-debug-qt-build",
@@ -377,14 +282,6 @@
             }
         },
         {
-            "name": "windows-msys-debug-wx-test",
-            "displayName": "Windows MSYS2 Debug Test (wxWidgets)",
-            "configurePreset": "windows-msys-debug-wx",
-            "output": {
-                "outputOnFailure": true
-            }
-        },
-        {
             "name": "windows-msys-debug-qt-test",
             "displayName": "Windows MSYS2 Debug Test (Qt)",
             "configurePreset": "windows-msys-debug-qt",
@@ -393,14 +290,7 @@
             }
         },
         {
-            "name": "windows-msys-release-wx-test",
-            "displayName": "Windows MSYS2 Release Test (wxWidgets)",
-            "configurePreset": "windows-msys-release-wx",
-            "output": {
-                "outputOnFailure": true
-            }
-        },
-        {
+
             "name": "windows-msys-release-qt-test",
             "displayName": "Windows MSYS2 Release Test (Qt)",
             "configurePreset": "windows-msys-release-qt",
@@ -421,12 +311,6 @@
             "displayName": "macOS QT Release Package",
             "configurePreset": "macos-release-qt",
             "generators": ["DragNDrop"]
-        },
-        {
-            "name": "windows-msys-release-wx-package",
-            "displayName": "Windows MSYS2 Release Package (wxWidgets)",
-            "configurePreset": "windows-msys-release-wx",
-            "generators": ["NSIS"]
         },
         {
             "name": "windows-msys-release-qt-package",
@@ -517,24 +401,6 @@
             ]
         },
         {
-            "name": "windows-msys-debug-wx-workflow",
-            "displayName": "Windows MSYS2 Debug Workflow (wxWidgets)",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "windows-msys-debug-wx"
-                },
-                {
-                    "type": "build",
-                    "name": "windows-msys-debug-wx-build"
-                },
-                {
-                    "type": "test",
-                    "name": "windows-msys-debug-wx-test"
-                }
-            ]
-        },
-        {
             "name": "windows-msys-debug-qt-workflow",
             "displayName": "Windows MSYS2 Debug Workflow (Qt)",
             "steps": [
@@ -549,28 +415,6 @@
                 {
                     "type": "test",
                     "name": "windows-msys-debug-qt-test"
-                }
-            ]
-        },
-        {
-            "name": "windows-msys-release-wx-workflow",
-            "displayName": "Windows MSYS2 Release Workflow (wxWidgets)",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "windows-msys-release-wx"
-                },
-                {
-                    "type": "build",
-                    "name": "windows-msys-release-wx-build"
-                },
-                {
-                    "type": "test",
-                    "name": "windows-msys-release-wx-test"
-                },
-                {
-                    "type": "package",
-                    "name": "windows-msys-release-wx-package"
                 }
             ]
         },

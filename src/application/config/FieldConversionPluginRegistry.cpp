@@ -1,6 +1,6 @@
-#include "config/FieldConversionPluginRegistry.hpp"
-#include "plugins/IPlugin.hpp"
-#include "util/Logger.hpp"
+#include "FieldConversionPluginRegistry.hpp"
+#include "IPlugin.hpp"
+#include "Logger.hpp"
 
 #include <algorithm>
 

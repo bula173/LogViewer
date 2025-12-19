@@ -1,6 +1,6 @@
-#include "db/EventsContainer.hpp"
-#include "db/LogEvent.hpp"
-#include "parser/IDataParser.hpp"
+#include "EventsContainer.hpp"
+#include "LogEvent.hpp"
+#include "IDataParser.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
