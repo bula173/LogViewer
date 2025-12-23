@@ -21,6 +21,11 @@ endif()
 
 add_executable(${PROJECT_NAME})
 
+# Correct the path to include the modular CMake files
+include(../cmake/EnableSanitizers.cmake)
+include(../cmake/Cppcheck.cmake)
+include(../cmake/ClangTidy.cmake)
+
 if (WIN32)
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
 endif()
@@ -95,32 +100,18 @@ if (APPLE)
     endif()
 endif()
 
-# ============================================================
-# Windows deployment
-# ============================================================
-
 if (WIN32)
-    # 1. Locate windeployqt
-    find_program(
-        WINDEPLOYQT_EXECUTABLE
-        windeployqt
-        HINTS ${Qt6_DIR}/../../../bin
-        REQUIRED
-    )
-
-    # 2. Capture the compiler bin directory
+    # 1. Capture paths before entering the install code string
     get_filename_component(COMPILER_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
 
-    # 3. Deployment Logic
-    # Note: We use the target name directly in the string to avoid token errors
+    # 2. Deployment Logic
     install(CODE "
-        set(PROJ_NAME \"${PROJECT_NAME}\")
         set(COMPILER_DIR \"${COMPILER_BIN_DIR}\")
-        set(DEPLOY_TOOL \"${WINDEPLOYQT_EXECUTABLE}\")
         
         # --- PART A: Deploy Qt Dependencies ---
+        # (Assuming WINDEPLOYQT_EXECUTABLE was found earlier)
         execute_process(
-            COMMAND \"\${DEPLOY_TOOL}\"
+            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
                     --no-translations
                     --no-system-d3d-compiler
                     --no-compiler-runtime
@@ -133,8 +124,15 @@ if (WIN32)
             RESOLVED_DEPENDENCIES_VAR _resolved_deps
             UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
             DIRECTORIES \"\${COMPILER_DIR}\"
-            PRE_EXCLUDE_REGEXES \"api-ms-.*\" \"ext-ms-.*\" \"kernel32.dll\" \"user32.dll\" \"gdi32.dll\" \"win32u.dll\" \"combase.dll\" \"rpcrt4.dll\" \"msvcp.*\\\\.dll\" \"vcruntime.*\\\\.dll\" \"ucrtbase.dll\"  \"d3d.*\\\\.dll\"
-            POST_EXCLUDE_REGEXES \"Qt6.*\\\\.dll\" \"icu.*\\\\.dll\"
+            PRE_EXCLUDE_REGEXES 
+                \"api-ms-.*\" \"ext-ms-.*\" \"kernel32.*\" \"user32.dll\" 
+                \"gdi32.dll\" \"win32u.dll\" \"combase.dll\" \"rpcrt4.dll\" 
+                \"msvcp.*\\\\.dll\" \"vcruntime.*\\\\.dll\" \"ucrtbase.dll\" 
+                \"d3d.*\\\\.dll\" \"shell32.dll\" \"advapi32.dll\" \"bcrypt.dll\" 
+                \"cfgmgr32.dll\" \"crypt32.dll\" \"gdi32full.dll\" \"imm32.dll\" 
+                \"msvcrt.dll\" \"ntdll.dll\" \"sechost.dll\" \"shcore.dll\" 
+                \"ws2_32.dll\" \"ole32.dll\" \"oleaut32.dll\" \"version.dll\"
+            POST_EXCLUDE_REGEXES \"Qt6.*\\\\.dll\"
         )
 
         foreach(_file IN LISTS _resolved_deps)
@@ -143,6 +141,11 @@ if (WIN32)
                 TYPE SHARED_LIBRARY
                 FILES \"\${_file}\"
             )
+        endforeach()
+
+        # Print warning if any non-excluded DLL was not found
+        foreach(_file IN LISTS _unresolved_deps)
+            message(WARNING \"Dependency not found: \${_file}\")
         endforeach()
     " COMPONENT application)
 endif()
