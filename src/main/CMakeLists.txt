@@ -22,9 +22,9 @@ endif()
 add_executable(${PROJECT_NAME})
 
 # Correct the path to include the modular CMake files
-include(../cmake/EnableSanitizers.cmake)
-include(../cmake/Cppcheck.cmake)
-include(../cmake/ClangTidy.cmake)
+# include(../cmake/EnableSanitizers.cmake)
+# include(../cmake/Cppcheck.cmake)
+# include(../cmake/ClangTidy.cmake)
 
 if (WIN32)
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
@@ -101,22 +101,31 @@ if (APPLE)
 endif()
 
 if (WIN32)
+    # Deploy Qt at install time
+    find_program(
+        WINDEPLOYQT_EXECUTABLE
+        windeployqt
+        HINTS ${Qt6_DIR}/../../../bin
+        REQUIRED
+    )
+
+    install(CODE "
+        execute_process(
+            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+                    --no-translations
+                    --no-system-d3d-compiler
+                    \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
+        )
+    "
+    COMPONENT application
+    )
+
     # 1. Capture paths before entering the install code string
     get_filename_component(COMPILER_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
 
     # 2. Deployment Logic
     install(CODE "
         set(COMPILER_DIR \"${COMPILER_BIN_DIR}\")
-        
-        # --- PART A: Deploy Qt Dependencies ---
-        # (Assuming WINDEPLOYQT_EXECUTABLE was found earlier)
-        execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-                    --no-translations
-                    --no-system-d3d-compiler
-                    --no-compiler-runtime
-                    \"$<TARGET_FILE:${PROJECT_NAME}>\"
-        )
 
         # --- PART B: Deploy MinGW/Clang Runtime Dependencies ---
         file(GET_RUNTIME_DEPENDENCIES
@@ -125,14 +134,15 @@ if (WIN32)
             UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
             DIRECTORIES \"\${COMPILER_DIR}\"
             PRE_EXCLUDE_REGEXES 
-                \"api-ms-.*\" \"ext-ms-.*\" \"kernel32.*\" \"user32.dll\" 
+                \"api-ms-.*\" \"ext-ms-.*\" \"kernel.*\" \"user32.dll\" 
                 \"gdi32.dll\" \"win32u.dll\" \"combase.dll\" \"rpcrt4.dll\" 
                 \"msvcp.*\\\\.dll\" \"vcruntime.*\\\\.dll\" \"ucrtbase.dll\" 
                 \"d3d.*\\\\.dll\" \"shell32.dll\" \"advapi32.dll\" \"bcrypt.dll\" 
                 \"cfgmgr32.dll\" \"crypt32.dll\" \"gdi32full.dll\" \"imm32.dll\" 
                 \"msvcrt.dll\" \"ntdll.dll\" \"sechost.dll\" \"shcore.dll\" 
                 \"ws2_32.dll\" \"ole32.dll\" \"oleaut32.dll\" \"version.dll\"
-            POST_EXCLUDE_REGEXES \"Qt6.*\\\\.dll\"
+            POST_EXCLUDE_REGEXES 
+                \"Qt6.*\\\\.dll\"
         )
 
         foreach(_file IN LISTS _resolved_deps)
