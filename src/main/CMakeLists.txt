@@ -114,49 +114,56 @@ if (WIN32)
             COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
                     --no-translations
                     --no-system-d3d-compiler
+                    --compiler-runtime
                     \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
+                    
         )
     "
     COMPONENT application
     )
 
-    # 1. Capture paths before entering the install code string
-    get_filename_component(COMPILER_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
-
-    # 2. Deployment Logic
     install(CODE "
-        set(COMPILER_DIR \"${COMPILER_BIN_DIR}\")
+        get_filename_component(COMPILER_DIR \"${CMAKE_CXX_COMPILER}\" DIRECTORY)
+        message(STATUS \"Analyzing dependencies for: $<TARGET_FILE:${PROJECT_NAME}>\")
+        message(STATUS \"Toolchain bin: \$\{COMPILER_DIR\}\")
 
-        # --- PART B: Deploy MinGW/Clang Runtime Dependencies ---
         file(GET_RUNTIME_DEPENDENCIES
             EXECUTABLES \"$<TARGET_FILE:${PROJECT_NAME}>\"
             RESOLVED_DEPENDENCIES_VAR _resolved_deps
             UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
-            DIRECTORIES \"\${COMPILER_DIR}\"
-            PRE_EXCLUDE_REGEXES 
-                \"api-ms-.*\" \"ext-ms-.*\" \"kernel.*\" \"user32.dll\" 
-                \"gdi32.dll\" \"win32u.dll\" \"combase.dll\" \"rpcrt4.dll\" 
-                \"msvcp.*\\\\.dll\" \"vcruntime.*\\\\.dll\" \"ucrtbase.dll\" 
-                \"d3d.*\\\\.dll\" \"shell32.dll\" \"advapi32.dll\" \"bcrypt.dll\" 
-                \"cfgmgr32.dll\" \"crypt32.dll\" \"gdi32full.dll\" \"imm32.dll\" 
-                \"msvcrt.dll\" \"ntdll.dll\" \"sechost.dll\" \"shcore.dll\" 
-                \"ws2_32.dll\" \"ole32.dll\" \"oleaut32.dll\" \"version.dll\"
-            POST_EXCLUDE_REGEXES 
-                \"Qt6.*\\\\.dll\"
+            DIRECTORIES \"\$\{COMPILER_DIR\}\"
+            PRE_EXCLUDE_REGEXES \"api-ms-.*\" \"ext-ms-.*\"
+            POST_EXCLUDE_REGEXES \".*[Ss]ystem32/.*\\.dll\" \".*[Ww]indows/.*\\.dll\"  \"Qt6.*\.dll\"
         )
 
-        foreach(_file IN LISTS _resolved_deps)
-            file(INSTALL
-                DESTINATION \"\${CMAKE_INSTALL_PREFIX}\"
-                TYPE SHARED_LIBRARY
-                FILES \"\${_file}\"
-            )
+        set(COPIED_COUNT 0)
+        foreach(DEP \${_resolved_deps})
+            # Only copy DLLs from the toolchain directory (skip Windows system DLLs)
+            string(FIND \"\${DEP}\" \"mingw64\" TOOLCHAIN_MATCH)
+            if(NOT TOOLCHAIN_MATCH EQUAL -1)
+                get_filename_component(DLL_NAME \"\${DEP}\" NAME)
+                
+                file(INSTALL
+                        DESTINATION \"\${CMAKE_INSTALL_PREFIX}\"
+                        TYPE SHARED_LIBRARY
+                        FILES \"\${DEP}\"
+                    )
+                    message(STATUS \"Copied: \${DLL_NAME}\")
+                    math(EXPR COPIED_COUNT \"\${COPIED_COUNT} + 1\")
+            endif()
         endforeach()
 
         # Print warning if any non-excluded DLL was not found
-        foreach(_file IN LISTS _unresolved_deps)
+        foreach(_file IN LISTS \${_unresolved_deps})
+            if(_file STREQUAL \"\")
+                continue()
+            endif()
             message(WARNING \"Dependency not found: \${_file}\")
         endforeach()
+
+        # Debugging: Print resolved and unresolved dependencies
+        message(STATUS \"Resolved dependencies: \${_resolved_deps}\")
+        message(STATUS \"Unresolved dependencies: \${_unresolved_deps}\")
     " COMPONENT application)
 endif()
 # ============================================================
