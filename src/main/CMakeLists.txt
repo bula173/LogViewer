@@ -59,7 +59,8 @@ if (APPLE)
 else()
     install(
         TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION . COMPONENT application
+        RUNTIME DESTINATION . 
+        COMPONENT application
     )
 endif()
 
@@ -99,9 +100,6 @@ endif()
 # ============================================================
 
 if (WIN32)
-    # Find DLLs portably
-    find_file(LIBARCHIVE_DLL libarchive-13.dll REQUIRED)
-    find_file(LIBEXPAT_DLL libexpat-1.dll REQUIRED)
 
     # Deploy Qt at install time
     find_program(
@@ -122,12 +120,23 @@ if (WIN32)
     COMPONENT application
     )
 
-    # Install dynamic DLLs to root
-    install(FILES
-        ${LIBARCHIVE_DLL}
-        ${LIBEXPAT_DLL}
-        DESTINATION .
-        COMPONENT application
+    # Deploy MinGW runtime dependencies at install time    
+    install(CODE [[
+        file(GET_RUNTIME_DEPENDENCIES
+            EXECUTABLES $<TARGET_FILE:LogViewer>
+            RESOLVED_DEPENDENCIES_VAR _resolved_deps
+            UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
+            DIRECTORIES "C:/msys64/mingw64/bin"  # Adjust if using UCRT64
+        )
+        foreach(_file ${_resolved_deps})
+            file(INSTALL
+                DESTINATION "${CMAKE_INSTALL_PREFIX}"
+                TYPE SHARED_LIBRARY
+                FILES "${_file}"
+            )
+        endforeach()
+    ]]
+    COMPONENT application
     )
 endif()
 
