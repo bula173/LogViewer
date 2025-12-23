@@ -60,7 +60,6 @@ jobs:
             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DGUI_FRAMEWORK="QT" \
             -DLibArchive_ROOT=$(brew --prefix libarchive) \
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
 

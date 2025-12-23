@@ -90,8 +90,6 @@ jobs:
             -DCMAKE_C_COMPILER=$CC_COMPILER \
             -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DGUI_FRAMEWORK="QT"
-
       - name: Build
         run: |
           mkdir -p dist/logs
