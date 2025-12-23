@@ -100,8 +100,7 @@ endif()
 # ============================================================
 
 if (WIN32)
-
-    # Deploy Qt at install time
+    # 1. Locate windeployqt
     find_program(
         WINDEPLOYQT_EXECUTABLE
         windeployqt
@@ -109,37 +108,44 @@ if (WIN32)
         REQUIRED
     )
 
+    # 2. Capture the compiler bin directory
+    get_filename_component(COMPILER_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+
+    # 3. Deployment Logic
+    # Note: We use the target name directly in the string to avoid token errors
     install(CODE "
+        set(PROJ_NAME \"${PROJECT_NAME}\")
+        set(COMPILER_DIR \"${COMPILER_BIN_DIR}\")
+        set(DEPLOY_TOOL \"${WINDEPLOYQT_EXECUTABLE}\")
+        
+        # --- PART A: Deploy Qt Dependencies ---
         execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+            COMMAND \"\${DEPLOY_TOOL}\"
                     --no-translations
                     --no-system-d3d-compiler
-                    \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
+                    --no-compiler-runtime
+                    \"$<TARGET_FILE:${PROJECT_NAME}>\"
         )
-    "
-    COMPONENT application
-    )
 
-    # Deploy MinGW runtime dependencies at install time    
-    install(CODE [[
+        # --- PART B: Deploy MinGW/Clang Runtime Dependencies ---
         file(GET_RUNTIME_DEPENDENCIES
-            EXECUTABLES $<TARGET_FILE:LogViewer>
+            EXECUTABLES \"$<TARGET_FILE:${PROJECT_NAME}>\"
             RESOLVED_DEPENDENCIES_VAR _resolved_deps
             UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
-            DIRECTORIES "C:/msys64/mingw64/bin"  # Adjust if using UCRT64
+            DIRECTORIES \"\${COMPILER_DIR}\"
+            PRE_EXCLUDE_REGEXES \"api-ms-.*\" \"ext-ms-.*\" \"kernel32.dll\" \"user32.dll\" \"gdi32.dll\" \"win32u.dll\" \"combase.dll\" \"rpcrt4.dll\" \"msvcp.*\\\\.dll\" \"vcruntime.*\\\\.dll\" \"ucrtbase.dll\"  \"d3d.*\\\\.dll\"
+            POST_EXCLUDE_REGEXES \"Qt6.*\\\\.dll\" \"icu.*\\\\.dll\"
         )
-        foreach(_file ${_resolved_deps})
+
+        foreach(_file IN LISTS _resolved_deps)
             file(INSTALL
-                DESTINATION "${CMAKE_INSTALL_PREFIX}"
+                DESTINATION \"\${CMAKE_INSTALL_PREFIX}\"
                 TYPE SHARED_LIBRARY
-                FILES "${_file}"
+                FILES \"\${_file}\"
             )
         endforeach()
-    ]]
-    COMPONENT application
-    )
+    " COMPONENT application)
 endif()
-
 # ============================================================
 # Linux (optional)
 # ============================================================
