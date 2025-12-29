@@ -67,7 +67,7 @@ void Config::LoadConfig()
         if (!std::filesystem::exists(defaultInstalled))
         {
             util::Logger::Error(
-                "Default config template not found in search paths. Aborting.");
+                "Default config template not found in search paths.");
         }
 
         try
@@ -200,11 +200,35 @@ void Config::LoadConfig()
         {
             m_dictionaryFilePath = j["dictionaryFilePath"].get<std::string>();
             util::Logger::Info("Dictionary file path: {}", m_dictionaryFilePath);
+
+            if (!std::filesystem::exists(m_dictionaryFilePath))
+            {
+                std::filesystem::path defaultDictPath = cwd / "etc" / "field_dictionary.json";
+                util::Logger::Warn("Dictionary file does not exist at specified path: {}", m_dictionaryFilePath);
+                util::Logger::Info("Attempting to copy default dictionary from: {}", defaultDictPath.string());
+                m_dictionaryFilePath = (GetDefaultAppPath() / "field_dictionary.json").string();
+                if (std::filesystem::exists(defaultDictPath))
+                {
+                    try
+                    {
+                        std::filesystem::copy_file(defaultDictPath, m_dictionaryFilePath,
+                            std::filesystem::copy_options::overwrite_existing);
+                        util::Logger::Info(
+                            "Copied default dictionary to user path: {}", m_dictionaryFilePath);
+                    }
+                    catch (const std::filesystem::filesystem_error& e)
+                    {
+                        util::Logger::Error("Failed to copy default dictionary: {}", e.what());
+                    }
+                }
+            }
             
             // Load dictionary from the specified file
-            if (!m_dictionaryFilePath.empty())
+            if (!m_dictionaryFilePath.empty() && std::filesystem::exists(m_dictionaryFilePath))
             {
+                util::Logger::Info("Loading field dictionary from: {}", m_dictionaryFilePath);
                 m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
+
             }
         }
 
@@ -225,26 +249,6 @@ void Config::LoadConfig()
         util::Logger::Error("Could not open config file: {}", m_configFilePath);
     }
 
-    if (!std::filesystem::exists(m_dictionaryFilePath))
-    {
-        std::filesystem::path defaultDictPath = cwd / "etc" / "field_dictionary.json";
-        if (std::filesystem::exists(defaultDictPath))
-        {
-            try
-            {
-                std::filesystem::copy_file(defaultDictPath, m_dictionaryFilePath,
-                    std::filesystem::copy_options::overwrite_existing);
-                util::Logger::Info(
-                    "Copied default dictionary to user path: {}", m_dictionaryFilePath);
-            }
-            catch (const std::filesystem::filesystem_error& e)
-            {
-                util::Logger::Error("Failed to copy default dictionary: {}", e.what());
-            }
-        }
-    }
-    util::Logger::Info("Loading field dictionary from: {}", m_dictionaryFilePath);
-    m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
 }
 
 void Config::SetupLogPath()

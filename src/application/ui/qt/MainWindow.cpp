@@ -48,6 +48,12 @@
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
+
+#ifdef _WIN32
+#include <windows.h>
+// Undefine Windows API macros that conflict with our method names
+#undef CreateService
+#endif
 #include <stdexcept>
 
 namespace ui::qt
@@ -852,8 +858,10 @@ void MainWindow::setupPluginManager() {
     // Register this window as an observer for plugin events
     pluginManager.RegisterObserver(this);
     
-    // Set plugins directory relative to application
-    std::filesystem::path pluginsDir = config::GetConfig().GetDefaultAppPath() / "plugins";
+    // Set plugins directory relative to application executable
+    std::filesystem::path pluginsDir;
+    
+    pluginsDir = config::GetConfig().GetDefaultAppPath() / "plugins";
     
     pluginManager.SetPluginsDirectory(pluginsDir);
     util::Logger::Info("[MainWindow] Plugin directory set to: {}", pluginsDir.string());

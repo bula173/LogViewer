@@ -61,7 +61,7 @@ target_include_directories(application_core
 if(BUILD_SDK)
     # Install public headers
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/application/
-        DESTINATION include
+        DESTINATION sdk/include
         COMPONENT sdk
         FILES_MATCHING 
             PATTERN "*.h" 
@@ -71,7 +71,7 @@ if(BUILD_SDK)
 
     # Install library as file with component
     install(FILES $<TARGET_FILE:application_core>
-        DESTINATION lib
+        DESTINATION sdk/lib
         COMPONENT sdk
     )
 
@@ -83,7 +83,7 @@ if(BUILD_SDK)
     )
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerTargets.cmake
-        DESTINATION lib/cmake/LogViewer
+        DESTINATION sdk/lib/cmake/
         COMPONENT sdk
     )
 
@@ -93,11 +93,11 @@ if(BUILD_SDK)
     configure_package_config_file(
         ${CMAKE_SOURCE_DIR}/cmake/LogViewerConfigVersion.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
-        INSTALL_DESTINATION lib/cmake/LogViewer
+        INSTALL_DESTINATION sdk/lib/cmake/
     )
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
-        DESTINATION lib/cmake/LogViewer
+        DESTINATION sdk/lib/cmake/
         COMPONENT sdk
     )
 endif()
