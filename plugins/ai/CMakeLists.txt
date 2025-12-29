@@ -71,7 +71,7 @@ if(WIN32)
             -DARGV1="$<TARGET_FILE_DIR:${PLUGIN_NAME}>/lib"
             -DARGV2="${CMAKE_C_COMPILER}"
             -DARGV3="$<TARGET_FILE:LogViewer>"
-            -P ${CMAKE_SOURCE_DIR}/cmake/copy_dlls.cmake
+            -P ${PROJECT_SOURCE_DIR}/cmake/copy_dlls.cmake
         COMMENT "Collecting MinGW runtime DLLs to lib"
     )
 endif()
