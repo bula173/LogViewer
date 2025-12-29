@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
-project(LogViewer VERSION 0.1.2 DESCRIPTION "A simple log viewer" LANGUAGES CXX C)
+project(LogViewer VERSION 0.1.3 DESCRIPTION "A simple log viewer" LANGUAGES CXX C)
 
 cmake_policy(SET CMP0074 NEW)
 
@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(MINGW)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libstdc++ -static-libgcc")
 endif()
 
 # Option to build SDK for plugin development

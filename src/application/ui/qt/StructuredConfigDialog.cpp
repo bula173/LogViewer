@@ -533,7 +533,6 @@ void StructuredConfigDialog::OnSaveClicked()
             util::Logger::Error("Failed to save dictionary file: {}", dictPath);
             QMessageBox::critical(this, tr("Dictionary Save Failed"),
                 tr("Failed to save dictionary to file:\n%1\n\nConfiguration changes were NOT saved.\nPlease check the file path and permissions.").arg(QString::fromStdString(dictPath)));
-            return; // Abort save and keep dialog open
         }
         else
         {
@@ -555,8 +554,7 @@ void StructuredConfigDialog::OnSaveClicked()
         NotifyObservers();
         QMessageBox::information(this, tr("Config"),
             tr("Configuration and dictionary saved successfully."));
-        accept(); // Only close dialog after everything saved successfully
-    }
+        }
     catch (const std::exception& ex)
     {
         util::Logger::Error(
