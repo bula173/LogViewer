@@ -1,8 +1,12 @@
 @PACKAGE_INIT@
 
-include(CMakeFindDependencyMacro)
-find_dependency(Qt6 COMPONENTS Core Widgets)  # Find Qt6 as a dependency
+# Generated version file for LogViewer package
+set(LogViewer_VERSION "@PACKAGE_VERSION@")
 
-include("${CMAKE_CURRENT_LIST_DIR}/LogViewerTargets.cmake")
-
-check_required_components(LogViewer)
+if(PACKAGE_FIND_VERSION)
+    if(LogViewer_VERSION VERSION_LESS PACKAGE_FIND_VERSION)
+        set(PACKAGE_VERSION_COMPATIBLE FALSE)
+    else()
+        set(PACKAGE_VERSION_COMPATIBLE TRUE)
+    endif()
+endif()

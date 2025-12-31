@@ -1,8 +1,10 @@
 # Field Conversion Plugin Architecture
 
-## Overview
+**⚠️ DEPRECATED:** This document describes an older plugin architecture. Current plugins use **C-ABI exports only** (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md)). This architecture is no longer used in the codebase.
 
-Field conversion plugins have been refactored to follow the same pattern as analysis plugins, integrating them into the main plugin system with the Observer pattern.
+## Overview (Historical)
+
+This document describes a historical approach where field conversion plugins implemented C++ interfaces. Modern LogViewer plugins use C-ABI exports exclusively.
 
 ## Architecture
 
@@ -30,9 +32,11 @@ public:
 };
 ```
 
-### Integration with IPlugin
+### Integration with IPlugin (Historical)
 
-Field conversion plugins implement both `IPlugin` and `IFieldConversionPlugin`:
+**Note:** This pattern is no longer used. Modern plugins use C-ABI exports (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md)).
+
+Historically, field conversion plugins implemented both `IPlugin` and `IFieldConversionPlugin`:
 
 ```cpp
 class MyConverterPlugin : public plugin::IPlugin, 

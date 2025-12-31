@@ -9,6 +9,10 @@
 #include "Config.hpp"
 #include "FieldConversionPluginRegistry.hpp"
 #include "Logger.hpp"
+#include "../../plugin_api/PluginLoggerC.h"
+#include "../../plugin_api/PluginKeyEncryptionC.h"
+#include "../../plugin_api/PluginC.h"
+#include "../util/KeyEncryption.hpp"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <algorithm>
@@ -23,6 +27,45 @@
 #else
     #include <dlfcn.h>
 #endif
+
+// Application-provided C callbacks for plugins (registered at startup)
+extern "C" void AppPluginLog(int level, const char* message)
+{
+    if (!message) return;
+    switch (level) {
+        case PLUGIN_LOG_TRACE:
+        case PLUGIN_LOG_DEBUG: util::Logger::Debug("[plugin] {}", message); break;
+        case PLUGIN_LOG_INFO: util::Logger::Info("[plugin] {}", message); break;
+        case PLUGIN_LOG_WARN: util::Logger::Warn("[plugin] {}", message); break;
+        case PLUGIN_LOG_ERROR: util::Logger::Error("[plugin] {}", message); break;
+        case PLUGIN_LOG_CRITICAL: util::Logger::Critical("[plugin] {}", message); break;
+        default: util::Logger::Info("[plugin] {}", message); break;
+    }
+}
+
+extern "C" char* AppPluginEncrypt(const char* input)
+{
+    if (!input) return nullptr;
+    try {
+        auto out = util::KeyEncryption::Encrypt(std::string(input));
+        char* ret = (char*)std::malloc(out.size() + 1);
+        if (!ret) return nullptr;
+        memcpy(ret, out.c_str(), out.size() + 1);
+        return ret;
+    } catch (...) { return nullptr; }
+}
+
+extern "C" char* AppPluginDecrypt(const char* input)
+{
+    if (!input) return nullptr;
+    try {
+        auto out = util::KeyEncryption::Decrypt(std::string(input));
+        char* ret = (char*)std::malloc(out.size() + 1);
+        if (!ret) return nullptr;
+        memcpy(ret, out.c_str(), out.size() + 1);
+        return ret;
+    } catch (...) { return nullptr; }
+}
 
 namespace plugin
 {
@@ -58,6 +101,88 @@ namespace {
         return parts.minor >= kSupportedApiMinMinor && parts.minor <= kSupportedApiMaxMinor;
     }
 }
+
+// Helper: resolve extraction directory (either input dir or appdata plugins/<stem>)
+// Forward declarations for helper functions defined lower in this file
+namespace {
+    bool ExtractZipPlugin(const std::filesystem::path& zipPath, const std::filesystem::path& extractDir);
+    void* LoadLibraryHelper(const std::filesystem::path& path);
+}
+
+// Helper: resolve extraction directory (either input dir or appdata plugins/<stem>)
+static util::Result<std::filesystem::path, error::Error> ResolvePluginExtractDir(const std::filesystem::path& pluginPath)
+{
+    if (std::filesystem::is_directory(pluginPath)) {
+        return util::Result<std::filesystem::path, error::Error>::Ok(pluginPath);
+    }
+
+    auto appDataPath = config::GetConfig().GetDefaultAppPath();
+    auto extractDir = appDataPath / "plugins" / pluginPath.stem();
+    if (!ExtractZipPlugin(pluginPath, extractDir)) {
+        return util::Result<std::filesystem::path, error::Error>::Err(
+            error::Error("Failed to extract plugin ZIP: " + pluginPath.string()));
+    }
+    return util::Result<std::filesystem::path, error::Error>::Ok(extractDir);
+}
+
+// Helper: load dependency DLLs from a plugin lib folder and return handles
+static std::vector<void*> LoadDependencyHandles(const std::filesystem::path& libFolder)
+{
+    std::vector<void*> handles;
+    if (!std::filesystem::exists(libFolder)) return handles;
+
+#ifdef _WIN32
+    SetDllDirectoryW(libFolder.wstring().c_str());
+#endif
+    for (const auto& entry : std::filesystem::directory_iterator(libFolder)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".dll") {
+            void* handle = LoadLibraryHelper(entry.path());
+            if (handle) {
+                handles.push_back(handle);
+                util::Logger::Info("Loaded dependency: {}", entry.path().string());
+            } else {
+                util::Logger::Warn("Failed to load dependency from plugin/lib: {} - main plugin may still work if dependency is available elsewhere", entry.path().string());
+            }
+        }
+    }
+#ifdef _WIN32
+    SetDllDirectoryW(NULL);
+#endif
+    return handles;
+}
+
+// Helper: probe optional C-style plugin exports into PluginLoadInfo
+static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
+{
+#ifdef _WIN32
+    auto probe_sym = [&](const char* name)->void* { return reinterpret_cast<void*>(GetProcAddress(static_cast<HMODULE>(libHandle), name)); };
+#else
+    auto probe_sym = [&](const char* name)->void* { return dlsym(libHandle, name); };
+#endif
+
+    info.pluginCreateAI = probe_sym("Plugin_CreateAIService");
+    info.pluginDestroyAI = probe_sym("Plugin_DestroyAIService");
+    info.pluginSetAIEvents = probe_sym("Plugin_SetAIEventsContainer");
+    info.pluginOnAIEventsUpdated = probe_sym("Plugin_OnAIEventsUpdated");
+
+    info.pluginCreateFieldConversion = probe_sym("Plugin_CreateFieldConversionService");
+    info.pluginDestroyFieldConversion = probe_sym("Plugin_DestroyFieldConversionService");
+    info.pluginSetFieldConversionEvents = probe_sym("Plugin_SetFieldConversionEventsContainer");
+    info.pluginOnFieldConversionUpdated = probe_sym("Plugin_OnFieldConversionUpdated");
+
+    info.pluginCreateAnalysis = probe_sym("Plugin_CreateAnalysisService");
+    info.pluginDestroyAnalysis = probe_sym("Plugin_DestroyAnalysisService");
+    info.pluginSetAnalysisEvents = probe_sym("Plugin_SetAnalysisEventsContainer");
+    info.pluginOnAnalysisUpdated = probe_sym("Plugin_OnAnalysisUpdated");
+
+    util::Logger::Debug("PluginManager: Probed AI exports for {}: create={} destroy={} setEvents={} onUpdated={}",
+        info.pluginId, info.pluginCreateAI != nullptr, info.pluginDestroyAI != nullptr, info.pluginSetAIEvents != nullptr, info.pluginOnAIEventsUpdated != nullptr);
+    util::Logger::Debug("PluginManager: Probed FieldConversion exports for {}: create={} destroy={} setEvents={} onUpdated={}",
+        info.pluginId, info.pluginCreateFieldConversion != nullptr, info.pluginDestroyFieldConversion != nullptr, info.pluginSetFieldConversionEvents != nullptr, info.pluginOnFieldConversionUpdated != nullptr);
+    util::Logger::Debug("PluginManager: Probed Analysis exports for {}: create={} destroy={} setEvents={} onUpdated={}",
+        info.pluginId, info.pluginCreateAnalysis != nullptr, info.pluginDestroyAnalysis != nullptr, info.pluginSetAnalysisEvents != nullptr, info.pluginOnAnalysisUpdated != nullptr);
+}
+
 
 // Helper functions - must be defined before use
 namespace {
@@ -157,6 +282,15 @@ PluginManager& PluginManager::GetInstance()
         registryObserverRegistered = true;
         util::Logger::Debug("PluginManager: Registered FieldConversionPluginRegistry as observer");
     }
+
+    // Register application logger/encryption callbacks for plugins (C API)
+    static bool callbacksRegistered = false;
+    if (!callbacksRegistered) {
+        PluginLogger_Register(&AppPluginLog);
+        PluginKeyEncryption_Register(&AppPluginEncrypt, &AppPluginDecrypt);
+        callbacksRegistered = true;
+        util::Logger::Debug("PluginManager: Registered plugin API callbacks");
+    }
     
     return instance;
 }
@@ -246,18 +380,11 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
                 "Only zipped plugins or plugin directories are supported. Expected .zip or directory: " + pluginPath.string()));
     }
 
-    std::filesystem::path extractDir;
-    if (std::filesystem::is_directory(pluginPath)) {
-        extractDir = pluginPath;
-    } else {
-        // Extract to a writable location in app data
-        auto appDataPath = config::GetConfig().GetDefaultAppPath();
-        extractDir = appDataPath / "plugins" / pluginPath.stem();
-        if (!ExtractZipPlugin(pluginPath, extractDir)) {
-            return util::Result<std::string, error::Error>::Err(
-                error::Error("Failed to extract plugin ZIP: " + pluginPath.string()));
-        }
+    auto extractRes = ResolvePluginExtractDir(pluginPath);
+    if (extractRes.isErr()) {
+        return util::Result<std::string, error::Error>::Err(extractRes.error());
     }
+    std::filesystem::path extractDir = extractRes.unwrap();
 
     // Parse config.json inside the extracted folder
     auto manifestPath = extractDir / "config.json";
@@ -308,32 +435,17 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     // shipped with the plugin over those found on PATH.
     std::filesystem::path libFolder = extractDir / "lib";
     if (std::filesystem::exists(libFolder)) {
-        util::Logger::Debug("PluginManager: Setting DLL search directory to {}", libFolder.string());
-#ifdef _WIN32
-        // Remember previous directory by setting to NULL after load
-        SetDllDirectoryW(libFolder.wstring().c_str());
-#endif
-        for (const auto& entry : std::filesystem::directory_iterator(libFolder)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".dll") {
-                void* handle = LoadLibraryHelper(entry.path());
-                if (!handle) {
-                    util::Logger::Warn("Failed to load dependency from plugin/lib: {} - main plugin may still work if dependency is available elsewhere", entry.path().string());
-                } else {
-                    m_dependencyHandles.push_back(handle);
-                    util::Logger::Info("Loaded dependency: {}", entry.path().string());
-                }
-            }
-        }
-#ifdef _WIN32
-        // Restore default DLL search behavior
-        SetDllDirectoryW(NULL);
-#endif
+        util::Logger::Debug("PluginManager: Loading dependencies from {}", libFolder.string());
+        auto handles = LoadDependencyHandles(libFolder);
+        // Append to manager's dependency handle list
+        for (auto h : handles) m_dependencyHandles.push_back(h);
     } else {
         util::Logger::Warn("Plugin lib folder does not exist: {}", libFolder.string());
     }
     
-    // Load the plugin library
-    auto result = LoadPluginLibrary(actualPluginPath);
+    // Load the plugin library, passing expected API version from manifest
+    void* libHandle = nullptr;
+    auto result = LoadPluginLibrary(actualPluginPath, manifestApiVersion, &libHandle);
     if (result.isErr())
     {
         return util::Result<std::string, error::Error>::Err(result.error());
@@ -374,6 +486,7 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     info.pluginId = metadata.id;
     info.path = actualPluginPath;
     info.instance = std::move(plugin);
+    info.libraryHandle = libHandle;
     info.enabled = false;  // Plugins start disabled, must be explicitly enabled
     info.autoLoad = false; // Default to not auto-load
 
@@ -390,6 +503,11 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     // Remember package path so unregister can remove it after restart
     m_registeredPlugins[metadata.id] = pluginPath;
 
+    // Probe for optional plugin C-exports and store pointers
+    if (info.libraryHandle) {
+        ProbeOptionalPluginExports(info.libraryHandle, info);
+    }
+
     m_plugins[metadata.id] = std::move(info);
 
     // Notify observers about plugin load
@@ -403,7 +521,9 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
 }
 
 util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLibrary(
-    const std::filesystem::path& path)
+    const std::filesystem::path& path,
+    const std::string& expectedApiVersion,
+    void** outLibraryHandle)
 {
 #ifdef _WIN32
     // Load the plugin using LoadLibraryEx with altered search path so the
@@ -436,21 +556,129 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                 "Failed to load library: " + errorMessage + " (code: " + std::to_string(error) + ")"));
     }
 
-    auto createFunc = reinterpret_cast<PluginFactoryFunc>(
-        GetProcAddress(handle, "CreatePlugin"));
-    if (!createFunc)
+    // Optional pre-flight: query the plugin binary for a reported API version
+    auto getBinVer = reinterpret_cast<const char*(*)()>(
+        GetProcAddress(handle, "GetPluginBinaryApiVersion"));
+    if (getBinVer)
     {
-        DWORD err = GetLastError();
-        LPSTR msgBuf = nullptr;
-        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                       NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&msgBuf, 0, NULL);
-        std::string errMsg = msgBuf ? std::string(msgBuf) : "Unknown error";
-        if (msgBuf) LocalFree(msgBuf);
-        FreeLibrary(handle);
-        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
-            error::Error(error::ErrorCode::RuntimeError,
-                std::string("CreatePlugin function not found: ") + errMsg + " (code: " + std::to_string(err) + ")"));
+        const char* reported = nullptr;
+        try { reported = getBinVer(); } catch (...) { reported = nullptr; }
+        if (!reported)
+        {
+            FreeLibrary(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "Plugin binary reported empty API version"));
+        }
+        std::string reportedStr(reported);
+        if (reportedStr != expectedApiVersion)
+        {
+            FreeLibrary(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError,
+                    "Plugin binary API version does not match manifest: " + reportedStr + " vs " + expectedApiVersion));
+        }
+        if (!IsApiVersionCompatible(reportedStr))
+        {
+            FreeLibrary(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError,
+                    "Plugin binary API version incompatible with application: " + reportedStr));
+        }
     }
+    // Prefer C ABI plugins that export `Plugin_Create` and associated C functions.
+    // If present, wrap them in a small adapter that implements `IPlugin` so
+    // the rest of the application can treat SDK-first plugins like regular
+    // in-tree plugins.
+    auto c_create_sym = reinterpret_cast<void*(*)()>(GetProcAddress(handle, "Plugin_Create"));
+    if (c_create_sym)
+    {
+        util::Logger::Info("PluginManager: Found C-ABI plugin exports, using C ABI path");
+
+        using Plugin_Create_Fn = void* (*)();
+        using Plugin_Destroy_Fn = void (*)(void*);
+        using Plugin_GetMetadataJson_Fn = const char* (*)(void*);
+        using Plugin_Initialize_Fn = bool (*)(void*);
+        using Plugin_Shutdown_Fn = void (*)(void*);
+        using Plugin_GetLastError_Fn = const char* (*)(void*);
+
+        auto c_create = reinterpret_cast<Plugin_Create_Fn>(c_create_sym);
+        auto c_destroy = reinterpret_cast<Plugin_Destroy_Fn>(GetProcAddress(handle, "Plugin_Destroy"));
+        auto c_getMeta = reinterpret_cast<Plugin_GetMetadataJson_Fn>(GetProcAddress(handle, "Plugin_GetMetadataJson"));
+        auto c_initialize = reinterpret_cast<Plugin_Initialize_Fn>(GetProcAddress(handle, "Plugin_Initialize"));
+        auto c_shutdown = reinterpret_cast<Plugin_Shutdown_Fn>(GetProcAddress(handle, "Plugin_Shutdown"));
+        auto c_getLastErr = reinterpret_cast<Plugin_GetLastError_Fn>(GetProcAddress(handle, "Plugin_GetLastError"));
+
+        if (!c_getMeta)
+        {
+            util::Logger::Error("PluginManager: C-ABI plugin missing Plugin_GetMetadataJson, rejecting plugin");
+            FreeLibrary(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "C-ABI plugin missing Plugin_GetMetadataJson"));
+        }
+
+        // Create an instance via C ABI
+        void* pluginHandle = nullptr;
+        try { pluginHandle = c_create(); } catch (...) { pluginHandle = nullptr; }
+        if (!pluginHandle)
+        {
+            FreeLibrary(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "C-ABI Plugin_Create returned null"));
+        }
+
+        // Adapter class implementing IPlugin by delegating to C ABI functions
+        class CAbiPluginAdapter : public IPlugin {
+        public:
+            CAbiPluginAdapter(void* h, Plugin_Destroy_Fn destroyFn, Plugin_GetMetadataJson_Fn metaFn,
+                              Plugin_Initialize_Fn initFn, Plugin_Shutdown_Fn shutdownFn,
+                              Plugin_GetLastError_Fn lastErrFn)
+                : handle_(h), destroyFn_(destroyFn), metaFn_(metaFn), initFn_(initFn), shutdownFn_(shutdownFn), lastErrFn_(lastErrFn)
+            {
+                // Populate metadata from JSON string
+                try {
+                    const char* js = metaFn_(handle_);
+                    if (js) {
+                        nlohmann::json j = nlohmann::json::parse(js);
+                        PluginApi_FreeString(const_cast<char*>(js));
+                        meta_.id = j.value("id", "");
+                        meta_.name = j.value("name", "");
+                        meta_.version = j.value("version", "");
+                        meta_.apiVersion = j.value("apiVersion", "1.0.0");
+                        meta_.author = j.value("author", "");
+                        meta_.description = j.value("description", "");
+                        meta_.website = j.value("website", "");
+                        meta_.type = PluginType::Custom;
+                    }
+                } catch (...) {}
+            }
+            ~CAbiPluginAdapter() override {
+                if (destroyFn_ && handle_) destroyFn_(handle_);
+            }
+            PluginMetadata GetMetadata() const override { return meta_; }
+            bool Initialize() override { return initFn_ ? initFn_(handle_) : true; }
+            void Shutdown() override { if (shutdownFn_) shutdownFn_(handle_); }
+            PluginStatus GetStatus() const override { return PluginStatus::Active; }
+            std::string GetLastError() const override { if (lastErrFn_) { const char* s = lastErrFn_(handle_); if (s) { std::string r(s); PluginApi_FreeString(const_cast<char*>(s)); return r; } } return {}; }
+            bool IsLicensed() const override { return true; }
+            bool SetLicense(const std::string&) override { return true; }
+            bool ValidateConfiguration() const override { return true; }
+        private:
+            void* handle_ = nullptr;
+            Plugin_Destroy_Fn destroyFn_ = nullptr;
+            Plugin_GetMetadataJson_Fn metaFn_ = nullptr;
+            Plugin_Initialize_Fn initFn_ = nullptr;
+            Plugin_Shutdown_Fn shutdownFn_ = nullptr;
+            Plugin_GetLastError_Fn lastErrFn_ = nullptr;
+            PluginMetadata meta_;
+        };
+
+        // Create adapter and return as unique_ptr<IPlugin>
+        auto adapter = std::make_unique<CAbiPluginAdapter>(pluginHandle, c_destroy, c_getMeta, c_initialize, c_shutdown, c_getLastErr);
+        if (outLibraryHandle) *outLibraryHandle = handle;
+        util::Logger::Info("PluginManager: Created C-ABI plugin adapter");
+        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Ok(std::move(adapter));
+    }
+
 #else
     void* handle = dlopen(path.string().c_str(), RTLD_NOW | RTLD_LOCAL);
     if (!handle)
@@ -460,48 +688,136 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
             error::Error(error::ErrorCode::RuntimeError,
                 std::string("Failed to load library: ") + (error ? error : "unknown")));
     }
+    // Optional pre-flight: query GetPluginBinaryApiVersion if present
+    auto getBinVerSym = dlsym(handle, "GetPluginBinaryApiVersion");
+    if (getBinVerSym)
+    {
+        auto getBinVer = reinterpret_cast<const char*(*)()>(getBinVerSym);
+        const char* reported = nullptr;
+        try { reported = getBinVer(); } catch (...) { reported = nullptr; }
+        if (!reported)
+        {
+            dlclose(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "Plugin binary reported empty API version"));
+        }
+        std::string reportedStr(reported);
+        if (reportedStr != expectedApiVersion)
+        {
+            dlclose(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError,
+                    "Plugin binary API version does not match manifest: " + reportedStr + " vs " + expectedApiVersion));
+        }
+        if (!IsApiVersionCompatible(reportedStr))
+        {
+            dlclose(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError,
+                    "Plugin binary API version incompatible with application: " + reportedStr));
+        }
+    }
 
-    auto createFunc = reinterpret_cast<PluginFactoryFunc>(
-        dlsym(handle, "CreatePlugin"));
-    if (!createFunc)
+    // Require C-ABI: Plugin_Create must be exported by SDK-first plugins on Unix too.
+    auto c_create_sym_unix = dlsym(handle, "Plugin_Create");
+    if (!c_create_sym_unix)
     {
         const char* error = dlerror();
         dlclose(handle);
         return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
             error::Error(error::ErrorCode::RuntimeError,
-                std::string("CreatePlugin function not found: ") + (error ? error : "unknown")));
+                std::string("Plugin does not export required C-ABI symbol: Plugin_Create") + (error ? (std::string(" - ") + error) : "")));
+    }
+
+    // Create instance via C-ABI and wrap in adapter (Unix path)
+    {
+        using Plugin_Create_Fn = void* (*)();
+        using Plugin_Destroy_Fn = void (*)(void*);
+        using Plugin_GetMetadataJson_Fn = const char* (*)(void*);
+        using Plugin_Initialize_Fn = bool (*)(void*);
+        using Plugin_Shutdown_Fn = void (*)(void*);
+        using Plugin_GetLastError_Fn = const char* (*)(void*);
+
+        auto c_create = reinterpret_cast<Plugin_Create_Fn>(c_create_sym_unix);
+        auto c_destroy = reinterpret_cast<Plugin_Destroy_Fn>(dlsym(handle, "Plugin_Destroy"));
+        auto c_getMeta = reinterpret_cast<Plugin_GetMetadataJson_Fn>(dlsym(handle, "Plugin_GetMetadataJson"));
+        auto c_initialize = reinterpret_cast<Plugin_Initialize_Fn>(dlsym(handle, "Plugin_Initialize"));
+        auto c_shutdown = reinterpret_cast<Plugin_Shutdown_Fn>(dlsym(handle, "Plugin_Shutdown"));
+        auto c_getLastErr = reinterpret_cast<Plugin_GetLastError_Fn>(dlsym(handle, "Plugin_GetLastError"));
+
+        if (!c_getMeta)
+        {
+            util::Logger::Error("PluginManager: C-ABI plugin missing Plugin_GetMetadataJson, rejecting plugin");
+            dlclose(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "C-ABI plugin missing Plugin_GetMetadataJson"));
+        }
+
+        void* pluginHandle = nullptr;
+        try { pluginHandle = c_create(); } catch (...) { pluginHandle = nullptr; }
+        if (!pluginHandle)
+        {
+            dlclose(handle);
+            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+                error::Error(error::ErrorCode::RuntimeError, "C-ABI Plugin_Create returned null"));
+        }
+
+        class CAbiPluginAdapter : public IPlugin {
+        public:
+            CAbiPluginAdapter(void* h, Plugin_Destroy_Fn destroyFn, Plugin_GetMetadataJson_Fn metaFn,
+                              Plugin_Initialize_Fn initFn, Plugin_Shutdown_Fn shutdownFn,
+                              Plugin_GetLastError_Fn lastErrFn)
+                : handle_(h), destroyFn_(destroyFn), metaFn_(metaFn), initFn_(initFn), shutdownFn_(shutdownFn), lastErrFn_(lastErrFn)
+            {
+                try {
+                    const char* js = metaFn_(handle_);
+                    if (js) {
+                        nlohmann::json j = nlohmann::json::parse(js);
+                        PluginApi_FreeString(const_cast<char*>(js));
+                        meta_.id = j.value("id", "");
+                        meta_.name = j.value("name", "");
+                        meta_.version = j.value("version", "");
+                        meta_.apiVersion = j.value("apiVersion", "1.0.0");
+                        meta_.author = j.value("author", "");
+                        meta_.description = j.value("description", "");
+                        meta_.website = j.value("website", "");
+                        meta_.type = PluginType::Custom;
+                    }
+                } catch (...) {}
+            }
+            ~CAbiPluginAdapter() override {
+                if (destroyFn_ && handle_) destroyFn_(handle_);
+            }
+            PluginMetadata GetMetadata() const override { return meta_; }
+            bool Initialize() override { return initFn_ ? initFn_(handle_) : true; }
+            void Shutdown() override { if (shutdownFn_) shutdownFn_(handle_); }
+            PluginStatus GetStatus() const override { return PluginStatus::Active; }
+            std::string GetLastError() const override { if (lastErrFn_) { const char* s = lastErrFn_(handle_); if (s) { std::string r(s); PluginApi_FreeString(const_cast<char*>(s)); return r; } } return {}; }
+            bool IsLicensed() const override { return true; }
+            bool SetLicense(const std::string&) override { return true; }
+            bool ValidateConfiguration() const override { return true; }
+        private:
+            void* handle_ = nullptr;
+            Plugin_Destroy_Fn destroyFn_ = nullptr;
+            Plugin_GetMetadataJson_Fn metaFn_ = nullptr;
+            Plugin_Initialize_Fn initFn_ = nullptr;
+            Plugin_Shutdown_Fn shutdownFn_ = nullptr;
+            Plugin_GetLastError_Fn lastErrFn_ = nullptr;
+            PluginMetadata meta_;
+        };
+
+        auto adapter = std::make_unique<CAbiPluginAdapter>(pluginHandle, c_destroy, c_getMeta, c_initialize, c_shutdown, c_getLastErr);
+        if (outLibraryHandle) *outLibraryHandle = handle;
+        util::Logger::Info("PluginManager: Created C-ABI plugin adapter (unix)");
+        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Ok(std::move(adapter));
     }
 #endif
 
-    try
-    {
-        auto plugin = createFunc();
-        if (!plugin)
-        {
-            UnloadLibrary(handle);
-            return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
-                error::Error(error::ErrorCode::RuntimeError,
-                    "CreatePlugin returned nullptr"));
-        }
-
-        // Store library handle in plugin info (will be done by caller)
-        util::Logger::Info("PluginManager: Successfully created plugin instance");
-        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Ok(std::move(plugin));
-    }
-    catch (const std::exception& e)
-    {
-        UnloadLibrary(handle);
-        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
-            error::Error(error::ErrorCode::RuntimeError,
-                std::string("Exception creating plugin: ") + e.what()));
-    }
-    catch (...)
-    {
-        UnloadLibrary(handle);
-        return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
-            error::Error(error::ErrorCode::RuntimeError,
-                "Unknown exception creating plugin"));
-    }
+    // All plugin creation paths handled above (C-ABI adapter). If we reach
+    // here it means an unexpected path was taken; reject the plugin.
+    UnloadLibrary(handle);
+    return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
+        error::Error(error::ErrorCode::RuntimeError, "Plugin creation path not supported (legacy CreatePlugin removed)"));
 }
 
 void PluginManager::UnloadLibrary(void* handle)
@@ -775,6 +1091,17 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
         
         // Plugin is loaded but disabled - just re-enable it
         info.enabled = true;
+
+        // If this is an AI provider plugin and it exposes a SetAIEvents symbol,
+        // call it to provide the application events container opaque handle.
+        if (info.instance && info.instance->GetMetadata().type == PluginType::AIProvider &&
+            info.pluginSetAIEvents && m_eventsContainerOpaque)
+        {
+            using SetFn = void(*)(void*, void*);
+            auto fn = reinterpret_cast<SetFn>(info.pluginSetAIEvents);
+            try { fn(static_cast<void*>(info.instance.get()), m_eventsContainerOpaque); }
+            catch (...) { util::Logger::Warn("PluginManager: Exception calling Plugin_SetAIEventsContainer for {}", pluginId); }
+        }
         
         // Notify observers about plugin enable
         NotifyObservers(PluginEvent::Enabled, pluginId, info.instance.get());
@@ -800,6 +1127,17 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
     // Mark as enabled
     auto& info = m_plugins[pluginId];
     info.enabled = true;
+
+    // If this is an AI provider plugin and it exposes a SetAIEvents symbol,
+    // call it to provide the application events container opaque handle.
+    if (info.instance && info.instance->GetMetadata().type == PluginType::AIProvider &&
+        info.pluginSetAIEvents && m_eventsContainerOpaque)
+    {
+        using SetFn = void(*)(void*, void*);
+        auto fn = reinterpret_cast<SetFn>(info.pluginSetAIEvents);
+        try { fn(static_cast<void*>(info.instance.get()), m_eventsContainerOpaque); }
+        catch (...) { util::Logger::Warn("PluginManager: Exception calling Plugin_SetAIEventsContainer for {}", pluginId); }
+    }
     
     // Notify observers about plugin enable
     NotifyObservers(PluginEvent::Enabled, pluginId, info.instance.get());

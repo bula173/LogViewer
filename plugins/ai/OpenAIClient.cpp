@@ -1,8 +1,12 @@
 #include "OpenAIClient.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 namespace ai
 {
@@ -25,7 +29,7 @@ OpenAIClient::OpenAIClient(const std::string& apiKey,
     , m_model(model)
     , m_baseUrl(baseUrl)
 {
-    util::Logger::Info("OpenAIClient initialized with model: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "OpenAIClient initialized with model: {}", m_model);
 }
 
 std::string OpenAIClient::SendPrompt(const std::string& prompt,
@@ -34,11 +38,11 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
     // Validate API key before sending request
     if (m_apiKey.empty())
     {
-        util::Logger::Error("OpenAI API key not configured");
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "OpenAI API key not configured");
         return "Error: API key required for OpenAI. Please configure it in the AI Configuration panel.";
     }
     
-    util::Logger::Info("Sending prompt to OpenAI API");
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Sending prompt to OpenAI API");
 
     // Build OpenAI API request
     nlohmann::json request = {
@@ -60,8 +64,8 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
                                                    request.dump(), 
                                                    authHeader);
         
-        util::Logger::Debug("OpenAI response (first 500 chars): {}", 
-                           response.substr(0, std::min(size_t(500), response.size())));
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI response (first 500 chars): {}", 
+               response.substr(0, std::min(size_t(500), response.size())));
         
         // Parse response
         nlohmann::json jsonResponse;
@@ -71,8 +75,8 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
         }
         catch (const nlohmann::json::parse_error& e)
         {
-            util::Logger::Error("Failed to parse OpenAI response as JSON. Response starts with: {}",
-                               response.substr(0, std::min(size_t(200), response.size())));
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to parse OpenAI response as JSON. Response starts with: {}",
+                       response.substr(0, std::min(size_t(200), response.size())));
             return "Error: Invalid JSON response from OpenAI. Check API key and endpoint. Response: " + 
                    response.substr(0, std::min(size_t(500), response.size()));
         }
@@ -86,7 +90,7 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
                 errorMsg += ": " + error["message"].get<std::string>();
             if (error.contains("type"))
                 errorMsg += " (" + error["type"].get<std::string>() + ")";
-            util::Logger::Error("{}", errorMsg);
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "{}", errorMsg);
             return "Error: " + errorMsg;
         }
         
@@ -99,12 +103,12 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
             }
         }
         
-        util::Logger::Error("Invalid OpenAI response format");
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Invalid OpenAI response format");
         return "Error: Invalid response from OpenAI";
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("OpenAI API error: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "OpenAI API error: {}", e.what());
         return std::string("Error: ") + e.what();
     }
 }
@@ -113,7 +117,7 @@ bool OpenAIClient::IsAvailable() const
 {
     if (m_apiKey.empty())
     {
-        util::Logger::Warn("OpenAI API key is not configured");
+        PLUGIN_LOG(PLUGIN_LOG_WARN, "OpenAI API key is not configured");
         return false;
     }
     
@@ -134,12 +138,12 @@ bool OpenAIClient::IsAvailable() const
                                                   authHeader);
         
         // If we get any response without exception, the API is available
-        util::Logger::Debug("OpenAI API health check successful");
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI API health check successful");
         return !response.empty();
     }
     catch (const std::exception& e)
     {
-        util::Logger::Warn("OpenAI API health check failed: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_WARN, "OpenAI API health check failed: {}", e.what());
         return false;
     }
 }
@@ -147,7 +151,7 @@ bool OpenAIClient::IsAvailable() const
 void OpenAIClient::SetModelName(const std::string& model)
 {
     m_model = model;
-    util::Logger::Info("OpenAI model changed to: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "OpenAI model changed to: {}", m_model);
 }
 
 std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
@@ -178,7 +182,7 @@ std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
     headers = curl_slist_append(headers, authHeader.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-    util::Logger::Debug("OpenAI POST request to: {}", fullUrl);
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI POST request to: {}", fullUrl);
 
     const CURLcode res = curl_easy_perform(curl);
     
@@ -192,16 +196,16 @@ std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
     {
         const std::string errorMsg = std::string("OpenAI API request failed: ") + 
                                      curl_easy_strerror(res);
-        util::Logger::Error("OpenAI API request failed: {}", curl_easy_strerror(res));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "OpenAI API request failed: {}", curl_easy_strerror(res));
         throw std::runtime_error(errorMsg);
     }
     
-    util::Logger::Debug("OpenAI response: HTTP {}, {} bytes", httpCode, responseData.size());
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI response: HTTP {}, {} bytes", httpCode, responseData.size());
     
     if (httpCode >= 400)
     {
-        util::Logger::Error("OpenAI API returned HTTP {}: {}", httpCode, 
-                           responseData.substr(0, std::min(size_t(500), responseData.size())));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "OpenAI API returned HTTP {}: {}", httpCode, 
+               responseData.substr(0, std::min(size_t(500), responseData.size())));
     }
 
     return responseData;

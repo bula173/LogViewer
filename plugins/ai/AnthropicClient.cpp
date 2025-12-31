@@ -1,6 +1,9 @@
 #include "AnthropicClient.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
@@ -25,7 +28,7 @@ AnthropicClient::AnthropicClient(const std::string& apiKey,
     , m_model(model)
     , m_baseUrl(baseUrl)
 {
-    util::Logger::Info("AnthropicClient initialized with model: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "AnthropicClient initialized with model: {}", m_model);
 }
 
 std::string AnthropicClient::SendPrompt(const std::string& prompt,
@@ -34,11 +37,11 @@ std::string AnthropicClient::SendPrompt(const std::string& prompt,
     // Validate API key before sending request
     if (m_apiKey.empty())
     {
-        util::Logger::Error("Anthropic API key not configured");
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Anthropic API key not configured");
         return "Error: API key required for Anthropic. Please configure it in the AI Configuration panel.";
     }
     
-    util::Logger::Info("Sending prompt to Anthropic API");
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Sending prompt to Anthropic API");
 
     // Build Anthropic API request (different format than OpenAI)
     nlohmann::json request = {
@@ -70,12 +73,12 @@ std::string AnthropicClient::SendPrompt(const std::string& prompt,
             }
         }
         
-        util::Logger::Error("Invalid Anthropic response format");
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Invalid Anthropic response format");
         return "Error: Invalid response from Anthropic";
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("Anthropic API error: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Anthropic API error: {}", e.what());
         return std::string("Error: ") + e.what();
     }
 }
@@ -88,7 +91,7 @@ bool AnthropicClient::IsAvailable() const
 void AnthropicClient::SetModelName(const std::string& model)
 {
     m_model = model;
-    util::Logger::Info("Anthropic model changed to: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Anthropic model changed to: {}", m_model);
 }
 
 std::string AnthropicClient::SendHttpPost(const std::string& endpoint,
@@ -121,7 +124,7 @@ std::string AnthropicClient::SendHttpPost(const std::string& endpoint,
     headers = curl_slist_append(headers, "anthropic-version: 2023-06-01");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-    util::Logger::Debug("Anthropic POST request to: {}", fullUrl);
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Anthropic POST request to: {}", fullUrl);
 
     const CURLcode res = curl_easy_perform(curl);
     
@@ -135,16 +138,16 @@ std::string AnthropicClient::SendHttpPost(const std::string& endpoint,
     {
         const std::string errorMsg = std::string("Anthropic API request failed: ") + 
                                      curl_easy_strerror(res);
-        util::Logger::Error("Anthropic API request failed: {}", curl_easy_strerror(res));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Anthropic API request failed: {}", curl_easy_strerror(res));
         throw std::runtime_error(errorMsg);
     }
     
-    util::Logger::Debug("Anthropic response: HTTP {}, {} bytes", httpCode, responseData.size());
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Anthropic response: HTTP {}, {} bytes", httpCode, responseData.size());
     
     if (httpCode >= 400)
     {
-        util::Logger::Error("Anthropic API returned HTTP {}: {}", httpCode, 
-                           responseData.substr(0, std::min(size_t(500), responseData.size())));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Anthropic API returned HTTP {}: {}", httpCode, 
+                   responseData.substr(0, std::min(size_t(500), responseData.size())));
         
         // Try to parse error from response
         try

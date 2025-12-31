@@ -1,9 +1,12 @@
 #include "AIAnalysisPanel.hpp"
 #include "AIConfigPanel.hpp"
-#include "ui/qt/EventsTableView.hpp"
 #include "OllamaClient.hpp"
 #include "OllamaSetupDialog.hpp"
-#include "util/Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -171,8 +174,8 @@ void AIAnalysisPanel::OnAnalyzeClicked()
     const size_t maxEvents = static_cast<size_t>(m_configPanel->GetMaxEvents());
     
     // Get filtered indices if any filters are active
-    const std::vector<unsigned long>* filteredIndices = 
-        m_eventsView ? m_eventsView->GetFilteredIndices() : nullptr;
+    // SDK-first: do not call into application UI types; defer to unfiltered processing
+    const std::vector<unsigned long>* filteredIndices = nullptr;
     
     // Check if using custom prompt
     const bool useCustomPrompt = m_useCustomPromptCheckbox->isChecked();
@@ -194,20 +197,20 @@ void AIAnalysisPanel::OnAnalyzeClicked()
         {
             if (useCustomPrompt)
             {
-                util::Logger::Info("Starting custom AI analysis: maxEvents={}, filtered={}", 
+                PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting custom AI analysis: maxEvents={}, filtered={}", 
                     maxEvents, filteredIndices != nullptr);
                 return m_analyzer->AnalyzeWithCustomPrompt(customPrompt.toStdString(), maxEvents, filteredIndices);
             }
             else
             {
-                util::Logger::Info("Starting AI analysis: type={}, maxEvents={}, filtered={}",
+                PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting AI analysis: type={}, maxEvents={}, filtered={}",
                     ai::LogAnalyzer::GetAnalysisTypeName(analysisType), maxEvents, filteredIndices != nullptr);
                 return m_analyzer->Analyze(analysisType, maxEvents, filteredIndices);
             }
         }
         catch (const std::exception& e)
         {
-            util::Logger::Error("AI analysis failed: {}", e.what());
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "AI analysis failed: {}", e.what());
             throw;
         }
     });
@@ -265,14 +268,14 @@ void AIAnalysisPanel::LoadPredefinedPrompts()
         if (dir.exists())
         {
             promptsDir = path;
-            util::Logger::Info("Found prompts directory: {}", promptsDir.toStdString());
+            PLUGIN_LOG(PLUGIN_LOG_INFO, "Found prompts directory: {}", promptsDir.toStdString());
             break;
         }
     }
     
     if (promptsDir.isEmpty())
     {
-        util::Logger::Info("No prompts directory found in search paths");
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "No prompts directory found in search paths");
         
         // Add some default built-in prompts as fallback
         m_predefinedPrompts[tr("Performance Analysis")] = 
@@ -316,7 +319,7 @@ void AIAnalysisPanel::LoadPredefinedPrompts()
             {
                 const QString name = fileInfo.completeBaseName();
                 m_predefinedPrompts[name] = content;
-                util::Logger::Info("Loaded prompt template: {}", name.toStdString());
+                PLUGIN_LOG(PLUGIN_LOG_INFO, "Loaded prompt template: {}", name.toStdString());
             }
         }
     }
@@ -327,7 +330,7 @@ void AIAnalysisPanel::LoadPredefinedPrompts()
         m_predefinedPromptCombo->addItem(it.key(), it.key());
     }
     
-    util::Logger::Info("Loaded {} predefined prompt templates", m_predefinedPrompts.size());
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Loaded {} predefined prompt templates", m_predefinedPrompts.size());
 }
 
 QString AIAnalysisPanel::LoadPromptFromFile(const QString& filePath)
@@ -335,7 +338,7 @@ QString AIAnalysisPanel::LoadPromptFromFile(const QString& filePath)
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        util::Logger::Error("Failed to open prompt file: {}", filePath.toStdString());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to open prompt file: {}", filePath.toStdString());
         return QString();
     }
     
@@ -354,7 +357,7 @@ void AIAnalysisPanel::OnPredefinedPromptSelected(int index)
     if (m_predefinedPrompts.contains(templateName))
     {
         m_customPromptEdit->setPlainText(m_predefinedPrompts[templateName]);
-        util::Logger::Info("Loaded predefined prompt: {}", templateName.toStdString());
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "Loaded predefined prompt: {}", templateName.toStdString());
     }
 }
 
@@ -377,10 +380,10 @@ void AIAnalysisPanel::OnLoadPromptFile()
         return;
     
     const QString content = LoadPromptFromFile(fileName);
-    if (!content.isEmpty())
+        if (!content.isEmpty())
     {
         m_customPromptEdit->setPlainText(content);
-        util::Logger::Info("Loaded prompt from file: {}", fileName.toStdString());
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "Loaded prompt from file: {}", fileName.toStdString());
     }
     else
     {
@@ -424,7 +427,7 @@ void AIAnalysisPanel::OnSavePromptFile()
             tr("Failed to save prompt to file:\n%1\n\nError: %2")
                 .arg(fileName)
                 .arg(file.errorString()));
-        util::Logger::Error("Failed to save prompt file: {}", fileName.toStdString());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to save prompt file: {}", fileName.toStdString());
         return;
     }
     
@@ -432,7 +435,7 @@ void AIAnalysisPanel::OnSavePromptFile()
     out << currentPrompt;
     file.close();
     
-    util::Logger::Info("Saved prompt to file: {}", fileName.toStdString());
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Saved prompt to file: {}", fileName.toStdString());
     
     QMessageBox::information(this, tr("Prompt Saved"),
         tr("Prompt successfully saved to:\n%1\n\n"

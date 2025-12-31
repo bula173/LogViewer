@@ -2,7 +2,8 @@
 
 #include "IAIService.hpp"
 #include "AIServiceFactory.hpp"
-#include "EventsContainer.hpp"
+#include "PluginEventsC.h"
+#include <nlohmann/json.hpp>
 #include <string>
 #include <memory>
 #include <vector>
@@ -25,8 +26,7 @@ public:
         Timeline          // Create timeline narrative
     };
 
-    explicit LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService,
-                        db::EventsContainer& events);
+    explicit LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService);
 
     /**
      * @brief Perform analysis on current log data
@@ -60,10 +60,9 @@ public:
 
 private:
     std::shared_ptr<AIServiceWrapper> m_aiService;
-    db::EventsContainer& m_events;
 
     std::string FormatEventsForAI(size_t maxEvents, const std::vector<unsigned long>* filteredIndices) const;
-    void FormatSingleEvent(std::ostringstream& oss, size_t index, const db::LogEvent& event) const;
+    void FormatSingleEvent(std::ostringstream& oss, size_t index, const nlohmann::json& eventJson) const;
     std::string BuildPrompt(AnalysisType type, const std::string& logData) const;
 };
 

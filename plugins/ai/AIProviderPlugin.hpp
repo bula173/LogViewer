@@ -1,8 +1,6 @@
 // AI provider plugin that supplies analysis, config, and chat panels via the plugin interfaces
 #pragma once
 
-#include "IPlugin.hpp"
-#include "IAIPlugin.hpp"
 #include "AIAnalysisPanel.hpp"
 #include "AIConfigPanel.hpp"
 #include "AIChatPanel.hpp"
@@ -15,33 +13,38 @@
 #include <filesystem>
 #include <memory>
 
+#include "PluginTypesC.h"
+#include <QWidget>
+
 namespace plugin
 {
 
-class AIProviderPlugin : public IPlugin, public IAIPlugin
+// SDK-first plugin: do not depend on internal application C++ interfaces.
+class AIProviderPlugin
 {
 public:
     AIProviderPlugin();
-    ~AIProviderPlugin() override = default;
+    ~AIProviderPlugin() = default;
 
-    // IPlugin
-    PluginMetadata GetMetadata() const override;
-    bool Initialize() override;
-    void Shutdown() override;
-    PluginStatus GetStatus() const override;
-    std::string GetLastError() const override;
-    bool IsLicensed() const override;
-    bool SetLicense(const std::string& licenseKey) override;
-    bool ValidateConfiguration() const override;
-    QWidget* CreateTab(QWidget* parent) override;
-    QWidget* CreateBottomPanel(QWidget* parent, ai::IAIService* service, db::EventsContainer* events) override;
-    QWidget* GetConfigurationUI() override;
-    IAIPlugin* GetAIPluginInterface() override { return this; }
+    // Plugin API methods (no C++ interface inheritance in SDK-first mode)
+    PluginMetadata GetMetadata() const;
+    bool Initialize();
+    void Shutdown();
+    PluginStatus GetStatus() const;
+    std::string GetLastError() const;
+    bool IsLicensed() const;
+    bool SetLicense(const std::string& licenseKey);
+    bool ValidateConfiguration() const;
+    QWidget* CreateTab(QWidget* parent);
+    QWidget* CreateBottomPanel(QWidget* parent, ai::IAIService* service, void* events);
+    QWidget* GetConfigurationUI();
 
-    // IAIPlugin
-    std::shared_ptr<ai::IAIService> CreateService(const nlohmann::json& settings) override;
-    void SetEventsContainer(std::shared_ptr<db::EventsContainer> eventsContainer) override;
-    void OnEventsUpdated() override;
+    // IAIPlugin-like methods exposed for host use via C ABI
+    std::shared_ptr<ai::IAIService> CreateService(const nlohmann::json& settings);
+    void SetEventsContainer(std::shared_ptr<void> eventsContainer);
+    // Non-owning setter used by C ABI bridge (host passes opaque raw pointer)
+    void SetEventsContainerRaw(void* eventsContainerRaw);
+    void OnEventsUpdated();
 
 private:
     void ensureAnalyzer();
@@ -54,7 +57,7 @@ private:
 
     std::shared_ptr<ai::AIServiceWrapper> m_aiService;
     std::shared_ptr<ai::LogAnalyzer> m_analyzer;
-    std::shared_ptr<db::EventsContainer> m_events;
+    std::shared_ptr<void> m_events;
 
     // UI instances managed by Qt parentage
     ui::qt::AIAnalysisPanel* m_analysisPanel {nullptr};

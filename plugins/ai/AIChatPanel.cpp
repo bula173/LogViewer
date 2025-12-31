@@ -1,7 +1,13 @@
 #include "AIChatPanel.hpp"
 #include "OllamaClient.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
+#include "PluginC.h"
+#include "PluginLoggerC.h"
+#include "PluginEventsC.h"
+#include <fmt/format.h>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -19,11 +25,9 @@ namespace ui::qt
 {
 
 AIChatPanel::AIChatPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
-                         db::EventsContainer& events,
                          QWidget* parent)
     : QWidget(parent)
     , m_aiService(aiService)
-    , m_events(events)
 {
     BuildUi();
 }
@@ -102,7 +106,7 @@ void AIChatPanel::OnClearClicked()
 void AIChatPanel::OnContextSizeChanged(int value)
 {
     m_maxContextEvents = value;
-    util::Logger::Info("AI chat context size changed to: {}", m_maxContextEvents);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "AI chat context size changed to: {}", m_maxContextEvents);
 }
 
 void AIChatPanel::SendMessage(const QString& message)
@@ -137,17 +141,17 @@ void AIChatPanel::SendMessage(const QString& message)
             prompt += "\\n\\nUser question: " + message.toStdString();
             prompt += "\\n\\nProvide a helpful, concise answer based on the logs above:";
 
-            util::Logger::Debug("Sending chat message with {} events context", m_maxContextEvents);
+            PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Sending chat message with {} events context", m_maxContextEvents);
 
             // Send to AI service
-            util::Logger::Debug("Model used: {}", 
+            PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Model used: {}", 
                 m_aiService->service->GetModelName().empty() ? "default" : m_aiService->service->GetModelName());
-            util::Logger::Debug("AI Chat Prompt: {}", prompt);
+            PLUGIN_LOG(PLUGIN_LOG_DEBUG, "AI Chat Prompt: {}", prompt);
             return m_aiService->service->SendPrompt(prompt);
         }
         catch (const std::exception& e)
         {
-            util::Logger::Error("AI chat error: {}", e.what());
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "AI chat error: {}", e.what());
             return "Error: " + std::string(e.what());
         }
     });
@@ -202,29 +206,35 @@ void AIChatPanel::AppendMessage(const QString& sender, const QString& message, c
 std::string AIChatPanel::FormatEventsForContext(size_t maxEvents) const
 {
     std::string formatted;
-    const size_t totalEvents = m_events.Size();
-    
-    if (totalEvents == 0)
-    {
+    const int totalEvents = PluginEvents_GetSize();
+    if (totalEvents <= 0)
         return "No log events available.";
-    }
-    
-    const size_t startIdx = totalEvents > maxEvents ? totalEvents - maxEvents : 0;
-    const size_t count = totalEvents - startIdx;
-    
-    formatted += "Total events: " + std::to_string(totalEvents) + "\n";
+
+    const size_t te = static_cast<size_t>(totalEvents);
+    const size_t startIdx = te > maxEvents ? te - maxEvents : 0;
+    const size_t count = te - startIdx;
+
+    formatted += "Total events: " + std::to_string(te) + "\n";
     formatted += "Showing last " + std::to_string(count) + " events:\n\n";
-    
-    for (size_t i = startIdx; i < totalEvents; ++i)
+
+    for (size_t i = startIdx; i < te; ++i)
     {
-        const auto& event = m_events.GetEvent(static_cast<int>(i));
-        const auto& config = config::GetConfig();
-        formatted += "[" + std::to_string(i + 1) + "] ";
-        formatted += event.findByKey("timestamp") + " ";
-        formatted += event.findByKey(config.typeFilterField) + ": ";
-        formatted += event.findByKey("message") + "\n";
+        char* jsonStr = PluginEvents_GetEventJson(static_cast<int>(i));
+        if (!jsonStr) continue;
+        try {
+            nlohmann::json ev = nlohmann::json::parse(jsonStr);
+            PluginApi_FreeString(jsonStr);
+            formatted += "[" + std::to_string(i + 1) + "] ";
+            if (ev.contains("timestamp")) formatted += ev["timestamp"].get<std::string>() + " ";
+            // Prefer common fields 'type' or 'level' for event classification
+            if (ev.contains("type")) formatted += ev["type"].get<std::string>() + ": ";
+            else if (ev.contains("level")) formatted += ev["level"].get<std::string>() + ": ";
+            if (ev.contains("message")) formatted += ev["message"].get<std::string>() + "\n";
+        } catch (...) {
+            PluginApi_FreeString(jsonStr);
+        }
     }
-    
+
     return formatted;
 }
 

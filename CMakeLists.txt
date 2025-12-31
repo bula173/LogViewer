@@ -6,8 +6,15 @@ cmake_policy(SET CMP0074 NEW)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# On MinGW, linking libstdc++ / libgcc statically can cause ABI/library
+# conflicts depending on the toolchain. Make static linking opt-in so the
+# default build uses the shared runtime which avoids duplicate-section linker
+# errors on mixed environments.
 if(MINGW)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libstdc++ -static-libgcc")
+    option(USE_STATIC_MINGW_LIBS "Link libstdc++ and libgcc statically on MinGW" OFF)
+    if(USE_STATIC_MINGW_LIBS)
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libstdc++ -static-libgcc")
+    endif()
 endif()
 
 # Option to build SDK for plugin development

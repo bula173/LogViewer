@@ -3,7 +3,10 @@
 #include "OpenAIClient.hpp"
 #include "AnthropicClient.hpp"
 #include "GeminiClient.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 namespace ai
 {
@@ -14,7 +17,7 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
     const std::string& baseUrl,
     const std::string& model)
 {
-    util::Logger::Info("Creating AI client for provider: {}", provider);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Creating AI client for provider: {}", provider);
 
     if (provider == "ollama" || provider == "lmstudio" || provider == "custom")
     {
@@ -27,7 +30,7 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
         // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Warn("API key not configured for provider: {}", provider);
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "API key not configured for provider: {}", provider);
         }
         // OpenAI has a fixed base URL
         const std::string openaiBaseUrl = "https://api.openai.com/v1";
@@ -38,7 +41,7 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
         // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Warn("API key not configured for Anthropic");
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "API key not configured for Anthropic");
         }
         // Anthropic has a fixed base URL
         const std::string anthropicBaseUrl = "https://api.anthropic.com/v1";
@@ -49,7 +52,7 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
         // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
         {
-            util::Logger::Warn("API key not configured for Google");
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "API key not configured for Google");
         }
         // Gemini has a fixed base URL
         const std::string geminiBaseUrl = "https://generativelanguage.googleapis.com";
@@ -57,7 +60,7 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
     }
     else
     {
-        util::Logger::Error("Unknown AI provider: {}", provider);
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Unknown AI provider: {}", provider);
         throw std::runtime_error("Unknown AI provider: " + provider);
     }
 }

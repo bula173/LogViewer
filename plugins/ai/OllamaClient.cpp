@@ -1,6 +1,10 @@
 #include "OllamaClient.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 #include <sstream>
 #include <iomanip>
@@ -56,14 +60,13 @@ OllamaClient::OllamaClient(const std::string& model, const std::string& baseUrl)
     : m_model(model)
     , m_baseUrl(baseUrl)
 {
-    util::Logger::Info("OllamaClient initialized with model: {}, baseUrl: {}",
-        m_model, m_baseUrl);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "OllamaClient initialized with model: {}, baseUrl: {}", m_model, m_baseUrl);
 }
 
 std::string OllamaClient::SendPrompt(const std::string& prompt,
     std::function<void(const std::string&)> callback)
 {
-    util::Logger::Debug("Sending prompt to Ollama (length: {})", prompt.length());
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Sending prompt to Ollama (length: {})", prompt.length());
 
     // Build JSON request with properly escaped prompt
     const std::string escapedPrompt = EscapeJson(prompt);
@@ -78,7 +81,7 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
     {
         const std::string response = SendHttpPost("/api/generate", jsonBody.str());
         
-        util::Logger::Debug("Raw Ollama response: {}", response.substr(0, 200));
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Raw Ollama response: {}", response.substr(0, 200));
         
         // Check for error response
         if (response.find(R"("error":")") != std::string::npos)
@@ -92,7 +95,7 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
                 const size_t errorEnd = response.find('"', errorStart);
                 const std::string errorMsg = response.substr(errorStart, errorEnd - errorStart);
                 
-                util::Logger::Error("Ollama error: {}", errorMsg);
+                PLUGIN_LOG(PLUGIN_LOG_ERROR, "Ollama error: {}", errorMsg);
                 
                 // Check for specific error types
                 if (errorMsg.find("not found") != std::string::npos)
@@ -113,7 +116,7 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
         const size_t startPos = response.find(searchKey);
         if (startPos == std::string::npos)
         {
-            util::Logger::Error("Could not find 'response' field in Ollama output. Response: {}", 
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "Could not find 'response' field in Ollama output. Response: {}", 
                 response.substr(0, 500));
             return "Error: Invalid response format from Ollama. Please check if Ollama is running correctly.";
         }
@@ -134,7 +137,7 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
 
         if (contentEnd >= response.length())
         {
-            util::Logger::Error("Malformed JSON response from Ollama");
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "Malformed JSON response from Ollama");
             return "Error: Malformed response from Ollama";
         }
 
@@ -157,13 +160,13 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
         if (callback)
             callback(result);
 
-        util::Logger::Debug("Received response from Ollama (length: {})", result.length());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Received response from Ollama (length: {})", result.length());
         return result;
     }
     catch (const std::exception& e)
     {
         const std::string errorMsg = std::string("Ollama request failed: ") + e.what();
-        util::Logger::Error("{}", errorMsg);
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "{}", errorMsg);
         return "Error: " + errorMsg;
     }
 }
@@ -189,13 +192,13 @@ std::string OllamaClient::GetModelName() const
 void OllamaClient::SetModelName(const std::string& model)
 {
     m_model = model;
-    util::Logger::Info("Ollama model changed to: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Ollama model changed to: {}", m_model);
 }
 
 void OllamaClient::SetBaseUrl(const std::string& url)
 {
     m_baseUrl = url;
-    util::Logger::Info("Ollama base URL changed to: {}", m_baseUrl);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Ollama base URL changed to: {}", m_baseUrl);
 }
 
 std::vector<ModelInfo> OllamaClient::GetInstalledModels() const
@@ -206,7 +209,7 @@ std::vector<ModelInfo> OllamaClient::GetInstalledModels() const
     {
         const std::string response = SendHttpGet("/api/tags");
         
-        util::Logger::Debug("GetInstalledModels raw response: {}", response.substr(0, 500));
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "GetInstalledModels raw response: {}", response.substr(0, 500));
         
         // Parse JSON response to extract models array
         // Look for "models":[...] pattern
@@ -215,7 +218,7 @@ std::vector<ModelInfo> OllamaClient::GetInstalledModels() const
         
         if (modelsPos == std::string::npos)
         {
-            util::Logger::Warn("Could not find 'models' array in /api/tags response. Full response: {}", 
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "Could not find 'models' array in /api/tags response. Full response: {}", 
                 response.substr(0, 500));
             return models;
         }
@@ -237,7 +240,7 @@ std::vector<ModelInfo> OllamaClient::GetInstalledModels() const
             ModelInfo info;
             info.name = response.substr(nameStart, nameEnd - nameStart);
             
-            util::Logger::Debug("Found model: {}", info.name);
+            PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Found model: {}", info.name);
             
             // Try to extract size (optional)
             const std::string sizeKey = R"("size":)";
@@ -263,11 +266,11 @@ std::vector<ModelInfo> OllamaClient::GetInstalledModels() const
             pos = nameEnd;
         }
         
-        util::Logger::Info("Found {} installed Ollama models", models.size());
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "Found {} installed Ollama models", models.size());
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("Failed to get installed models: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to get installed models: {}", e.what());
     }
     
     return models;

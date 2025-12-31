@@ -4,10 +4,13 @@
 #include "AnthropicClient.hpp"
 #include "GeminiClient.hpp"
 #include "AIServiceFactory.hpp"
-#include "PluginManager.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
-#include "KeyEncryption.hpp"
+#include "PluginLoggerC.h"
+#include "PluginKeyEncryptionC.h"
+#include <fmt/format.h>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 #include <fstream>
 #include <filesystem>
@@ -20,6 +23,7 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 namespace ui::qt
 {
@@ -81,6 +85,20 @@ void AIConfigPanel::BuildUi()
     });
     configLayout->addRow(tr("Base URL:"), m_baseUrlEdit);
 
+    // Timeout for AI requests
+    m_timeoutSpin = new QSpinBox(this);
+    m_timeoutSpin->setMinimum(1);
+    m_timeoutSpin->setMaximum(600);
+    int timeoutVal = pluginConfig.value("aiTimeoutSeconds", cfg.aiTimeoutSeconds);
+    m_timeoutSpin->setValue(timeoutVal);
+    m_timeoutSpin->setToolTip(tr("Timeout for AI requests in seconds"));
+    connect(m_timeoutSpin, QOverload<int>::of(&QSpinBox::valueChanged), [this](int){
+        SavePluginConfig();
+        RefreshAIClient();
+        emit ConfigurationChanged();
+    });
+    configLayout->addRow(tr("Timeout (s):"), m_timeoutSpin);
+
     // API Keys group for cloud providers
     auto* apiKeysGroup = new QGroupBox(tr("Cloud Provider API Keys"), this);
     apiKeysGroup->setToolTip(tr("API keys are stored encrypted. Only required for cloud providers."));
@@ -90,28 +108,52 @@ void AIConfigPanel::BuildUi()
     m_openaiKeyEdit->setEchoMode(QLineEdit::Password);
     m_openaiKeyEdit->setPlaceholderText(tr("OpenAI API key (from platform.openai.com)"));
     std::string openaiKey = pluginConfig.value("openaiApiKey", cfg.openaiApiKey);
-    m_openaiKeyEdit->setText(QString::fromStdString(util::KeyEncryption::Decrypt(openaiKey)));
+    if (!openaiKey.empty()) {
+        char* dec = PluginKeyEncryption_Decrypt(openaiKey.c_str());
+        if (dec) {
+            m_openaiKeyEdit->setText(QString::fromStdString(dec));
+            PluginKeyEncryption_FreeString(dec);
+        }
+    }
     apiKeysLayout->addRow(tr("OpenAI:"), m_openaiKeyEdit);
     
     m_anthropicKeyEdit = new QLineEdit(apiKeysGroup);
     m_anthropicKeyEdit->setEchoMode(QLineEdit::Password);
     m_anthropicKeyEdit->setPlaceholderText(tr("Anthropic API key (from console.anthropic.com)"));
     std::string anthropicKey = pluginConfig.value("anthropicApiKey", cfg.anthropicApiKey);
-    m_anthropicKeyEdit->setText(QString::fromStdString(util::KeyEncryption::Decrypt(anthropicKey)));
+    if (!anthropicKey.empty()) {
+        char* dec = PluginKeyEncryption_Decrypt(anthropicKey.c_str());
+        if (dec) {
+            m_anthropicKeyEdit->setText(QString::fromStdString(dec));
+            PluginKeyEncryption_FreeString(dec);
+        }
+    }
     apiKeysLayout->addRow(tr("Anthropic:"), m_anthropicKeyEdit);
     
     m_googleKeyEdit = new QLineEdit(apiKeysGroup);
     m_googleKeyEdit->setEchoMode(QLineEdit::Password);
     m_googleKeyEdit->setPlaceholderText(tr("Google API key (from makersuite.google.com)"));
     std::string googleKey = pluginConfig.value("googleApiKey", cfg.googleApiKey);
-    m_googleKeyEdit->setText(QString::fromStdString(util::KeyEncryption::Decrypt(googleKey)));
+    if (!googleKey.empty()) {
+        char* dec = PluginKeyEncryption_Decrypt(googleKey.c_str());
+        if (dec) {
+            m_googleKeyEdit->setText(QString::fromStdString(dec));
+            PluginKeyEncryption_FreeString(dec);
+        }
+    }
     apiKeysLayout->addRow(tr("Google:"), m_googleKeyEdit);
     
     m_xaiKeyEdit = new QLineEdit(apiKeysGroup);
     m_xaiKeyEdit->setEchoMode(QLineEdit::Password);
     m_xaiKeyEdit->setPlaceholderText(tr("xAI API key (from console.x.ai)"));
     std::string xaiKey = pluginConfig.value("xaiApiKey", cfg.xaiApiKey);
-    m_xaiKeyEdit->setText(QString::fromStdString(util::KeyEncryption::Decrypt(xaiKey)));
+    if (!xaiKey.empty()) {
+        char* dec = PluginKeyEncryption_Decrypt(xaiKey.c_str());
+        if (dec) {
+            m_xaiKeyEdit->setText(QString::fromStdString(dec));
+            PluginKeyEncryption_FreeString(dec);
+        }
+    }
     apiKeysLayout->addRow(tr("xAI:"), m_xaiKeyEdit);
     
     mainLayout->addWidget(apiKeysGroup);
@@ -201,7 +243,7 @@ void AIConfigPanel::OnProviderChanged(int index)
     if (provider.isEmpty())
         return;
     
-    util::Logger::Info("AI provider changed to: {}", provider.toStdString());
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "AI provider changed to: {}", provider.toStdString());
     
     // Get default base URL for the new provider
     std::string newBaseUrl = ai::AIServiceFactory::GetDefaultBaseUrl(provider.toStdString());
@@ -209,9 +251,9 @@ void AIConfigPanel::OnProviderChanged(int index)
     // Update UI field
     if (m_baseUrlEdit)
     {
-        util::Logger::Debug("Updating base URL field to: {}", newBaseUrl);
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Updating base URL field to: {}", newBaseUrl);
         m_baseUrlEdit->setText(QString::fromStdString(newBaseUrl));
-        util::Logger::Debug("Base URL field updated, current text: {}", m_baseUrlEdit->text().toStdString());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Base URL field updated, current text: {}", m_baseUrlEdit->text().toStdString());
     }
     
     // Load current config, update it, and save
@@ -234,7 +276,7 @@ void AIConfigPanel::OnModelChanged(int index)
     if (modelName.isEmpty())
         return;
     
-    util::Logger::Info("AI model changed to: {}", modelName.toStdString());
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "AI model changed to: {}", modelName.toStdString());
     
     // Update plugin config
     nlohmann::json pluginConfig = LoadPluginConfig();
@@ -440,30 +482,54 @@ void AIConfigPanel::RefreshAIClient()
     if (provider == "openai")
     {
         std::string encryptedKey = pluginConfig.value("openaiApiKey", mainConfig.openaiApiKey);
-        util::Logger::Debug("OpenAI encrypted key from config: {} chars", encryptedKey.size());
-        apiKey = util::KeyEncryption::Decrypt(encryptedKey);
-        util::Logger::Debug("OpenAI decrypted key: {} chars", apiKey.size());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI encrypted key from config: {} chars", encryptedKey.size());
+        if (!encryptedKey.empty()) {
+            char* dec = PluginKeyEncryption_Decrypt(encryptedKey.c_str());
+            if (dec) {
+                apiKey = std::string(dec);
+                PluginKeyEncryption_FreeString(dec);
+                PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI decrypted key: {} chars", apiKey.size());
+            }
+        }
     }
     else if (provider == "anthropic")
     {
         std::string encryptedKey = pluginConfig.value("anthropicApiKey", mainConfig.anthropicApiKey);
-        util::Logger::Debug("Anthropic encrypted key from config: {} chars", encryptedKey.size());
-        apiKey = util::KeyEncryption::Decrypt(encryptedKey);
-        util::Logger::Debug("Anthropic decrypted key: {} chars", apiKey.size());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Anthropic encrypted key from config: {} chars", encryptedKey.size());
+        if (!encryptedKey.empty()) {
+            char* dec = PluginKeyEncryption_Decrypt(encryptedKey.c_str());
+            if (dec) {
+                apiKey = std::string(dec);
+                PluginKeyEncryption_FreeString(dec);
+                PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Anthropic decrypted key: {} chars", apiKey.size());
+            }
+        }
     }
     else if (provider == "google")
     {
         std::string encryptedKey = pluginConfig.value("googleApiKey", mainConfig.googleApiKey);
-        util::Logger::Debug("Google encrypted key from config: {} chars", encryptedKey.size());
-        apiKey = util::KeyEncryption::Decrypt(encryptedKey);
-        util::Logger::Debug("Google decrypted key: {} chars", apiKey.size());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Google encrypted key from config: {} chars", encryptedKey.size());
+        if (!encryptedKey.empty()) {
+            char* dec = PluginKeyEncryption_Decrypt(encryptedKey.c_str());
+            if (dec) {
+                apiKey = std::string(dec);
+                PluginKeyEncryption_FreeString(dec);
+                PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Google decrypted key: {} chars", apiKey.size());
+            }
+        }
     }
     else if (provider == "xai")
     {
         std::string encryptedKey = pluginConfig.value("xaiApiKey", mainConfig.xaiApiKey);
-        util::Logger::Debug("xAI encrypted key from config: {} chars", encryptedKey.size());
-        apiKey = util::KeyEncryption::Decrypt(encryptedKey);
-        util::Logger::Debug("xAI decrypted key: {} chars", apiKey.size());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "xAI encrypted key from config: {} chars", encryptedKey.size());
+        if (!encryptedKey.empty()) {
+            char* dec = PluginKeyEncryption_Decrypt(encryptedKey.c_str());
+            if (dec) {
+                apiKey = std::string(dec);
+                PluginKeyEncryption_FreeString(dec);
+                PLUGIN_LOG(PLUGIN_LOG_DEBUG, "xAI decrypted key: {} chars", apiKey.size());
+            }
+        }
     }
     
     try
@@ -478,11 +544,11 @@ void AIConfigPanel::RefreshAIClient()
         PopulateModelList();
         
         UpdateStatusLabel();
-        util::Logger::Info("AI client refreshed: provider={}", m_aiService->service->GetProviderName());
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "AI client refreshed: provider={}", m_aiService->service->GetProviderName());
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("Failed to refresh AI client: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to refresh AI client: {}", e.what());
         if (m_statusLabel)
         {
             m_statusLabel->setText(tr("Error: %1").arg(e.what()));
@@ -493,12 +559,12 @@ void AIConfigPanel::RefreshAIClient()
 
 nlohmann::json AIConfigPanel::LoadPluginConfig()
 {
-    auto& pluginManager = plugin::PluginManager::GetInstance();
-    std::filesystem::path configPath = pluginManager.GetPluginConfigPath("ai_provider");
+    const std::string appDir = QCoreApplication::applicationDirPath().toStdString();
+    std::filesystem::path configPath = std::filesystem::path(appDir) / "plugins" / "ai_provider" / "config.json";
     
     if (!std::filesystem::exists(configPath))
     {
-        util::Logger::Debug("[AIConfigPanel] No plugin config file found, using defaults");
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] No plugin config file found, using defaults");
         return nlohmann::json::object();
     }
 
@@ -507,7 +573,7 @@ nlohmann::json AIConfigPanel::LoadPluginConfig()
         std::ifstream file(configPath);
         if (!file.is_open())
         {
-            util::Logger::Warn("[AIConfigPanel] Failed to open plugin config file");
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "[AIConfigPanel] Failed to open plugin config file");
             return nlohmann::json::object();
         }
 
@@ -517,15 +583,15 @@ nlohmann::json AIConfigPanel::LoadPluginConfig()
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("[AIConfigPanel] Failed to parse plugin config: {}", ex.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "[AIConfigPanel] Failed to parse plugin config: {}", ex.what());
         return nlohmann::json::object();
     }
 }
 
 void AIConfigPanel::SavePluginConfig()
 {
-    auto& pluginManager = plugin::PluginManager::GetInstance();
-    std::filesystem::path configPath = pluginManager.GetPluginConfigPath("ai_provider");
+    const std::string appDir = QCoreApplication::applicationDirPath().toStdString();
+    std::filesystem::path configPath = std::filesystem::path(appDir) / "plugins" / "ai_provider" / "config.json";
     
     try
     {
@@ -546,6 +612,11 @@ void AIConfigPanel::SavePluginConfig()
         {
             config["baseUrl"] = m_baseUrlEdit->text().toStdString();
         }
+
+        if (m_timeoutSpin)
+        {
+            config["aiTimeoutSeconds"] = m_timeoutSpin->value();
+        }
         
         if (m_modelCombo && m_modelCombo->count() > 0)
         {
@@ -560,38 +631,30 @@ void AIConfigPanel::SavePluginConfig()
         if (m_openaiKeyEdit && !m_openaiKeyEdit->text().isEmpty())
         {
             std::string key = m_openaiKeyEdit->text().toStdString();
-            if (!util::KeyEncryption::IsEncrypted(key))
-            {
-                key = util::KeyEncryption::Encrypt(key);
-            }
-            config["openaiApiKey"] = key;
+            char* enc = PluginKeyEncryption_Encrypt(key.c_str());
+            if (enc) { config["openaiApiKey"] = std::string(enc); PluginKeyEncryption_FreeString(enc); }
+            else { config["openaiApiKey"] = key; }
         }
         if (m_anthropicKeyEdit && !m_anthropicKeyEdit->text().isEmpty())
         {
             std::string key = m_anthropicKeyEdit->text().toStdString();
-            if (!util::KeyEncryption::IsEncrypted(key))
-            {
-                key = util::KeyEncryption::Encrypt(key);
-            }
-            config["anthropicApiKey"] = key;
+            char* enc = PluginKeyEncryption_Encrypt(key.c_str());
+            if (enc) { config["anthropicApiKey"] = std::string(enc); PluginKeyEncryption_FreeString(enc); }
+            else { config["anthropicApiKey"] = key; }
         }
         if (m_googleKeyEdit && !m_googleKeyEdit->text().isEmpty())
         {
             std::string key = m_googleKeyEdit->text().toStdString();
-            if (!util::KeyEncryption::IsEncrypted(key))
-            {
-                key = util::KeyEncryption::Encrypt(key);
-            }
-            config["googleApiKey"] = key;
+            char* enc = PluginKeyEncryption_Encrypt(key.c_str());
+            if (enc) { config["googleApiKey"] = std::string(enc); PluginKeyEncryption_FreeString(enc); }
+            else { config["googleApiKey"] = key; }
         }
         if (m_xaiKeyEdit && !m_xaiKeyEdit->text().isEmpty())
         {
             std::string key = m_xaiKeyEdit->text().toStdString();
-            if (!util::KeyEncryption::IsEncrypted(key))
-            {
-                key = util::KeyEncryption::Encrypt(key);
-            }
-            config["xaiApiKey"] = key;
+            char* enc = PluginKeyEncryption_Encrypt(key.c_str());
+            if (enc) { config["xaiApiKey"] = std::string(enc); PluginKeyEncryption_FreeString(enc); }
+            else { config["xaiApiKey"] = key; }
         }
         
         // Ensure directory exists
@@ -604,17 +667,24 @@ void AIConfigPanel::SavePluginConfig()
         std::ofstream file(configPath);
         if (!file.is_open())
         {
-            util::Logger::Error("[AIConfigPanel] Failed to open config file for writing");
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "[AIConfigPanel] Failed to open config file for writing");
             return;
         }
 
         file << config.dump(2);
         file.close();
-        util::Logger::Info("[AIConfigPanel] Saved plugin config to: {}", configPath.string());
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] Saved plugin config to: {}", configPath.string());
+        // Apply saved settings to runtime plugin-local config
+        try {
+            config::GetConfig().ApplyJson(config);
+            PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] Applied plugin config to runtime");
+        } catch (...) {
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "[AIConfigPanel] Failed to apply plugin config to runtime");
+        }
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("[AIConfigPanel] Failed to save plugin config: {}", ex.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "[AIConfigPanel] Failed to save plugin config: {}", ex.what());
     }
 }
 

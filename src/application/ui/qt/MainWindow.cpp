@@ -59,6 +59,38 @@
 namespace ui::qt
 {
 
+// C-style EventsContainer bridge for plugins
+#include "../../../plugin_api/PluginEventsC.h"
+
+static int PluginEvents_GetSizeBridge(void* handle)
+{
+    if (!handle) return 0;
+    auto container = static_cast<db::EventsContainer*>(handle);
+    return static_cast<int>(container->Size());
+}
+
+static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
+{
+    if (!handle) return nullptr;
+    auto container = static_cast<db::EventsContainer*>(handle);
+    try {
+        const auto& event = container->GetEvent(index);
+        nlohmann::json j;
+        for (const auto& kv : event.getEventItems()) {
+            // If duplicate keys exist, last one wins
+            j[kv.first] = kv.second;
+        }
+        std::string s = j.dump();
+        char* out = (char*)std::malloc(s.size() + 1);
+        if (!out) return nullptr;
+        memcpy(out, s.c_str(), s.size() + 1);
+        return out;
+    } catch (...) {
+        return nullptr;
+    }
+}
+
+
 MainWindow::MainWindow(mvc::IController& controller,
     db::EventsContainer& events, QWidget* parent)
     : QMainWindow(parent)
@@ -865,6 +897,19 @@ void MainWindow::setupPluginManager() {
     
     pluginManager.SetPluginsDirectory(pluginsDir);
     util::Logger::Info("[MainWindow] Plugin directory set to: {}", pluginsDir.string());
+
+    // Register EventsContainer callbacks so plugins can access events via C ABI
+    if (m_events) {
+        PluginEvents_Register(reinterpret_cast<void*>(m_events),
+                              &PluginEvents_GetSizeBridge,
+                              &PluginEvents_GetEventJsonBridge);
+        util::Logger::Debug("[MainWindow] Registered EventsContainer bridge for plugins");
+        // Also inform PluginManager about the opaque events pointer so it can pass
+        // the same opaque handle to AI provider plugins via C API.
+        plugin::PluginManager::GetInstance().SetEventsContainerOpaque(reinterpret_cast<void*>(m_events));
+    } else {
+        util::Logger::Warn("[MainWindow] No EventsContainer available to register with plugins");
+    }
 }
 
 void MainWindow::loadPlugins() {
