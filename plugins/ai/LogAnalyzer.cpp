@@ -1,15 +1,19 @@
 #include "LogAnalyzer.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <algorithm>
+#include "PluginEventsC.h"
+#include <nlohmann/json.hpp>
+
+// Helper macro for formatted plugin logging
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 
 namespace ai
 {
 
-LogAnalyzer::LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService,
-                         db::EventsContainer& events)
+LogAnalyzer::LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService)
     : m_aiService(std::move(aiService))
-    , m_events(events)
 {
 }
 
@@ -21,13 +25,14 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
         return "Error: AI service not available. Please setup the AI provider.";
     }
 
-    if (m_events.Size() == 0)
+    const int totalEvents = PluginEvents_GetSize();
+    if (totalEvents == 0)
     {
         return "No log data available to analyze.";
     }
 
-    const size_t eventCount = filteredIndices ? filteredIndices->size() : m_events.Size();
-    util::Logger::Info("Starting {} analysis on {} {} events",
+    const size_t eventCount = filteredIndices ? filteredIndices->size() : static_cast<size_t>(totalEvents);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting {} analysis on {} {} events",
         GetAnalysisTypeName(type),
         maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
         filteredIndices ? "filtered" : "total");
@@ -38,13 +43,13 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
     try
     {
         const std::string result = m_aiService->service->SendPrompt(prompt);
-        util::Logger::Info("Analysis completed successfully");
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "Analysis completed successfully");
         return result;
     }
     catch (const std::exception& e)
     {
         const std::string error = std::string("Analysis failed: ") + e.what();
-        util::Logger::Error("{}", error);
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "{}", error);
         return error;
     }
 }
@@ -57,13 +62,14 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
         return "Error: AI service not available. Please setup the AI provider.";
     }
 
-    if (m_events.Size() == 0)
+    const int totalEvents = PluginEvents_GetSize();
+    if (totalEvents == 0)
     {
         return "No log data available to analyze.";
     }
 
-    const size_t eventCount = filteredIndices ? filteredIndices->size() : m_events.Size();
-    util::Logger::Info("Starting custom prompt analysis on {} {} events",
+    const size_t eventCount = filteredIndices ? filteredIndices->size() : static_cast<size_t>(totalEvents);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting custom prompt analysis on {} {} events",
         maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
         filteredIndices ? "filtered" : "total");
 
@@ -79,13 +85,13 @@ std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt
     try
     {
         const std::string result = m_aiService->service->SendPrompt(prompt.str());
-        util::Logger::Info("Custom analysis completed successfully");
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "Custom analysis completed successfully");
         return result;
     }
     catch (const std::exception& e)
     {
         const std::string error = std::string("Analysis failed: ") + e.what();
-        util::Logger::Error("{}", error);
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "{}", error);
         return error;
     }
 }
@@ -113,7 +119,7 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
 {
     std::ostringstream oss;
     
-    const size_t totalEvents = m_events.Size();
+    const size_t totalEvents = static_cast<size_t>(PluginEvents_GetSize());
     const size_t availableEvents = filteredIndices ? filteredIndices->size() : totalEvents;
     size_t eventsToInclude = (maxEvents > 0) ? 
         std::min(maxEvents, availableEvents) : availableEvents;
@@ -141,7 +147,14 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
             {
                 const size_t filteredIndex = i * step;
                 const unsigned long eventIndex = (*filteredIndices)[filteredIndex];
-                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+                char* jsonStr = PluginEvents_GetEventJson(static_cast<int>(eventIndex));
+                if (jsonStr) {
+                    try {
+                        nlohmann::json ev = nlohmann::json::parse(jsonStr);
+                        FormatSingleEvent(oss, eventIndex, ev);
+                    } catch (...) {}
+                    std::free(jsonStr);
+                }
             }
         }
         else
@@ -151,7 +164,14 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
             for (size_t i = 0; i < eventsToInclude; ++i)
             {
                 const size_t eventIndex = i * step;
-                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+                char* jsonStr = PluginEvents_GetEventJson(static_cast<int>(eventIndex));
+                if (jsonStr) {
+                    try {
+                        nlohmann::json ev = nlohmann::json::parse(jsonStr);
+                        FormatSingleEvent(oss, eventIndex, ev);
+                    } catch (...) {}
+                    std::free(jsonStr);
+                }
             }
         }
     }
@@ -165,7 +185,14 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
             for (size_t i = 0; i < eventsToInclude; ++i)
             {
                 const unsigned long eventIndex = (*filteredIndices)[i];
-                FormatSingleEvent(oss, eventIndex, m_events.GetEvent(static_cast<int>(eventIndex)));
+                char* jsonStr = PluginEvents_GetEventJson(static_cast<int>(eventIndex));
+                if (jsonStr) {
+                    try {
+                        nlohmann::json ev = nlohmann::json::parse(jsonStr);
+                        FormatSingleEvent(oss, eventIndex, ev);
+                    } catch (...) {}
+                    std::free(jsonStr);
+                }
             }
         }
         else
@@ -173,7 +200,14 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
             // Send events sequentially from the start
             for (size_t i = 0; i < eventsToInclude; ++i)
             {
-                FormatSingleEvent(oss, i, m_events.GetEvent(static_cast<int>(i)));
+                char* jsonStr = PluginEvents_GetEventJson(static_cast<int>(i));
+                if (jsonStr) {
+                    try {
+                        nlohmann::json ev = nlohmann::json::parse(jsonStr);
+                        FormatSingleEvent(oss, i, ev);
+                    } catch (...) {}
+                    std::free(jsonStr);
+                }
             }
         }
     }
@@ -181,20 +215,25 @@ std::string LogAnalyzer::FormatEventsForAI(size_t maxEvents,
     return oss.str();
 }
 
-void LogAnalyzer::FormatSingleEvent(std::ostringstream& oss, size_t index, const db::LogEvent& event) const
+void LogAnalyzer::FormatSingleEvent(std::ostringstream& oss, size_t index, const nlohmann::json& eventJson) const
 {
-    oss << "Event[" << index << "] ID=" << event.getId() << "\n";
-    
-    // Include ALL fields from the event
-    const auto& items = event.getEventItems();
-    for (const auto& [key, value] : items)
+    // Use 'id' field if present
+    std::string id = "";
+    if (eventJson.contains("id")) id = eventJson["id"].get<std::string>();
+    oss << "Event[" << index << "] ID=" << id << "\n";
+
+    // Include string fields from the event JSON
+    for (auto it = eventJson.begin(); it != eventJson.end(); ++it)
     {
-        if (!value.empty())
+        if (it.value().is_string())
         {
-            oss << "  " << key << ": " << value << "\n";
+            const std::string key = it.key();
+            const std::string value = it.value().get<std::string>();
+            if (!value.empty())
+                oss << "  " << key << ": " << value << "\n";
         }
     }
-    
+
     oss << "\n";
 }
 

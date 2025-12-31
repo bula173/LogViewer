@@ -1,6 +1,9 @@
 #include "GeminiClient.hpp"
 #include "Config.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
@@ -25,7 +28,7 @@ GeminiClient::GeminiClient(const std::string& apiKey,
     , m_model(model)
     , m_baseUrl(baseUrl)
 {
-    util::Logger::Info("GeminiClient initialized with model: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "GeminiClient initialized with model: {}", m_model);
 }
 
 std::string GeminiClient::SendPrompt(const std::string& prompt,
@@ -34,11 +37,11 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
     // Validate API key before sending request
     if (m_apiKey.empty())
     {
-        util::Logger::Error("Google API key not configured");
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Google API key not configured");
         return "Error: API key required for Google Gemini. Please configure it in the AI Configuration panel.";
     }
     
-    util::Logger::Info("Sending prompt to Gemini API (model: {})", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Sending prompt to Gemini API (model: {})", m_model);
 
     // Build Gemini API request
     nlohmann::json request = {
@@ -60,15 +63,15 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
         endpoint += m_model;
         endpoint += ":generateContent";
         
-        util::Logger::Debug("Gemini endpoint: {}", endpoint);
-        util::Logger::Debug("Gemini base URL: {}", m_baseUrl);
-        util::Logger::Debug("Gemini full URL: {}{}", m_baseUrl, endpoint);
-        util::Logger::Debug("Gemini request: {}", request.dump());
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini endpoint: {}", endpoint);
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini base URL: {}", m_baseUrl);
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini full URL: {}{}", m_baseUrl, endpoint);
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini request: {}", request.dump());
         
         const std::string response = SendHttpPost(endpoint, request.dump());
         
-        util::Logger::Debug("Gemini response (first 500 chars): {}", 
-                           response.substr(0, std::min(size_t(500), response.size())));
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini response (first 500 chars): {}", 
+                   response.substr(0, std::min(size_t(500), response.size())));
         
         // Parse Gemini response format
         nlohmann::json jsonResponse;
@@ -78,7 +81,7 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
         }
         catch (const nlohmann::json::parse_error& e)
         {
-            util::Logger::Error("Failed to parse Gemini response as JSON. Response starts with: {}",
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "Failed to parse Gemini response as JSON. Response starts with: {}",
                                response.substr(0, std::min(size_t(200), response.size())));
             return "Error: Invalid JSON response from Gemini. Response: " + 
                    response.substr(0, std::min(size_t(500), response.size()));
@@ -93,7 +96,7 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
                 errorMsg += ": " + error["message"].get<std::string>();
             if (error.contains("code"))
                 errorMsg += " (code: " + std::to_string(error["code"].get<int>()) + ")";
-            util::Logger::Error("{}", errorMsg);
+            PLUGIN_LOG(PLUGIN_LOG_ERROR, "{}", errorMsg);
             return "Error: " + errorMsg;
         }
         
@@ -112,12 +115,12 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
             }
         }
         
-        util::Logger::Error("Invalid Gemini response format: {}", response.substr(0, 200));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Invalid Gemini response format: {}", response.substr(0, 200));
         return "Error: Invalid response format from Gemini";
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("Gemini API error: {}", e.what());
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Gemini API error: {}", e.what());
         return std::string("Error: ") + e.what();
     }
 }
@@ -130,7 +133,7 @@ bool GeminiClient::IsAvailable() const
 void GeminiClient::SetModelName(const std::string& model)
 {
     m_model = model;
-    util::Logger::Info("Gemini model changed to: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO, "Gemini model changed to: {}", m_model);
 }
 
 std::string GeminiClient::SendHttpPost(const std::string& endpoint,
@@ -167,7 +170,7 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     headers = curl_slist_append(headers, apiKeyHeader.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-    util::Logger::Debug("Gemini POST request to: {}", fullUrl);
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini POST request to: {}", fullUrl);
 
     const CURLcode res = curl_easy_perform(curl);
     
@@ -181,16 +184,16 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     {
         const std::string errorMsg = std::string("Gemini API request failed: ") + 
                                      curl_easy_strerror(res);
-        util::Logger::Error("Gemini API request failed: {}", curl_easy_strerror(res));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Gemini API request failed: {}", curl_easy_strerror(res));
         throw std::runtime_error(errorMsg);
     }
     
-    util::Logger::Debug("Gemini response: HTTP {}, {} bytes", httpCode, responseData.size());
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Gemini response: HTTP {}, {} bytes", httpCode, responseData.size());
     
     if (httpCode >= 400)
     {
-        util::Logger::Error("Gemini API returned HTTP {}: {}", httpCode, 
-                           responseData.substr(0, std::min(size_t(500), responseData.size())));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Gemini API returned HTTP {}: {}", httpCode, 
+                   responseData.substr(0, std::min(size_t(500), responseData.size())));
         
         // Try to parse error from response
         try

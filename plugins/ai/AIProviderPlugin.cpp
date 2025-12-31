@@ -1,11 +1,16 @@
 #include "AIProviderPlugin.hpp"
 
-#include "EventsContainer.hpp"
-#include "PluginManager.hpp"
-#include "Logger.hpp"
+#include "PluginC.h"
+#include "PluginEventsC.h"
+#include "PluginKeyEncryptionC.h"
+#include "PluginLoggerC.h"
+#include "PluginAIProviderC.h"
+#include <fmt/format.h>
 
 #include <fstream>
 #include <filesystem>
+
+#include <QCoreApplication>
 
 namespace plugin
 {
@@ -74,21 +79,24 @@ bool AIProviderPlugin::ValidateConfiguration() const
 
 std::shared_ptr<ai::IAIService> AIProviderPlugin::CreateService(const nlohmann::json& settings)
 {
-    // Load plugin's own config file
+    // Load plugin's own config file and apply to runtime config
     nlohmann::json pluginConfig = LoadPluginConfig();
-    
-    // Main config as ultimate fallback for defaults
-    const auto& cfg = config::GetConfig();
+    config::GetConfig().ApplyJson(pluginConfig);
 
-    // Priority: provided settings > plugin config file > main config defaults
-    const std::string provider = settings.value("provider", 
-        pluginConfig.value("provider", cfg.aiProvider));
-    const std::string apiKey = settings.value("apiKey", 
-        pluginConfig.value("apiKey", cfg.GetApiKeyForProvider(provider)));
-    const std::string baseUrl = settings.value("baseUrl", 
-        pluginConfig.value("baseUrl", cfg.ollamaBaseUrl));
-    const std::string model = settings.value("model", 
-        pluginConfig.value("model", cfg.ollamaDefaultModel));
+    // Use plugin-local config as defaults; explicit settings override them
+    const auto& cfg = config::GetConfig();
+    const std::string provider = settings.value("provider", pluginConfig.value("provider", cfg.aiProvider));
+    std::string apiKey = settings.value("apiKey", pluginConfig.value("apiKey", cfg.openaiApiKey));
+    // Decrypt via plugin API (application may register real decrypt function)
+    if (!apiKey.empty()) {
+        char* dec = PluginKeyEncryption_Decrypt(apiKey.c_str());
+        if (dec) {
+            apiKey = std::string(dec);
+            PluginKeyEncryption_FreeString(dec);
+        }
+    }
+    const std::string baseUrl = settings.value("baseUrl", pluginConfig.value("baseUrl", cfg.ollamaBaseUrl));
+    const std::string model = settings.value("model", pluginConfig.value("model", cfg.ollamaDefaultModel));
 
     try
     {
@@ -102,14 +110,26 @@ std::shared_ptr<ai::IAIService> AIProviderPlugin::CreateService(const nlohmann::
     {
         m_lastError = ex.what();
         m_status = PluginStatus::Error;
-        util::Logger::Error("[AIProviderPlugin] Failed to create service: {}", ex.what());
+        std::string msg = fmt::format("[AIProviderPlugin] Failed to create service: {}", ex.what());
+        PluginLogger_Log(PLUGIN_LOG_ERROR, msg.c_str());
         return nullptr;
     }
 }
 
-void AIProviderPlugin::SetEventsContainer(std::shared_ptr<db::EventsContainer> eventsContainer)
+void AIProviderPlugin::SetEventsContainer(std::shared_ptr<void> eventsContainer)
 {
     m_events = std::move(eventsContainer);
+    ensureAnalyzer();
+}
+
+void AIProviderPlugin::SetEventsContainerRaw(void* eventsContainerRaw)
+{
+    if (!eventsContainerRaw) {
+        m_events.reset();
+        return;
+    }
+    // Create a non-owning shared_ptr that will not free the underlying pointer
+    m_events = std::shared_ptr<void>(eventsContainerRaw, [](void*){});
     ensureAnalyzer();
 }
 
@@ -153,7 +173,7 @@ QWidget* AIProviderPlugin::GetConfigurationUI()
     return m_configPanel;
 }
 
-QWidget* AIProviderPlugin::CreateBottomPanel(QWidget* parent, ai::IAIService*, db::EventsContainer* events)
+QWidget* AIProviderPlugin::CreateBottomPanel(QWidget* parent, ai::IAIService*, void* events)
 {
     if (!events)
         return nullptr;
@@ -161,24 +181,28 @@ QWidget* AIProviderPlugin::CreateBottomPanel(QWidget* parent, ai::IAIService*, d
     if (!m_aiService || !m_aiService->service)
         return nullptr;
 
-    return new ui::qt::AIChatPanel(m_aiService, *events, parent);
+    // Store opaque events container via SDK-managed setter; UI will use
+    // PluginEvents_GetSize/PluginEvents_GetEventJson to access events.
+    SetEventsContainerRaw(events);
+    return new ui::qt::AIChatPanel(m_aiService, parent);
 }
 
 void AIProviderPlugin::ensureAnalyzer()
 {
-    if (!m_aiService || !m_aiService->service || !m_events)
+    if (!m_aiService || !m_aiService->service)
         return;
 
     if (!m_analyzer)
     {
-        m_analyzer = std::make_shared<ai::LogAnalyzer>(m_aiService, *m_events);
+        m_analyzer = std::make_shared<ai::LogAnalyzer>(m_aiService);
     }
 }
 
 std::filesystem::path AIProviderPlugin::GetConfigFilePath() const
 {
-    auto& pluginManager = PluginManager::GetInstance();
-    return pluginManager.GetPluginConfigPath(GetMetadata().id);
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const std::string id = GetMetadata().id;
+    return std::filesystem::path(appDir.toStdString()) / "plugins" / id / "config.json";
 }
 
 nlohmann::json AIProviderPlugin::LoadPluginConfig()
@@ -187,8 +211,10 @@ nlohmann::json AIProviderPlugin::LoadPluginConfig()
     
     if (!std::filesystem::exists(configPath))
     {
-        util::Logger::Debug("[AIProviderPlugin] No config file found at {}, using defaults", 
-            configPath.string());
+        {
+            std::string m = fmt::format("[AIProviderPlugin] No config file found at {}, using defaults", configPath.string());
+            PluginLogger_Log(PLUGIN_LOG_DEBUG, m.c_str());
+        }
         return nlohmann::json::object();
     }
 
@@ -197,19 +223,25 @@ nlohmann::json AIProviderPlugin::LoadPluginConfig()
         std::ifstream file(configPath);
         if (!file.is_open())
         {
-            util::Logger::Warn("[AIProviderPlugin] Failed to open config file: {}", 
-                configPath.string());
+            std::string m = fmt::format("[AIProviderPlugin] Failed to open config file: {}", configPath.string());
+            PluginLogger_Log(PLUGIN_LOG_WARN, m.c_str());
             return nlohmann::json::object();
         }
 
         nlohmann::json config;
         file >> config;
-        util::Logger::Info("[AIProviderPlugin] Loaded config from: {}", configPath.string());
+        {
+            std::string m = fmt::format("[AIProviderPlugin] Loaded config from: {}", configPath.string());
+            PluginLogger_Log(PLUGIN_LOG_INFO, m.c_str());
+        }
         return config;
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("[AIProviderPlugin] Failed to parse config file: {}", ex.what());
+        {
+            std::string m = fmt::format("[AIProviderPlugin] Failed to parse config file: {}", ex.what());
+            PluginLogger_Log(PLUGIN_LOG_ERROR, m.c_str());
+        }
         return nlohmann::json::object();
     }
 }
@@ -230,21 +262,127 @@ void AIProviderPlugin::SavePluginConfig(const nlohmann::json& config)
         std::ofstream file(configPath);
         if (!file.is_open())
         {
-            util::Logger::Error("[AIProviderPlugin] Failed to open config file for writing: {}", 
-                configPath.string());
+            std::string m = fmt::format("[AIProviderPlugin] Failed to open config file for writing: {}", configPath.string());
+            PluginLogger_Log(PLUGIN_LOG_ERROR, m.c_str());
             return;
         }
 
         file << config.dump(2);
         file.close();
-        util::Logger::Info("[AIProviderPlugin] Saved config to: {}", configPath.string());
+        {
+            std::string m = fmt::format("[AIProviderPlugin] Saved config to: {}", configPath.string());
+            PluginLogger_Log(PLUGIN_LOG_INFO, m.c_str());
+        }
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("[AIProviderPlugin] Failed to save config: {}", ex.what());
+        {
+            std::string m = fmt::format("[AIProviderPlugin] Failed to save config: {}", ex.what());
+            PluginLogger_Log(PLUGIN_LOG_ERROR, m.c_str());
+        }
     }
 }
 
 } // namespace plugin
 
-EXPORT_PLUGIN(plugin::AIProviderPlugin)
+
+extern "C" {
+
+// Create/destroy plugin instance using opaque PluginHandle (defined in PluginC.h)
+EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create()
+{
+    try {
+        auto* p = new plugin::AIProviderPlugin();
+        return static_cast<PluginHandle>(p);
+    } catch (...) { return nullptr; }
+}
+
+EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle h)
+{
+    if (!h) return;
+    auto* p = reinterpret_cast<plugin::AIProviderPlugin*>(h);
+    delete p;
+}
+
+// C ABI: create/destroy AI service wrappers and events container setter using PluginHandle
+EXPORT_PLUGIN_SYMBOL AIServiceHandle Plugin_CreateAIService(PluginHandle pluginHandle, const char* settingsJson)
+{
+    if (!pluginHandle) return nullptr;
+    try {
+        auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+        nlohmann::json settings = nlohmann::json::object();
+        if (settingsJson) {
+            try { settings = nlohmann::json::parse(settingsJson); } catch (...) { settings = nlohmann::json::object(); }
+        }
+        auto svc = plugin->CreateService(settings);
+        if (!svc) return nullptr;
+        auto* wrapper = new std::shared_ptr<ai::IAIService>(svc);
+        return static_cast<AIServiceHandle>(wrapper);
+    } catch (...) { return nullptr; }
+}
+
+EXPORT_PLUGIN_SYMBOL void Plugin_DestroyAIService(AIServiceHandle svc)
+{
+    if (!svc) return;
+    auto* wrapper = reinterpret_cast<std::shared_ptr<ai::IAIService>*>(svc);
+    delete wrapper;
+}
+
+EXPORT_PLUGIN_SYMBOL void Plugin_SetAIEventsContainer(PluginHandle pluginHandle, void* eventsContainerOpaque)
+{
+    if (!pluginHandle) return;
+    auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+    plugin->SetEventsContainerRaw(eventsContainerOpaque);
+}
+
+EXPORT_PLUGIN_SYMBOL void Plugin_OnAIEventsUpdated(PluginHandle pluginHandle)
+{
+    if (!pluginHandle) return;
+    auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+    try { plugin->OnEventsUpdated(); } catch (...) {}
+}
+
+} // extern "C"
+
+// Additional required C-ABI helpers: metadata and last-error getters.
+extern "C" {
+
+EXPORT_PLUGIN_SYMBOL const char* Plugin_GetMetadataJson(PluginHandle pluginHandle)
+{
+    try {
+        if (!pluginHandle) return nullptr;
+        auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+        auto meta = plugin->GetMetadata();
+        nlohmann::json j;
+        j["id"] = meta.id;
+        j["name"] = meta.name;
+        j["version"] = meta.version;
+        j["apiVersion"] = meta.apiVersion;
+        j["author"] = meta.author;
+        j["description"] = meta.description;
+        j["website"] = meta.website;
+        j["type"] = static_cast<int>(meta.type);
+        // Serialize
+        std::string s = j.dump();
+        char* out = static_cast<char*>(std::malloc(s.size() + 1));
+        if (!out) return nullptr;
+        memcpy(out, s.c_str(), s.size() + 1);
+        return out;
+    } catch (...) { return nullptr; }
+}
+
+EXPORT_PLUGIN_SYMBOL const char* Plugin_GetLastError(PluginHandle pluginHandle)
+{
+    try {
+        if (!pluginHandle) return nullptr;
+        auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+        std::string e = plugin->GetLastError();
+        if (e.empty()) return nullptr;
+        char* out = static_cast<char*>(std::malloc(e.size() + 1));
+        if (!out) return nullptr;
+        memcpy(out, e.c_str(), e.size() + 1);
+        return out;
+    } catch (...) { return nullptr; }
+}
+
+} // extern "C"

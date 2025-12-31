@@ -5,7 +5,9 @@ set(PLUGIN_DISPLAY_NAME "AI Provider")
 set(PLUGIN_API_VERSION "1.0.0")
 
 find_package(CURL REQUIRED)
-find_package(Qt6 COMPONENTS Core)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
+
+
 
 add_library(${PLUGIN_NAME} MODULE
     AIProviderPlugin.cpp
@@ -34,11 +36,38 @@ add_library(${PLUGIN_NAME} MODULE
     AnthropicClient.hpp
 )
 
+# If building in-tree with the main LogViewer target available, enable internal interface support
+message(STATUS "ai_provider: Building SDK-first (no application internals)")
+
+# Ensure JSON include is available for `IAIPlugin.hpp` and other headers
 target_link_libraries(${PLUGIN_NAME}
     PRIVATE
-        CURL::libcurl  # Changed to standard target name
-        application_core
+    nlohmann_json::nlohmann_json
+    fmt::fmt-header-only
+    Qt6::Widgets
 )
+
+if(TARGET plugin_api)
+    target_link_libraries(${PLUGIN_NAME}
+        PRIVATE
+            CURL::libcurl
+            plugin_api
+    )
+elseif(TARGET LogViewer::plugin_api)
+    target_link_libraries(${PLUGIN_NAME}
+        PRIVATE
+            CURL::libcurl
+            LogViewer::plugin_api
+    )
+else()
+    # Require installed SDK when no in-tree plugin_api target is available
+    find_package(LogViewer CONFIG REQUIRED)
+    target_link_libraries(${PLUGIN_NAME}
+        PRIVATE
+            CURL::libcurl
+            LogViewer::plugin_api
+    )
+endif()
 
 set_target_properties(${PLUGIN_NAME} PROPERTIES
     AUTOMOC ON
@@ -64,13 +93,20 @@ configure_file(${PLUGIN_CONFIG_TEMPLATE} ${PLUGIN_CONFIG} @ONLY)
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
 
 if(WIN32)
-    # Copy to lib for packaging
+    # Determine main executable path for exclusion if available (no application_core usage)
+    if(TARGET LogViewer)
+        set(PLUGIN_EXCLUDE_APP_FILE "$<TARGET_FILE:LogViewer>")
+    else()
+        set(PLUGIN_EXCLUDE_APP_FILE "")
+    endif()
+
+    # Copy to lib for packaging (uses SDK-only or in-tree `LogViewer::plugin_api`, never application_core)
     add_custom_command(TARGET ${PLUGIN_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND}
             -DARGV0="$<TARGET_FILE:${PLUGIN_NAME}>"
             -DARGV1="$<TARGET_FILE_DIR:${PLUGIN_NAME}>/lib"
             -DARGV2="${CMAKE_C_COMPILER}"
-            -DARGV3="$<TARGET_FILE:LogViewer>"
+            -DARGV3="${PLUGIN_EXCLUDE_APP_FILE}"
             -P ${PROJECT_SOURCE_DIR}/cmake/copy_dlls.cmake
         COMMENT "Collecting MinGW runtime DLLs to lib"
     )

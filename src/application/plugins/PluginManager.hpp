@@ -33,6 +33,21 @@ struct PluginLoadInfo
     void* libraryHandle = nullptr;     ///< Dynamic library handle
     bool autoLoad = false;             ///< Auto-load on startup
     bool enabled = true;               ///< Plugin enabled
+    // Optional C-style AI provider function pointers discovered in plugin DLL
+    void* pluginCreateAI = nullptr;
+    void* pluginDestroyAI = nullptr;
+    void* pluginSetAIEvents = nullptr;
+    void* pluginOnAIEventsUpdated = nullptr;
+    // Optional C-style Field Conversion provider function pointers
+    void* pluginCreateFieldConversion = nullptr;
+    void* pluginDestroyFieldConversion = nullptr;
+    void* pluginSetFieldConversionEvents = nullptr;
+    void* pluginOnFieldConversionUpdated = nullptr;
+    // Optional C-style Analysis provider function pointers
+    void* pluginCreateAnalysis = nullptr;
+    void* pluginDestroyAnalysis = nullptr;
+    void* pluginSetAnalysisEvents = nullptr;
+    void* pluginOnAnalysisUpdated = nullptr;
 };
 
 /**
@@ -202,7 +217,9 @@ private:
      * @return Result with plugin instance or error
      */
     util::Result<std::unique_ptr<IPlugin>, error::Error> LoadPluginLibrary(
-        const std::filesystem::path& path);
+        const std::filesystem::path& path,
+        const std::string& expectedApiVersion,
+        /*out*/ void** outLibraryHandle);
 
     /**
      * @brief Unloads dynamic library
@@ -223,6 +240,8 @@ private:
     std::map<std::string, std::filesystem::path> m_registeredPlugins;  // pluginId -> file path
     std::filesystem::path m_configPath;
     std::vector<IPluginObserver*> m_observers;
+    // Opaque events container pointer provided by application (for C API)
+    void* m_eventsContainerOpaque = nullptr;
     
     // Cache for plugin configuration loaded before plugins are instantiated
     struct PluginConfigCache {
@@ -232,6 +251,9 @@ private:
     std::map<std::string, PluginConfigCache> m_configCache;
 
     std::vector<void*> m_dependencyHandles;  // Store handles to loaded dependencies
+    // Setter for application to provide opaque events container handle
+public:
+    void SetEventsContainerOpaque(void* handle) { m_eventsContainerOpaque = handle; }
 };
 
 } // namespace plugin

@@ -2,7 +2,16 @@
 
 ## Overview
 
-Your LogViewer now includes local AI-powered log analysis using Ollama. This keeps all your log data private on your machine.
+LogViewer includes AI-powered log analysis through a plugin architecture. The AI provider plugin keeps all your log data private on your machine by using local AI models (Ollama) or cloud providers (OpenAI, Anthropic, Google, xAI).
+
+## Plugin Architecture
+
+The AI analysis functionality is provided by the `ai_provider` plugin, which:
+- Loads as a ZIP package from the application installation
+- Provides configuration UI in the left panel (separate tab alongside Filters)
+- Adds main analysis panel for log analysis
+- Adds bottom chat panel for interactive queries
+- Logs all operations to application logs with `[plugin]` prefix
 
 ## Features
 

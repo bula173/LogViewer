@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+# Imported target for plugin API
+add_library(LogViewer::plugin_api INTERFACE IMPORTED)
+set_target_properties(LogViewer::plugin_api PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/sdk/include"
+)

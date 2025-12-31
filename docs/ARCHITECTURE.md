@@ -288,7 +288,7 @@ public:
 ### Component Overview
 ```
 ┌──────────────────┐
-│  AIAnalysisPanel │ (UI)
+│  AIAnalysisPanel │ (UI - Qt Widget)
 └────────┬─────────┘
          │
          ▼
@@ -301,13 +301,44 @@ public:
 │  IAIService      │ (Interface)
 └────────┬─────────┘
          │
-    ┌────┴─────┬──────────┬───────────┬─────────┐
-    ▼          ▼          ▼           ▼         ▼
-┌─────────┐┌─────────┐┌──────────┐┌─────────┐┌─────────┐
-│Ollama   ││OpenAI   ││Anthropic ││Gemini   ││Custom   │
-│Client   ││Client   ││Client    ││Client   ││Client   │
-└─────────┘└─────────┘└──────────┘└─────────┘└─────────┘
+         ▼
+┌──────────────────────────────────────────────────────────┐
+│              AI Provider Plugin (C-ABI)                   │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │  Plugin_CreateAIService(handle, settingsJson)     │   │
+│  └────────────────────┬─────────────────────────────┘   │
+│                       │                                   │
+│      ┌────────────────┴──────────────────┐              │
+│      ▼                ▼                   ▼              │
+│  ┌─────────┐    ┌─────────┐        ┌─────────┐         │
+│  │Ollama   │    │OpenAI   │        │Anthropic│         │
+│  │Client   │    │Client   │        │Client   │         │
+│  └─────────┘    └─────────┘        └─────────┘         │
+│      ▼                ▼                   ▼              │
+│  ┌─────────┐    ┌─────────┐        ┌─────────┐         │
+│  │Gemini   │    │xAI Grok │        │LM Studio│         │
+│  │Client   │    │Client   │        │Client   │         │
+│  └─────────┘    └─────────┘        └─────────┘         │
+└──────────────────────────────────────────────────────────┘
 ```
+
+### Plugin Architecture
+
+AI providers are implemented as C-ABI plugins (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md)):
+
+**Plugin Exports:**
+- `Plugin_Create()` - Creates plugin instance
+- `Plugin_SetLoggerCallback(handle, logFn)` - Receives logging callback
+- `Plugin_CreateAIService(handle, settings)` - Creates AI service
+- `Plugin_CreateMainPanel(handle, parent, settings)` - Analysis panel
+- `Plugin_CreateLeftPanel(handle, parent, settings)` - Configuration panel
+- `Plugin_CreateBottomPanel(handle, parent, settings)` - Chat panel
+
+**Benefits:**
+- Hot-swappable AI providers without recompilation
+- Third-party provider support
+- ABI-stable interface across compiler versions
+- Isolated plugin failures don't crash application
 
 ### AI Request Flow
 1. User selects analysis type in AIAnalysisPanel
@@ -445,13 +476,6 @@ All configuration saved to platform-specific location:
   "filters": {
     "typeFilterField": "level"
   },
-  "aiConfig": {
-    "provider": "ollama",
-    "baseUrl": "http://localhost:11434",
-    "defaultModel": "qwen2.5-coder:7b",
-    "apiKey": "",
-    "timeoutSeconds": 300
-  },
   "parsers": {
     "xml": {
       "rootElement": "events",
@@ -521,7 +545,7 @@ void MainWindow::OnConfigChanged() {
 ## Future Enhancements
 
 1. **Async Parsing**: Background thread for file parsing with progress
-2. **Plugin System**: Load parsers and AI clients from DLLs
+2. **Extended Plugin System**: Parser plugins, filter plugins, visualization plugins
 3. **Network Logs**: Real-time log streaming via TCP/HTTP
 4. **Database Export**: Export to SQLite/PostgreSQL
 5. **Advanced Analytics**: Statistics, graphs, anomaly detection
@@ -539,6 +563,8 @@ void MainWindow::OnConfigChanged() {
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/)
 - [Design Patterns](https://refactoring.guru/design-patterns)
 - [Modern C++ Design](https://www.amazon.com/Modern-Design-Generic-Programming-Patterns/dp/0201704315)
+- [Plugin System Documentation](PLUGIN_SYSTEM.md)
+- [AI Provider Plugin](AI_PROVIDER_PLUGIN.md)
 - [Ollama Documentation](https://ollama.ai/docs)
 - [OpenAI API Reference](https://platform.openai.com/docs)
 - [Anthropic Claude API](https://docs.anthropic.com/)

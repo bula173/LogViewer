@@ -2,397 +2,287 @@
 
 ## Overview
 
-Completed implementation of a generic plugin system for LogViewer that allows extending functionality through dynamically loaded shared libraries. The SSH parser has been refactored as the first plugin to demonstrate the architecture.
+LogViewer implements a plugin system using **C-ABI exports** for maximum compatibility and ABI stability. Plugins are dynamically loaded shared libraries that export standard C functions.
 
-## Implementation Details
+## Current Architecture (C-ABI)
 
-### 1. Plugin Interface (`src/application/plugins/IPlugin.hpp`)
+### Plugin C-ABI Exports
 
-**Created**: Complete plugin interface definition
+Plugins export standard C functions for lifecycle management and UI creation:
 
-**Features**:
-- `PluginType` enum: Parser, Filter, Exporter, Analyzer, Connector, Visualizer, Custom
-- `PluginStatus` enum: Unloaded, Loaded, Initialized, Active, Error, Disabled
-- `PluginMetadata` struct: id, name, version, author, description, website, type, requiresLicense, dependencies
-- `IPlugin` abstract class with lifecycle methods:
-  - `Initialize()`: Setup plugin resources
-  - `Shutdown()`: Cleanup plugin resources
-  - `GetMetadata()`: Return plugin information
-  - `GetStatus()`: Return current plugin state
-  - `GetLastError()`: Return last error message
-  - `IsLicensed()`: Check license status
-  - `SetLicense()`: Set license key
-- `EXPORT_PLUGIN` macro: Platform-independent symbol export
+**Lifecycle:**
+- `Plugin_Create()`: Create plugin instance, returns opaque handle
+- `Plugin_Destroy(handle)`: Destroy plugin instance
+- `Plugin_GetMetadataJson(handle)`: Return JSON metadata string
+- `Plugin_Initialize(handle)`: Initialize plugin resources
+- `Plugin_Shutdown(handle)`: Cleanup plugin resources
 
-### 2. Plugin Manager (`src/application/plugins/PluginManager.*`)
+**Logger Integration:**
+- `Plugin_SetLoggerCallback(handle, logFn)`: Application provides logging callback
+  - Called immediately after `Plugin_Create()`
+  - Enables plugin to log to application logs
+  - Plugin uses `PluginLogger_Log(level, message)` to log
 
-**Created**: Complete plugin management system
+**UI Panels (Optional):**
+- `Plugin_CreateMainPanel(handle, parent, settings)`: Create main content panel
+- `Plugin_CreateBottomPanel(handle, parent, settings)`: Create bottom panel (e.g., chat)
+- `Plugin_CreateLeftPanel(handle, parent, settings)`: Create configuration panel
+- `Plugin_CreateRightPanel(handle, parent, settings)`: Create right panel
 
-**Features**:
+### Plugin Logger
+
+**Problem Solved:**
+Original inline header-only logger with static variables caused ODR violations across DLL boundaries - each DLL had its own copy of the global variable, causing the application's registration to be invisible to the plugin.
+
+**Solution:**
+Callback-based logging passed from application to plugin:
+
+```cpp
+// Application side (PluginManager.cpp)
+auto handle = Plugin_Create();          // Create plugin instance
+Plugin_SetLoggerCallback(handle, &AppPluginLog);  // Pass callback to plugin
+
+// Plugin side (AIProviderPlugin.cpp)
+void Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn) {
+    PluginLogger_Register(logFn);  // Store in plugin's copy of global
+}
+
+// Usage anywhere in plugin
+PluginLogger_Log(PLUGIN_LOG_INFO, "Plugin initialized");
+```
+
+**Benefits:**
+- Works across DLL boundaries
+- No ABI dependencies
+- Simple usage for plugin developers
+- Messages appear in application logs with `[plugin]` prefix
+
+### Configuration UI
+
+**Left Panel Integration:**
+Plugins provide configuration UI by exporting `Plugin_CreateLeftPanel`:
+
+```cpp
+EXPORT_PLUGIN_SYMBOL void* Plugin_CreateLeftPanel(PluginHandle h, void* parent, const char* settings) {
+    auto* plugin = reinterpret_cast<MyPlugin*>(h);
+    QWidget* parentWidget = reinterpret_cast<QWidget*>(parent);
+    return plugin->GetConfigurationUI(parentWidget);
+}
+```
+
+**MainWindow Integration:**
+- Checks for `Plugin_CreateLeftPanel` export
+- Creates widget with `m_pluginLeftTabs` as parent
+- Adds as new tab alongside "Filters" tab in left dock
+- Widget lifecycle managed by host
+
+## Plugin Manager Implementation
+
+**Location**: `src/application/plugins/PluginManager.cpp`
+
+**Key Features:**
 - Singleton pattern for global access
-- Plugin discovery in specified directory
-- Dynamic library loading (dlopen/LoadLibrary)
-- Plugin registration and lifecycle management
-- Enable/disable plugin functionality
-- Auto-load configuration support
-- Dependency validation
-- Configuration persistence (stub for integration)
+- Plugin discovery in specified directory (scans for `.dll`/`.so`/`.dylib` files)
+- Dynamic library loading (`LoadLibrary`/`dlopen`)
+- Logger callback setup immediately after plugin creation
+- Panel creation via C-ABI exports
+- Platform-specific implementations (Windows, Unix)
 
-**Key Methods**:
-- `DiscoverPlugins()`: Scan plugins directory for .dylib/.so/.dll files
-- `LoadPlugin()`: Load plugin from file path
-- `UnloadPlugin()`: Unload and cleanup plugin
-- `RegisterPlugin()`: Register in-memory plugin instance
-- `GetPlugin()`: Retrieve loaded plugin by ID
-- `GetPluginsByType()`: Filter plugins by type
-- `EnablePlugin()`/`DisablePlugin()`: Control plugin state
-- `ValidateDependencies()`: Check all dependencies satisfied
+**Loading Process:**
+1. Load shared library via `LoadLibrary`/`dlopen`
+2. Resolve `Plugin_Create` symbol
+3. Call `Plugin_Create()` to get plugin handle
+4. Call `Plugin_SetLoggerCallback` to enable logging
+5. Call `Plugin_GetMetadataJson` to get plugin info
+6. Call `Plugin_Initialize` to init resources
+7. Create UI panels as needed via `Plugin_CreateXxxPanel`
+8. On shutdown: `Plugin_Shutdown`, `Plugin_Destroy`
 
-**Platform Support**:
-- macOS: dlopen/dlsym/dlclose
-- Linux: dlopen/dlsym/dlclose
-- Windows: LoadLibrary/GetProcAddress/FreeLibrary
+**Platform Support:**
+- Windows: `LoadLibrary`/`GetProcAddress`/`FreeLibrary`
+- Linux/macOS: `dlopen`/`dlsym`/`dlclose`
 
-### 3. SSH Parser Plugin (`src/plugins/ssh_parser/`)
+## AI Provider Plugin Example
 
-**Refactored**: SSH parser converted to plugin architecture
+**Location**: `plugins/ai/AIProviderPlugin.cpp`
 
-**Files Created**:
-- `SSHParserPlugin.hpp`: Plugin wrapper class
-- `SSHParserPlugin.cpp`: Plugin implementation
+The AI Provider plugin demonstrates the complete C-ABI architecture:
 
-**Files Existing** (moved from libs/):
-- `SSHConnection.hpp/.cpp`: SSH connection management
-- `SSHTextParser.hpp/.cpp`: Text log parsing with regex
-- `SSHLogSource.hpp/.cpp`: Integrated monitoring
+**Exports:**
+- `Plugin_Create` - Creates AIProviderPlugin instance
+- `Plugin_Destroy` - Destroys plugin instance
+- `Plugin_SetLoggerCallback` - Receives logging callback
+- `Plugin_GetMetadataJson` - Returns metadata as JSON
+- `Plugin_Initialize` - Initializes resources
+- `Plugin_Shutdown` - Cleanup
+- `Plugin_CreateMainPanel` - AI analysis panel (main content)
+- `Plugin_CreateBottomPanel` - AI chat panel (bottom dock)
+- `Plugin_CreateLeftPanel` - Configuration panel (left dock)
+- `Plugin_CreateAIService` - AI service factory
+- `Plugin_SetAIEventsContainer` - Receives log events
 
-**Plugin Metadata**:
-- ID: `ssh_parser`
-- Name: `SSH Parser Plugin`
-- Version: `1.0.0`
-- Type: `Connector`
-- Requires License: Yes
+**Internal Structure:**
+- C++ class `AIProviderPlugin` with all logic
+- C-ABI exports are thin wrappers calling C++ methods
+- Uses `PluginLogger_Log` for all logging
+- Proper error handling with try-catch
 
-**Features**:
-- Factory methods for creating SSH components
-- License validation (placeholder implementation)
-- Proper initialization and shutdown
-- Error reporting through plugin interface
+## Creating New Plugins
 
-### 4. Build System Updates
+See [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md) for detailed guide on creating plugins.
 
-**Modified Files**:
-- `src/plugins/CMakeLists.txt`: New plugins directory configuration
-- `src/plugins/ssh_parser/CMakeLists.txt`: Updated to build as shared library
-- `src/application/CMakeLists.txt`: Added PluginManager.cpp to core library
-- `src/CMakeLists.txt`: Added plugins subdirectory
-- `libs/CMakeLists.txt`: Removed ssh_parser (moved to plugins)
+**Quick Steps:**
+1. Create C++ plugin class
+2. Export C-ABI functions (`Plugin_Create`, etc.)
+3. Implement `Plugin_SetLoggerCallback` to enable logging
+4. Optionally export panel creation functions
+5. Build as shared library
+6. Test loading in LogViewer
 
-**Build Configuration**:
-- SSH plugin built as shared library (`SHARED`)
-- Output directory: `${CMAKE_BINARY_DIR}/plugins`
-- No 'lib' prefix on plugin files
-- Install target to `plugins/` directory
-- Conditional build with `ENABLE_SSH_PARSER` option
+## Build System
 
-**CMake Options**:
+**Plugin CMake Configuration:**
+
 ```cmake
-option(ENABLE_SSH_PARSER "Enable SSH parser plugin" OFF)
+add_library(my_plugin SHARED
+    MyPlugin.cpp
+)
+
+target_include_directories(my_plugin PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/plugin_api
+)
+
+target_link_libraries(my_plugin PRIVATE
+    Qt6::Widgets
+    fmt::fmt
+    nlohmann_json::nlohmann_json
+)
+
+set_target_properties(my_plugin PROPERTIES
+    PREFIX ""
+    OUTPUT_NAME "my_plugin"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
+)
 ```
 
-To enable:
-```bash
-cmake -DENABLE_SSH_PARSER=ON ..
-```
-
-### 5. Documentation
-
-**Created Files**:
-- `docs/PLUGIN_SYSTEM.md`: Complete plugin system documentation
-  - Overview and architecture
-  - Plugin types and interface
-  - Plugin manager usage
-  - Creating custom plugins
-  - Build system integration
-  - Platform-specific notes
-  - Troubleshooting guide
-  - Best practices
+**Key Points:**
+- Build as `SHARED` library
+- No `lib` prefix (PREFIX "")
+- Output to `${CMAKE_BINARY_DIR}/plugins`
+- Link only required dependencies
+- Include `src/plugin_api` for C-ABI headers
 
 ## Directory Structure
 
 ```
 LogViewer/
 ├── src/
-│   ├── application/
-│   │   ├── plugins/
-│   │   │   ├── IPlugin.hpp          # Plugin interface ✅
-│   │   │   ├── PluginManager.hpp    # Manager header ✅
-│   │   │   └── PluginManager.cpp    # Manager implementation ✅
-│   │   └── CMakeLists.txt           # Updated for PluginManager ✅
-│   ├── plugins/
-│   │   ├── CMakeLists.txt           # Plugins build config ✅
-│   │   └── ssh_parser/              # SSH parser plugin ✅
-│   │       ├── CMakeLists.txt       # Shared library build ✅
-│   │       ├── SSHParserPlugin.hpp  # Plugin wrapper ✅
-│   │       ├── SSHParserPlugin.cpp  # Plugin implementation ✅
-│   │       ├── SSHConnection.*      # SSH functionality
-│   │       ├── SSHTextParser.*      # Text parsing
-│   │       └── SSHLogSource.*       # Log monitoring
-│   └── CMakeLists.txt               # Added plugins subdir ✅
-├── docs/
-│   └── PLUGIN_SYSTEM.md             # Plugin documentation ✅
-└── build/
-    └── plugins/                     # Built plugin output
-        └── ssh_parser_plugin.dylib
+│   ├── plugin_api/
+│   │   ├── PluginC.h              # C-ABI typedefs
+│   │   ├── PluginLoggerC.h        # Logger API
+│   │   ├── PluginEventsC.h        # Events API
+│   │   └── PluginKeyEncryptionC.h # Encryption API
+│   └── application/
+│       └── plugins/
+│           ├── PluginManager.hpp
+│           └── PluginManager.cpp
+└── plugins/
+    └── ai/                         # AI provider plugin
+        ├── CMakeLists.txt
+        ├── AIProviderPlugin.hpp
+        ├── AIProviderPlugin.cpp
+        └── lib/                    # Dependencies
 ```
 
 ## Usage Examples
 
-### Plugin Manager Initialization
+### Plugin Manager
 
 ```cpp
 #include "application/plugins/PluginManager.hpp"
 
-// Get singleton instance
 auto& manager = plugin::PluginManager::GetInstance();
+manager.SetPluginsDirectory("plugins/");
 
-// Set plugins directory
-manager.SetPluginsDirectory("/path/to/plugins");
-
-// Discover available plugins
-auto plugins = manager.DiscoverPlugins();
-for (const auto& path : plugins) {
-    std::cout << "Found plugin: " << path << std::endl;
-}
-```
-
-### Loading a Plugin
-
-```cpp
-// Load plugin from file
-auto result = manager.LoadPlugin("/path/to/ssh_parser_plugin.dylib");
+// Load plugin
+auto result = manager.LoadPlugin("plugins/ai_provider.dll");
 if (result.isOk()) {
-    std::string pluginId = result.unwrap();
-    std::cout << "Loaded plugin: " << pluginId << std::endl;
-    
-    // Get plugin instance
-    auto* plugin = manager.GetPlugin(pluginId);
-    auto metadata = plugin->GetMetadata();
-    
-    std::cout << "Name: " << metadata.name << std::endl;
-    std::cout << "Version: " << metadata.version << std::endl;
+    std::string id = result.unwrap();
+    std::cout << "Loaded plugin: " << id << std::endl;
 }
 ```
 
-### Using SSH Parser Plugin
+### Creating UI Panels
 
 ```cpp
-// Get SSH parser plugin
-auto* basePlugin = manager.GetPlugin("ssh_parser");
-auto* sshPlugin = dynamic_cast<ssh::SSHParserPlugin*>(basePlugin);
-
-if (sshPlugin && sshPlugin->IsLicensed()) {
-    // Create SSH connection
-    auto connection = sshPlugin->CreateConnection("192.168.1.100", 22, "user");
-    
-    // Authenticate
-    connection->AuthenticateWithPassword("password");
-    connection->Connect();
-    
-    // Create parser and log source
-    auto parser = sshPlugin->CreateTextParser();
-    auto logSource = sshPlugin->CreateLogSource(
-        std::move(connection),
-        std::move(parser),
-        ssh::SSHLogSource::MonitorMode::TailFile);
-    
-    // Configure monitoring
-    logSource->SetCommand("tail -f /var/log/syslog");
-    logSource->StartMonitoring();
+// Application code (MainWindow.cpp)
+void* parentWidget = m_pluginLeftTabs;  // QTabWidget*
+void* panel = Plugin_CreateLeftPanel(handle, parentWidget, nullptr);
+if (panel) {
+    QWidget* widget = reinterpret_cast<QWidget*>(panel);
+    m_pluginLeftTabs->addTab(widget, "AI Provider");
 }
 ```
 
-### Plugin Lifecycle Management
+## Key Design Decisions
 
-```cpp
-// Enable/disable plugins
-manager.EnablePlugin("ssh_parser");
-manager.DisablePlugin("ssh_parser");
-
-// Set auto-load
-manager.SetPluginAutoLoad("ssh_parser", true);
-
-// Validate all dependencies
-auto validation = manager.ValidateDependencies();
-if (validation.isErr()) {
-    std::cerr << "Dependency error: " 
-              << validation.unwrapErr().GetMessage() << std::endl;
-}
-
-// Unload plugin
-manager.UnloadPlugin("ssh_parser");
-```
-
-## Integration Points
-
-### Configuration System
-
-The plugin manager provides stubs for configuration integration:
-- `LoadConfiguration()`: Load plugin settings from config.json
-- `SaveConfiguration()`: Save plugin settings to config.json
-
-These methods should be implemented to integrate with the existing `Config` class.
-
-### UI Integration (TODO)
-
-Plugin configuration UI needs to be added to the settings dialog:
-1. List of discovered/loaded plugins
-2. Enable/disable checkboxes
-3. Auto-load toggles
-4. License key input fields
-5. Plugin information display
-6. Dependency status indicators
-
-### Main Application Integration (TODO)
-
-The main application should:
-1. Initialize PluginManager on startup
-2. Load configuration and auto-load plugins
-3. Provide UI for plugin management
-4. Handle plugin errors gracefully
-5. Save configuration on exit
-
-## Testing
-
-### Manual Testing Steps
-
-1. **Build with SSH Parser**:
-   ```bash
-   cmake -DENABLE_SSH_PARSER=ON -B build
-   cmake --build build
-   ```
-
-2. **Verify Plugin Built**:
-   ```bash
-   ls build/plugins/ssh_parser_plugin.dylib
-   ```
-
-3. **Test Plugin Loading**:
-   ```cpp
-   auto& manager = PluginManager::GetInstance();
-   manager.SetPluginsDirectory("build/plugins");
-   auto result = manager.LoadPlugin("build/plugins/ssh_parser_plugin.dylib");
-   // Check result.isOk()
-   ```
-
-### Unit Tests (TODO)
-
-Suggested test cases:
-- Plugin discovery and loading
-- Plugin initialization and shutdown
-- License validation
-- Dependency checking
-- Enable/disable functionality
-- Error handling
-- Platform-specific loading (Linux, macOS, Windows)
+1. **C-ABI Only**: No C++ interfaces exported - maximum compatibility
+2. **Callback-based Logging**: Solves ODR violation across DLL boundaries
+3. **Opaque Handles**: `PluginHandle` is `void*` - hides implementation
+4. **Qt Widget Panels**: UI created as `QWidget*` cast to `void*`
+5. **JSON Metadata**: Metadata returned as JSON string - flexible schema
+6. **Manual Memory**: Plugin allocates, app may free or plugin manages
 
 ## Known Limitations
 
-1. **License Validation**: SSH plugin currently accepts any non-empty license key (placeholder)
-2. **Configuration Persistence**: LoadConfiguration/SaveConfiguration are stubs
-3. **UI Integration**: No configuration dialog implemented yet
-4. **Hot Reloading**: Plugins cannot be reloaded without restarting application
-5. **Sandboxing**: No security isolation between plugins and main application
+1. **No Hot Reloading**: Must restart application to reload plugins
+2. **No Sandboxing**: Plugins run in same process - no security isolation
+3. **ABI Compatibility**: Must match compiler and Qt version
+4. **Symbol Visibility**: Must use `EXPORT_PLUGIN_SYMBOL` for all exports
 
-## Next Steps
+## Testing
 
-### High Priority
+**Manual Testing:**
+1. Build plugin as shared library
+2. Copy to plugins directory
+3. Start LogViewer
+4. Check application logs for plugin loading messages
+5. Verify UI panels appear correctly
 
-1. **Configuration Integration**:
-   - Implement LoadConfiguration() to load from config.json
-   - Implement SaveConfiguration() to persist settings
-   - Add plugin section to configuration schema
-
-2. **UI Integration**:
-   - Create plugin configuration dialog
-   - Add plugin management to settings UI
-   - Display plugin metadata and status
-
-3. **Main Application Integration**:
-   - Initialize PluginManager in main()
-   - Load auto-load plugins on startup
-   - Save configuration on exit
-
-### Medium Priority
-
-4. **Testing**:
-   - Create unit tests for PluginManager
-   - Test SSH plugin loading and usage
-   - Add integration tests
-
-5. **License System**:
-   - Implement proper license validation
-   - Add license key encryption
-   - Create license generation tool
-
-### Low Priority
-
-6. **Additional Features**:
-   - Plugin hot-reloading
-   - Plugin API versioning
-   - Remote plugin updates
-   - Plugin marketplace support
-
-## Build Commands
-
-### Enable SSH Parser Plugin
-
-```bash
-# Configure with SSH parser enabled
-cmake -B build -DENABLE_SSH_PARSER=ON
-
-# Build
-cmake --build build
-
-# Install (optional)
-cmake --install build
-```
-
-### Disable SSH Parser Plugin
-
-```bash
-# Configure with SSH parser disabled (default)
-cmake -B build -DENABLE_SSH_PARSER=OFF
-cmake --build build
-```
+**Troubleshooting:**
+- Check plugin exports: `nm -g plugin.so | grep Plugin_`
+- Review logs for error messages
+- Verify plugin dependencies are satisfied
+- Ensure ABI compatibility (same compiler/Qt)
 
 ## Success Criteria
 
 ✅ **Completed**:
-- Generic plugin interface defined (IPlugin.hpp)
-- Plugin manager implemented (PluginManager.hpp/.cpp)
-- SSH parser refactored as plugin (SSHParserPlugin.hpp/.cpp)
-- Build system updated for plugin architecture
-- Documentation created (PLUGIN_SYSTEM.md)
-- Plugins moved to src/plugins/ directory
-- Dynamic library loading implemented (cross-platform)
+- C-ABI plugin architecture
+- Logger callback mechanism
+- Panel creation exports
+- AI Provider plugin with 3 panels
+- PluginManager implementation
+- Cross-platform support (Windows, Linux, macOS)
+- Comprehensive documentation
 
-⏳ **Pending**:
-- Configuration system integration
-- UI configuration dialog
-- Main application integration
-- Unit tests
-- License validation implementation
+## Future Enhancements
+
+- Plugin API versioning
+- Hot reload support
+- Plugin marketplace
+- Automatic updates
+- Sandboxing/isolation
+- Performance monitoring
 
 ## Conclusion
 
-The plugin system provides a solid foundation for extending LogViewer functionality. The SSH parser demonstrates the architecture with a real-world example. The system supports:
+The C-ABI plugin system provides a stable, maintainable foundation for extending LogViewer. The architecture has been successfully implemented and tested with the AI Provider plugin, demonstrating:
 
-- Dynamic loading of shared libraries
-- Platform independence (macOS, Linux, Windows)
-- License management for commercial plugins
-- Dependency tracking between plugins
-- Enable/disable plugin control
-- Type-based plugin categorization
+- **Stability**: Callback-based logging solves ODR violations
+- **Flexibility**: Optional panel exports support various UI needs
+- **Maintainability**: Clean separation between app and plugins
+- **Compatibility**: Pure C-ABI works across compilers and versions
 
-The architecture is ready for integration into the main application and addition of new plugins.
+The system is production-ready and new plugins can be added following the established patterns.
+

@@ -1,12 +1,16 @@
 # Plugin Observer Pattern
 
+**⚠️ PARTIALLY DEPRECATED:** This document describes the observer pattern for plugin lifecycle events, which is still used internally. However, the `IPlugin` C++ interface is **no longer used**. Modern plugins use **C-ABI exports only** (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md)).
+
 ## Overview
 
-The PluginManager uses the Observer pattern to notify interested parties about plugin lifecycle events. This replaces the previous callback-based approach with a more flexible and extensible design.
+The PluginManager uses the Observer pattern to notify interested parties about plugin lifecycle events. This allows the UI and other components to react to plugin loading, enabling, disabling, and unloading.
 
 ## Architecture
 
 ### IPluginObserver Interface
+
+**Note:** While the observer pattern is still used, observers now receive `PluginHandle` (opaque pointer) instead of `IPlugin*` since plugins use C-ABI.
 
 ```cpp
 class IPluginObserver
@@ -16,7 +20,7 @@ public:
     
     virtual void OnPluginEvent(PluginEvent event, 
                               const std::string& pluginId,
-                              IPlugin* plugin) = 0;
+                              void* pluginHandle) = 0;  // Changed from IPlugin*
 };
 ```
 
@@ -87,10 +91,10 @@ public:
     
     void OnPluginEvent(plugin::PluginEvent event, 
                       const std::string& pluginId,
-                      plugin::IPlugin* plugin) override {
+                      void* pluginHandle) override {  // Changed from IPlugin*
         switch (event) {
             case PluginEvent::Enabled:
-                createPluginTab(pluginId, plugin);
+                createPluginTab(pluginId, pluginHandle);
                 break;
             case PluginEvent::Disabled:
                 removePluginTab(pluginId);

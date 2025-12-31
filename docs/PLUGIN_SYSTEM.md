@@ -2,208 +2,274 @@
 
 ## Overview
 
-LogViewer supports a plugin architecture that allows extending functionality without modifying the core application. Plugins are dynamically loaded shared libraries that implement the `IPlugin` interface.
+LogViewer supports a plugin architecture that allows extending functionality without modifying the core application. Plugins are dynamically loaded shared libraries that use a **C-ABI interface** for maximum compatibility and ABI stability across different compilers and versions.
+
+Plugins export standard C functions like `Plugin_Create`, `Plugin_CreateMainPanel`, etc.
+
+### C-ABI Plugin Architecture
+
+The C-ABI approach is recommended for better compatibility and reduced ABI dependencies. Plugins export standard C functions that the application calls to create and manage plugin instances.
+
+**Required Exports:**
+```cpp
+extern "C" {
+    EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create();
+    EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle);
+    EXPORT_PLUGIN_SYMBOL const char* Plugin_GetMetadataJson(PluginHandle);
+}
+```
+
+**Optional Panel Exports:**
+```cpp
+extern "C" {
+    EXPORT_PLUGIN_SYMBOL void* Plugin_CreateMainPanel(PluginHandle, void* parent, const char* settings);
+    EXPORT_PLUGIN_SYMBOL void* Plugin_CreateBottomPanel(PluginHandle, void* parent, const char* settings);
+    EXPORT_PLUGIN_SYMBOL void* Plugin_CreateLeftPanel(PluginHandle, void* parent, const char* settings);
+    EXPORT_PLUGIN_SYMBOL void* Plugin_CreateRightPanel(PluginHandle, void* parent, const char* settings);
+}
+```
+
+**Logger Callback:**
+```cpp
+extern "C" {
+    EXPORT_PLUGIN_SYMBOL void Plugin_SetLoggerCallback(PluginHandle, PluginLogFn);
+}
+```
+
+The application calls `Plugin_SetLoggerCallback` immediately after `Plugin_Create` to provide a logging function that plugins can use.
+
+## Plugin Logging
+
+Plugins can log messages to the application's logging system using the provided callback:
+
+```cpp
+#include "PluginLoggerC.h"
+
+// Use the logger anywhere in plugin code
+PluginLogger_Log(PLUGIN_LOG_INFO, "Plugin initialized successfully");
+PluginLogger_Log(PLUGIN_LOG_ERROR, "Failed to connect to service");
+```
+
+**Log Levels:**
+- `PLUGIN_LOG_TRACE`: Detailed debug information
+- `PLUGIN_LOG_DEBUG`: Debug messages
+- `PLUGIN_LOG_INFO`: Informational messages
+- `PLUGIN_LOG_WARN`: Warning messages
+- `PLUGIN_LOG_ERROR`: Error messages
+- `PLUGIN_LOG_CRITICAL`: Critical errors
+
+**How It Works:**
+1. Application calls `Plugin_Create()` to instantiate the plugin
+2. Application calls `Plugin_SetLoggerCallback(handle, &AppLogFunc)` to provide logging callback
+3. Plugin calls `PluginLogger_Register(logFn)` to store the callback
+4. Plugin uses `PluginLogger_Log(level, message)` to log messages
+5. Messages appear in application logs with `[plugin]` prefix
 
 ## Plugin Types
 
 The system supports several plugin types:
 
-- **Parser**: Custom log file format parsers (must also implement `parser::IDataParser`)
-- **Filter**: Custom filtering strategies (must also implement `filters::IFilterStrategy`)
+- **Parser**: Custom log file format parsers
+- **Filter**: Custom filtering strategies
 - **Exporter**: Export logs to different formats
 - **Analyzer**: Advanced log analysis tools
 - **Connector**: Remote log source connections (e.g., SSH, databases)
 - **Visualizer**: Custom visualization components
+- **AIProvider**: AI-powered log analysis
 - **Custom**: Generic plugins for other purposes
 
 ## Plugin Architecture
 
-### IPlugin Interface
+### C Plugin Structure
 
-All plugins must implement the `IPlugin` interface defined in `src/application/plugins/IPlugin.hpp`:
+Plugins are C++ classes that export C-ABI functions. Internally, plugins can use any C++ features, but the external interface must be pure C.
+
+**Example Plugin Class:**
 
 ```cpp
-class IPlugin {
+namespace plugin {
+
+class MyPlugin {
 public:
-    virtual bool Initialize() = 0;
-    virtual void Shutdown() = 0;
-    virtual PluginMetadata GetMetadata() const = 0;
-    virtual PluginStatus GetStatus() const = 0;
-    virtual std::string GetLastError() const = 0;
-    virtual bool IsLicensed() const = 0;
-    virtual bool SetLicense(const std::string& licenseKey) = 0;
+    MyPlugin() { /* constructor */ }
+    ~MyPlugin() { /* destructor */ }
     
-    // Type-specific interface access
-    virtual parser::IDataParser* GetParserInterface() { return nullptr; }
-    virtual filters::IFilterStrategy* GetFilterInterface() { return nullptr; }
-    
-    // For Parser plugins
-    virtual bool SupportsExtension(const std::string& extension) const { return false; }
-    virtual std::vector<std::string> GetSupportedExtensions() const { return {}; }
-};
-```
-
-### Type-Specific Interfaces
-
-Plugins must implement additional type-specific interfaces based on their type:
-
-#### Parser Plugins
-
-Parser plugins **MUST** implement both:
-1. `plugin::IPlugin` - Base plugin interface
-2. `parser::IDataParser` - Parser-specific interface
-
-Example:
-```cpp
-class MyParserPlugin : public plugin::IPlugin, public parser::IDataParser
-{
-public:
-    // IPlugin methods...
-    parser::IDataParser* GetParserInterface() override { return this; }
-    bool SupportsExtension(const std::string& ext) const override {
-        return ext == ".myformat";
+    PluginMetadata GetMetadata() const {
+        return {
+            .id = "my_plugin",
+            .name = "My Plugin",
+            .version = "1.0.0",
+            .type = PluginType::Custom
+        };
     }
     
-    // IDataParser methods...
-    void Parse(const std::filesystem::path& path) override { /* ... */ }
-    void ParseStream(std::istream& stream) override { /* ... */ }
-    // ... other IDataParser methods
-};
-```
-
-#### Filter Plugins
-
-Filter plugins **MUST** implement both:
-1. `plugin::IPlugin` - Base plugin interface
-2. `filters::IFilterStrategy` - Filter-specific interface
-
-Example:
-```cpp
-class MyFilterPlugin : public plugin::IPlugin, public filters::IFilterStrategy
-{
-public:
-    // IPlugin methods...
-    filters::IFilterStrategy* GetFilterInterface() override { return this; }
+    bool Initialize() { /* init resources */ return true; }
+    void Shutdown() { /* cleanup */ }
     
-    // IFilterStrategy methods...
-    bool Matches(const db::LogEvent& event) const override { /* ... */ }
-    // ... other IFilterStrategy methods
+    // Optional: Create UI panels
+    QWidget* CreateConfigPanel(QWidget* parent) { /* ... */ }
 };
-```
 
-See `docs/examples/ExampleParserPlugin.hpp` for a complete parser plugin implementation.
+} // namespace plugin
+```
 
 ### Plugin Metadata
 
-Each plugin provides metadata describing its capabilities:
+Plugins return metadata as JSON via `Plugin_GetMetadataJson`:
 
-```cpp
-struct PluginMetadata {
-    std::string id;              // Unique identifier
-    std::string name;            // Display name
-    std::string version;         // Version string
-    std::string author;          // Author information
-    std::string description;     // Plugin description
-    std::string website;         // Plugin website/repository
-    PluginType type;             // Plugin type
-    bool requiresLicense;        // Whether license is required
-    std::vector<std::string> dependencies;  // Other plugin dependencies
-};
+```json
+{
+    "id": "my_plugin",
+    "name": "My Plugin",
+    "version": "1.0.0",
+    "apiVersion": "1.0.0",
+    "author": "Plugin Developer",
+    "description": "Plugin description",
+    "website": "https://example.com",
+    "type": 0,
+    "requiresLicense": false,
+    "dependencies": []
+}
 ```
 
-### Plugin Factory
-
-Each plugin must export a factory function:
-
-```cpp
-extern "C" EXPORT_PLUGIN std::unique_ptr<IPlugin> CreatePlugin();
-```
-
-The `EXPORT_PLUGIN` macro ensures proper symbol visibility across platforms.
+**Plugin Types (type field):**
+- 0 = Parser
+- 1 = Filter
+- 2 = Exporter
+- 3 = Analyzer
+- 4 = AIProvider
+- 5 = Connector
+- 6 = Visualizer
+- 7 = Custom
 
 ## Plugin Manager
 
 The `PluginManager` singleton handles plugin lifecycle:
 
-- **Discovery**: Scan plugins directory for available plugins
-- **Loading**: Dynamically load plugin shared libraries
-- **Registration**: Register plugins and validate dependencies
-- **Lifecycle**: Initialize, enable, disable, and shutdown plugins
-- **Configuration**: Persist plugin settings
+- **Discovery**: Scan plugins directory for `.dll`/`.so`/`.dylib` files
+- **Loading**: Load plugin via `LoadLibrary`/`dlopen`
+- **Logger Setup**: Call `Plugin_SetLoggerCallback` to provide logging
+- **Initialization**: Call `Plugin_Initialize` on loaded plugins
+- **Panel Creation**: Call `Plugin_CreateXxxPanel` functions for UI
+- **Lifecycle**: Initialize, shutdown plugins via C-ABI functions
 
-### Usage Example
+### Plugin Loading Process
 
 ```cpp
-// Get plugin manager instance
-auto& manager = plugin::PluginManager::GetInstance();
+// 1. Application loads plugin library
+PluginHandle handle = Plugin_Create();
 
-// Set plugins directory
-manager.SetPluginsDirectory("/path/to/plugins");
+// 2. Set up logging immediately
+Plugin_SetLoggerCallback(handle, &AppPluginLog);
 
-// Discover available plugins
-auto plugins = manager.DiscoverPlugins();
+// 3. Get plugin metadata
+const char* json = Plugin_GetMetadataJson(handle);
+// Parse JSON to get plugin info
 
-// Load a specific plugin
-auto result = manager.LoadPlugin("/path/to/plugin.dylib");
-if (result.isOk()) {
-    std::string pluginId = result.unwrap();
-    
-    // Get plugin instance
-    auto* plugin = manager.GetPlugin(pluginId);
-    
-    // Set license if required
-    if (plugin->GetMetadata().requiresLicense) {
-        plugin->SetLicense("YOUR-LICENSE-KEY");
-    }
-}
+// 4. Initialize plugin
+Plugin_Initialize(handle);
 
-// Enable/disable plugins
-manager.EnablePlugin("plugin_id");
-manager.DisablePlugin("plugin_id");
+// 5. Create UI panels as needed
+void* leftPanel = Plugin_CreateLeftPanel(handle, parentWidget, settingsJson);
+void* mainPanel = Plugin_CreateMainPanel(handle, parentWidget, settingsJson);
 
-// Unload plugin
-manager.UnloadPlugin("plugin_id");
+// 6. Cleanup on exit
+Plugin_Shutdown(handle);
+Plugin_Destroy(handle);
 ```
 
 ## Creating a Plugin
 
-### 1. Implement IPlugin Interface
+### 1. Create Plugin Class
 
-Create a class that implements `IPlugin`:
+Create a C++ class with your plugin logic:
 
 ```cpp
-class MyPlugin : public plugin::IPlugin {
+namespace plugin {
+
+class MyPlugin {
+private:
+    std::string m_lastError;
+    
 public:
-    bool Initialize() override {
-        // Initialize plugin resources
+    MyPlugin() = default;
+    ~MyPlugin() = default;
+    
+    PluginMetadata GetMetadata() const {
+        return {
+            .id = "my_plugin",
+            .name = "My Plugin",
+            .version = "1.0.0",
+            .apiVersion = "1.0.0",
+            .author = "Your Name",
+            .description = "Plugin description",
+            .type = PluginType::Custom
+        };
+    }
+    
+    bool Initialize() {
+        PluginLogger_Log(PLUGIN_LOG_INFO, "Initializing plugin");
         return true;
     }
     
-    void Shutdown() override {
-        // Cleanup resources
+    void Shutdown() {
+        PluginLogger_Log(PLUGIN_LOG_INFO, "Shutting down plugin");
     }
     
-    plugin::PluginMetadata GetMetadata() const override {
-        plugin::PluginMetadata metadata;
-        metadata.id = "my_plugin";
-        metadata.name = "My Plugin";
-        metadata.version = "1.0.0";
-        metadata.type = plugin::PluginType::Custom;
-        return metadata;
-    }
-    
-    // Implement other interface methods...
+    const std::string& GetLastError() const { return m_lastError; }
 };
+
+} // namespace plugin
 ```
 
-### 2. Export Factory Function
+### 2. Export C-ABI Functions
 
-Export the factory function:
+Export required C functions:
 
 ```cpp
-extern "C" EXPORT_PLUGIN std::unique_ptr<plugin::IPlugin> CreatePlugin() {
-    return std::make_unique<MyPlugin>();
+extern "C" {
+
+EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create() {
+    try {
+        return new plugin::MyPlugin();
+    } catch (...) {
+        return nullptr;
+    }
 }
+
+EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle h) {
+    if (h) {
+        delete reinterpret_cast<plugin::MyPlugin*>(h);
+    }
+}
+
+EXPORT_PLUGIN_SYMBOL void Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn) {
+    if (h && logFn) {
+        PluginLogger_Register(logFn);
+    }
+}
+
+EXPORT_PLUGIN_SYMBOL const char* Plugin_GetMetadataJson(PluginHandle h) {
+    if (!h) return nullptr;
+    auto* plugin = reinterpret_cast<plugin::MyPlugin*>(h);
+    auto meta = plugin->GetMetadata();
+    
+    // Convert metadata to JSON and return as malloc'd string
+    nlohmann::json j;
+    j["id"] = meta.id;
+    j["name"] = meta.name;
+    j["version"] = meta.version;
+    // ... add other fields
+    
+    std::string str = j.dump();
+    char* result = (char*)malloc(str.size() + 1);
+    if (result) {
+        memcpy(result, str.c_str(), str.size() + 1);
+    }
+    return result;
+}
+
+} // extern "C"
 ```
 
 ### 3. Build as Shared Library
@@ -216,9 +282,16 @@ add_library(my_plugin SHARED
     MyPlugin.hpp
 )
 
+target_include_directories(my_plugin PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/plugin_api
+)
+
 target_link_libraries(my_plugin
     PRIVATE
-        application_core
+        Qt6::Widgets
+        fmt::fmt
+        nlohmann_json::nlohmann_json
 )
 
 set_target_properties(my_plugin PROPERTIES
@@ -229,6 +302,7 @@ set_target_properties(my_plugin PROPERTIES
 
 install(TARGETS my_plugin
     LIBRARY DESTINATION plugins
+    RUNTIME DESTINATION plugins
 )
 ```
 
@@ -244,255 +318,64 @@ if(ENABLE_MY_PLUGIN)
 endif()
 ```
 
-## Creating Plugins Outside the Build System
-
-If you want to develop plugins independently of the LogViewer build system, you can build them as standalone shared libraries. This approach requires you to manually manage dependencies and include paths.
-
-### Prerequisites
-
-Before building external plugins, ensure you have:
-
-1. **LogViewer Source Access**: Access to LogViewer header files
-2. **Compatible Compiler**: Same compiler and standard library version as LogViewer
-3. **Required Dependencies**: 
-   - nlohmann_json (header-only)
-   - spdlog (header-only) 
-   - expat (XML parsing)
-   - CURL (HTTP requests)
-   - C++17 compatible standard library
-
-### Directory Structure
-
-Organize your plugin project like this:
-
-```
-my_plugin/
-├── CMakeLists.txt          # Standalone build configuration
-├── MyPlugin.cpp           # Plugin implementation
-├── MyPlugin.hpp           # Plugin header (optional)
-└── build/                 # Build output directory
-```
-
-### CMakeLists.txt for External Plugin
-
-```cmake
-cmake_minimum_required(VERSION 3.16)
-project(MyPlugin VERSION 1.0.0)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Find required dependencies
-find_package(CURL REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(EXPAT REQUIRED expat)
-
-# Set LogViewer source paths (adjust these to match your LogViewer installation)
-set(LOGVIEWER_SRC_DIR "/path/to/LogViewer/src")
-set(LOGVIEWER_INCLUDE_DIR "/path/to/LogViewer/include")
-set(LOGVIEWER_THIRDPARTY_DIR "/path/to/LogViewer/thirdparty")
-
-# Create plugin library
-add_library(my_plugin SHARED
-    MyPlugin.cpp
-)
-
-# Include directories
-target_include_directories(my_plugin PRIVATE
-    ${LOGVIEWER_SRC_DIR}
-    ${LOGVIEWER_INCLUDE_DIR}
-    ${LOGVIEWER_THIRDPARTY_DIR}/nlohmann_json/include
-    ${LOGVIEWER_THIRDPARTY_DIR}/spdlog/include
-    ${EXPAT_INCLUDE_DIRS}
-)
-
-# Link dependencies
-target_link_libraries(my_plugin PRIVATE
-    CURL::libcurl
-    ${EXPAT_LIBRARIES}
-)
-
-# Set library properties
-set_target_properties(my_plugin PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "my_plugin"
-    VERSION ${PROJECT_VERSION}
-    SOVERSION 1
-)
-
-# Compiler flags (match LogViewer's build settings)
-target_compile_options(my_plugin PRIVATE
-    -Wall
-    -Wextra
-    -fPIC
-)
-
-# Installation
-install(TARGETS my_plugin
-    LIBRARY DESTINATION plugins
-)
-```
-
-### Makefile Alternative
-
-If you prefer using Make directly:
-
-```makefile
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -fPIC -shared
-INCLUDES = -I/path/to/LogViewer/src \
-           -I/path/to/LogViewer/include \
-           -I/path/to/LogViewer/thirdparty/nlohmann_json/include \
-           -I/path/to/LogViewer/thirdparty/spdlog/include \
-           -I/usr/include/expat
-LIBS = -lcurl -lexpat
-
-TARGET = my_plugin.so
-SOURCES = MyPlugin.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
-
-clean:
-	rm -f $(OBJECTS) $(TARGET)
-
-install: $(TARGET)
-	cp $(TARGET) /path/to/plugins/
-```
-
-### Visual Studio Project (Windows)
-
-For Windows development, create a new DLL project with these settings:
-
-1. **Project Type**: Dynamic Link Library (DLL)
-2. **Include Directories**:
-   - `C:\path\to\LogViewer\src`
-   - `C:\path\to\LogViewer\include`
-   - `C:\path\to\LogViewer\thirdparty\nlohmann_json\include`
-   - `C:\path\to\LogViewer\thirdparty\spdlog\include`
-3. **Library Directories**: Add paths to expat and CURL libraries
-4. **Additional Dependencies**: `libcurl.lib`, `expat.lib`
-5. **Preprocessor Definitions**: Add `EXPORT_PLUGIN_SYMBOL=__declspec(dllexport)`
-6. **C++ Standard**: C++17 or later
-
-### Important Considerations
-
-#### Header Dependencies
-
-Your plugin must include these key headers:
-
-```cpp
-#include "application/plugins/IPlugin.hpp"           // Base plugin interface
-#include "application/config/IFieldConversionPlugin.hpp"  // For field conversion plugins
-// Include other type-specific interfaces as needed
-```
-
-#### Library Compatibility
-
-- **ABI Compatibility**: Ensure your plugin is built with the same compiler and standard library as LogViewer
-- **Dependency Versions**: Use the same versions of third-party libraries (nlohmann_json, spdlog, etc.)
-- **Platform Architecture**: Match the target platform (32-bit vs 64-bit)
-
-#### Symbol Visibility
-
-- Use the `EXPORT_PLUGIN` macro to ensure `CreatePlugin` is exported
-- On Linux/macOS, ensure `-fPIC` is used when compiling
-- On Windows, use `__declspec(dllexport)` for the factory function
-
-#### Testing Your Plugin
-
-1. Build your plugin as a shared library
-2. Copy it to LogViewer's plugins directory
-3. Start LogViewer and check if the plugin loads
-4. Verify plugin functionality through the UI
-
-#### Troubleshooting
-
-**Plugin fails to load:**
-- Check that all dependencies are available
-- Verify `CreatePlugin` symbol is exported: `nm -g plugin.so | grep CreatePlugin`
-- Ensure ABI compatibility with LogViewer
-
-**Missing headers:**
-- Verify include paths point to correct LogViewer source directories
-- Check that third-party headers are accessible
-
-**Linker errors:**
-- Ensure all required libraries are linked
-- Check library paths and versions match LogViewer build
-
 ## Available Plugins
 
-### SSH Parser Plugin
+### AI Provider Plugin
 
-**Location**: `src/plugins/ssh_parser/`
+**Location**: `plugins/ai/`
 
-Provides SSH connectivity and remote log parsing capabilities.
+Provides AI-powered log analysis capabilities with multiple provider support.
 
 **Features**:
-- SSH connection with password, key, or agent authentication
-- Text log parsing with regex patterns
-- Real-time log monitoring (command output, file tailing, shell)
+- Multiple AI provider support (Ollama, OpenAI, Anthropic, Google, xAI, LM Studio)
+- Three UI panels: configuration (left), analysis (main), chat (bottom)
+- Real-time log analysis and pattern detection
+- Interactive chat with AI about logs
 
-**Build Option**: `ENABLE_SSH_PARSER=ON`
+**Build Option**: Enabled by default
 
-**Dependencies**: libssh
+**Dependencies**: libcurl, Qt6
 
-**Usage**:
-```cpp
-auto& manager = plugin::PluginManager::GetInstance();
-auto* plugin = dynamic_cast<ssh::SSHParserPlugin*>(
-    manager.GetPlugin("ssh_parser"));
+**C-ABI Exports**:
+- `Plugin_Create/Destroy` - Lifecycle
+- `Plugin_CreateMainPanel` - Analysis panel
+- `Plugin_CreateBottomPanel` - Chat panel
+- `Plugin_CreateLeftPanel` - Configuration panel
+- `Plugin_CreateAIService` - AI service factory
 
-if (plugin && plugin->IsLicensed()) {
-    auto connection = plugin->CreateConnection("hostname", 22, "user");
-    auto parser = plugin->CreateTextParser();
-    auto logSource = plugin->CreateLogSource(
-        std::move(connection),
-        std::move(parser),
-        ssh::SSHLogSource::MonitorMode::CommandOutput);
-}
-```
+See [AI_PROVIDER_PLUGIN.md](AI_PROVIDER_PLUGIN.md) for detailed documentation.
 
 ## Plugin Configuration
 
-Plugins can be configured through the application's configuration dialog:
+Plugins are configured through the application's configuration dialog:
 
-1. **Plugin List**: View all discovered and loaded plugins
+1. **Plugin List**: View all discovered plugins
 2. **Enable/Disable**: Toggle plugin activation
 3. **Auto-Load**: Configure plugins to load automatically on startup
-4. **License Management**: Set license keys for commercial plugins
-5. **Dependencies**: View plugin dependencies and status
+4. **Settings**: Plugin-specific configuration via left panel UI
+
+Plugin settings are stored in JSON format in the application's configuration directory.
 
 ## Plugin Directory Structure
 
 ```
 LogViewer/
 ├── src/
-│   ├── application/
-│   │   └── plugins/
-│   │       ├── IPlugin.hpp          # Plugin interface
-│   │       ├── PluginManager.hpp    # Plugin manager
-│   │       └── PluginManager.cpp
-│   └── plugins/
-│       ├── CMakeLists.txt
-│       └── ssh_parser/              # SSH parser plugin
-│           ├── CMakeLists.txt
-│           ├── SSHParserPlugin.hpp
-│           ├── SSHParserPlugin.cpp
-│           ├── SSHConnection.hpp
-│           ├── SSHConnection.cpp
-│           ├── SSHTextParser.hpp
-│           ├── SSHTextParser.cpp
-│           ├── SSHLogSource.hpp
-│           └── SSHLogSource.cpp
-└── build/
-    └── plugins/                      # Built plugins
-        └── ssh_parser_plugin.dylib
+│   ├── plugin_api/
+│   │   ├── PluginC.h              # C-ABI function typedefs
+│   │   ├── PluginLoggerC.h        # Logger API for plugins
+│   │   ├── PluginEventsC.h        # Events API
+│   │   └── PluginKeyEncryptionC.h # Key encryption API
+│   └── application/
+│       └── plugins/
+│           ├── PluginManager.hpp  # Plugin manager
+│           └── PluginManager.cpp
+└── plugins/
+    └── ai/                         # AI provider plugin
+        ├── CMakeLists.txt
+        ├── AIProviderPlugin.hpp
+        ├── AIProviderPlugin.cpp
+        └── lib/                    # Plugin dependencies
 ```
 
 ## Platform-Specific Notes
@@ -505,43 +388,47 @@ LogViewer/
 ### Linux
 - Plugin extension: `.so`
 - Use `dlopen()` for dynamic loading
-- May require `-fPIC` compiler flag
+- Requires `-fPIC` compiler flag
 
 ### Windows
 - Plugin extension: `.dll`
 - Use `LoadLibrary()` for dynamic loading
-- Requires proper `__declspec(dllexport)` decoration
+- Use `EXPORT_PLUGIN_SYMBOL __declspec(dllexport)` for exports
 
 ## Troubleshooting
 
 ### Plugin Not Loading
 
 1. Check plugin file exists in plugins directory
-2. Verify plugin exports `CreatePlugin` function
+2. Verify plugin exports `Plugin_Create` function: `nm -g plugin.so | grep Plugin_Create`
 3. Check dependencies are satisfied
-4. Review error messages from `GetLastError()`
+4. Review application logs for error messages
+5. Ensure plugin is built with compatible compiler/ABI
 
-### License Issues
+### Logger Issues
 
-1. Verify license key is set: `plugin->SetLicense(key)`
-2. Check `IsLicensed()` returns true
-3. Contact plugin vendor for license support
+1. Verify `Plugin_SetLoggerCallback` is exported
+2. Check that `PluginLogger_Register` is called in the callback
+3. Use `PLUGIN_LOG_INFO` level for visibility (DEBUG may be filtered)
+4. Look for `[plugin]` prefix in application logs
 
-### Dependency Errors
+### Panel Not Appearing
 
-1. Ensure all required plugins are loaded first
-2. Use `ValidateDependencies()` to check
-3. Load plugins in dependency order
+1. Check that `Plugin_CreateXxxPanel` export exists
+2. Verify function returns non-null `QWidget*`
+3. Check plugin logs for error messages during panel creation
+4. Ensure parent widget is passed correctly
 
-## Best Practices
+### Best Practices
 
-1. **Error Handling**: Always check return values and handle errors
-2. **Licensing**: Implement proper license validation for commercial plugins
-3. **Dependencies**: Minimize dependencies between plugins
+1. **Error Handling**: Always check return values, use try-catch in C++ code
+2. **Logging**: Use `PluginLogger_Log` extensively for debugging
+3. **Dependencies**: Keep external dependencies minimal
 4. **Versioning**: Use semantic versioning for plugins
-5. **Documentation**: Provide clear documentation for plugin usage
-6. **Testing**: Create unit tests for plugin functionality
-7. **Thread Safety**: Ensure plugins are thread-safe if used concurrently
+5. **Documentation**: Provide clear plugin documentation
+6. **Testing**: Test plugin loading/unloading multiple times
+7. **Thread Safety**: Ensure plugins are thread-safe
+8. **Resource Cleanup**: Properly cleanup in `Plugin_Destroy`
 
 ## Future Enhancements
 
@@ -551,3 +438,4 @@ LogViewer/
 - Plugin sandboxing for security
 - Plugin API versioning
 - Remote plugin updates
+

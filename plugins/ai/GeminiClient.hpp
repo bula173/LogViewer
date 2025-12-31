@@ -1,7 +1,10 @@
 #pragma once
 
 #include "IAIService.hpp"
-#include "Logger.hpp"
+#include "PluginLoggerC.h"
+#include <fmt/format.h>
+
+#define PLUGIN_LOG(level, ...) do { std::string _pl_msg = fmt::format(__VA_ARGS__); PluginLogger_Log(level, _pl_msg.c_str()); } while(0)
 #include <string>
 
 namespace ai
@@ -33,7 +36,7 @@ public:
     explicit GeminiClient(const std::string& apiKey,
                          const std::string& model = "gemini-2.5-flash",
                          const std::string& baseUrl = "https://generativelanguage.googleapis.com");
-    ~GeminiClient() override {util::Logger::Debug("GeminiClient destroyed");};
+    ~GeminiClient() override { PLUGIN_LOG(PLUGIN_LOG_DEBUG, "GeminiClient destroyed"); };
 
     std::string SendPrompt(const std::string& prompt,
         std::function<void(const std::string&)> callback = nullptr) override;

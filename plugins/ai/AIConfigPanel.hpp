@@ -58,6 +58,7 @@ private:
     QComboBox* m_modelCombo{nullptr};
     QComboBox* m_analysisTypeCombo{nullptr};
     QSpinBox* m_maxEventsSpin{nullptr};
+    QSpinBox* m_timeoutSpin{nullptr};
     QLabel* m_statusLabel{nullptr};
     QLineEdit* m_baseUrlEdit{nullptr};
     QLineEdit* m_openaiKeyEdit{nullptr};
