@@ -39,6 +39,10 @@ AIAnalysisPanel::AIAnalysisPanel(std::shared_ptr<ai::AIServiceWrapper> aiService
     , m_eventsView(eventsView)
 {
     BuildUi();
+    // Log parent pointer and visibility to help diagnose docking/visibility issues
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "AIAnalysisPanel constructed: parent={:p} visible={}", static_cast<const void*>(parent), this->isVisible());
+    // Ensure analysis panel is visible when added to host tab widget
+    this->setVisible(true);
 }
 
 void AIAnalysisPanel::SetConfigPanel(AIConfigPanel* configPanel)

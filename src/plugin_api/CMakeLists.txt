@@ -1,22 +1,29 @@
+## CMake config for plugin_api SDK headers and implementation
+
+# Plugin API is header-only INTERFACE library
 add_library(plugin_api INTERFACE)
+
 target_include_directories(plugin_api
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
         $<INSTALL_INTERFACE:include>
 )
 
+# Provide an alias used by plugins when linking against an installed SDK
+add_library(LogViewer::plugin_api ALIAS plugin_api)
+
+message(STATUS "plugin_api: INTERFACE library target created (header-only)")
+
 if(BUILD_SDK)
     # Install only the public C API headers and SDK helper for third-party plugin developers
     install(FILES
         ${CMAKE_CURRENT_LIST_DIR}/PluginC.h
+        ${CMAKE_CURRENT_LIST_DIR}/PluginAIProviderC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginTypesC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginEventsC.h
-        ${CMAKE_CURRENT_LIST_DIR}/PluginFieldConversionC.h
-        ${CMAKE_CURRENT_LIST_DIR}/PluginAnalysisC.h
-        ${CMAKE_CURRENT_LIST_DIR}/PluginAIProviderC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginLoggerC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginKeyEncryptionC.h
-        ${CMAKE_CURRENT_LIST_DIR}/PluginSDK.hpp
+        # AI/Analysis/FieldConversion helpers merged into PluginC.h; SDK helper removed
         DESTINATION sdk/include
         COMPONENT sdk
     )

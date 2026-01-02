@@ -39,7 +39,6 @@ class LogAnalyzer;
 namespace plugin
 {
 class IPlugin;
-class IAIPlugin;
 }
 
 namespace ui
@@ -118,17 +117,26 @@ class MainWindow : public QMainWindow,
     void reloadPlugins();
     void createPluginTab(const std::string& pluginId, plugin::IPlugin* plugin);
     void removePluginTab(const std::string& pluginId);
-    void createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin);
-    void removePluginFilterTab(const std::string& pluginId);
-    void createPluginConfigTab(const std::string& pluginId, plugin::IPlugin* plugin);
-    void removePluginConfigTab(const std::string& pluginId);
-    void RefreshAIProvider();
-    void UseBuiltInAIProvider();
-    void UseAIPluginProvider(const std::string& pluginId, plugin::IAIPlugin* aiPlugin);
-    void RemoveAIPluginPanel();
-    void RemoveAITab();
-    void RemoveAIConfigWidget();
-    void RemoveAIChatWidget();
+    // Left/side panel (previously "config" tab) for plugins. SDK-first plugins
+    // may provide left-panel widgets via C-ABI and the host will insert them
+    // into the left filter tabs or the plugin config dock as appropriate.
+    void createPluginLeftTab(const std::string& pluginId, plugin::IPlugin* plugin);
+    void removePluginLeftTab(const std::string& pluginId);
+
+    // Helpers to simplify plugin panel embedding
+    QWidget* CreateHostContainerForPluginWidget(QWidget* pluginWidget, QTabWidget* parentTabs);
+    bool TryAddPluginMainPanel(const std::string& pluginId, plugin::IPlugin* plugin);
+    bool TryAddPluginBottomPanel(const std::string& pluginId, plugin::IPlugin* plugin);
+    bool TryAddPluginRightPanel(const std::string& pluginId, plugin::IPlugin* plugin);
+
+    // Deprecated: legacy filter-tab helpers removed. Left/tab management is
+    // handled by createPluginLeftTab/removePluginLeftTab.
+    void RefreshPluginPanels();
+    // Generic panel removal helpers (wrap legacy AI-specific names)
+    void RemoveMainPanel();
+    void RemoveLeftPanel();
+    void RemoveBottomPanel();
+    void RemoveRightPanel();
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
@@ -144,31 +152,33 @@ class MainWindow : public QMainWindow,
     QTabWidget* m_bottomTabs {nullptr};
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
-    QWidget* m_aiChatWidget {nullptr};
+    QWidget* m_bottomChatWidget {nullptr};
 
     // Dock widgets for collapsible panels
     QDockWidget* m_filtersDock {nullptr};
     QDockWidget* m_detailsDock {nullptr};
     QDockWidget* m_bottomDock {nullptr};
-    QDockWidget* m_pluginConfigDock {nullptr};  // Generic plugin configuration dock
-    QTabWidget* m_pluginConfigTabs {nullptr};   // Tabs for multiple plugin configs
+    QDockWidget* m_pluginLeftDock {nullptr};    // Generic plugin configuration dock (left-panel fallback)
+    QTabWidget* m_pluginLeftTabs {nullptr};     // Tabs for multiple plugin configs / left-panel fallback
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
-    QWidget* m_aiTabWidget {nullptr};
-    int m_aiTabIndex {-1};
+    QWidget* m_mainPanelWidget {nullptr};
+    int m_mainPanelIndex {-1};
     db::EventsContainer* m_events {nullptr};
     
-    // AI service shared between panels
-    std::shared_ptr<ai::IAIService> m_aiService;
-    QWidget* m_aiPluginPanel {nullptr};
-    std::string m_activeAiPluginId;
+    // Active plugin tracking
+    std::string m_activePluginId;
+    std::shared_ptr<ai::IAIService> m_pluginService;  // TODO: Generalize beyond AI-specific interface
+    QWidget* m_bottomPluginPanel {nullptr};
+    QTabWidget* m_rightTabs {nullptr};
     
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index
     std::map<std::string, int> m_pluginFilterTabIndices;  // Maps plugin ID to filter tab index
-    std::map<std::string, int> m_pluginConfigTabIndices;  // Maps plugin ID to config tab index
+    std::map<std::string, int> m_pluginLeftTabIndices;    // Maps plugin ID to left/config tab index
+    std::map<std::string, int> m_pluginRightTabIndices;   // Maps plugin ID to right dock tab index
 };
 
 } // namespace ui::qt

@@ -72,13 +72,6 @@ class Config
     void GetPrintConfig() const;
     
     /**
-     * @brief Get the API key for a specific provider
-     * @param provider The provider name ("openai", "anthropic", "google", "xai")
-     * @return The API key for that provider, or empty string if not set
-     */
-    std::string GetApiKeyForProvider(const std::string& provider) const;
-    
-    /**
      * @brief Get the field translator for value conversions
      * @return Reference to the FieldTranslator instance
      */
@@ -127,7 +120,6 @@ class Config
     void ParseXmlConfig(const json& j);
     void GetLoggingConfig(const json& j);
     void GetFilterConfig(const json& j);
-    void GetAIConfig(const json& j);
     std::filesystem::path GetDefaultConfigPath();
     std::filesystem::path GetDefaultLogPath();
     void SetupLogPath();
@@ -159,20 +151,6 @@ class Config
     
     // Filter configuration
     std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")
-    
-    // AI configuration
-    std::string aiProvider {"ollama"};  // "ollama", "lmstudio", "openai", "anthropic", "google", "xai"
-    std::string aiPluginId;              // Optional AI provider plugin id (each plugin has its own config file)
-    
-    // API keys for cloud providers (encrypted in config file)
-    std::string openaiApiKey;
-    std::string anthropicApiKey;
-    std::string googleApiKey;
-    std::string xaiApiKey;
-    
-    std::string ollamaBaseUrl {"http://localhost:11434"};
-    std::string ollamaDefaultModel {"qwen2.5-coder:7b"};
-    int aiTimeoutSeconds {300};  // Timeout for AI requests in seconds (default 5 minutes)
 };
 
 Config& GetConfig();

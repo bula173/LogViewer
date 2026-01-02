@@ -31,23 +31,23 @@ struct PluginLoadInfo
     std::filesystem::path path;        ///< Plugin file path
     std::unique_ptr<IPlugin> instance; ///< Plugin instance
     void* libraryHandle = nullptr;     ///< Dynamic library handle
+    void* pluginOpaqueHandle = nullptr; ///< Raw opaque handle returned by C-ABI plugins
     bool autoLoad = false;             ///< Auto-load on startup
     bool enabled = true;               ///< Plugin enabled
-    // Optional C-style AI provider function pointers discovered in plugin DLL
-    void* pluginCreateAI = nullptr;
-    void* pluginDestroyAI = nullptr;
-    void* pluginSetAIEvents = nullptr;
-    void* pluginOnAIEventsUpdated = nullptr;
-    // Optional C-style Field Conversion provider function pointers
-    void* pluginCreateFieldConversion = nullptr;
-    void* pluginDestroyFieldConversion = nullptr;
-    void* pluginSetFieldConversionEvents = nullptr;
-    void* pluginOnFieldConversionUpdated = nullptr;
-    // Optional C-style Analysis provider function pointers
-    void* pluginCreateAnalysis = nullptr;
-    void* pluginDestroyAnalysis = nullptr;
-    void* pluginSetAnalysisEvents = nullptr;
-    void* pluginOnAnalysisUpdated = nullptr;
+    // Optional C-style panel creation function pointers discovered in plugin DLL
+    void* pluginCreateLeftPanel = nullptr;
+    void* pluginCreateRightPanel = nullptr;
+    void* pluginCreateBottomPanel = nullptr;
+    void* pluginCreateMainPanel = nullptr;
+    // Optional destroy function for panel widgets
+    void* pluginDestroyPanelWidget = nullptr;
+    // Optional AI service creation/destruction exported by plugins
+    void* pluginCreateAIService = nullptr;
+    void* pluginDestroyAIService = nullptr;
+    // Opaque handle returned by plugin service creation (if any)
+    void* pluginServiceHandle = nullptr;
+    // Optional plugin function to receive opaque events container from host
+    void* pluginSetAIEventsContainer = nullptr;
 };
 
 /**
@@ -219,7 +219,8 @@ private:
     util::Result<std::unique_ptr<IPlugin>, error::Error> LoadPluginLibrary(
         const std::filesystem::path& path,
         const std::string& expectedApiVersion,
-        /*out*/ void** outLibraryHandle);
+        /*out*/ void** outLibraryHandle,
+        /*out*/ void** outPluginOpaqueHandle);
 
     /**
      * @brief Unloads dynamic library

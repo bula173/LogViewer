@@ -6,6 +6,30 @@ A modern, cross-platform log viewer with AI-assisted analysis, flexible filterin
 - **Qt 6** (default): Modern, dock-based flexible UI
 - **wxWidgets 3.2+**: Classic native UI with virtual list controls
 
+## Recent Updates (January 2026)
+
+### Plugin System Improvements
+- **Fixed Plugin Logging**: Implemented callback-based logging mechanism that works across DLL boundaries
+  - Application calls `Plugin_SetLoggerCallback` after plugin creation
+  - Plugin messages now appear in application logs with `[plugin]` prefix
+  - Resolved ODR violation with inline static variables
+  
+- **Configuration Panel Integration**: Fixed plugin configuration UI display
+  - Added `Plugin_CreateLeftPanel` C-ABI export for configuration widgets
+  - Configuration panel now appears as separate tab in left dock alongside "Filters"
+  - Previously panels were incorrectly embedded inside the Filters tab
+  - Proper parent widget management ensures correct UI hierarchy
+
+- **Enhanced Diagnostics**: Added comprehensive logging throughout plugin lifecycle
+  - Plugin creation, service initialization, and panel creation are fully logged
+  - Error messages clearly indicate failure points
+  - Easier debugging of plugin integration issues
+
+For detailed plugin documentation, see:
+- `docs/PLUGIN_SYSTEM.md` - Plugin architecture overview
+- `docs/AI_PROVIDER_PLUGIN.md` - AI Provider plugin specifics
+- `docs/PLUGIN_IMPLEMENTATION.md` - Implementation details
+
 ## Features
 
 ### Core Functionality
@@ -19,10 +43,19 @@ A modern, cross-platform log viewer with AI-assisted analysis, flexible filterin
 
 ### AI-Assisted Analysis (Qt version)
 - **Multiple AI Providers**: Ollama (local), LM Studio (local), OpenAI, Anthropic Claude, Google Gemini, xAI Grok
+- **Plugin Architecture**: AI providers implemented as C-ABI plugins for better compatibility
 - **Smart Log Analysis**: Automatic pattern detection, error summarization, and insights
 - **Filter-Aware**: AI respects your current filters and type field configuration
 - **Custom Prompts**: Save and load analysis prompts for different log types
 - **Configurable Timeout**: Adjust timeout (30-3600s) for large analyses or slow machines
+- **Plugin Configuration UI**: Each plugin can provide its own configuration panel in the left dock
+
+### Plugin System
+- **C-ABI Architecture**: Plugins use C function exports for better compatibility across compiler versions
+- **Dynamic Loading**: Plugins loaded from ZIP archives or directories
+- **Integrated Logging**: Plugins log to application via callback mechanism
+- **UI Extension**: Plugins can add panels to main, bottom, left, and right dock areas
+- **Configuration Panels**: Plugins provide configuration UI as separate tabs in left panel
 
 ### Configuration
 - **Configurable Type Filter Field**: Use any log field for filtering (`type`, `level`, `severity`, `priority`, etc.)
@@ -479,6 +512,18 @@ brew upgrade cmake
 - Increase timeout in Settings > AI > Timeout (up to 3600 seconds)
 - Use local AI providers (Ollama/LM Studio) for better performance
 - Reduce number of events being analyzed
+
+**AI plugin configuration panel not visible:**
+- Ensure plugin is installed and enabled in Settings > Plugins
+- Check application logs for `[plugin]` messages
+- Configuration panel appears as separate tab in left dock alongside "Filters"
+- Restart application if plugin was just installed
+
+**Plugin logs not appearing:**
+- Plugins use callback-based logging via `Plugin_SetLoggerCallback`
+- Check logs for: `PluginManager: Set logger callback for C-ABI plugin`
+- If missing, rebuild plugin with latest `plugin_api` headers
+- Plugin messages appear with `[plugin]` prefix in logs
 
 **File dialog not working (macOS):**
 - Known issue with native dialogs - already using non-native dialogs

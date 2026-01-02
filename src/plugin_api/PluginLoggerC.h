@@ -1,10 +1,9 @@
-// C-style logger API for plugins. Header-only; application registers logger callback.
+// C-style logger API for plugins. The application passes a callback to the plugin.
 #pragma once
 
-#include <cstdlib>
-#include <cstring>
-
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 enum PluginLogLevel {
     PLUGIN_LOG_TRACE = 0,
@@ -17,23 +16,24 @@ enum PluginLogLevel {
 
 typedef void (*PluginLogFn)(int level, const char* message);
 
-// Registration function
-void PluginLogger_Register(PluginLogFn fn);
-
-// Helper used by plugins
-void PluginLogger_Log(int level, const char* message);
-
+// Global logger callback - set by Plugin_SetLoggerCallback C-ABI function
 static PluginLogFn g_plugin_logger_fn = nullptr;
 
+// Registration function - called by application to set the logging callback
+// This function is provided for backward compatibility and internal use
 inline void PluginLogger_Register(PluginLogFn fn)
 {
     g_plugin_logger_fn = fn;
 }
 
+// Logging function - called by plugins to log messages
 inline void PluginLogger_Log(int level, const char* message)
 {
-    if (g_plugin_logger_fn)
+    if (g_plugin_logger_fn && message) {
         g_plugin_logger_fn(level, message);
+    }
 }
 
-} // extern "C"
+#ifdef __cplusplus
+}
+#endif
