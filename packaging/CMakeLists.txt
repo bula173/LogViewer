@@ -153,6 +153,12 @@ elseif(APPLE)
     set(CPACK_GENERATOR "Bundle")
     set(CPACK_PACKAGING_INSTALL_PREFIX "/")
 
+    # The CMake preset uses DragNDrop for macOS packaging. By default CPack
+    # would include all components (application + plugins + sdk), which leads
+    # to a DMG with extra top-level folders. Keep the default macOS DMG as
+    # app-only; plugins/SDK can still be packaged via the split targets.
+    set(CPACK_COMPONENTS_ALL application)
+
     set(MACOSX_BUNDLE_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
     set(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
     set(CPACK_BUNDLE_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)

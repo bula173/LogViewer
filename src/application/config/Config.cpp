@@ -9,8 +9,43 @@
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 namespace config
 {
+
+namespace {
+std::filesystem::path GetInstalledEtcDir()
+{
+#ifdef __APPLE__
+    // Resolve: <App>.app/Contents/MacOS/<exe> -> <App>.app/Contents/Resources/etc
+    uint32_t size = 0;
+    _NSGetExecutablePath(nullptr, &size);
+    if (size > 0)
+    {
+        std::string buffer;
+        buffer.resize(size);
+        if (_NSGetExecutablePath(buffer.data(), &size) == 0)
+        {
+            std::error_code ec;
+            auto exePath = std::filesystem::weakly_canonical(std::filesystem::path(buffer), ec);
+            if (!ec)
+            {
+                auto resourcesEtc = exePath.parent_path() / ".." / "Resources" / "etc";
+                resourcesEtc = std::filesystem::weakly_canonical(resourcesEtc, ec);
+                if (!ec && std::filesystem::exists(resourcesEtc))
+                    return resourcesEtc;
+            }
+        }
+    }
+#endif
+
+    // Fallback: previous behavior (use current working directory)
+    return std::filesystem::current_path() / "etc";
+}
+} // namespace
 
 static Config configInstance;
 // This is a singleton instance of the Config class
@@ -52,7 +87,7 @@ void Config::SetAppName(const std::string& name)
 void Config::LoadConfig()
 {
     std::filesystem::path cwd = std::filesystem::current_path();
-    std::filesystem::path defaultInstalled = cwd /"etc"/ "config.json";
+    std::filesystem::path defaultInstalled = GetInstalledEtcDir() / "config.json";
 
     if (!std::filesystem::exists(m_configFilePath))
     {
@@ -202,7 +237,7 @@ void Config::LoadConfig()
 
             if (!std::filesystem::exists(m_dictionaryFilePath))
             {
-                std::filesystem::path defaultDictPath = cwd / "etc" / "field_dictionary.json";
+                std::filesystem::path defaultDictPath = GetInstalledEtcDir() / "field_dictionary.json";
                 util::Logger::Warn("Dictionary file does not exist at specified path: {}", m_dictionaryFilePath);
                 util::Logger::Info("Attempting to copy default dictionary from: {}", defaultDictPath.string());
                 m_dictionaryFilePath = (GetDefaultAppPath() / "field_dictionary.json").string();

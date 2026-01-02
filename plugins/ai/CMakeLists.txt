@@ -71,10 +71,14 @@ endif()
 
 set_target_properties(${PLUGIN_NAME} PROPERTIES
     AUTOMOC ON
-    VERSION 1.0.0
-    SOVERSION 1
     PREFIX ""
 )
+
+if(APPLE)
+    set_target_properties(${PLUGIN_NAME} PROPERTIES
+        SUFFIX ".dylib"
+    )
+endif()
 
 if(WIN32)
     set(PLUGIN_EXTENSION ".dll")
@@ -143,6 +147,21 @@ install (FILES ${PACKAGE_ARCHIVE}
     DESTINATION plugins
     COMPONENT plugins
 )
+
+# `cmake --install` does not build targets. Ensure the plugin ZIP exists when
+# installing the plugins component (e.g. in CI staging installs).
+install(CODE "
+    if(NOT EXISTS \"${PACKAGE_ARCHIVE}\")
+        message(STATUS \"ai_provider: ZIP not found, building create_ai_provider_zip before install\")
+        execute_process(
+            COMMAND \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target create_ai_provider_zip
+            RESULT_VARIABLE _zip_build_res
+        )
+        if(NOT _zip_build_res EQUAL 0)
+            message(FATAL_ERROR \"ai_provider: Failed to build ZIP (create_ai_provider_zip)\")
+        endif()
+    endif()
+" COMPONENT plugins)
 
 # Copy plugin files to main executable's plugins directory for development builds
 add_custom_target(copy_ai_provider_to_main ALL
