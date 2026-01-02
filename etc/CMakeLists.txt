@@ -3,6 +3,7 @@ install(
     FILES 
         ${CMAKE_CURRENT_SOURCE_DIR}/field_dictionary.json
         ${CMAKE_CURRENT_SOURCE_DIR}/default_config.json 
+        ${CMAKE_CURRENT_SOURCE_DIR}/example_log_10k.xml
     DESTINATION etc
     COMPONENT application
 )

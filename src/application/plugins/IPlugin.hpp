@@ -15,10 +15,11 @@ namespace filters { class IFilterStrategy; }
 namespace ai { class IAIService; }
 namespace db { class EventsContainer; }
 
-namespace plugin { 
-    class IAnalysisPlugin; 
+// Note: internal type-specific plugin interfaces (IAIPlugin/IAnalysisPlugin)
+// were removed in favor of generic C-ABI panels and PluginEvents API.
+
+namespace plugin {
     class IFieldConversionPlugin;
-    class IAIPlugin;
 }
 
 // Forward declare QWidget for GUI plugins
@@ -44,8 +45,8 @@ public:
     virtual bool SetLicense(const std::string& licenseKey) = 0;
     virtual parser::IDataParser* GetParserInterface() { return nullptr; }
     virtual filters::IFilterStrategy* GetFilterInterface() { return nullptr; }
-    virtual IAnalysisPlugin* GetAnalysisInterface() { return nullptr; }
-    virtual IAIPlugin* GetAIPluginInterface() { return nullptr; }
+    // Type-specific interfaces removed - plugins expose UI via C-ABI panel
+    // creators and access data via PluginEvents_* helpers.
     virtual IFieldConversionPlugin* GetFieldConversionInterface() { return nullptr; }
     virtual bool SupportsExtension([[maybe_unused]] const std::string& extension) const { return false; }
     virtual std::vector<std::string> GetSupportedExtensions() const { return {}; }

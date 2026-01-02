@@ -4,7 +4,6 @@
 #include "PluginEventsC.h"
 #include "PluginKeyEncryptionC.h"
 #include "PluginLoggerC.h"
-#include "PluginAIProviderC.h"
 #include <fmt/format.h>
 
 #include <fstream>
@@ -81,12 +80,10 @@ std::shared_ptr<ai::IAIService> AIProviderPlugin::CreateService(const nlohmann::
 {
     // Load plugin's own config file and apply to runtime config
     nlohmann::json pluginConfig = LoadPluginConfig();
-    config::GetConfig().ApplyJson(pluginConfig);
-
+    
     // Use plugin-local config as defaults; explicit settings override them
-    const auto& cfg = config::GetConfig();
-    const std::string provider = settings.value("provider", pluginConfig.value("provider", cfg.aiProvider));
-    std::string apiKey = settings.value("apiKey", pluginConfig.value("apiKey", cfg.openaiApiKey));
+    const std::string provider = settings.value("provider", pluginConfig.value("provider", "ollama"));
+    std::string apiKey = settings.value("apiKey", pluginConfig.value("apiKey", ""));
     // Decrypt via plugin API (application may register real decrypt function)
     if (!apiKey.empty()) {
         char* dec = PluginKeyEncryption_Decrypt(apiKey.c_str());
@@ -95,8 +92,8 @@ std::shared_ptr<ai::IAIService> AIProviderPlugin::CreateService(const nlohmann::
             PluginKeyEncryption_FreeString(dec);
         }
     }
-    const std::string baseUrl = settings.value("baseUrl", pluginConfig.value("baseUrl", cfg.ollamaBaseUrl));
-    const std::string model = settings.value("model", pluginConfig.value("model", cfg.ollamaDefaultModel));
+    const std::string baseUrl = settings.value("baseUrl", pluginConfig.value("baseUrl", "http://localhost:11434"));
+    const std::string model = settings.value("model", pluginConfig.value("model", "qwen2.5-coder:7b"));
 
     try
     {
@@ -140,11 +137,19 @@ void AIProviderPlugin::OnEventsUpdated()
 
 QWidget* AIProviderPlugin::CreateTab(QWidget* parent)
 {
+    std::string msg = fmt::format("CreateTab called: parent={:p}, m_aiService={}", 
+                     static_cast<const void*>(parent), m_aiService != nullptr);
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
     ensureAnalyzer();
     if (!m_analyzer)
+    {
+        PluginLogger_Log(PLUGIN_LOG_WARN, "CreateTab: m_analyzer is null, returning nullptr");
         return nullptr;
+    }
 
     m_analysisPanel = new ui::qt::AIAnalysisPanel(m_aiService, m_analyzer, nullptr, parent);
+    msg = fmt::format("CreateTab: successfully created AIAnalysisPanel={:p}", static_cast<const void*>(m_analysisPanel));
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
     if (m_analysisPanel && m_configPanel)
     {
         m_analysisPanel->SetConfigPanel(m_configPanel);
@@ -154,46 +159,99 @@ QWidget* AIProviderPlugin::CreateTab(QWidget* parent)
 
 QWidget* AIProviderPlugin::GetConfigurationUI()
 {
+    // Legacy override without parent - call the new version with nullptr parent
+    return GetConfigurationUI(nullptr);
+}
+
+QWidget* AIProviderPlugin::GetConfigurationUI(QWidget* parent)
+{
+    std::string msg = fmt::format("GetConfigurationUI called: parent={:p}, m_aiService={}, m_analyzer={}",
+                     static_cast<const void*>(parent), m_aiService != nullptr, m_analyzer != nullptr);
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
+    
     // Ensure service and analyzer are created
     if (!m_aiService) {
-        // Create a default service if not already created
+        PluginLogger_Log(PLUGIN_LOG_WARN, "GetConfigurationUI: m_aiService is null - service should be created before calling GetConfigurationUI");
+        // Create a default service as fallback
         nlohmann::json emptySettings;
         CreateService(emptySettings);
     }
     
-    ensureAnalyzer();
-    if (!m_analyzer)
+    if (!m_aiService || !m_aiService->service) {
+        msg = fmt::format("GetConfigurationUI: Cannot create config UI - m_aiService={}, service={}",
+                         m_aiService != nullptr, (m_aiService && m_aiService->service) != false);
+        PluginLogger_Log(PLUGIN_LOG_ERROR, msg.c_str());
         return nullptr;
+    }
+    
+    PluginLogger_Log(PLUGIN_LOG_INFO, "GetConfigurationUI: Ensuring analyzer is created");
+    ensureAnalyzer();
+    
+    if (!m_analyzer) {
+        PluginLogger_Log(PLUGIN_LOG_ERROR, "GetConfigurationUI: m_analyzer is null after ensureAnalyzer, cannot create config panel");
+        return nullptr;
+    }
 
-    m_configPanel = new ui::qt::AIConfigPanel(m_aiService, m_analyzer);
-    if (m_analysisPanel)
-    {
+    PluginLogger_Log(PLUGIN_LOG_INFO, "GetConfigurationUI: Creating AIConfigPanel with parent");
+    m_configPanel = new ui::qt::AIConfigPanel(m_aiService, m_analyzer, parent);
+    
+    PluginLogger_Log(PLUGIN_LOG_INFO, fmt::format("GetConfigurationUI: Created AIConfigPanel={:p}", 
+                     static_cast<const void*>(m_configPanel)).c_str());
+    
+    if (m_analysisPanel) {
         m_analysisPanel->SetConfigPanel(m_configPanel);
     }
+    
     return m_configPanel;
 }
 
 QWidget* AIProviderPlugin::CreateBottomPanel(QWidget* parent, ai::IAIService*, void* events)
 {
-    if (!events)
+    std::string msg = fmt::format("CreateBottomPanel called: events={}, m_events={}, m_aiService={}, parent={:p}",
+                     events != nullptr, m_events != nullptr, m_aiService != nullptr, static_cast<const void*>(parent));
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
+    
+    // Use stored events container if no events parameter provided (C-ABI path)
+    void* eventsToUse = events ? events : m_events.get();
+    
+    if (!eventsToUse)
+    {
+        PluginLogger_Log(PLUGIN_LOG_WARN, "CreateBottomPanel: no events container available, returning nullptr");
         return nullptr;
+    }
 
     if (!m_aiService || !m_aiService->service)
+    {
+        PluginLogger_Log(PLUGIN_LOG_WARN, "CreateBottomPanel: m_aiService or service is null, returning nullptr");
         return nullptr;
+    }
 
     // Store opaque events container via SDK-managed setter; UI will use
     // PluginEvents_GetSize/PluginEvents_GetEventJson to access events.
-    SetEventsContainerRaw(events);
-    return new ui::qt::AIChatPanel(m_aiService, parent);
+    SetEventsContainerRaw(eventsToUse);
+    auto* panel = new ui::qt::AIChatPanel(m_aiService, parent);
+    msg = fmt::format("CreateBottomPanel: successfully created AIChatPanel={:p}", static_cast<const void*>(panel));
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
+    return panel;
 }
 
 void AIProviderPlugin::ensureAnalyzer()
 {
+    std::string msg = fmt::format("ensureAnalyzer: m_aiService={}, m_aiService->service={}, m_analyzer={}",
+                     m_aiService != nullptr, 
+                     (m_aiService && m_aiService->service) != false,
+                     m_analyzer != nullptr);
+    PluginLogger_Log(PLUGIN_LOG_INFO, msg.c_str());
+    
     if (!m_aiService || !m_aiService->service)
+    {
+        PluginLogger_Log(PLUGIN_LOG_WARN, "ensureAnalyzer: m_aiService or m_aiService->service is null, returning");
         return;
+    }
 
     if (!m_analyzer)
     {
+        PluginLogger_Log(PLUGIN_LOG_INFO, "ensureAnalyzer: creating LogAnalyzer");
         m_analyzer = std::make_shared<ai::LogAnalyzer>(m_aiService);
     }
 }
@@ -297,6 +355,13 @@ EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create()
     } catch (...) { return nullptr; }
 }
 
+EXPORT_PLUGIN_SYMBOL void Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn)
+{
+    if (!h) return;
+    // Set the global logger callback so all PluginLogger_Log calls work
+    PluginLogger_Register(logFn);
+}
+
 EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle h)
 {
     if (!h) return;
@@ -305,7 +370,7 @@ EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle h)
 }
 
 // C ABI: create/destroy AI service wrappers and events container setter using PluginHandle
-EXPORT_PLUGIN_SYMBOL AIServiceHandle Plugin_CreateAIService(PluginHandle pluginHandle, const char* settingsJson)
+EXPORT_PLUGIN_SYMBOL PluginServiceHandle Plugin_CreateAIService(PluginHandle pluginHandle, const char* settingsJson)
 {
     if (!pluginHandle) return nullptr;
     try {
@@ -317,11 +382,11 @@ EXPORT_PLUGIN_SYMBOL AIServiceHandle Plugin_CreateAIService(PluginHandle pluginH
         auto svc = plugin->CreateService(settings);
         if (!svc) return nullptr;
         auto* wrapper = new std::shared_ptr<ai::IAIService>(svc);
-        return static_cast<AIServiceHandle>(wrapper);
+        return static_cast<PluginServiceHandle>(wrapper);
     } catch (...) { return nullptr; }
 }
 
-EXPORT_PLUGIN_SYMBOL void Plugin_DestroyAIService(AIServiceHandle svc)
+EXPORT_PLUGIN_SYMBOL void Plugin_DestroyAIService(PluginServiceHandle svc)
 {
     if (!svc) return;
     auto* wrapper = reinterpret_cast<std::shared_ptr<ai::IAIService>*>(svc);
@@ -340,6 +405,63 @@ EXPORT_PLUGIN_SYMBOL void Plugin_OnAIEventsUpdated(PluginHandle pluginHandle)
     if (!pluginHandle) return;
     auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
     try { plugin->OnEventsUpdated(); } catch (...) {}
+}
+
+} // extern "C"
+
+// Panel creation helpers exposed via C ABI so host can embed plugin widgets
+extern "C" {
+
+EXPORT_PLUGIN_SYMBOL void* Plugin_CreateMainPanel(PluginHandle pluginHandle, void* parentWidget, const char* /*settingsJson*/)
+{
+    if (!pluginHandle) return nullptr;
+    auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+    QWidget* parent = reinterpret_cast<QWidget*>(parentWidget);
+    try {
+        return static_cast<void*>(plugin->CreateTab(parent));
+    } catch (...) { return nullptr; }
+}
+
+EXPORT_PLUGIN_SYMBOL void* Plugin_CreateBottomPanel(PluginHandle pluginHandle, void* parentWidget, const char* /*settingsJson*/)
+{
+    if (!pluginHandle) return nullptr;
+    auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+    QWidget* parent = reinterpret_cast<QWidget*>(parentWidget);
+    try {
+        // plugin expects events to be set via Plugin_SetAIEventsContainer; pass nullptr for service
+        return static_cast<void*>(plugin->CreateBottomPanel(parent, nullptr, nullptr));
+    } catch (...) { return nullptr; }
+}
+
+EXPORT_PLUGIN_SYMBOL void* Plugin_CreateLeftPanel(PluginHandle pluginHandle, void* parentWidget, const char* /*settingsJson*/)
+{
+    if (!pluginHandle) {
+        PluginLogger_Log(PLUGIN_LOG_ERROR, "Plugin_CreateLeftPanel: pluginHandle is null");
+        return nullptr;
+    }
+    
+    auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+    QWidget* parent = reinterpret_cast<QWidget*>(parentWidget);
+    
+    PluginLogger_Log(PLUGIN_LOG_INFO, fmt::format("Plugin_CreateLeftPanel called: parent={:p}",
+                     static_cast<const void*>(parent)).c_str());
+    
+    try {
+        QWidget* configWidget = plugin->GetConfigurationUI(parent);
+        if (configWidget) {
+            PluginLogger_Log(PLUGIN_LOG_INFO, fmt::format("Plugin_CreateLeftPanel: Created config widget={:p}",
+                           static_cast<const void*>(configWidget)).c_str());
+        } else {
+            PluginLogger_Log(PLUGIN_LOG_WARN, "Plugin_CreateLeftPanel: GetConfigurationUI returned nullptr");
+        }
+        return static_cast<void*>(configWidget);
+    } catch (const std::exception& e) {
+        PluginLogger_Log(PLUGIN_LOG_ERROR, fmt::format("Plugin_CreateLeftPanel exception: {}", e.what()).c_str());
+        return nullptr;
+    } catch (...) {
+        PluginLogger_Log(PLUGIN_LOG_ERROR, "Plugin_CreateLeftPanel: Unknown exception");
+        return nullptr;
+    }
 }
 
 } // extern "C"

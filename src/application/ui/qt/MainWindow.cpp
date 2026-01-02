@@ -16,8 +16,6 @@
 #include "StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
-#include "IAnalysisPlugin.hpp"
-#include "IAIPlugin.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -129,15 +127,15 @@ MainWindow::MainWindow(mvc::IController& controller,
             restoreState(state);
         }
         
-        // Force plugin config dock to be properly positioned after state restoration
-        if (m_pluginConfigDock) {
-            m_pluginConfigDock->setFloating(false);
+        // Force plugin left/config dock to be properly positioned after state restoration
+        if (m_pluginLeftDock) {
+            m_pluginLeftDock->setFloating(false);
             // Ensure it's in the left dock area
-            if (!dockWidgetArea(m_pluginConfigDock)) {
-                addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
+            if (!dockWidgetArea(m_pluginLeftDock)) {
+                addDockWidget(Qt::LeftDockWidgetArea, m_pluginLeftDock);
             }
             // Tab with filters
-            tabifyDockWidget(m_filtersDock, m_pluginConfigDock);
+            tabifyDockWidget(m_filtersDock, m_pluginLeftDock);
         }
 
     } catch (const std::exception& ex) {
@@ -195,7 +193,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         m_contentTabs->addTab(m_eventsView, "Events");
 
         // AI UI provided by plugins; initialize service holder only
-        m_aiService = nullptr;
+        m_pluginService = nullptr;
 
         setCentralWidget(m_contentTabs);
 
@@ -253,30 +251,30 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
     // Generic Plugin Configuration dock with tabs for multiple plugins
-    m_pluginConfigDock = new QDockWidget("Plugin Configuration", this);
-    if (!m_pluginConfigDock) {
-        throw std::runtime_error("Failed to create plugin config dock");
+    m_pluginLeftDock = new QDockWidget("Plugin Configuration", this);
+    if (!m_pluginLeftDock) {
+        throw std::runtime_error("Failed to create plugin left/config dock");
     }
-    m_pluginConfigDock->setObjectName("PluginConfigurationDockWidget");
-    m_pluginConfigDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_pluginConfigDock->setFeatures(QDockWidget::DockWidgetMovable |
+    m_pluginLeftDock->setObjectName("PluginConfigurationDockWidget");
+    m_pluginLeftDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_pluginLeftDock->setFeatures(QDockWidget::DockWidgetMovable |
                                     QDockWidget::DockWidgetFloatable |
                                     QDockWidget::DockWidgetClosable);
     
     // Create tab widget to hold multiple plugin configurations
-    m_pluginConfigTabs = new QTabWidget(m_pluginConfigDock);
-    m_pluginConfigTabs->setObjectName("PluginConfigTabs");
-    m_pluginConfigTabs->setTabsClosable(false);
-    
+    m_pluginLeftTabs = new QTabWidget(m_pluginLeftDock);
+    m_pluginLeftTabs->setObjectName("PluginConfigTabs");
+    m_pluginLeftTabs->setTabsClosable(false);
+
     // Set size policy to allow the tab widget to shrink/expand with available space
-    m_pluginConfigTabs->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    
-    m_pluginConfigDock->setWidget(m_pluginConfigTabs);
-    
-    addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
-    m_pluginConfigDock->setFloating(false);  // Ensure it's docked, not floating
-    tabifyDockWidget(m_filtersDock, m_pluginConfigDock);  // Tab with filters in left panel
-    m_pluginConfigDock->hide(); // Hidden until plugins provide configuration UI
+    m_pluginLeftTabs->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+
+    m_pluginLeftDock->setWidget(m_pluginLeftTabs);
+
+    addDockWidget(Qt::LeftDockWidgetArea, m_pluginLeftDock);
+    m_pluginLeftDock->setFloating(false);  // Ensure it's docked, not floating
+    tabifyDockWidget(m_filtersDock, m_pluginLeftDock);  // Tab with filters in left panel
+    m_pluginLeftDock->hide(); // Hidden until plugins provide configuration UI
 
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
@@ -453,7 +451,7 @@ void MainWindow::SetupMenus()
     // View menu for dock widgets
     auto* viewMenu = bar->addMenu(tr("&View"));
     viewMenu->addAction(m_filtersDock->toggleViewAction());
-    viewMenu->addAction(m_pluginConfigDock->toggleViewAction());
+    viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
     
@@ -467,12 +465,12 @@ void MainWindow::SetupMenus()
             addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
             m_filtersDock->show();
         }
-        if (m_pluginConfigDock) {
-            m_pluginConfigDock->setFloating(false);
-            addDockWidget(Qt::LeftDockWidgetArea, m_pluginConfigDock);
+        if (m_pluginLeftDock) {
+            m_pluginLeftDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_pluginLeftDock);
             // Only show if there are config tabs
-            if (m_pluginConfigTabs && m_pluginConfigTabs->count() > 0) {
-                m_pluginConfigDock->show();
+            if (m_pluginLeftTabs && m_pluginLeftTabs->count() > 0) {
+                m_pluginLeftDock->show();
             }
         }
         if (m_detailsDock) {
@@ -861,7 +859,7 @@ void MainWindow::OnConfigChanged()
         m_itemDetailsView->RefreshView();
     
     // Refresh AI provider (built-in or plugin)
-    RefreshAIProvider();
+    RefreshPluginPanels();
 }
 
 void MainWindow::OnAboutRequested()
@@ -914,7 +912,6 @@ void MainWindow::setupPluginManager() {
 
 void MainWindow::loadPlugins() {
     auto& pluginManager = plugin::PluginManager::GetInstance();
-    const std::string configuredAiPlugin = config::GetConfig().aiPluginId;
     
     // Load plugin configuration (states, auto-load settings)
     auto configResult = pluginManager.LoadConfiguration();
@@ -941,9 +938,8 @@ void MainWindow::loadPlugins() {
         // Check if plugin should be auto-enabled based on autoLoad setting
         const auto& loadedPlugins = pluginManager.GetLoadedPlugins();
         auto it = loadedPlugins.find(pluginId);
-        if (it != loadedPlugins.end() && (it->second.autoLoad || pluginId == configuredAiPlugin)) {
-            util::Logger::Info("[MainWindow] Enabling plugin: {} (autoLoad={} configuredAi={})",
-                pluginId, it->second.autoLoad, pluginId == configuredAiPlugin);
+        if (it != loadedPlugins.end() && it->second.autoLoad) {
+            util::Logger::Info("[MainWindow] Enabling plugin: {} (autoLoad=true)", pluginId);
             auto enableResult = pluginManager.EnablePlugin(pluginId);
             if (enableResult.isErr()) {
                 util::Logger::Error("[MainWindow] Failed to enable plugin {}: {}",
@@ -952,190 +948,176 @@ void MainWindow::loadPlugins() {
         }
     }
 
-    RefreshAIProvider();
+    RefreshPluginPanels();
 }
 
-void MainWindow::RemoveAIPluginPanel()
+// Inline removal implementations into generic wrappers and remove AI-specific symbols
+
+// Generic wrappers keeping compatibility while removing AI-specific naming
+void MainWindow::RemoveMainPanel()
 {
-    if (!m_bottomTabs || !m_aiPluginPanel)
+    if (!m_contentTabs || !m_mainPanelWidget)
         return;
 
-    const int idx = m_bottomTabs->indexOf(m_aiPluginPanel);
-    if (idx >= 0)
-    {
-        m_bottomTabs->removeTab(idx);
-    }
-    m_aiPluginPanel->deleteLater();
-    m_aiPluginPanel = nullptr;
-    m_activeAiPluginId.clear();
-}
-
-void MainWindow::RemoveAITab()
-{
-    if (!m_contentTabs || !m_aiTabWidget)
-        return;
-
-    const int idx = m_contentTabs->indexOf(m_aiTabWidget);
+    const int idx = m_contentTabs->indexOf(m_mainPanelWidget);
     if (idx >= 0)
     {
         m_contentTabs->removeTab(idx);
     }
-    m_aiTabWidget->deleteLater();
-    m_aiTabWidget = nullptr;
-    m_aiTabIndex = -1;
+    m_mainPanelWidget->deleteLater();
+    m_mainPanelWidget = nullptr;
+    m_mainPanelIndex = -1;
 }
 
-void MainWindow::RemoveAIConfigWidget()
+void MainWindow::RemoveLeftPanel()
 {
-    // Config tab removal is handled by generic removePluginConfigTab
-    // This function is kept for compatibility but does nothing now
-    util::Logger::Debug("[MainWindow] RemoveAIConfigWidget - config handled by generic plugin system");
+    // Remove all plugin-provided left/filter and config tabs
+    std::vector<std::string> ids;
+    ids.reserve(m_pluginFilterTabIndices.size() + m_pluginLeftTabIndices.size());
+    for (const auto& [id, idx] : m_pluginFilterTabIndices) ids.push_back(id);
+    for (const auto& [id, idx] : m_pluginLeftTabIndices) ids.push_back(id);
+    for (const auto& id : ids) removePluginLeftTab(id);
 }
 
-void MainWindow::RemoveAIChatWidget()
+void MainWindow::RemoveBottomPanel()
 {
-    if (!m_bottomTabs || !m_aiChatWidget)
+    if (!m_bottomTabs || !m_bottomChatWidget)
         return;
 
-    const int idx = m_bottomTabs->indexOf(m_aiChatWidget);
+    const int idx = m_bottomTabs->indexOf(m_bottomChatWidget);
     if (idx >= 0)
     {
         m_bottomTabs->removeTab(idx);
     }
-    m_aiChatWidget->deleteLater();
-    m_aiChatWidget = nullptr;
+    m_bottomChatWidget->deleteLater();
+    m_bottomChatWidget = nullptr;
 }
 
-void MainWindow::UseBuiltInAIProvider()
+void MainWindow::RemoveRightPanel()
 {
-    // No built-in AI UI; fallback disables AI integration
-    RemoveAITab();
-    RemoveAIConfigWidget();
-    RemoveAIChatWidget();
-    RemoveAIPluginPanel();
-    m_aiService.reset();
-    m_activeAiPluginId.clear();
-    util::Logger::Info("[MainWindow] No AI plugin active; AI features disabled");
+    // Remove all plugin-provided right dock tabs
+    std::vector<std::string> ids;
+    ids.reserve(m_pluginRightTabIndices.size());
+    for (const auto& [id, idx] : m_pluginRightTabIndices) ids.push_back(id);
+    for (const auto& id : ids) {
+        auto it = m_pluginRightTabIndices.find(id);
+        if (it == m_pluginRightTabIndices.end()) continue;
+        int tabIndex = it->second;
+        if (m_rightTabs && tabIndex >= 0 && tabIndex < m_rightTabs->count()) {
+            QWidget* widget = m_rightTabs->widget(tabIndex);
+            m_rightTabs->removeTab(tabIndex);
+            if (widget) widget->deleteLater();
+            util::Logger::Info("[MainWindow] Removed plugin right-panel at index {}", tabIndex);
+        }
+        m_pluginRightTabIndices.erase(it);
+        for (auto& [pid, pidx] : m_pluginRightTabIndices) if (pidx > tabIndex) pidx--;
+    }
+    m_activePluginId.clear();
 }
 
-void MainWindow::UseAIPluginProvider(const std::string& pluginId, plugin::IAIPlugin* aiPlugin)
+void MainWindow::RefreshPluginPanels()
 {
-    if (!aiPlugin || !m_events)
-    {
-        util::Logger::Warn("[MainWindow] UseAIPluginProvider called with missing plugin or events");
-        UseBuiltInAIProvider();
-        return;
-    }
-
-    // Plugin will load its own config file; pass empty settings to CreateService
-    nlohmann::json settings = nlohmann::json::object();
-    util::Logger::Debug("[MainWindow] Initializing AI plugin {} with plugin-managed config", pluginId);
-    
-    auto pluginService = aiPlugin->CreateService(settings);
-    if (!pluginService)
-    {
-        util::Logger::Error("[MainWindow] AI plugin {} failed to create service", pluginId);
-        UseBuiltInAIProvider();
-        return;
-    }
-
-    m_aiService = pluginService;
-    m_activeAiPluginId = pluginId;
-
-    // Provide events container to the AI plugin
-    aiPlugin->SetEventsContainer(std::shared_ptr<db::EventsContainer>(m_events, [](db::EventsContainer*){}));
-    aiPlugin->OnEventsUpdated();
-
-    // Remove built-in UI and plugin remnants
-    RemoveAITab();
-    RemoveAIConfigWidget();
-    RemoveAIChatWidget();
-    RemoveAIPluginPanel();
-
-    if (auto* plugin = plugin::PluginManager::GetInstance().GetPlugin(pluginId))
-    {
-        util::Logger::Debug("[MainWindow] Creating UI widgets for AI plugin: {}", pluginId);
-        
-        // Ensure config tab is created for AI plugin
-        // Check if it already exists, if not create it
-        if (m_pluginConfigTabIndices.find(pluginId) == m_pluginConfigTabIndices.end()) {
-            createPluginConfigTab(pluginId, plugin);
-        }
-        
-        // Create analysis tab
-        if (m_contentTabs)
-        {
-            m_aiTabWidget = plugin->CreateTab(m_contentTabs);
-            util::Logger::Debug("[MainWindow] Got analysis tab widget: {}", m_aiTabWidget ? "yes" : "no");
-            if (m_aiTabWidget)
-            {
-                const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name;
-                m_aiTabIndex = m_contentTabs->addTab(m_aiTabWidget, QString::fromStdString(tabName));
-                util::Logger::Info("[MainWindow] Added AI analysis tab '{}' at index {}", tabName, m_aiTabIndex);
-            }
-        }
-
-        // Create bottom panel (chat)
-        if (m_bottomTabs)
-        {
-            m_aiPluginPanel = plugin->CreateBottomPanel(m_bottomTabs, m_aiService.get(), m_events);
-            util::Logger::Debug("[MainWindow] Got bottom panel widget: {}", m_aiPluginPanel ? "yes" : "no");
-            if (m_aiPluginPanel)
-            {
-                const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name + " Chat";
-                int chatTabIndex = m_bottomTabs->addTab(m_aiPluginPanel, QString::fromStdString(tabName));
-                util::Logger::Info("[MainWindow] Added AI chat tab '{}' at index {}", tabName, chatTabIndex);
-            }
-        }
-    }
-
-    util::Logger::Info("[MainWindow] Activated AI plugin provider: {}", pluginId);
+    // Plugins are responsible for creating/managing their own UI panels via the SDK/C-ABI.
+    // This function is kept for potential future use but currently does nothing.
+    util::Logger::Debug("[MainWindow] RefreshPluginPanels called (no-op)");
 }
 
-void MainWindow::RefreshAIProvider()
-{
-    auto& cfg = config::GetConfig();
-    auto& pluginManager = plugin::PluginManager::GetInstance();
+// Helper: create a small host-owned container and parent the plugin widget into it
+QWidget* MainWindow::CreateHostContainerForPluginWidget(QWidget* pluginWidget, QTabWidget* parentTabs) {
+    if (!pluginWidget || !parentTabs) return nullptr;
+    QWidget* hostContainer = new QWidget(parentTabs);
+    auto* layout = new QVBoxLayout(hostContainer);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    hostContainer->setLayout(layout);
+    try { pluginWidget->setParent(hostContainer); } catch(...) {}
+    pluginWidget->setVisible(true);
+    layout->addWidget(pluginWidget);
+    return hostContainer;
+}
 
-    if (!cfg.aiPluginId.empty())
-    {
-        const auto& loaded = pluginManager.GetLoadedPlugins();
-        auto it = loaded.find(cfg.aiPluginId);
-        if (it != loaded.end())
-        {
-            if (!it->second.enabled)
-            {
-                auto enableResult = pluginManager.EnablePlugin(cfg.aiPluginId);
-                if (enableResult.isErr())
-                {
-                    util::Logger::Warn("[MainWindow] Failed to enable configured AI plugin {}: {}",
-                        cfg.aiPluginId, enableResult.error().what());
-                }
-            }
+bool MainWindow::TryAddPluginMainPanel(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!m_contentTabs || !plugin) return false;
+    auto& manager = plugin::PluginManager::GetInstance();
+    const auto& loaded = manager.GetLoadedPlugins();
+    auto it = loaded.find(pluginId);
+    if (it == loaded.end()) return false;
+    if (!(it->second.pluginCreateMainPanel && it->second.pluginOpaqueHandle)) return false;
+    using CreatePanelFn = void*(*)(void*, void*, const char*);
+    auto fn = reinterpret_cast<CreatePanelFn>(it->second.pluginCreateMainPanel);
+    void* w = nullptr;
+    try { w = fn(it->second.pluginOpaqueHandle, static_cast<void*>(m_contentTabs), nullptr); } catch(...) { w = nullptr; }
+    util::Logger::Debug("[MainWindow] TryAddPluginMainPanel for {}: widget returned = {}", pluginId, w != nullptr);
+    if (!w) return false;
+    QWidget* pluginWidget = reinterpret_cast<QWidget*>(w);
+    QWidget* hostContainer = CreateHostContainerForPluginWidget(pluginWidget, m_contentTabs);
+    if (!hostContainer) return false;
+    const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name;
+    int idx = m_contentTabs->addTab(hostContainer, QString::fromStdString(tabName));
+    m_pluginTabIndices[pluginId] = idx;
+    util::Logger::Info("[MainWindow] Added plugin main tab '{}' at index {}", tabName, idx);
+    return true;
+}
 
-            if (auto* plugin = pluginManager.GetPlugin(cfg.aiPluginId);
-                plugin && plugin->GetMetadata().type == plugin::PluginType::AIProvider)
-            {
-                if (auto* aiInterface = plugin->GetAIPluginInterface())
-                {
-                    UseAIPluginProvider(cfg.aiPluginId, aiInterface);
-                    return;
-                }
-            }
+bool MainWindow::TryAddPluginBottomPanel(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!m_bottomTabs || !plugin) return false;
+    auto& manager = plugin::PluginManager::GetInstance();
+    const auto& loaded = manager.GetLoadedPlugins();
+    auto it = loaded.find(pluginId);
+    if (it == loaded.end()) return false;
+    if (!(it->second.pluginCreateBottomPanel && it->second.pluginOpaqueHandle)) return false;
+    using CreatePanelFn = void*(*)(void*, void*, const char*);
+    auto fn = reinterpret_cast<CreatePanelFn>(it->second.pluginCreateBottomPanel);
+    void* w = nullptr;
+    try { w = fn(it->second.pluginOpaqueHandle, static_cast<void*>(m_bottomTabs), nullptr); } catch(...) { w = nullptr; }
+    util::Logger::Debug("[MainWindow] TryAddPluginBottomPanel for {}: widget returned = {}", pluginId, w != nullptr);
+    if (!w) return false;
+    QWidget* pluginWidget = reinterpret_cast<QWidget*>(w);
+    QWidget* hostContainer = CreateHostContainerForPluginWidget(pluginWidget, m_bottomTabs);
+    if (!hostContainer) return false;
+    const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name + " Chat";
+    int chatTabIndex = m_bottomTabs->addTab(hostContainer, QString::fromStdString(tabName));
+    m_bottomPluginPanel = hostContainer;
+    util::Logger::Info("[MainWindow] Added plugin bottom tab '{}' at index {}", tabName, chatTabIndex);
+    return true;
+}
+
+bool MainWindow::TryAddPluginRightPanel(const std::string& pluginId, plugin::IPlugin* plugin) {
+    if (!plugin) return false;
+    auto& manager = plugin::PluginManager::GetInstance();
+    const auto& loaded = manager.GetLoadedPlugins();
+    auto it = loaded.find(pluginId);
+    if (it == loaded.end()) return false;
+    if (!(it->second.pluginCreateRightPanel && it->second.pluginOpaqueHandle)) return false;
+    using CreatePanelFn = void*(*)(void*, void*, const char*);
+    auto fn = reinterpret_cast<CreatePanelFn>(it->second.pluginCreateRightPanel);
+    void* w = nullptr;
+    try { w = fn(it->second.pluginOpaqueHandle, static_cast<void*>(m_detailsDock ? m_detailsDock : nullptr), nullptr); } catch(...) { w = nullptr; }
+    if (!w) return false;
+
+    // Ensure we have a tab widget in the right dock
+    if (!m_rightTabs) {
+        m_rightTabs = new QTabWidget(m_detailsDock);
+        if (m_itemDetailsView) {
+            m_rightTabs->addTab(m_itemDetailsView, "Details");
         }
-        util::Logger::Warn("[MainWindow] Configured AI plugin {} not available or disabled; falling back",
-            cfg.aiPluginId);
+        m_detailsDock->setWidget(m_rightTabs);
     }
 
-    // Only remove AI UI if there's no active service (don't override plugin-enabled AI)
-    if (!m_aiService || m_activeAiPluginId.empty())
-    {
-        UseBuiltInAIProvider();
+    QWidget* pluginWidget = reinterpret_cast<QWidget*>(w);
+    QWidget* hostContainer = CreateHostContainerForPluginWidget(pluginWidget, m_rightTabs);
+    if (!hostContainer) return false;
+
+    const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name + " Right";
+    int idx = m_rightTabs->addTab(hostContainer, QString::fromStdString(tabName));
+    m_pluginRightTabIndices[pluginId] = idx;
+    if (m_detailsDock) {
+        m_detailsDock->setFloating(false);
+        addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
+        m_detailsDock->show();
     }
-    else
-    {
-        util::Logger::Info("[MainWindow] AI provider already active ({}), skipping fallback", m_activeAiPluginId);
-    }
+    util::Logger::Info("[MainWindow] Added plugin right tab '{}' at index {}", tabName, idx);
+    return true;
 }
 
 void MainWindow::OnPluginEvent(plugin::PluginEvent event, 
@@ -1150,24 +1132,37 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
             
         case PluginEvent::Unloaded:
             util::Logger::Debug("[MainWindow] Plugin unloaded: {}", pluginId);
-            if (pluginId == m_activeAiPluginId) {
-                RemoveAITab();
-                RemoveAIConfigWidget();
-                RemoveAIChatWidget();
-                RemoveAIPluginPanel();
-                UseBuiltInAIProvider();
+            if (pluginId == m_activePluginId) {
+                RemoveMainPanel();
+                RemoveLeftPanel();
+                RemoveBottomPanel();
+                RemoveRightPanel();
             }
             break;
-            
+
         case PluginEvent::Enabled:
             util::Logger::Info("[MainWindow] Plugin enabled: {}", pluginId);
-            createPluginTab(pluginId, plugin);
-            createPluginFilterTab(pluginId, plugin);
-            createPluginConfigTab(pluginId, plugin);
-            if (plugin && plugin->GetMetadata().type == plugin::PluginType::AIProvider) {
-                // Directly activate this AI provider since user enabled it
-                if (auto* aiInterface = plugin->GetAIPluginInterface()) {
-                    UseAIPluginProvider(pluginId, aiInterface);
+                    createPluginTab(pluginId, plugin);
+                    createPluginLeftTab(pluginId, plugin);
+            // If the plugin exposes C-ABI panel creators, embed those widgets
+            // into main/bottom panels regardless of declared plugin type.
+            {
+                auto& manager = plugin::PluginManager::GetInstance();
+                const auto& loaded = manager.GetLoadedPlugins();
+                auto it = loaded.find(pluginId);
+                if (it != loaded.end()) {
+                    util::Logger::Debug("[MainWindow] Panel creation check for {}: mainExp={} bottomExp={} opaque={} contentTabs={} bottomTabs={}",
+                        pluginId,
+                        it->second.pluginCreateMainPanel != nullptr,
+                        it->second.pluginCreateBottomPanel != nullptr,
+                        it->second.pluginOpaqueHandle != nullptr,
+                        m_contentTabs != nullptr,
+                        m_bottomTabs != nullptr);
+                    
+                    // Use helper methods for consistent widget wrapping
+                    TryAddPluginMainPanel(pluginId, plugin);
+                    TryAddPluginBottomPanel(pluginId, plugin);
+                    TryAddPluginRightPanel(pluginId, plugin);
                 }
             }
             break;
@@ -1175,14 +1170,13 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
         case PluginEvent::Disabled:
             util::Logger::Info("[MainWindow] Plugin disabled: {}", pluginId);
             removePluginTab(pluginId);
-            removePluginFilterTab(pluginId);
-            removePluginConfigTab(pluginId);
-            if (pluginId == m_activeAiPluginId) {
-                RemoveAITab();
-                RemoveAIConfigWidget();
-                RemoveAIChatWidget();
-                RemoveAIPluginPanel();
-                UseBuiltInAIProvider();
+            removePluginLeftTab(pluginId);
+            if (pluginId == m_activePluginId) {
+                RemoveMainPanel();
+                RemoveLeftPanel();
+                RemoveBottomPanel();
+                RemoveRightPanel();
+                util::Logger::Info("[MainWindow] Plugin disabled and panels removed: {}", pluginId);
             }
             break;
             
@@ -1209,10 +1203,17 @@ void MainWindow::createPluginTab(const std::string& pluginId, plugin::IPlugin* p
     
     util::Logger::Info("[MainWindow] Creating tab for plugin: {}", pluginId);
     
-    // AI provider tab is created during provider activation to ensure service/events are ready
-    if (plugin->GetMetadata().type == plugin::PluginType::AIProvider) {
-        util::Logger::Info("[MainWindow] Skipping immediate tab creation for AI provider: {}", pluginId);
-        return;
+    // If the plugin exposes SDK-first panel creators, the host will embed
+    // widgets via the C-ABI exports; skip calling the legacy CreateTab in
+    // that case to avoid duplicate UI.
+    {
+        auto& pluginManager = plugin::PluginManager::GetInstance();
+        const auto& loaded = pluginManager.GetLoadedPlugins();
+        auto it = loaded.find(pluginId);
+        if (it != loaded.end() && (it->second.pluginCreateMainPanel || it->second.pluginCreateBottomPanel || it->second.pluginCreateLeftPanel || it->second.pluginCreateRightPanel)) {
+            util::Logger::Info("[MainWindow] Skipping immediate tab creation for SDK-first plugin: {}", pluginId);
+            return;
+        }
     }
 
     QWidget* tab = plugin->CreateTab(this);
@@ -1227,16 +1228,7 @@ void MainWindow::createPluginTab(const std::string& pluginId, plugin::IPlugin* p
     m_pluginTabIndices[pluginId] = tabIndex;
     util::Logger::Info("[MainWindow] Created plugin tab: {} at index {}", metadata.name, tabIndex);
     
-    // If this is an analysis plugin, set up events container
-    if (metadata.type == plugin::PluginType::Analyzer) {
-        auto* analysisPlugin = plugin->GetAnalysisInterface();
-        if (analysisPlugin && m_events) {
-            analysisPlugin->SetEventsContainer(
-                std::shared_ptr<db::EventsContainer>(m_events, [](db::EventsContainer*){}));
-            util::Logger::Info("[MainWindow] Set events container for analysis plugin: {}", 
-                metadata.name);
-        }
-    }
+    // Analysis plugins should access events via PluginEvents_* helpers.
 }
 
 void MainWindow::removePluginTab(const std::string& pluginId) {
@@ -1267,137 +1259,180 @@ void MainWindow::removePluginTab(const std::string& pluginId) {
     }
 }
 
-void MainWindow::createPluginFilterTab(const std::string& pluginId, plugin::IPlugin* plugin) {
+// Legacy filter-tab creation removed. Left/tab management is done by
+// createPluginLeftTab/removePluginLeftTab which handles both left-dock
+// insertion and plugin config dock fallback.
+
+void MainWindow::createPluginLeftTab(const std::string& pluginId, plugin::IPlugin* plugin) {
     if (!plugin) {
-        util::Logger::Error("[MainWindow] createPluginFilterTab called with null plugin");
+        util::Logger::Error("[MainWindow] createPluginLeftTab called with null plugin");
         return;
     }
     
-    if (!m_filterTabs) {
-        util::Logger::Error("[MainWindow] createPluginFilterTab called but m_filterTabs is null");
+    if (!m_pluginLeftTabs) {
+        util::Logger::Error("[MainWindow] createPluginLeftTab called but m_pluginLeftTabs is null");
         return;
     }
     
-    if (plugin->GetMetadata().type == plugin::PluginType::AIProvider) {
-        util::Logger::Info("[MainWindow] Skipping filter tab creation for AI provider: {}", pluginId);
-        return;
-    }
+    util::Logger::Info("[MainWindow] Creating left/config tab for plugin: {}", pluginId);
 
-    util::Logger::Info("[MainWindow] Creating filter tab for plugin: {}", pluginId);
-    
-    // Try to create a filter tab from the plugin
-    QWidget* filterTab = plugin->CreateFilterTab(this);
-    if (!filterTab) {
-        util::Logger::Info("[MainWindow] Plugin {} does not provide a filter tab widget", pluginId);
-        return;
-    }
-    
-    auto metadata = plugin->GetMetadata();
-    QString tabName = QString::fromStdString(metadata.name + " Config");
-    int tabIndex = m_filterTabs->addTab(filterTab, tabName);
-    m_pluginFilterTabIndices[pluginId] = tabIndex;
-    util::Logger::Info("[MainWindow] Created plugin filter tab: {} at index {}", metadata.name, tabIndex);
-}
-
-void MainWindow::removePluginFilterTab(const std::string& pluginId) {
-    util::Logger::Info("[MainWindow] Removing filter tab for plugin: {}", pluginId);
-    
-    // Find and remove the filter tab for this plugin
-    auto it = m_pluginFilterTabIndices.find(pluginId);
-    if (it != m_pluginFilterTabIndices.end()) {
-        int tabIndex = it->second;
-        
-        // Remove the tab
-        if (tabIndex >= 0 && tabIndex < m_filterTabs->count()) {
-            QWidget* widget = m_filterTabs->widget(tabIndex);
-            m_filterTabs->removeTab(tabIndex);
-            if (widget) {
-                widget->deleteLater();
-            }
-            util::Logger::Info("[MainWindow] Removed plugin filter tab at index {}", tabIndex);
-        }
-        
-        // Update indices for tabs that came after this one
-        m_pluginFilterTabIndices.erase(it);
-        for (auto& [id, idx] : m_pluginFilterTabIndices) {
-            if (idx > tabIndex) {
-                idx--;
+    // First, allow SDK-first plugins to provide a left-panel widget via
+    // C-ABI (Plugin_CreateLeftPanel). If present, prefer that widget as
+    // the left-dock/filter-panel content. Otherwise fall back to the
+    // legacy GetConfigurationUI() path which goes into the plugin config dock.
+    QWidget* configWidget = nullptr;
+    bool addedToLeft = false;
+    try {
+        auto& pluginManager = plugin::PluginManager::GetInstance();
+        const auto& loaded = pluginManager.GetLoadedPlugins();
+        auto it = loaded.find(pluginId);
+        if (it != loaded.end() && it->second.pluginCreateLeftPanel && it->second.pluginOpaqueHandle) {
+            using CreatePanelFn = void*(*)(void*, void*, const char*);
+            auto fn = reinterpret_cast<CreatePanelFn>(it->second.pluginCreateLeftPanel);
+            void* w = nullptr;
+            try { w = fn(it->second.pluginOpaqueHandle, static_cast<void*>(m_pluginLeftTabs), nullptr); } catch(...) { w = nullptr; }
+            if (w) {
+                configWidget = reinterpret_cast<QWidget*>(w);
+                addedToLeft = true;
+                util::Logger::Info("[MainWindow] Using plugin-provided left panel for left dock: {}", pluginId);
             }
         }
-    }
-}
+    } catch (...) { }
 
-void MainWindow::createPluginConfigTab(const std::string& pluginId, plugin::IPlugin* plugin) {
-    if (!plugin) {
-        util::Logger::Error("[MainWindow] createPluginConfigTab called with null plugin");
-        return;
+    // Fallback to plugin-provided configuration UI via C++ API if no left-panel C-ABI widget
+    if (!configWidget) {
+        try { configWidget = plugin->GetConfigurationUI(); } catch(...) { configWidget = nullptr; }
     }
-    
-    if (!m_pluginConfigTabs) {
-        util::Logger::Error("[MainWindow] createPluginConfigTab called but m_pluginConfigTabs is null");
-        return;
-    }
-    
-    util::Logger::Info("[MainWindow] Creating config tab for plugin: {}", pluginId);
-    
-    // Try to get configuration UI from the plugin
-    QWidget* configWidget = plugin->GetConfigurationUI();
     if (!configWidget) {
         util::Logger::Info("[MainWindow] Plugin {} does not provide a configuration UI", pluginId);
-        return;
+        // Create a lightweight host-side placeholder so the Plugin Configuration
+        // tab is not empty and offers a simple enable/disable control.
+        QWidget* placeholder = new QWidget(m_pluginLeftTabs);
+        auto* vlayout = new QVBoxLayout(placeholder);
+        vlayout->setContentsMargins(8, 8, 8, 8);
+        vlayout->setSpacing(8);
+        auto* infoLabel = new QLabel(tr("No configuration UI provided by plugin."), placeholder);
+        vlayout->addWidget(infoLabel);
+        auto* controlRow = new QWidget(placeholder);
+        auto* hlayout = new QHBoxLayout(controlRow);
+        hlayout->setContentsMargins(0,0,0,0);
+        hlayout->setSpacing(8);
+        auto* toggleBtn = new QPushButton(controlRow);
+        // Determine current enabled state
+        bool enabled = false;
+        try {
+            auto& pm = plugin::PluginManager::GetInstance();
+            const auto& loaded = pm.GetLoadedPlugins();
+            auto itp = loaded.find(pluginId);
+            if (itp != loaded.end()) enabled = itp->second.enabled;
+        } catch(...) {}
+        toggleBtn->setText(enabled ? tr("Disable Plugin") : tr("Enable Plugin"));
+        hlayout->addWidget(toggleBtn);
+        controlRow->setLayout(hlayout);
+        vlayout->addWidget(controlRow);
+
+        // Connect button to toggle enable/disable via PluginManager
+        connect(toggleBtn, &QPushButton::clicked, this, [this, pluginId, toggleBtn]() {
+            auto& pm = plugin::PluginManager::GetInstance();
+            const auto& loaded = pm.GetLoadedPlugins();
+            auto it = loaded.find(pluginId);
+            if (it != loaded.end()) {
+                if (it->second.enabled) {
+                    pm.DisablePlugin(pluginId);
+                    toggleBtn->setText(tr("Enable Plugin"));
+                } else {
+                    pm.EnablePlugin(pluginId);
+                    toggleBtn->setText(tr("Disable Plugin"));
+                }
+            }
+        });
+
+        configWidget = placeholder;
     }
     
-    // Wrap the config widget in a scroll area to prevent overlap with bottom panel
-    auto* scrollArea = new QScrollArea(m_pluginConfigTabs);
-    scrollArea->setWidget(configWidget);
-    scrollArea->setWidgetResizable(true);  // Allow widget to resize with available space
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setFrameShape(QFrame::NoFrame);  // Remove frame border for cleaner look
-    
+    // Wrap the config widget inside a host-owned container and then a scroll area
     auto metadata = plugin->GetMetadata();
     QString tabName = QString::fromStdString(metadata.name.empty() ? pluginId : metadata.name);
-    int tabIndex = m_pluginConfigTabs->addTab(scrollArea, tabName);
-    m_pluginConfigTabIndices[pluginId] = tabIndex;
-    
-    // Show the dock when first config tab is added
-    if (m_pluginConfigDock && m_pluginConfigTabs->count() == 1) {
-        m_pluginConfigDock->setFloating(false);  // Ensure it's not floating
-        m_pluginConfigDock->show();
-        m_pluginConfigDock->raise();  // Bring to front if tabified
+
+    if (addedToLeft && m_pluginLeftTabs) {
+        // Create host container parented to plugin left tabs, then place in scroll area
+        QWidget* hostContainer = CreateHostContainerForPluginWidget(configWidget, m_pluginLeftTabs);
+        auto* leftScroll = new QScrollArea(m_pluginLeftTabs);
+        leftScroll->setWidget(hostContainer);
+        leftScroll->setWidgetResizable(true);
+        leftScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        leftScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        leftScroll->setFrameShape(QFrame::NoFrame);
+
+        int tabIndex = m_pluginLeftTabs->addTab(leftScroll, tabName);
+        m_pluginLeftTabIndices[pluginId] = tabIndex;
+        // Ensure left dock is visible
+        if (m_pluginLeftDock) {
+            m_pluginLeftDock->setFloating(false);
+            addDockWidget(Qt::LeftDockWidgetArea, m_pluginLeftDock);
+            m_pluginLeftDock->show();
+            if (m_filtersDock) tabifyDockWidget(m_filtersDock, m_pluginLeftDock);
+        }
+        util::Logger::Info("[MainWindow] Added plugin left-panel config tab at index {}: {}", tabIndex, pluginId);
+    } else {
+        // Default: add to plugin config dock (wrap host container in scroll area)
+        QWidget* hostContainer = CreateHostContainerForPluginWidget(configWidget, m_pluginLeftTabs);
+        auto* scrollArea = new QScrollArea(m_pluginLeftTabs);
+        scrollArea->setWidget(hostContainer);
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        scrollArea->setFrameShape(QFrame::NoFrame);
+
+        int tabIndex = m_pluginLeftTabs->addTab(scrollArea, tabName);
+        m_pluginLeftTabIndices[pluginId] = tabIndex;
+
+        // Show the dock when first config tab is added
+        if (m_pluginLeftDock && m_pluginLeftTabs->count() == 1) {
+            m_pluginLeftDock->setFloating(false);
+            m_pluginLeftDock->show();
+            m_pluginLeftDock->raise();
+        }
+
+        util::Logger::Info("[MainWindow] Created plugin left/config tab: {} at index {}", tabName.toStdString(), tabIndex);
     }
-    
-    util::Logger::Info("[MainWindow] Created plugin config tab: {} at index {}", tabName.toStdString(), tabIndex);
 }
 
-void MainWindow::removePluginConfigTab(const std::string& pluginId) {
-    util::Logger::Info("[MainWindow] Removing config tab for plugin: {}", pluginId);
-    
-    auto it = m_pluginConfigTabIndices.find(pluginId);
-    if (it != m_pluginConfigTabIndices.end()) {
-        int tabIndex = it->second;
-        
-        // Remove the tab
-        if (tabIndex >= 0 && tabIndex < m_pluginConfigTabs->count()) {
-            QWidget* widget = m_pluginConfigTabs->widget(tabIndex);
-            m_pluginConfigTabs->removeTab(tabIndex);
-            if (widget) {
-                widget->deleteLater();
-            }
+void MainWindow::removePluginLeftTab(const std::string& pluginId) {
+    util::Logger::Info("[MainWindow] Removing left/config tab for plugin: {}", pluginId);
+
+    // Try removing from left filter tabs first
+    auto fit = m_pluginFilterTabIndices.find(pluginId);
+    if (fit != m_pluginFilterTabIndices.end()) {
+        int tabIndex = fit->second;
+        if (tabIndex >= 0 && m_filterTabs && tabIndex < m_filterTabs->count()) {
+            QWidget* widget = m_filterTabs->widget(tabIndex);
+            m_filterTabs->removeTab(tabIndex);
+            if (widget) widget->deleteLater();
+            util::Logger::Info("[MainWindow] Removed plugin left-panel at index {}", tabIndex);
+        }
+        m_pluginFilterTabIndices.erase(fit);
+        for (auto& [id, idx] : m_pluginFilterTabIndices) {
+            if (idx > tabIndex) idx--;
+        }
+    }
+
+    // Also remove from plugin config tabs (fallback)
+    auto cit = m_pluginLeftTabIndices.find(pluginId);
+    if (cit != m_pluginLeftTabIndices.end()) {
+        int tabIndex = cit->second;
+        if (tabIndex >= 0 && m_pluginLeftTabs && tabIndex < m_pluginLeftTabs->count()) {
+            QWidget* widget = m_pluginLeftTabs->widget(tabIndex);
+            m_pluginLeftTabs->removeTab(tabIndex);
+            if (widget) widget->deleteLater();
             util::Logger::Info("[MainWindow] Removed plugin config tab at index {}", tabIndex);
         }
-        
-        // Hide dock if no more config tabs
-        if (m_pluginConfigDock && m_pluginConfigTabs->count() == 0) {
-            m_pluginConfigDock->hide();
+        m_pluginLeftTabIndices.erase(cit);
+        if (m_pluginLeftDock && m_pluginLeftTabs->count() == 0) {
+            m_pluginLeftDock->hide();
         }
-        
-        // Update indices for tabs that came after this one
-        m_pluginConfigTabIndices.erase(it);
-        for (auto& [id, idx] : m_pluginConfigTabIndices) {
-            if (idx > tabIndex) {
-                idx--;
-            }
+        for (auto& [id, idx] : m_pluginLeftTabIndices) {
+            if (idx > tabIndex) idx--;
         }
     }
 }
@@ -1411,10 +1446,10 @@ void MainWindow::reloadPlugins() {
     util::Logger::Info("[MainWindow] Reloading plugins...");
     
     // Clear AI-specific UI to let provider refresh cleanly
-    RemoveAITab();
-    RemoveAIConfigWidget();
-    RemoveAIChatWidget();
-    RemoveAIPluginPanel();
+    RemoveMainPanel();
+    RemoveLeftPanel();
+    RemoveBottomPanel();
+    RemoveRightPanel();
 
     // Clear plugin tab tracking
     m_pluginTabIndices.clear();

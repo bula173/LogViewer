@@ -176,7 +176,6 @@ void Config::LoadConfig()
         GetColorConfig(j);
         GetLoggingConfig(j);
         GetFilterConfig(j);
-        GetAIConfig(j);
         ParseXmlConfig(j);
         
         // Load config version if present
@@ -455,86 +454,6 @@ void Config::GetFilterConfig(const json& j)
     }
 }
 
-void Config::GetAIConfig(const json& j)
-{
-    if (j.contains("aiConfig"))
-    {
-        const auto& aiConfig = j["aiConfig"];
-        if (aiConfig.contains("provider"))
-        {
-            aiProvider = aiConfig["provider"].get<std::string>();
-            util::Logger::Info("AI provider set to: {}", aiProvider);
-        }
-        if (aiConfig.contains("pluginId") && aiConfig["pluginId"].is_string())
-        {
-            aiPluginId = aiConfig["pluginId"].get<std::string>();
-            util::Logger::Info("AI plugin provider set to: {}", aiPluginId);
-        }
-        // Note: Plugin-specific settings are now stored in each plugin's own config file
-        // Load provider-specific API keys (backward compatibility with old "apiKey" field)
-        if (aiConfig.contains("apiKey"))
-        {
-            const std::string storedKey = aiConfig["apiKey"].get<std::string>();
-            // Decrypt old generic key and migrate based on provider
-            const std::string decryptedKey = util::KeyEncryption::Decrypt(storedKey);
-            if (aiProvider == "openai") openaiApiKey = decryptedKey;
-            else if (aiProvider == "anthropic") anthropicApiKey = decryptedKey;
-            else if (aiProvider == "google") googleApiKey = decryptedKey;
-            else if (aiProvider == "xai") xaiApiKey = decryptedKey;
-            util::Logger::Info("Migrated legacy API key for provider: {}", aiProvider);
-        }
-        
-        // Load new provider-specific keys
-        if (aiConfig.contains("openaiApiKey"))
-        {
-            const std::string storedKey = aiConfig["openaiApiKey"].get<std::string>();
-            openaiApiKey = util::KeyEncryption::Decrypt(storedKey);
-            util::Logger::Info("OpenAI API key loaded (encrypted: {})", 
-                             util::KeyEncryption::IsEncrypted(storedKey));
-        }
-        if (aiConfig.contains("anthropicApiKey"))
-        {
-            const std::string storedKey = aiConfig["anthropicApiKey"].get<std::string>();
-            anthropicApiKey = util::KeyEncryption::Decrypt(storedKey);
-            util::Logger::Info("Anthropic API key loaded (encrypted: {})", 
-                             util::KeyEncryption::IsEncrypted(storedKey));
-        }
-        if (aiConfig.contains("googleApiKey"))
-        {
-            const std::string storedKey = aiConfig["googleApiKey"].get<std::string>();
-            googleApiKey = util::KeyEncryption::Decrypt(storedKey);
-            util::Logger::Info("Google API key loaded (encrypted: {})", 
-                             util::KeyEncryption::IsEncrypted(storedKey));
-        }
-        if (aiConfig.contains("xaiApiKey"))
-        {
-            const std::string storedKey = aiConfig["xaiApiKey"].get<std::string>();
-            xaiApiKey = util::KeyEncryption::Decrypt(storedKey);
-            util::Logger::Info("xAI API key loaded (encrypted: {})", 
-                             util::KeyEncryption::IsEncrypted(storedKey));
-        }
-        if (aiConfig.contains("baseUrl"))
-        {
-            ollamaBaseUrl = aiConfig["baseUrl"].get<std::string>();
-            util::Logger::Info("AI base URL set to: {}", ollamaBaseUrl);
-        }
-        if (aiConfig.contains("defaultModel"))
-        {
-            ollamaDefaultModel = aiConfig["defaultModel"].get<std::string>();
-            util::Logger::Info("AI default model set to: {}", ollamaDefaultModel);
-        }
-        if (aiConfig.contains("timeoutSeconds"))
-        {
-            aiTimeoutSeconds = aiConfig["timeoutSeconds"].get<int>();
-            util::Logger::Info("AI timeout set to: {} seconds", aiTimeoutSeconds);
-        }
-    }
-    else
-    {
-        util::Logger::Info("No AI config found, using defaults.");
-    }
-}
-
 std::filesystem::path Config::GetDefaultAppPath()
 {
     std::filesystem::path configPath;
@@ -679,20 +598,6 @@ void Config::GetPrintConfig() const {
         configFile >> j;
         util::Logger::Info("Loaded config from: {}", j.dump());
     }
-}
-
-std::string Config::GetApiKeyForProvider(const std::string& provider) const
-{
-    if (provider == "openai")
-        return openaiApiKey;
-    else if (provider == "anthropic")
-        return anthropicApiKey;
-    else if (provider == "google")
-        return googleApiKey;
-    else if (provider == "xai")
-        return xaiApiKey;
-    else
-        return ""; // Local providers don't need API keys
 }
 
 const FieldTranslator& Config::GetFieldTranslator() const

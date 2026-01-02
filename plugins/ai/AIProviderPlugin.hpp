@@ -38,6 +38,7 @@ public:
     QWidget* CreateTab(QWidget* parent);
     QWidget* CreateBottomPanel(QWidget* parent, ai::IAIService* service, void* events);
     QWidget* GetConfigurationUI();
+    QWidget* GetConfigurationUI(QWidget* parent);
 
     // IAIPlugin-like methods exposed for host use via C ABI
     std::shared_ptr<ai::IAIService> CreateService(const nlohmann::json& settings);

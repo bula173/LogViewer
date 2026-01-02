@@ -30,6 +30,10 @@ AIChatPanel::AIChatPanel(std::shared_ptr<ai::AIServiceWrapper> aiService,
     , m_aiService(aiService)
 {
     BuildUi();
+    // Log parent pointer and visibility for debugging across C-ABI boundary
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "AIChatPanel constructed: parent={:p} visible={}", static_cast<const void*>(parent), this->isVisible());
+    // Ensure panel is visible when added to host tab widget
+    this->setVisible(true);
 }
 
 void AIChatPanel::BuildUi()

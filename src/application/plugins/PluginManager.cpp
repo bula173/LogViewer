@@ -160,27 +160,27 @@ static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
     auto probe_sym = [&](const char* name)->void* { return dlsym(libHandle, name); };
 #endif
 
-    info.pluginCreateAI = probe_sym("Plugin_CreateAIService");
-    info.pluginDestroyAI = probe_sym("Plugin_DestroyAIService");
-    info.pluginSetAIEvents = probe_sym("Plugin_SetAIEventsContainer");
-    info.pluginOnAIEventsUpdated = probe_sym("Plugin_OnAIEventsUpdated");
+    // Probe for generic panel creation exports
+    info.pluginCreateLeftPanel = probe_sym("Plugin_CreateLeftPanel");
+    info.pluginCreateRightPanel = probe_sym("Plugin_CreateRightPanel");
+    info.pluginCreateBottomPanel = probe_sym("Plugin_CreateBottomPanel");
+    info.pluginCreateMainPanel = probe_sym("Plugin_CreateMainPanel");
+    info.pluginCreateAIService = probe_sym("Plugin_CreateAIService");
+    info.pluginDestroyAIService = probe_sym("Plugin_DestroyAIService");
+    info.pluginSetAIEventsContainer = probe_sym("Plugin_SetAIEventsContainer");
+    info.pluginDestroyPanelWidget = probe_sym("Plugin_DestroyPanelWidget");
 
-    info.pluginCreateFieldConversion = probe_sym("Plugin_CreateFieldConversionService");
-    info.pluginDestroyFieldConversion = probe_sym("Plugin_DestroyFieldConversionService");
-    info.pluginSetFieldConversionEvents = probe_sym("Plugin_SetFieldConversionEventsContainer");
-    info.pluginOnFieldConversionUpdated = probe_sym("Plugin_OnFieldConversionUpdated");
+    util::Logger::Debug("PluginManager: Probed panel exports for {}: left={} right={} bottom={} main={} destroy={}",
+        info.pluginId,
+        info.pluginCreateLeftPanel != nullptr,
+        info.pluginCreateRightPanel != nullptr,
+        info.pluginCreateBottomPanel != nullptr,
+        info.pluginCreateMainPanel != nullptr,
+        info.pluginDestroyPanelWidget != nullptr);
 
-    info.pluginCreateAnalysis = probe_sym("Plugin_CreateAnalysisService");
-    info.pluginDestroyAnalysis = probe_sym("Plugin_DestroyAnalysisService");
-    info.pluginSetAnalysisEvents = probe_sym("Plugin_SetAnalysisEventsContainer");
-    info.pluginOnAnalysisUpdated = probe_sym("Plugin_OnAnalysisUpdated");
-
-    util::Logger::Debug("PluginManager: Probed AI exports for {}: create={} destroy={} setEvents={} onUpdated={}",
-        info.pluginId, info.pluginCreateAI != nullptr, info.pluginDestroyAI != nullptr, info.pluginSetAIEvents != nullptr, info.pluginOnAIEventsUpdated != nullptr);
-    util::Logger::Debug("PluginManager: Probed FieldConversion exports for {}: create={} destroy={} setEvents={} onUpdated={}",
-        info.pluginId, info.pluginCreateFieldConversion != nullptr, info.pluginDestroyFieldConversion != nullptr, info.pluginSetFieldConversionEvents != nullptr, info.pluginOnFieldConversionUpdated != nullptr);
-    util::Logger::Debug("PluginManager: Probed Analysis exports for {}: create={} destroy={} setEvents={} onUpdated={}",
-        info.pluginId, info.pluginCreateAnalysis != nullptr, info.pluginDestroyAnalysis != nullptr, info.pluginSetAnalysisEvents != nullptr, info.pluginOnAnalysisUpdated != nullptr);
+    util::Logger::Debug("PluginManager: Probed events setter for {}: setEvents={}", info.pluginId, info.pluginSetAIEventsContainer != nullptr);
+    util::Logger::Debug("PluginManager: Probed AI service exports for {}: create={} destroy={}",
+        info.pluginId, info.pluginCreateAIService != nullptr, info.pluginDestroyAIService != nullptr);
 }
 
 
@@ -302,11 +302,15 @@ PluginManager::~PluginManager()
     {
         if (info.instance)
         {
+            // Ensure the plugin instance is destroyed while the library is
+            // still loaded so any C-ABI destructor callbacks remain valid.
             info.instance->Shutdown();
+            info.instance.reset();
         }
         if (info.libraryHandle)
         {
             UnloadLibrary(info.libraryHandle);
+            info.libraryHandle = nullptr;
         }
     }
 }
@@ -445,7 +449,8 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     
     // Load the plugin library, passing expected API version from manifest
     void* libHandle = nullptr;
-    auto result = LoadPluginLibrary(actualPluginPath, manifestApiVersion, &libHandle);
+    void* pluginOpaque = nullptr;
+    auto result = LoadPluginLibrary(actualPluginPath, manifestApiVersion, &libHandle, &pluginOpaque);
     if (result.isErr())
     {
         return util::Result<std::string, error::Error>::Err(result.error());
@@ -487,6 +492,7 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     info.path = actualPluginPath;
     info.instance = std::move(plugin);
     info.libraryHandle = libHandle;
+    info.pluginOpaqueHandle = pluginOpaque;
     info.enabled = false;  // Plugins start disabled, must be explicitly enabled
     info.autoLoad = false; // Default to not auto-load
 
@@ -523,7 +529,8 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
 util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLibrary(
     const std::filesystem::path& path,
     const std::string& expectedApiVersion,
-    void** outLibraryHandle)
+    void** outLibraryHandle,
+    void** outPluginOpaqueHandle)
 {
 #ifdef _WIN32
     // Load the plugin using LoadLibraryEx with altered search path so the
@@ -626,6 +633,16 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                 error::Error(error::ErrorCode::RuntimeError, "C-ABI Plugin_Create returned null"));
         }
 
+        // Set logger callback immediately after plugin creation
+        using Plugin_SetLoggerCallback_Fn = void (*)(void*, PluginLogFn);
+        auto setLoggerSym = reinterpret_cast<Plugin_SetLoggerCallback_Fn>(GetProcAddress(handle, "Plugin_SetLoggerCallback"));
+        if (setLoggerSym) {
+            setLoggerSym(pluginHandle, &AppPluginLog);
+            util::Logger::Info("PluginManager: Set logger callback for C-ABI plugin");
+        } else {
+            util::Logger::Warn("PluginManager: Plugin_SetLoggerCallback not found - plugin logs may not work");
+        }
+
         // Adapter class implementing IPlugin by delegating to C ABI functions
         class CAbiPluginAdapter : public IPlugin {
         public:
@@ -647,7 +664,9 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                         meta_.author = j.value("author", "");
                         meta_.description = j.value("description", "");
                         meta_.website = j.value("website", "");
-                        meta_.type = PluginType::Custom;
+                        // Preserve plugin type from metadata if present
+                        int t = j.value("type", static_cast<int>(PluginType::Custom));
+                        meta_.type = static_cast<PluginType>(t);
                     }
                 } catch (...) {}
             }
@@ -675,6 +694,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
         // Create adapter and return as unique_ptr<IPlugin>
         auto adapter = std::make_unique<CAbiPluginAdapter>(pluginHandle, c_destroy, c_getMeta, c_initialize, c_shutdown, c_getLastErr);
         if (outLibraryHandle) *outLibraryHandle = handle;
+        if (outPluginOpaqueHandle) *outPluginOpaqueHandle = pluginHandle;
         util::Logger::Info("PluginManager: Created C-ABI plugin adapter");
         return util::Result<std::unique_ptr<IPlugin>, error::Error>::Ok(std::move(adapter));
     }
@@ -762,6 +782,16 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                 error::Error(error::ErrorCode::RuntimeError, "C-ABI Plugin_Create returned null"));
         }
 
+        // Set logger callback immediately after plugin creation
+        using Plugin_SetLoggerCallback_Fn = void (*)(void*, PluginLogFn);
+        auto setLoggerSym = reinterpret_cast<Plugin_SetLoggerCallback_Fn>(dlsym(handle, "Plugin_SetLoggerCallback"));
+        if (setLoggerSym) {
+            setLoggerSym(pluginHandle, &AppPluginLog);
+            util::Logger::Info("PluginManager: Set logger callback for C-ABI plugin");
+        } else {
+            util::Logger::Warn("PluginManager: Plugin_SetLoggerCallback not found - plugin logs may not work");
+        }
+
         class CAbiPluginAdapter : public IPlugin {
         public:
             CAbiPluginAdapter(void* h, Plugin_Destroy_Fn destroyFn, Plugin_GetMetadataJson_Fn metaFn,
@@ -781,7 +811,9 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                         meta_.author = j.value("author", "");
                         meta_.description = j.value("description", "");
                         meta_.website = j.value("website", "");
-                        meta_.type = PluginType::Custom;
+                        // Preserve plugin type from metadata if present
+                        int t = j.value("type", static_cast<int>(PluginType::Custom));
+                        meta_.type = static_cast<PluginType>(t);
                     }
                 } catch (...) {}
             }
@@ -808,6 +840,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
 
         auto adapter = std::make_unique<CAbiPluginAdapter>(pluginHandle, c_destroy, c_getMeta, c_initialize, c_shutdown, c_getLastErr);
         if (outLibraryHandle) *outLibraryHandle = handle;
+        if (outPluginOpaqueHandle) *outPluginOpaqueHandle = pluginHandle;
         util::Logger::Info("PluginManager: Created C-ABI plugin adapter (unix)");
         return util::Result<std::unique_ptr<IPlugin>, error::Error>::Ok(std::move(adapter));
     }
@@ -845,13 +878,26 @@ util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& 
     util::Logger::Info("PluginManager: Unloading plugin: {}", pluginId);
 
     auto& info = it->second;
+    // Destroy any plugin-created AI service before shutdown
+    if (info.pluginDestroyAIService && info.pluginServiceHandle) {
+        using DestroyServiceFn = void(*)(void*);
+        auto fn = reinterpret_cast<DestroyServiceFn>(info.pluginDestroyAIService);
+        try { fn(info.pluginServiceHandle); } catch(...) {}
+        info.pluginServiceHandle = nullptr;
+        util::Logger::Info("PluginManager: Destroyed plugin AI service for {} during unload", pluginId);
+    }
     if (info.instance)
     {
+        // Shutdown and destroy the plugin instance before unloading the
+        // library so any C-ABI destroy callbacks remain valid while
+        // being invoked from the adapter destructor.
         info.instance->Shutdown();
+        info.instance.reset();
     }
     if (info.libraryHandle)
     {
         UnloadLibrary(info.libraryHandle);
+        info.libraryHandle = nullptr;
     }
 
     // Notify observers before unloading
@@ -1092,15 +1138,29 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
         // Plugin is loaded but disabled - just re-enable it
         info.enabled = true;
 
-        // If this is an AI provider plugin and it exposes a SetAIEvents symbol,
-        // call it to provide the application events container opaque handle.
-        if (info.instance && info.instance->GetMetadata().type == PluginType::AIProvider &&
-            info.pluginSetAIEvents && m_eventsContainerOpaque)
-        {
-            using SetFn = void(*)(void*, void*);
-            auto fn = reinterpret_cast<SetFn>(info.pluginSetAIEvents);
-            try { fn(static_cast<void*>(info.instance.get()), m_eventsContainerOpaque); }
-            catch (...) { util::Logger::Warn("PluginManager: Exception calling Plugin_SetAIEventsContainer for {}", pluginId); }
+        // Events access is provided via PluginEvents_Register; no AI-specific
+        // SetAIEvents call is performed here. Plugins should use PluginEvents_* helpers.
+        // If the plugin exposes a C-ABI setter for the opaque events container,
+        // call it now so SDK-first plugins can access events via the provided
+        // opaque pointer.
+        if (info.pluginOpaqueHandle && info.pluginSetAIEventsContainer && m_eventsContainerOpaque) {
+            using SetEventsFn = void(*)(void*, void*);
+            auto fn = reinterpret_cast<SetEventsFn>(info.pluginSetAIEventsContainer);
+            try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque); } catch(...) {}
+        }
+
+        // If the plugin provides an AI service factory, create a service instance
+        // so plugin panels relying on an internal service have it available.
+        if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {
+            using CreateServiceFn = void*(*)(void*, const char*);
+            auto fn = reinterpret_cast<CreateServiceFn>(info.pluginCreateAIService);
+            try {
+                void* svc = fn(info.pluginOpaqueHandle, nullptr);
+                if (svc) {
+                    info.pluginServiceHandle = svc;
+                    util::Logger::Info("PluginManager: Created plugin AI service for {}", pluginId);
+                }
+            } catch(...) {}
         }
         
         // Notify observers about plugin enable
@@ -1128,15 +1188,26 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
     auto& info = m_plugins[pluginId];
     info.enabled = true;
 
-    // If this is an AI provider plugin and it exposes a SetAIEvents symbol,
-    // call it to provide the application events container opaque handle.
-    if (info.instance && info.instance->GetMetadata().type == PluginType::AIProvider &&
-        info.pluginSetAIEvents && m_eventsContainerOpaque)
-    {
-        using SetFn = void(*)(void*, void*);
-        auto fn = reinterpret_cast<SetFn>(info.pluginSetAIEvents);
-        try { fn(static_cast<void*>(info.instance.get()), m_eventsContainerOpaque); }
-        catch (...) { util::Logger::Warn("PluginManager: Exception calling Plugin_SetAIEventsContainer for {}", pluginId); }
+    // Events access is provided via PluginEvents_Register; plugins should use
+    // PluginEvents_GetSize / PluginEvents_GetEventJson helpers to read events.
+    // If plugin exposes C-ABI setter for events, call it so plugin receives
+    // the opaque events container from the application.
+    if (info.pluginOpaqueHandle && info.pluginSetAIEventsContainer && m_eventsContainerOpaque) {
+        using SetEventsFn = void(*)(void*, void*);
+        auto fn = reinterpret_cast<SetEventsFn>(info.pluginSetAIEventsContainer);
+        try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque); } catch(...) {}
+    }
+    // If the plugin provides an AI service factory, create a service instance
+    if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {
+        using CreateServiceFn = void*(*)(void*, const char*);
+        auto fn = reinterpret_cast<CreateServiceFn>(info.pluginCreateAIService);
+        try {
+            void* svc = fn(info.pluginOpaqueHandle, nullptr);
+            if (svc) {
+                info.pluginServiceHandle = svc;
+                util::Logger::Info("PluginManager: Created plugin AI service for {}", pluginId);
+            }
+        } catch(...) {}
     }
     
     // Notify observers about plugin enable
@@ -1169,6 +1240,14 @@ util::Result<bool, error::Error> PluginManager::DisablePlugin(const std::string&
     
     // Notify observers about plugin disable
     NotifyObservers(PluginEvent::Disabled, pluginId, it->second.instance.get());
+    // If plugin provided an AI service instance, destroy it when disabled
+    if (it->second.pluginDestroyAIService && it->second.pluginServiceHandle) {
+        using DestroyServiceFn = void(*)(void*);
+        auto fn = reinterpret_cast<DestroyServiceFn>(it->second.pluginDestroyAIService);
+        try { fn(it->second.pluginServiceHandle); } catch(...) {}
+        it->second.pluginServiceHandle = nullptr;
+        util::Logger::Info("PluginManager: Destroyed plugin AI service for {}", pluginId);
+    }
     
     // NOTE: We keep the plugin loaded in memory, just mark it as disabled
     // This allows quick re-enabling without reloading from disk
