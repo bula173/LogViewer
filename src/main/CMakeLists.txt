@@ -32,6 +32,13 @@ endif()
 
 if (APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+
+    # Avoid embedding Homebrew Qt paths into the installed bundle.
+    # We want the app to resolve frameworks from inside the bundle.
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        INSTALL_RPATH "@executable_path/../Frameworks"
+        INSTALL_RPATH_USE_LINK_PATH FALSE
+    )
 endif()
 
 target_sources(${PROJECT_NAME}
@@ -57,8 +64,9 @@ target_link_libraries(${PROJECT_NAME}
 
 if (APPLE)
     install(
-        TARGETS ${PROJECT_NAME}
-        BUNDLE DESTINATION .
+        DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app
+        DESTINATION .
+        USE_SOURCE_PERMISSIONS
         COMPONENT application
     )
 else()
@@ -95,6 +103,9 @@ if (APPLE)
             POST_BUILD
             COMMAND ${MACDEPLOYQT_EXECUTABLE}
                     $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    ${CMAKE_SOURCE_DIR}/etc/qt.conf
+                    $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Resources/qt.conf
             COMMENT "Running macdeployqt"
         )
     endif()
