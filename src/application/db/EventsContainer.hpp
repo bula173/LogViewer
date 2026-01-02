@@ -140,10 +140,17 @@ class EventsContainer : public mvc::IModel
     void Clear() override;
     
     /**
-     * @brief Merges events from another container, sorted by timestamp.
-     * 
-     * Events are merged in timestamp order. If a timestamp field is not found,
-     * events are appended at the end in their original order.
+      * @brief Merges events from another container by timestamp (stable).
+      *
+      * Performs a stable merge of two *already ordered* event sequences using the
+      * provided timestamp field.
+      *
+      * Key property: events with the same timestamp keep their original order
+      * within each source container (no reordering of existing events).
+      *
+      * Events missing the timestamp field are treated as having an empty
+      * timestamp and are appended after all events with valid timestamps (while
+      * still preserving their internal order).
      * 
      * @param other Container with events to merge
      * @param existingAlias Identifier for events already in this container

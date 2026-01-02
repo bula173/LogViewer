@@ -190,8 +190,10 @@ if (UNIX AND NOT APPLE)
             POST_BUILD
             COMMAND ${LINUXDEPLOYQT_EXECUTABLE}
                     $<TARGET_FILE:${PROJECT_NAME}>
-                    --deploy-deps-only
+                    -deploy-deps-only
             COMMENT "Running linuxdeployqt"
         )
     endif()
 endif()
+
+
