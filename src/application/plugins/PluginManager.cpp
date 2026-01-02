@@ -168,6 +168,7 @@ static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
     info.pluginCreateAIService = probe_sym("Plugin_CreateAIService");
     info.pluginDestroyAIService = probe_sym("Plugin_DestroyAIService");
     info.pluginSetAIEventsContainer = probe_sym("Plugin_SetAIEventsContainer");
+    info.pluginSetEventsCallbacks = probe_sym("Plugin_SetEventsCallbacks");
     info.pluginDestroyPanelWidget = probe_sym("Plugin_DestroyPanelWidget");
 
     util::Logger::Debug("PluginManager: Probed panel exports for {}: left={} right={} bottom={} main={} destroy={}",
@@ -178,7 +179,10 @@ static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
         info.pluginCreateMainPanel != nullptr,
         info.pluginDestroyPanelWidget != nullptr);
 
-    util::Logger::Debug("PluginManager: Probed events setter for {}: setEvents={}", info.pluginId, info.pluginSetAIEventsContainer != nullptr);
+    util::Logger::Debug("PluginManager: Probed events setter for {}: setEvents={} setCallbacks={}",
+        info.pluginId,
+        info.pluginSetAIEventsContainer != nullptr,
+        info.pluginSetEventsCallbacks != nullptr);
     util::Logger::Debug("PluginManager: Probed AI service exports for {}: create={} destroy={}",
         info.pluginId, info.pluginCreateAIService != nullptr, info.pluginDestroyAIService != nullptr);
 }
@@ -1149,6 +1153,12 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
             try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque); } catch(...) {}
         }
 
+        if (info.pluginOpaqueHandle && info.pluginSetEventsCallbacks && m_eventsContainerOpaque && m_eventsGetSizeFn && m_eventsGetEventJsonFn) {
+            using SetCallbacksFn = void(*)(void*, void*, EventsContainer_GetSize_Fn, EventsContainer_GetEventJson_Fn);
+            auto fn = reinterpret_cast<SetCallbacksFn>(info.pluginSetEventsCallbacks);
+            try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque, m_eventsGetSizeFn, m_eventsGetEventJsonFn); } catch(...) {}
+        }
+
         // If the plugin provides an AI service factory, create a service instance
         // so plugin panels relying on an internal service have it available.
         if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {
@@ -1196,6 +1206,12 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
         using SetEventsFn = void(*)(void*, void*);
         auto fn = reinterpret_cast<SetEventsFn>(info.pluginSetAIEventsContainer);
         try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque); } catch(...) {}
+    }
+
+    if (info.pluginOpaqueHandle && info.pluginSetEventsCallbacks && m_eventsContainerOpaque && m_eventsGetSizeFn && m_eventsGetEventJsonFn) {
+        using SetCallbacksFn = void(*)(void*, void*, EventsContainer_GetSize_Fn, EventsContainer_GetEventJson_Fn);
+        auto fn = reinterpret_cast<SetCallbacksFn>(info.pluginSetEventsCallbacks);
+        try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque, m_eventsGetSizeFn, m_eventsGetEventJsonFn); } catch(...) {}
     }
     // If the plugin provides an AI service factory, create a service instance
     if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {

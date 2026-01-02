@@ -905,6 +905,10 @@ void MainWindow::setupPluginManager() {
         // Also inform PluginManager about the opaque events pointer so it can pass
         // the same opaque handle to AI provider plugins via C API.
         plugin::PluginManager::GetInstance().SetEventsContainerOpaque(reinterpret_cast<void*>(m_events));
+        // Also provide the callback function pointers so PluginManager can pass
+        // them into plugins (required for cross-DLL event access).
+        plugin::PluginManager::GetInstance().SetEventsCallbacks(&PluginEvents_GetSizeBridge,
+                                                                &PluginEvents_GetEventJsonBridge);
     } else {
         util::Logger::Warn("[MainWindow] No EventsContainer available to register with plugins");
     }

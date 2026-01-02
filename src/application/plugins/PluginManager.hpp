@@ -12,6 +12,7 @@
 #include "IPluginObserver.hpp"
 #include "Result.hpp"
 #include "Error.hpp"
+#include "PluginEventsC.h"
 #include <filesystem>
 #include <map>
 #include <memory>
@@ -48,6 +49,8 @@ struct PluginLoadInfo
     void* pluginServiceHandle = nullptr;
     // Optional plugin function to receive opaque events container from host
     void* pluginSetAIEventsContainer = nullptr;
+    // Optional plugin function to receive event access callbacks from host
+    void* pluginSetEventsCallbacks = nullptr;
 };
 
 /**
@@ -243,6 +246,8 @@ private:
     std::vector<IPluginObserver*> m_observers;
     // Opaque events container pointer provided by application (for C API)
     void* m_eventsContainerOpaque = nullptr;
+    EventsContainer_GetSize_Fn m_eventsGetSizeFn = nullptr;
+    EventsContainer_GetEventJson_Fn m_eventsGetEventJsonFn = nullptr;
     
     // Cache for plugin configuration loaded before plugins are instantiated
     struct PluginConfigCache {
@@ -255,6 +260,11 @@ private:
     // Setter for application to provide opaque events container handle
 public:
     void SetEventsContainerOpaque(void* handle) { m_eventsContainerOpaque = handle; }
+    void SetEventsCallbacks(EventsContainer_GetSize_Fn sizeFn, EventsContainer_GetEventJson_Fn getEventFn)
+    {
+        m_eventsGetSizeFn = sizeFn;
+        m_eventsGetEventJsonFn = getEventFn;
+    }
 };
 
 } // namespace plugin

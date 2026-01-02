@@ -400,6 +400,25 @@ EXPORT_PLUGIN_SYMBOL void Plugin_SetAIEventsContainer(PluginHandle pluginHandle,
     plugin->SetEventsContainerRaw(eventsContainerOpaque);
 }
 
+// Provide EventsContainer access callbacks to this plugin DLL.
+// This is required because PluginEventsC.h stores its callback state per-binary.
+EXPORT_PLUGIN_SYMBOL void Plugin_SetEventsCallbacks(
+    PluginHandle pluginHandle,
+    void* eventsContainerOpaque,
+    EventsContainer_GetSize_Fn sizeFn,
+    EventsContainer_GetEventJson_Fn getEventFn)
+{
+    // Register callbacks for LogAnalyzer (and any other TU) via shared inline vars.
+    PluginEvents_Register(reinterpret_cast<EventsContainerHandle>(eventsContainerOpaque), sizeFn, getEventFn);
+
+    // Also keep the opaque pointer on the plugin instance (used by some UI paths).
+    if (pluginHandle)
+    {
+        auto* plugin = reinterpret_cast<plugin::AIProviderPlugin*>(pluginHandle);
+        plugin->SetEventsContainerRaw(eventsContainerOpaque);
+    }
+}
+
 EXPORT_PLUGIN_SYMBOL void Plugin_OnAIEventsUpdated(PluginHandle pluginHandle)
 {
     if (!pluginHandle) return;
