@@ -29,6 +29,30 @@ For detailed plugin documentation, see:
 - `docs/AI_PROVIDER_PLUGIN.md` - AI Provider plugin specifics
 - `docs/PLUGIN_IMPLEMENTATION.md` - Implementation details
 
+## Recent Updates (January 2026)
+
+### Plugin System Improvements
+- **Fixed Plugin Logging**: Implemented callback-based logging mechanism that works across DLL boundaries
+  - Application calls `Plugin_SetLoggerCallback` after plugin creation
+  - Plugin messages now appear in application logs with `[plugin]` prefix
+  - Resolved ODR violation with inline static variables
+  
+- **Configuration Panel Integration**: Fixed plugin configuration UI display
+  - Added `Plugin_CreateLeftPanel` C-ABI export for configuration widgets
+  - Configuration panel now appears as separate tab in left dock alongside "Filters"
+  - Previously panels were incorrectly embedded inside the Filters tab
+  - Proper parent widget management ensures correct UI hierarchy
+
+- **Enhanced Diagnostics**: Added comprehensive logging throughout plugin lifecycle
+  - Plugin creation, service initialization, and panel creation are fully logged
+  - Error messages clearly indicate failure points
+  - Easier debugging of plugin integration issues
+
+For detailed plugin documentation, see:
+- `docs/PLUGIN_SYSTEM.md` - Plugin architecture overview
+- `docs/AI_PROVIDER_PLUGIN.md` - AI Provider plugin specifics
+- `docs/PLUGIN_IMPLEMENTATION.md` - Implementation details
+
 ## Features
 
 ### Core Functionality
@@ -343,6 +367,78 @@ LogViewer/
 ## Framework
 
 The project uses `Qt 6` as the supported UI framework. AI integration and plugin UI extensions are implemented for Qt.
+
+## Installation and Packaging
+
+### Creating Distributable Packages
+
+After building, you can create distributable packages:
+
+**macOS (.dmg):**
+```bash
+# Build release
+cmake --preset macos-release-qt
+cmake --build --preset macos-release-build-qt
+
+# Install to staging
+cmake --install build/macos-release-qt --prefix dist/staging
+
+# Create DMG package
+cd build/macos-release-qt
+cpack --config CPackConfig.cmake
+
+# Package will be in dist/packages/
+```
+
+**Windows (.zip with installer):**
+```bash
+# Build release
+cmake --preset windows-msys-release-qt
+cmake --build --preset windows-msys-release-build-qt
+
+# Install to staging
+cmake --install build/windows-msys-release-qt --prefix dist/staging
+
+# Create package
+cd build/windows-msys-release-qt
+cpack --config CPackConfig.cmake
+
+# Package will be in dist/packages/
+```
+
+**Linux (.tar.gz, .deb):**
+```bash
+# Build release
+cmake --preset linux-release-qt
+cmake --build --preset linux-release-build-qt
+
+# Install to staging
+cmake --install build/linux-release-qt --prefix dist/staging
+
+# Create packages
+cd build/linux-release-qt
+cpack --config CPackConfig.cmake
+
+# Packages will be in dist/packages/
+```
+
+### Directory Structure After Build
+
+```
+build/macos-release-qt/     # Build artifacts
+  ├── bin/                  # Development executables
+  │   └── LogViewer.app/
+  ├── lib/                  # Static libraries
+  └── plugins/              # Plugin .dylib files & .zip packages
+
+dist/
+  ├── staging/              # Installed application (after cmake --install)
+  │   ├── LogViewer.app/
+  │   ├── etc/
+  │   └── plugins/
+  └── packages/             # Final distributable packages
+      └── LogViewer-1.0.0-Darwin.dmg
+```
 
 ## Installation and Packaging
 
