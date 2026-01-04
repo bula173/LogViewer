@@ -124,17 +124,31 @@ set(PACKAGE_ARCHIVE "${PACKAGE_OUTPUT_DIR}/ai_provider.zip")
 file(MAKE_DIRECTORY "${PACKAGE_OUTPUT_DIR}")
 message(STATUS "Package output directory: ${PACKAGE_OUTPUT_DIR}")
 
-# Create the ZIP archive
-add_custom_command(
-    OUTPUT ${PACKAGE_ARCHIVE}
-    DEPENDS ${PLUGIN_NAME} ${PLUGIN_CONFIG}
-    COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PACKAGE_ARCHIVE}" --format=zip
-        $<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json
-        $<TARGET_FILE:${PLUGIN_NAME}>
-        $<TARGET_FILE_DIR:${PLUGIN_NAME}>/lib
-    COMMENT "Creating ZIP archive for ai_provider"
-    VERBATIM
-)
+# Create the ZIP archive (include lib directory on Windows only)
+if(WIN32)
+    add_custom_command(
+        OUTPUT ${PACKAGE_ARCHIVE}
+        DEPENDS ${PLUGIN_NAME} ${PLUGIN_CONFIG}
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PACKAGE_ARCHIVE}" --format=zip
+            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json
+            $<TARGET_FILE:${PLUGIN_NAME}>
+            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/lib
+        COMMENT "Creating ZIP archive for ai_provider (with dependencies)"
+        VERBATIM
+        WORKING_DIRECTORY $<TARGET_FILE_DIR:${PLUGIN_NAME}>
+    )
+else()
+    add_custom_command(
+        OUTPUT ${PACKAGE_ARCHIVE}
+        DEPENDS ${PLUGIN_NAME} ${PLUGIN_CONFIG}
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PACKAGE_ARCHIVE}" --format=zip
+            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json
+            $<TARGET_FILE:${PLUGIN_NAME}>
+        COMMENT "Creating ZIP archive for ai_provider"
+        VERBATIM
+        WORKING_DIRECTORY $<TARGET_FILE_DIR:${PLUGIN_NAME}>
+    )
+endif()
 
 # Custom target to build the ZIP archive
 add_custom_target(create_ai_provider_zip ALL
@@ -168,9 +182,16 @@ add_custom_target(copy_ai_provider_to_main ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/src/main/plugins/ai_provider
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/config.json ${CMAKE_BINARY_DIR}/src/main/plugins/ai_provider/
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ai_provider> ${CMAKE_BINARY_DIR}/src/main/plugins/ai_provider/
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/lib ${CMAKE_BINARY_DIR}/src/main/plugins/ai_provider/lib
     DEPENDS ai_provider ${PLUGIN_CONFIG}
     COMMENT "Copying ai_provider plugin to main plugins directory"
 )
+
+# On Windows, also copy runtime dependencies
+if(WIN32)
+    add_custom_command(TARGET copy_ai_provider_to_main POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/lib ${CMAKE_BINARY_DIR}/src/main/plugins/ai_provider/lib
+        COMMENT "Copying ai_provider dependencies (lib)"
+    )
+endif()
 
 

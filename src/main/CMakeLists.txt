@@ -59,22 +59,24 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # ============================================================
-# Install main executable
+# Install main executable (only in standalone mode, not when used as subproject)
 # ============================================================
 
-if (APPLE)
-    install(
-        DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app
-        DESTINATION .
-        USE_SOURCE_PERMISSIONS
-        COMPONENT application
-    )
-else()
-    install(
-        TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION . 
-        COMPONENT application
-    )
+if(NOT LOGVIEWER_SUBPROJECT)
+    if (APPLE)
+        install(
+            DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app
+            DESTINATION .
+            USE_SOURCE_PERMISSIONS
+            COMPONENT application
+        )
+    else()
+        install(
+            TARGETS ${PROJECT_NAME}
+            RUNTIME DESTINATION . 
+            COMPONENT application
+        )
+    endif()
 endif()
 
 # ============================================================
