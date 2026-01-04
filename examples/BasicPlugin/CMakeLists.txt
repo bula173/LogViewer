@@ -101,20 +101,10 @@ set(PLUGIN_PACKAGE_PATH "${PLUGIN_PACKAGE_DIR}/${PLUGIN_PACKAGE_NAME}")
 file(MAKE_DIRECTORY "${PLUGIN_PACKAGE_DIR}")
 
 # Create the ZIP archive after the plugin is built and dependencies collected
-add_custom_command(
-    TARGET ${PLUGIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PLUGIN_PACKAGE_PATH}"
-        --format=zip
-        "$<TARGET_FILE:${PLUGIN_NAME}>"
-        "${CMAKE_CURRENT_BINARY_DIR}/config.json"
-    COMMENT "Creating plugin archive: ${PLUGIN_PACKAGE_NAME}"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-)
-
-# If dependencies were collected, include them in the archive
 if(WIN32)
+    # On Windows, include collected dependencies in the archive
     add_custom_command(
-        TARGET ${PLUGIN_NAME} POST_BUILD
+        OUTPUT "${PLUGIN_PACKAGE_PATH}"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PLUGIN_PACKAGE_PATH}"
             --format=zip
             "$<TARGET_FILE:${PLUGIN_NAME}>"
@@ -122,17 +112,27 @@ if(WIN32)
             "lib/"
         COMMENT "Creating plugin archive with dependencies: ${PLUGIN_PACKAGE_NAME}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+        DEPENDS ${PLUGIN_NAME} "${CMAKE_CURRENT_BINARY_DIR}/config.json"
+    )
+else()
+    # On other platforms, just the binary and config (no lib/ directory)
+    add_custom_command(
+        OUTPUT "${PLUGIN_PACKAGE_PATH}"
+        COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PLUGIN_PACKAGE_PATH}"
+            --format=zip
+            "$<TARGET_FILE:${PLUGIN_NAME}>"
+            "${CMAKE_CURRENT_BINARY_DIR}/config.json"
+        COMMENT "Creating plugin archive: ${PLUGIN_PACKAGE_NAME}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+        DEPENDS ${PLUGIN_NAME} "${CMAKE_CURRENT_BINARY_DIR}/config.json"
     )
 endif()
 
-# Add custom target to manually create/rebuild the archive
+# Custom target to create/rebuild the archive
 add_custom_target(package_plugin ALL
-    DEPENDS ${PLUGIN_PACKAGE_PATH}
+    DEPENDS "${PLUGIN_PACKAGE_PATH}"
     COMMENT "Plugin package: ${PLUGIN_PACKAGE_PATH}"
 )
-
-# Hook the package target to the plugin build
-add_dependencies(package_plugin ${PLUGIN_NAME})
 
 message(STATUS "BasicExamplePlugin: Configured")
 message(STATUS "  Plugin: ${PLUGIN_NAME}")
