@@ -2,9 +2,8 @@
 
 A modern, cross-platform log viewer with AI-assisted analysis, flexible filtering, and customizable visualization.
 
-**Dual GUI Framework Support:**
-- **Qt 6** (default): Modern, dock-based flexible UI
-- **wxWidgets 3.2+**: Classic native UI with virtual list controls
+**GUI Framework:**
+- **Qt 6 (required)**: Modern, dock-based flexible UI used for all current features including AI integration
 
 ## Recent Updates (January 2026)
 
@@ -38,8 +37,7 @@ For detailed plugin documentation, see:
 - **Advanced Filtering**: Text search, regex, type-based filters with configurable field selection
 - **Customizable Display**: Configurable columns, colors, and movable/resizable panels
 - **Flexible UI**: 
-  - **Qt**: Dock-based layout - move, float, or hide panels as needed
-  - **wxWidgets**: Traditional split-pane layout with virtual list controls
+ - **Flexible UI (Qt)**: Dock-based layout - move, float, or hide panels as needed
 
 ### AI-Assisted Analysis (Qt version)
 - **Multiple AI Providers**: Ollama (local), LM Studio (local), OpenAI, Anthropic Claude, Google Gemini, xAI Grok
@@ -65,17 +63,16 @@ For detailed plugin documentation, see:
 
 ## Architecture
 
-**Dual UI Framework:**
-- **Qt 6**: QMainWindow, QDockWidget, QTableView with Model/View architecture
-- **wxWidgets**: wxFrame, wxDataViewCtrl with virtual list controls
+## Architecture
+
+**UI Framework:**
+- **Qt 6**: QMainWindow, QDockWidget, QTableView with Model/View architecture (current and supported UI)
 
 **Common Core:**
-- **Model**: `db::EventsContainer` - unified data model for both frameworks
+- **Model**: `db::EventsContainer` - unified data model
 - **Parsing**: Modular parser system (XML, JSON support)
-- **AI Integration** (Qt only): Factory pattern with multiple provider implementations
-- **Threading**: 
-  - Qt: QtConcurrent for non-blocking AI requests
-  - wxWidgets: wxThread for background parsing
+- **AI Integration**: Implemented for the Qt UI using a provider factory
+- **Threading**: QtConcurrent used for non-blocking operations
 - **Error Handling**: Structured error types with user-friendly messages
 
 ## Requirements
@@ -87,20 +84,15 @@ For detailed plugin documentation, see:
   - GCC 11+
   - MSVC 2019+
 
-### GUI Framework (Choose One)
+### GUI Framework and Requirements
 
-**For Qt Build (Default):**
-- **Qt 6**: 6.5 or higher
-  - macOS: `brew install qt@6`
-  - Linux: `sudo apt-get install qt6-base-dev`
-  - Windows: Download from qt.io or use vcpkg
-- **CURL**: For AI provider HTTP requests (usually pre-installed on macOS/Linux)
+The project now targets **Qt 6** exclusively. Qt 6 (6.5+) is required to build the full feature set including AI providers and the plugin UI integration.
 
-**For wxWidgets Build:**
-- **wxWidgets**: 3.2 or higher
-  - macOS: `brew install wxwidgets`
-  - Linux: `sudo apt-get install libwxgtk3.2-dev`
-  - Windows: Download from wxwidgets.org or use vcpkg
+- macOS: `brew install qt@6`
+- Linux: `sudo apt-get install qt6-base-dev`
+- Windows: Download from qt.io or use vcpkg
+
+**CURL**: For AI provider HTTP requests (usually pre-installed on macOS/Linux)
 
 ### Optional
 - **Ninja**: Faster builds
@@ -112,16 +104,11 @@ For detailed plugin documentation, see:
 
 ### Choosing GUI Framework
 
-The project supports two GUI frameworks. Qt is the default and recommended for new features (AI integration). wxWidgets provides a traditional native UI experience.
+The project targets Qt 6. Qt is the supported and recommended framework for new features (AI integration).
 
 **Build with Qt (Default):**
 ```bash
-cmake --preset macos-debug              # GUI_FRAMEWORK=QT (default)
-```
-
-**Build with wxWidgets:**
-```bash
-cmake --preset macos-debug -DGUI_FRAMEWORK=WX
+cmake --preset macos-debug-qt
 ```
 
 ### Quick Start (Qt - macOS)
@@ -140,61 +127,30 @@ cmake --build --preset macos-debug-build-qt
 ./scripts/run_debug.sh
 ```
 
-### Quick Start (wxWidgets - macOS)
-
-```bash
-# Configure with wxWidgets
-cmake --preset macos-debug-wx
-
-# Build
-cmake --build --preset macos-debug-build-wx
-
-# Run
-./build/macos-debug-wx/bin/LogViewerWx.app/Contents/MacOS/LogViewerWx
-```
-
 ### Platform-Specific Presets
 
-All presets support `-DGUI_FRAMEWORK=WX` or `-DGUI_FRAMEWORK=QT` (default).
+Presets are configured for Qt builds across macOS, Windows, and Linux. Use the provided presets for quick configuration and building.
 
-**macOS:**
+Examples:
 ```bash
-# Qt (default)
-cmake --preset macos-debug-qt           # or macos-release-qt
+# macOS (Qt)
+cmake --preset macos-debug-qt
 cmake --build --preset macos-debug-build-qt
 
-# wxWidgets
-cmake --preset macos-debug-wx           # or macos-release-wx
-cmake --build --preset macos-debug-build-wx
-```
-
-**Windows (MSYS2):**
-```bash
-# Qt (default)
-cmake --preset windows-msys-debug-qt    # or windows-msys-release-qt
+# Windows (MSYS2, Qt)
+cmake --preset windows-msys-debug-qt
 cmake --build --preset windows-msys-debug-build-qt
 
-# wxWidgets
-cmake --preset windows-msys-debug-wx    # or windows-msys-release-wx
-cmake --build --preset windows-msys-debug-build-wx
-```
-
-**Linux:**
-```bash
-# Qt (default)
-cmake --preset linux-debug-qt           # or linux-release-qt
+# Linux (Qt)
+cmake --preset linux-debug-qt
 cmake --build --preset linux-debug-build-qt
-
-# wxWidgets
-cmake --preset linux-debug -DGUI_FRAMEWORK=WX
-cmake --build --preset linux-debug-build
 ```
 
 ### Using VS Code Tasks
 
 The project includes pre-configured tasks (Cmd/Ctrl+Shift+P > "Tasks: Run Task"):
 
-**Note:** VS Code tasks currently configured for Qt builds. For wxWidgets, use command line with `-DGUI_FRAMEWORK=WX`.
+**Note:** VS Code tasks are configured for Qt builds.
 
 - **Build Debug** - Configure and build debug version (Qt)
 - **Build Release** - Configure and build release version (Qt)
@@ -273,13 +229,6 @@ Configuration is stored in platform-specific locations:
       "INFO": {"foreground": "#000000", "background": "#28a745"},
       "DEBUG": {"foreground": "#ffffff", "background": "#6c757d"}
     }
-  },
-  "aiConfig": {
-    "provider": "ollama",
-    "apiKey": "",
-    "ollamaBaseUrl": "http://localhost:11434",
-    "ollamaDefaultModel": "llama3.2:latest",
-    "timeoutSeconds": 300
   }
 }
 ```
@@ -319,7 +268,7 @@ Configure in Settings > AI:
 
 ## Usage
 
-### Basic Workflow (Both Qt and wxWidgets)
+### Basic Workflow (Qt)
 
 1. **Open Log File**: File > Open (or Cmd/Ctrl+O)
 2. **Apply Filters**: Use the Filters panel to filter by type, text, or regex
@@ -357,7 +306,7 @@ LogViewer/
 │   │   ├── plugins/         # Plugin system interfaces
 │   │   └── ui/
 │   │       ├── qt/          # Qt 6 UI components
-│   │       └── wx/          # wxWidgets UI components
+│   │       └──              # wxWidgets UI components removed
 │   ├── db/                  # Data model (EventsContainer)
 │   ├── parser/              # Log parsers (XML, JSON)
 │   ├── plugins/             # Plugin implementations
@@ -391,20 +340,9 @@ LogViewer/
 - Run `cpack` to create installers in `dist/packages/`
 - Only `dist/packages/` contents are suitable for distribution
 
-## Framework Comparison
+## Framework
 
-| Feature | Qt 6 | wxWidgets |
-|---------|------|-----------|
-| **UI Style** | Modern dock-based | Traditional split-pane |
-| **AI Integration** | ✅ Full support | ❌ Not available |
-| **Movable Panels** | ✅ Yes | ❌ Fixed layout |
-| **Column Reordering** | ✅ Yes | ⚠️ Limited |
-| **Performance** | Excellent | Excellent |
-| **Native Look** | Good | Excellent |
-| **Platform Support** | Windows, macOS, Linux | Windows, macOS, Linux |
-| **License** | LGPL v3 (dynamically linked) | wxWindows (LGPL-like) |
-
-**Recommendation:** Use Qt for new deployments (AI features, modern UI). Use wxWidgets for traditional native UI or specific platform requirements.
+The project uses `Qt 6` as the supported UI framework. AI integration and plugin UI extensions are implemented for Qt.
 
 ## Installation and Packaging
 
@@ -484,7 +422,8 @@ This project is licensed under the MIT License - see `license.md` for details.
 
 **Third-Party Licenses:**
 - **Qt 6**: LGPL v3 (dynamically linked) - Qt version only
-- **wxWidgets**: wxWindows License (LGPL-like) - wxWidgets version only
+**Third-Party Licenses:**
+- **Qt 6**: LGPL v3 (dynamically linked)
 - **Other libraries**: MIT, BSD (see `license.md` for complete list)
 
 ## Contributing
@@ -504,8 +443,8 @@ This project is licensed under the MIT License - see `license.md` for details.
 
 **GUI Framework selection:**
 ```bash
-# Explicitly choose framework
-cmake --preset macos-debug -DGUI_FRAMEWORK=QT   # or WX
+# Explicitly choose framework (Qt is supported)
+cmake --preset macos-debug -DGUI_FRAMEWORK=QT
 ```
 
 **Qt not found:**
@@ -521,17 +460,7 @@ sudo apt-get install qt6-base-dev
 # Install Qt from qt.io or use vcpkg
 ```
 
-**wxWidgets not found:**
-```bash
-# macOS
-brew install wxwidgets
-
-# Linux  
-sudo apt-get install libwxgtk3.2-dev
-
-# Windows (MSYS2)
-pacman -S mingw-w64-x86_64-wxwidgets3.2-msw
-```
+(wxWidgets support removed from this README)
 
 **CMake version too old:**
 ```bash
@@ -594,9 +523,8 @@ cmake --build --preset macos-release-build --target package
 - **Documentation**: `docs/` directory
 
 ## Acknowledgments
-
-- Original wxWidgets template and foundation by lszl84
 - Qt Framework by The Qt Company
-- wxWidgets by wxWidgets team
+- Project templates and earlier foundation contributions
 - AI providers: Ollama, OpenAI, Anthropic, Google, xAI
 - Third-party libraries: nlohmann/json, spdlog, CURL, Google Test
+ 
