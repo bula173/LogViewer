@@ -59,7 +59,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # ============================================================
-# Install main executable (only in standalone mode, not when used as subproject)
+# Install main executable (only when built standalone, not as subproject)
 # ============================================================
 
 if(NOT LOGVIEWER_SUBPROJECT)

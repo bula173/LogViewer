@@ -15,12 +15,7 @@ add_library(LogViewer::plugin_api ALIAS plugin_api)
 message(STATUS "plugin_api: INTERFACE library target created (header-only)")
 
 if(BUILD_SDK)
-    # Export config files to build tree (for FetchContent usage)
-    # This makes find_package(LogViewer) work automatically when using FetchContent
-    # without requiring manual CMAKE_PREFIX_PATH configuration
-    export(PACKAGE LogViewer)
-    
-    # Also make them discoverable in the build directory
+    # Configure CMake helper files for find_package(LogViewer)
     configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerPluginTargets.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginTargets.cmake @ONLY)
     
@@ -32,16 +27,19 @@ if(BUILD_SDK)
     
     configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerConfigVersion.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake @ONLY)
-    
+
+    # Always make config files discoverable in build tree (for FetchContent and internal builds)
+    # This ensures find_package(LogViewer) works automatically without manual CMAKE_PREFIX_PATH
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/src/plugin_api")
     file(COPY
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginTargets.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfig.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
         DESTINATION ${CMAKE_BINARY_DIR}/src/plugin_api
     )
+    export(PACKAGE LogViewer)
 
-    # Only install SDK when building as standalone project (not as subproject)
-    # When used as subproject (e.g., via FetchContent), only the build-tree targets are available
+    # Only install SDK when building standalone (not as subproject via FetchContent)
     if(NOT LOGVIEWER_SUBPROJECT)
         # Install public C API headers
         install(FILES
