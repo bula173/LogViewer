@@ -1,15 +1,15 @@
 if (WIN32)
     configure_file(
-        ${CMAKE_SOURCE_DIR}/packaging/LogViewer.rc.in
+        ${PROJECT_SOURCE_DIR}/packaging/LogViewer.rc.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewer.rc
     )
     configure_file(
-        ${CMAKE_SOURCE_DIR}/packaging/LogViewer.manifest
+        ${PROJECT_SOURCE_DIR}/packaging/LogViewer.manifest
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewer.manifest
         COPYONLY
     )
     configure_file(
-        ${CMAKE_SOURCE_DIR}/packaging/LogViewer.ico
+        ${PROJECT_SOURCE_DIR}/packaging/LogViewer.ico
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewer.ico
         COPYONLY
     )

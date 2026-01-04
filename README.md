@@ -209,7 +209,47 @@ The project includes pre-configured tasks (Cmd/Ctrl+Shift+P > "Tasks: Run Task")
 ctest --preset macos-debug-test      # or windows-msys-debug-test, linux-debug-test
 ```
 
-## Configuration
+## Plugin Development
+
+LogViewer has an official **Plugin SDK** for extending functionality with custom plugins.
+
+### Getting Started with Plugins
+
+Quick references for plugin developers:
+
+1. **[SDK Getting Started Guide](docs/SDK_GETTING_STARTED.md)** — Complete walkthrough with examples
+2. **[SDK Quick Reference](docs/SDK_QUICK_REFERENCE.md)** — Syntax reference and common patterns  
+3. **[Basic Plugin Example](examples/BasicPlugin/)** — Minimal working plugin to study
+
+### Building the Example Plugin
+
+```bash
+# Build and install LogViewer SDK
+cmake -S . -B build -DBUILD_SDK=ON
+cmake --install build --prefix ~/LogViewer_install
+
+# Build the BasicPlugin example
+cd examples/BasicPlugin
+cmake -S . -B build -DCMAKE_PREFIX_PATH=~/LogViewer_install/sdk/lib/cmake
+cmake --build build
+```
+
+### Plugin Features
+
+- **C-ABI Interface**: Stable binary interface across compilers
+- **Automatic Dependency Discovery**: `find_package(LogViewer CONFIG REQUIRED)` provides Qt6, Threads, JSON, formatting libraries, and more
+- **Logger Callback**: Plugins log to application via callback
+- **UI Panels**: Create Qt widgets for left, right, bottom, or main areas
+- **Event Access**: Read log events via event container API
+- **Cross-Platform**: Build once, run on Windows, macOS, Linux
+
+### Plugin Documentation
+
+For detailed plugin development:
+- [Plugin System Architecture](docs/PLUGIN_SYSTEM.md)
+- [Plugin Implementation Guide](docs/PLUGIN_IMPLEMENTATION.md)
+- [AI Provider Plugin](docs/CLOUD_AI_INTEGRATION.md)
+
 
 **Note:** AI features and advanced configuration UI are only available in the Qt version.
 

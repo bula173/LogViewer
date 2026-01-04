@@ -1,6 +1,20 @@
 @PACKAGE_INIT@
 
-# Basic package config that exposes the plugin API targets installed to sdk/lib/cmake
+# Plugin API is header-only and requires only Qt6 for panel creation (QWidget* ABI)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Threads REQUIRED)
+
+# Optional but commonly used by plugins: JSON, formatting, HTTP
+find_package(nlohmann_json QUIET)
+find_package(fmt QUIET)
+find_package(CURL QUIET)
+
+# Also provide common utility headers if building from SDK
+find_package(spdlog QUIET)
+find_package(LibArchive QUIET)
+find_package(EXPAT QUIET)
+
+# Expose plugin API targets
 include("${CMAKE_CURRENT_LIST_DIR}/LogViewerPluginTargets.cmake")
 
-message(STATUS "LogViewer CMake package loaded (plugin API only)")
+message(STATUS "LogViewer CMake package loaded (plugin API SDK)")

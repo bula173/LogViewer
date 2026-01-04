@@ -129,15 +129,18 @@ The AI Provider plugin demonstrates the complete C-ABI architecture:
 
 ## Creating New Plugins
 
-See [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md) for detailed guide on creating plugins.
+**For comprehensive plugin development guide, see:**
+- [SDK Getting Started Guide](SDK_GETTING_STARTED.md) - Complete walkthrough with examples
+- [SDK Quick Reference](SDK_QUICK_REFERENCE.md) - Syntax reference and common patterns  
+- [Basic Plugin Example](../examples/BasicPlugin/) - Minimal working example code
 
 **Quick Steps:**
-1. Create C++ plugin class
-2. Export C-ABI functions (`Plugin_Create`, etc.)
-3. Implement `Plugin_SetLoggerCallback` to enable logging
-4. Optionally export panel creation functions
-5. Build as shared library
-6. Test loading in LogViewer
+1. Create C++ plugin file with C-ABI exports
+2. Export required functions: `Plugin_Create`, `Plugin_Destroy`, `Plugin_Initialize`, `Plugin_Shutdown`, `Plugin_GetApiVersion`, `Plugin_GetMetadataJson`, `Plugin_GetLastError`, `Plugin_SetLoggerCallback`
+3. Optionally export panel creation functions for UI (`Plugin_CreateLeftPanel`, `Plugin_CreateRightPanel`, etc.)
+4. Use CMake with `find_package(LogViewer CONFIG REQUIRED)` to automatically discover all dependencies
+5. Create `config.json` metadata file alongside the plugin binary
+6. Copy plugin and config.json to LogViewer plugins directory to test
 
 ## Build System
 

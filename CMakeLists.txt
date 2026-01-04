@@ -20,9 +20,23 @@ endif()
 # Option to build SDK for plugin development
 option(BUILD_SDK "Build SDK for plugin development" ON)
 
+# Detect if LogViewer is being used as a subproject (e.g., via FetchContent)
+# In subproject mode, only build the SDK; skip full application/plugin builds
+if(NOT CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    message(STATUS "LogViewer: Building as subproject (SDK only)")
+    set(LOGVIEWER_SUBPROJECT TRUE)
+else()
+    message(STATUS "LogViewer: Building as standalone project")
+    set(LOGVIEWER_SUBPROJECT FALSE)
+endif()
+
 add_subdirectory(thirdparty)
 add_subdirectory(src)
-add_subdirectory(tests)
-add_subdirectory(etc)
-add_subdirectory(plugins)
-add_subdirectory(packaging)
+
+if(NOT LOGVIEWER_SUBPROJECT)
+    add_subdirectory(tests)
+    add_subdirectory(etc)
+    add_subdirectory(plugins)
+    add_subdirectory(examples)
+    add_subdirectory(packaging)
+endif()

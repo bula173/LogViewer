@@ -31,14 +31,14 @@ if(BUILD_SDK)
 
     # Configure and install CMake helper files so SDK consumers can find the
     # plugin API target via find_package(LogViewer CONFIG REQUIRED)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerPluginTargets.cmake.in
+    configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerPluginTargets.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginTargets.cmake @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginTargets.cmake
         DESTINATION sdk/lib/cmake/
         COMPONENT sdk
     )
 
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerConfig.cmake.in
+    configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerConfig.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfig.cmake @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfig.cmake
         DESTINATION sdk/lib/cmake/
@@ -46,7 +46,7 @@ if(BUILD_SDK)
     )
 
     # Optional helper for packaging plugins into .zip archives
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerPluginPackaging.cmake.in
+    configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerPluginPackaging.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginPackaging.cmake @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginPackaging.cmake
         DESTINATION sdk/lib/cmake/
@@ -54,9 +54,15 @@ if(BUILD_SDK)
     )
     
     # Configure and install version file for find_package version checks
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerConfigVersion.cmake.in
+    configure_file(${PROJECT_SOURCE_DIR}/cmake/LogViewerConfigVersion.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfigVersion.cmake
+        DESTINATION sdk/lib/cmake/
+        COMPONENT sdk
+    )
+
+    # Install helper script for collecting runtime dependencies (DLLs)
+    install(FILES ${PROJECT_SOURCE_DIR}/cmake/copy_dlls.cmake
         DESTINATION sdk/lib/cmake/
         COMPONENT sdk
     )
