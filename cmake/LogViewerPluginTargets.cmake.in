@@ -2,6 +2,11 @@
 
 # Imported target for plugin API
 add_library(LogViewer::plugin_api INTERFACE IMPORTED)
+
+# Compute SDK prefix relative to this file so the package is relocatable and
+# does not depend on the consuming project's CMAKE_INSTALL_PREFIX.
+get_filename_component(_LOGVIEWER_SDK_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+
 set_target_properties(LogViewer::plugin_api PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/sdk/include"
+    INTERFACE_INCLUDE_DIRECTORIES "${_LOGVIEWER_SDK_PREFIX}/include"
 )

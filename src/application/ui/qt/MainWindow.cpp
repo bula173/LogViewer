@@ -59,6 +59,7 @@ namespace ui::qt
 
 // C-style EventsContainer bridge for plugins
 #include "../../../plugin_api/PluginEventsC.h"
+#include "../../../plugin_api/PluginHostUiC.h"
 
 static int PluginEvents_GetSizeBridge(void* handle)
 {
@@ -86,6 +87,14 @@ static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
     } catch (...) {
         return nullptr;
     }
+}
+
+static void PluginHostUi_SetCurrentItemBridge(void* hostOpaque, int itemIndex)
+{
+    if (!hostOpaque) return;
+    auto container = static_cast<db::EventsContainer*>(hostOpaque);
+    util::Logger::Debug("[PluginHostUi] setCurrentItem requested index={}", itemIndex);
+    try { container->SetCurrentItem(itemIndex); } catch (...) {}
 }
 
 
@@ -909,6 +918,11 @@ void MainWindow::setupPluginManager() {
         // them into plugins (required for cross-DLL event access).
         plugin::PluginManager::GetInstance().SetEventsCallbacks(&PluginEvents_GetSizeBridge,
                                                                 &PluginEvents_GetEventJsonBridge);
+
+        PluginHostUiCallbacks hostUi {};
+        hostUi.size = static_cast<uint32_t>(sizeof(PluginHostUiCallbacks));
+        hostUi.setCurrentItem = &PluginHostUi_SetCurrentItemBridge;
+        plugin::PluginManager::GetInstance().SetHostUiCallbacks(reinterpret_cast<void*>(m_events), hostUi);
     } else {
         util::Logger::Warn("[MainWindow] No EventsContainer available to register with plugins");
     }

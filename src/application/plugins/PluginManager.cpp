@@ -12,6 +12,7 @@
 #include "../../plugin_api/PluginLoggerC.h"
 #include "../../plugin_api/PluginKeyEncryptionC.h"
 #include "../../plugin_api/PluginC.h"
+#include "../../plugin_api/PluginHostUiC.h"
 #include "../util/KeyEncryption.hpp"
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -169,6 +170,7 @@ static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
     info.pluginDestroyAIService = probe_sym("Plugin_DestroyAIService");
     info.pluginSetAIEventsContainer = probe_sym("Plugin_SetAIEventsContainer");
     info.pluginSetEventsCallbacks = probe_sym("Plugin_SetEventsCallbacks");
+    info.pluginSetHostUiCallbacks = probe_sym("Plugin_SetHostUiCallbacks");
     info.pluginDestroyPanelWidget = probe_sym("Plugin_DestroyPanelWidget");
 
     util::Logger::Debug("PluginManager: Probed panel exports for {}: left={} right={} bottom={} main={} destroy={}",
@@ -183,6 +185,10 @@ static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
         info.pluginId,
         info.pluginSetAIEventsContainer != nullptr,
         info.pluginSetEventsCallbacks != nullptr);
+
+    util::Logger::Debug("PluginManager: Probed host UI callbacks setter for {}: setHostUiCallbacks={}",
+        info.pluginId,
+        info.pluginSetHostUiCallbacks != nullptr);
     util::Logger::Debug("PluginManager: Probed AI service exports for {}: create={} destroy={}",
         info.pluginId, info.pluginCreateAIService != nullptr, info.pluginDestroyAIService != nullptr);
 }
@@ -516,6 +522,14 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     // Probe for optional plugin C-exports and store pointers
     if (info.libraryHandle) {
         ProbeOptionalPluginExports(info.libraryHandle, info);
+    }
+
+    // Provide host UI callbacks early if the plugin supports it.
+    // (Even though the plugin may be disabled, this avoids timing issues.)
+    if (info.pluginOpaqueHandle && info.pluginSetHostUiCallbacks && m_hostUiOpaque && m_hostUiCallbacks.size >= sizeof(PluginHostUiCallbacks)) {
+        using SetHostUiCallbacksFn = void(*)(void*, void*, const PluginHostUiCallbacks*);
+        auto fn = reinterpret_cast<SetHostUiCallbacksFn>(info.pluginSetHostUiCallbacks);
+        try { fn(info.pluginOpaqueHandle, m_hostUiOpaque, &m_hostUiCallbacks); } catch(...) {}
     }
 
     m_plugins[metadata.id] = std::move(info);
@@ -1159,6 +1173,13 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
             try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque, m_eventsGetSizeFn, m_eventsGetEventJsonFn); } catch(...) {}
         }
 
+        if (info.pluginOpaqueHandle && info.pluginSetHostUiCallbacks && m_hostUiOpaque && m_hostUiCallbacks.size >= sizeof(PluginHostUiCallbacks)) {
+            using SetHostUiCallbacksFn = void(*)(void*, void*, const PluginHostUiCallbacks*);
+            auto fn = reinterpret_cast<SetHostUiCallbacksFn>(info.pluginSetHostUiCallbacks);
+            util::Logger::Debug("PluginManager: Injecting host UI callbacks into {}", pluginId);
+            try { fn(info.pluginOpaqueHandle, m_hostUiOpaque, &m_hostUiCallbacks); } catch(...) {}
+        }
+
         // If the plugin provides an AI service factory, create a service instance
         // so plugin panels relying on an internal service have it available.
         if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {
@@ -1212,6 +1233,13 @@ util::Result<bool, error::Error> PluginManager::EnablePlugin(const std::string& 
         using SetCallbacksFn = void(*)(void*, void*, EventsContainer_GetSize_Fn, EventsContainer_GetEventJson_Fn);
         auto fn = reinterpret_cast<SetCallbacksFn>(info.pluginSetEventsCallbacks);
         try { fn(info.pluginOpaqueHandle, m_eventsContainerOpaque, m_eventsGetSizeFn, m_eventsGetEventJsonFn); } catch(...) {}
+    }
+
+    if (info.pluginOpaqueHandle && info.pluginSetHostUiCallbacks && m_hostUiOpaque && m_hostUiCallbacks.size >= sizeof(PluginHostUiCallbacks)) {
+        using SetHostUiCallbacksFn = void(*)(void*, void*, const PluginHostUiCallbacks*);
+        auto fn = reinterpret_cast<SetHostUiCallbacksFn>(info.pluginSetHostUiCallbacks);
+        util::Logger::Debug("PluginManager: Injecting host UI callbacks into {}", pluginId);
+        try { fn(info.pluginOpaqueHandle, m_hostUiOpaque, &m_hostUiCallbacks); } catch(...) {}
     }
     // If the plugin provides an AI service factory, create a service instance
     if (info.pluginCreateAIService && !info.pluginServiceHandle && info.pluginOpaqueHandle) {

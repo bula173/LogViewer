@@ -13,6 +13,7 @@
 #include "Result.hpp"
 #include "Error.hpp"
 #include "PluginEventsC.h"
+#include "PluginHostUiC.h"
 #include <filesystem>
 #include <map>
 #include <memory>
@@ -51,6 +52,9 @@ struct PluginLoadInfo
     void* pluginSetAIEventsContainer = nullptr;
     // Optional plugin function to receive event access callbacks from host
     void* pluginSetEventsCallbacks = nullptr;
+
+    // Optional plugin function to receive host UI callbacks (e.g. set current event)
+    void* pluginSetHostUiCallbacks = nullptr;
 };
 
 /**
@@ -248,6 +252,10 @@ private:
     void* m_eventsContainerOpaque = nullptr;
     EventsContainer_GetSize_Fn m_eventsGetSizeFn = nullptr;
     EventsContainer_GetEventJson_Fn m_eventsGetEventJsonFn = nullptr;
+
+    // Optional host UI callbacks provided to plugins
+    void* m_hostUiOpaque = nullptr;
+    PluginHostUiCallbacks m_hostUiCallbacks {0u, nullptr};
     
     // Cache for plugin configuration loaded before plugins are instantiated
     struct PluginConfigCache {
@@ -264,6 +272,28 @@ public:
     {
         m_eventsGetSizeFn = sizeFn;
         m_eventsGetEventJsonFn = getEventFn;
+    }
+
+    void SetHostUiCallbacks(void* hostOpaque, const PluginHostUiCallbacks& callbacks)
+    {
+        m_hostUiOpaque = hostOpaque;
+        m_hostUiCallbacks = callbacks;
+
+        // If plugins are already enabled, push the callbacks immediately.
+        // This avoids ordering issues (e.g. host sets callbacks after plugin enable).
+        if (!m_hostUiOpaque || m_hostUiCallbacks.size < sizeof(PluginHostUiCallbacks))
+            return;
+
+        using SetHostUiCallbacksFn = void(*)(void*, void*, const PluginHostUiCallbacks*);
+        for (auto& [id, info] : m_plugins)
+        {
+            (void)id;
+            if (!info.enabled) continue;
+            if (!info.pluginOpaqueHandle) continue;
+            if (!info.pluginSetHostUiCallbacks) continue;
+            auto fn = reinterpret_cast<SetHostUiCallbacksFn>(info.pluginSetHostUiCallbacks);
+            try { fn(info.pluginOpaqueHandle, m_hostUiOpaque, &m_hostUiCallbacks); } catch(...) {}
+        }
     }
 };
 
