@@ -1,6 +1,8 @@
 # Plugin Observer Pattern
 
-**⚠️ PARTIALLY DEPRECATED:** This document describes the observer pattern for plugin lifecycle events, which is still used internally. However, the `IPlugin` C++ interface is **no longer used**. Modern plugins use **C-ABI exports only** (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md)).
+**⚠️ DEPRECATED FOR PLUGIN DEVELOPERS:** This document describes the observer pattern for plugin lifecycle events using the old `IPlugin` C++ interface, which is **no longer used**. Modern plugins use **C-ABI exports only** (see [PLUGIN_SYSTEM.md](PLUGIN_SYSTEM.md) and [SDK_GETTING_STARTED.md](SDK_GETTING_STARTED.md)).
+
+**For plugin developers:** Please use the [SDK Getting Started Guide](SDK_GETTING_STARTED.md) and [Basic Plugin Example](../examples/BasicPlugin/) instead. This document is for internal LogViewer architecture only.
 
 ## Overview
 

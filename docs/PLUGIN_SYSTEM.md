@@ -1,5 +1,12 @@
 # LogViewer Plugin System
 
+## Quick Start
+
+New to LogViewer plugins? Start here:
+- **[SDK Getting Started Guide](SDK_GETTING_STARTED.md)** — Complete walkthrough for plugin developers
+- **[SDK Quick Reference](SDK_QUICK_REFERENCE.md)** — Quick syntax reference and examples
+- **[Basic Plugin Example](../examples/BasicPlugin/)** — Minimal working plugin to learn from
+
 ## Overview
 
 LogViewer supports a plugin architecture that allows extending functionality without modifying the core application. Plugins are dynamically loaded shared libraries that use a **C-ABI interface** for maximum compatibility and ABI stability across different compilers and versions.
@@ -8,7 +15,7 @@ Plugins export standard C functions like `Plugin_Create`, `Plugin_CreateMainPane
 
 ### C-ABI Plugin Architecture
 
-The C-ABI approach is recommended for better compatibility and reduced ABI dependencies. Plugins export standard C functions that the application calls to create and manage plugin instances.
+All modern LogViewer plugins use the **C-ABI approach** for better compatibility and reduced ABI dependencies. Plugins export standard C functions that the application calls to create and manage plugin instances. This is the only supported method for plugin development going forward.
 
 **Required Exports:**
 ```cpp
@@ -122,25 +129,12 @@ Plugins return metadata as JSON via `Plugin_GetMetadataJson`:
     "id": "my_plugin",
     "name": "My Plugin",
     "version": "1.0.0",
-    "apiVersion": "1.0.0",
-    "author": "Plugin Developer",
-    "description": "Plugin description",
-    "website": "https://example.com",
-    "type": 0,
-    "requiresLicense": false,
-    "dependencies": []
+    "api_version": "1.0.0",
+    "description": "Plugin description"
 }
 ```
 
-**Plugin Types (type field):**
-- 0 = Parser
-- 1 = Filter
-- 2 = Exporter
-- 3 = Analyzer
-- 4 = AIProvider
-- 5 = Connector
-- 6 = Visualizer
-- 7 = Custom
+See the [SDK Quick Reference](SDK_QUICK_REFERENCE.md#configjson-template) for the current config.json format and required fields.
 
 ## Plugin Manager
 
@@ -179,6 +173,13 @@ Plugin_Destroy(handle);
 ```
 
 ## Creating a Plugin
+
+**⚠️ For detailed plugin development instructions, see:**
+- [SDK Getting Started Guide](SDK_GETTING_STARTED.md) - Complete step-by-step guide
+- [SDK Quick Reference](SDK_QUICK_REFERENCE.md) - Quick syntax reference
+- [Basic Plugin Example](../examples/BasicPlugin/) - Working minimal example
+
+The sections below provide architectural context. Developers should follow the SDK guides above.
 
 ### 1. Create Plugin Class
 
@@ -274,51 +275,54 @@ EXPORT_PLUGIN_SYMBOL const char* Plugin_GetMetadataJson(PluginHandle h) {
 
 ### 3. Build as Shared Library
 
-Create a CMakeLists.txt that builds your plugin as a shared library:
-
+**Use the SDK approach:**
 ```cmake
-add_library(my_plugin SHARED
-    MyPlugin.cpp
-    MyPlugin.hpp
-)
+cmake_minimum_required(VERSION 3.22)
+project(MyPlugin)
 
-target_include_directories(my_plugin PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/plugin_api
-)
+find_package(LogViewer CONFIG REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
+
+add_library(my_plugin MODULE src/MyPlugin.cpp)
 
 target_link_libraries(my_plugin
     PRIVATE
+        LogViewer::plugin_api
         Qt6::Widgets
-        fmt::fmt
-        nlohmann_json::nlohmann_json
 )
 
-set_target_properties(my_plugin PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "my_plugin"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-)
+set_target_properties(my_plugin PROPERTIES PREFIX "")
 
-install(TARGETS my_plugin
-    LIBRARY DESTINATION plugins
-    RUNTIME DESTINATION plugins
+configure_file(config.json.in config.json @ONLY)
+add_custom_command(TARGET my_plugin POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_BINARY_DIR}/config.json
+        $<TARGET_FILE_DIR:my_plugin>/config.json
 )
 ```
 
-### 4. Enable in CMake
-
-Add a CMake option to conditionally build your plugin:
-
-```cmake
-option(ENABLE_MY_PLUGIN "Enable My Plugin" OFF)
-
-if(ENABLE_MY_PLUGIN)
-    add_subdirectory(my_plugin)
-endif()
-```
+See [SDK Quick Reference](SDK_QUICK_REFERENCE.md#cmakeliststxt-template) for the complete CMakeLists.txt template.
 
 ## Available Plugins
+
+### Basic Example Plugin
+
+**Location**: `examples/BasicPlugin/`
+
+A minimal plugin demonstrating the C-ABI interface. Perfect for learning plugin development.
+
+**Features**:
+- All required plugin exports
+- Plugin state management
+- Logger callback integration
+- Config.json metadata
+
+**Build Instructions**:
+```bash
+cd examples/BasicPlugin
+cmake -S . -B build -DCMAKE_PREFIX_PATH=/path/to/sdk/lib/cmake
+cmake --build build
+```
 
 ### AI Provider Plugin
 
@@ -327,21 +331,14 @@ endif()
 Provides AI-powered log analysis capabilities with multiple provider support.
 
 **Features**:
-- Multiple AI provider support (Ollama, OpenAI, Anthropic, Google, xAI, LM Studio)
+- Multiple AI provider support (Ollama, OpenAI, Anthropic, Google Gemini, xAI Grok, LM Studio)
 - Three UI panels: configuration (left), analysis (main), chat (bottom)
 - Real-time log analysis and pattern detection
 - Interactive chat with AI about logs
 
-**Build Option**: Enabled by default
+**Build Option**: Enabled by default when building LogViewer with plugins
 
-**Dependencies**: libcurl, Qt6
-
-**C-ABI Exports**:
-- `Plugin_Create/Destroy` - Lifecycle
-- `Plugin_CreateMainPanel` - Analysis panel
-- `Plugin_CreateBottomPanel` - Chat panel
-- `Plugin_CreateLeftPanel` - Configuration panel
-- `Plugin_CreateAIService` - AI service factory
+**Dependencies**: libcurl, Qt6, nlohmann_json, fmt
 
 See [AI_PROVIDER_PLUGIN.md](AI_PROVIDER_PLUGIN.md) for detailed documentation.
 
