@@ -21,6 +21,7 @@ if(BUILD_SDK)
         ${CMAKE_CURRENT_LIST_DIR}/PluginAIProviderC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginTypesC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginEventsC.h
+        ${CMAKE_CURRENT_LIST_DIR}/PluginHostUiC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginLoggerC.h
         ${CMAKE_CURRENT_LIST_DIR}/PluginKeyEncryptionC.h
         # AI/Analysis/FieldConversion helpers merged into PluginC.h; SDK helper removed
@@ -40,6 +41,14 @@ if(BUILD_SDK)
     configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerConfig.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfig.cmake @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerConfig.cmake
+        DESTINATION sdk/lib/cmake/
+        COMPONENT sdk
+    )
+
+    # Optional helper for packaging plugins into .zip archives
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/LogViewerPluginPackaging.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginPackaging.cmake @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LogViewerPluginPackaging.cmake
         DESTINATION sdk/lib/cmake/
         COMPONENT sdk
     )

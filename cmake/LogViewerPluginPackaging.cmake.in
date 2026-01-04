@@ -1,0 +1,56 @@
+@PACKAGE_INIT@
+
+# Helper: package a built plugin (DLL/SO/DYLIB) + config.json into a ZIP.
+#
+# Usage:
+#   include(${LogViewer_DIR}/LogViewerPluginPackaging.cmake)
+#   logviewer_plugin_add_zip(
+#     TARGET my_plugin
+#     MANIFEST "${CMAKE_CURRENT_BINARY_DIR}/config.json"
+#     OUTPUT_ZIP "${CMAKE_CURRENT_BINARY_DIR}/my_plugin.zip"
+#     ENTRY_NAME "my_plugin${CMAKE_SHARED_LIBRARY_SUFFIX}"  # optional
+#   )
+#
+# The ZIP layout is:
+#   config.json
+#   <ENTRY_NAME>
+#   lib/ ... (optional if you copy extra files into STAGING_DIR before build)
+
+function(logviewer_plugin_add_zip)
+  set(options)
+  set(oneValueArgs TARGET MANIFEST OUTPUT_ZIP ENTRY_NAME STAGING_DIR)
+  set(multiValueArgs)
+  cmake_parse_arguments(LVZ "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  if (NOT LVZ_TARGET)
+    message(FATAL_ERROR "logviewer_plugin_add_zip: TARGET is required")
+  endif()
+  if (NOT LVZ_MANIFEST)
+    message(FATAL_ERROR "logviewer_plugin_add_zip: MANIFEST is required")
+  endif()
+  if (NOT LVZ_OUTPUT_ZIP)
+    message(FATAL_ERROR "logviewer_plugin_add_zip: OUTPUT_ZIP is required")
+  endif()
+
+  if (NOT LVZ_ENTRY_NAME)
+    # Default: use the built library file name.
+    set(LVZ_ENTRY_NAME "$<TARGET_FILE_NAME:${LVZ_TARGET}>")
+  endif()
+
+  if (NOT LVZ_STAGING_DIR)
+    set(LVZ_STAGING_DIR "${CMAKE_CURRENT_BINARY_DIR}/plugin_zip_staging_${LVZ_TARGET}")
+  endif()
+
+  add_custom_command(
+    TARGET ${LVZ_TARGET}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${LVZ_STAGING_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${LVZ_MANIFEST}" "${LVZ_STAGING_DIR}/config.json"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${LVZ_TARGET}>" "${LVZ_STAGING_DIR}/${LVZ_ENTRY_NAME}"
+    COMMAND ${CMAKE_COMMAND} -E rm -f "${LVZ_OUTPUT_ZIP}"
+    COMMAND ${CMAKE_COMMAND} -E chdir "${LVZ_STAGING_DIR}" ${CMAKE_COMMAND} -E tar "cf" "${LVZ_OUTPUT_ZIP}" --format=zip -- "config.json" "${LVZ_ENTRY_NAME}"
+    VERBATIM
+  )
+
+  add_custom_target(${LVZ_TARGET}_zip ALL DEPENDS ${LVZ_TARGET})
+endfunction()

@@ -3,6 +3,8 @@
 // with `PluginApi_FreeString`.
 #pragma once
 
+#include <stdlib.h>
+
 // Plugin SDK version (merge of PluginSDK.hpp)
 #define LOGVIEWER_PLUGIN_API_VERSION "1.0.0"
 
