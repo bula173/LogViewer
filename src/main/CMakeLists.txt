@@ -16,8 +16,10 @@ if (WIN32)
 endif()
 
 # ============================================================
-# Executable
+# Executable (only build when not used as subproject)
 # ============================================================
+
+if(NOT LOGVIEWER_SUBPROJECT)
 
 add_executable(${PROJECT_NAME})
 
@@ -58,6 +60,8 @@ target_link_libraries(${PROJECT_NAME}
         application_core
 )
 
+endif()
+
 # ============================================================
 # Install main executable (only when built standalone, not as subproject)
 # ============================================================
@@ -83,7 +87,7 @@ endif()
 # macOS deployment
 # ============================================================
 
-if (APPLE)
+if (APPLE AND NOT LOGVIEWER_SUBPROJECT)
     configure_file(
         ${CMAKE_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in
         ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
@@ -114,76 +118,78 @@ if (APPLE)
 endif()
 
 if (WIN32)
-    # Deploy Qt at install time
-    find_program(
-        WINDEPLOYQT_EXECUTABLE
-        windeployqt
-        HINTS ${Qt6_DIR}/../../../bin
-        REQUIRED
-    )
+    if(NOT LOGVIEWER_SUBPROJECT)
+        # Deploy Qt at install time
+        find_program(
+            WINDEPLOYQT_EXECUTABLE
+            windeployqt
+            HINTS ${Qt6_DIR}/../../../bin
+            REQUIRED
+        )
 
-    install(CODE "
-        execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
-                    --no-translations
-                    --no-system-d3d-compiler
-                    --compiler-runtime
-                    \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
+        install(CODE "
+            execute_process(
+                COMMAND \"${WINDEPLOYQT_EXECUTABLE}\"
+                        --no-translations
+                        --no-system-d3d-compiler
+                        --compiler-runtime
+                        \"\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.exe\"  # Updated for root
+                        
+            )
+        "
+        COMPONENT application
+        )
+
+        install(CODE "
+            get_filename_component(COMPILER_DIR \"${CMAKE_CXX_COMPILER}\" DIRECTORY)
+            message(STATUS \"Analyzing dependencies for: $<TARGET_FILE:${PROJECT_NAME}>\")
+            message(STATUS \"Toolchain bin: \$\{COMPILER_DIR\}\")
+
+            file(GET_RUNTIME_DEPENDENCIES
+                EXECUTABLES \"$<TARGET_FILE:${PROJECT_NAME}>\"
+                RESOLVED_DEPENDENCIES_VAR _resolved_deps
+                UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
+                DIRECTORIES \"\$\{COMPILER_DIR\}\"
+                PRE_EXCLUDE_REGEXES \"api-ms-.*\" \"ext-ms-.*\"
+                POST_EXCLUDE_REGEXES \".*[Ss]ystem32/.*\\.dll\" \".*[Ww]indows/.*\\.dll\"  \"Qt6.*\.dll\"
+            )
+
+            set(COPIED_COUNT 0)
+            foreach(DEP \${_resolved_deps})
+                # Only copy DLLs from the toolchain directory (skip Windows system DLLs)
+                string(FIND \"\${DEP}\" \"mingw64\" TOOLCHAIN_MATCH)
+                if(NOT TOOLCHAIN_MATCH EQUAL -1)
+                    get_filename_component(DLL_NAME \"\${DEP}\" NAME)
                     
-        )
-    "
-    COMPONENT application
-    )
+                    file(INSTALL
+                            DESTINATION \"\${CMAKE_INSTALL_PREFIX}\"
+                            TYPE SHARED_LIBRARY
+                            FILES \"\${DEP}\"
+                        )
+                        message(STATUS \"Copied: \${DLL_NAME}\")
+                        math(EXPR COPIED_COUNT \"\${COPIED_COUNT} + 1\")
+                endif()
+            endforeach()
 
-    install(CODE "
-        get_filename_component(COMPILER_DIR \"${CMAKE_CXX_COMPILER}\" DIRECTORY)
-        message(STATUS \"Analyzing dependencies for: $<TARGET_FILE:${PROJECT_NAME}>\")
-        message(STATUS \"Toolchain bin: \$\{COMPILER_DIR\}\")
+            # Print warning if any non-excluded DLL was not found
+            foreach(_file IN LISTS \${_unresolved_deps})
+                if(_file STREQUAL \"\")
+                    continue()
+                endif()
+                message(WARNING \"Dependency not found: \${_file}\")
+            endforeach()
 
-        file(GET_RUNTIME_DEPENDENCIES
-            EXECUTABLES \"$<TARGET_FILE:${PROJECT_NAME}>\"
-            RESOLVED_DEPENDENCIES_VAR _resolved_deps
-            UNRESOLVED_DEPENDENCIES_VAR _unresolved_deps
-            DIRECTORIES \"\$\{COMPILER_DIR\}\"
-            PRE_EXCLUDE_REGEXES \"api-ms-.*\" \"ext-ms-.*\"
-            POST_EXCLUDE_REGEXES \".*[Ss]ystem32/.*\\.dll\" \".*[Ww]indows/.*\\.dll\"  \"Qt6.*\.dll\"
-        )
-
-        set(COPIED_COUNT 0)
-        foreach(DEP \${_resolved_deps})
-            # Only copy DLLs from the toolchain directory (skip Windows system DLLs)
-            string(FIND \"\${DEP}\" \"mingw64\" TOOLCHAIN_MATCH)
-            if(NOT TOOLCHAIN_MATCH EQUAL -1)
-                get_filename_component(DLL_NAME \"\${DEP}\" NAME)
-                
-                file(INSTALL
-                        DESTINATION \"\${CMAKE_INSTALL_PREFIX}\"
-                        TYPE SHARED_LIBRARY
-                        FILES \"\${DEP}\"
-                    )
-                    message(STATUS \"Copied: \${DLL_NAME}\")
-                    math(EXPR COPIED_COUNT \"\${COPIED_COUNT} + 1\")
-            endif()
-        endforeach()
-
-        # Print warning if any non-excluded DLL was not found
-        foreach(_file IN LISTS \${_unresolved_deps})
-            if(_file STREQUAL \"\")
-                continue()
-            endif()
-            message(WARNING \"Dependency not found: \${_file}\")
-        endforeach()
-
-        # Debugging: Print resolved and unresolved dependencies
-        message(STATUS \"Resolved dependencies: \${_resolved_deps}\")
-        message(STATUS \"Unresolved dependencies: \${_unresolved_deps}\")
-    " COMPONENT application)
+            # Debugging: Print resolved and unresolved dependencies
+            message(STATUS \"Resolved dependencies: \${_resolved_deps}\")
+            message(STATUS \"Unresolved dependencies: \${_unresolved_deps}\")
+        " COMPONENT application)
+    endif()
 endif()
 # ============================================================
 # Linux (optional)
 # ============================================================
 
-if (UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE AND NOT LOGVIEWER_SUBPROJECT)
     find_program(LINUXDEPLOYQT_EXECUTABLE linuxdeployqt HINTS /usr/bin)
 
     if (LINUXDEPLOYQT_EXECUTABLE)
