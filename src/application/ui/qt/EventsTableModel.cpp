@@ -487,6 +487,16 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
         // However, we can't reorder the container itself as it may break other references
         // So we set the filtered indices to the sorted order
         m_filteredIndices = indicesToSort;
+        // When we populated filtered indices from a full sort, mark filtering
+        // as active so other model methods use the mapped indices.
+        m_filteringActive = true;
+        // Rebuild reverse lookup map for RowFromActualIndex
+        m_reverseFilteredIndices.clear();
+        m_reverseFilteredIndices.reserve(m_filteredIndices.size());
+        for (int row = 0; row < static_cast<int>(m_filteredIndices.size()); ++row)
+        {
+            m_reverseFilteredIndices[m_filteredIndices[static_cast<std::size_t>(row)]] = row;
+        }
     }
     else
     {
