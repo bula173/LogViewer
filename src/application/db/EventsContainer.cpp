@@ -207,85 +207,90 @@ void EventsContainer::MergeEvents(EventsContainer& other,
         return;
     }
 
-    // Lock both containers exclusively for the duration of the merge to:
-    // - avoid deadlocks (consistent lock order via scoped_lock)
-    // - ensure we merge a consistent snapshot
-    // - prevent any reordering of existing data while we inject
-    std::scoped_lock lock(m_mutex, other.m_mutex);
+    // We need to lock both containers while we inspect and merge their
+    // internal vectors. However, notifying views while holding those locks
+    // may cause deadlocks if view callbacks call back into this container.
+    // Acquire the locks only for the merge and release them before
+    // invoking any callbacks.
 
-    // Set source on existing events (only if not set)
-    for (auto& event : m_data)
-    {
-        if (event.GetSource().empty())
-            event.SetSource(existingAlias);
-    }
-
-    // Set source on events being merged (always set to newAlias)
-    for (auto& event : other.m_data)
-        event.SetSource(newAlias);
-
-    auto isBefore = [&timestampField](const LogEvent& a, const LogEvent& b) -> bool {
-        const std::string timestampA = a.findByKey(timestampField);
-        const std::string timestampB = b.findByKey(timestampField);
-
-        // Empty timestamps are treated as "after" any non-empty timestamp
-        if (timestampA.empty() && timestampB.empty())
-            return false;
-        if (timestampA.empty())
-            return false;
-        if (timestampB.empty())
-            return true;
-
-        // ISO-8601-like timestamps compare correctly as strings.
-        return timestampA < timestampB;
-    };
-
-    // Stable merge: preserves relative order within each input sequence.
-    // Tie-breaker: existing events are emitted before new events for the same timestamp.
     std::vector<LogEvent> mergedEvents;
     mergedEvents.reserve(m_data.size() + other.m_data.size());
 
-    std::size_t i = 0;
-    std::size_t j = 0;
-
-    while (i < m_data.size() && j < other.m_data.size())
     {
-        const auto& a = m_data[i];
-        const auto& b = other.m_data[j];
+        std::scoped_lock lock(m_mutex, other.m_mutex);
 
-        // If b is strictly before a, take b. Otherwise take a.
-        // This makes ties (equal timestamps, or both empty) favor existing (a).
-        if (isBefore(b, a))
+        // Set source on existing events (only if not set)
+        for (auto& event : m_data)
         {
-            mergedEvents.push_back(b);
-            ++j;
+            if (event.GetSource().empty())
+                event.SetSource(existingAlias);
         }
-        else
+
+        // Set source on events being merged (always set to newAlias)
+        for (auto& event : other.m_data)
+            event.SetSource(newAlias);
+
+        auto isBefore = [&timestampField](const LogEvent& a, const LogEvent& b) -> bool {
+            const std::string timestampA = a.findByKey(timestampField);
+            const std::string timestampB = b.findByKey(timestampField);
+
+            // Empty timestamps are treated as "after" any non-empty timestamp
+            if (timestampA.empty() && timestampB.empty())
+                return false;
+            if (timestampA.empty())
+                return false;
+            if (timestampB.empty())
+                return true;
+
+            // ISO-8601-like timestamps compare correctly as strings.
+            return timestampA < timestampB;
+        };
+
+        // Stable merge: preserves relative order within each input sequence.
+        // Tie-breaker: existing events are emitted before new events for the same timestamp.
+        std::size_t i = 0;
+        std::size_t j = 0;
+
+        while (i < m_data.size() && j < other.m_data.size())
         {
-            mergedEvents.push_back(a);
-            ++i;
+            const auto& a = m_data[i];
+            const auto& b = other.m_data[j];
+
+            // If b is strictly before a, take b. Otherwise take a.
+            // This makes ties (equal timestamps, or both empty) favor existing (a).
+            if (isBefore(b, a))
+            {
+                mergedEvents.push_back(b);
+                ++j;
+            }
+            else
+            {
+                mergedEvents.push_back(a);
+                ++i;
+            }
         }
+
+        // Append the remainder in original order
+        for (; i < m_data.size(); ++i)
+            mergedEvents.push_back(m_data[i]);
+        for (; j < other.m_data.size(); ++j)
+            mergedEvents.push_back(other.m_data[j]);
+
+        util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}",
+                           other.m_data.size(), mergedEvents.size());
+
+        // Replace internal data while still holding the locks to avoid races.
+        m_data = std::move(mergedEvents);
+        m_currentItem = -1; // Reset selection after merge
     }
 
-    // Append the remainder in original order
-    for (; i < m_data.size(); ++i)
-        mergedEvents.push_back(m_data[i]);
-    for (; j < other.m_data.size(); ++j)
-        mergedEvents.push_back(other.m_data[j]);
-
-    util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}",
-                       other.m_data.size(), mergedEvents.size());
-
-    m_data = std::move(mergedEvents);
-    m_currentItem = -1; // Reset selection after merge
-    
-    // Notify views
+    // Locks released here. Notify views without holding the container mutexes.
     for (auto v : m_views)
     {
         util::Logger::Trace("EventsContainer::MergeEvents notifying view of current index update: -1");
         v->OnCurrentIndexUpdated(-1);
     }
-    
+
     this->NotifyDataChanged();
 }
 } // db namespace
