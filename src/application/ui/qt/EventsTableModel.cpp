@@ -63,11 +63,15 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
 
     const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(index.column())];
     
-    // Handle dynamic source column (index -1)
+    // Handle dynamic source column (index -1) and original_id column (index -2)
     std::string columnName;
     if (columnConfigIndex == -1)
     {
         columnName = "source";
+    }
+    else if (columnConfigIndex == -2)
+    {
+        columnName = "original_id";
     }
     else if (columnConfigIndex < 0 || columnConfigIndex >= static_cast<int>(columns.size()))
     {
@@ -120,6 +124,12 @@ QVariant EventsTableModel::headerData(int section,
         if (columnIndex == -1)
         {
             return QString("Source");
+        }
+        
+        // Handle dynamic original_id column
+        if (columnIndex == -2)
+        {
+            return QString("Original ID");
         }
         
         const auto& columns = m_config.GetColumns();
@@ -250,6 +260,11 @@ std::vector<int> EventsTableModel::ColumnWidths() const
             // Source column default width
             widths.push_back(100);
         }
+        else if (idx == -2)
+        {
+            // Original ID column default width
+            widths.push_back(100);
+        }
         else if (idx >= 0 && idx < static_cast<int>(columns.size()))
         {
             widths.push_back(columns[static_cast<std::size_t>(idx)].width);
@@ -265,6 +280,7 @@ void EventsTableModel::RebuildVisibleColumns()
     
     // Check if we should show source column
     const bool needsSourceColumn = ShouldShowSourceColumn();
+    const bool needsOriginalIdColumn = ShouldShowOriginalIdColumn();
     
     // Build list of visible columns
     for (std::size_t i = 0; i < columns.size(); ++i)
@@ -273,15 +289,18 @@ void EventsTableModel::RebuildVisibleColumns()
         {
             m_visibleColumnIndices.push_back(static_cast<int>(i));
             
-            // Insert source column after id column (if id is first visible column)
-            if (i == 0 && needsSourceColumn && columns[i].name == "id")
+            // Insert dynamic columns after id column (if id is first visible column)
+            if (i == 0 && columns[i].name == "id")
             {
-                m_visibleColumnIndices.push_back(-1); // -1 indicates dynamic source column
+                if (needsSourceColumn)
+                    m_visibleColumnIndices.push_back(-1); // -1 indicates source column
+                if (needsOriginalIdColumn)
+                    m_visibleColumnIndices.push_back(-2); // -2 indicates original_id column
             }
         }
     }
     
-    // If source column should be shown but id wasn't first, add source at the beginning
+    // If dynamic columns should be shown but weren't added after id, add them at the beginning
     if (needsSourceColumn)
     {
         bool sourceAdded = false;
@@ -298,6 +317,34 @@ void EventsTableModel::RebuildVisibleColumns()
         {
             // Insert source at the beginning
             m_visibleColumnIndices.insert(m_visibleColumnIndices.begin(), -1);
+        }
+    }
+
+    if (needsOriginalIdColumn)
+    {
+        bool originalIdAdded = false;
+        for (int idx : m_visibleColumnIndices)
+        {
+            if (idx == -2)
+            {
+                originalIdAdded = true;
+                break;
+            }
+        }
+        
+        if (!originalIdAdded)
+        {
+            // Insert after source column if present, otherwise at beginning
+            auto sourcePos = std::find(m_visibleColumnIndices.begin(), 
+                                      m_visibleColumnIndices.end(), -1);
+            if (sourcePos != m_visibleColumnIndices.end())
+            {
+                m_visibleColumnIndices.insert(sourcePos + 1, -2);
+            }
+            else
+            {
+                m_visibleColumnIndices.insert(m_visibleColumnIndices.begin(), -2);
+            }
         }
     }
     
@@ -323,6 +370,26 @@ bool EventsTableModel::ShouldShowSourceColumn() const
     return false;
 }
 
+bool EventsTableModel::ShouldShowOriginalIdColumn() const
+{
+    // Check if any event has an original_id field (set during merge)
+    const size_t count = m_events.Size();
+    // Check first few events for performance
+    const size_t samplesToCheck = std::min(count, size_t(100));
+    
+    for (size_t i = 0; i < samplesToCheck; ++i)
+    {
+        const auto& event = m_events.GetEvent(static_cast<int>(i));
+        const std::string originalId = event.findByKey("original_id");
+        if (!originalId.empty())
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
     const std::string& columnName) const
 {
@@ -331,6 +398,12 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
     
     if (columnName == "source")
         return QString::fromStdString(event.GetSource());
+    
+    if (columnName == "original_id")
+    {
+        const std::string originalId = event.findByKey("original_id");
+        return QString::fromStdString(originalId);
+    }
 
     const auto values = event.findAllByKey(columnName);
     if (values.empty())
@@ -387,6 +460,19 @@ QVariant EventsTableModel::GetSortValue(const db::LogEvent& event,
     
     if (columnName == "source")
         return QString::fromStdString(event.GetSource());
+    
+    if (columnName == "original_id")
+    {
+        const std::string originalId = event.findByKey("original_id");
+        if (originalId.empty())
+            return QString();
+        // Try to parse as number for numeric comparison
+        bool ok = false;
+        long long numValue = QString::fromStdString(originalId).toLongLong(&ok);
+        if (ok)
+            return QVariant::fromValue(numValue);
+        return QString::fromStdString(originalId);
+    }
 
     const auto values = event.findAllByKey(columnName);
     if (values.empty())
@@ -421,6 +507,10 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     if (columnConfigIndex == -1)
     {
         columnName = "source";
+    }
+    else if (columnConfigIndex == -2)
+    {
+        columnName = "original_id";
     }
     else
     {

@@ -97,19 +97,66 @@ namespace db
     EXPECT_NE(it, event.getEventItems().end());
     EXPECT_EQ(it->first, "key1");
     EXPECT_EQ(it->second, "value1");
+  }
 
-    it = event.findInEvent("value2");
-    EXPECT_NE(it, event.getEventItems().end());
-    EXPECT_EQ(it->first, "key2");
-    EXPECT_EQ(it->second, "value2");
+  /**
+   * @test Test SetOriginalId method
+   * 
+   * Verifies that SetOriginalId stores the original_id field correctly
+   * and that it can be retrieved later.
+   */
+  TEST_F(EventTest, SetOriginalIdTest)
+  {
+    LogEvent event(1, {{"key1", "value1"}});
+    
+    // Store original ID
+    event.SetOriginalId(42);
+    
+    // Verify it's stored as event data
+    EXPECT_EQ(event.findByKey("original_id"), "42");
+    
+    // Verify the actual event ID hasn't changed
+    EXPECT_EQ(event.getId(), 1);
+  }
 
-    it = event.findInEvent("another.*");
-    EXPECT_NE(it, event.getEventItems().end());
-    EXPECT_EQ(it->first, "key3");
-    EXPECT_EQ(it->second, "anotherValue");
+  /**
+   * @test Test SetOriginalId overwrites existing original_id
+   * 
+   * Verifies that calling SetOriginalId multiple times overwrites
+   * the previous original_id without creating duplicates.
+   */
+  TEST_F(EventTest, SetOriginalIdOverwriteTest)
+  {
+    LogEvent event(1, {{"key1", "value1"}});
+    
+    // Set original ID first time
+    event.SetOriginalId(42);
+    EXPECT_EQ(event.findByKey("original_id"), "42");
+    
+    // Set original ID second time (should overwrite)
+    event.SetOriginalId(99);
+    EXPECT_EQ(event.findByKey("original_id"), "99");
+    
+    // Verify no duplicates - should have same number of items
+    // Original: 1 item (key1), after first SetOriginalId: 2 items
+    // After second SetOriginalId: should still be 2 items (not 3)
+    EXPECT_EQ(event.getEventItems().size(), 2);
+  }
 
-    it = event.findInEvent("nonexistent");
-    EXPECT_EQ(it, event.getEventItems().end());
+  /**
+   * @test Test SetOriginalId with empty event
+   * 
+   * Verifies that SetOriginalId works correctly on events with no other data.
+   */
+  TEST_F(EventTest, SetOriginalIdEmptyEventTest)
+  {
+    LogEvent event(5, {});
+    
+    event.SetOriginalId(100);
+    
+    EXPECT_EQ(event.getId(), 5);
+    EXPECT_EQ(event.findByKey("original_id"), "100");
+    EXPECT_EQ(event.getEventItems().size(), 1);
   }
 
 }

@@ -103,6 +103,7 @@ class MainWindow : public QMainWindow,
     void OnSetDarkTheme();
     void OnSetLightTheme();
     void OnSetSystemTheme();
+    void OnRecentFileTriggered(const QString& filePath);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -114,6 +115,10 @@ class MainWindow : public QMainWindow,
         db::EventsContainer& events);
     void ApplyExtendedFilters();
     void SetupMenus();
+    void RefreshRecentFilesMenu();
+    void AddToRecentFiles(const QString& filePath);
+    void LoadRecentFiles();
+    void SaveRecentFiles();
     void ShowError(const QString& title, const QString& message);
     void setupPluginManager();
     void loadPlugins();
@@ -170,6 +175,11 @@ class MainWindow : public QMainWindow,
     QWidget* m_mainPanelWidget {nullptr};
     int m_mainPanelIndex {-1};
     db::EventsContainer* m_events {nullptr};
+    
+    // Recent files
+    std::vector<QString> m_recentFiles;
+    QMenu* m_recentFilesMenu {nullptr};
+    static const int MAX_RECENT_FILES = 10;
     
     // Active plugin tracking
     std::string m_activePluginId;

@@ -242,8 +242,12 @@ void EventsContainer::MergeEvents(EventsContainer& other,
             if (timestampB.empty())
                 return true;
 
-            // ISO-8601-like timestamps compare correctly as strings.
-            return timestampA < timestampB;
+            // Compare timestamps first
+            if (timestampA != timestampB)
+                return timestampA < timestampB;
+
+            // If timestamps are equal, use event ID as tiebreaker
+            return a.getId() < b.getId();
         };
 
         // Stable merge: preserves relative order within each input sequence.
@@ -300,6 +304,21 @@ void EventsContainer::MergeEvents(EventsContainer& other,
 
         util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}",
                            other.m_data.size(), mergedEvents.size());
+
+        // Store original IDs and reassign sequential IDs based on merge order
+        for (int i = 0; i < static_cast<int>(mergedEvents.size()); ++i)
+        {
+            auto& event = mergedEvents[static_cast<size_t>(i)];
+            
+            // Store the original ID before reassignment
+            event.SetOriginalId(event.getId());
+            
+            // Update ID to sequential index in merged list
+            event.SetId(i);
+            
+            util::Logger::Debug("EventsContainer::MergeEvents: Event reassigned - original_id={}, new_id={}",
+                               event.findByKey("original_id"), event.getId());
+        }
 
         // Replace internal data while still holding the locks to avoid races.
         m_data = std::move(mergedEvents);
