@@ -93,6 +93,8 @@ endif()
 # ============================================================
 
 if (APPLE AND NOT LOGVIEWER_SUBPROJECT)
+    set(LOGVIEWER_CODESIGN_IDENTITY "-" CACHE STRING "codesign identity to use for macOS app bundle signing (default: ad-hoc '-')")
+
     configure_file(
         ${CMAKE_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in
         ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
@@ -117,7 +119,14 @@ if (APPLE AND NOT LOGVIEWER_SUBPROJECT)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${CMAKE_SOURCE_DIR}/etc/qt.conf
                     $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Resources/qt.conf
-            COMMENT "Running macdeployqt"
+            # macdeployqt (and/or install_name_tool) can invalidate signatures of copied dylibs.
+            # Re-sign the bundle (default: ad-hoc) so macOS doesn't SIGKILL on cs_invalid_page.
+            COMMAND /usr/bin/codesign
+                --force
+                --deep
+                    --sign "${LOGVIEWER_CODESIGN_IDENTITY}"
+                $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>
+            COMMENT "Running macdeployqt + codesign"
         )
     endif()
 endif()
