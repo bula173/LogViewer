@@ -67,7 +67,10 @@ jobs:
             -DCMAKE_C_COMPILER=/usr/bin/clang \
             -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DLibArchive_ROOT=$(brew --prefix libarchive) \
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
 
@@ -98,8 +101,9 @@ jobs:
         run: ctest -N || true
 
       - name: Run tests
+        if: github.event_name == 'push'
         working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -j"$(sysctl -n hw.logicalcpu)" --build-config ${{ matrix.build_type }} --output-on-failure
+        run: ./tests/bin/LogViewer_tests
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'

@@ -35,11 +35,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache MSYS2 installation
+        uses: actions/cache@v4
+        with:
+          path: C:\msys64
+          key: msys2-${{ github.run_id }}
+          restore-keys: msys2-
+
       - name: Set up MSYS2
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           update: true
+          cache: true
           install: >-
             base-devel
             git
@@ -104,7 +112,8 @@ jobs:
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
                 -DCMAKE_PREFIX_PATH=/mingw64 \
                 -DGUI_FRAMEWORK="QT" \
-                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+                -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
 
       - name: Build
         shell: msys2 {0}
@@ -114,7 +123,7 @@ jobs:
           cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Run Code Quality Tools
-        if: matrix.build_type == 'Debug'
+        if: matrix.build_type == 'Debug' && github.event_name == 'push'
         shell: msys2 {0}
         continue-on-error: true
         run: |
