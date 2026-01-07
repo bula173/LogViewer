@@ -212,7 +212,6 @@ if (UNIX AND NOT APPLE AND NOT LOGVIEWER_SUBPROJECT)
             POST_BUILD
             COMMAND ${LINUXDEPLOYQT_EXECUTABLE}
                     $<TARGET_FILE:${PROJECT_NAME}>
-                    -deploy-deps-only
             COMMENT "Running linuxdeployqt"
         )
     endif()
