@@ -546,17 +546,24 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
             QVariant valB = GetSortValue(eventB, columnName);
             
             // Handle different types
+            bool isEqual = false;
+            bool result = false;
+            
             if (valA.typeId() == QMetaType::LongLong && valB.typeId() == QMetaType::LongLong)
             {
                 long long aNum = valA.toLongLong();
                 long long bNum = valB.toLongLong();
-                return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+                if (aNum != bNum)
+                    return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+                isEqual = true;
             }
             else if (valA.typeId() == QMetaType::Double && valB.typeId() == QMetaType::Double)
             {
                 double aNum = valA.toDouble();
                 double bNum = valB.toDouble();
-                return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+                if (aNum != bNum)
+                    return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
+                isEqual = true;
             }
             else
             {
@@ -564,8 +571,20 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
                 QString aStr = valA.toString();
                 QString bStr = valB.toString();
                 int cmp = aStr.compare(bStr, Qt::CaseInsensitive);
-                return order == Qt::AscendingOrder ? cmp < 0 : cmp > 0;
+                if (cmp != 0)
+                    return order == Qt::AscendingOrder ? cmp < 0 : cmp > 0;
+                isEqual = true;
             }
+            
+            // If values are equal, use ID as tiebreaker
+            if (isEqual)
+            {
+                int idA = eventA.getId();
+                int idB = eventB.getId();
+                return order == Qt::AscendingOrder ? idA < idB : idA > idB;
+            }
+            
+            return false;
         });
 
     // Update the filtered indices with sorted order
