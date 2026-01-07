@@ -456,7 +456,7 @@ QVariant EventsTableModel::GetSortValue(const db::LogEvent& event,
     const std::string& columnName) const
 {
     if (columnName == "id")
-        return QVariant::fromValue(event.getId());
+        return QVariant::fromValue(static_cast<long long>(event.getId()));
     
     if (columnName == "source")
         return QString::fromStdString(event.GetSource());
