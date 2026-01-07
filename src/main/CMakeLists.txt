@@ -212,7 +212,8 @@ if (UNIX AND NOT APPLE AND NOT LOGVIEWER_SUBPROJECT)
             POST_BUILD
             COMMAND ${LINUXDEPLOYQT_EXECUTABLE}
                     $<TARGET_FILE:${PROJECT_NAME}>
-            COMMENT "Running linuxdeployqt"
+                    || (echo "linuxdeployqt warning: deployment bundling failed, binary will still work" && true)
+            COMMENT "Running linuxdeployqt (non-fatal)"
         )
     endif()
 endif()
