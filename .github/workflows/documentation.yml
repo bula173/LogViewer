@@ -2,7 +2,7 @@ name: Build Documentation
 
 on:
   push:
-    branches: [ "main", "qt", "analysis" ]
+    branches: [ "main", "qt" ]
     paths:
       - 'docs/**'
       - 'src/**/*.hpp'
@@ -74,9 +74,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/html
           publish_branch: gh-pages
+          force_orphan: true
           commit_message: 'Deploy documentation from ${{ github.sha }}'
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
+          cname: 
       
       - name: Build summary
         run: |
@@ -91,5 +93,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ github.ref }}" == "refs/heads/main" ] && [ "${{ github.event_name }}" == "push" ]; then
             echo "### Deployment" >> $GITHUB_STEP_SUMMARY
-            echo "📚 Documentation deployed to: https://bula173.github.io/LogViewer/" >> $GITHUB_STEP_SUMMARY
+            echo "📚 Documentation deployed to: https://${{ github.repository_owner }}.github.io/LogViewer/" >> $GITHUB_STEP_SUMMARY
+            echo "🔗 Visit the [Documentation Website](https://${{ github.repository_owner }}.github.io/LogViewer/)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ Documentation preview available in artifacts" >> $GITHUB_STEP_SUMMARY
           fi

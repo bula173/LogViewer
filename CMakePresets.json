@@ -11,10 +11,13 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
                 "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
                 "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON"
+                "ENABLE_CPPCHECK": "ON",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "condition": {
                 "type": "equals",
@@ -32,9 +35,11 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt"
-                
+                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "condition": {
                 "type": "equals",
@@ -52,10 +57,13 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
                 "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
-                "LOGVIEWER_SANITIZER": "None"
+                "LOGVIEWER_SANITIZER": "None",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
@@ -71,10 +79,13 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
                 "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
-                "LOGVIEWER_SANITIZER": "None"
+                "LOGVIEWER_SANITIZER": "None",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
@@ -88,9 +99,12 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "Qt6_DIR": "/usr/lib/cmake/Qt6",
                 "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON"
+                "ENABLE_CPPCHECK": "ON",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "condition": {
                 "type": "equals",
@@ -106,7 +120,10 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "Qt6_DIR": "/usr/lib/cmake/Qt6"
+                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "Qt6_DIR": "/usr/lib/cmake/Qt6",
+                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "condition": {
                 "type": "equals",

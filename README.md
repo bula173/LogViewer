@@ -5,7 +5,7 @@ A modern, cross-platform log viewer with AI-assisted analysis, flexible filterin
 **GUI Framework:**
 - **Qt 6 (required)**: Modern, dock-based flexible UI used for all current features including AI integration
 
-## Recent Updates (January 2026)
+## Recent Updates (January 2026 - v1.0.0)
 
 ### Plugin System Improvements
 - **Fixed Plugin Logging**: Implemented callback-based logging mechanism that works across DLL boundaries
@@ -24,29 +24,14 @@ A modern, cross-platform log viewer with AI-assisted analysis, flexible filterin
   - Error messages clearly indicate failure points
   - Easier debugging of plugin integration issues
 
-For detailed plugin documentation, see:
-- `docs/PLUGIN_SYSTEM.md` - Plugin architecture overview
-- `docs/AI_PROVIDER_PLUGIN.md` - AI Provider plugin specifics
-- `docs/PLUGIN_IMPLEMENTATION.md` - Implementation details
+- **Event Management & Sorting**: Improved event merge strategy and sorting behavior
+  - Sequential ID reassignment with original_id preservation for all events
+  - ID-based tie-breaking when sorting by timestamp or other columns
+  - Source and original_id columns auto-hide when no data available
 
-## Recent Updates (January 2026)
-
-### Plugin System Improvements
-- **Fixed Plugin Logging**: Implemented callback-based logging mechanism that works across DLL boundaries
-  - Application calls `Plugin_SetLoggerCallback` after plugin creation
-  - Plugin messages now appear in application logs with `[plugin]` prefix
-  - Resolved ODR violation with inline static variables
-  
-- **Configuration Panel Integration**: Fixed plugin configuration UI display
-  - Added `Plugin_CreateLeftPanel` C-ABI export for configuration widgets
-  - Configuration panel now appears as separate tab in left dock alongside "Filters"
-  - Previously panels were incorrectly embedded inside the Filters tab
-  - Proper parent widget management ensures correct UI hierarchy
-
-- **Enhanced Diagnostics**: Added comprehensive logging throughout plugin lifecycle
-  - Plugin creation, service initialization, and panel creation are fully logged
-  - Error messages clearly indicate failure points
-  - Easier debugging of plugin integration issues
+- **User Experience**: Recent files list with persistent storage
+  - Quick access to frequently opened files from File menu
+  - Automatic cleanup of files that no longer exist
 
 For detailed plugin documentation, see:
 - `docs/PLUGIN_SYSTEM.md` - Plugin architecture overview

@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#include <vector>
 
 namespace ui::qt
 {
@@ -116,7 +117,18 @@ void ItemDetailsView::DisplayEvent(int actualRow)
 
     const auto& event = m_events.GetItem(actualRow);
     const auto& items = event.getEventItems();
-    const int itemCount = static_cast<int>(items.size());
+    
+    // Filter out internal fields that shouldn't be displayed to users
+    std::vector<std::pair<std::string, std::string>> displayItems;
+    for (const auto& [key, value] : items)
+    {
+        // Skip internal fields used for merge tracking
+        if (key == "original_id")
+            continue;
+        displayItems.push_back({key, value});
+    }
+    
+    const int itemCount = static_cast<int>(displayItems.size());
     
     // Only update row count if it changed
     if (m_details->rowCount() != itemCount)
@@ -128,7 +140,7 @@ void ItemDetailsView::DisplayEvent(int actualRow)
     const auto& dictionary = config::GetConfig().GetFieldTranslator();
 
     int row = 0;
-    for (const auto& [key, value] : items)
+    for (const auto& [key, value] : displayItems)
     {
         // Reuse existing items if possible
         QTableWidgetItem* keyItem = m_details->item(row, 0);

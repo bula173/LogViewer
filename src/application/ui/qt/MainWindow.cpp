@@ -16,6 +16,7 @@
 #include "StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
+#include "ThemeSwitcher.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -23,6 +24,7 @@
 #include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
@@ -106,6 +108,7 @@ MainWindow::MainWindow(mvc::IController& controller,
     util::Logger::Info("[MainWindow] Initializing main window");
 
     try {
+        LoadRecentFiles();  // Load recent files early
         InitializeUi(events);
         util::Logger::Debug("[MainWindow] UI initialization completed");
 
@@ -155,6 +158,9 @@ MainWindow::MainWindow(mvc::IController& controller,
 
 MainWindow::~MainWindow()
 {
+    // Save recent files before cleanup
+    SaveRecentFiles();
+    
     // Clean up presenter first to ensure proper disconnection before Qt widgets are destroyed
     m_presenter.reset();
 
@@ -415,6 +421,11 @@ void MainWindow::SetupMenus()
         OnOpenFileRequested();
     });
 
+    // Add Recent Files submenu
+    m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
+    m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
+    RefreshRecentFilesMenu();
+
     auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
     clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
     connect(clearAction, &QAction::triggered, this,
@@ -463,6 +474,20 @@ void MainWindow::SetupMenus()
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
+    
+    viewMenu->addSeparator();
+    
+    // Theme submenu
+    auto* themeMenu = viewMenu->addMenu(tr("&Theme"));
+    
+    auto* darkThemeAction = themeMenu->addAction(tr("&Dark"));
+    connect(darkThemeAction, &QAction::triggered, this, &MainWindow::OnSetDarkTheme);
+    
+    auto* lightThemeAction = themeMenu->addAction(tr("&Light"));
+    connect(lightThemeAction, &QAction::triggered, this, &MainWindow::OnSetLightTheme);
+    
+    auto* systemThemeAction = themeMenu->addAction(tr("&System"));
+    connect(systemThemeAction, &QAction::triggered, this, &MainWindow::OnSetSystemTheme);
     
     viewMenu->addSeparator();
     
@@ -536,6 +561,111 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     m_searchResults->SetObserver(this);
 
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");
+}
+
+void MainWindow::LoadRecentFiles()
+{
+    QSettings settings("LogViewer", "LogViewer");
+    m_recentFiles.clear();
+    
+    int size = settings.beginReadArray("RecentFiles");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        QString path = settings.value("path", "").toString();
+        if (!path.isEmpty() && std::filesystem::exists(path.toStdString())) {
+            m_recentFiles.push_back(path);
+        }
+    }
+    settings.endArray();
+    
+    util::Logger::Debug("[MainWindow] Loaded {} recent files", m_recentFiles.size());
+}
+
+void MainWindow::SaveRecentFiles()
+{
+    QSettings settings("LogViewer", "LogViewer");
+    settings.beginWriteArray("RecentFiles");
+    
+    for (int i = 0; i < static_cast<int>(m_recentFiles.size()); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("path", m_recentFiles[i]);
+    }
+    
+    settings.endArray();
+    util::Logger::Debug("[MainWindow] Saved {} recent files", m_recentFiles.size());
+}
+
+void MainWindow::AddToRecentFiles(const QString& filePath)
+{
+    if (filePath.isEmpty()) return;
+    
+    // Remove if already in list
+    auto it = std::find(m_recentFiles.begin(), m_recentFiles.end(), filePath);
+    if (it != m_recentFiles.end()) {
+        m_recentFiles.erase(it);
+    }
+    
+    // Add to front
+    m_recentFiles.insert(m_recentFiles.begin(), filePath);
+    
+    // Keep only MAX_RECENT_FILES
+    if (m_recentFiles.size() > MAX_RECENT_FILES) {
+        m_recentFiles.resize(MAX_RECENT_FILES);
+    }
+    
+    // Refresh menu
+    if (m_recentFilesMenu) {
+        m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
+        RefreshRecentFilesMenu();
+    }
+    
+    // Save to settings
+    SaveRecentFiles();
+    
+    util::Logger::Debug("[MainWindow] Added to recent files: {}", filePath.toStdString());
+}
+
+void MainWindow::RefreshRecentFilesMenu()
+{
+    if (!m_recentFilesMenu) return;
+    
+    m_recentFilesMenu->clear();
+    
+    if (m_recentFiles.empty()) {
+        auto* emptyAction = m_recentFilesMenu->addAction(tr("(Empty)"));
+        emptyAction->setEnabled(false);
+        return;
+    }
+    
+    for (const auto& file : m_recentFiles) {
+        QFileInfo fileInfo(file);
+        QString displayName = fileInfo.fileName();
+        QString fullPath = file;
+        
+        auto* action = m_recentFilesMenu->addAction(displayName);
+        action->setToolTip(fullPath);
+        
+        connect(action, &QAction::triggered, this, [this, fullPath]() {
+            OnRecentFileTriggered(fullPath);
+        });
+    }
+    
+    m_recentFilesMenu->addSeparator();
+    auto* clearAction = m_recentFilesMenu->addAction(tr("Clear Recent Files"));
+    connect(clearAction, &QAction::triggered, this, [this]() {
+        m_recentFiles.clear();
+        SaveRecentFiles();
+        if (m_recentFilesMenu) {
+            m_recentFilesMenu->setEnabled(false);
+            RefreshRecentFilesMenu();
+        }
+    });
+}
+
+void MainWindow::OnRecentFileTriggered(const QString& filePath)
+{
+    util::Logger::Debug("[MainWindow] Recent file triggered: {}", filePath.toStdString());
+    HandleDroppedFile(filePath);
 }
 
 std::string MainWindow::ReadSearchQuery() const
@@ -684,6 +814,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->SetItemDetailsVisible(true);
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
                     UpdateStatusText(readyMsg.toStdString());
+                    AddToRecentFiles(path);  // Add to recent files
                 }
                 else // Merge
                 {
@@ -696,6 +827,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->SetItemDetailsVisible(true);
                     const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
                     UpdateStatusText(completeMsg.toStdString());
+                    AddToRecentFiles(path);  // Add to recent files
                 }
             }
             // If dialog was canceled, do nothing
@@ -709,6 +841,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             m_presenter->SetItemDetailsVisible(true);
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
             UpdateStatusText(readyMsg.toStdString());
+            AddToRecentFiles(path);  // Add to recent files
         }
     }
     catch (const std::exception& ex)
@@ -778,7 +911,10 @@ void MainWindow::OnClearDataRequested()
         if (m_events)
             m_events->Clear();
         if (m_eventsView)
+        {
             m_eventsView->RefreshView();
+            m_eventsView->RefreshColumns();  // Hide Source and original_id columns after clearing
+        }
         if (m_itemDetailsView)
             m_itemDetailsView->RefreshView();
         UpdateStatusText("Data cleared");
@@ -1496,6 +1632,24 @@ void MainWindow::reloadPlugins() {
     // Reload all plugins (callback will create tabs)
     loadPlugins();
     util::Logger::Info("[MainWindow] Plugins reloaded");
+}
+
+void MainWindow::OnSetDarkTheme()
+{
+    ApplyTheme(*qApp, 0);
+    util::Logger::Info("[MainWindow] Dark theme applied");
+}
+
+void MainWindow::OnSetLightTheme()
+{
+    ApplyTheme(*qApp, 1);
+    util::Logger::Info("[MainWindow] Light theme applied");
+}
+
+void MainWindow::OnSetSystemTheme()
+{
+    ApplyTheme(*qApp, 2);
+    util::Logger::Info("[MainWindow] System theme applied");
 }
 
 } // namespace ui::qt

@@ -111,4 +111,31 @@ void LogEvent::buildLookupIndex()
     }
 }
 
+void LogEvent::SetOriginalId(int originalId)
+{
+    // Store the original ID as a special field in the event data
+    // Remove any existing original_id field first to avoid duplicates
+    auto it = std::ranges::find_if(m_eventItems,
+        [](const auto& item) { return item.first == "original_id"; });
+    if (it != m_eventItems.end())
+    {
+        m_eventItems.erase(it);
+    }
+    
+    // Add the original ID as a data field
+    m_eventItems.push_back({"original_id", std::to_string(originalId)});
+    
+    // Rebuild the lookup index since we modified the items
+    buildLookupIndex();
+    
+    util::Logger::Debug("LogEvent::SetOriginalId: Set original_id={} for event id={}", 
+                        originalId, m_id);
+}
+
+void LogEvent::SetId(int newId)
+{
+    util::Logger::Debug("LogEvent::SetId: Updating event id from {} to {}", m_id, newId);
+    m_id = newId;
+}
+
 } // namespace db

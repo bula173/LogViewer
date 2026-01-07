@@ -43,6 +43,7 @@ class EventsTableModel : public QAbstractTableModel
   private:
     void RebuildVisibleColumns();
     bool ShouldShowSourceColumn() const;
+    bool ShouldShowOriginalIdColumn() const;
     QString ComposeCellText(const db::LogEvent& event,
         const std::string& columnName) const;
     QColor ResolveColor(const std::string& column,

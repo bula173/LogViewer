@@ -4,7 +4,7 @@
 
 **Proprietary License**
 
-Copyright (c) 2022-2025 LogViewer Contributors
+Copyright (c) 2022-2026 LogViewer Contributors
 
 All rights reserved.
 

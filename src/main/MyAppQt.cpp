@@ -4,6 +4,7 @@
 #include "Version.hpp"
 #include "MainController.hpp"
 #include "qt/MainWindow.hpp"
+#include "qt/ThemeSwitcher.hpp"
 #include "Logger.hpp"
 
 #include <QApplication>
@@ -11,6 +12,11 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QLibraryInfo>
+#include <QPalette>
+#include <QStyle>
+#include <QStyleFactory>
+#include <QFile>
+#include <QFont>
 #include <cstdlib>
 #include <string>
 
@@ -21,6 +27,19 @@
 namespace
 {
 constexpr const char* kQtAppName = "LogViewer";
+
+void ApplyModernStyle(QApplication& app)
+{
+    // Apply dark theme by default
+    ApplyTheme(app, 0);
+    
+    // Set application font for better typography
+    // Use system default font with better sizing
+    QFont appFont = app.font();
+    appFont.setPointSize(10);
+    appFont.setStyleStrategy(QFont::PreferAntialias);
+    app.setFont(appFont);
+}
 
 bool SetupConfig()
 {
@@ -88,6 +107,9 @@ int main(int argc, char** argv)
         app.setApplicationVersion(QString::fromStdString(Version::current().asShortStr()));
         app.setOrganizationName("LogViewer");
         app.setOrganizationDomain("logviewer.app");
+        
+        // Apply modern styling
+        ApplyModernStyle(app);
 
         // Verify QApplication is properly initialized
         if (!QApplication::instance()) {

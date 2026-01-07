@@ -175,6 +175,28 @@ class LogEvent
     }
     
     /**
+     * @brief Sets the original ID before merge (stores as event data)
+     *
+     * When merging events from different sources, the original event ID is 
+     * preserved as a data field so users can see both the original ID and
+     * the new merged ID.
+     *
+     * @param originalId The original event ID before merge
+     */
+    void SetOriginalId(int originalId);
+
+    /**
+     * @brief Updates the event's ID (used during merge to reassign sequential IDs)
+     *
+     * After merging events, this method reassigns event IDs to be sequential
+     * based on their position in the merged list. The original ID is preserved
+     * separately via SetOriginalId().
+     *
+     * @param newId The new event ID to assign
+     */
+    void SetId(int newId);
+
+    /**
      * @brief Gets the source identifier for this event
      * @return const std::string& The source identifier (empty for legacy events)
      */

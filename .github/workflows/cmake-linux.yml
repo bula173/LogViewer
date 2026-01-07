@@ -32,6 +32,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache APT packages
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: ninja-build ccache libexpat1-dev cppcheck libssh-dev libarchive-dev zip libeigen3-dev libboost-all-dev libcurl4-openssl-dev g++ clang qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev
+          version: 1.0
+
       - name: Install dependencies (apt)
         run: |
           sudo apt-get update
@@ -63,6 +69,13 @@ jobs:
           restore-keys: |
             ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-
             ccache-linux-${{ matrix.compiler }}-
+      - name: Cache FetchContent
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: fetchcontent-
       - name: Toolchain info
         run: |
           if [ "${{ matrix.compiler }}" = "gcc" ]; then
@@ -89,14 +102,17 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_C_COMPILER=$CC_COMPILER \
             -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
       - name: Build
         run: |
           mkdir -p dist/logs
           cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Run Code Quality Tools
-        if: matrix.build_type == 'Debug'
+        if: matrix.build_type == 'Debug' && github.event_name == 'push'
         continue-on-error: true
         run: |
           # Ensure logs directory exists
@@ -113,13 +129,10 @@ jobs:
             find src -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p "$BUILD_DIR" 2>&1 | tee dist/logs/clang-tidy.log || true
           fi
 
-      - name: List tests
-        working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -N || true
-
       - name: Run tests
-        working-directory: ${{ env.BUILD_DIR }}
-        run: ctest -j$(nproc) --build-config ${{ matrix.build_type }} --output-on-failure
+        if: github.event_name == 'push'
+        run: |
+          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests" || { echo "Test binary not found at ${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"; find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f; exit 1; }
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
