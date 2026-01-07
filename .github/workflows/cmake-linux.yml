@@ -133,8 +133,7 @@ jobs:
         if: github.event_name == 'push'
         working-directory: ${{ env.BUILD_DIR }}
         run: |
-          export PATH="/mingw64/bin:$PATH"
-          ./tests/bin/LogViewer_tests.exe
+          ./tests/bin/LogViewer_tests
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
