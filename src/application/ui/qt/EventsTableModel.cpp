@@ -547,7 +547,6 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
             
             // Handle different types
             bool isEqual = false;
-            bool result = false;
             
             if (valA.typeId() == QMetaType::LongLong && valB.typeId() == QMetaType::LongLong)
             {
