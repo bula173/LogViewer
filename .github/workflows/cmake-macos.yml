@@ -111,8 +111,8 @@ jobs:
 
       - name: Run tests
         if: github.event_name == 'push'
-        working-directory: ${{ env.BUILD_DIR }}
-        run: ./tests/bin/LogViewer_tests
+        run: |
+          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests" || { echo "Test binary not found at ${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"; find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f; exit 1; }
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
