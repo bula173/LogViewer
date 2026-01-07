@@ -46,6 +46,14 @@ jobs:
             ccache-macos-clang-${{ matrix.build_type }}-
             ccache-macos-clang-
 
+      - name: Cache FetchContent
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: fetchcontent-
+
       - name: Toolchain info
         run: |
           which clang++

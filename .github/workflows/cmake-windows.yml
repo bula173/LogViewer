@@ -76,6 +76,21 @@ jobs:
             ccache-win-clang-${{ matrix.build_type }}-
             ccache-win-clang-
 
+      - name: Cache MSYS2 packages
+        uses: actions/cache@v4
+        with:
+          path: C:\msys64
+          key: msys2-packages-${{ hashFiles('.github/workflows/cmake-windows.yml') }}
+          restore-keys: msys2-packages-
+
+      - name: Cache FetchContent
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: fetchcontent-
+
       - name: Configure (CMake)
         shell: msys2 {0}
         run: |
