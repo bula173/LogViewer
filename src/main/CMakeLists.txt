@@ -43,9 +43,14 @@ if (APPLE)
     )
 endif()
 
+qt_add_resources(RESOURCE_FILES
+    ${PROJECT_SOURCE_DIR}/resources/styles.qrc
+)
+
 target_sources(${PROJECT_NAME}
     PRIVATE
         MyAppQt.cpp
+        ${RESOURCE_FILES}
 )
 
 if (WIN32)

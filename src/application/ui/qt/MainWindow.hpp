@@ -100,6 +100,9 @@ class MainWindow : public QMainWindow,
     void OnOpenAppLogRequested();
     void OnExitRequested();
     void OnAboutRequested();
+    void OnSetDarkTheme();
+    void OnSetLightTheme();
+    void OnSetSystemTheme();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;

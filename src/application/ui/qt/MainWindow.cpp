@@ -16,6 +16,7 @@
 #include "StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
+#include "ThemeSwitcher.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -463,6 +464,20 @@ void MainWindow::SetupMenus()
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
+    
+    viewMenu->addSeparator();
+    
+    // Theme submenu
+    auto* themeMenu = viewMenu->addMenu(tr("&Theme"));
+    
+    auto* darkThemeAction = themeMenu->addAction(tr("&Dark"));
+    connect(darkThemeAction, &QAction::triggered, this, &MainWindow::OnSetDarkTheme);
+    
+    auto* lightThemeAction = themeMenu->addAction(tr("&Light"));
+    connect(lightThemeAction, &QAction::triggered, this, &MainWindow::OnSetLightTheme);
+    
+    auto* systemThemeAction = themeMenu->addAction(tr("&System"));
+    connect(systemThemeAction, &QAction::triggered, this, &MainWindow::OnSetSystemTheme);
     
     viewMenu->addSeparator();
     
@@ -1496,6 +1511,24 @@ void MainWindow::reloadPlugins() {
     // Reload all plugins (callback will create tabs)
     loadPlugins();
     util::Logger::Info("[MainWindow] Plugins reloaded");
+}
+
+void MainWindow::OnSetDarkTheme()
+{
+    ApplyTheme(*qApp, 0);
+    util::Logger::Info("[MainWindow] Dark theme applied");
+}
+
+void MainWindow::OnSetLightTheme()
+{
+    ApplyTheme(*qApp, 1);
+    util::Logger::Info("[MainWindow] Light theme applied");
+}
+
+void MainWindow::OnSetSystemTheme()
+{
+    ApplyTheme(*qApp, 2);
+    util::Logger::Info("[MainWindow] System theme applied");
 }
 
 } // namespace ui::qt
