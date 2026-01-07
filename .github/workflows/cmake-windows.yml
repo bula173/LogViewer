@@ -119,10 +119,9 @@ jobs:
 
       - name: Run tests
         shell: msys2 {0}
-        working-directory: ${{ env.BUILD_DIR }}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          ctest -j"$(nproc)" --build-config ${{ matrix.build_type }} --output-on-failure
+          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests.exe"
 
       - name: Install (staging)
         shell: msys2 {0}

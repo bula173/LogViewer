@@ -1,4 +1,4 @@
-if (WIN32)
+if (FALSE)
     message(STATUS "Tests are disabled on Windows")
     return()
 endif()

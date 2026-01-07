@@ -248,33 +248,55 @@ void EventsContainer::MergeEvents(EventsContainer& other,
 
         // Stable merge: preserves relative order within each input sequence.
         // Tie-breaker: existing events are emitted before new events for the same timestamp.
-        std::size_t i = 0;
-        std::size_t j = 0;
+        auto it1 = m_data.begin();
+        auto it2 = other.m_data.begin();
 
-        while (i < m_data.size() && j < other.m_data.size())
+        while (it1 != m_data.end() && it2 != other.m_data.end())
         {
-            const auto& a = m_data[i];
-            const auto& b = other.m_data[j];
-
-            // If b is strictly before a, take b. Otherwise take a.
-            // This makes ties (equal timestamps, or both empty) favor existing (a).
-            if (isBefore(b, a))
+            // If it2 (new event) is strictly before it1 (existing event), take it2.
+            // Otherwise take it1. This makes ties favor existing events.
+            if (isBefore(*it2, *it1))
             {
-                mergedEvents.push_back(b);
-                ++j;
+                mergedEvents.push_back(std::move(*it2));
+                ++it2;
             }
             else
             {
-                mergedEvents.push_back(a);
-                ++i;
+                mergedEvents.push_back(std::move(*it1));
+                ++it1;
             }
         }
 
-        // Append the remainder in original order
-        for (; i < m_data.size(); ++i)
-            mergedEvents.push_back(m_data[i]);
-        for (; j < other.m_data.size(); ++j)
-            mergedEvents.push_back(other.m_data[j]);
+        // Continue merging remaining items from whichever container has items left
+        while (it1 != m_data.end() || it2 != other.m_data.end())
+        {
+            if (it1 == m_data.end())
+            {
+                // No more items in m_data, append remaining from other
+                mergedEvents.push_back(std::move(*it2));
+                ++it2;
+            }
+            else if (it2 == other.m_data.end())
+            {
+                // No more items in other, append remaining from m_data
+                mergedEvents.push_back(std::move(*it1));
+                ++it1;
+            }
+            else
+            {
+                // Both have items, compare and take the one that comes first
+                if (isBefore(*it2, *it1))
+                {
+                    mergedEvents.push_back(std::move(*it2));
+                    ++it2;
+                }
+                else
+                {
+                    mergedEvents.push_back(std::move(*it1));
+                    ++it1;
+                }
+            }
+        }
 
         util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}",
                            other.m_data.size(), mergedEvents.size());
