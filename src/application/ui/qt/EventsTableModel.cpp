@@ -609,6 +609,13 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     else
     {
         m_filteredIndices = indicesToSort;
+        // Rebuild reverse lookup map for RowFromModelIndex
+        m_reverseFilteredIndices.clear();
+        m_reverseFilteredIndices.reserve(m_filteredIndices.size());
+        for (int row = 0; row < static_cast<int>(m_filteredIndices.size()); ++row)
+        {
+            m_reverseFilteredIndices[m_filteredIndices[static_cast<std::size_t>(row)]] = row;
+        }
     }
 
     emit layoutChanged();
