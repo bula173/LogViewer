@@ -171,7 +171,7 @@ if (WIN32)
             set(COPIED_COUNT 0)
             foreach(DEP \${_resolved_deps})
                 # Only copy DLLs from the toolchain directory (skip Windows system DLLs)
-                string(FIND \"\${DEP}\" \"mingw64\" TOOLCHAIN_MATCH)
+                string(FIND \"\${DEP}\" \"msys64\" TOOLCHAIN_MATCH)
                 if(NOT TOOLCHAIN_MATCH EQUAL -1)
                     get_filename_component(DLL_NAME \"\${DEP}\" NAME)
                     

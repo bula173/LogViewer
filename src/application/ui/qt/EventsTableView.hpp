@@ -35,8 +35,7 @@ class EventsTableView : public QTableView,
     void OnDataUpdated() override;
     void OnCurrentIndexUpdated(const int index) override;
 
-    int CurrentActualRow() const;
-    void ScrollToActualRow(int actualRow);
+    void ScrollToModelIndex(int modelIndex);
 
   signals:
     void CurrentActualRowChanged(int actualRow);

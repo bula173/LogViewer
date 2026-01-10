@@ -111,6 +111,11 @@ void LogEvent::buildLookupIndex()
     }
 }
 
+int LogEvent::GetOriginalId() const
+{
+    return std::stoi(findByKey("original_id"));
+}
+
 void LogEvent::SetOriginalId(int originalId)
 {
     // Store the original ID as a special field in the event data

@@ -48,7 +48,7 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return {};
 
-    const int actualIndex = ResolveToActualIndex(index.row());
+    const int actualIndex = ResolveToModelIndex(index.row());
     if (actualIndex < 0)
         return {};
 
@@ -198,7 +198,7 @@ void EventsTableModel::SetFilteredIndices(
     m_filteredIndices = indices;
     m_filteringActive = true; // Mark that filtering is now active
     
-    // Build reverse lookup map for O(1) RowFromActualIndex lookups
+    // Build reverse lookup map for O(1) RowFromModelIndex lookups
     m_reverseFilteredIndices.clear();
     m_reverseFilteredIndices.reserve(indices.size());
     for (int row = 0; row < static_cast<int>(indices.size()); ++row)
@@ -217,7 +217,7 @@ void EventsTableModel::ClearFilter()
     RefreshAll();
 }
 
-int EventsTableModel::ResolveToActualIndex(int row) const
+int EventsTableModel::ResolveToModelIndex(int row) const
 {
     if (row < 0)
         return -1;
@@ -232,7 +232,7 @@ int EventsTableModel::ResolveToActualIndex(int row) const
     return row;
 }
 
-int EventsTableModel::RowFromActualIndex(int actualIndex) const
+int EventsTableModel::RowFromModelIndex(int actualIndex) const
 {
     if (actualIndex < 0)
         return -1;
@@ -598,7 +598,7 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
         // When we populated filtered indices from a full sort, mark filtering
         // as active so other model methods use the mapped indices.
         m_filteringActive = true;
-        // Rebuild reverse lookup map for RowFromActualIndex
+        // Rebuild reverse lookup map for RowFromModelIndex
         m_reverseFilteredIndices.clear();
         m_reverseFilteredIndices.reserve(m_filteredIndices.size());
         for (int row = 0; row < static_cast<int>(m_filteredIndices.size()); ++row)

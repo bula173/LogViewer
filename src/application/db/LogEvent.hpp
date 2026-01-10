@@ -185,6 +185,17 @@ class LogEvent
      */
     void SetOriginalId(int originalId);
 
+        /**
+     * @brief Get the original ID before merge (stores as event data)
+     *
+     * When merging events from different sources, the original event ID is 
+     * preserved as a data field so users can see both the original ID and
+     * the new merged ID.
+     *
+     * @return The original event ID before merge
+     */
+    int GetOriginalId() const;
+
     /**
      * @brief Updates the event's ID (used during merge to reassign sequential IDs)
      *

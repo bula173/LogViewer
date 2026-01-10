@@ -36,8 +36,8 @@ class EventsTableModel : public QAbstractTableModel
     void ClearFilter(); // Clear filtering and show all events
     const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
 
-    int ResolveToActualIndex(int row) const;
-    int RowFromActualIndex(int actualIndex) const;
+    int ResolveToModelIndex(int row) const;
+    int RowFromModelIndex(int actualIndex) const;
     std::vector<int> ColumnWidths() const;
 
   private:

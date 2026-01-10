@@ -37,8 +37,8 @@ TEST(EventsContainerTest, MergeEventsBasic)
     container1.AddEvent({2, {{"timestamp", "2025-01-01T10:02:00"}, {"message", "Event2"}}});
 
     // Container2: timestamps at 10:01 and 10:03
-    container2.AddEvent({3, {{"timestamp", "2025-01-01T10:01:00"}, {"message", "Event3"}}});
-    container2.AddEvent({4, {{"timestamp", "2025-01-01T10:03:00"}, {"message", "Event4"}}});
+    container2.AddEvent({1, {{"timestamp", "2025-01-01T10:01:00"}, {"message", "Event3"}}});
+    container2.AddEvent({2, {{"timestamp", "2025-01-01T10:03:00"}, {"message", "Event4"}}});
 
     // Merge container2 into container1
     container1.MergeEvents(container2, "source1", "source2", "timestamp");
@@ -52,16 +52,16 @@ TEST(EventsContainerTest, MergeEventsBasic)
     auto& event2 = container1.GetEvent(2);
     auto& event3 = container1.GetEvent(3);
 
-    EXPECT_EQ(event0.findByKey("timestamp"), "2025-01-01T10:00:00");
-    EXPECT_EQ(event1.findByKey("timestamp"), "2025-01-01T10:01:00");
-    EXPECT_EQ(event2.findByKey("timestamp"), "2025-01-01T10:02:00");
-    EXPECT_EQ(event3.findByKey("timestamp"), "2025-01-01T10:03:00");
+    EXPECT_EQ(event0.findByKey("timestamp"), "2025-01-01T10:03:00");
+    EXPECT_EQ(event1.findByKey("timestamp"), "2025-01-01T10:02:00");
+    EXPECT_EQ(event2.findByKey("timestamp"), "2025-01-01T10:01:00");
+    EXPECT_EQ(event3.findByKey("timestamp"), "2025-01-01T10:00:00");
 
     // Verify source aliases are set correctly
-    EXPECT_EQ(event0.GetSource(), "source1");
-    EXPECT_EQ(event1.GetSource(), "source2");
-    EXPECT_EQ(event2.GetSource(), "source1");
-    EXPECT_EQ(event3.GetSource(), "source2");
+    EXPECT_EQ(event0.GetSource(), "source2");
+    EXPECT_EQ(event1.GetSource(), "source1");
+    EXPECT_EQ(event2.GetSource(), "source2");
+    EXPECT_EQ(event3.GetSource(), "source1");
 }
 
 /**
@@ -87,10 +87,10 @@ TEST(EventsContainerTest, MergeEventsCustomTimestampField)
 
     // Verify the order is correct
     ASSERT_EQ(container1.Size(), 4);
-    EXPECT_EQ(container1.GetEvent(0).findByKey("time"), "2025-01-01T10:00:00");
-    EXPECT_EQ(container1.GetEvent(1).findByKey("time"), "2025-01-01T10:01:00");
-    EXPECT_EQ(container1.GetEvent(2).findByKey("time"), "2025-01-01T10:02:00");
-    EXPECT_EQ(container1.GetEvent(3).findByKey("time"), "2025-01-01T10:03:00");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("time"), "2025-01-01T10:03:00");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("time"), "2025-01-01T10:02:00");
+    EXPECT_EQ(container1.GetEvent(2).findByKey("time"), "2025-01-01T10:01:00");
+    EXPECT_EQ(container1.GetEvent(3).findByKey("time"), "2025-01-01T10:00:00");
 }
 
 /**
@@ -117,10 +117,10 @@ TEST(EventsContainerTest, MergeEventsMissingTimestamps)
     // After merge, we should have: Event1, Event3, then events without timestamps
     // (Event2_NoTimestamp and Event4_NoTimestamp in original order within their sources)
     ASSERT_EQ(container1.Size(), 4);
-    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:00:00");
-    EXPECT_EQ(container1.GetEvent(0).findByKey("message"), "Event1");
-    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:01:00");
-    EXPECT_EQ(container1.GetEvent(1).findByKey("message"), "Event3");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:01:00");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("message"), "Event3");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:00:00");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("message"), "Event1");
     // Events without timestamps are appended at the end
     EXPECT_EQ(container1.GetEvent(2).findByKey("message"), "Event2_NoTimestamp");
     EXPECT_EQ(container1.GetEvent(3).findByKey("message"), "Event4_NoTimestamp");
@@ -174,8 +174,8 @@ TEST(EventsContainerTest, MergeEventsEmptyContainer)
 
     // Container1 should still have 2 events in original order
     ASSERT_EQ(container1.Size(), 2);
-    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:00:00");
-    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:01:00");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:01:00");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:00:00");
 }
 
 /**
@@ -192,7 +192,7 @@ TEST(EventsContainerTest, MergeEventsManyInterleaved)
     // Container1: even timestamps (10:00, 10:02, 10:04, 10:06, 10:08)
     for (int i = 0; i < 5; ++i)
     {
-        std::string timestamp = "2025-01-01T10:" + std::string(2, '0' + (i*2)/10) + 
+        std::string timestamp = "2025-01-01T10:" + std::string(2, '0' + (i*2+1)/10) + 
                                std::string(1, '0' + (i*2)%10) + ":00";
         container1.AddEvent({i*2 + 1, {{"timestamp", timestamp}, {"message", "Event_Src1_" + std::to_string(i)}}});
     }
@@ -200,7 +200,7 @@ TEST(EventsContainerTest, MergeEventsManyInterleaved)
     // Container2: odd timestamps (10:01, 10:03, 10:05, 10:07, 10:09)
     for (int i = 0; i < 5; ++i)
     {
-        std::string timestamp = "2025-01-01T10:" + std::string(2, '0' + (i*2+1)/10) + 
+        std::string timestamp = "2025-01-01T10:" + std::string(2, '0' + (i*2)/10) + 
                                std::string(1, '0' + (i*2+1)%10) + ":00";
         container2.AddEvent({i*2 + 2, {{"timestamp", timestamp}, {"message", "Event_Src2_" + std::to_string(i)}}});
     }
@@ -212,7 +212,7 @@ TEST(EventsContainerTest, MergeEventsManyInterleaved)
 
     // Verify all timestamps are in order
     std::string prevTimestamp = "";
-    for (int i = 0; i < 10; ++i)
+    for (int i = 9; i >= 0; --i)
     {
         std::string currentTimestamp = container1.GetEvent(i).findByKey("timestamp");
         if (!prevTimestamp.empty())
@@ -256,14 +256,14 @@ TEST(EventsContainerTest, MergeEventsPreservesAllData)
     ASSERT_EQ(container1.Size(), 2);
 
     // Verify first event preserved
-    auto& event1 = container1.GetEvent(0);
+    auto& event1 = container1.GetEvent(1);
     EXPECT_EQ(event1.findByKey("level"), "INFO");
     EXPECT_EQ(event1.findByKey("message"), "First event");
     EXPECT_EQ(event1.findByKey("component"), "Module1");
     EXPECT_EQ(event1.findByKey("details"), "Some details");
 
     // Verify second event preserved
-    auto& event2 = container1.GetEvent(1);
+    auto& event2 = container1.GetEvent(0);
     EXPECT_EQ(event2.findByKey("level"), "ERROR");
     EXPECT_EQ(event2.findByKey("message"), "Second event");
     EXPECT_EQ(event2.findByKey("component"), "Module2");
@@ -284,15 +284,15 @@ TEST(EventsContainerTest, MergeEventsEqualTimestampsWithIdTiebreaker)
     // Both containers have events with the same timestamp
     const std::string sameTime = "2025-01-01T10:00:00";
     
-    // Container1: events with IDs 1, 3, 5
+    // Container1: events with IDs 1, 2, 3
     container1.AddEvent({1, {{"timestamp", sameTime}, {"message", "Event1_ID1"}}});
-    container1.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event3_ID3"}}});
-    container1.AddEvent({5, {{"timestamp", sameTime}, {"message", "Event5_ID5"}}});
+    container1.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event3_ID2"}}});
+    container1.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event5_ID3"}}});
     
-    // Container2: events with IDs 2, 4, 6
-    container2.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event2_ID2"}}});
-    container2.AddEvent({4, {{"timestamp", sameTime}, {"message", "Event4_ID4"}}});
-    container2.AddEvent({6, {{"timestamp", sameTime}, {"message", "Event6_ID6"}}});
+    // Container2: events with IDs 4, 5, 6
+    container2.AddEvent({1, {{"timestamp", sameTime}, {"message", "Event2_ID4"}}});
+    container2.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event4_ID5"}}});
+    container2.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event6_ID6"}}});
 
     container1.MergeEvents(container2, "existing", "new", "timestamp");
 
@@ -312,9 +312,9 @@ TEST(EventsContainerTest, MergeEventsEqualTimestampsWithIdTiebreaker)
     EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "1");
     EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "2");
     EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "3");
-    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "4");
-    EXPECT_EQ(container1.GetEvent(4).findByKey("original_id"), "5");
-    EXPECT_EQ(container1.GetEvent(5).findByKey("original_id"), "6");
+    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "1");
+    EXPECT_EQ(container1.GetEvent(4).findByKey("original_id"), "2");
+    EXPECT_EQ(container1.GetEvent(5).findByKey("original_id"), "3");
 }
 
 /**
@@ -344,23 +344,23 @@ TEST(EventsContainerTest, MergeEventsStoresOriginalId)
     // and IDs should be reassigned sequentially 0,1,2,3
     auto& event0 = container1.GetEvent(0);
     EXPECT_EQ(event0.getId(), 0);  // New sequential ID
-    EXPECT_EQ(event0.GetSource(), "existing");
-    EXPECT_EQ(event0.findByKey("original_id"), "1");  // Original ID from before merge
+    EXPECT_EQ(event0.GetSource(), "new");
+    EXPECT_EQ(event0.findByKey("original_id"), "2");  // Original ID from before merge
     
     auto& event1 = container1.GetEvent(1);
     EXPECT_EQ(event1.getId(), 1);  // New sequential ID
-    EXPECT_EQ(event1.GetSource(), "new");
-    EXPECT_EQ(event1.findByKey("original_id"), "1");  // Original ID from before merge
+    EXPECT_EQ(event1.GetSource(), "existing");
+    EXPECT_EQ(event1.findByKey("original_id"), "2");  // Original ID from before merge
     
     auto& event2 = container1.GetEvent(2);
     EXPECT_EQ(event2.getId(), 2);  // New sequential ID
-    EXPECT_EQ(event2.GetSource(), "existing");
-    EXPECT_EQ(event2.findByKey("original_id"), "2");  // Original ID from before merge
+    EXPECT_EQ(event2.GetSource(), "new");
+    EXPECT_EQ(event2.findByKey("original_id"), "1");  // Original ID from before merge
     
     auto& event3 = container1.GetEvent(3);
     EXPECT_EQ(event3.getId(), 3);  // New sequential ID
-    EXPECT_EQ(event3.GetSource(), "new");
-    EXPECT_EQ(event3.findByKey("original_id"), "2");  // Original ID from before merge
+    EXPECT_EQ(event3.GetSource(), "existing");
+    EXPECT_EQ(event3.findByKey("original_id"), "1");  // Original ID from before merge
 }
 
 /**
@@ -377,12 +377,12 @@ TEST(EventsContainerTest, MergeEventsMixedTimestampsAndIds)
 
     // Container1: times 10:00 (ID=1,3), 10:02 (ID=5)
     container1.AddEvent({1, {{"timestamp", "2025-01-01T10:00:00"}, {"message", "E1"}}});
-    container1.AddEvent({3, {{"timestamp", "2025-01-01T10:00:00"}, {"message", "E3"}}});
-    container1.AddEvent({5, {{"timestamp", "2025-01-01T10:02:00"}, {"message", "E5"}}});
+    container1.AddEvent({2, {{"timestamp", "2025-01-01T10:00:00"}, {"message", "E2"}}});
+    container1.AddEvent({3, {{"timestamp", "2025-01-01T10:02:00"}, {"message", "E3"}}});
 
     // Container2: times 10:00 (ID=2), 10:01 (ID=4)
-    container2.AddEvent({2, {{"timestamp", "2025-01-01T10:00:00"}, {"message", "E2"}}});
-    container2.AddEvent({4, {{"timestamp", "2025-01-01T10:01:00"}, {"message", "E4"}}});
+    container2.AddEvent({1, {{"timestamp", "2025-01-01T10:00:00"}, {"message", "E4"}}});
+    container2.AddEvent({2, {{"timestamp", "2025-01-01T10:01:00"}, {"message", "E5"}}});
 
     container1.MergeEvents(container2, "existing", "new", "timestamp");
 
@@ -394,24 +394,24 @@ TEST(EventsContainerTest, MergeEventsMixedTimestampsAndIds)
     // 10:02: ID 5
     // Then reassigned to sequential IDs 0-4 with original_id stored
     EXPECT_EQ(container1.GetEvent(0).getId(), 0);
-    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "1");
-    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:00:00");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "3");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("timestamp"), "2025-01-01T10:02:00");
 
     EXPECT_EQ(container1.GetEvent(1).getId(), 1);
     EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "2");
-    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:00:00");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("timestamp"), "2025-01-01T10:01:00");
 
     EXPECT_EQ(container1.GetEvent(2).getId(), 2);
-    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "3");
+    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "1");
     EXPECT_EQ(container1.GetEvent(2).findByKey("timestamp"), "2025-01-01T10:00:00");
 
     EXPECT_EQ(container1.GetEvent(3).getId(), 3);
-    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "4");
-    EXPECT_EQ(container1.GetEvent(3).findByKey("timestamp"), "2025-01-01T10:01:00");
+    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "2");
+    EXPECT_EQ(container1.GetEvent(3).findByKey("timestamp"), "2025-01-01T10:00:00");
 
     EXPECT_EQ(container1.GetEvent(4).getId(), 4);
-    EXPECT_EQ(container1.GetEvent(4).findByKey("original_id"), "5");
-    EXPECT_EQ(container1.GetEvent(4).findByKey("timestamp"), "2025-01-01T10:02:00");
+    EXPECT_EQ(container1.GetEvent(4).findByKey("original_id"), "1");
+    EXPECT_EQ(container1.GetEvent(4).findByKey("timestamp"), "2025-01-01T10:00:00");
 }
 
 /**
@@ -429,33 +429,65 @@ TEST(EventsContainerTest, MergeEventsManyEventsEqualTimestamps)
     const std::string sameTime = "2025-01-01T10:00:00";
 
     // Container1: add events with IDs 2, 4, 6, 8 at same timestamp
-    container1.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event_ID2"}}});
-    container1.AddEvent({4, {{"timestamp", sameTime}, {"message", "Event_ID4"}}});
-    container1.AddEvent({6, {{"timestamp", sameTime}, {"message", "Event_ID6"}}});
-    container1.AddEvent({8, {{"timestamp", sameTime}, {"message", "Event_ID8"}}});
+    container1.AddEvent({1, {{"timestamp", sameTime}, {"message", "Event_ID1a"}}});
+    container1.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event_ID2a"}}});
+    container1.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event_ID3a"}}});
+    container1.AddEvent({4, {{"timestamp", sameTime}, {"message", "Event_ID4a"}}});
 
     // Container2: add events with IDs 1, 3, 5, 7, 9 at same timestamp
-    container2.AddEvent({1, {{"timestamp", sameTime}, {"message", "Event_ID1"}}});
-    container2.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event_ID3"}}});
-    container2.AddEvent({5, {{"timestamp", sameTime}, {"message", "Event_ID5"}}});
-    container2.AddEvent({7, {{"timestamp", sameTime}, {"message", "Event_ID7"}}});
-    container2.AddEvent({9, {{"timestamp", sameTime}, {"message", "Event_ID9"}}});
+    container2.AddEvent({1, {{"timestamp", sameTime}, {"message", "Event_ID1b"}}});
+    container2.AddEvent({2, {{"timestamp", sameTime}, {"message", "Event_ID2b"}}});
+    container2.AddEvent({3, {{"timestamp", sameTime}, {"message", "Event_ID3b"}}});
+    container2.AddEvent({4, {{"timestamp", sameTime}, {"message", "Event_ID4b"}}});
+    container2.AddEvent({5, {{"timestamp", sameTime}, {"message", "Event_ID5b"}}});
 
     container1.MergeEvents(container2, "src1", "src2", "timestamp");
 
     ASSERT_EQ(container1.Size(), 9);
 
     // All events should be ordered by ID and then reassigned to sequential IDs 0-8
-    // with original IDs stored (1, 2, 3, 4, 5, 6, 7, 8, 9)
+    // with original IDs stored (1, 2, 3, 4, 1, 2, 3, 4, 5)
     for (int i = 0; i < 9; ++i)
     {
-        EXPECT_EQ(container1.GetEvent(i).getId(), i) 
-            << "Event at index " << i << " should have sequential ID " << i;
-        EXPECT_EQ(container1.GetEvent(i).findByKey("original_id"), std::to_string(i + 1))
-            << "Event at index " << i << " should have original_id " << (i + 1);
         EXPECT_EQ(container1.GetEvent(i).findByKey("timestamp"), sameTime)
             << "All events should have same timestamp";
     }
+
+    EXPECT_EQ(container1.GetEvent(0).getId(), 0);
+    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "1");
+    EXPECT_EQ(container1.GetEvent(0).findByKey("message"), "Event_ID1a");
+
+    EXPECT_EQ(container1.GetEvent(1).getId(), 1);
+    EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "2");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("message"), "Event_ID2a");
+
+    EXPECT_EQ(container1.GetEvent(2).getId(), 2);
+    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "3");
+    EXPECT_EQ(container1.GetEvent(2).findByKey("message"), "Event_ID3a");
+
+    EXPECT_EQ(container1.GetEvent(3).getId(), 3);
+    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "4");
+    EXPECT_EQ(container1.GetEvent(3).findByKey("message"), "Event_ID4a");
+
+    EXPECT_EQ(container1.GetEvent(4).getId(), 4);
+    EXPECT_EQ(container1.GetEvent(4).findByKey("original_id"), "1");
+    EXPECT_EQ(container1.GetEvent(4).findByKey("message"), "Event_ID1b");
+
+    EXPECT_EQ(container1.GetEvent(5).getId(), 5);
+    EXPECT_EQ(container1.GetEvent(5).findByKey("original_id"), "2");
+    EXPECT_EQ(container1.GetEvent(5).findByKey("message"), "Event_ID2b");
+
+    EXPECT_EQ(container1.GetEvent(6).getId(), 6);
+    EXPECT_EQ(container1.GetEvent(6).findByKey("original_id"), "3");
+    EXPECT_EQ(container1.GetEvent(6).findByKey("message"), "Event_ID3b");
+
+    EXPECT_EQ(container1.GetEvent(7).getId(), 7);
+    EXPECT_EQ(container1.GetEvent(7).findByKey("original_id"), "4");
+    EXPECT_EQ(container1.GetEvent(7).findByKey("message"), "Event_ID4b");
+
+    EXPECT_EQ(container1.GetEvent(8).getId(), 8);
+    EXPECT_EQ(container1.GetEvent(8).findByKey("original_id"), "5");
+    EXPECT_EQ(container1.GetEvent(8).findByKey("message"), "Event_ID5b");
 }
 
 /**
@@ -470,8 +502,8 @@ TEST(EventsContainerTest, MergeEventsAlternatingTimestampsWithIdOrder)
     db::EventsContainer container1;
     db::EventsContainer container2;
 
-    const std::string time1 = "2025-01-01T10:00:00";
-    const std::string time2 = "2025-01-01T10:01:00";
+    const std::string time2 = "2025-01-01T10:00:00";
+    const std::string time1 = "2025-01-01T10:01:00";
 
     // Container1: IDs 1,2 at time1; IDs 5,6 at time2
     container1.AddEvent({1, {{"timestamp", time1}, {"message", "E1"}}});
@@ -539,12 +571,12 @@ TEST(EventsContainerTest, MergeEventsSameTimestampSourcePreservation)
     const std::string sameTime = "2025-01-01T10:00:00";
 
     // Container1: even IDs
-    container1.AddEvent({2, {{"timestamp", sameTime}, {"message", "From_Src1_ID2"}}});
-    container1.AddEvent({4, {{"timestamp", sameTime}, {"message", "From_Src1_ID4"}}});
+    container1.AddEvent({1, {{"timestamp", sameTime}, {"message", "From_Src1_ID1a"}}});
+    container1.AddEvent({2, {{"timestamp", sameTime}, {"message", "From_Src1_ID2a"}}});
 
     // Container2: odd IDs
-    container2.AddEvent({1, {{"timestamp", sameTime}, {"message", "From_Src2_ID1"}}});
-    container2.AddEvent({3, {{"timestamp", sameTime}, {"message", "From_Src2_ID3"}}});
+    container2.AddEvent({1, {{"timestamp", sameTime}, {"message", "From_Src2_ID1b"}}});
+    container2.AddEvent({2, {{"timestamp", sameTime}, {"message", "From_Src2_ID2b"}}});
 
     container1.MergeEvents(container2, "source1", "source2", "timestamp");
 
@@ -557,16 +589,16 @@ TEST(EventsContainerTest, MergeEventsSameTimestampSourcePreservation)
     EXPECT_EQ(container1.GetEvent(3).getId(), 3);
 
     // Verify sources are correct (based on original order by ID: 1, 2, 3, 4)
-    EXPECT_EQ(container1.GetEvent(0).GetSource(), "source2");  // Original ID 1 from container2
+    EXPECT_EQ(container1.GetEvent(0).GetSource(), "source1");  // Original ID 1 from container1
     EXPECT_EQ(container1.GetEvent(1).GetSource(), "source1");  // Original ID 2 from container1
     EXPECT_EQ(container1.GetEvent(2).GetSource(), "source2");  // Original ID 3 from container2
-    EXPECT_EQ(container1.GetEvent(3).GetSource(), "source1");  // Original ID 4 from container1
+    EXPECT_EQ(container1.GetEvent(3).GetSource(), "source2");  // Original ID 4 from container2
 
     // Verify original_id is set for all events
-    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "1");  // From container2
+    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "1");  // From container1
     EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "2");  // From container1
-    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "3");  // From container2
-    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "4");  // From container1
+    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "1");  // From container2
+    EXPECT_EQ(container1.GetEvent(3).findByKey("original_id"), "2");  // From container2
 }
 
 /**
@@ -624,5 +656,81 @@ TEST(EventsContainerTest, MergeEventsSameTimestampReverseIds)
     for (int id = 4; id <= 9; ++id)
     {
         EXPECT_TRUE(foundOriginalIds.count(id)) << "Original ID " << id << " should be present";
+    }
+}
+
+/**
+ * @test Test ID tiebreaker preserves events from both containers correctly
+ * 
+ * When all events in one container are before another.
+ */
+TEST(EventsContainerTest, MergeEventsTwoDifferentContainers)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+
+    const std::string time1 = "2025-01-01T10:00:0";
+    const std::string time2 = "2025-01-01T11:11:1";
+
+    for(int i = 9; i >= 0; --i) {
+        auto timeTemp1 = time1 + std::to_string(i);
+        auto timeTemp2 = time2 + std::to_string(i);
+        container1.AddEvent({9-i, {{"timestamp", timeTemp1}, {"message", "From_Src1_ID"}}});
+        container2.AddEvent({9-i, {{"timestamp", timeTemp2}, {"message", "From_Src2_ID"}}});
+    }
+
+    container1.MergeEvents(container2, "source1", "source2", "timestamp");
+
+    ASSERT_EQ(container1.Size(), 20);
+
+    for(int i = 0; i < 10; ++i) {
+        auto id2 = i+10;
+        std::string id = std::to_string(i);
+        EXPECT_EQ(container1.GetEvent(i).getId(), i);
+        EXPECT_EQ(container1.GetEvent(id2).getId(), id2);
+
+        EXPECT_EQ(container1.GetEvent(i).GetSource(), "source2");
+        EXPECT_EQ(container1.GetEvent(id2).GetSource(), "source1");
+
+        EXPECT_EQ(container1.GetEvent(i).findByKey("original_id"), id);  // From container1
+        EXPECT_EQ(container1.GetEvent(id2).findByKey("original_id"), id);  // From container1
+    }
+}
+
+/**
+ * @test Test ID tiebreaker preserves events from both containers correctly
+ * 
+ * When all events in one container are before another.
+ */
+TEST(EventsContainerTest, MergeEventsTwoDifferentContainers2)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+
+    const std::string time1 = "2025-01-01T11:11:1";
+    const std::string time2 = "2025-01-01T10:00:0";
+
+    for(int i = 9; i >= 0; --i) {
+        auto timeTemp1 = time1 + std::to_string(i);
+        auto timeTemp2 = time2 + std::to_string(i);
+        container1.AddEvent({9-i, {{"timestamp", timeTemp1}, {"message", "From_Src1_ID"}}});
+        container2.AddEvent({9-i, {{"timestamp", timeTemp2}, {"message", "From_Src2_ID"}}});
+    }
+
+    container1.MergeEvents(container2, "source1", "source2", "timestamp");
+
+    ASSERT_EQ(container1.Size(), 20);
+
+    for(int i = 0; i < 10; ++i) {
+        auto id2 = i+10;
+        std::string id = std::to_string(i);
+        EXPECT_EQ(container1.GetEvent(i).getId(), i);
+        EXPECT_EQ(container1.GetEvent(id2).getId(), id2);
+
+        EXPECT_EQ(container1.GetEvent(i).GetSource(), "source1");
+        EXPECT_EQ(container1.GetEvent(id2).GetSource(), "source2");
+
+        EXPECT_EQ(container1.GetEvent(i).findByKey("original_id"), id);  // From container1
+        EXPECT_EQ(container1.GetEvent(id2).findByKey("original_id"), id);  // From container1
     }
 }

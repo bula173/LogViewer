@@ -96,14 +96,14 @@ void EventsTableView::ConnectSelectionSignals()
                 return;
             }
 
-            const int actualIndex = m_model->ResolveToActualIndex(current.row());
+            const int modelIndex = m_model->ResolveToModelIndex(current.row());
             util::Logger::Debug(
-                "[EventsTableView] currentRowChanged viewRow={} actualIndex={}",
-                current.row(), actualIndex);
+                "[EventsTableView] currentRowChanged viewRow={} modelIndex={}",
+                current.row(), modelIndex);
 
-            emit CurrentActualRowChanged(actualIndex);
-            if (actualIndex >= 0)
-                m_events.SetCurrentItem(actualIndex);
+            emit CurrentActualRowChanged(modelIndex);
+            if (modelIndex >= 0)
+                m_events.SetCurrentItem(modelIndex);
 
            
         });
@@ -186,31 +186,19 @@ void EventsTableView::OnCurrentIndexUpdated(const int index)
     }    
 
     // Ensure the view scrolls and selects the corresponding row
-    ScrollToActualRow(index);
+    ScrollToModelIndex(index);
 }
 
-int EventsTableView::CurrentActualRow() const
+void EventsTableView::ScrollToModelIndex(int modelIndex)
 {
-    if (!selectionModel())
-        return -1;
+    util::Logger::Debug("[EventsTableView] ScrollToModelIndex modelIndex={}", modelIndex);
 
-    const QModelIndex current = selectionModel()->currentIndex();
-    if (!current.isValid())
-        return -1;
-
-    return m_model->ResolveToActualIndex(current.row());
-}
-
-void EventsTableView::ScrollToActualRow(int actualRow)
-{
-    util::Logger::Debug("[EventsTableView] ScrollToActualRow actualRow={}", actualRow);
-
-    if (actualRow < 0 || !m_model)
+    if (modelIndex < 0 || !m_model)
         return;
 
-    const int viewRow = m_model->RowFromActualIndex(actualRow);
+    const int viewRow = m_model->RowFromModelIndex(modelIndex);
     util::Logger::Debug("[EventsTableView] mapped actualRow={} to viewRow={}",
-        actualRow, viewRow);
+        modelIndex, viewRow);
     if (viewRow < 0)
         return;
 

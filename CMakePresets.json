@@ -55,18 +55,18 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/clang++.exe",
                 "CMAKE_C_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe",
+                "Qt6_DIR": "C:/msys64/ucrt64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
                 "LOGVIEWER_SANITIZER": "None",
                 "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "environment": {
-                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+                "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
             }
         },
         {
@@ -77,18 +77,18 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/clang++.exe",
                 "CMAKE_C_COMPILER_LAUNCHER": "ccache",
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
+                "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe",
+                "Qt6_DIR": "C:/msys64/ucrt64/lib/cmake/Qt6",
                 "ENABLE_CLANG_TIDY": "OFF",
                 "LOGVIEWER_SANITIZER": "None",
                 "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
             },
             "environment": {
-                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+                "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
             }
         },
         {

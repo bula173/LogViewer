@@ -95,6 +95,8 @@ void EventsContainer::SetCurrentItem(const int item)
      * synchronization between the UI selection and the data model.
      */
     util::Logger::Trace("EventsContainer::SetCurrentItem called with item: {}", item);
+    if(item == m_currentItem) return;
+   
     m_currentItem = item;
     for (auto v : m_views)
     {
@@ -213,9 +215,6 @@ void EventsContainer::MergeEvents(EventsContainer& other,
     // Acquire the locks only for the merge and release them before
     // invoking any callbacks.
 
-    std::vector<LogEvent> mergedEvents;
-    mergedEvents.reserve(m_data.size() + other.m_data.size());
-
     {
         std::scoped_lock lock(m_mutex, other.m_mutex);
 
@@ -225,6 +224,7 @@ void EventsContainer::MergeEvents(EventsContainer& other,
             if (event.GetSource().empty())
                 event.SetSource(existingAlias);
         }
+
 
         // Set source on events being merged (always set to newAlias)
         for (auto& event : other.m_data)
@@ -241,74 +241,18 @@ void EventsContainer::MergeEvents(EventsContainer& other,
                 return false;
             if (timestampB.empty())
                 return true;
+                
+            return timestampA > timestampB;
 
-            // Compare timestamps first
-            if (timestampA != timestampB)
-                return timestampA < timestampB;
-
-            // If timestamps are equal, use event ID as tiebreaker
-            return a.getId() < b.getId();
         };
 
-        // Stable merge: preserves relative order within each input sequence.
-        // Tie-breaker: existing events are emitted before new events for the same timestamp.
-        auto it1 = m_data.begin();
-        auto it2 = other.m_data.begin();
-
-        while (it1 != m_data.end() && it2 != other.m_data.end())
-        {
-            // If it2 (new event) is strictly before it1 (existing event), take it2.
-            // Otherwise take it1. This makes ties favor existing events.
-            if (isBefore(*it2, *it1))
-            {
-                mergedEvents.push_back(std::move(*it2));
-                ++it2;
-            }
-            else
-            {
-                mergedEvents.push_back(std::move(*it1));
-                ++it1;
-            }
-        }
-
-        // Continue merging remaining items from whichever container has items left
-        while (it1 != m_data.end() || it2 != other.m_data.end())
-        {
-            if (it1 == m_data.end())
-            {
-                // No more items in m_data, append remaining from other
-                mergedEvents.push_back(std::move(*it2));
-                ++it2;
-            }
-            else if (it2 == other.m_data.end())
-            {
-                // No more items in other, append remaining from m_data
-                mergedEvents.push_back(std::move(*it1));
-                ++it1;
-            }
-            else
-            {
-                // Both have items, compare and take the one that comes first
-                if (isBefore(*it2, *it1))
-                {
-                    mergedEvents.push_back(std::move(*it2));
-                    ++it2;
-                }
-                else
-                {
-                    mergedEvents.push_back(std::move(*it1));
-                    ++it1;
-                }
-            }
-        }
-
-        util::Logger::Info("EventsContainer::MergeEvents: Merged {} events, total count: {}",
-                           other.m_data.size(), mergedEvents.size());
-
+        std::copy(other.m_data.begin(), other.m_data.end(), back_inserter(m_data));
+        std::stable_sort(m_data.begin(),m_data.end(),isBefore);
+        
         // Store original IDs and reassign sequential IDs based on merge order
-        for (int i = 0; i < static_cast<int>(mergedEvents.size()); ++i)
+        for (int i = 0; i < static_cast<int>(m_data.size()); ++i)
         {
-            auto& event = mergedEvents[static_cast<size_t>(i)];
+            auto& event = m_data[static_cast<size_t>(i)];
             
             // Store the original ID before reassignment
             event.SetOriginalId(event.getId());
@@ -321,7 +265,6 @@ void EventsContainer::MergeEvents(EventsContainer& other,
         }
 
         // Replace internal data while still holding the locks to avoid races.
-        m_data = std::move(mergedEvents);
         m_currentItem = -1; // Reset selection after merge
     }
 
