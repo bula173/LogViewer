@@ -51,6 +51,24 @@ class IView
      * @param index The new current item index in the model
      */
     virtual void OnCurrentIndexUpdated(const int index) = 0;
+
+    /**
+     * @brief Called when the view is attached to a model.
+     *
+     * This method is called after the view is registered with a model.
+     * Views can use this to initialize model-specific state.
+     *
+     * @param model The model the view was attached to (optional)
+     */
+    virtual void OnAttachedToModel(class IModelObservable* model) { }
+
+    /**
+     * @brief Called when the view is detached from a model.
+     *
+     * This method is called when the view is unregistered from a model.
+     * Views can use this to clean up model-specific state.
+     */
+    virtual void OnDetachedFromModel() { }
 };
 
 } // namespace mvc
