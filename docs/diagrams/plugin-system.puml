@@ -1,0 +1,100 @@
+@startuml plugin-system
+
+title LogViewer Plugin System - Class Diagram
+
+namespace plugin {
+    enum PluginType {
+        AI_PROVIDER
+        PARSER
+        UI_WIDGET
+        UTILITY
+        UNKNOWN
+    }
+
+    struct PluginMetadata {
+        +id: string
+        +name: string
+        +version: string
+        +apiVersion: string
+        +type: PluginType
+        +description: string
+        +path: string
+    }
+
+    interface IPlugin {
+        {abstract} +GetMetadata(): const PluginMetadata&
+        {abstract} +Initialize(): Result
+        {abstract} +Shutdown(): Result
+        {abstract} +GetName(): string
+        {abstract} +GetVersion(): string
+    }
+
+    interface IUIPanel {
+        {abstract} +GetWidget(): QWidget*
+        {abstract} +OnDataUpdated(): void
+        {abstract} +OnFilterApplied(): void
+    }
+
+    interface IAIProvider : IPlugin {
+        {abstract} +AnalyzeEvents(events): Result<string>
+        {abstract} +GetCapabilities(): vector<string>
+        {abstract} +Configure(settings): Result
+    }
+
+    interface IParser : IPlugin {
+        {abstract} +ParseFile(path): Result<vector<LogEvent>>
+        {abstract} +SupportsFormat(ext): bool
+        {abstract} +GetSupportedFormats(): vector<string>
+    }
+
+    class PluginManager {
+        -{static} m_instance: PluginManager*
+        -m_plugins: map<string, PluginHandle>
+        -m_observers: vector<PluginObserver*>
+        --
+        #{static} GetInstance(): PluginManager&
+        +LoadPlugin(path): Result
+        +UnloadPlugin(id): void
+        +GetPlugin(id): IPlugin*
+        +GetPluginsOfType(type): vector<IPlugin*>
+        +DiscoverPlugins(searchPath): void
+        +RegisterPluginObserver(observer): void
+    }
+
+    class PluginLoader {
+        +LoadFromFile(path): Result<PluginHandle>
+        +LoadFromZip(zipPath): Result<PluginHandle>
+        +Unload(handle): void
+        -ValidatePluginSignature(path): bool
+        -ExtractMetadata(lib): PluginMetadata
+    }
+
+    interface PluginObserver {
+        {abstract} +OnPluginLoaded(plugin): void
+        {abstract} +OnPluginUnloaded(plugin): void
+        {abstract} +OnPluginError(id, error): void
+    }
+
+    IPlugin <|.. IAIProvider: implements
+    IPlugin <|.. IParser: implements
+    IPlugin <|.. IUIPanel: implements
+
+    PluginManager "1" --> "*" IPlugin: "manages"
+    PluginManager "1" --> "*" PluginObserver: "notifies"
+    PluginManager "1" --> "1" PluginLoader: "uses"
+    PluginLoader ..> PluginMetadata: "creates"
+    PluginManager "1" *-- "*" PluginMetadata: "stores"
+
+    note right of PluginManager
+        Singleton pattern
+        Factory + Registry pattern
+        Dynamic loading from DLLs/SOs
+    end note
+
+    note right of IPlugin
+        C-ABI compatible interface
+        Enables cross-compiler plugins
+    end note
+}
+
+@enduml

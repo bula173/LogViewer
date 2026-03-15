@@ -28,21 +28,96 @@ namespace db
  * millions of events). The container supports random access, iteration, and
  * provides methods for virtual list control integration.
  *
+ * @par Design Goals
+ * - **Performance**: O(1) random access, efficient batch operations
+ * - **Thread Safety**: Safe for concurrent reads and exclusive writes
+ * - **Integration**: Works as IModel for MVC-based UI rendering
+ * - **Scalability**: Tested with millions of events
+ *
  * @par Performance Characteristics
  * - Random access: O(1)
  * - Insertion at end: O(1) amortized
- * - Memory usage: Optimized for large datasets
+ * - Insertion via AddEventBatch: O(k) amortized, k = batch size
+ * - Memory usage: Optimized for large datasets with no fragmentation
+ * - Merge operation: O(n + m) for n + m total events
  *
- * @par Thread Safety
- * **Thread-safe**: All public methods are protected by internal locks.
- * - Multiple threads can read concurrently (shared_lock)
- * - Write operations use exclusive locks (unique_lock)
- * - Safe for concurrent access from parser threads and UI thread
+ * @par Thread Safety Model
+ * **Thread-safe**: All public methods are protected by internal std::shared_mutex locks.
+ * - **Multiple Concurrent Readers**: Multiple threads can call GetEvent(), Size(), etc.
+ *   simultaneously (shared_lock allows concurrent access)
+ * - **Exclusive Writers**: Write operations (AddEvent, AddEventBatch, Clear, MergeEvents)
+ *   use unique_lock to ensure only one writer at a time
+ * - **Safe Parser Integration**: Parser threads can add events while UI thread reads
+ * - **Lock Strategy Implementation**:
+ *   - Read operations: `std::shared_lock<std::shared_mutex> lock(m_eventMutex);`
+ *   - Write operations: `std::unique_lock<std::shared_mutex> lock(m_eventMutex);`
  *
- * @par Lock Strategy
- * Uses std::shared_mutex for reader-writer lock pattern:
- * - Read operations (GetEvent, Size): shared_lock allows concurrent reads
- * - Write operations (AddEvent, Clear): unique_lock ensures exclusive access
+ * @par Usage Examples
+ *
+ * **Adding individual events:**
+ * @code
+ * db::EventsContainer container;
+ *
+ * // Create and add event (moved into container)
+ * db::LogEvent event(1, {
+ *     {"timestamp", "2025-03-15T12:00:00Z"},
+ *     {"level", "INFO"},
+ *     {"message", "Application started"}
+ * });
+ * container.AddEvent(std::move(event));
+ *
+ * // Access the stored event
+ * const auto& stored = container.GetEvent(0);
+ * std::cout << stored.findByKey("message") << std::endl;
+ * @endcode
+ *
+ * **Batch operations for efficiency:**
+ * @code
+ * std::vector<std::pair<int, db::LogEvent::EventItems>> batch;
+ * for (int i = 0; i < 1000; ++i) {
+ *     batch.push_back({i, {
+ *         {"timestamp", "2025-03-15"},
+ *         {"sequence", std::to_string(i)}
+ *     }});
+ * }
+ * container.AddEventBatch(std::move(batch));  // Efficient bulk insertion
+ * std::cout << "Container size: " << container.Size() << std::endl;
+ * @endcode
+ *
+ * **Thread-safe concurrent access:**
+ * @code
+ * // Parser thread
+ * std::thread parser([&container](const std::string& filename) {
+ *     // Parse and add events...
+ *     for (const auto& event_data : parsed_events) {
+ *         container.AddEvent(db::LogEvent(...));  // Thread-safe
+ *     }
+ * });
+ *
+ * // UI thread (concurrent read)
+ * std::thread ui([&container]() {
+ *     for (size_t i = 0; i < container.Size(); ++i) {
+ *         const auto& event = container.GetEvent(i);  // Thread-safe read
+ *         // Render event in UI...
+ *     }
+ * });
+ * @endcode
+ *
+ * **Merging events from multiple sources:**
+ * @code
+ * db::EventsContainer log_file_1;
+ * db::EventsContainer log_file_2;
+ *
+ * // Parse into separate containers...
+ * // Merge events by timestamp, preserving source information
+ * log_file_1.MergeEvents(log_file_2, "app.log", "system.log", "timestamp");
+ *
+ * // Events now interleaved by timestamp, with source identifiers preserved
+ * @endcode
+ *
+ * @see LogEvent for individual event representation
+ * @see mvc::IModel for model interface details
+ * @see FilterManager for filtering merged events
  */
 class EventsContainer : public mvc::IModel
 {

@@ -1,0 +1,45 @@
+@startuml log-loading-workflow
+
+title LogViewer - Log File Loading Workflow
+
+actor User
+participant MainWindow
+participant Parser
+participant EventsContainer
+participant UIModel
+participant EventsTableView
+
+User -> MainWindow: Load Log File
+MainWindow -> Parser: ParseFile(path)
+activate Parser
+Parser -> EventsContainer: Create event batch
+Parser -> Parser: Parse file\n(XML/CSV)
+note right of Parser
+    Converts raw file data
+    into LogEvent objects
+end note
+Parser --> EventsContainer: AddEventBatch([events])
+deactivate Parser
+
+EventsContainer -> EventsContainer: Lock (shared_mutex)
+EventsContainer -> EventsContainer: Add events to storage
+EventsContainer -> EventsContainer: Update indices
+EventsContainer -> UIModel: NotifyDataChanged()
+deactivate EventsContainer
+
+UIModel -> EventsTableView: Update model
+activate EventsTableView
+EventsTableView -> EventsTableView: Refresh virtual view
+note right of EventsTableView
+    Virtual scrolling:
+    Only renders visible rows
+end note
+EventsTableView --> User: Display log entries
+deactivate EventsTableView
+
+note over MainWindow
+    Entire operation is non-blocking
+    Parser runs in background thread
+end note
+
+@enduml

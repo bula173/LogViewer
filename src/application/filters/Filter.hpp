@@ -16,9 +16,49 @@ namespace filters
 
 /**
  * @struct FilterCondition
- * @brief Represents a single condition within a filter
+ * @brief Represents a single matching condition within a filter structure.
  *
- * A filter can have multiple conditions that are combined with AND logic.
+ * A filter can have multiple conditions that are combined with AND logic,
+ * allowing complex filtering expressions. Each condition specifies:
+ * - A target column or parameter to search
+ * - A pattern to match against
+ * - Strategy for matching (regex, substring, etc.)
+ * - Optional case sensitivity
+ *
+ * @par Usage Scenarios
+ * - **Column Matching**: Match against log event fields (level, timestamp, etc.)
+ * - **Parameter Matching**: Search nested JSON structures at configurable depth
+ * - **Complex Patterns**: Use regex patterns for sophisticated matching
+ * - **Case Handling**: Optional case-sensitive or case-insensitive matching
+ *
+ * @par Thread Safety
+ * FilterCondition is immutable with respect to matching. Once created, the
+ * condition can be safely used by multiple threads without synchronization.
+ *
+ * @par Example
+ * @code
+ * // Simple column matching
+ * FilterCondition level_error(
+ *     "level",      // columnName
+ *     "ERROR",      // pattern
+ *     false,        // parameterFilter
+ *     "",           // parameterKey
+ *     0,            // depth
+ *     true          // caseSensitive
+ * );
+ *
+ * // Nested parameter search
+ * FilterCondition nested_search(
+ *     "",                    // columnName (not used for parameters)
+ *     "connection_timeout",  // pattern to find in nested data
+ *     true,                  // isParameterFilter = true
+ *     "error_details",       // parameterKey
+ *     2                      // depth = 2 levels deep
+ * );
+ * @endcode
+ *
+ * @see Filter for combining multiple conditions
+ * @see IFilterStrategy for matching algorithm details
  */
 struct FilterCondition
 {
@@ -57,14 +97,86 @@ struct FilterCondition
 
 /**
  * @class Filter
- * @brief Filter for log events with pluggable matching strategies
+ * @brief Composable log event filter with pluggable matching strategies and multi-condition support.
  *
- * Supports multiple conditions combined with AND logic.
- * Uses Strategy pattern for flexible matching algorithms.
+ * The Filter class implements a flexible filtering system for log events, supporting:
+ * - **Single and Multiple Conditions**: Conditions can be combined with AND logic
+ * - **Strategy Pattern**: Pluggable matching algorithms (regex, substring, etc.)
+ * - **Complex Queries**: Column matching, nested parameter search, regex patterns
+ * - **Inversion**: Supports NOT logic via inverted flag
+ * - **Persistence**: Filters can be serialized to JSON and restored
  *
- * @par Thread Safety:
+ * @par Design Patterns
+ * - **Strategy Pattern**: Uses IFilterStrategy for pluggable matching algorithms
+ * - **Builder Pattern**: Legacy fields (name, columnName, pattern) for simple cases
+ * - **Composite Pattern**: Multiple conditions combined with AND logic
+ *
+ * @par Thread Safety
  * Filter instances should not be modified during concurrent matching.
- * Strategy instances are immutable and thread-safe.
+ * Strategy instances are immutable and thread-safe for concurrent reads.
+ * For thread-safe filter management, use FilterManager.
+ *
+ * @par Performance Notes
+ * - Matching is O(k * n) where k = number of conditions, n = event fields
+ * - Evaluation short-circuits on first false condition
+ * - Compiled expressions are cached for efficiency
+ *
+ * @par Usage Examples
+ *
+ * **Simple single-condition filter:**
+ * @code
+ * filters::Filter error_filter("Show Errors", "level", "ERROR");
+ * error_filter.compile();
+ *
+ * if (error_filter.matches(event)) {
+ *     // Event passes filter - display it
+ * }
+ * @endcode
+ *
+ * **Complex multi-condition filter:**
+ * @code
+ * filters::Filter complex_filter("Database Errors");
+ * complex_filter.addCondition(
+ *     FilterCondition("database", "error", false, "", 0, true)
+ * );
+ * complex_filter.addCondition(
+ *     FilterCondition("status", "failed", false, "", 0, false)
+ * );
+ * complex_filter.compile();
+ * @endcode
+ *
+ * **Inverted filter:**
+ * @code
+ * filters::Filter not_debug("Exclude Debug");
+ * not_debug.columnName = "level";
+ * not_debug.pattern = "DEBUG";
+ * not_debug.isInverted = true;  // Show everything EXCEPT DEBUG
+ * not_debug.compile();
+ * @endcode
+ *
+ * **Regex pattern matching:**
+ * @code
+ * filters::Filter regex_filter(
+ *     "IPv4 Addresses",
+ *     "ip_address",
+ *     R"(^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$)"  // Regex pattern
+ * );
+ * regex_filter.compile();
+ * @endcode
+ *
+ * **Serialization:**
+ * @code
+ * // Save to JSON
+ * nlohmann::json j = filter.toJson();
+ *
+ * // Load from JSON
+ * filters::Filter restored =
+ *     filters::Filter::fromJson(j);  // Static method
+ * @endcode
+ *
+ * @see FilterManager for managing multiple filters
+ * @see FilterCondition for individual condition details
+ * @see IFilterStrategy for custom matching strategies
  */
 class Filter
 {

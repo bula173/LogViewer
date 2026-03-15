@@ -1,0 +1,50 @@
+@startuml filter-workflow
+
+title LogViewer - Filter Application Workflow
+
+actor User
+participant FilterPanel
+participant FilterManager
+participant Filter
+participant EventsContainer
+participant UIModel
+participant EventsTableView
+
+User -> FilterPanel: Create/Edit Filter
+FilterPanel -> FilterManager: addFilter(filter)
+activate FilterManager
+
+FilterManager -> Filter: Compile pattern
+activate Filter
+Filter -> Filter: Build regex/strategy
+deactivate Filter
+
+User -> FilterPanel: Apply Filter
+FilterPanel -> FilterManager: applyFilters(criteria)
+
+FilterManager -> FilterManager: For each filter:\nCheck if enabled
+FilterManager -> EventsContainer: GetEvent(index)
+EventsContainer -> Filter: matches(event)
+
+Filter -> Filter: Evaluate all conditions
+note right of Filter
+    Multiple conditions
+    combined with AND logic
+end note
+Filter --> FilterManager: bool result
+
+FilterManager -> FilterManager: Accumulate matching\nindices
+
+FilterManager --> UIModel: NotifyDataChanged()\nwith filtered results
+
+UIModel -> EventsTableView: Update filtered view
+EventsTableView -> EventsTableView: Refresh display
+EventsTableView --> User: Show filtered events
+
+User -> FilterPanel: Disable/Remove Filter
+FilterPanel -> FilterManager: applyFilters(criteria)
+FilterManager --> UIModel: NotifyDataChanged()
+UIModel -> EventsTableView: Refresh
+EventsTableView --> User: Show all events again
+
+@enduml

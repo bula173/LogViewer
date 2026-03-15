@@ -1,0 +1,89 @@
+@startuml filter-system
+
+title LogViewer Filter System - Class Diagram
+
+namespace filters {
+    struct FilterCondition {
+        +columnName: string
+        +pattern: string
+        +isParameterFilter: bool
+        +parameterKey: string
+        +parameterDepth: int
+        +isCaseSensitive: bool
+        +strategy: unique_ptr<IFilterStrategy>
+        --
+        +matches(event): bool
+        +toJson(): json
+        +fromJson(j): FilterCondition
+    }
+
+    class Filter {
+        +name: string
+        +columnName: string
+        +pattern: string
+        +isEnabled: bool
+        +isInverted: bool
+        +isCaseSensitive: bool
+        +conditions: vector<FilterCondition>
+        --
+        +matches(value): bool
+        +matches(event): bool
+        +matchesParameter(event): bool
+        +applyToIndices(indices, model): vector<int>
+        +compile(): void
+        +addCondition(cond): void
+        +removeCondition(index): void
+    }
+
+    class FilterManager {
+        -{static} m_instance: FilterManager*
+        -m_filters: vector<unique_ptr<Filter>>
+        --
+        #{static} GetInstance(): FilterManager&
+        +addFilter(filter): void
+        +removeFilter(name): void
+        +GetFilter(name): Filter*
+        +getFilterCount(): int
+        +enableFilter(name, enable): void
+        +applyFilters(...): vector<int>
+        +SaveFiltersToJson(...): void
+        +LoadFiltersFromJson(...): void
+    }
+
+    interface IFilterStrategy {
+        {abstract} +matches(event, pattern, ...): bool
+        {abstract} +clone(): unique_ptr<IFilterStrategy>
+    }
+
+    class RegexFilterStrategy {
+        -m_regex: regex
+        --
+        +matches(event, pattern, case_sensitive): bool
+        +clone(): unique_ptr<IFilterStrategy>
+    }
+
+    class TextFilterStrategy {
+        --
+        +matches(event, pattern, case_sensitive): bool
+        +clone(): unique_ptr<IFilterStrategy>
+    }
+
+    Filter "1" *-- "*" FilterCondition: "contains"
+    FilterCondition "1" --> "1" IFilterStrategy: "uses"
+    IFilterStrategy <|.. RegexFilterStrategy: "implements"
+    IFilterStrategy <|.. TextFilterStrategy: "implements"
+
+    FilterManager "1" *-- "*" Filter: "manages"
+
+    note right of FilterManager
+        Singleton pattern
+        Persists to JSON config
+    end note
+
+    note right of IFilterStrategy
+        Strategy pattern
+        Pluggable matching algorithms
+    end note
+}
+
+@enduml

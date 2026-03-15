@@ -1,0 +1,63 @@
+@startuml plugin-loading-workflow
+
+title LogViewer - Plugin Loading Lifecycle
+
+participant "Application" as App
+participant "PluginManager" as PM
+participant "PluginLoader" as PL
+participant "Plugin DLL/SO" as DLL
+participant "IPlugin Instance" as Plugin
+
+App -> PM: DiscoverPlugins(searchPath)
+activate PM
+
+PM -> PM: Scan directories\nfor .so/.dll/.zip
+
+PM -> PL: LoadPlugin(path)
+activate PL
+
+PL -> PL: Validate file\n(signature check)
+PL -> DLL: dlopen(path)
+activate DLL
+DLL --> PL: Handle
+deactivate DLL
+
+PL -> PL: Extract metadata\nfrom library
+
+PL -> DLL: Call plugin_create()\nC-ABI function
+activate DLL
+DLL -> Plugin: Create IPlugin instance
+Plugin --> DLL: Instance pointer
+deactivate DLL
+
+PL --> PM: PluginHandle\n+ Metadata
+deactivate PL
+
+PM -> Plugin: Initialize()
+activate Plugin
+Plugin -> Plugin: Setup resources\nConnect callbacks
+Plugin --> PM: Result::Ok
+deactivate Plugin
+
+PM -> PM: Register in map\nNotify observers
+PM --> App: OK
+
+note over PM
+    Plugins are managed
+    in a registry map
+end note
+
+... Later: Cleanup ...
+
+App -> PM: UnloadPlugin(id)
+PM -> Plugin: Shutdown()
+PM -> DLL: Close handle
+DLL -> Plugin: Destroy instance
+
+note over PL
+    C-ABI interface allows
+    plugins from any compiler
+    that supports C calling convention
+end note
+
+@enduml

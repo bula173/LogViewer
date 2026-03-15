@@ -1,0 +1,46 @@
+@startuml architecture-overview
+
+!include <C4/C4_Component>
+
+title LogViewer System Architecture
+
+Person(user, "End User", "Uses LogViewer to analyze logs")
+
+System_Boundary(logviewer, "LogViewer Application") {
+    Component(ui, "Qt UI", "User Interface", "Main window, panels, dialogs")
+    Component(controller, "Main Controller", "Business Logic", "Orchestrates operations")
+    Component(models, "Data Models", "Entities", "LogEvent, EventsContainer")
+
+    System_Boundary(subsystems, "Core Subsystems") {
+        Component(parser, "Parser System", "ParserFactory", "XML, CSV, custom parsers")
+        Component(filter, "Filter System", "FilterManager", "Apply filters to events")
+        Component(config, "Configuration", "Config Manager", "Settings & persistence")
+        Component(ai, "AI Provider", "Plugin Interface", "AI analysis (Ollama, OpenAI, etc.)")
+    }
+
+    System_Boundary(plugin, "Plugin System") {
+        Component(pm, "Plugin Manager", "Dynamic Loading", "Load/manage external plugins")
+        Component(api, "Plugin API (C-ABI)", "Stable Interface", "C-compatible plugin interface")
+    }
+}
+
+System_Ext(ollama, "Ollama", "Local AI Service")
+System_Ext(openai, "OpenAI", "Cloud AI Service")
+System_Ext(files, "Log Files", "Input data")
+
+Rel(user, ui, "Interacts with")
+Rel(ui, controller, "Uses")
+Rel(controller, models, "Manages")
+Rel(controller, parser, "Uses")
+Rel(controller, filter, "Uses")
+Rel(controller, config, "Reads/Writes")
+Rel(parser, models, "Populates")
+Rel(filter, models, "Filters")
+Rel(ui, ai, "Requests analysis")
+Rel(ai, ollama, "Connects to")
+Rel(ai, openai, "Connects to")
+Rel(parser, files, "Reads")
+Rel(pm, api, "Implements")
+Rel(controller, pm, "Uses")
+
+@enduml

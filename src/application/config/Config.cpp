@@ -563,39 +563,38 @@ void Config::GetColorConfig(const json& j)
 {
     if (j.contains("columnColors"))
     {
-        for (const auto& col : j["columnColors"].items())
+        for (const auto& [col_name, col_data] : j["columnColors"].items())
         {
             ValueColorMap valueColorMap;
-            for (const auto& val : col.value().items())
+            for (const auto& [val_name, val_data] : col_data.items())
             {
-                valueColorMap[val.key()] = {val.value()[0], val.value()[1]};
+                valueColorMap[val_name] = {val_data[0], val_data[1]};
             }
-            columnColors[col.key()] = std::move(valueColorMap);
+            columnColors[col_name] = std::move(valueColorMap);
         }
     }
     else
     {
         util::Logger::Warn("Missing 'columnColors' in config file.");
     }
-    
+
     // Load item highlights for ItemDetailsView
     if (j.contains("itemHighlights"))
     {
-        for (const auto& item : j["itemHighlights"].items())
+        for (const auto& [item_name, item_data] : j["itemHighlights"].items())
         {
             ItemHighlight highlight;
-            const auto& config = item.value();
-            
-            if (config.contains("backgroundColor"))
-                highlight.backgroundColor = config["backgroundColor"].get<std::string>();
-            if (config.contains("foregroundColor"))
-                highlight.foregroundColor = config["foregroundColor"].get<std::string>();
-            if (config.contains("bold"))
-                highlight.bold = config["bold"].get<bool>();
-            if (config.contains("italic"))
-                highlight.italic = config["italic"].get<bool>();
-            
-            itemHighlights[item.key()] = highlight;
+
+            if (item_data.contains("backgroundColor"))
+                highlight.backgroundColor = item_data["backgroundColor"].get<std::string>();
+            if (item_data.contains("foregroundColor"))
+                highlight.foregroundColor = item_data["foregroundColor"].get<std::string>();
+            if (item_data.contains("bold"))
+                highlight.bold = item_data["bold"].get<bool>();
+            if (item_data.contains("italic"))
+                highlight.italic = item_data["italic"].get<bool>();
+
+            itemHighlights[item_name] = highlight;
         }
         util::Logger::Info("Loaded {} item highlight rules", itemHighlights.size());
     }

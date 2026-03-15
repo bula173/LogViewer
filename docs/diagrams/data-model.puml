@@ -1,0 +1,70 @@
+@startuml data-model
+
+title LogViewer Data Model - Class Diagram
+
+namespace db {
+    class LogEvent {
+        -m_id: int
+        -m_eventItems: EventItems
+        -m_lookupIndex: LookupIndex
+        -m_originalId: int
+        -m_source: string
+        --
+        +LogEvent(int id, EventItems items)
+        +getId(): int
+        +getEventItems(): const EventItems&
+        +findByKey(key): const string
+        +findAllByKey(key): vector<int>
+        +SetId(id): void
+        +SetOriginalId(id): void
+        +SetSource(source): void
+        +GetSource(): string
+    }
+
+    class EventsContainer {
+        -m_data: vector<LogEvent>
+        -m_mutex: shared_mutex
+        -m_updateNotificationFnc: function
+        --
+        +AddEvent(event): void
+        +AddEventBatch(batch): void
+        +GetEvent(index): const LogEvent&
+        +Size(): int
+        +Clear(): void
+        +FindByKey(index, key): string
+        +MergeEvents(...): vector<int>
+    }
+
+    interface IModel {
+        +AddItem(item): void
+        +GetCurrentItem(): int
+        +SetCurrentItem(index): void
+        +Size(): int
+        +RegisterOnDataUpdated(callback): void
+        +NotifyDataChanged(): void
+    }
+
+    EventsContainer --|> IModel: implements
+    EventsContainer "1" *-- "*" LogEvent: contains
+
+    note on link : Thread-safe\nRead-write locks
+}
+
+namespace mvc {
+    interface IModel {
+        {abstract} +AddItem(item): void
+        {abstract} +GetCurrentItem(): int
+        {abstract} +SetCurrentItem(index): void
+        {abstract} +Size(): int
+    }
+
+    note right of IModel
+        Observer pattern
+        Notifies views of changes
+    end note
+}
+
+db.IModel --|> mvc.IModel: extends
+
+hide namespace {{
+@enduml

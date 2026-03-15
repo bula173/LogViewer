@@ -1324,7 +1324,7 @@ void PluginManager::RegisterObserver(IPluginObserver* observer)
 
 void PluginManager::UnregisterObserver(IPluginObserver* observer)
 {
-    auto it = std::find(m_observers.begin(), m_observers.end(), observer);
+    auto it = std::ranges::find(m_observers, observer);
     if (it != m_observers.end())
     {
         m_observers.erase(it);

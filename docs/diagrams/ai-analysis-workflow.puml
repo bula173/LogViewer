@@ -1,0 +1,59 @@
+@startuml ai-analysis-workflow
+
+title LogViewer - AI Analysis Workflow
+
+actor User
+participant MainWindow
+participant AIAnalysisPanel
+participant PluginManager
+participant AIProvider
+participant ExternalAI
+participant ResultsDisplay
+
+User -> AIAnalysisPanel: Select events
+User -> AIAnalysisPanel: Choose AI provider\n(Ollama/OpenAI/etc)
+User -> AIAnalysisPanel: Trigger analysis
+
+AIAnalysisPanel -> PluginManager: GetPlugin(provider_id)
+activate PluginManager
+PluginManager --> AIAnalysisPanel: IAIProvider instance
+deactivate PluginManager
+
+AIAnalysisPanel -> AIProvider: AnalyzeEvents(events)
+activate AIProvider
+note right of AIProvider
+    Prepare events data
+    Create API request
+end note
+
+AIProvider -> ExternalAI: HTTP POST\n(JSON events)
+activate ExternalAI
+note right of ExternalAI
+    Ollama: Local inference
+    OpenAI: Cloud API
+    Claude: Cloud API
+    Gemini: Cloud API
+end note
+ExternalAI --> AIProvider: Analysis response
+deactivate ExternalAI
+
+AIProvider -> AIProvider: Process response\nExtract insights
+AIProvider --> AIAnalysisPanel: Result<AnalysisOutput>
+deactivate AIProvider
+
+AIAnalysisPanel -> ResultsDisplay: Display results
+activate ResultsDisplay
+ResultsDisplay -> ResultsDisplay: Format output\nSyntax highlighting
+note right of ResultsDisplay
+    Show AI insights:
+    - Anomalies
+    - Patterns
+    - Recommendations
+end note
+ResultsDisplay --> User: Display analysis
+deactivate ResultsDisplay
+
+User -> ResultsDisplay: Export/Copy results
+ResultsDisplay -> User: Download report
+
+@enduml

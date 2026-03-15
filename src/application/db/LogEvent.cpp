@@ -59,11 +59,11 @@ const std::vector<std::string> LogEvent::findAllByKey(std::string_view key) cons
     util::Logger::Trace("LogEvent::findAllByKey called with key: {}", std::string(key));
 
     std::vector<std::string> results;
-    
-    for (const auto& item : m_eventItems) {
-        if (item.first == key) {
-            results.push_back(item.second);
-            util::Logger::Trace("LogEvent::findAllByKey found value: {}", item.second);
+
+    for (const auto& [item_key, item_value] : m_eventItems) {
+        if (item_key == key) {
+            results.push_back(item_value);
+            util::Logger::Trace("LogEvent::findAllByKey found value: {}", item_value);
         }
     }
 

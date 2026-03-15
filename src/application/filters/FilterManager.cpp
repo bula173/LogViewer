@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <numeric>
 #include <unordered_set>
 #include <nlohmann/json.hpp>
 
@@ -86,7 +87,7 @@ void FilterManager::updateFilter(const FilterPtr& filter)
 
 void FilterManager::removeFilter(const std::string& filterName)
 {
-    auto it = std::find_if(m_filters.begin(), m_filters.end(),
+    auto it = std::ranges::find_if(m_filters,
         [&](const FilterPtr& f) { return f->name == filterName; });
 
     if (it != m_filters.end())
@@ -123,29 +124,19 @@ std::vector<unsigned long> FilterManager::applyFilters(
     const mvc::IModel& model) const
 {
     // If no filters enabled, include all events
-    size_t enabledFilters = 0;
-    for (const auto& filter : m_filters)
-    {
-        if (filter && filter->isEnabled)
-            enabledFilters++;
-    }
+    size_t enabledFilters = std::ranges::count_if(m_filters,
+        [](const FilterPtr& f) { return f && f->isEnabled; });
 
     if (enabledFilters == 0)
     {
         std::vector<unsigned long> result(model.Size());
-        for (unsigned long i = 0; i < model.Size(); ++i)
-        {
-            result[i] = i;
-        }
+        std::iota(result.begin(), result.end(), 0UL);
         return result;
     }
 
-    // Create list of all indices
+    // Create list of all indices using std::iota
     std::vector<unsigned long> allIndices(model.Size());
-    for (unsigned long i = 0; i < model.Size(); ++i)
-    {
-        allIndices[i] = i;
-    }
+    std::iota(allIndices.begin(), allIndices.end(), 0UL);
 
     // Apply each filter and collect matching indices (OR logic between filters)
     std::vector<unsigned long> result;

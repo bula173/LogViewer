@@ -12,6 +12,7 @@
 #include <vector>
 #include <string_view>
 #include <unordered_map>
+#include "Concepts.hpp"
 
 /**
  * @namespace db
@@ -29,13 +30,69 @@ namespace db
  * identifier and contains metadata such as timestamps, severity levels, and
  * custom attributes.
  *
+ * @par Design Philosophy
+ * LogEvent is optimized for:
+ * - Efficient key-value lookups via internal hash index
+ * - Memory efficiency through move semantics and perfect forwarding
+ * - Integration with filtering and display systems
+ * - Support for multi-source event merging with original ID tracking
+ *
+ * @par Key Features
+ * - Fast key-value lookup: O(1) amortized via cached LookupIndex
+ * - Multiple source tracking: Identifies events from different log files
+ * - Original ID preservation: Retains pre-merge IDs for traceability
+ * - Flexible construction: Supports initializer lists and perfect forwarding
+ *
  * @par Thread Safety
  * This class is not thread-safe. External synchronization is required when
- * accessing LogEvent instances from multiple threads.
+ * accessing LogEvent instances from multiple threads. For thread-safe collection
+ * management, use EventsContainer instead.
  *
  * @par Memory Management
  * LogEvent uses move semantics and perfect forwarding where possible to
- * minimize unnecessary copying of large data sets.
+ * minimize unnecessary copying of large data sets. Events are typically
+ * moved into EventsContainer for storage.
+ *
+ * @par Usage Examples
+ *
+ * **Creating events from initializer list:**
+ * @code
+ * db::LogEvent event(42, {
+ *     {"timestamp", "2025-03-15T12:00:00Z"},
+ *     {"level", "ERROR"},
+ *     {"message", "Database connection failed"},
+ *     {"source", "db_engine"}
+ * });
+ *
+ * // Accessing data
+ * std::string timestamp = event.findByKey("timestamp");
+ * std::cout << "Level: " << event.findByKey("level") << std::endl;
+ * @endcode
+ *
+ * **Searching for values:**
+ * @code
+ * if (!event.findByKey("error_code").empty()) {
+ *     std::cout << "Error code: " << event.findByKey("error_code") << std::endl;
+ * }
+ * @endcode
+ *
+ * **Iterating through event data:**
+ * @code
+ * for (const auto& [key, value] : event.getEventItems()) {
+ *     std::cout << key << " = " << value << std::endl;
+ * }
+ * @endcode
+ *
+ * **Working with merged events:**
+ * @code
+ * db::LogEvent original_event(1, {{"msg", "warning"}});
+ * original_event.SetOriginalId(1);  // Track original ID
+ * original_event.SetId(100);        // Assign merged ID
+ * original_event.SetSource("log_file_1.txt");  // Track source
+ * @endcode
+ *
+ * @see EventsContainer for thread-safe collection management
+ * @see FilterManager for filtering events based on key-value data
  */
 class LogEvent
 {
@@ -60,16 +117,28 @@ class LogEvent
      *
      * Constructs a LogEvent with an ID and forwards arguments to EventItems
      * constructor. This enables efficient construction from various argument
-     * types.
+     * types without unnecessary copies.
      *
      * @tparam Args Variadic template arguments for EventItems construction
-     * @param id The unique identifier for the event
+     * @param id The unique identifier for the event (typically assigned by parser)
      * @param args Arguments forwarded to EventItems constructor
-     * @note Uses SFINAE to ensure Args can construct an EventItems object
+     *
+     * @note Uses C++20 concepts to constrain args that can construct an EventItems object
+     *
+     * @par Usage
+     * @code
+     * // From vector of pairs
+     * std::vector<std::pair<std::string, std::string>> data = {...};
+     * db::LogEvent event(123, data);  // or std::move(data)
+     *
+     * // From initializer list (handled by overload)
+     * db::LogEvent event(456, {{"key", "value"}});
+     * @endcode
+     *
+     * @see LogEvent(int, std::initializer_list)
      */
-    template <typename... Args,
-        typename =
-            std::enable_if_t<std::is_constructible_v<EventItems, Args&&...>>>
+    template <typename... Args>
+    requires util::Constructible<EventItems, Args&&...>
     LogEvent(int id, Args&&... args)
         : m_id(id)
         , m_eventItems(std::forward<Args>(args)...)
@@ -117,15 +186,33 @@ class LogEvent
     /**
      * @brief Finds a value by its key in the event's items.
      *
-     * Performs a linear search through the event's key-value pairs to find
-     * the first occurrence of the specified key.
+     * Performs a fast lookup using the internal hash index to retrieve the
+     * value associated with the first occurrence of a key. If the key is not found,
+     * returns an empty string.
      *
-     * @param key The key to search for
-     * @return const std::string The corresponding value, or empty string if not
-     * found
-    * @note Returns the first matching value if duplicate keys exist
-    * @par Complexity
-    * O(n) where n is the number of items in the event
+     * @param key The key to search for (e.g., "timestamp", "level", "message")
+     * @return const std::string The corresponding value, or empty string if not found
+     *
+     * @note Returns the first matching value if duplicate keys exist in event data
+     * @note The lookup is fast due to internal caching (O(1) average case)
+     *
+     * @par Example
+     * @code
+     * db::LogEvent event(1, {
+     *     {"timestamp", "2025-03-15"},
+     *     {"level", "INFO"},
+     *     {"message", "User logged in"}
+     * });
+     *
+     * std::string timestamp = event.findByKey("timestamp");  // "2025-03-15"
+     * std::string missing = event.findByKey("nonexistent");   // ""
+     * @endcode
+     *
+     * @see findAllByKey() for retrieving all values with the same key
+     * @see findInEvent() for substring search in both keys and values
+     *
+     * @par Complexity
+     * O(1) average case (hash table lookup)
      */
     const std::string findByKey(std::string_view key) const;
 
