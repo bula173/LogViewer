@@ -42,8 +42,23 @@ std::filesystem::path GetInstalledEtcDir()
     }
 #endif
 
-    // Fallback: previous behavior (use current working directory)
-    return std::filesystem::current_path() / "etc";
+    // Fallback: attempt to use current working directory
+    // Note: current_path() can throw if CWD no longer exists
+    try
+    {
+        auto cwd = std::filesystem::current_path();
+        auto etcDir = cwd / "etc";
+        util::Logger::Debug("Using fallback etc directory: {}", etcDir.string());
+        return etcDir;
+    }
+    catch (const std::filesystem::filesystem_error& e)
+    {
+        util::Logger::Warn(
+            "Cannot determine etc directory - CWD inaccessible: {}", e.what());
+        // Return a reasonable fallback (application home directory)
+        // This directory likely doesn't exist, but that's handled by callers
+        return std::filesystem::path("/etc");
+    }
 }
 } // namespace
 
