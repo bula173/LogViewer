@@ -35,9 +35,9 @@ struct FilterCondition
                    bool paramFilter = false, const std::string& paramKey = "",
                    int depth = 0, bool caseSensitive = false)
         : columnName(col), pattern(pat), isParameterFilter(paramFilter),
-          parameterKey(paramKey), parameterDepth(depth), isCaseSensitive(caseSensitive)
+          parameterKey(paramKey), parameterDepth(depth), isCaseSensitive(caseSensitive),
+          strategy(std::make_unique<RegexFilterStrategy>())
     {
-        strategy = std::make_unique<RegexFilterStrategy>();
     }
 
     FilterCondition(const FilterCondition& other);

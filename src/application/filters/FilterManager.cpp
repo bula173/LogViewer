@@ -159,9 +159,8 @@ std::vector<unsigned long> FilterManager::applyFilters(
         auto filteredIndices = filter->applyToIndices(allIndices, model);
         for (unsigned long idx : filteredIndices)
         {
-            if (seen.find(idx) == seen.end())
+            if (seen.insert(idx).second)
             {
-                seen.insert(idx);
                 result.push_back(idx);
             }
         }

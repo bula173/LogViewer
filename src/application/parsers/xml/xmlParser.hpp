@@ -17,7 +17,7 @@ class XmlParser : public IDataParser
 {
   public:
     XmlParser();
-    virtual ~XmlParser() = default;
+    virtual ~XmlParser() override = default;
     // Loads and parses XML file using Expat
     void ParseData(const std::filesystem::path& filepath) override;
     void ParseData(std::istream& input) override;

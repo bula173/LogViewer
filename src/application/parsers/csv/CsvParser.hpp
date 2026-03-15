@@ -53,7 +53,7 @@ class CsvParser : public IDataParser
     /**
      * @brief Virtual destructor for proper cleanup
      */
-    virtual ~CsvParser() = default;
+    virtual ~CsvParser() override = default;
 
     /**
      * @brief Parses CSV data from a file

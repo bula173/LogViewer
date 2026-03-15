@@ -72,7 +72,7 @@ public:
         try
         {
             time_t timestamp = std::stoll(std::string(value));
-            std::tm* tm = std::gmtime(&timestamp);
+            const std::tm* tm = std::gmtime(&timestamp);
             if (!tm) return std::string(value);
 
             char buffer[80];

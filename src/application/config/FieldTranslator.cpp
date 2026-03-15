@@ -109,7 +109,7 @@ TranslationResult FieldTranslator::Translate(std::string_view key, std::string_v
     // Apply conversion using plugin system
     if (translation.conversionType != "tooltip_only")
     {
-        auto& registry = FieldConversionPluginRegistry::GetInstance();
+        const auto& registry = FieldConversionPluginRegistry::GetInstance();
         std::string pluginResult = registry.ApplyConversion(translation.conversionType, value, translation.valueMap);
 
         if (pluginResult != std::string(value))

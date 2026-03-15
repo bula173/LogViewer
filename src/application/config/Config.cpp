@@ -86,7 +86,6 @@ void Config::SetAppName(const std::string& name)
 
 void Config::LoadConfig()
 {
-    std::filesystem::path cwd = std::filesystem::current_path();
     std::filesystem::path defaultInstalled = GetInstalledEtcDir() / "config.json";
 
     if (!std::filesystem::exists(m_configFilePath))

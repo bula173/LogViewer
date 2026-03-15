@@ -86,7 +86,7 @@ class ITypeFilterView
 class IItemDetailsView : public IEventDetailsView
 {
   public:
-    virtual ~IItemDetailsView() = default;
+    virtual ~IItemDetailsView() override = default;
 
     /** @brief Show or hide the panel's visual control. */
     virtual void ShowControl(bool show) = 0;

@@ -104,10 +104,7 @@ void LogEvent::buildLookupIndex()
     for (size_t i = 0; i < m_eventItems.size(); ++i)
     {
         // Only index the first occurrence of each key (maintains existing behavior)
-        if (m_lookupIndex.find(m_eventItems[i].first) == m_lookupIndex.end())
-        {
-            m_lookupIndex[m_eventItems[i].first] = i;
-        }
+        m_lookupIndex.try_emplace(m_eventItems[i].first, i);
     }
 }
 
