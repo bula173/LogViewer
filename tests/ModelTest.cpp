@@ -69,6 +69,8 @@ class ModelImpl : public IModel
 };
 }
 
+namespace {
+
 class MockView : public mvc::IView
 {
   public:
@@ -156,3 +158,5 @@ TEST_F(ModelImplTest, SetCurrentItemOutOfRange)
     EXPECT_THROW(model.SetCurrentItem(0), std::out_of_range);
     EXPECT_THROW(model.SetCurrentItem(-1), std::out_of_range);
 }
+
+} // namespace

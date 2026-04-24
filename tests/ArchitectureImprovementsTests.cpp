@@ -154,6 +154,8 @@ TEST(PluginDependencyGraphTest, ValidatesMissingDependencies)
 // Test: MVC Observer Pattern with Weak Pointers
 // ============================================================================
 
+namespace {
+
 // Mock view for testing
 class MockView : public mvc::IView {
   public:
@@ -255,9 +257,13 @@ TEST(ModelObservableTest, CallsLifecycleHooks)
     EXPECT_EQ(view->detachedCount, 1);
 }
 
+} // namespace
+
 // ============================================================================
 // Test: Plugin Event Bus
 // ============================================================================
+
+namespace {
 
 class MockPluginEventObserver : public plugin::IPluginEventObserver {
   public:
@@ -315,3 +321,5 @@ TEST(PluginEventBusTest, NotifiesMultipleObservers)
     EXPECT_EQ(obs1->receivedEvents.size(), 1);
     EXPECT_EQ(obs2->receivedEvents.size(), 1);
 }
+
+} // namespace
