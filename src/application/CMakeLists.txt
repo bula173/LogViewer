@@ -28,6 +28,9 @@ set_target_properties(application_core PROPERTIES
     SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
+# Apply project-wide compiler warning flags (defined in cmake/Warnings.cmake)
+logviewer_target_warnings(application_core)
+
 # Submodules extend application_core via target_sources()
 add_subdirectory(config)
 add_subdirectory(db)
