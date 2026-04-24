@@ -60,7 +60,7 @@ class IView
      *
      * @param model The model the view was attached to (optional)
      */
-    virtual void OnAttachedToModel(class IModelObservable* model) { }
+    virtual void OnAttachedToModel(class IModelObservable* /*model*/) { }
 
     /**
      * @brief Called when the view is detached from a model.

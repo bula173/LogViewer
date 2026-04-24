@@ -269,7 +269,7 @@ namespace {
                 int64_t offset;
                 
                 while (archive_read_data_block(a, &buff, &size, &offset) == ARCHIVE_OK) {
-                    outFile.write(static_cast<const char*>(buff), size);
+                    outFile.write(static_cast<const char*>(buff), static_cast<std::streamsize>(size));
                 }
                 outFile.close();
             }

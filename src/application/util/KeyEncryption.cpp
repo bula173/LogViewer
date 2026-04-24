@@ -147,8 +147,9 @@ std::string KeyEncryption::Base64Decode(const std::string& input)
     int val = 0;
     int valb = -8;
     
-    for (unsigned char c : input)
+    for (const char ch : input)
     {
+        const auto c = static_cast<unsigned char>(ch);
         if (base64_table[c] == 64)
             break;
         val = (val << 6) + base64_table[c];

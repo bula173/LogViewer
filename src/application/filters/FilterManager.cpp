@@ -124,7 +124,7 @@ std::vector<unsigned long> FilterManager::applyFilters(
     const mvc::IModel& model) const
 {
     // If no filters enabled, include all events
-    size_t enabledFilters = std::ranges::count_if(m_filters,
+    const auto enabledFilters = std::ranges::count_if(m_filters,
         [](const FilterPtr& f) { return f && f->isEnabled; });
 
     if (enabledFilters == 0)

@@ -588,7 +588,7 @@ void MainWindow::SaveRecentFiles()
     
     for (int i = 0; i < static_cast<int>(m_recentFiles.size()); ++i) {
         settings.setArrayIndex(i);
-        settings.setValue("path", m_recentFiles[i]);
+        settings.setValue("path", m_recentFiles[static_cast<std::size_t>(i)]);
     }
     
     settings.endArray();
@@ -1486,7 +1486,7 @@ void MainWindow::createPluginLeftTab(const std::string& pluginId, plugin::IPlugi
         vlayout->addWidget(controlRow);
 
         // Connect button to toggle enable/disable via PluginManager
-        connect(toggleBtn, &QPushButton::clicked, this, [this, pluginId, toggleBtn]() {
+        connect(toggleBtn, &QPushButton::clicked, this, [pluginId, toggleBtn]() {
             auto& pm = plugin::PluginManager::GetInstance();
             const auto& loaded = pm.GetLoadedPlugins();
             auto it = loaded.find(pluginId);
