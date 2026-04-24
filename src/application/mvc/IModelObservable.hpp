@@ -80,15 +80,15 @@ class IModelObservable {
             return;
         }
 
-        std::unique_lock lock(m_viewsMutex);
-        m_weakViews.push_back(std::weak_ptr<IView>(view));
-        CleanupDeadViews();
-
-        // Notify view of attachment
+        {
+            std::unique_lock lock(m_viewsMutex);
+            m_weakViews.push_back(std::weak_ptr<IView>(view));
+            CleanupDeadViews();
+            util::Logger::Trace("View registered, total: {} active views",
+                               m_weakViews.size());
+        }
+        // Call into view AFTER releasing the lock to avoid re-entrancy deadlock
         view->OnAttachedToModel(this);
-
-        util::Logger::Trace("View registered, total: {} active views",
-                           m_weakViews.size());
     }
 
     /**
@@ -104,29 +104,32 @@ class IModelObservable {
             return;
         }
 
-        std::unique_lock lock(m_viewsMutex);
+        ViewPtr found;
+        {
+            std::unique_lock lock(m_viewsMutex);
 
-        // Notify view before removal
-        for (auto& weak : m_weakViews) {
-            if (auto v = weak.lock()) {
-                if (v.get() == view) {
-                    v->OnDetachedFromModel();
+            for (auto& weak : m_weakViews) {
+                if (auto v = weak.lock(); v && v.get() == view) {
+                    found = v;
                     break;
                 }
             }
+
+            m_weakViews.erase(
+                std::remove_if(m_weakViews.begin(), m_weakViews.end(),
+                               [view](const auto& weak) {
+                                   auto shared = weak.lock();
+                                   return !shared || shared.get() == view;
+                               }),
+                m_weakViews.end());
+
+            util::Logger::Trace("View unregistered, remaining: {} views",
+                               m_weakViews.size());
         }
-
-        // Remove from observers
-        m_weakViews.erase(
-            std::remove_if(m_weakViews.begin(), m_weakViews.end(),
-                           [view](const auto& weak) {
-                               auto shared = weak.lock();
-                               return !shared || shared.get() == view;
-                           }),
-            m_weakViews.end());
-
-        util::Logger::Trace("View unregistered, remaining: {} views",
-                           m_weakViews.size());
+        // Call into view AFTER releasing the lock
+        if (found) {
+            found->OnDetachedFromModel();
+        }
     }
 
     /**
@@ -135,7 +138,12 @@ class IModelObservable {
      */
     size_t GetViewCount() const
     {
-        std::shared_lock lock(m_viewsMutex);
+        std::unique_lock lock(m_viewsMutex);
+        // Prune expired entries so the count reflects live observers only
+        m_weakViews.erase(
+            std::remove_if(m_weakViews.begin(), m_weakViews.end(),
+                           [](const auto& w) { return w.expired(); }),
+            m_weakViews.end());
         return m_weakViews.size();
     }
 
@@ -153,21 +161,27 @@ class IModelObservable {
      */
     void NotifyDataChanged()
     {
-        std::shared_lock lock(m_viewsMutex);
-
-        for (auto& weak : m_weakViews) {
-            if (auto view = weak.lock()) {
-                try {
-                    view->OnDataUpdated();
-                } catch (const std::exception& e) {
-                    util::Logger::Error("Observer error in OnDataUpdated: {}",
-                                       e.what());
-                }
+        // Snapshot live views under lock, then notify outside the lock.
+        // This prevents deadlock from lock upgrade (shared→unique) and
+        // re-entrancy if a view calls back into the model during notification.
+        std::vector<ViewPtr> live;
+        {
+            std::unique_lock lock(m_viewsMutex);
+            CleanupDeadViews();
+            live.reserve(m_weakViews.size());
+            for (auto& weak : m_weakViews) {
+                if (auto v = weak.lock()) live.push_back(v);
             }
         }
 
-        // Clean up dead observers
-        CleanupDeadObservers();
+        for (auto& view : live) {
+            try {
+                view->OnDataUpdated();
+            } catch (const std::exception& e) {
+                util::Logger::Error("Observer error in OnDataUpdated: {}",
+                                   e.what());
+            }
+        }
     }
 
     /**
@@ -177,16 +191,21 @@ class IModelObservable {
      */
     void NotifyCurrentIndexUpdated(int index)
     {
-        std::shared_lock lock(m_viewsMutex);
+        std::vector<ViewPtr> live;
+        {
+            std::unique_lock lock(m_viewsMutex);
+            live.reserve(m_weakViews.size());
+            for (auto& weak : m_weakViews) {
+                if (auto v = weak.lock()) live.push_back(v);
+            }
+        }
 
-        for (auto& weak : m_weakViews) {
-            if (auto view = weak.lock()) {
-                try {
-                    view->OnCurrentIndexUpdated(index);
-                } catch (const std::exception& e) {
-                    util::Logger::Error("Observer error in OnCurrentIndexUpdated: {}",
-                                       e.what());
-                }
+        for (auto& view : live) {
+            try {
+                view->OnCurrentIndexUpdated(index);
+            } catch (const std::exception& e) {
+                util::Logger::Error("Observer error in OnCurrentIndexUpdated: {}",
+                                   e.what());
             }
         }
     }
@@ -194,8 +213,9 @@ class IModelObservable {
     /**
      * @brief Manually triggers cleanup of dead observers
      *
-     * Automatically called during notifications, but can be called
-     * explicitly to remove expired weak_ptr entries.
+     * Can be called explicitly to prune expired weak_ptr entries.
+     * Internally, cleanup is also performed on every RegisterView and
+     * NotifyDataChanged call.
      */
     void CleanupDeadObservers()
     {
