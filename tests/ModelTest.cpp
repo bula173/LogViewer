@@ -82,7 +82,7 @@ class ModelImplTest : public ::testing::Test
 {
   protected:
     mvc::ModelImpl model;
-    MockView mockView;
+    ::testing::NiceMock<MockView> mockView;
 
     void SetUp() override
     {
