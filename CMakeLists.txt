@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
-project(LogViewer VERSION 1.0.0 DESCRIPTION "A modern log viewer with AI-assisted analysis" LANGUAGES CXX C)
+project(LogViewer VERSION 1.1.0 DESCRIPTION "A modern log viewer with AI-assisted analysis" LANGUAGES CXX C)
 
 cmake_policy(SET CMP0074 NEW)
 
@@ -74,7 +74,7 @@ endif()
 # Targets listed here are the ones whose runtime behaviour we want to check.
 # ---------------------------------------------------------------------------
 if(NOT LOGVIEWER_SUBPROJECT)
-    logviewer_enable_sanitizers(application_core LogViewer)
+    logviewer_enable_sanitizers(application_core LogViewer LogViewer_tests)
 endif()
 
 # ---------------------------------------------------------------------------
