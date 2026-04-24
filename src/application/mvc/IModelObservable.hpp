@@ -138,13 +138,10 @@ class IModelObservable {
      */
     size_t GetViewCount() const
     {
-        std::unique_lock lock(m_viewsMutex);
-        // Prune expired entries so the count reflects live observers only
-        m_weakViews.erase(
-            std::remove_if(m_weakViews.begin(), m_weakViews.end(),
-                           [](const auto& w) { return w.expired(); }),
-            m_weakViews.end());
-        return m_weakViews.size();
+        std::shared_lock lock(m_viewsMutex);
+        return static_cast<size_t>(
+            std::count_if(m_weakViews.begin(), m_weakViews.end(),
+                          [](const auto& w) { return !w.expired(); }));
     }
 
   protected:
@@ -232,22 +229,19 @@ class IModelObservable {
      * @brief Internal method to clean up expired weak pointers
      *
      * Called during registration and notifications to remove dead observers.
-     * Should only be called with lock held.
+     * Must be called with unique_lock held.
      */
-    void CleanupDeadViews() const
+    void CleanupDeadViews()
     {
-        // Note: Intentionally not calling const_cast - relies on thread safety
-        // The mutable m_viewsMutex allows shared_lock const access with modification
-        auto& mutable_views = const_cast<std::vector<std::weak_ptr<IView>>&>(m_weakViews);
-
         auto erased = std::remove_if(
-            mutable_views.begin(), mutable_views.end(),
+            m_weakViews.begin(), m_weakViews.end(),
             [](const auto& weak) { return weak.expired(); });
 
-        size_t count = std::distance(erased, mutable_views.end());
+        const size_t count = static_cast<size_t>(
+            std::distance(erased, m_weakViews.end()));
         if (count > 0) {
             util::Logger::Trace("Cleaned up {} expired view observers", count);
-            mutable_views.erase(erased, mutable_views.end());
+            m_weakViews.erase(erased, m_weakViews.end());
         }
     }
 };
