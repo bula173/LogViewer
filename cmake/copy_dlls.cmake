@@ -1,5 +1,10 @@
  # copy_dlls.cmake - Use CMake's native dependency resolver (no ldd needed)
 
+# Suppress CMP0207: file(GET_RUNTIME_DEPENDENCIES) path normalisation (CMake 3.28+)
+if(POLICY CMP0207)
+    cmake_policy(SET CMP0207 NEW)
+endif()
+
 set(EXE_PATH "${ARGV0}")
 set(DEST_DIR "${ARGV1}")
 set(COMPILER_PATH "${ARGV2}")

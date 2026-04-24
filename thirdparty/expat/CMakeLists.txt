@@ -4,6 +4,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/libexpat/libexpat/
     GIT_TAG        R_2_7_3 # or latest stable
     SOURCE_SUBDIR  expat/
+    SYSTEM
 )
 
 set(EXPAT_BUILD_DOCS OFF CACHE BOOL "" FORCE)
