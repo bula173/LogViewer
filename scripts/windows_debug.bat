@@ -50,23 +50,24 @@ echo.
 echo [5/7] Checking application directory...
 cd /d "%~dp0.."
 echo   App directory: %CD%
-if exist "dist\Debug\LogViewer.exe" (
+if exist "build\windows-debug-qt\src\main\LogViewer.exe" (
     echo   OK: Debug executable found
-) else if exist "dist\Release\LogViewer.exe" (
+) else if exist "build\windows-release-qt\src\main\LogViewer.exe" (
     echo   OK: Release executable found
 ) else (
     echo   ERROR: Executable not found!
+    echo   Build first: cmake --preset windows-msys-debug-qt ^&^& cmake --build --preset windows-msys-debug-build-qt
 )
 echo.
 
 echo [6/7] Checking Qt plugins...
-if exist "dist\Debug\platforms\qwindows.dll" (
+if exist "build\windows-debug-qt\src\main\platforms\qwindows.dll" (
     echo   OK: Qt platform plugin found (Debug)
-) else if exist "dist\Release\platforms\qwindows.dll" (
+) else if exist "build\windows-release-qt\src\main\platforms\qwindows.dll" (
     echo   OK: Qt platform plugin found (Release)
 ) else (
-    echo   ERROR: Qt platform plugin (qwindows.dll) not found!
-    echo   This will cause startup crashes!
+    echo   WARNING: Qt platform plugin (qwindows.dll) not yet deployed
+    echo   Run windeployqt after build to copy Qt runtime files.
 )
 echo.
 
@@ -74,8 +75,8 @@ echo [7/7] Checking DLL dependencies...
 where dumpbin >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo   Running dependency check...
-    if exist "dist\Debug\LogViewer.exe" (
-        dumpbin /dependents "dist\Debug\LogViewer.exe" | findstr /i "Qt6"
+    if exist "build\windows-debug-qt\src\main\LogViewer.exe" (
+        dumpbin /dependents "build\windows-debug-qt\src\main\LogViewer.exe" | findstr /i "Qt6"
     )
 ) else (
     echo   INFO: dumpbin not available (install Visual Studio to get it)
@@ -89,6 +90,6 @@ echo.
 echo To run with detailed Qt debug output:
 echo   set QT_DEBUG_PLUGINS=1
 echo   set QT_LOGGING_RULES="*.debug=true"
-echo   dist\Debug\LogViewer.exe
+echo   build\windows-debug-qt\src\main\LogViewer.exe
 echo.
 pause

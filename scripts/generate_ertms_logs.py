@@ -4,6 +4,7 @@ ERTMS Log Generator
 Generates comprehensive ERTMS system logs with RBC, Interlocking, and Train interactions.
 """
 
+import pathlib
 import random
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
@@ -199,11 +200,14 @@ class ERTMSLogGenerator:
         return events
 
 def main():
+    repo_root = pathlib.Path(__file__).parent.parent
+    xml_path = repo_root / "test_data" / "ertms_logs.xml"
+
     generator = ERTMSLogGenerator()
     events = generator.generate_logs(956)  # 1000 total - 44 already created
 
     # Load existing XML
-    tree = ET.parse('/Users/Marcin/workspace/cpp/LogViewer/test_data/ertms_logs.xml')
+    tree = ET.parse(xml_path)
     root = tree.getroot()
 
     # Add new events
@@ -222,7 +226,7 @@ def main():
     lines = pretty_xml.decode('UTF-8').split('\n')
     cleaned_lines = [line for line in lines if line.strip() or line.startswith('<?xml')]
 
-    with open('/Users/Marcin/workspace/cpp/LogViewer/test_data/ertms_logs.xml', 'w', encoding='UTF-8') as f:
+    with open(xml_path, 'w', encoding='UTF-8') as f:
         f.write('\n'.join(cleaned_lines))
 
     print(f"Generated {len(events)} additional events. Total: {generator.event_id - 1}")

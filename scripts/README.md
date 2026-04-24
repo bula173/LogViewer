@@ -1,197 +1,139 @@
-# GitHub Workflow Testing Scripts
+# LogViewer Scripts
 
-This directory contains scripts to test GitHub workflows locally using the `act` tool.
+Helper scripts for building, running, and testing LogViewer locally.
 
-## Prerequisites
+## Scripts
 
-### Install act
-- **Windows**: `winget install nektos.act`
-- **Linux/macOS**: `curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash`
-- **Alternative**: Download from [GitHub releases](https://github.com/nektos/act/releases)
+| Script | Platform | Purpose |
+|--------|----------|---------|
+| `configure_and_build_osx.sh` | macOS | Configure + build via CMake presets |
+| `run_debug.sh` | macOS | Launch the debug build |
+| `run-gh-actions.sh` | macOS / Linux | Simulate CI workflows locally |
+| `windows_debug.bat` | Windows | Diagnose Windows startup issues |
+| `generate_ertms_logs.py` | Any | Generate ERTMS test log data |
 
-### Optional: Docker
-- For full workflow execution (without Docker, scripts run in dry-run mode)
-- Install Docker Desktop or Docker CE
+---
 
-## Available Scripts
+## configure_and_build_osx.sh
 
-### 1. test-workflows.ps1 (PowerShell)
-Advanced PowerShell script with comprehensive options and colored output.
+Configure and build on macOS using CMake presets.
 
-**Usage:**
-```powershell
-# Test all workflows
-.\scripts\test-workflows.ps1
-
-# Test specific platform
-.\scripts\test-workflows.ps1 -Target windows
-.\scripts\test-workflows.ps1 -Target linux
-.\scripts\test-workflows.ps1 -Target macos
-
-# Test specific framework
-.\scripts\test-workflows.ps1 -Target wx
-.\scripts\test-workflows.ps1 -Target qt
-
-# Release build testing
-.\scripts\test-workflows.ps1 -Target all -BuildType Release
-
-# Dry-run mode (syntax validation only)
-.\scripts\test-workflows.ps1 -DryRun
-
-# Verbose output
-.\scripts\test-workflows.ps1 -Target wx -Verbose
+```bash
+./scripts/configure_and_build_osx.sh          # debug (default)
+./scripts/configure_and_build_osx.sh release
+./scripts/configure_and_build_osx.sh asan
 ```
 
-**Parameters:**
-- `-Target`: `all`, `windows`, `linux`, `macos`, `wx`, `qt`
-- `-BuildType`: `Debug`, `Release`
-- `-DryRun`: Run in dry-run mode (syntax validation only)
-- `-Verbose`: Enable verbose output
+## run_debug.sh
 
-### 2. test-workflows.bat (Batch)
-Simple batch script with menu-driven interface.
+Launch the macOS debug binary directly.
 
-**Usage:**
+```bash
+./scripts/run_debug.sh
+```
+
+Build first if the binary is missing:
+```bash
+cmake --build --preset macos-debug-build-qt
+```
+
+## run-gh-actions.sh
+
+Simulate GitHub Actions workflows locally.
+
+- **macOS**: runs the equivalent cmake presets directly (no Docker).
+- **Linux**: delegates to [`act`](https://github.com/nektos/act) with Docker.
+
+```bash
+./scripts/run-gh-actions.sh [workflow] [--dry-run]
+```
+
+### Workflows
+
+| Workflow | What it does |
+|----------|-------------|
+| `build` (default) | Configure + build debug and release |
+| `quality` | clang-tidy, cppcheck, format check |
+| `asan` | Build + test with AddressSanitizer |
+| `tsan` | Build + test with ThreadSanitizer |
+| `test` | CTest on the debug build |
+| `all` | All of the above in sequence |
+
+```bash
+./scripts/run-gh-actions.sh build
+./scripts/run-gh-actions.sh quality
+./scripts/run-gh-actions.sh asan
+./scripts/run-gh-actions.sh all --dry-run   # preview commands without running
+./scripts/run-gh-actions.sh --list          # list available workflows
+```
+
+### Prerequisites
+
+**macOS** – cmake + Qt 6 in PATH (same as a normal build, no extra tools).
+
+**Linux (act)**:
+```bash
+# Install act
+brew install act                 # or
+curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+# Docker must be running
+```
+
+act uses the `catthehacker/ubuntu:act-22.04` image which closely matches the
+GitHub-hosted `ubuntu-latest` runner.
+
+## windows_debug.bat
+
+Diagnostic tool for Windows: checks Qt DLLs, VC++ runtimes, config directory,
+executable presence, and DLL dependencies.
+
 ```cmd
-REM Interactive menu
-scripts\test-workflows.bat
-
-REM Direct option selection
-scripts\test-workflows.bat 1  (Windows workflow)
-scripts\test-workflows.bat 2  (Linux workflow)
-scripts\test-workflows.bat 4  (All workflows)
+scripts\windows_debug.bat
 ```
 
-**Menu Options:**
-1. Test Windows workflow (wx + qt)
-2. Test Linux workflow (wx + qt, gcc + clang)
-3. Test macOS workflow (wx + qt)
-4. Test all workflows
-5. Test wxWidgets framework only
-6. Test Qt framework only
-7. Validate workflow syntax only
-8. Custom test (interactive)
-
-### 3. test-workflows.sh (Bash)
-Unix shell script with command-line options.
-
-**Usage:**
-```bash
-# Make executable
-chmod +x scripts/test-workflows.sh
-
-# Test all workflows
-./scripts/test-workflows.sh
-
-# Test specific platform
-./scripts/test-workflows.sh windows
-./scripts/test-workflows.sh linux
-./scripts/test-workflows.sh macos
-
-# Test specific framework
-./scripts/test-workflows.sh wx
-./scripts/test-workflows.sh qt
-
-# With options
-./scripts/test-workflows.sh --dry-run qt
-./scripts/test-workflows.sh --verbose --build-type Release wx
+After a successful cmake build the executable is at:
+```
+build\windows-debug-qt\src\main\LogViewer.exe
+build\windows-release-qt\src\main\LogViewer.exe
 ```
 
-**Options:**
-- `-d, --dry-run`: Run in dry-run mode
-- `-v, --verbose`: Enable verbose output
-- `-b, --build-type`: Build type (Debug|Release)
-- `-h, --help`: Show help message
+## generate_ertms_logs.py
 
-## Testing Matrix
-
-All scripts test the following combinations:
-
-### Windows Workflow
-- Framework: wx, qt
-- Build Type: Debug, Release
-- Matrix: `gui_framework × build_type`
-
-### Linux Workflow  
-- Framework: wx, qt
-- Compiler: gcc, clang
-- Build Type: Debug, Release
-- Matrix: `gui_framework × compiler × build_type`
-
-### macOS Workflow
-- Framework: wx, qt
-- Build Type: Debug, Release
-- Matrix: `gui_framework × build_type`
-
-## Example Output
-
-```
-🧪 LogViewer Workflow Tester
-============================================================
-Target: all | Build Type: Debug | Dry Run: false
-
-🔍 Checking prerequisites...
-✅ act is installed: act version 0.2.82
-⚠️  Docker is not available. Using dry-run mode only.
-
-🪟 Testing Windows Workflows
-==================================================
-📝 Validating workflow syntax: .github/workflows/cmake-windows.yml
-✅ Workflow syntax is valid
-
-  Testing framework: wx
-🚀 Testing workflow: cmake-windows.yml
-   Running in dry-run mode
-   Command: act -n -W .github/workflows/cmake-windows.yml --matrix gui_framework:wx --matrix build_type:Debug -v
-✅ Workflow test passed: cmake-windows.yml
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **act not found**
-   - Install act using the methods above
-   - Ensure act is in your system PATH
-
-2. **Docker not available**
-   - Scripts automatically switch to dry-run mode
-   - Install Docker for full workflow execution
-
-3. **Workflow syntax errors**
-   - Check YAML indentation in workflow files
-   - Validate against GitHub Actions schema
-
-4. **Matrix parameter errors**
-   - Ensure matrix parameters match workflow definitions
-   - Check for typos in framework names (wx/qt)
-
-### Verification Commands
+Appends ~1000 synthetic ERTMS events to `test_data/ertms_logs.xml`.
 
 ```bash
-# Verify act installation
-act --version
-
-# List available workflows
-act --list
-
-# Check specific workflow syntax
-act -n -W .github/workflows/cmake-windows.yml
-
-# Test with verbose output for debugging
-act -n -W .github/workflows/cmake-windows.yml --matrix gui_framework:wx -v
+python3 scripts/generate_ertms_logs.py
 ```
 
-## Integration with Development Workflow
+The path is resolved relative to the script location — no hardcoded paths.
 
-1. **Pre-commit testing**: Run syntax validation before committing
-2. **Feature branch testing**: Test specific frameworks when working on GUI changes
-3. **Release testing**: Use Release build type before creating releases
-4. **CI/CD validation**: Verify workflow changes locally before pushing
+---
 
-## Configuration Files
+## CMake Preset Quick Reference
 
-- `.actrc`: Local act configuration (platform mappings)
-- `.github/workflows/`: Actual workflow files being tested
+```bash
+# Debug
+cmake --preset macos-debug-qt
+cmake --build --preset macos-debug-build-qt
+ctest --preset macos-debug-test-qt
 
-The scripts automatically handle matrix parameters and provide comprehensive coverage of all build configurations supported by your CI/CD pipeline.
+# Release
+cmake --preset macos-release-qt
+cmake --build --preset macos-release-build-qt
+
+# ASan
+cmake --preset macos-asan-qt
+cmake --build --preset macos-asan-build-qt
+ctest --preset macos-asan-test-qt
+
+# Quality (clang-tidy + cppcheck)
+cmake --preset macos-checks-qt
+cmake --build --preset macos-checks-build-qt
+
+# Format
+cmake --build --preset macos-format-check   # read-only check
+cmake --build --preset macos-format-apply   # auto-fix
+```
+
+Replace `macos` with `linux` or `windows-msys` for other platforms.
