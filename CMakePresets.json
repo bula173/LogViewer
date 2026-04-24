@@ -2,22 +2,18 @@
     "version": 6,
     "configurePresets": [
         {
-            "name": "macos-debug-qt",
-            "displayName": "macOS Debug (Qt)",
+            "name": "macos-base",
+            "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-debug-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
-                "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
-                "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
+                "CMAKE_C_COMPILER":             "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER":           "/usr/bin/clang++",
+                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
+                "CMAKE_PREFIX_PATH":            "/opt/homebrew/opt/qt",
+                "LibArchive_ROOT":              "/opt/homebrew/opt/libarchive",
+                "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
             "condition": {
                 "type": "equals",
@@ -26,25 +22,166 @@
             }
         },
         {
-            "name": "macos-release-qt",
-            "displayName": "macOS Release (Qt)",
+            "name": "linux-base",
+            "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/macos-release-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "/usr/bin/clang",
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "LibArchive_ROOT": "/opt/homebrew/opt/libarchive",
-                "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
+                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
+                "Qt6_DIR":                      "/usr/lib/cmake/Qt6",
+                "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos-debug-qt",
+            "displayName": "macOS Debug (Qt) [ASan+UBSan]",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "macos-release-qt",
+            "displayName": "macOS Release (Qt)",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Release",
+                "LOGVIEWER_SANITIZER": "None",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "macos-asan-qt",
+            "displayName": "macOS Debug (Qt) [AddressSanitizer]",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-asan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "macos-tsan-qt",
+            "displayName": "macOS Debug (Qt) [ThreadSanitizer]",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-tsan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Thread",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "macos-ubsan-qt",
+            "displayName": "macOS Debug (Qt) [UndefinedBehaviorSanitizer]",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-ubsan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "UndefinedBehavior",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "macos-checks-qt",
+            "displayName": "macOS Checks (Qt) [cppcheck + clang-tidy, no sanitizer]",
+            "inherits": "macos-base",
+            "binaryDir": "${sourceDir}/build/macos-checks-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "None",
+                "ENABLE_CPPCHECK":    "ON",
+                "ENABLE_CLANG_TIDY":  "ON",
+                "CLANG_TIDY_FIX":     "OFF"
+            }
+        },
+        {
+            "name": "linux-debug-qt",
+            "displayName": "Linux Debug (Qt) [ASan+UBSan]",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "linux-release-qt",
+            "displayName": "Linux Release (Qt)",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-release-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Release",
+                "LOGVIEWER_SANITIZER": "None",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "linux-asan-qt",
+            "displayName": "Linux Debug (Qt) [AddressSanitizer]",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-asan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Address",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "linux-tsan-qt",
+            "displayName": "Linux Debug (Qt) [ThreadSanitizer]",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-tsan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "Thread",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "linux-ubsan-qt",
+            "displayName": "Linux Debug (Qt) [UndefinedBehaviorSanitizer]",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-ubsan-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "UndefinedBehavior",
+                "ENABLE_CPPCHECK":    "OFF",
+                "ENABLE_CLANG_TIDY":  "OFF"
+            }
+        },
+        {
+            "name": "linux-checks-qt",
+            "displayName": "Linux Checks (Qt) [cppcheck + clang-tidy, no sanitizer]",
+            "inherits": "linux-base",
+            "binaryDir": "${sourceDir}/build/linux-checks-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE":    "Debug",
+                "LOGVIEWER_SANITIZER": "None",
+                "ENABLE_CPPCHECK":    "ON",
+                "ENABLE_CLANG_TIDY":  "ON",
+                "CLANG_TIDY_FIX":     "OFF"
             }
         },
         {
@@ -53,17 +190,18 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/windows-debug-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE":             "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
-                "ENABLE_CLANG_TIDY": "OFF",
-                "LOGVIEWER_SANITIZER": "None",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
+                "CMAKE_C_COMPILER":             "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER":           "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
+                "CMAKE_MAKE_PROGRAM":           "C:/msys64/mingw64/bin/ninja.exe",
+                "Qt6_DIR":                      "C:/msys64/mingw64/lib/cmake/Qt6",
+                "LOGVIEWER_SANITIZER":          "None",
+                "ENABLE_CPPCHECK":             "OFF",
+                "ENABLE_CLANG_TIDY":           "OFF",
+                "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
@@ -75,334 +213,402 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/windows-release-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_BUILD_TYPE":             "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_MAKE_PROGRAM": "C:/msys64/mingw64/bin/ninja.exe",
-                "Qt6_DIR": "C:/msys64/mingw64/lib/cmake/Qt6",
-                "ENABLE_CLANG_TIDY": "OFF",
-                "LOGVIEWER_SANITIZER": "None",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
+                "CMAKE_C_COMPILER":             "C:/msys64/mingw64/bin/clang.exe",
+                "CMAKE_CXX_COMPILER":           "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
+                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
+                "CMAKE_MAKE_PROGRAM":           "C:/msys64/mingw64/bin/ninja.exe",
+                "Qt6_DIR":                      "C:/msys64/mingw64/lib/cmake/Qt6",
+                "LOGVIEWER_SANITIZER":          "None",
+                "ENABLE_CPPCHECK":             "OFF",
+                "ENABLE_CLANG_TIDY":           "OFF",
+                "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
             }
-        },
-        {
-            "name": "linux-debug-qt",
-            "displayName": "Linux Debug (Qt)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-debug-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "Qt6_DIR": "/usr/lib/cmake/Qt6",
-                "LOGVIEWER_SANITIZER": "Address",
-                "ENABLE_CPPCHECK": "ON",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
-        },
-        {
-            "name": "linux-release-qt",
-            "displayName": "Linux Release (Qt)",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/linux-release-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER_LAUNCHER": "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
-                "Qt6_DIR": "/usr/lib/cmake/Qt6",
-                "CMAKE_MESSAGE_LOG_LEVEL": "WARNING"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
         }
-
     ],
+
     "buildPresets": [
         {
-            "name": "linux-debug-build-qt",
-            "displayName": "Linux QT Debug Build",
-            "configurePreset": "linux-debug-qt"
-        },
-        {
-            "name": "linux-release-build-qt",
-            "displayName": "Linux QT Release Build",
-            "configurePreset": "linux-release-qt"
-        },
-        {
             "name": "macos-debug-build-qt",
-            "displayName": "macOS QT Debug Build",
+            "displayName": "macOS Debug Build",
             "configurePreset": "macos-debug-qt"
         },
         {
             "name": "macos-release-build-qt",
-            "displayName": "macOS QT Release Build",
+            "displayName": "macOS Release Build",
             "configurePreset": "macos-release-qt"
         },
         {
+            "name": "linux-debug-build-qt",
+            "displayName": "Linux Debug Build",
+            "configurePreset": "linux-debug-qt"
+        },
+        {
+            "name": "linux-release-build-qt",
+            "displayName": "Linux Release Build",
+            "configurePreset": "linux-release-qt"
+        },
+        {
             "name": "windows-msys-debug-qt-build",
-            "displayName": "Windows MSYS2 Debug Build (Qt)",
+            "displayName": "Windows MSYS2 Debug Build",
             "configurePreset": "windows-msys-debug-qt"
         },
         {
             "name": "windows-msys-release-qt-build",
-            "displayName": "Windows MSYS2 Release Build (Qt)",
+            "displayName": "Windows MSYS2 Release Build",
             "configurePreset": "windows-msys-release-qt"
         },
         {
+            "name": "macos-asan-build-qt",
+            "displayName": "macOS ASan Build",
+            "configurePreset": "macos-asan-qt"
+        },
+        {
+            "name": "macos-tsan-build-qt",
+            "displayName": "macOS TSan Build",
+            "configurePreset": "macos-tsan-qt"
+        },
+        {
+            "name": "macos-ubsan-build-qt",
+            "displayName": "macOS UBSan Build",
+            "configurePreset": "macos-ubsan-qt"
+        },
+        {
+            "name": "linux-asan-build-qt",
+            "displayName": "Linux ASan Build",
+            "configurePreset": "linux-asan-qt"
+        },
+        {
+            "name": "linux-tsan-build-qt",
+            "displayName": "Linux TSan Build",
+            "configurePreset": "linux-tsan-qt"
+        },
+        {
+            "name": "linux-ubsan-build-qt",
+            "displayName": "Linux UBSan Build",
+            "configurePreset": "linux-ubsan-qt"
+        },
+        {
+            "name": "macos-checks-build-qt",
+            "displayName": "macOS Checks Build (no sanitizer)",
+            "configurePreset": "macos-checks-qt"
+        },
+        {
+            "name": "linux-checks-build-qt",
+            "displayName": "Linux Checks Build (no sanitizer)",
+            "configurePreset": "linux-checks-qt"
+        },
+        {
             "name": "macos-cppcheck",
-            "displayName": "macOS: Run Cppcheck Analysis",
-            "configurePreset": "macos-debug-qt",
+            "displayName": "macOS: cppcheck",
+            "configurePreset": "macos-checks-qt",
             "targets": ["cppcheck"]
         },
         {
             "name": "linux-cppcheck",
-            "displayName": "Linux: Run Cppcheck Analysis",
-            "configurePreset": "linux-debug-qt",
+            "displayName": "Linux: cppcheck",
+            "configurePreset": "linux-checks-qt",
             "targets": ["cppcheck"]
         },
         {
             "name": "macos-clang-tidy",
-            "displayName": "macOS: Run Clang-Tidy Analysis",
-            "configurePreset": "macos-debug-qt",
+            "displayName": "macOS: clang-tidy",
+            "configurePreset": "macos-checks-qt",
             "targets": ["tidy"]
         },
         {
             "name": "linux-clang-tidy",
-            "displayName": "Linux: Run Clang-Tidy Analysis",
-            "configurePreset": "linux-debug-qt",
+            "displayName": "Linux: clang-tidy",
+            "configurePreset": "linux-checks-qt",
             "targets": ["tidy"]
         },
         {
             "name": "macos-format",
-            "displayName": "macOS: Format Code (clang-format)",
+            "displayName": "macOS: Format sources in-place",
             "configurePreset": "macos-debug-qt",
             "targets": ["format"]
         },
         {
             "name": "linux-format",
-            "displayName": "Linux: Format Code (clang-format)",
+            "displayName": "Linux: Format sources in-place",
             "configurePreset": "linux-debug-qt",
             "targets": ["format"]
         },
         {
-            "name": "macos-quality-tools",
-            "displayName": "macOS: Run All Code Quality Tools",
+            "name": "macos-format-check",
+            "displayName": "macOS: Format check (CI, read-only)",
             "configurePreset": "macos-debug-qt",
+            "targets": ["format-check"]
+        },
+        {
+            "name": "linux-format-check",
+            "displayName": "Linux: Format check (CI, read-only)",
+            "configurePreset": "linux-debug-qt",
+            "targets": ["format-check"]
+        },
+        {
+            "name": "macos-quality-tools",
+            "displayName": "macOS: All quality tools (cppcheck + tidy + format-check)",
+            "configurePreset": "macos-checks-qt",
             "targets": ["run_tools"]
         },
         {
             "name": "linux-quality-tools",
-            "displayName": "Linux: Run All Code Quality Tools",
-            "configurePreset": "linux-debug-qt",
+            "displayName": "Linux: All quality tools (cppcheck + tidy + format-check)",
+            "configurePreset": "linux-checks-qt",
             "targets": ["run_tools"]
         }
     ],
+
     "testPresets": [
         {
-            "name": "linux-debug-test-qt",
-            "displayName": "Linux QT Debug Test",
-            "configurePreset": "linux-debug-qt",
-            "output": {
-                "outputOnFailure": true
-            }
-        },
-        {
-            "name": "linux-release-test-qt",
-            "displayName": "Linux QT Release Test",
-            "configurePreset": "linux-release-qt",
-            "output": {
-                "outputOnFailure": true
-            }
-        },
-        {
             "name": "macos-debug-test-qt",
-            "displayName": "macOS QT Debug Test",
+            "displayName": "macOS Debug Tests",
             "configurePreset": "macos-debug-qt",
-            "output": {
-                "outputOnFailure": true
-            }
+            "output": { "outputOnFailure": true }
         },
         {
             "name": "macos-release-test-qt",
-            "displayName": "macOS QT Release Test",
+            "displayName": "macOS Release Tests",
             "configurePreset": "macos-release-qt",
-            "output": {
-                "outputOnFailure": true
-            }
+            "output": { "outputOnFailure": true }
+        },
+        {
+            "name": "linux-debug-test-qt",
+            "displayName": "Linux Debug Tests",
+            "configurePreset": "linux-debug-qt",
+            "output": { "outputOnFailure": true }
+        },
+        {
+            "name": "linux-release-test-qt",
+            "displayName": "Linux Release Tests",
+            "configurePreset": "linux-release-qt",
+            "output": { "outputOnFailure": true }
         },
         {
             "name": "windows-msys-debug-qt-test",
-            "displayName": "Windows MSYS2 Debug Test (Qt)",
+            "displayName": "Windows MSYS2 Debug Tests",
             "configurePreset": "windows-msys-debug-qt",
-            "output": {
-                "outputOnFailure": true
+            "output": { "outputOnFailure": true }
+        },
+        {
+            "name": "windows-msys-release-qt-test",
+            "displayName": "Windows MSYS2 Release Tests",
+            "configurePreset": "windows-msys-release-qt",
+            "output": { "outputOnFailure": true }
+        },
+        {
+            "name": "macos-asan-test-qt",
+            "displayName": "macOS ASan Tests",
+            "configurePreset": "macos-asan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "ASAN_OPTIONS":  "detect_leaks=1:halt_on_error=1",
+                "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
             }
         },
         {
-
-            "name": "windows-msys-release-qt-test",
-            "displayName": "Windows MSYS2 Release Test (Qt)",
-            "configurePreset": "windows-msys-release-qt",
-            "output": {
-                "outputOnFailure": true
+            "name": "macos-tsan-test-qt",
+            "displayName": "macOS TSan Tests",
+            "configurePreset": "macos-tsan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "TSAN_OPTIONS": "halt_on_error=1"
+            }
+        },
+        {
+            "name": "macos-ubsan-test-qt",
+            "displayName": "macOS UBSan Tests",
+            "configurePreset": "macos-ubsan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+            }
+        },
+        {
+            "name": "linux-asan-test-qt",
+            "displayName": "Linux ASan Tests",
+            "configurePreset": "linux-asan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "ASAN_OPTIONS":  "detect_leaks=1:halt_on_error=1",
+                "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+            }
+        },
+        {
+            "name": "linux-tsan-test-qt",
+            "displayName": "Linux TSan Tests",
+            "configurePreset": "linux-tsan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "TSAN_OPTIONS": "halt_on_error=1"
+            }
+        },
+        {
+            "name": "linux-ubsan-test-qt",
+            "displayName": "Linux UBSan Tests",
+            "configurePreset": "linux-ubsan-qt",
+            "output": { "outputOnFailure": true },
+            "environment": {
+                "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
             }
         }
     ],
+
     "packagePresets": [
         {
-            "name": "linux-release-package-qt",
-            "displayName": "Linux QT Release Package",
-            "configurePreset": "linux-release-qt",
-            "generators": ["DEB", "TBZ2", "TXZ"]
-        },
-        {
             "name": "macos-release-package-qt",
-            "displayName": "macOS QT Release Package",
+            "displayName": "macOS Release Package",
             "configurePreset": "macos-release-qt",
             "generators": ["DragNDrop"]
         },
         {
+            "name": "linux-release-package-qt",
+            "displayName": "Linux Release Package",
+            "configurePreset": "linux-release-qt",
+            "generators": ["DEB", "TBZ2", "TXZ"]
+        },
+        {
             "name": "windows-msys-release-qt-package",
-            "displayName": "Windows MSYS2 Release Package (Qt)",
+            "displayName": "Windows MSYS2 Release Package",
             "configurePreset": "windows-msys-release-qt",
             "generators": ["NSIS"]
         }
     ],
+
     "workflowPresets": [
         {
-            "name": "linux-debug-workflow-qt",
-            "displayName": "Linux QT Debug Workflow",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "linux-debug-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "linux-debug-build-qt"
-                },
-                {
-                    "type": "test",
-                    "name": "linux-debug-test-qt"
-                }
-            ]
-        },
-        {
-            "name": "linux-release-workflow-qt",
-            "displayName": "Linux QT Release Workflow",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "linux-release-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "linux-release-build-qt"
-                },
-                {
-                    "type": "test",
-                    "name": "linux-release-test-qt"
-                },
-                {
-                    "type": "package",
-                    "name": "linux-release-package-qt"
-                }
-            ]
-        },
-        {
             "name": "macos-debug-workflow-qt",
-            "displayName": "macOS QT Debug Workflow",
+            "displayName": "macOS: Configure + Build + Test [ASan]",
             "steps": [
-                {
-                    "type": "configure",
-                    "name": "macos-debug-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "macos-debug-build-qt"
-                },
-                {
-                    "type": "test",
-                    "name": "macos-debug-test-qt"
-                }
+                { "type": "configure", "name": "macos-debug-qt" },
+                { "type": "build",     "name": "macos-debug-build-qt" },
+                { "type": "test",      "name": "macos-debug-test-qt" }
             ]
         },
         {
             "name": "macos-release-workflow-qt",
-            "displayName": "macOS QT Release Workflow",
+            "displayName": "macOS: Configure + Build + Test + Package",
             "steps": [
-                {
-                    "type": "configure",
-                    "name": "macos-release-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "macos-release-build-qt"
-                },
-                {
-                    "type": "test",
-                    "name": "macos-release-test-qt"
-                },
-                {
-                    "type": "package",
-                    "name": "macos-release-package-qt"
-                }
+                { "type": "configure", "name": "macos-release-qt" },
+                { "type": "build",     "name": "macos-release-build-qt" },
+                { "type": "test",      "name": "macos-release-test-qt" },
+                { "type": "package",   "name": "macos-release-package-qt" }
+            ]
+        },
+        {
+            "name": "macos-asan-workflow-qt",
+            "displayName": "macOS: Configure + Build + Test [AddressSanitizer]",
+            "steps": [
+                { "type": "configure", "name": "macos-asan-qt" },
+                { "type": "build",     "name": "macos-asan-build-qt" },
+                { "type": "test",      "name": "macos-asan-test-qt" }
+            ]
+        },
+        {
+            "name": "macos-tsan-workflow-qt",
+            "displayName": "macOS: Configure + Build + Test [ThreadSanitizer]",
+            "steps": [
+                { "type": "configure", "name": "macos-tsan-qt" },
+                { "type": "build",     "name": "macos-tsan-build-qt" },
+                { "type": "test",      "name": "macos-tsan-test-qt" }
+            ]
+        },
+        {
+            "name": "macos-ubsan-workflow-qt",
+            "displayName": "macOS: Configure + Build + Test [UBSan]",
+            "steps": [
+                { "type": "configure", "name": "macos-ubsan-qt" },
+                { "type": "build",     "name": "macos-ubsan-build-qt" },
+                { "type": "test",      "name": "macos-ubsan-test-qt" }
+            ]
+        },
+        {
+            "name": "macos-quality-workflow-qt",
+            "displayName": "macOS: Configure + Build + All Quality Tools",
+            "steps": [
+                { "type": "configure", "name": "macos-checks-qt" },
+                { "type": "build",     "name": "macos-checks-build-qt" },
+                { "type": "build",     "name": "macos-quality-tools" }
+            ]
+        },
+        {
+            "name": "linux-debug-workflow-qt",
+            "displayName": "Linux: Configure + Build + Test [ASan]",
+            "steps": [
+                { "type": "configure", "name": "linux-debug-qt" },
+                { "type": "build",     "name": "linux-debug-build-qt" },
+                { "type": "test",      "name": "linux-debug-test-qt" }
+            ]
+        },
+        {
+            "name": "linux-release-workflow-qt",
+            "displayName": "Linux: Configure + Build + Test + Package",
+            "steps": [
+                { "type": "configure", "name": "linux-release-qt" },
+                { "type": "build",     "name": "linux-release-build-qt" },
+                { "type": "test",      "name": "linux-release-test-qt" },
+                { "type": "package",   "name": "linux-release-package-qt" }
+            ]
+        },
+        {
+            "name": "linux-asan-workflow-qt",
+            "displayName": "Linux: Configure + Build + Test [AddressSanitizer]",
+            "steps": [
+                { "type": "configure", "name": "linux-asan-qt" },
+                { "type": "build",     "name": "linux-asan-build-qt" },
+                { "type": "test",      "name": "linux-asan-test-qt" }
+            ]
+        },
+        {
+            "name": "linux-tsan-workflow-qt",
+            "displayName": "Linux: Configure + Build + Test [ThreadSanitizer]",
+            "steps": [
+                { "type": "configure", "name": "linux-tsan-qt" },
+                { "type": "build",     "name": "linux-tsan-build-qt" },
+                { "type": "test",      "name": "linux-tsan-test-qt" }
+            ]
+        },
+        {
+            "name": "linux-ubsan-workflow-qt",
+            "displayName": "Linux: Configure + Build + Test [UBSan]",
+            "steps": [
+                { "type": "configure", "name": "linux-ubsan-qt" },
+                { "type": "build",     "name": "linux-ubsan-build-qt" },
+                { "type": "test",      "name": "linux-ubsan-test-qt" }
+            ]
+        },
+        {
+            "name": "linux-quality-workflow-qt",
+            "displayName": "Linux: Configure + Build + All Quality Tools",
+            "steps": [
+                { "type": "configure", "name": "linux-checks-qt" },
+                { "type": "build",     "name": "linux-checks-build-qt" },
+                { "type": "build",     "name": "linux-quality-tools" }
             ]
         },
         {
             "name": "windows-msys-debug-qt-workflow",
-            "displayName": "Windows MSYS2 Debug Workflow (Qt)",
+            "displayName": "Windows: Configure + Build + Test",
             "steps": [
-                {
-                    "type": "configure",
-                    "name": "windows-msys-debug-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "windows-msys-debug-qt-build"
-                },
-                {
-                    "type": "test",
-                    "name": "windows-msys-debug-qt-test"
-                }
+                { "type": "configure", "name": "windows-msys-debug-qt" },
+                { "type": "build",     "name": "windows-msys-debug-qt-build" },
+                { "type": "test",      "name": "windows-msys-debug-qt-test" }
             ]
         },
         {
             "name": "windows-msys-release-qt-workflow",
-            "displayName": "Windows MSYS2 Release Workflow (Qt)",
+            "displayName": "Windows: Configure + Build + Test + Package",
             "steps": [
-                {
-                    "type": "configure",
-                    "name": "windows-msys-release-qt"
-                },
-                {
-                    "type": "build",
-                    "name": "windows-msys-release-qt-build"
-                },
-                {
-                    "type": "test",
-                    "name": "windows-msys-release-qt-test"
-                },
-                {
-                    "type": "package",
-                    "name": "windows-msys-release-qt-package"
-                }
+                { "type": "configure", "name": "windows-msys-release-qt" },
+                { "type": "build",     "name": "windows-msys-release-qt-build" },
+                { "type": "test",      "name": "windows-msys-release-qt-test" },
+                { "type": "package",   "name": "windows-msys-release-qt-package" }
             ]
         }
     ]
