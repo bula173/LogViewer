@@ -1,539 +1,308 @@
 {
     "version": "2.0.0",
     "tasks": [
-        // ========================================================================
-        // Configure Tasks (using CMake Presets)
-        // ========================================================================
+
+        // ── Configure ────────────────────────────────────────────────────────
         {
-            "label": "Configure QT Debug",
+            "label": "Configure: Debug",
             "type": "shell",
+            "osx":    { "command": "cmake", "args": ["--preset", "macos-debug-qt"] },
+            "linux":  { "command": "cmake", "args": ["--preset", "linux-debug-qt"] },
             "windows": {
                 "command": "cmake",
-                "args": [
-                    "--preset",
-                    "windows-msys-debug-qt"
-                ],
-                "options": {
-                    "env": {
-                        "CXX": "C:/msys64/mingw64/bin/clang++.exe",
-                        "CC": "C:/msys64/mingw64/bin/clang.exe",
-                        "PATH": "C:/msys64/mingw64/bin;$PATH"
-                    }
-                }
-            },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--preset",
-                    "linux-debug-qt"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--preset",
-                    "macos-debug-qt"
-                ]
+                "args": ["--preset", "windows-msys-debug-qt"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
             "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Configure QT Release",
+            "label": "Configure: Release",
             "type": "shell",
+            "osx":    { "command": "cmake", "args": ["--preset", "macos-release-qt"] },
+            "linux":  { "command": "cmake", "args": ["--preset", "linux-release-qt"] },
             "windows": {
                 "command": "cmake",
-                "args": [
-                    "--preset",
-                    "windows-msys-release-qt"
-                ]
-            },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--preset",
-                    "linux-release-qt"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--preset",
-                    "macos-release-qt"
-                ]
+                "args": ["--preset", "windows-msys-release-qt"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
             "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Configure: Checks (clang-tidy + cppcheck, no sanitizer)",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--preset", "macos-checks-qt"] },
+            "linux": { "command": "cmake", "args": ["--preset", "linux-checks-qt"] },
+            "windows": { "command": "echo", "args": ["Checks preset not supported on Windows"] },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
 
-        // ========================================================================
-        // Build Tasks (using CMake Presets)
-        // ========================================================================
+        // ── Build ────────────────────────────────────────────────────────────
         {
-            "label": "Build QT Debug",
+            "label": "Build: Debug",
             "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-debug-build-qt"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-debug-build-qt"] },
             "windows": {
                 "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "windows-msys-debug-qt-build"
-                ]
+                "args": ["--build", "--preset", "windows-msys-debug-qt-build"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "linux-debug-build-qt"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "macos-debug-build-qt"
-                ]
-            },
-            "dependsOn": [
-                "Configure QT Debug"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
+            "dependsOn": ["Configure: Debug"],
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Build QT Release",
+            "label": "Build: Release",
             "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-release-build-qt"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-release-build-qt"] },
             "windows": {
                 "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "windows-msys-release-build-qt"
-                ]
+                "args": ["--build", "--preset", "windows-msys-release-qt-build"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "linux-release-build-qt"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--build",
-                    "--preset",
-                    "macos-release-build-qt"
-                ]
-            },
-            "dependsOn": [
-                "Configure QT Release"
-            ],
+            "dependsOn": ["Configure: Release"],
             "group": "build",
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Build Debug",
+            "label": "Build: ASan",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}/build/windows-debug-qt",
-                "--target",
-                "LogViewer"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-asan-build-qt"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-asan-build-qt"] },
+            "windows": { "command": "echo", "args": ["ASan not supported on Windows"] },
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Build Release",
+            "label": "Build: Checks",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}/build/windows-release-qt",
-                "--target",
-                "LogViewer"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$gcc"
-        }
-
-        // ========================================================================
-        // Compatibility Alias Tasks
-        // ========================================================================
-        {
-            "label": "Build QT release with CMake",
-            "type": "shell",
-            "dependsOn": [
-                "Build QT Release"
-            ],
-            "command": "echo",
-            "args": [
-                "Build QT Release completed"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "Build QT debug with CMake",
-            "type": "shell",
-            "dependsOn": [
-                "Build QT Debug"
-            ],
-            "command": "echo",
-            "args": [
-                "Build QT Debug completed"
-            ],
-            "problemMatcher": []
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-checks-build-qt"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-checks-build-qt"] },
+            "windows": { "command": "echo", "args": ["Checks preset not supported on Windows"] },
+            "dependsOn": ["Configure: Checks (clang-tidy + cppcheck, no sanitizer)"],
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
 
-        // ========================================================================
-        // Test Tasks (using CMake Presets)
-        // ========================================================================
+        // ── Test ─────────────────────────────────────────────────────────────
         {
-            "label": "Test QT Debug",
+            "label": "Test: Debug",
             "type": "shell",
+            "osx":   { "command": "ctest", "args": ["--preset", "macos-debug-test-qt"] },
+            "linux": { "command": "ctest", "args": ["--preset", "linux-debug-test-qt"] },
             "windows": {
                 "command": "ctest",
-                "args": [
-                    "--preset",
-                    "windows-msys-debug-test-qt"
-                ]
+                "args": ["--preset", "windows-msys-debug-qt-test"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "linux": {
-                "command": "ctest",
-                "args": [
-                    "--preset",
-                    "linux-debug-test-qt"
-                ]
-            },
-            "osx": {
-                "command": "ctest",
-                "args": [
-                    "--preset",
-                    "macos-debug-test-qt"
-                ]
-            },
-            "dependsOn": [
-                "Build QT Debug"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
+            "dependsOn": ["Build: Debug"],
+            "group": { "kind": "test", "isDefault": true },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Test QT Release",
+            "label": "Test: Release",
             "type": "shell",
+            "osx":   { "command": "ctest", "args": ["--preset", "macos-release-test-qt"] },
+            "linux": { "command": "ctest", "args": ["--preset", "linux-release-test-qt"] },
             "windows": {
                 "command": "ctest",
-                "args": [
-                    "--preset",
-                    "windows-msys-release-test-qt"
-                ]
+                "args": ["--preset", "windows-msys-release-qt-test"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
+            },
+            "dependsOn": ["Build: Release"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Test: ASan",
+            "type": "shell",
+            "osx":   { "command": "ctest", "args": ["--preset", "macos-asan-test-qt"] },
+            "linux": { "command": "ctest", "args": ["--preset", "linux-asan-test-qt"] },
+            "windows": { "command": "echo", "args": ["ASan not supported on Windows"] },
+            "dependsOn": ["Build: ASan"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+
+        // ── Static analysis ──────────────────────────────────────────────────
+        {
+            "label": "Analysis: cppcheck",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-cppcheck"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-cppcheck"] },
+            "windows": { "command": "echo", "args": ["cppcheck preset not configured for Windows"] },
+            "dependsOn": ["Configure: Checks (clang-tidy + cppcheck, no sanitizer)"],
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Analysis: clang-tidy",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-clang-tidy"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-clang-tidy"] },
+            "windows": { "command": "echo", "args": ["clang-tidy preset not configured for Windows"] },
+            "dependsOn": ["Configure: Checks (clang-tidy + cppcheck, no sanitizer)"],
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Analysis: All Quality Tools",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-quality-tools"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-quality-tools"] },
+            "windows": { "command": "echo", "args": ["Quality tools preset not configured for Windows"] },
+            "dependsOn": ["Build: Checks"],
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Format: Check (CI, read-only)",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-format-check"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-format-check"] },
+            "windows": { "command": "echo", "args": ["Format check not configured for Windows"] },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Format: Apply in-place",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--build", "--preset", "macos-format"] },
+            "linux": { "command": "cmake", "args": ["--build", "--preset", "linux-format"] },
+            "windows": { "command": "echo", "args": ["Format not configured for Windows"] },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+
+        // ── Run ──────────────────────────────────────────────────────────────
+        {
+            "label": "Run: Debug",
+            "type": "shell",
+            "osx": {
+                "command": "${workspaceFolder}/build/macos-debug-qt/src/main/LogViewer.app/Contents/MacOS/LogViewer",
+                "args": []
             },
             "linux": {
-                "command": "ctest",
-                "args": [
-                    "--preset",
-                    "linux-release-test-qt"
-                ]
+                "command": "${workspaceFolder}/build/linux-debug-qt/src/main/LogViewer",
+                "args": []
             },
-            "osx": {
-                "command": "ctest",
-                "args": [
-                    "--preset",
-                    "macos-release-test-qt"
-                ]
-            },
-            "dependsOn": [
-                "Build QT Release"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        },
-        // ========================================================================
-        // Analysis and Packaging Tasks
-        // ========================================================================
-        {
-            "label": "Static Analysis (cppcheck)",
-            "type": "shell",
             "windows": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/windows-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/windows-debug/cppcheck-report.txt >/dev/null; then cat build/windows-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
-                ]
+                "command": "${workspaceFolder}/build/windows-debug-qt/src/main/LogViewer.exe",
+                "args": [],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "linux": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/linux-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/linux-debug/cppcheck-report.txt >/dev/null; then cat build/linux-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
-                ]
-            },
-            "osx": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches --template=gcc -I src -I include src 2> build/macos-debug/cppcheck-report.txt || true; if grep -E ':[0-9]+:[0-9]+: (error|warning):' build/macos-debug/cppcheck-report.txt >/dev/null; then cat build/macos-debug/cppcheck-report.txt; echo 'cppcheck issues found'; exit 1; else echo 'No blocking cppcheck issues'; fi"
-                ]
-            },
-            "dependsOn": [
-                "Configure Debug"
-            ]
+            "dependsOn": ["Build: Debug"],
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Package QT Release",
+            "label": "Run: Release",
             "type": "shell",
+            "osx": {
+                "command": "${workspaceFolder}/build/macos-release-qt/src/main/LogViewer.app/Contents/MacOS/LogViewer",
+                "args": []
+            },
+            "linux": {
+                "command": "${workspaceFolder}/build/linux-release-qt/src/main/LogViewer",
+                "args": []
+            },
+            "windows": {
+                "command": "${workspaceFolder}/build/windows-release-qt/src/main/LogViewer.exe",
+                "args": [],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
+            },
+            "dependsOn": ["Build: Release"],
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+
+        // ── Package ──────────────────────────────────────────────────────────
+        {
+            "label": "Package: Release",
+            "type": "shell",
+            "osx":   { "command": "cpack", "args": ["--preset", "macos-release-package-qt"] },
+            "linux": { "command": "cpack", "args": ["--preset", "linux-release-package-qt"] },
             "windows": {
                 "command": "cpack",
-                "args": [
-                    "--preset",
-                    "windows-msys-release-package-qt"
-                ]
+                "args": ["--preset", "windows-msys-release-qt-package"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "linux": {
-                "command": "cpack",
-                "args": [
-                    "--preset",
-                    "linux-release-package-qt"
-                ]
-            },
-            "osx": {
-                "command": "cpack",
-                "args": [
-                    "--preset",
-                    "macos-release-package-qt"
-                ]
-            },
-            "dependsOn": [
-                "Build QT Release"
-            ]
+            "dependsOn": ["Build: Release"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
-        // ========================================================================
-        // Run Tasks
-        // ========================================================================
+
+        // ── Workflows ────────────────────────────────────────────────────────
         {
-            "label": "Run App (Debug)",
+            "label": "Workflow: Debug (configure + build + test)",
             "type": "shell",
-            "linux": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "exec build/linux-debug/src/LogViewer || exec build/linux-debug/LogViewer"
-                ]
-            },
-            "osx": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "APP=build/macos-debug/src/LogViewer; BUNDLE=build/macos-debug/src/LogViewer.app/Contents/MacOS/LogViewer; [ -x \"$BUNDLE\" ] && exec \"$BUNDLE\" || exec \"$APP\""
-                ]
-            },
+            "osx":   { "command": "cmake", "args": ["--workflow", "--preset", "macos-debug-workflow-qt"] },
+            "linux": { "command": "cmake", "args": ["--workflow", "--preset", "linux-debug-workflow-qt"] },
             "windows": {
-                "command": "cmd",
-                "args": [
-                    "/c",
-                    "if exist build\\windows-debug\\src\\LogViewer.exe (build\\windows-debug\\src\\LogViewer.exe) else (build\\windows-debug\\LogViewer.exe)"
-                ],
-                "options": {
-                    "env": {
-                        "PATH": "C:\\msys64\\mingw64\\bin;%PATH%"
-                    }
-                }
+                "command": "cmake",
+                "args": ["--workflow", "--preset", "windows-msys-debug-qt-workflow"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "dependsOn": [
-                "Build QT Debug"
-            ],
-            "isBackground": true
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
         {
-            "label": "Run Tests (Debug)",
+            "label": "Workflow: Release (configure + build + test + package)",
             "type": "shell",
-            "linux": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "ctest --test-dir build/linux-debug --output-on-failure"
-                ]
-            },
-            "osx": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "ctest --test-dir build/macos-debug --output-on-failure"
-                ]
-            },
+            "osx":   { "command": "cmake", "args": ["--workflow", "--preset", "macos-release-workflow-qt"] },
+            "linux": { "command": "cmake", "args": ["--workflow", "--preset", "linux-release-workflow-qt"] },
             "windows": {
-                "command": "cmd",
-                "args": [
-                    "/c",
-                    "ctest --test-dir build\\windows-debug --output-on-failure"
-                ],
-                "options": {
-                    "env": {
-                        "PATH": "C:\\msys64\\mingw64\\bin;%PATH%"
-                    }
-                }
+                "command": "cmake",
+                "args": ["--workflow", "--preset", "windows-msys-release-qt-workflow"],
+                "options": { "env": { "PATH": "C:/msys64/mingw64/bin;$PATH" } }
             },
-            "dependsOn": [
-                "Build QT Debug"
-            ]
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
         },
-        // ========================================================================
-        // Utility Tasks
-        // ========================================================================
         {
-            "label": "Clean",
+            "label": "Workflow: Quality (configure + build + all tools)",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--workflow", "--preset", "macos-quality-workflow-qt"] },
+            "linux": { "command": "cmake", "args": ["--workflow", "--preset", "linux-quality-workflow-qt"] },
+            "windows": { "command": "echo", "args": ["Quality workflow not configured for Windows"] },
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Workflow: ASan (configure + build + test)",
+            "type": "shell",
+            "osx":   { "command": "cmake", "args": ["--workflow", "--preset", "macos-asan-workflow-qt"] },
+            "linux": { "command": "cmake", "args": ["--workflow", "--preset", "linux-asan-workflow-qt"] },
+            "windows": { "command": "echo", "args": ["ASan not supported on Windows"] },
+            "problemMatcher": ["$gcc"],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+
+        // ── Utility ──────────────────────────────────────────────────────────
+        {
+            "label": "Clean: All build dirs",
             "type": "shell",
             "command": "bash",
-            "args": [
-                "-c",
-                "rm -rf build dist compile_commands.json"
-            ],
+            "args": ["-c", "rm -rf '${workspaceFolder}/build'"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "shared" }
+        },
+        {
+            "label": "Clean: Debug",
+            "type": "shell",
+            "osx":   { "command": "bash", "args": ["-c", "rm -rf '${workspaceFolder}/build/macos-debug-qt'"] },
+            "linux": { "command": "bash", "args": ["-c", "rm -rf '${workspaceFolder}/build/linux-debug-qt'"] },
+            "windows": { "command": "cmd", "args": ["/c", "rmdir /s /q build\\windows-debug-qt"] },
             "problemMatcher": []
-        },
-        {
-            "label": "Clean Build Artifacts",
-            "type": "shell",
-            "windows": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "rm -rf build/windows-debug build/windows-release"
-                ]
-            },
-            "linux": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "rm -rf build/linux-debug build/linux-release"
-                ]
-            },
-            "osx": {
-                "command": "bash",
-                "args": [
-                    "-c",
-                    "rm -rf build/macos-debug build/macos-release"
-                ]
-            },
-            "problemMatcher": []
-        },
-
-        // ========================================================================
-        // Workflow Tasks (Complete Build + Test + Package)
-        // ========================================================================
-        {
-            "label": "Full Debug Workflow",
-            "type": "shell",
-            "windows": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "windows-msys-debug-workflow"
-                ]
-            },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "linux-debug-workflow"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "macos-debug-workflow"
-                ]
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "Full Release Workflow",
-            "type": "shell",
-            "windows": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "windows-msys-release-workflow"
-                ]
-            },
-            "linux": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "linux-release-workflow"
-                ]
-            },
-            "osx": {
-                "command": "cmake",
-                "args": [
-                    "--workflow",
-                    "--preset",
-                    "macos-release-workflow"
-                ]
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
         }
     ]
 }

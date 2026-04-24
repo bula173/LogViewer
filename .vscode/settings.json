@@ -1,4 +1,14 @@
 {
+    "cmake.buildDirectory": "${workspaceFolder}/build/${presetName}",
+    "cmake.configureOnOpen": false,
+    "cmake.useCMakePresets": "always",
+    "cmake.parallelJobs": 0,
+    "cmake.ctest.testExplorerIntegrationEnabled": true,
+
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.configurationWarnings": "disabled",
+
     "files.associations": {
         "complex": "cpp",
         "__bit_reference": "cpp",
@@ -45,11 +55,5 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp"
-    },
-    "cmake.buildDirectory": "${workspaceFolder}/build/${presetName}",
-    "cmake.configureOnOpen": false,
-    "cmake.useCMakePresets": "always",
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.intelliSenseEngine": "default",
-    "C_Cpp.configurationWarnings": "disabled"
+    }
 }

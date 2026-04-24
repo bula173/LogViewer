@@ -1,129 +1,125 @@
 {
     "version": "0.2.0",
     "configurations": [
+
+        // ── macOS ─────────────────────────────────────────────────────────────
         {
-            "name": "Launch Debug",
+            "name": "macOS: Debug (lldb)",
             "type": "cppdbg",
             "request": "launch",
+            "program": "${workspaceFolder}/build/macos-debug-qt/src/main/LogViewer.app/Contents/MacOS/LogViewer",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "preLaunchTask": "Build Debug",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
-                "environment": [
-                    {
-                        "name": "PATH",
-                        "value": "C:\\msys64\\mingw64\\bin;${env:PATH}"
-                    }
-                ],
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
+            "MIMode": "lldb",
+            "preLaunchTask": "Build: Debug",
+            "presentation": { "group": "macOS", "order": 1 }
         },
         {
-            "name": "Launch Debug - without preLaunchTask",
+            "name": "macOS: Release (lldb)",
             "type": "cppdbg",
             "request": "launch",
+            "program": "${workspaceFolder}/build/macos-release-qt/src/main/LogViewer.app/Contents/MacOS/LogViewer",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.app/Contents/MacOS/LogViewer"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Debug/LogViewer.exe",
-                "environment": [
-                    {
-                        "name": "PATH",
-                        "value": "C:\\msys64\\mingw64\\bin;${env:PATH}"
-                    }
-                ],
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing",
-                        "ignoreFailures": true
-                    }
-                ]
-            }
+            "MIMode": "lldb",
+            "preLaunchTask": "Build: Release",
+            "presentation": { "group": "macOS", "order": 2 }
         },
         {
-            "name": "Launch Release",
+            "name": "macOS: ASan Debug (lldb)",
             "type": "cppdbg",
             "request": "launch",
+            "program": "${workspaceFolder}/build/macos-asan-qt/src/main/LogViewer.app/Contents/MacOS/LogViewer",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "preLaunchTask": "Build Release",
-            "linux": {
-                "MIMode": "gdb",
-                "program": "${workspaceFolder}/dist/Release/LogViewer"
-            },
-            "osx": {
-                "MIMode": "lldb",
-                "program": "${workspaceFolder}/dist/Release/LogViewer.app/Contents/MacOS/LogViewer"
-            },
-            "windows": {
-                "MIMode": "gdb",
-                "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-                "program": "${workspaceFolder}/dist/Release/LogViewer.exe",
-                "environment": [
-                    {
-                        "name": "PATH",
-                        "value": "C:\\msys64\\mingw64\\bin;${env:PATH}"
-                    }
-                ]
-            }
+            "MIMode": "lldb",
+            "environment": [
+                { "name": "ASAN_OPTIONS",  "value": "detect_leaks=1:halt_on_error=1" },
+                { "name": "UBSAN_OPTIONS", "value": "halt_on_error=1:print_stacktrace=1" }
+            ],
+            "preLaunchTask": "Build: ASan",
+            "presentation": { "group": "macOS", "order": 3 }
+        },
+
+        // ── Linux ─────────────────────────────────────────────────────────────
+        {
+            "name": "Linux: Debug (gdb)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/linux-debug-qt/src/main/LogViewer",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "preLaunchTask": "Build: Debug",
+            "presentation": { "group": "Linux", "order": 1 }
         },
         {
-            "name": "Debug LogViewer",
+            "name": "Linux: Release (gdb)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/linux-release-qt/src/main/LogViewer",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "preLaunchTask": "Build: Release",
+            "presentation": { "group": "Linux", "order": 2 }
+        },
+        {
+            "name": "Linux: ASan Debug (gdb)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/linux-asan-qt/src/main/LogViewer",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "environment": [
+                { "name": "ASAN_OPTIONS",  "value": "detect_leaks=1:halt_on_error=1" },
+                { "name": "UBSAN_OPTIONS", "value": "halt_on_error=1:print_stacktrace=1" }
+            ],
+            "preLaunchTask": "Build: ASan",
+            "presentation": { "group": "Linux", "order": 3 }
+        },
+
+        // ── Windows ───────────────────────────────────────────────────────────
+        {
+            "name": "Windows: Debug (gdb)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/windows-debug-qt/src/main/LogViewer.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "environment": [{ "name": "PATH", "value": "C:\\msys64\\mingw64\\bin;${env:PATH}" }],
             "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+                { "description": "Enable pretty-printing", "text": "-enable-pretty-printing", "ignoreFailures": true }
+            ],
+            "preLaunchTask": "Build: Debug",
+            "presentation": { "group": "Windows", "order": 1 }
+        },
+        {
+            "name": "Windows: Release (gdb)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/windows-release-qt/src/main/LogViewer.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "environment": [{ "name": "PATH", "value": "C:\\msys64\\mingw64\\bin;${env:PATH}" }],
+            "setupCommands": [
+                { "description": "Enable pretty-printing", "text": "-enable-pretty-printing", "ignoreFailures": true }
+            ],
+            "preLaunchTask": "Build: Release",
+            "presentation": { "group": "Windows", "order": 2 }
         }
-    ],
-    "inputs": []
+    ]
 }
