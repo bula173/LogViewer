@@ -1,14 +1,11 @@
-if (FALSE)
-    message(STATUS "Tests are disabled on Windows")
-    return()
-endif()
-
 # Updated runtime output directory to align with default build directory structure
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/bin)
 
 message(STATUS "Building LogViewer::tests")
 
-file(GLOB TEST_SOURCES "*.cpp")
+# CONFIGURE_DEPENDS: CMake re-globs automatically during build when files are
+# added or removed, preventing stale builds after adding new test files.
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "*.cpp")
 
 add_executable(
   ${PROJECT_NAME}_tests

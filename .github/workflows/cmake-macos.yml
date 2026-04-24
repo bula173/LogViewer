@@ -2,7 +2,7 @@ name: macOS CI (clang)
 
 on:
   push:
-    branches: [ "main","qt" ]
+    branches: [ "main", "qt" ]
   pull_request:
   workflow_dispatch:
 
@@ -12,6 +12,8 @@ concurrency:
 
 permissions:
   contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -25,48 +27,53 @@ jobs:
       BUILD_DIR: ${{ github.workspace }}/build
       CMAKE_GENERATOR: Ninja
       CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
 
     steps:
       - uses: actions/checkout@v4
 
+      # Cache Homebrew downloads — key on Brewfile or workflow file so cache
+      # is invalidated when package list changes
       - name: Cache Homebrew packages
         uses: actions/cache@v4
         with:
           path: |
-            ~/Library/Caches/Homebrew
-            ~/Library/Caches/pip
-          key: brew-${{ runner.os }}-${{ hashFiles('**/Brewfile.lock.json') }}
+            ~/Library/Caches/Homebrew/downloads
+            /usr/local/Homebrew
+          key: brew-${{ runner.os }}-${{ hashFiles('.github/workflows/cmake-macos.yml') }}
           restore-keys: brew-${{ runner.os }}-
 
       - name: Install dependencies (Homebrew)
         run: |
-          brew update
-          brew install ninja ccache expat cppcheck libssh libarchive zip eigen boost
-          brew install qt
+          brew update --quiet
+          brew install ninja ccache expat cppcheck libssh libarchive qt || true
 
+      # Key on source hashes — reused across commits, invalidated on real changes
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-macos-clang-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-macos-clang-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
           restore-keys: |
             ccache-macos-clang-${{ matrix.build_type }}-
             ccache-macos-clang-
 
-      - name: Cache FetchContent
+      # Include thirdparty hashes so cache invalidates when dependency versions change
+      - name: Cache FetchContent dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ${{ env.BUILD_DIR }}/_deps
-          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
-          restore-keys: fetchcontent-
+          path: ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-macos-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
+          restore-keys: |
+            fetchcontent-macos-
+            fetchcontent-
 
       - name: Toolchain info
         run: |
-          which clang++
           clang++ --version
+          ccache --version
+          cmake --version
+          ninja --version
 
       - name: Configure
         run: |
@@ -86,38 +93,53 @@ jobs:
       - name: Build
         run: |
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+          cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+
+      - name: Print ccache stats
+        run: ccache --show-stats
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug'
         continue-on-error: true
         run: |
-          # Ensure logs directory exists
           mkdir -p dist/logs
-          
-          # Run cppcheck analysis
+
           echo "Running cppcheck..."
-          cmake --build --preset macos-cppcheck 2>&1 | tee dist/logs/cppcheck.log || true
-          
-          # Run clang-tidy if available
+          cmake --build "$BUILD_DIR" --target cppcheck 2>&1 | tee dist/logs/cppcheck.log || true
+
           if command -v clang-tidy &> /dev/null; then
             echo "Running clang-tidy..."
-            cmake --build --preset macos-clang-tidy 2>&1 | tee dist/logs/clang-tidy.log || true
+            cmake --build "$BUILD_DIR" --target clang-tidy 2>&1 | tee dist/logs/clang-tidy.log || true
           fi
 
-      - name: List tests
+      - name: List available tests
         working-directory: ${{ env.BUILD_DIR }}
         run: ctest -N || true
 
       - name: Run tests
-        if: github.event_name == 'push'
+        id: run-tests
         run: |
-          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests" || { echo "Test binary not found at ${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"; find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f; exit 1; }
+          TEST_BIN="${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"
+          if [ ! -f "$TEST_BIN" ]; then
+            echo "Test binary not found, searching..."
+            find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f
+            exit 1
+          fi
+          mkdir -p dist/test-results
+          "$TEST_BIN" --gtest_output="xml:dist/test-results/results.xml"
+
+      # Annotate PRs with test failures directly in the diff view
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action/macos@v2
+        if: always()
+        with:
+          files: dist/test-results/*.xml
+          comment_mode: always
+          check_name: "Test Results (macOS clang)"
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
-        run: |
-          cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+        run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
       - name: Verify CPack config
         if: matrix.build_type == 'Release'
@@ -136,14 +158,6 @@ jobs:
           find "$BUILD_DIR" -maxdepth 1 -type f -name "*.tar.gz" -exec mv {} dist/packages/ \;
           ls -lh dist/packages/
 
-      - name: Collect plugins
-        if: matrix.build_type == 'Release'
-        run: |
-          echo "Listing plugins in build directory:"
-          ls -lh "$BUILD_DIR/plugins/" || echo "plugins not found"
-          echo "Plugin zip files:"
-          find "$BUILD_DIR/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
-
       - name: Upload plugins
         if: matrix.build_type == 'Release'
         uses: actions/upload-artifact@v4
@@ -160,6 +174,7 @@ jobs:
           path: |
             dist/staging/**
             dist/packages/*.tar.gz
+            dist/test-results/**
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
 
@@ -168,6 +183,19 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.build_type }}-logs
-          path: |
-            dist/logs/**
+          path: dist/logs/**
           if-no-files-found: ignore
+
+      - name: Build summary
+        if: always()
+        run: |
+          echo "## macOS Build (clang / ${{ matrix.build_type }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests | ${{ steps.run-tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**ccache stats:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ccache --show-stats >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

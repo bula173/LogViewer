@@ -2,7 +2,7 @@ name: Linux CI (gcc/clang)
 
 on:
   push:
-    branches: [ "main","qt" ]
+    branches: [ "main", "qt" ]
   pull_request:
   workflow_dispatch:
 
@@ -12,6 +12,8 @@ concurrency:
 
 permissions:
   contents: read
+  checks: write       # Required for test result annotations
+  pull-requests: write # Required for PR comments
 
 jobs:
   build:
@@ -26,69 +28,70 @@ jobs:
       BUILD_DIR: ${{ github.workspace }}/build
       CMAKE_GENERATOR: Ninja
       CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache APT packages
+      # Single step: cache-apt-pkgs handles both install (miss) and restore (hit)
+      - name: Cache and install APT packages
         uses: awalsh128/cache-apt-pkgs-action@v1
         with:
-          packages: ninja-build ccache libexpat1-dev cppcheck libssh-dev libarchive-dev zip libeigen3-dev libboost-all-dev libcurl4-openssl-dev g++ clang qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev
-          version: 1.0
-
-      - name: Install dependencies (apt)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            ninja-build \
-            ccache \
-            libexpat1-dev \
-            cppcheck \
-            libssh-dev \
-            libarchive-dev \
-            zip \
-            libeigen3-dev \
-            libboost-all-dev \
-            libcurl4-openssl-dev \
-            ${{ matrix.compiler == 'gcc' && 'g++' || 'clang' }} \
+          packages: >-
+            ninja-build ccache libexpat1-dev cppcheck libssh-dev libarchive-dev
+            zip libeigen3-dev libboost-all-dev libcurl4-openssl-dev g++ clang
             qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev
+            lcov gcovr
+          version: 1.1
+
+      # Cache linuxdeployqt binary across runs
+      - name: Cache linuxdeployqt
+        id: cache-linuxdeployqt
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/linuxdeployqt
+          key: linuxdeployqt-continuous-${{ runner.os }}
 
       - name: Install linuxdeployqt
+        if: steps.cache-linuxdeployqt.outputs.cache-hit != 'true'
         run: |
-          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          wget -q "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           sudo mv linuxdeployqt-continuous-x86_64.AppImage /usr/local/bin/linuxdeployqt
 
+      # Key on source hashes so cache is reused across commits, invalidated on real changes
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
           restore-keys: |
             ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-
             ccache-linux-${{ matrix.compiler }}-
-      - name: Cache FetchContent
+
+      # Include thirdparty hashes so cache is invalidated when dependency versions change
+      - name: Cache FetchContent dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ${{ env.BUILD_DIR }}/_deps
-          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
-          restore-keys: fetchcontent-
+          path: ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-linux-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
+          restore-keys: |
+            fetchcontent-linux-
+            fetchcontent-
+
       - name: Toolchain info
         run: |
           if [ "${{ matrix.compiler }}" = "gcc" ]; then
-            which g++
             g++ --version
           else
-            which clang++
             clang++ --version
           fi
+          ccache --version
+          cmake --version
+          ninja --version
 
       - name: Configure
         run: |
-          # Determine compiler
           if [ "${{ matrix.compiler }}" = "gcc" ]; then
             CC_COMPILER=gcc
             CXX_COMPILER=g++
@@ -96,7 +99,7 @@ jobs:
             CC_COMPILER=clang
             CXX_COMPILER=clang++
           fi
-          
+
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
@@ -105,39 +108,59 @@ jobs:
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
       - name: Build
         run: |
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+          cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+
+      - name: Print ccache stats
+        run: ccache --show-stats
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug' && github.event_name == 'push'
         continue-on-error: true
         run: |
-          # Ensure logs directory exists
           mkdir -p dist/logs
-          
-          # Run cppcheck analysis
+
           echo "Running cppcheck..."
-          cppcheck --enable=warning,performance,portability --inline-suppr --suppress=normalCheckLevelMaxBranches \
-            --template=gcc -I src -I include src 2>&1 | tee dist/logs/cppcheck.log || true
-          
-          # Run clang-tidy if available
+          cppcheck --enable=warning,performance,portability \
+            --inline-suppr \
+            --suppress=normalCheckLevelMaxBranches \
+            --template=gcc \
+            -I src -I include \
+            src 2>&1 | tee dist/logs/cppcheck.log || true
+
           if command -v clang-tidy &> /dev/null; then
             echo "Running clang-tidy..."
-            find src -name "*.cpp" -o -name "*.h" | xargs clang-tidy -p "$BUILD_DIR" 2>&1 | tee dist/logs/clang-tidy.log || true
+            find src -name "*.cpp" | xargs clang-tidy -p "$BUILD_DIR" 2>&1 | tee dist/logs/clang-tidy.log || true
           fi
 
       - name: Run tests
-        if: github.event_name == 'push'
+        id: run-tests
         run: |
-          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests" || { echo "Test binary not found at ${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"; find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f; exit 1; }
+          TEST_BIN="${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"
+          if [ ! -f "$TEST_BIN" ]; then
+            echo "Test binary not found, searching..."
+            find "${{ env.BUILD_DIR }}" -name "LogViewer_tests" -type f
+            exit 1
+          fi
+          mkdir -p dist/test-results
+          "$TEST_BIN" --gtest_output="xml:dist/test-results/results.xml"
+
+      # Annotate PRs with test failures directly in the diff view
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: dist/test-results/*.xml
+          comment_mode: always
+          check_name: "Test Results (Linux ${{ matrix.compiler }})"
 
       - name: Install (staging)
         if: matrix.build_type == 'Release'
-        run: |
-          cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
+        run: cmake --install "$BUILD_DIR" --config Release --prefix "$BUILD_DIR/_staging"
 
       - name: Verify CPack config
         if: matrix.build_type == 'Release'
@@ -153,16 +176,9 @@ jobs:
         if: matrix.build_type == 'Release'
         run: |
           mkdir -p dist/packages
-          find "$BUILD_DIR" -maxdepth 1 -type f \( -name "*.tar.gz" -o -name "*.deb" -o -name "*.rpm" \) -exec mv {} dist/packages/ \;
+          find "$BUILD_DIR" -maxdepth 1 -type f \( -name "*.tar.gz" -o -name "*.deb" -o -name "*.rpm" \) \
+            -exec mv {} dist/packages/ \;
           ls -lh dist/packages/
-
-      - name: Collect plugins
-        if: matrix.build_type == 'Release'
-        run: |
-          echo "Listing plugins in build directory:"
-          ls -lh "$BUILD_DIR/plugins/" || echo "plugins not found"
-          echo "Plugin zip files:"
-          find "$BUILD_DIR/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
@@ -182,6 +198,7 @@ jobs:
             dist/packages/*.tar.gz
             dist/packages/*.deb
             dist/packages/*.rpm
+            dist/test-results/**
             ${{ env.BUILD_DIR }}/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
 
@@ -190,6 +207,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-${{ matrix.build_type }}-logs
-          path: |
-            dist/logs/**
+          path: dist/logs/**
           if-no-files-found: ignore
+
+      - name: Build summary
+        if: always()
+        run: |
+          echo "## Linux Build (${{ matrix.compiler }} / ${{ matrix.build_type }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ steps.run-tests.outcome != 'failure' && '✅' || '⚠️' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests | ${{ steps.run-tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**ccache stats:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ccache --show-stats >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

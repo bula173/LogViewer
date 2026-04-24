@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # Keep GitHub Actions up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    groups:
+      # Group all action updates into a single PR
+      github-actions:
+        patterns: ["*"]
+    labels:
+      - "ci"
+      - "dependencies"
+
+  # Keep CMake FetchContent dependencies up to date
+  # Dependabot reads GIT_TAG fields in CMakeLists.txt files
+  - package-ecosystem: "cmake"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "cmake"

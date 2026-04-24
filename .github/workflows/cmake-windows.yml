@@ -10,11 +10,11 @@ concurrency:
   group: windows-ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Minimal permissions — only escalate what's actually needed
 permissions:
   contents: read
-  packages: write
-  pages: write
-  actions: write
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -28,18 +28,20 @@ jobs:
       BUILD_DIR: ${{ github.workspace }}\build
       CMAKE_GENERATOR: Ninja
       CCACHE_DIR: ${{ github.workspace }}\.ccache
-      CMAKE_BUILD_PARALLEL_LEVEL: 4
       GTEST_COLOR: 1
       GUI_FRAMEWORK: QT
 
     steps:
       - uses: actions/checkout@v4
 
+      # msys2/setup-msys2 has its own internal caching via cache: true.
+      # We add an outer cache keyed on the workflow file so the full MSYS2
+      # installation is reused across runs when the package list hasn't changed.
       - name: Cache MSYS2 installation
         uses: actions/cache@v4
         with:
           path: C:\msys64
-          key: msys2-${{ github.run_id }}
+          key: msys2-${{ hashFiles('.github/workflows/cmake-windows.yml') }}
           restore-keys: msys2-
 
       - name: Set up MSYS2
@@ -52,6 +54,7 @@ jobs:
             base-devel
             git
             zip
+            tar
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-clang
             mingw-w64-x86_64-cmake
@@ -66,61 +69,63 @@ jobs:
             mingw-w64-x86_64-libarchive
             mingw-w64-x86_64-eigen3
             mingw-w64-x86_64-boost
-            tar
-
 
       - name: Toolchain info
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           clang++ --version
+          ccache --version
+          cmake --version
+          ninja --version
 
+      # Key on source hashes — reused across commits, invalidated on real changes
       - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-win-clang-${{ matrix.build_type }}-${{ github.sha }}
+          key: ccache-win-clang-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
           restore-keys: |
             ccache-win-clang-${{ matrix.build_type }}-
             ccache-win-clang-
 
-      - name: Cache MSYS2 packages
+      # Include thirdparty hashes so cache invalidates when dependency versions change
+      - name: Cache FetchContent dependencies
         uses: actions/cache@v4
         with:
-          path: C:\msys64
-          key: msys2-packages-${{ hashFiles('.github/workflows/cmake-windows.yml') }}
-          restore-keys: msys2-packages-
-
-      - name: Cache FetchContent
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ env.BUILD_DIR }}/_deps
-          key: fetchcontent-${{ hashFiles('CMakeLists.txt') }}
-          restore-keys: fetchcontent-
+          path: ${{ env.BUILD_DIR }}/_deps
+          key: fetchcontent-win-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
+          restore-keys: |
+            fetchcontent-win-
+            fetchcontent-
 
       - name: Configure (CMake)
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
-                -G "$CMAKE_GENERATOR" \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
-                -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
-                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-                -DCMAKE_PREFIX_PATH=/mingw64 \
-                -DGUI_FRAMEWORK="QT" \
-                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-                -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
+            -G "$CMAKE_GENERATOR" \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
+            -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_PREFIX_PATH=/mingw64 \
+            -DGUI_FRAMEWORK="QT" \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
 
       - name: Build
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }} 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+          cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+
+      - name: Print ccache stats
+        shell: msys2 {0}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          ccache --show-stats
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug' && github.event_name == 'push'
@@ -135,37 +140,37 @@ jobs:
             --inline-suppr \
             --suppress=normalCheckLevelMaxBranches \
             --template=gcc \
-            -I src -I include \
-            src 2> dist/logs/cppcheck-report.txt || true
-          echo "---- cppcheck report ----"
-          cat dist/logs/cppcheck-report.txt || true
-          echo "-------------------------"
+            -I src \
+            src 2>&1 | tee dist/logs/cppcheck.log || true
 
       - name: Run tests
+        id: run-tests
         shell: msys2 {0}
         run: |
           export PATH="/mingw64/bin:$PATH"
-          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests.exe"
+          mkdir -p dist/test-results
+          "${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests.exe" \
+            --gtest_output="xml:dist/test-results/results.xml"
+
+      # Annotate PRs with test failures
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
+        if: always()
+        with:
+          files: dist/test-results/*.xml
+          comment_mode: always
+          check_name: "Test Results (Windows clang)"
 
       - name: Install (staging)
         shell: msys2 {0}
         run: cmake --install "$BUILD_DIR" --config ${{ matrix.build_type }} --prefix "$BUILD_DIR/_staging"
 
-      - name: run CPack NSIS directly
+      - name: Package (CPack NSIS)
         shell: msys2 {0}
         working-directory: ${{ env.BUILD_DIR }}
         run: |
           export PATH="/mingw64/bin:$PATH"
           cpack -G NSIS -C ${{ matrix.build_type }} --config CPackConfig.cmake
-
-      - name: Collect plugins
-        if: matrix.build_type == 'Release'
-        shell: msys2 {0}
-        run: |
-          echo "Listing plugins in build directory:"
-          ls -lh "$BUILD_DIR/plugins/" || echo "plugins not found"
-          echo "Plugin zip files:"
-          find "$BUILD_DIR/plugins" -maxdepth 1 -type f -name "*.zip" || echo "No plugin zips found"
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
@@ -183,18 +188,18 @@ jobs:
           path: |
             ${{ env.BUILD_DIR }}\Testing\Temporary\LastTest.log
             ${{ env.BUILD_DIR }}\tests\bin\LogViewer_tests.exe
+            dist\test-results\**
           if-no-files-found: ignore
 
       - name: Upload staging artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-${{ matrix.build_type }}-staging
-            path: dist/staging/**
-            if-no-files-found: ignore
+          name: windows-${{ matrix.build_type }}-staging
+          path: dist/staging/**
+          if-no-files-found: ignore
 
       - name: Upload installer artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ matrix.build_type }}-installer
@@ -206,10 +211,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ matrix.build_type }}-logs
-          path: |
-            dist/logs/**
+          path: dist/logs/**
           if-no-files-found: ignore
 
-      - name: List CPack staging
+      - name: Build summary
+        if: always()
         shell: msys2 {0}
-        run: ls -lhR "$BUILD_DIR/_staging"
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          echo "## Windows Build (clang / ${{ matrix.build_type }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests | ${{ steps.run-tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**ccache stats:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ccache --show-stats >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

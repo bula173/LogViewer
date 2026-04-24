@@ -1,0 +1,160 @@
+name: Security
+
+on:
+  push:
+    branches: [ "main", "qt" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Run weekly on Monday at 08:00 UTC to catch newly disclosed vulnerabilities
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write   # Needed to post dependency review comments on PRs
+  security-events: write # Needed to upload SARIF results to GitHub Security tab
+
+jobs:
+  # ─── Dependency Review (PRs only) ───────────────────────────────────────────
+  # Blocks PRs that introduce dependencies with known vulnerabilities
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail on HIGH or CRITICAL vulnerabilities
+          fail-on-severity: high
+          # Allow licenses commonly used in open-source C++ projects
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, LGPL-2.1, LGPL-3.0, MPL-2.0, ISC
+          comment-summary-in-pr: always
+
+  # ─── CodeQL Static Analysis ─────────────────────────────────────────────────
+  # Detects security vulnerabilities and bugs via GitHub's CodeQL engine
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    # Don't block PRs — informational only on non-main branches
+    continue-on-error: ${{ github.event_name == 'pull_request' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: cpp
+          # Use extended security queries for more thorough analysis
+          queries: security-extended
+
+      - name: Cache and install APT packages
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: >-
+            ninja-build libexpat1-dev libarchive-dev libssh-dev zip
+            libcurl4-openssl-dev g++ qt6-base-dev qt6-tools-dev libqt6opengl6-dev
+          version: 1.1
+
+      - name: Cache FetchContent
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: fetchcontent-codeql-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
+          restore-keys: fetchcontent-codeql-
+
+      - name: Configure
+        run: |
+          cmake -B build -S . \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
+
+      # CodeQL requires an actual build to trace compilation
+      - name: Build (for CodeQL tracing)
+        run: cmake --build build --parallel
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:cpp"
+          # Upload results to GitHub Security tab
+          upload: true
+          output: sarif-results
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: sarif-results/cpp.sarif
+          category: codeql-cpp
+
+  # ─── Secret Scanning (push/schedule) ────────────────────────────────────────
+  # Checks for accidentally committed secrets (API keys, passwords, etc.)
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Full history needed for accurate scanning
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Optional: only for orgs
+
+  # ─── Supply Chain: Verify Action Pinning ────────────────────────────────────
+  # Warns when GitHub Actions are using floating tags instead of SHA digests
+  action-pinning:
+    name: Check Action Pinning
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for unpinned actions
+        run: |
+          echo "Checking for GitHub Actions using floating tags..."
+          ISSUES=0
+
+          # Find all workflow files and check for tag-based action references
+          # that aren't pinned to a full SHA digest
+          while IFS= read -r file; do
+            # Match lines like: uses: owner/repo@v1  (but not uses: owner/repo@abc1234...)
+            grep -n 'uses:' "$file" | \
+              grep -vE 'uses:\s+[a-zA-Z0-9_/-]+@[0-9a-f]{40}' | \
+              grep -vE '^\s*#' | \
+              while read -r line; do
+                echo "⚠️  $file: $line"
+                ISSUES=$((ISSUES + 1))
+              done
+          done < <(find .github/workflows -name "*.yml" -o -name "*.yaml")
+
+          if [ "$ISSUES" -gt 0 ]; then
+            echo ""
+            echo "Consider pinning actions to full SHA digests for security:"
+            echo "  uses: actions/checkout@v4"
+            echo "  →"
+            echo "  uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4"
+            echo ""
+            echo "Use https://github.com/renovatebot/renovate or"
+            echo "    https://github.com/dependabot to automate pinning updates."
+          else
+            echo "✅ All actions are pinned to SHA digests"
+          fi
+          # Informational only — don't fail the build
+          exit 0
