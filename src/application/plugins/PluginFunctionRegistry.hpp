@@ -124,15 +124,15 @@ class FunctionRegistry {
      */
     FnType ResolveSymbol() const
     {
-        void* ptr = nullptr;
-
 #ifdef _WIN32
-        ptr = GetProcAddress(static_cast<HMODULE>(m_handle),
-                            m_symbolName.c_str());
+        // FARPROC is a function pointer; cannot assign to void* — cast directly.
+        FARPROC proc = GetProcAddress(static_cast<HMODULE>(m_handle),
+                                      m_symbolName.c_str());
+        return reinterpret_cast<FnType>(proc);
 #else
         // Clear any previous errors
         dlerror();
-        ptr = dlsym(m_handle, m_symbolName.c_str());
+        void* ptr = dlsym(m_handle, m_symbolName.c_str());
 
         if (!ptr) {
             const char* error = dlerror();
@@ -140,9 +140,9 @@ class FunctionRegistry {
                 util::Logger::Trace("dlsym error: {}", error);
             }
         }
-#endif
 
-        return ptr ? reinterpret_cast<FnType>(ptr) : nullptr;
+        return reinterpret_cast<FnType>(ptr);
+#endif
     }
 };
 

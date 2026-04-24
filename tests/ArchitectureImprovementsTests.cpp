@@ -11,7 +11,20 @@
 #include "IModelObservable.hpp"
 #include "PluginEventBus.hpp"
 #include <memory>
-#include <dlfcn.h>
+
+// Platform abstraction for dynamic symbol resolution in tests
+#ifdef _WIN32
+    #include <windows.h>
+    using DlHandle = HMODULE;
+    // Load the C runtime DLL which is guaranteed to export strlen/putchar
+    static DlHandle dlOpenSelf()  { return LoadLibraryA("ucrtbase.dll"); }
+    static void     dlCloseSelf(DlHandle h) { if (h) FreeLibrary(h); }
+#else
+    #include <dlfcn.h>
+    using DlHandle = void*;
+    static DlHandle dlOpenSelf()  { return dlopen(nullptr, RTLD_LAZY); }
+    static void     dlCloseSelf(DlHandle h) { dlclose(h); }
+#endif
 
 // ============================================================================
 // Test: Type-Safe Plugin Function Registry
@@ -20,43 +33,43 @@
 TEST(PluginFunctionRegistryTest, ResolvesValidSymbol)
 {
     // Test symbol resolution (example with libc)
-    void* handle = dlopen(nullptr, RTLD_LAZY);
+    DlHandle handle = dlOpenSelf();
     ASSERT_NE(handle, nullptr);
 
     // Use strlen as test function - it's guaranteed to exist
     using StrlenFn = size_t(*)(const char*);
-    plugin::FunctionRegistry<StrlenFn> strlen_fn(handle, "strlen");
+    plugin::FunctionRegistry<StrlenFn> strlen_fn(static_cast<void*>(handle), "strlen");
 
     EXPECT_TRUE(strlen_fn);  // Should resolve
     if (strlen_fn) {
         EXPECT_EQ(strlen_fn.call("hello"), 5);
     }
 
-    dlclose(handle);
+    dlCloseSelf(handle);
 }
 
 TEST(PluginFunctionRegistryTest, FailsInvalidSymbol)
 {
-    void* handle = dlopen(nullptr, RTLD_LAZY);
+    DlHandle handle = dlOpenSelf();
     ASSERT_NE(handle, nullptr);
 
     using DummyFn = void(*)();
-    plugin::FunctionRegistry<DummyFn> dummy_fn(handle, "NonExistentSymbolXYZ");
+    plugin::FunctionRegistry<DummyFn> dummy_fn(static_cast<void*>(handle), "NonExistentSymbolXYZ");
 
     EXPECT_FALSE(dummy_fn);  // Should not resolve
 
     EXPECT_THROW(dummy_fn.call(), std::runtime_error);
 
-    dlclose(handle);
+    dlCloseSelf(handle);
 }
 
 TEST(PluginFunctionRegistryTest, CallsResolvedFunction)
 {
-    void* handle = dlopen(nullptr, RTLD_LAZY);
+    DlHandle handle = dlOpenSelf();
     ASSERT_NE(handle, nullptr);
 
     using PutcharFn = int(*)(int);
-    plugin::FunctionRegistry<PutcharFn> putchar_fn(handle, "putchar");
+    plugin::FunctionRegistry<PutcharFn> putchar_fn(static_cast<void*>(handle), "putchar");
 
     if (putchar_fn) {
         // Call resolved function - no exception
@@ -64,7 +77,7 @@ TEST(PluginFunctionRegistryTest, CallsResolvedFunction)
         EXPECT_GT(result, -1);  // putchar returns character or EOF
     }
 
-    dlclose(handle);
+    dlCloseSelf(handle);
 }
 
 // ============================================================================
