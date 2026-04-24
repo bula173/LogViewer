@@ -26,6 +26,9 @@ target_link_libraries(${PROJECT_NAME}_tests
   gtest_main
   gmock
   application_core
+  # dlopen/dlclose used in ArchitectureImprovementsTests; requires -ldl on Linux
+  # (empty on macOS and Windows where it's part of the system library)
+  ${CMAKE_DL_LIBS}
 )
 
 include(GoogleTest)

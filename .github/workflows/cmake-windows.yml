@@ -117,6 +117,7 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
+          set -o pipefail
           export PATH="/mingw64/bin:$PATH"
           mkdir -p dist/logs
           cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log

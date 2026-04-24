@@ -92,6 +92,7 @@ jobs:
 
       - name: Build
         run: |
+          set -o pipefail
           mkdir -p dist/logs
           cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
