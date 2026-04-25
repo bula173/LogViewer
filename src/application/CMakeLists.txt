@@ -4,7 +4,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_library(application_core)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts)
 find_package(LibArchive REQUIRED)
 find_package(EXPAT REQUIRED)
 
@@ -17,6 +17,7 @@ target_link_libraries(application_core
     PUBLIC   # Keep Qt public for plugins
         Qt6::Core
         Qt6::Widgets
+        Qt6::Charts
         nlohmann_json::nlohmann_json
         spdlog::spdlog
         fmt::fmt

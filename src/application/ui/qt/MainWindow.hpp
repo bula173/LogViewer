@@ -54,6 +54,7 @@ class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
+class StatsSummaryPanel;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -190,6 +191,7 @@ class MainWindow : public QMainWindow,
     std::shared_ptr<ai::IAIService> m_pluginService;  // TODO: Generalize beyond AI-specific interface
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
+    StatsSummaryPanel* m_statsPanel {nullptr};
     
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index

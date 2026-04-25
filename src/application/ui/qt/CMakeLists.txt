@@ -14,6 +14,7 @@ target_sources(application_core
         EventsTableModel.cpp
         EventsTableView.cpp
         ExportManager.cpp
+        StatsSummaryPanel.cpp
         FilterEditorDialog.cpp
         FiltersPanel.cpp
         ItemDetailsView.cpp
@@ -27,6 +28,7 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/StatsSummaryPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/FilterEditorDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/FiltersPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ItemDetailsView.hpp
@@ -40,6 +42,7 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StatsSummaryPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/FilterEditorDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/FiltersPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ItemDetailsView.hpp>
@@ -52,6 +55,7 @@ target_sources(application_core
         $<INSTALL_INTERFACE:EventsTableModel.hpp>
         $<INSTALL_INTERFACE:EventsTableView.hpp>
         $<INSTALL_INTERFACE:ExportManager.hpp>
+        $<INSTALL_INTERFACE:StatsSummaryPanel.hpp>
         $<INSTALL_INTERFACE:FilterEditorDialog.hpp>
         $<INSTALL_INTERFACE:FiltersPanel.hpp>
         $<INSTALL_INTERFACE:ItemDetailsView.hpp>

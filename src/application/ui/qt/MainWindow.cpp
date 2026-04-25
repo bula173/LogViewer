@@ -3,6 +3,7 @@
 #include "EventsContainer.hpp"
 #include "ExportManager.hpp"
 #include "FilterManager.hpp"
+#include "StatsSummaryPanel.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
 #include "EventsTableView.hpp"
@@ -312,6 +313,10 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_detailsDock->setWidget(m_itemDetailsView);
     addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
 
+    // ===== MAIN TAB: Statistics Summary =====
+    m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
+
     // ===== BOTTOM DOCK: Search & AI Chat =====
     m_bottomDock = new QDockWidget("Tools", this);
     if (!m_bottomDock) {
@@ -574,6 +579,12 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
 
     // Set up observers
     m_searchResults->SetObserver(this);
+
+    // Connect stats panel to model resets (covers both data load and filter changes)
+    if (m_statsPanel && m_eventsView && m_eventsView->model()) {
+        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
+                m_statsPanel, &StatsSummaryPanel::Refresh);
+    }
 
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");
 }
