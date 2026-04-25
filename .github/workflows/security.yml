@@ -62,7 +62,7 @@ jobs:
         with:
           packages: >-
             ninja-build libexpat1-dev libarchive-dev libssh-dev zip
-            libcurl4-openssl-dev g++ qt6-base-dev qt6-tools-dev libqt6opengl6-dev
+            libcurl4-openssl-dev g++ qt6-base-dev qt6-tools-dev libqt6opengl6-dev qt6-charts-dev
           version: 1.1
 
       - name: Cache FetchContent
