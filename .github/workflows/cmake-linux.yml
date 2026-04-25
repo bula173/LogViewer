@@ -41,7 +41,7 @@ jobs:
             ninja-build ccache libexpat1-dev cppcheck libssh-dev libarchive-dev
             zip libeigen3-dev libboost-all-dev libcurl4-openssl-dev g++ clang
             qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev
-            libqt6charts6-dev
+            qt6-charts-dev
             lcov gcovr
           version: 1.1
 
