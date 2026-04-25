@@ -226,6 +226,15 @@ void Config::LoadConfig()
         GetLoggingConfig(j);
         GetFilterConfig(j);
         ParseXmlConfig(j);
+
+        // Load update settings
+        if (j.contains("updates") && j["updates"].is_object())
+        {
+            const auto& u = j["updates"];
+            updates.checkOnStartup    = u.value("checkOnStartup",    true);
+            updates.checkIntervalDays = u.value("checkIntervalDays", 7);
+            updates.lastCheckTime     = u.value("lastCheckTime",     std::string{});
+        }
         
         // Load config version if present
         if (j.contains("version") && j["version"].is_object())
@@ -334,7 +343,12 @@ void Config::SaveConfig()
         }
         j["logging"]["level"] = logLevel;
         j["filters"]["typeFilterField"] = typeFilterField;
-        
+
+        // Save update settings
+        j["updates"]["checkOnStartup"]    = updates.checkOnStartup;
+        j["updates"]["checkIntervalDays"] = updates.checkIntervalDays;
+        j["updates"]["lastCheckTime"]     = updates.lastCheckTime;
+
         // Note: AI configuration is now managed by the AI provider plugin
         // and stored in ~/Library/Application Support/LogViewer/plugins/ai_provider/config.json
         

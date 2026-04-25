@@ -151,6 +151,13 @@ class Config
     
     // Filter configuration
     std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")
+
+    // Update settings
+    struct UpdateSettings {
+        bool        checkOnStartup    {true};
+        int         checkIntervalDays {7};
+        std::string lastCheckTime     {};  // ISO 8601 UTC, e.g. "2026-04-25T10:00:00Z"
+    } updates;
 };
 
 Config& GetConfig();

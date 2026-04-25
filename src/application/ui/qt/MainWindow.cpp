@@ -4,6 +4,8 @@
 #include "ExportManager.hpp"
 #include "FilterManager.hpp"
 #include "StatsSummaryPanel.hpp"
+#include "UpdateChecker.hpp"
+#include "UpdateDialog.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
 #include "EventsTableView.hpp"
@@ -44,6 +46,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTimer>
 #include <QKeySequence>
 #include <QDockWidget>
 
@@ -317,6 +320,30 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
 
+    // ===== UPDATE CHECKER =====
+    m_updateChecker = new UpdateChecker(this);
+    connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
+            this,            &MainWindow::OnUpdateCheckComplete);
+
+    // Status bar badge — hidden until an update is found
+    m_updateBadge = new QLabel(tr("  ⬆ Update available  "), this);
+    m_updateBadge->setStyleSheet(
+        "color: white; background-color: #007AFF; border-radius: 3px;"
+        " padding: 1px 4px; font-weight: bold;");
+    m_updateBadge->setCursor(Qt::PointingHandCursor);
+    m_updateBadge->setToolTip(tr("Click to view available updates"));
+    m_updateBadge->hide();
+    statusBar()->addPermanentWidget(m_updateBadge);
+    // Make badge clickable via a transparent overlay QPushButton
+    {
+        auto* badgeBtn = new QPushButton(m_updateBadge);
+        badgeBtn->setFlat(true);
+        badgeBtn->setStyleSheet("background: transparent; border: none;");
+        badgeBtn->resize(m_updateBadge->sizeHint());
+        connect(badgeBtn, &QPushButton::clicked, this, &MainWindow::OnCheckForUpdates);
+        badgeBtn->show();
+    }
+
     // ===== BOTTOM DOCK: Search & AI Chat =====
     m_bottomDock = new QDockWidget("Tools", this);
     if (!m_bottomDock) {
@@ -541,6 +568,10 @@ void MainWindow::SetupMenus()
 
     // Help menu
     auto* helpMenu = bar->addMenu(tr("&Help"));
+    auto* checkUpdatesAction = helpMenu->addAction(tr("Check for &Updates..."));
+    connect(checkUpdatesAction, &QAction::triggered, this,
+            &MainWindow::OnCheckForUpdates);
+    helpMenu->addSeparator();
     auto* aboutAction = helpMenu->addAction(tr("&About"));
     connect(aboutAction, &QAction::triggered, this, [this]() {
         OnAboutRequested();
@@ -584,6 +615,13 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     if (m_statsPanel && m_eventsView && m_eventsView->model()) {
         connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
                 m_statsPanel, &StatsSummaryPanel::Refresh);
+    }
+
+    // Schedule automatic update check (delayed so the UI is fully shown first)
+    if (m_updateChecker && ShouldCheckForUpdates())
+    {
+        QTimer::singleShot(3000, m_updateChecker, &UpdateChecker::CheckAsync);
+        util::Logger::Info("[MainWindow] Update check scheduled (startup)");
     }
 
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");
@@ -1783,6 +1821,133 @@ void MainWindow::OnExportXmlRequested()
         QMessageBox::warning(this, tr("Export Failed"),
                              tr("Could not write to:\n%1").arg(path));
     }
+}
+
+// ---------------------------------------------------------------------------
+// Update mechanism
+// ---------------------------------------------------------------------------
+
+bool MainWindow::ShouldCheckForUpdates() const
+{
+    const auto& cfg = config::GetConfig().updates;
+    if (!cfg.checkOnStartup) return false;
+    if (cfg.lastCheckTime.empty()) return true;
+
+    // Parse ISO datetime and compare against interval
+    const QDateTime last = QDateTime::fromString(
+        QString::fromStdString(cfg.lastCheckTime), Qt::ISODate);
+    if (!last.isValid()) return true;
+
+    const int daysSince = static_cast<int>(last.daysTo(QDateTime::currentDateTimeUtc()));
+    return daysSince >= cfg.checkIntervalDays;
+}
+
+void MainWindow::OnCheckForUpdates()
+{
+    if (!m_updateChecker) return;
+
+    if (m_updateChecker->IsChecking())
+    {
+        UpdateStatusText("Checking for updates...");
+        return;
+    }
+
+    if (m_lastUpdateResult.HasAnyUpdate())
+    {
+        // Show cached result immediately; user can re-check via the dialog title
+        auto* dlg = new UpdateDialog(m_lastUpdateResult, m_updateChecker, this);
+        connect(dlg, &UpdateDialog::ApplyPluginUpdate,
+                this, &MainWindow::OnApplyPluginUpdate);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->exec();
+    }
+    else
+    {
+        // Trigger a fresh check and open the dialog when it completes
+        connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
+                this, [this](updates::UpdateCheckResult result) {
+                    // Disconnect the one-shot connection by using a single-shot
+                    // lambda guard; we rely on Qt auto-disconnect after exec.
+                    auto* dlg = new UpdateDialog(result, m_updateChecker, this);
+                    connect(dlg, &UpdateDialog::ApplyPluginUpdate,
+                            this, &MainWindow::OnApplyPluginUpdate);
+                    dlg->setAttribute(Qt::WA_DeleteOnClose);
+                    dlg->exec();
+                }, static_cast<Qt::ConnectionType>(Qt::SingleShotConnection));
+        m_updateChecker->CheckAsync();
+        UpdateStatusText("Checking for updates...");
+    }
+}
+
+void MainWindow::OnUpdateCheckComplete(updates::UpdateCheckResult result)
+{
+    m_lastUpdateResult = result;
+
+    // Persist the check timestamp
+    config::GetConfig().updates.lastCheckTime =
+        QDateTime::currentDateTimeUtc().toString(Qt::ISODate).toStdString();
+    config::GetConfig().SaveConfig();
+
+    if (result.HasAnyUpdate())
+    {
+        util::Logger::Info("[MainWindow] Update available — showing badge");
+        if (m_updateBadge)
+            m_updateBadge->show();
+    }
+    else
+    {
+        util::Logger::Info("[MainWindow] No updates available");
+        if (m_updateBadge)
+            m_updateBadge->hide();
+    }
+
+    UpdateStatusText("Ready");
+}
+
+void MainWindow::OnApplyPluginUpdate(QString pluginId, QString tempZipPath)
+{
+    const std::string id = pluginId.toStdString();
+    util::Logger::Info("[MainWindow] Applying plugin update: {}", id);
+
+    auto& pm = plugin::PluginManager::GetInstance();
+
+    // 1. Disable (unload) — triggers OnPluginEvent(Disabled) which removes tabs
+    auto disResult = pm.DisablePlugin(id);
+    if (disResult.isErr())
+    {
+        util::Logger::Warn("[MainWindow] Could not disable plugin {} before update: {}",
+                           id, disResult.error().what());
+        // Continue anyway — RegisterPlugin will overwrite files even if loaded
+    }
+
+    // 2. Extract/replace the plugin files
+    const std::filesystem::path zipPath(tempZipPath.toStdString());
+    auto regResult = pm.RegisterPlugin(zipPath);
+    if (regResult.isErr())
+    {
+        const QString errMsg =
+            tr("Failed to install plugin update for %1:\n%2")
+                .arg(pluginId,
+                     QString::fromStdString(regResult.error().what()));
+        util::Logger::Error("[MainWindow] {}", errMsg.toStdString());
+        QMessageBox::critical(this, tr("Plugin Update Failed"), errMsg);
+        return;
+    }
+
+    // 3. Re-enable (load new version) — triggers OnPluginEvent(Enabled) which recreates tabs
+    auto enableResult = pm.EnablePlugin(id);
+    if (enableResult.isErr())
+    {
+        util::Logger::Warn("[MainWindow] Could not re-enable plugin {} after update: {}",
+                           id, enableResult.error().what());
+    }
+
+    // 4. Clean up temp file
+    std::error_code ec;
+    std::filesystem::remove(zipPath, ec);
+
+    util::Logger::Info("[MainWindow] Plugin {} updated successfully", id);
+    UpdateStatusText(tr("Plugin %1 updated").arg(pluginId).toStdString());
 }
 
 } // namespace ui::qt

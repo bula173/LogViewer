@@ -3,6 +3,7 @@
 #include "IMainWindowView.hpp"
 #include "IUiPanels.hpp"
 #include "ConfigObserver.hpp"
+#include "UpdateInfo.hpp"
 #include <memory>
 #include "IPluginObserver.hpp"
 
@@ -55,6 +56,7 @@ class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
 class StatsSummaryPanel;
+class UpdateChecker;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -108,6 +110,9 @@ class MainWindow : public QMainWindow,
     void OnExportCsvRequested();
     void OnExportJsonRequested();
     void OnExportXmlRequested();
+    void OnCheckForUpdates();
+    void OnUpdateCheckComplete(updates::UpdateCheckResult result);
+    void OnApplyPluginUpdate(QString pluginId, QString tempZipPath);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -125,6 +130,7 @@ class MainWindow : public QMainWindow,
     void SaveRecentFiles();
     void ShowError(const QString& title, const QString& message);
     std::vector<int> GetRowsToExport() const;
+    bool ShouldCheckForUpdates() const;
     void setupPluginManager();
     void loadPlugins();
     void reloadPlugins();
@@ -192,6 +198,9 @@ class MainWindow : public QMainWindow,
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
     StatsSummaryPanel* m_statsPanel {nullptr};
+    UpdateChecker*     m_updateChecker {nullptr};
+    QLabel*            m_updateBadge   {nullptr};
+    updates::UpdateCheckResult m_lastUpdateResult;
     
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index

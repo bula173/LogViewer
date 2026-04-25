@@ -4,7 +4,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_library(application_core)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network)
 find_package(LibArchive REQUIRED)
 find_package(EXPAT REQUIRED)
 
@@ -18,6 +18,7 @@ target_link_libraries(application_core
         Qt6::Core
         Qt6::Widgets
         Qt6::Charts
+        Qt6::Network
         nlohmann_json::nlohmann_json
         spdlog::spdlog
         fmt::fmt
@@ -41,6 +42,7 @@ add_subdirectory(mvc)
 add_subdirectory(parsers)
 add_subdirectory(plugins)
 add_subdirectory(ui)
+add_subdirectory(updates)
 add_subdirectory(util)
 add_subdirectory(version)
 
@@ -58,6 +60,7 @@ target_include_directories(application_core
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/plugin_api>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ui>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/util>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/updates>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/version>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/main>
         $<INSTALL_INTERFACE:include>
