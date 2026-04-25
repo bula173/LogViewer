@@ -104,6 +104,9 @@ class MainWindow : public QMainWindow,
     void OnSetLightTheme();
     void OnSetSystemTheme();
     void OnRecentFileTriggered(const QString& filePath);
+    void OnExportCsvRequested();
+    void OnExportJsonRequested();
+    void OnExportXmlRequested();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -120,6 +123,7 @@ class MainWindow : public QMainWindow,
     void LoadRecentFiles();
     void SaveRecentFiles();
     void ShowError(const QString& title, const QString& message);
+    std::vector<int> GetRowsToExport() const;
     void setupPluginManager();
     void loadPlugins();
     void reloadPlugins();

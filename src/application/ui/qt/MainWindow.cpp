@@ -1,6 +1,7 @@
 #include "MainWindow.hpp"
 
 #include "EventsContainer.hpp"
+#include "ExportManager.hpp"
 #include "FilterManager.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
@@ -44,6 +45,8 @@
 #include <QWidget>
 #include <QKeySequence>
 #include <QDockWidget>
+
+#include <set>
 
 #include <nlohmann/json.hpp>
 
@@ -425,6 +428,18 @@ void MainWindow::SetupMenus()
     m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
     m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
     RefreshRecentFilesMenu();
+
+    fileMenu->addSeparator();
+
+    auto* exportMenu = fileMenu->addMenu(tr("E&xport"));
+    auto* exportCsvAction  = exportMenu->addAction(tr("Export to &CSV..."));
+    auto* exportJsonAction = exportMenu->addAction(tr("Export to &JSON..."));
+    auto* exportXmlAction  = exportMenu->addAction(tr("Export to &XML..."));
+    connect(exportCsvAction,  &QAction::triggered, this, &MainWindow::OnExportCsvRequested);
+    connect(exportJsonAction, &QAction::triggered, this, &MainWindow::OnExportJsonRequested);
+    connect(exportXmlAction,  &QAction::triggered, this, &MainWindow::OnExportXmlRequested);
+
+    fileMenu->addSeparator();
 
     auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
     clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
@@ -1650,6 +1665,113 @@ void MainWindow::OnSetSystemTheme()
 {
     ApplyTheme(*qApp, 2);
     util::Logger::Info("[MainWindow] System theme applied");
+}
+
+std::vector<int> MainWindow::GetRowsToExport() const
+{
+    auto* m = m_eventsView ? m_eventsView->model() : nullptr;
+    if (!m) return {};
+
+    // Prefer the current selection if any rows are explicitly selected.
+    const QModelIndexList sel =
+        m_eventsView->selectionModel() ? m_eventsView->selectionModel()->selectedIndexes()
+                                       : QModelIndexList{};
+
+    std::set<int> rowSet;
+    for (const auto& idx : sel)
+        rowSet.insert(idx.row());
+
+    if (!rowSet.empty())
+        return {rowSet.begin(), rowSet.end()};
+
+    // Nothing selected — export every visible (filtered) row.
+    const int n = m->rowCount();
+    std::vector<int> all;
+    all.reserve(static_cast<size_t>(n));
+    for (int r = 0; r < n; ++r)
+        all.push_back(r);
+    return all;
+}
+
+void MainWindow::OnExportCsvRequested()
+{
+    const auto rows = GetRowsToExport();
+    if (rows.empty()) {
+        QMessageBox::information(this, tr("Export"), tr("No data to export."));
+        return;
+    }
+
+    QFileDialog dialog(this, tr("Export to CSV"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setNameFilter(tr("CSV files (*.csv);;All files (*.*)"));
+    dialog.setDefaultSuffix(QStringLiteral("csv"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    if (!ExportManager::ToCsv(*m_eventsView->model(), rows, path)) {
+        QMessageBox::warning(this, tr("Export Failed"),
+                             tr("Could not write to:\n%1").arg(path));
+    }
+}
+
+void MainWindow::OnExportJsonRequested()
+{
+    const auto rows = GetRowsToExport();
+    if (rows.empty()) {
+        QMessageBox::information(this, tr("Export"), tr("No data to export."));
+        return;
+    }
+
+    QFileDialog dialog(this, tr("Export to JSON"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setNameFilter(tr("JSON files (*.json);;All files (*.*)"));
+    dialog.setDefaultSuffix(QStringLiteral("json"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    if (!ExportManager::ToJson(*m_eventsView->model(), rows, path)) {
+        QMessageBox::warning(this, tr("Export Failed"),
+                             tr("Could not write to:\n%1").arg(path));
+    }
+}
+
+void MainWindow::OnExportXmlRequested()
+{
+    const auto rows = GetRowsToExport();
+    if (rows.empty()) {
+        QMessageBox::information(this, tr("Export"), tr("No data to export."));
+        return;
+    }
+
+    QFileDialog dialog(this, tr("Export to XML"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setNameFilter(tr("XML files (*.xml);;All files (*.*)"));
+    dialog.setDefaultSuffix(QStringLiteral("xml"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    if (!ExportManager::ToXml(*m_eventsView->model(), rows, path)) {
+        QMessageBox::warning(this, tr("Export Failed"),
+                             tr("Could not write to:\n%1").arg(path));
+    }
 }
 
 } // namespace ui::qt

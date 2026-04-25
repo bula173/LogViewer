@@ -46,7 +46,7 @@ jobs:
       - name: Install dependencies (Homebrew)
         run: |
           brew update --quiet
-          brew install ninja ccache expat cppcheck libssh libarchive qt || true
+          brew install ninja ccache expat cppcheck libssh libarchive qt curl || true
 
       # Key on source hashes — reused across commits, invalidated on real changes
       - name: Cache ccache
@@ -88,6 +88,7 @@ jobs:
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DLibArchive_ROOT=$(brew --prefix libarchive) \
+            -DCURL_ROOT=$(brew --prefix curl) \
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
 
       - name: Build
