@@ -151,6 +151,7 @@ class Config
     
     // Filter configuration
     std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")
+    std::string actorField {"actor"};      // Field to use for actor identification in Actors panel
 
     // Update settings
     struct UpdateSettings {

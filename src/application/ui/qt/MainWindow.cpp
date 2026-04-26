@@ -4,6 +4,8 @@
 #include "ExportManager.hpp"
 #include "FilterManager.hpp"
 #include "StatsSummaryPanel.hpp"
+#include "ActorsPanel.hpp"
+#include "ActorDefinitionsPanel.hpp"
 #include "UpdateChecker.hpp"
 #include "UpdateDialog.hpp"
 #include "IControler.hpp"
@@ -269,6 +271,10 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_filterTabs->addTab(filtersTab, "Extended Filters");
     m_filterTabs->addTab(typeTab, "Type Filters");
 
+    // ── Actor Definitions tab (left panel) ───────────────────────────────
+    m_actorDefPanel = new ActorDefinitionsPanel(m_filterTabs);
+    m_filterTabs->addTab(m_actorDefPanel, "Actor Definitions");
+
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
@@ -319,6 +325,10 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // ===== MAIN TAB: Statistics Summary =====
     m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
+
+    // ===== MAIN TAB: Actors =====
+    m_actorsPanel = new ActorsPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_actorsPanel, tr("Actors"));
 
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
@@ -615,6 +625,20 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     if (m_statsPanel && m_eventsView && m_eventsView->model()) {
         connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
                 m_statsPanel, &StatsSummaryPanel::Refresh);
+    }
+
+    // Connect actors panel to model resets
+    if (m_actorsPanel && m_eventsView && m_eventsView->model()) {
+        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
+                m_actorsPanel, &ActorsPanel::Refresh);
+    }
+
+    // Connect actor definitions → actors panel
+    if (m_actorDefPanel && m_actorsPanel) {
+        connect(m_actorDefPanel, &ActorDefinitionsPanel::DefinitionsChanged,
+                m_actorsPanel,   &ActorsPanel::SetDefinitions);
+        // Push any already-loaded definitions immediately
+        m_actorsPanel->SetDefinitions(m_actorDefPanel->Definitions());
     }
 
     // Schedule automatic update check (delayed so the UI is fully shown first)

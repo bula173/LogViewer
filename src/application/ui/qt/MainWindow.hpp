@@ -56,6 +56,8 @@ class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
 class StatsSummaryPanel;
+class ActorsPanel;
+class ActorDefinitionsPanel;
 class UpdateChecker;
 
 class MainWindow : public QMainWindow,
@@ -197,8 +199,10 @@ class MainWindow : public QMainWindow,
     std::shared_ptr<ai::IAIService> m_pluginService;  // TODO: Generalize beyond AI-specific interface
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
-    StatsSummaryPanel* m_statsPanel {nullptr};
-    UpdateChecker*     m_updateChecker {nullptr};
+    StatsSummaryPanel*      m_statsPanel   {nullptr};
+    ActorsPanel*            m_actorsPanel  {nullptr};
+    ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
+    UpdateChecker*          m_updateChecker{nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     

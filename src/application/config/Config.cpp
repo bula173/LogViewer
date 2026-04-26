@@ -343,6 +343,7 @@ void Config::SaveConfig()
         }
         j["logging"]["level"] = logLevel;
         j["filters"]["typeFilterField"] = typeFilterField;
+        j["filters"]["actorField"] = actorField;
 
         // Save update settings
         j["updates"]["checkOnStartup"]    = updates.checkOnStartup;
@@ -509,6 +510,11 @@ void Config::GetFilterConfig(const json& j)
         else
         {
             util::Logger::Info("No 'typeFilterField' in filter config, using default: type");
+        }
+        if (filterConfig.contains("actorField"))
+        {
+            actorField = filterConfig["actorField"].get<std::string>();
+            util::Logger::Info("Actor field set to: {}", actorField);
         }
     }
     else

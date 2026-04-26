@@ -11,6 +11,8 @@ set(CMAKE_AUTOUIC ON)
 target_sources(application_core
     PRIVATE
         ../MainWindowPresenter.cpp
+        ActorDefinitionsPanel.cpp
+        ActorsPanel.cpp
         EventsTableModel.cpp
         EventsTableView.cpp
         ExportManager.cpp
@@ -27,6 +29,9 @@ target_sources(application_core
         StructuredConfigDialog.cpp
         LogFileLoadDialog.cpp
         ${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/ActorsPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp
@@ -43,6 +48,9 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorsPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp>
@@ -58,6 +66,9 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StructuredConfigDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp>
         $<INSTALL_INTERFACE:ConfigEditorDialog.hpp>
+        $<INSTALL_INTERFACE:ActorDefinition.hpp>
+        $<INSTALL_INTERFACE:ActorDefinitionsPanel.hpp>
+        $<INSTALL_INTERFACE:ActorsPanel.hpp>
         $<INSTALL_INTERFACE:EventsTableModel.hpp>
         $<INSTALL_INTERFACE:EventsTableView.hpp>
         $<INSTALL_INTERFACE:ExportManager.hpp>
