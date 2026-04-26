@@ -8,6 +8,7 @@
 #pragma once
 #include "LogEvent.hpp"
 #include "IModel.hpp"
+#include <atomic>
 #include <shared_mutex>
 #include <vector>
 
@@ -249,11 +250,34 @@ class EventsContainer : public mvc::IModel
     db::LogEvent& GetItem(const int index) override;
     const db::LogEvent& GetItem(const int index) const override;
 
+    /**
+     * @brief Temporarily disables view notifications during bulk loading.
+     *
+     * Call before a background-thread bulk insert to prevent Qt widget
+     * callbacks from being invoked on the wrong thread. Resume with
+     * ResumeNotifications() and then refresh the view manually.
+     */
+    void SuspendNotifications() noexcept
+    {
+        m_notificationsEnabled.store(false, std::memory_order_release);
+    }
+
+    /**
+     * @brief Re-enables view notifications after bulk loading.
+     */
+    void ResumeNotifications() noexcept
+    {
+        m_notificationsEnabled.store(true, std::memory_order_release);
+    }
+
   private:
     std::vector<LogEvent> m_data; ///< Internal storage for events
     int m_currentItem {
       -1}; ///< Currently selected item index (-1 = no selection)
     mutable std::shared_mutex m_mutex; ///< Reader-writer lock for thread safety
+    /// When false, AddEvent/AddEventBatch skip NotifyDataChanged so that
+    /// Qt widget calls are not made from a background parser thread.
+    std::atomic<bool> m_notificationsEnabled{true};
 };
 
 } // namespace db

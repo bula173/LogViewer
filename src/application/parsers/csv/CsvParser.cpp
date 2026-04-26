@@ -36,6 +36,12 @@ void CsvParser::ParseData(const std::filesystem::path& filepath)
             "CsvParser::ParseData failed to open file: " + filepath.string());
     }
 
+    // Use a 1 MB read buffer to reduce system-call overhead on large files.
+    constexpr size_t kReadBufSize = 1024 * 1024;
+    std::vector<char> readBuf(kReadBufSize);
+    input.rdbuf()->pubsetbuf(readBuf.data(),
+                             static_cast<std::streamsize>(kReadBufSize));
+
     // Determine file size for progress tracking
     input.seekg(0, std::ios::end);
     m_totalProgress = static_cast<uint32_t>(input.tellg());
@@ -76,15 +82,21 @@ void CsvParser::ParseData(std::istream& input)
     std::string line;
     int eventId = 0;
     size_t lineNumber = 0;
-    constexpr size_t BATCH_SIZE = 100;
+    constexpr size_t BATCH_SIZE = 5000; // larger batch = fewer mutex + notify calls
     std::vector<std::pair<int, db::LogEvent::EventItems>> eventBatch;
     eventBatch.reserve(BATCH_SIZE);
+
+    // Avoid calling tellg() on every line — it triggers a file-position sync
+    // on every iteration which is very slow.  Instead, estimate bytes consumed
+    // by accumulating line lengths (+ 1 for the newline stripped by getline).
+    size_t bytesConsumed = 0;
+    constexpr size_t kProgressReportEvery = 5000; // update every N events
 
     // Read and parse each line
     while (std::getline(input, line))
     {
         lineNumber++;
-        m_currentProgress = static_cast<uint32_t>(input.tellg());
+        bytesConsumed += line.size() + 1; // +1 for stripped newline
 
         // Skip empty lines
         if (line.empty() || line.find_first_not_of(" \t\r\n") == std::string::npos)
@@ -136,12 +148,13 @@ void CsvParser::ParseData(std::istream& input)
             // Send batch when full
             if (eventBatch.size() >= BATCH_SIZE)
             {
+                m_currentProgress = static_cast<uint32_t>(bytesConsumed);
                 NotifyNewEventBatch(std::move(eventBatch));
                 eventBatch.clear();
                 eventBatch.reserve(BATCH_SIZE);
-                
-                // Notify progress periodically
-                NotifyProgressUpdated();
+
+                if ((static_cast<size_t>(eventId) % kProgressReportEvery) == 0)
+                    NotifyProgressUpdated();
             }
         }
         catch (const std::exception& e)
@@ -154,6 +167,7 @@ void CsvParser::ParseData(std::istream& input)
     // Send remaining events in batch
     if (!eventBatch.empty())
     {
+        m_currentProgress = static_cast<uint32_t>(bytesConsumed);
         NotifyNewEventBatch(std::move(eventBatch));
     }
 

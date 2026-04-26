@@ -51,7 +51,7 @@ struct ParserState
     {
         currentElement.reserve(64);
         currentText.reserve(1024);
-        eventBatch.reserve(500);
+        eventBatch.reserve(5000);
         eventItems.reserve(10);
     }
 };

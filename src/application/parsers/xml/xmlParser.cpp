@@ -117,8 +117,8 @@ static void EndElementHandler(void* userData, const XML_Char* name)
         state->insideEvent = false;
 
         // Send batch every N events
-        if (state->eventBatch.size() >= 500)
-        { // Larger batches
+        if (state->eventBatch.size() >= 5000)
+        { // Large batch: fewer mutex acquires and notify calls
             state->parser->NotifyNewEventBatch(std::move(state->eventBatch));
             state->eventBatch.clear();
         }
@@ -140,28 +140,22 @@ static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
         state->currentText.append(s, static_cast<size_t>(len));
     }
 
-    state->bytesProcessed = static_cast<size_t>(
-        XML_GetCurrentByteIndex(state->parserHandle));
+        state->bytesProcessed = static_cast<size_t>(
+            XML_GetCurrentByteIndex(state->parserHandle));
 
-    // Update progress calculation
-    uint32_t newProgress = (state->totalBytes > 0)
-        ? static_cast<uint32_t>(
-              (static_cast<double>(state->bytesProcessed) / static_cast<double>(state->totalBytes)) *
-              100)
-        : 100;
-
-    // Only send progress updates when percentage changes OR every N bytes
-    if (newProgress != state->parser->m_currentProgress ||
-        (state->bytesProcessed - state->lastProgressBytes) > 1024 * 100)
-    { // Every 100KB
-
-        state->parser->m_currentProgress = newProgress;
-        state->parser->NotifyProgressUpdated();
-        state->lastProgressBytes = state->bytesProcessed;
-
-        util::Logger::Trace("XmlParser::ParseData progress: {}% ({}/{} bytes)",
-            newProgress, state->bytesProcessed, state->totalBytes);
-    }
+        // Update progress only every 500 KB to reduce overhead.
+        // The background-thread polling loop updates the UI independently.
+        if ((state->bytesProcessed - state->lastProgressBytes) >= 512 * 1024)
+        {
+            uint32_t newProgress = (state->totalBytes > 0)
+                ? static_cast<uint32_t>(
+                      (static_cast<double>(state->bytesProcessed) /
+                       static_cast<double>(state->totalBytes)) * 100.0)
+                : 100;
+            state->parser->m_currentProgress = newProgress;
+            state->parser->NotifyProgressUpdated();
+            state->lastProgressBytes = state->bytesProcessed;
+        }
 }
 
 XmlParser::XmlParser()
@@ -235,7 +229,7 @@ void XmlParser::ParseData(std::istream& input)
 
     try
     {
-        constexpr size_t bufferSize = 64 * 1024;
+        constexpr size_t bufferSize = 1024 * 1024; // 1 MB – fewer read() syscalls
         std::vector<char> buffer(bufferSize);
         bool finalSent = false;
         bool bomProcessed = false;

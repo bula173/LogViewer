@@ -1,11 +1,15 @@
 #include "MainWindowPresenter.hpp"
 
 #include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <cstddef>
+#include <exception>
 #include <filesystem>
 #include <limits>
 #include <set>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include "Config.hpp"
@@ -97,46 +101,142 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
+
     m_view.UpdateStatusText("Clear...");
-    clearAllData();
+    clearAllData();                  // notifies views on main thread - OK
     m_view.SetSearchControlsEnabled(false);
     m_view.ToggleProgressVisibility(true);
     m_view.ConfigureProgressRange(100);
     m_view.UpdateProgressValue(0);
     m_view.UpdateStatusText("Loading ...");
 
-    try
+    // Create parser on main thread before handing off to background
+    auto parserResult = parser::ParserFactory::CreateFromFile(path);
+    if (!parserResult.isOk())
     {
-        m_controller.LoadLogFile(path, this);
-        m_view.UpdateStatusText("Data ready. Path: " + path.string());
-        m_view.ToggleProgressVisibility(false);
-        m_view.SetSearchControlsEnabled(true);
-        UpdateTypeFilters();
-        if (m_eventsListView)
-            m_eventsListView->RefreshView();
-        if (m_itemDetailsView)
-            m_itemDetailsView->RefreshView();
         m_isParsing = false;
         m_progressConfigured = false;
-        m_view.ProcessPendingEvents();
-    }
-    catch (...)
-    {
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_view.UpdateStatusText(previousStatus);
-        
-        // Update type filters even on error, so any successfully parsed events are shown
+        throw parserResult.error();
+    }
+    auto parser = parserResult.unwrap();
+
+    // Suppress per-batch view notifications while the background thread fills
+    // m_events.  Without this, every batch would call Qt widget methods from
+    // the background thread (undefined behaviour) AND trigger dozens of full
+    // model resets.  A single RefreshView() is done after parsing completes.
+    m_events.SuspendNotifications();
+
+    // Observer that runs entirely on the background thread:
+    //  - adds events to m_events via its thread-safe mutex
+    //  - stores progress in atomics so the main thread can read it safely
+    struct BgObserver final : public parser::IDataParserObserver
+    {
+        db::EventsContainer& events;
+        const parser::IDataParser* parserPtr;
+        std::atomic<uint32_t> currentProgress{0};
+        std::atomic<uint32_t> totalProgress{0};
+
+        BgObserver(db::EventsContainer& ev, const parser::IDataParser* p)
+            : events(ev), parserPtr(p) {}
+
+        void ProgressUpdated() override
+        {
+            // Background thread: safe to read parser state here
+            currentProgress.store(parserPtr->GetCurrentProgress(),
+                                  std::memory_order_relaxed);
+            totalProgress.store(parserPtr->GetTotalProgress(),
+                                std::memory_order_relaxed);
+        }
+        void NewEventFound(db::LogEvent&& e) override
+        {
+            events.AddEvent(std::move(e));
+        }
+        void NewEventBatchFound(
+            std::vector<std::pair<int, db::LogEvent::EventItems>>&& batch) override
+        {
+            events.AddEventBatch(std::move(batch));
+        }
+    };
+
+    BgObserver bgObserver{m_events, parser.get()};
+    parser->RegisterObserver(&bgObserver);
+
+    std::exception_ptr parseException;
+    std::atomic<bool> parsingDone{false};
+
+    std::thread parseThread(
+        [&parser, &path, &parseException, &parsingDone]()
+        {
+            try
+            {
+                parser->ParseData(path);
+            }
+            catch (...)
+            {
+                parseException = std::current_exception();
+            }
+            parsingDone.store(true, std::memory_order_release);
+        });
+
+    // Main thread: keep UI responsive at ~60 Hz while background parses
+    {
+        uint32_t lastDisplayedProgress = 0;
+        while (!parsingDone.load(std::memory_order_acquire))
+        {
+            m_view.ProcessPendingEvents();
+
+            const uint32_t total =
+                bgObserver.totalProgress.load(std::memory_order_relaxed);
+            const uint32_t current =
+                bgObserver.currentProgress.load(std::memory_order_relaxed);
+
+            if (total > 0 && !m_progressConfigured)
+            {
+                m_view.ConfigureProgressRange(ClampToInt(total));
+                m_progressConfigured = true;
+            }
+            if (current != lastDisplayedProgress)
+            {
+                m_view.UpdateProgressValue(ClampToInt(current));
+                lastDisplayedProgress = current;
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        }
+    }
+
+    parseThread.join();
+    m_events.ResumeNotifications();
+
+    if (parseException)
+    {
+        m_isParsing = false;
+        m_progressConfigured = false;
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        m_view.UpdateStatusText(previousStatus);
         UpdateTypeFilters();
         if (m_eventsListView)
             m_eventsListView->RefreshView();
         if (m_itemDetailsView)
             m_itemDetailsView->RefreshView();
-        
-        m_isParsing = false;
-        m_progressConfigured = false;
-        throw;
+        std::rethrow_exception(parseException);
     }
+
+    m_view.UpdateStatusText("Data ready. Path: " + path.string());
+    m_view.ToggleProgressVisibility(false);
+    m_view.SetSearchControlsEnabled(true);
+    UpdateTypeFilters();
+    if (m_eventsListView)
+        m_eventsListView->RefreshView();
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
+    m_isParsing = false;
+    m_progressConfigured = false;
+    m_view.ProcessPendingEvents();
 }
 
 void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
@@ -333,15 +433,29 @@ void MainWindowPresenter::SetItemDetailsVisible(bool visible)
 
 void MainWindowPresenter::ProgressUpdated()
 {
+    // This method is only called in the synchronous (non-background-thread)
+    // loading path (e.g. MergeLogFile's TempObserver). During async LoadLogFile
+    // the presenter is not registered as a parser observer; progress is handled
+    // by the polling loop in LoadLogFile instead.
     const auto total = m_controller.GetParserTotalProgress();
     if (!m_progressConfigured && total > 0)
     {
         m_view.ConfigureProgressRange(ClampToInt(total));
         m_progressConfigured = true;
     }
-
     m_view.UpdateProgressValue(ClampToInt(m_controller.GetParserCurrentProgress()));
-    m_view.ProcessPendingEvents();
+    // Throttle event processing: only yield to the event loop every ~5 %
+    // progress to avoid excessive overhead on large files.
+    if (total > 0)
+    {
+        const auto current = m_controller.GetParserCurrentProgress();
+        static uint32_t lastYield = 0;
+        if ((current - lastYield) * 20 >= total)
+        {
+            lastYield = current;
+            m_view.ProcessPendingEvents();
+        }
+    }
 }
 
 void MainWindowPresenter::NewEventFound(db::LogEvent&&)
@@ -352,6 +466,13 @@ void MainWindowPresenter::NewEventFound(db::LogEvent&&)
 void MainWindowPresenter::NewEventBatchFound(
     std::vector<std::pair<int, db::LogEvent::EventItems>>&&)
 {
+    // During async LoadLogFile the presenter is not registered as observer so
+    // this is never called from the background thread. For any synchronous
+    // path that does call this (e.g. custom observers), guard against
+    // refreshing during an active load.
+    if (m_isParsing)
+        return;
+
     if (m_eventsListView)
         m_eventsListView->RefreshView();
     if (m_itemDetailsView)

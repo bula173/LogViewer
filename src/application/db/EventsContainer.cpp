@@ -38,9 +38,10 @@ void EventsContainer::AddEvent(LogEvent&& event)
         std::unique_lock<std::shared_mutex> lock(m_mutex);
         this->AddItem(std::move(event));
     } // Release lock before notifying views
-    
-    // Notify views after releasing the lock to avoid deadlock
-    this->NotifyDataChanged();
+
+    // Skip notifications during bulk loading (e.g., background thread parsing)
+    if (m_notificationsEnabled.load(std::memory_order_acquire))
+        this->NotifyDataChanged();
 }
 
 void EventsContainer::AddEventBatch(
@@ -59,9 +60,10 @@ void EventsContainer::AddEventBatch(
             m_data.emplace_back(item.first, std::move(item.second));
         }
     } // Release lock before notifying views
-    
-    // Notify views after releasing the lock to avoid deadlock
-    this->NotifyDataChanged();
+
+    // Skip notifications during bulk loading (e.g., background thread parsing)
+    if (m_notificationsEnabled.load(std::memory_order_acquire))
+        this->NotifyDataChanged();
 }
 
 const LogEvent& EventsContainer::GetEvent(const int index)
