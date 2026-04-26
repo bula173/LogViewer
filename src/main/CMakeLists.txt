@@ -114,20 +114,36 @@ if (APPLE AND NOT LOGVIEWER_SUBPROJECT)
         add_custom_command(
             TARGET ${PROJECT_NAME}
             POST_BUILD
+            # 1. Copy the AI plugin into Contents/PlugIns BEFORE macdeployqt so that
+            #    macdeployqt rewrites the plugin's Homebrew Qt references to use the
+            #    bundled frameworks (@executable_path/../Frameworks/). Without this,
+            #    the plugin has a separate Qt instance and crashes with
+            #    "QWidget: Must construct a QApplication before a QWidget".
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+                    $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/PlugIns/ai_provider
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    $<TARGET_FILE:ai_provider>
+                    $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/PlugIns/ai_provider/
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    ${CMAKE_BINARY_DIR}/plugins/ai/config.json
+                    $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/PlugIns/ai_provider/config.json
+            # 2. macdeployqt processes the whole bundle including Contents/PlugIns/,
+            #    fixing Qt framework references in the plugin dylib.
             COMMAND ${MACDEPLOYQT_EXECUTABLE}
                     $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${CMAKE_SOURCE_DIR}/etc/qt.conf
                     $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>/Contents/Resources/qt.conf
-            # macdeployqt (and/or install_name_tool) can invalidate signatures of copied dylibs.
-            # Re-sign the bundle (default: ad-hoc) so macOS doesn't SIGKILL on cs_invalid_page.
+            # 3. Re-sign the bundle after macdeployqt (it invalidates signatures).
             COMMAND /usr/bin/codesign
                 --force
                 --deep
                     --sign "${LOGVIEWER_CODESIGN_IDENTITY}"
                 $<TARGET_BUNDLE_DIR:${PROJECT_NAME}>
-            COMMENT "Running macdeployqt + codesign"
+            COMMENT "Bundling AI plugin → macdeployqt → codesign"
         )
+        # Ensure the plugin is built before the main app's POST_BUILD step runs
+        add_dependencies(${PROJECT_NAME} ai_provider)
     endif()
 endif()
 
