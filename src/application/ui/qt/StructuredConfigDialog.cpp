@@ -2195,16 +2195,17 @@ void StructuredConfigDialog::OnPluginSelectionChanged()
 
 void StructuredConfigDialog::OnBrowsePluginClicked()
 {
-    QString filter;
-    filter = tr("Plugin Files (*.zip);;All Files (*)");
-
     QFileDialog dialog(this, tr("Select Plugin"));
-    #ifdef __APPLE__
+#ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-    #endif
-    
-    dialog.setNameFilter(filter);
+    // On macOS, plugins are directories (bundles) or zip archives
+    dialog.setNameFilter(tr("All Files (*)"));
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly, false);
+#else
+    dialog.setNameFilter(tr("Plugin Files (*.zip);;All Files (*)"));
     dialog.setFileMode(QFileDialog::ExistingFile);
+#endif
 
     if (dialog.exec() != QDialog::Accepted)
         return;

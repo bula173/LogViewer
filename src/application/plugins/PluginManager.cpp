@@ -937,12 +937,23 @@ util::Result<std::string, error::Error> PluginManager::RegisterPlugin(
                 "Plugin file does not exist: " + sourcePath.string()));
     }
 
+#if defined(_WIN32) || defined(__linux__)
+    // On Windows/Linux, only ZIP archives are accepted for manual installation
     if (sourcePath.extension() != ".zip")
     {
         return util::Result<std::string, error::Error>::Err(
             error::Error(error::ErrorCode::InvalidArgument,
                 "Only zipped plugins are supported. Expected .zip: " + sourcePath.string()));
     }
+#else
+    // On macOS, also accept plugin directories (used by bundled plugins)
+    if (sourcePath.extension() != ".zip" && !std::filesystem::is_directory(sourcePath))
+    {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error(error::ErrorCode::InvalidArgument,
+                "Only zipped plugins or plugin directories are supported. Expected .zip or directory: " + sourcePath.string()));
+    }
+#endif
 
     try {
         // Ensure plugins directory exists
