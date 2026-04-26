@@ -28,7 +28,10 @@ GeminiClient::GeminiClient(const std::string& apiKey,
     , m_model(model)
     , m_baseUrl(baseUrl)
 {
-    PLUGIN_LOG(PLUGIN_LOG_INFO, "GeminiClient initialized with model: {}", m_model);
+    PLUGIN_LOG(PLUGIN_LOG_INFO,
+        "GeminiClient initialized: model='{}' baseUrl='{}' keyLen={} keyPrefix='{}'",
+        m_model, m_baseUrl, m_apiKey.size(),
+        m_apiKey.size() >= 6 ? m_apiKey.substr(0, 6) + "..." : "(empty)");
 }
 
 std::string GeminiClient::SendPrompt(const std::string& prompt,
@@ -127,7 +130,10 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
 
 bool GeminiClient::IsAvailable() const
 {
-    return !m_apiKey.empty();
+    const bool available = !m_apiKey.empty();
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "GeminiClient::IsAvailable() = {} (keyLen={})",
+        available, m_apiKey.size());
+    return available;
 }
 
 void GeminiClient::SetModelName(const std::string& model)
@@ -192,26 +198,26 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     
     if (httpCode >= 400)
     {
-        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Gemini API returned HTTP {}: {}", httpCode, 
-                   responseData.substr(0, std::min(size_t(500), responseData.size())));
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Gemini API HTTP {} error. Full response: {}",
+                   httpCode, responseData);
         
-        // Try to parse error from response
+        // Try to extract the error message from JSON for a clean exception
         try
         {
             auto errorJson = nlohmann::json::parse(responseData);
             if (errorJson.contains("error") && errorJson["error"].contains("message"))
             {
-                throw std::runtime_error("Gemini API error: " + 
+                throw std::runtime_error("Gemini API error (HTTP " + std::to_string(httpCode) + "): " +
                     errorJson["error"]["message"].get<std::string>());
             }
         }
         catch (const nlohmann::json::parse_error&)
         {
-            // If we can't parse, just use the raw response
+            // Raw response wasn't JSON
         }
         
-        throw std::runtime_error("Gemini API HTTP " + std::to_string(httpCode) + 
-                               ": " + responseData.substr(0, std::min(size_t(200), responseData.size())));
+        throw std::runtime_error("Gemini API HTTP " + std::to_string(httpCode) +
+                               ": " + responseData.substr(0, std::min(size_t(500), responseData.size())));
     }
 
     return responseData;

@@ -24,10 +24,12 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* use
 
 OpenAIClient::OpenAIClient(const std::string& apiKey,
                            const std::string& model,
-                           const std::string& baseUrl)
+                           const std::string& baseUrl,
+                           const std::string& providerName)
     : m_apiKey(apiKey)
     , m_model(model)
     , m_baseUrl(baseUrl)
+    , m_providerName(providerName)
 {
     PLUGIN_LOG(PLUGIN_LOG_INFO, "OpenAIClient initialized with model: {}", m_model);
 }

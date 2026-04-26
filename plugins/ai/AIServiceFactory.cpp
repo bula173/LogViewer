@@ -24,17 +24,18 @@ std::shared_ptr<IAIService> AIServiceFactory::CreateClient(
         // Local or custom OpenAI-compatible endpoints
         return std::make_shared<OllamaClient>(model, baseUrl);
     }
-    else if (provider == "openai" || provider == "xai")
+    else if (provider == "openai")
     {
-        // OpenAI and xAI use the same API format
-        // Note: API key can be empty during configuration; will be validated when sending requests
         if (apiKey.empty())
-        {
             PLUGIN_LOG(PLUGIN_LOG_WARN, "API key not configured for provider: {}", provider);
-        }
-        // OpenAI has a fixed base URL
-        const std::string openaiBaseUrl = "https://api.openai.com/v1";
-        return std::make_shared<OpenAIClient>(apiKey, model, openaiBaseUrl);
+        return std::make_shared<OpenAIClient>(apiKey, model, "https://api.openai.com/v1");
+    }
+    else if (provider == "xai")
+    {
+        // xAI uses OpenAI-compatible API at a different base URL
+        if (apiKey.empty())
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "API key not configured for provider: {}", provider);
+        return std::make_shared<OpenAIClient>(apiKey, model, "https://api.x.ai/v1", "xai");
     }
     else if (provider == "anthropic")
     {
@@ -96,13 +97,13 @@ std::string AIServiceFactory::GetDefaultModel(const std::string& provider)
     if (provider == "ollama" || provider == "lmstudio")
         return "qwen2.5-coder:7b";
     else if (provider == "openai")
-        return "gpt-3.5-turbo";
+        return "gpt-4o-mini";
     else if (provider == "anthropic")
-        return "claude-3-sonnet-20240229";
+        return "claude-3-7-sonnet-20250219";
     else if (provider == "google")
-        return "gemini-2.5-flash";  // Free tier, fast and good quality
+        return "gemini-2.5-flash";
     else if (provider == "xai")
-        return "grok-beta";
+        return "grok-3";
     else
         return "qwen2.5-coder:7b";
 }

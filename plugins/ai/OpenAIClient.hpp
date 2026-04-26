@@ -7,18 +7,18 @@ namespace ai
 {
 
 /**
- * @brief Client for OpenAI API (ChatGPT)
- * 
- * Supports: gpt-4, gpt-4-turbo, gpt-3.5-turbo
- * API: https://api.openai.com/v1
- * Authentication: Bearer token in Authorization header
+ * @brief Client for OpenAI-compatible APIs (OpenAI, xAI Grok, etc.)
+ *
+ * Supports any OpenAI-compatible endpoint. Pass the correct baseUrl and
+ * providerName when constructing for non-OpenAI providers (e.g. xAI).
  */
 class OpenAIClient : public IAIService
 {
 public:
     explicit OpenAIClient(const std::string& apiKey,
-                         const std::string& model = "gpt-3.5-turbo",
-                         const std::string& baseUrl = "https://api.openai.com/v1");
+                         const std::string& model = "gpt-4o-mini",
+                         const std::string& baseUrl = "https://api.openai.com/v1",
+                         const std::string& providerName = "openai");
     ~OpenAIClient() override = default;
 
     std::string SendPrompt(const std::string& prompt,
@@ -29,15 +29,13 @@ public:
 
     void SetModelName(const std::string& model) override;
 
-        /**
-     * @brief Get the name of the AI provider
-     */
-    virtual std::string GetProviderName() const override { return "OpenAI"; }
+    virtual std::string GetProviderName() const override { return m_providerName; }
 
 private:
     std::string m_apiKey;
     std::string m_model;
     std::string m_baseUrl;
+    std::string m_providerName;
 
     std::string SendHttpPost(const std::string& endpoint,
                              const std::string& jsonBody,

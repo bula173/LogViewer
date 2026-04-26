@@ -24,6 +24,7 @@
 #include <QGroupBox>
 #include <QMessageBox>
 #include <QCoreApplication>
+#include <QStandardPaths>
 
 namespace ui::qt
 {
@@ -115,6 +116,12 @@ void AIConfigPanel::BuildUi()
             PluginKeyEncryption_FreeString(dec);
         }
     }
+    connect(m_openaiKeyEdit, &QLineEdit::editingFinished, [this]() {
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] OpenAI API key changed, saving and refreshing");
+        SavePluginConfig();
+        RefreshAIClient();
+        emit ConfigurationChanged();
+    });
     apiKeysLayout->addRow(tr("OpenAI:"), m_openaiKeyEdit);
     
     m_anthropicKeyEdit = new QLineEdit(apiKeysGroup);
@@ -128,11 +135,17 @@ void AIConfigPanel::BuildUi()
             PluginKeyEncryption_FreeString(dec);
         }
     }
+    connect(m_anthropicKeyEdit, &QLineEdit::editingFinished, [this]() {
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] Anthropic API key changed, saving and refreshing");
+        SavePluginConfig();
+        RefreshAIClient();
+        emit ConfigurationChanged();
+    });
     apiKeysLayout->addRow(tr("Anthropic:"), m_anthropicKeyEdit);
     
     m_googleKeyEdit = new QLineEdit(apiKeysGroup);
     m_googleKeyEdit->setEchoMode(QLineEdit::Password);
-    m_googleKeyEdit->setPlaceholderText(tr("Google API key (from makersuite.google.com)"));
+    m_googleKeyEdit->setPlaceholderText(tr("Google API key (from aistudio.google.com)"));
     std::string googleKey = pluginConfig.value("googleApiKey", cfg.googleApiKey);
     if (!googleKey.empty()) {
         char* dec = PluginKeyEncryption_Decrypt(googleKey.c_str());
@@ -141,6 +154,12 @@ void AIConfigPanel::BuildUi()
             PluginKeyEncryption_FreeString(dec);
         }
     }
+    connect(m_googleKeyEdit, &QLineEdit::editingFinished, [this]() {
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] Google API key changed, saving and refreshing");
+        SavePluginConfig();
+        RefreshAIClient();
+        emit ConfigurationChanged();
+    });
     apiKeysLayout->addRow(tr("Google:"), m_googleKeyEdit);
     
     m_xaiKeyEdit = new QLineEdit(apiKeysGroup);
@@ -154,6 +173,12 @@ void AIConfigPanel::BuildUi()
             PluginKeyEncryption_FreeString(dec);
         }
     }
+    connect(m_xaiKeyEdit, &QLineEdit::editingFinished, [this]() {
+        PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] xAI API key changed, saving and refreshing");
+        SavePluginConfig();
+        RefreshAIClient();
+        emit ConfigurationChanged();
+    });
     apiKeysLayout->addRow(tr("xAI:"), m_xaiKeyEdit);
     
     mainLayout->addWidget(apiKeysGroup);
@@ -345,18 +370,54 @@ void AIConfigPanel::UpdateStatusLabel()
     {
         m_statusLabel->setText(tr("Not initialized"));
         m_statusLabel->setStyleSheet("QLabel { color: gray; }");
+        PLUGIN_LOG(PLUGIN_LOG_WARN, "[AIConfigPanel] UpdateStatusLabel: analyzer is null");
         return;
     }
 
+    // Get current provider and key status for detailed reporting
+    std::string providerName = "unknown";
+    bool hasKey = false;
+    bool isAvailable = false;
+    if (m_aiService && m_aiService->service)
+    {
+        providerName = m_aiService->service->GetProviderName();
+        isAvailable = m_aiService->service->IsAvailable();
+        // Determine if key is present based on provider
+        if (providerName == "google" && m_googleKeyEdit)
+            hasKey = !m_googleKeyEdit->text().isEmpty();
+        else if (providerName == "openai" && m_openaiKeyEdit)
+            hasKey = !m_openaiKeyEdit->text().isEmpty();
+        else if (providerName == "anthropic" && m_anthropicKeyEdit)
+            hasKey = !m_anthropicKeyEdit->text().isEmpty();
+        else if (providerName == "xai" && m_xaiKeyEdit)
+            hasKey = !m_xaiKeyEdit->text().isEmpty();
+        else
+            hasKey = isAvailable; // for local providers (ollama etc.) key not needed
+    }
+
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG,
+        "[AIConfigPanel] UpdateStatusLabel: provider={} hasKey={} IsAvailable={}",
+        providerName, hasKey, isAvailable);
+
     if (m_analyzer->IsReady())
     {
-        m_statusLabel->setText(tr("Ready"));
+        m_statusLabel->setText(tr("Ready (%1)").arg(QString::fromStdString(providerName)));
         m_statusLabel->setStyleSheet("QLabel { color: green; }");
     }
     else
     {
-        m_statusLabel->setText(tr("Not available"));
-        m_statusLabel->setStyleSheet("QLabel { color: orange; }");
+        if (!hasKey && providerName != "ollama" && providerName != "lmstudio" && providerName != "custom")
+        {
+            m_statusLabel->setText(tr("API key required for %1")
+                .arg(QString::fromStdString(providerName)));
+            m_statusLabel->setStyleSheet("QLabel { color: orange; }");
+        }
+        else
+        {
+            m_statusLabel->setText(tr("Not available (%1)")
+                .arg(QString::fromStdString(providerName)));
+            m_statusLabel->setStyleSheet("QLabel { color: red; }");
+        }
     }
 }
 
@@ -410,30 +471,32 @@ void AIConfigPanel::PopulateModelList()
     }
     else if (currentProvider == "openai")
     {
-        m_modelCombo->addItem("GPT-3.5 Turbo (Recommended)", "gpt-3.5-turbo");
-        m_modelCombo->addItem("GPT-4o Mini", "gpt-4o-mini");
+        m_modelCombo->addItem("GPT-4o Mini (Recommended)", "gpt-4o-mini");
         m_modelCombo->addItem("GPT-4o", "gpt-4o");
         m_modelCombo->addItem("GPT-4 Turbo", "gpt-4-turbo");
-        m_modelCombo->addItem("GPT-4", "gpt-4");
+        m_modelCombo->addItem("o4 Mini (Reasoning)", "o4-mini");
+        m_modelCombo->addItem("o3 (Advanced Reasoning)", "o3");
     }
     else if (currentProvider == "anthropic")
     {
+        m_modelCombo->addItem("Claude 3.7 Sonnet (Recommended)", "claude-3-7-sonnet-20250219");
         m_modelCombo->addItem("Claude 3.5 Sonnet", "claude-3-5-sonnet-20241022");
+        m_modelCombo->addItem("Claude 3.5 Haiku", "claude-3-5-haiku-20241022");
         m_modelCombo->addItem("Claude 3 Opus", "claude-3-opus-20240229");
-        m_modelCombo->addItem("Claude 3 Sonnet", "claude-3-sonnet-20240229");
-        m_modelCombo->addItem("Claude 3 Haiku", "claude-3-haiku-20240307");
     }
     else if (currentProvider == "google")
     {
+        m_modelCombo->addItem("Gemini 2.5 Flash (Recommended)", "gemini-2.5-flash");
         m_modelCombo->addItem("Gemini 2.5 Pro", "gemini-2.5-pro");
-        m_modelCombo->addItem("Gemini 2.5 Lite", "gemini-2.5-flash-lite");
-        m_modelCombo->addItem("Gemini 2.5 Flash", "gemini-2.5-flash");
-        m_modelCombo->addItem("Gemini 3 Pro", "gemini-3-pro");
+        m_modelCombo->addItem("Gemini 2.5 Flash-Lite", "gemini-2.5-flash-lite");
+        m_modelCombo->addItem("Gemini 3 Flash (Preview)", "gemini-3-flash-preview");
+        m_modelCombo->addItem("Gemini 3.1 Pro (Preview)", "gemini-3.1-pro-preview");
     }
     else if (currentProvider == "xai")
     {
-        m_modelCombo->addItem("Grok Beta", "grok-beta");
-        m_modelCombo->addItem("Grok 2", "grok-2");
+        m_modelCombo->addItem("Grok 3 (Recommended)", "grok-3");
+        m_modelCombo->addItem("Grok 3 Mini", "grok-3-mini");
+        m_modelCombo->addItem("Grok 2", "grok-2-1212");
     }
     
     m_modelCombo->blockSignals(false);
@@ -476,6 +539,10 @@ void AIConfigPanel::RefreshAIClient()
     std::string provider = pluginConfig.value("provider", mainConfig.aiProvider);
     std::string baseUrl = pluginConfig.value("baseUrl", mainConfig.ollamaBaseUrl);
     std::string model = pluginConfig.value("model", mainConfig.ollamaDefaultModel);
+
+    PLUGIN_LOG(PLUGIN_LOG_INFO,
+        "[AIConfigPanel] RefreshAIClient: provider='{}' model='{}' baseUrl='{}'",
+        provider, model, baseUrl);
     
     // Get API key for the selected provider
     std::string apiKey;
@@ -489,6 +556,8 @@ void AIConfigPanel::RefreshAIClient()
                 apiKey = std::string(dec);
                 PluginKeyEncryption_FreeString(dec);
                 PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI decrypted key: {} chars", apiKey.size());
+            } else {
+                PLUGIN_LOG(PLUGIN_LOG_WARN, "OpenAI key decryption returned null");
             }
         }
     }
@@ -502,6 +571,8 @@ void AIConfigPanel::RefreshAIClient()
                 apiKey = std::string(dec);
                 PluginKeyEncryption_FreeString(dec);
                 PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Anthropic decrypted key: {} chars", apiKey.size());
+            } else {
+                PLUGIN_LOG(PLUGIN_LOG_WARN, "Anthropic key decryption returned null");
             }
         }
     }
@@ -514,8 +585,15 @@ void AIConfigPanel::RefreshAIClient()
             if (dec) {
                 apiKey = std::string(dec);
                 PluginKeyEncryption_FreeString(dec);
-                PLUGIN_LOG(PLUGIN_LOG_DEBUG, "Google decrypted key: {} chars", apiKey.size());
+                PLUGIN_LOG(PLUGIN_LOG_INFO,
+                    "Google decrypted key: {} chars, starts with: '{}'",
+                    apiKey.size(),
+                    apiKey.size() >= 6 ? apiKey.substr(0, 6) + "..." : apiKey);
+            } else {
+                PLUGIN_LOG(PLUGIN_LOG_ERROR, "Google key decryption returned null — key may be corrupt");
             }
+        } else {
+            PLUGIN_LOG(PLUGIN_LOG_WARN, "Google: no API key found in config (googleApiKey missing or empty)");
         }
     }
     else if (provider == "xai")
@@ -528,6 +606,8 @@ void AIConfigPanel::RefreshAIClient()
                 apiKey = std::string(dec);
                 PluginKeyEncryption_FreeString(dec);
                 PLUGIN_LOG(PLUGIN_LOG_DEBUG, "xAI decrypted key: {} chars", apiKey.size());
+            } else {
+                PLUGIN_LOG(PLUGIN_LOG_WARN, "xAI key decryption returned null");
             }
         }
     }
@@ -544,7 +624,10 @@ void AIConfigPanel::RefreshAIClient()
         PopulateModelList();
         
         UpdateStatusLabel();
-        PLUGIN_LOG(PLUGIN_LOG_INFO, "AI client refreshed: provider={}", m_aiService->service->GetProviderName());
+        PLUGIN_LOG(PLUGIN_LOG_INFO,
+            "[AIConfigPanel] AI client refreshed: provider={} IsAvailable={}",
+            m_aiService->service->GetProviderName(),
+            m_aiService->service->IsAvailable());
     }
     catch (const std::exception& e)
     {
@@ -557,12 +640,26 @@ void AIConfigPanel::RefreshAIClient()
     }
 }
 
+static std::filesystem::path PluginConfigPath()
+{
+    // Use the OS-standard app-data location so the config survives across builds,
+    // bundle moves, and DMG installations.  On macOS this resolves to
+    // ~/Library/Application Support/LogViewer/plugins/ai_provider/config.json.
+    const QString dataDir =
+        QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    const auto path = std::filesystem::path(dataDir.toStdString()) / "plugins" / "ai_provider" / "config.json";
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] PluginConfigPath resolved to: {}", path.string());
+    return path;
+}
+
 nlohmann::json AIConfigPanel::LoadPluginConfig()
 {
-    const std::string appDir = QCoreApplication::applicationDirPath().toStdString();
-    std::filesystem::path configPath = std::filesystem::path(appDir) / "plugins" / "ai_provider" / "config.json";
-    
-    if (!std::filesystem::exists(configPath))
+    const std::filesystem::path configPath = PluginConfigPath();
+    const bool exists = std::filesystem::exists(configPath);
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] Loading config from: {} (exists={})",
+        configPath.string(), exists);
+
+    if (!exists)
     {
         PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] No plugin config file found, using defaults");
         return nlohmann::json::object();
@@ -579,6 +676,18 @@ nlohmann::json AIConfigPanel::LoadPluginConfig()
 
         nlohmann::json config;
         file >> config;
+
+        // Log which keys are present (never log the actual values)
+        PLUGIN_LOG(PLUGIN_LOG_DEBUG,
+            "[AIConfigPanel] Config loaded: provider='{}' model='{}' "
+            "hasOpenAIKey={} hasAnthropicKey={} hasGoogleKey={} hasXAIKey={}",
+            config.value("provider", std::string("(not set)")),
+            config.value("model", std::string("(not set)")),
+            config.contains("openaiApiKey") && !config["openaiApiKey"].get<std::string>().empty(),
+            config.contains("anthropicApiKey") && !config["anthropicApiKey"].get<std::string>().empty(),
+            config.contains("googleApiKey") && !config["googleApiKey"].get<std::string>().empty(),
+            config.contains("xaiApiKey") && !config["xaiApiKey"].get<std::string>().empty());
+
         return config;
     }
     catch (const std::exception& ex)
@@ -590,9 +699,9 @@ nlohmann::json AIConfigPanel::LoadPluginConfig()
 
 void AIConfigPanel::SavePluginConfig()
 {
-    const std::string appDir = QCoreApplication::applicationDirPath().toStdString();
-    std::filesystem::path configPath = std::filesystem::path(appDir) / "plugins" / "ai_provider" / "config.json";
-    
+    const std::filesystem::path configPath = PluginConfigPath();
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] Saving config to: {}", configPath.string());
+
     try
     {
         // Load existing config
