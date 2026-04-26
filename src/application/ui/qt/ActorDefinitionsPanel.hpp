@@ -8,6 +8,7 @@
 class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
+class QLabel;
 
 namespace ui::qt {
 
@@ -52,6 +53,7 @@ class ActorDefinitionsPanel : public QWidget
     void BuildLayout();
     void RebuildTable();
     void EmitAndSave();
+    void SetStatus(const QString& msg, bool isError);
 
     /// Open an add/edit dialog; returns false if user cancelled.
     bool EditDefinition(ActorDefinition& def, bool isNew);
@@ -62,9 +64,11 @@ class ActorDefinitionsPanel : public QWidget
     QTableWidget* m_table    {nullptr};
     QPushButton*  m_editBtn  {nullptr};
     QPushButton*  m_removeBtn{nullptr};
+    QLabel*       m_statusLabel {nullptr};
 
     std::vector<ActorDefinition> m_definitions;
     std::string                  m_currentFilePath; ///< last saved/loaded path
+    bool                         m_rebuilding {false}; ///< true while RebuildTable runs
 };
 
 } // namespace ui::qt

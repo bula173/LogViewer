@@ -18,12 +18,12 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRegularExpression>
-#include <QSignalBlocker>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QVBoxLayout>
 
 #include <fstream>
+#include <filesystem>
 
 namespace ui::qt {
 
@@ -47,8 +47,13 @@ ActorDefinitionsPanel::ActorDefinitionsPanel(QWidget* parent)
             ifs >> j;
             m_definitions = ActorDefinition::ListFromJson(j);
             RebuildTable();
+            if (!m_definitions.empty())
+                SetStatus(tr("Auto-loaded %1 definition(s)").arg(m_definitions.size()), false);
         }
-        catch (...) {}
+        catch (const std::exception& e)
+        {
+            SetStatus(tr("Auto-load failed: %1").arg(QString::fromStdString(e.what())), true);
+        }
     }
 }
 
@@ -81,6 +86,12 @@ void ActorDefinitionsPanel::BuildLayout()
     m_table->verticalHeader()->hide();
     m_table->setAlternatingRowColors(true);
     layout->addWidget(m_table, 1);
+
+    // ── Status label ─────────────────────────────────────────────────────
+    m_statusLabel = new QLabel(this);
+    m_statusLabel->setWordWrap(true);
+    m_statusLabel->setStyleSheet("font-style: italic; color: gray;");
+    layout->addWidget(m_statusLabel);
 
     // ── Buttons: Add / Edit / Remove ─────────────────────────────────────
     auto* btnRow1 = new QHBoxLayout();
@@ -125,7 +136,7 @@ void ActorDefinitionsPanel::BuildLayout()
 
 void ActorDefinitionsPanel::RebuildTable()
 {
-    const QSignalBlocker blocker(m_table); // prevent itemChanged during rebuild
+    m_rebuilding = true;
     m_table->setRowCount(0);
     for (const auto& def : m_definitions)
     {
@@ -148,6 +159,7 @@ void ActorDefinitionsPanel::RebuildTable()
                     it->setForeground(QColor(150, 150, 150));
         }
     }
+    m_rebuilding = false;
     HandleSelectionChanged();
 }
 
@@ -215,15 +227,43 @@ void ActorDefinitionsPanel::HandleSave()
 
     try
     {
+        std::filesystem::create_directories(
+            std::filesystem::path(m_currentFilePath).parent_path());
+
         std::ofstream ofs(m_currentFilePath);
         if (!ofs) throw std::runtime_error("Cannot open file for writing");
-        ofs << ActorDefinition::ListToJson(m_definitions).dump(2);
+        const std::string json = ActorDefinition::ListToJson(m_definitions).dump(2);
+        ofs << json;
+        ofs.flush();
+        if (!ofs) throw std::runtime_error("Write error");
         emit DefinitionsChanged(m_definitions);
+        SetStatus(tr("Saved %1 definition(s) to %2.")
+            .arg(m_definitions.size())
+            .arg(QString::fromStdString(m_currentFilePath)), false);
     }
     catch (const std::exception& e)
     {
         QMessageBox::warning(this, tr("Save Error"),
             tr("Could not save actors: %1").arg(QString::fromStdString(e.what())));
+        return;
+    }
+
+    // Keep actors.json in sync regardless of where we saved
+    const std::string defaultPath = DefaultFilePath();
+    if (m_currentFilePath != defaultPath)
+    {
+        try
+        {
+            std::filesystem::create_directories(
+                std::filesystem::path(defaultPath).parent_path());
+            std::ofstream def(defaultPath);
+            if (def)
+            {
+                def << ActorDefinition::ListToJson(m_definitions).dump(2);
+                def.flush();
+            }
+        }
+        catch (...) {} // best-effort
     }
 }
 
@@ -235,7 +275,16 @@ void ActorDefinitionsPanel::HandleSaveAs()
 #endif
     dlg.setNameFilter(tr("Actor Definitions (*.json)"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
-    dlg.selectFile("actors.json");
+    dlg.setDefaultSuffix("json");
+
+    // Start in the same directory as the current file
+    const std::string startFile = m_currentFilePath.empty()
+        ? DefaultFilePath()
+        : m_currentFilePath;
+    dlg.setDirectory(QString::fromStdString(
+        std::filesystem::path(startFile).parent_path().string()));
+    dlg.selectFile(QString::fromStdString(
+        std::filesystem::path(startFile).filename().string()));
 
     if (dlg.exec() != QDialog::Accepted) return;
     const QString path = dlg.selectedFiles().value(0);
@@ -248,9 +297,19 @@ void ActorDefinitionsPanel::HandleSaveAs()
 void ActorDefinitionsPanel::HandleLoad()
 {
     QFileDialog dlg(this, tr("Load Actor Definitions"));
+#ifdef __APPLE__
+    dlg.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
     dlg.setNameFilter(tr("Actor Definitions (*.json)"));
     dlg.setAcceptMode(QFileDialog::AcceptOpen);
     dlg.setFileMode(QFileDialog::ExistingFile);
+
+    // Start in the directory of the currently loaded file (or default app path)
+    const std::string startDir = m_currentFilePath.empty()
+        ? DefaultFilePath()
+        : m_currentFilePath;
+    dlg.setDirectory(QString::fromStdString(
+        std::filesystem::path(startDir).parent_path().string()));
 
     if (dlg.exec() != QDialog::Accepted) return;
     const QString path = dlg.selectedFiles().value(0);
@@ -266,6 +325,28 @@ void ActorDefinitionsPanel::HandleLoad()
         m_currentFilePath = path.toStdString();
         RebuildTable();
         emit DefinitionsChanged(m_definitions);
+        if (m_definitions.empty())
+            SetStatus(tr("File loaded but contains 0 definitions."), true);
+        else
+            SetStatus(tr("Loaded %1 definition(s) from file.").arg(m_definitions.size()), false);
+
+        // Keep actors.json in sync so the loaded definitions survive restarts
+        const std::string defaultPath = DefaultFilePath();
+        if (m_currentFilePath != defaultPath)
+        {
+            try
+            {
+                std::filesystem::create_directories(
+                    std::filesystem::path(defaultPath).parent_path());
+                std::ofstream def(defaultPath);
+                if (def)
+                {
+                    def << ActorDefinition::ListToJson(m_definitions).dump(2);
+                    def.flush();
+                }
+            }
+            catch (...) {} // best-effort
+        }
     }
     catch (const std::exception& e)
     {
@@ -283,7 +364,7 @@ void ActorDefinitionsPanel::HandleSelectionChanged()
 
 void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
 {
-    // Only the "On" column (0) carries the enabled checkbox
+    if (m_rebuilding) return; // ignore signals during table rebuild
     if (!item || item->column() != 0) return;
     const int row = item->row();
     if (row < 0 || row >= static_cast<int>(m_definitions.size())) return;
@@ -293,10 +374,11 @@ void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
 
     // Update row text colour to reflect enabled state
     {
-        const QSignalBlocker blocker(m_table);
+        m_rebuilding = true;
         for (int c = 1; c < 4; ++c)
             if (auto* it = m_table->item(row, c))
                 it->setForeground(on ? QColor() : QColor(150, 150, 150));
+        m_rebuilding = false;
     }
 
     EmitAndSave();
@@ -395,22 +477,50 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
 void ActorDefinitionsPanel::EmitAndSave()
 {
     emit DefinitionsChanged(m_definitions);
-    // Auto-save to the current file (silently)
-    if (!m_currentFilePath.empty())
+
+    // Always auto-save to the default path so that actors.json is kept
+    // up-to-date regardless of any "Save As" export location.
+    const std::string autoSavePath = DefaultFilePath();
+    try
     {
-        try
+        std::filesystem::create_directories(
+            std::filesystem::path(autoSavePath).parent_path());
+
+        std::ofstream ofs(autoSavePath);
+        if (!ofs)
         {
-            std::ofstream ofs(m_currentFilePath);
-            if (ofs)
-                ofs << ActorDefinition::ListToJson(m_definitions).dump(2);
+            SetStatus(tr("Auto-save failed: cannot open %1")
+                .arg(QString::fromStdString(autoSavePath)), true);
+            return;
         }
-        catch (...) {}
+        const std::string json = ActorDefinition::ListToJson(m_definitions).dump(2);
+        ofs << json;
+        ofs.flush();
+        if (!ofs)
+            SetStatus(tr("Auto-save failed: write error"), true);
+        else
+            SetStatus(tr("Auto-saved %1 definition(s) → %2")
+                .arg(m_definitions.size())
+                .arg(QString::fromStdString(autoSavePath)), false);
+    }
+    catch (const std::exception& e)
+    {
+        SetStatus(tr("Auto-save error: %1").arg(QString::fromStdString(e.what())), true);
     }
 }
 
 std::string ActorDefinitionsPanel::DefaultFilePath()
 {
     return (config::GetConfig().GetDefaultAppPath() / "actors.json").string();
+}
+
+void ActorDefinitionsPanel::SetStatus(const QString& msg, bool isError)
+{
+    if (!m_statusLabel) return;
+    m_statusLabel->setText(msg);
+    m_statusLabel->setStyleSheet(
+        isError ? "font-style: italic; color: #c0392b;"
+                : "font-style: italic; color: #27ae60;");
 }
 
 } // namespace ui::qt
