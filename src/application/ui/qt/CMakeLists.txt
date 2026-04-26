@@ -13,6 +13,7 @@ target_sources(application_core
         ../MainWindowPresenter.cpp
         ActorDefinitionsPanel.cpp
         ActorsPanel.cpp
+        SearchBar.cpp
         EventsTableModel.cpp
         EventsTableView.cpp
         ExportManager.cpp
@@ -32,6 +33,7 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorsPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/SearchBar.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp
@@ -51,6 +53,7 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorsPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/SearchBar.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableModel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp>
@@ -69,6 +72,7 @@ target_sources(application_core
         $<INSTALL_INTERFACE:ActorDefinition.hpp>
         $<INSTALL_INTERFACE:ActorDefinitionsPanel.hpp>
         $<INSTALL_INTERFACE:ActorsPanel.hpp>
+        $<INSTALL_INTERFACE:SearchBar.hpp>
         $<INSTALL_INTERFACE:EventsTableModel.hpp>
         $<INSTALL_INTERFACE:EventsTableView.hpp>
         $<INSTALL_INTERFACE:ExportManager.hpp>

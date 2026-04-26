@@ -6,6 +6,7 @@
 #include "StatsSummaryPanel.hpp"
 #include "ActorsPanel.hpp"
 #include "ActorDefinitionsPanel.hpp"
+#include "SearchBar.hpp"
 #include "UpdateChecker.hpp"
 #include "UpdateDialog.hpp"
 #include "IControler.hpp"
@@ -51,6 +52,7 @@
 #include <QTimer>
 #include <QKeySequence>
 #include <QDockWidget>
+#include <QShortcut>
 
 #include <set>
 
@@ -209,12 +211,25 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             // Ensure we always have a central widget before returning
             setCentralWidget(m_contentTabs);
 
-        // Events view tab
+        // Events view tab — wrapped in a container that holds the search bar
         m_eventsView = new EventsTableView(events, m_contentTabs);
         if (!m_eventsView) {
             throw std::runtime_error("Failed to create events view");
         }
-        m_contentTabs->addTab(m_eventsView, "Events");
+
+        {
+            auto* eventsContainer = new QWidget(m_contentTabs);
+            auto* eventsLayout    = new QVBoxLayout(eventsContainer);
+            eventsLayout->setContentsMargins(0, 0, 0, 0);
+            eventsLayout->setSpacing(0);
+
+            m_searchBar = new SearchBar(eventsContainer);
+            m_searchBar->setVisible(false);
+            eventsLayout->addWidget(m_searchBar);
+            eventsLayout->addWidget(m_eventsView);
+
+            m_contentTabs->addTab(eventsContainer, "Events");
+        }
 
         // AI UI provided by plugins; initialize service holder only
         m_pluginService = nullptr;
@@ -639,6 +654,32 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_actorsPanel,   &ActorsPanel::SetDefinitions);
         // Push any already-loaded definitions immediately
         m_actorsPanel->SetDefinitions(m_actorDefPanel->Definitions());
+    }
+
+    // Search bar (Ctrl+F)
+    if (m_searchBar && m_eventsView) {
+        // Text / case changes → update model highlights and navigate to first match
+        connect(m_searchBar, &SearchBar::SearchChanged,
+                m_eventsView, &EventsTableView::SetSearchTerm);
+        connect(m_searchBar, &SearchBar::NavigatePrev,
+                m_eventsView, &EventsTableView::NavigateToPrevMatch);
+        connect(m_searchBar, &SearchBar::NavigateNext,
+                m_eventsView, &EventsTableView::NavigateToNextMatch);
+        // Close bar → clear highlights
+        connect(m_searchBar, &SearchBar::Closed, m_eventsView, [this]() {
+            m_eventsView->SetSearchTerm(QString(), false);
+            m_searchBar->SetMatchInfo(0, 0);
+        });
+        // View reports match position → update counter label
+        connect(m_eventsView, &EventsTableView::MatchInfoChanged,
+                m_searchBar,  &SearchBar::SetMatchInfo);
+
+        // Ctrl+F: switch to Events tab and show the search bar
+        auto* findShortcut = new QShortcut(QKeySequence::Find, this);
+        connect(findShortcut, &QShortcut::activated, this, [this]() {
+            m_contentTabs->setCurrentIndex(0); // Events is the first tab
+            m_searchBar->FocusInput();
+        });
     }
 
     // Schedule automatic update check (delayed so the UI is fully shown first)
@@ -1164,6 +1205,37 @@ void MainWindow::loadPlugins() {
     
     // Discover plugins from the plugins directory
     auto discoveredPlugins = pluginManager.DiscoverPlugins();
+
+#ifdef __APPLE__
+    // On macOS, also discover plugins bundled inside the .app (Contents/PlugIns/).
+    // This makes distributed DMGs work without requiring the user to install plugins manually.
+    {
+        const std::filesystem::path appDir =
+            QCoreApplication::applicationDirPath().toStdString(); // Contents/MacOS
+        const std::filesystem::path bundlePlugIns = appDir / ".." / "PlugIns";
+        std::error_code ec;
+        if (std::filesystem::exists(bundlePlugIns, ec))
+        {
+            util::Logger::Info("[MainWindow] Scanning bundle PlugIns: {}", bundlePlugIns.string());
+            for (const auto& entry : std::filesystem::directory_iterator(bundlePlugIns, ec))
+            {
+                if (!entry.is_directory()) continue;
+                if (!std::filesystem::exists(entry.path() / "config.json")) continue;
+                // Avoid duplicates (user may have installed same plugin in app-data dir)
+                const auto canonical = std::filesystem::weakly_canonical(entry.path(), ec);
+                bool already = false;
+                for (const auto& p : discoveredPlugins)
+                    if (std::filesystem::weakly_canonical(p, ec) == canonical) { already = true; break; }
+                if (!already)
+                {
+                    discoveredPlugins.push_back(entry.path());
+                    util::Logger::Debug("[MainWindow] Found bundle plugin: {}", entry.path().string());
+                }
+            }
+        }
+    }
+#endif
+
     util::Logger::Info("[MainWindow] Discovered {} plugins", discoveredPlugins.size());
     
     for (const auto& pluginPath : discoveredPlugins) {

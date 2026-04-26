@@ -58,6 +58,7 @@ class FiltersPanel;
 class StatsSummaryPanel;
 class ActorsPanel;
 class ActorDefinitionsPanel;
+class SearchBar;
 class UpdateChecker;
 
 class MainWindow : public QMainWindow,
@@ -202,6 +203,7 @@ class MainWindow : public QMainWindow,
     StatsSummaryPanel*      m_statsPanel   {nullptr};
     ActorsPanel*            m_actorsPanel  {nullptr};
     ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
+    SearchBar*              m_searchBar    {nullptr};
     UpdateChecker*          m_updateChecker{nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;

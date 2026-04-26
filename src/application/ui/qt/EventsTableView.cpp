@@ -245,4 +245,56 @@ void EventsTableView::ScrollToActualRow(int actualRow)
 
 }
 
+// ---------------------------------------------------------------------------
+// Search / highlight
+// ---------------------------------------------------------------------------
+
+void EventsTableView::SetSearchTerm(const QString& term, bool caseSensitive)
+{
+    m_model->SetSearchTerm(term, caseSensitive);
+    m_currentMatchIndex = -1;
+
+    const int total = m_model->MatchCount();
+    if (total > 0)
+    {
+        m_currentMatchIndex = 0;
+        ScrollToMatchIndex(0);
+    }
+    emit MatchInfoChanged(total > 0 ? 1 : 0, total);
+}
+
+void EventsTableView::NavigateToNextMatch()
+{
+    const int total = m_model->MatchCount();
+    if (total == 0) return;
+
+    m_currentMatchIndex = (m_currentMatchIndex + 1) % total;
+    ScrollToMatchIndex(m_currentMatchIndex);
+    emit MatchInfoChanged(m_currentMatchIndex + 1, total);
+}
+
+void EventsTableView::NavigateToPrevMatch()
+{
+    const int total = m_model->MatchCount();
+    if (total == 0) return;
+
+    m_currentMatchIndex = (m_currentMatchIndex - 1 + total) % total;
+    ScrollToMatchIndex(m_currentMatchIndex);
+    emit MatchInfoChanged(m_currentMatchIndex + 1, total);
+}
+
+void EventsTableView::ScrollToMatchIndex(int matchIndex)
+{
+    const auto& rows = m_model->MatchedRows();
+    if (matchIndex < 0 || matchIndex >= static_cast<int>(rows.size())) return;
+
+    const QModelIndex idx = m_model->index(rows[static_cast<size_t>(matchIndex)], 0);
+    if (!idx.isValid()) return;
+
+    scrollTo(idx, QAbstractItemView::PositionAtCenter);
+    if (selectionModel())
+        selectionModel()->setCurrentIndex(
+            idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}
+
 } // namespace ui::qt

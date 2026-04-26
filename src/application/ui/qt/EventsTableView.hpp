@@ -4,6 +4,7 @@
 #include "IEventsView.hpp"
 
 #include <QTableView>
+#include <QString>
 #include <vector>
 
 namespace db
@@ -38,16 +39,24 @@ class EventsTableView : public QTableView,
     int CurrentActualRow() const;
     void ScrollToActualRow(int actualRow);
 
+    // ── Search / highlight ────────────────────────────────────────────────
+    void SetSearchTerm(const QString& term, bool caseSensitive);
+    void NavigateToNextMatch();
+    void NavigateToPrevMatch();
+
   signals:
     void CurrentActualRowChanged(int actualRow);
+    void MatchInfoChanged(int current, int total);
 
   private:
     void InitializeView();
     void ConnectSelectionSignals();
     void ResizeColumnsToConfiguration();
+    void ScrollToMatchIndex(int matchIndex);
 
     db::EventsContainer& m_events;
     EventsTableModel* m_model {nullptr};
+    int m_currentMatchIndex {-1};
 };
 
 } // namespace ui::qt

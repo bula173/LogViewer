@@ -92,6 +92,12 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
         case Qt::ForegroundRole:
         case Qt::BackgroundRole:
         {
+            // Search highlight takes priority over type colour
+            if (role == Qt::BackgroundRole && !m_searchTerm.isEmpty()
+                    && m_matchedRowSet.count(index.row()))
+            {
+                return QBrush(QColor(255, 235, 59, 160)); // amber-yellow, semi-transparent
+            }
             // Apply color to entire row based on configured typeFilterField
             const std::string typeValue = event.findByKey(m_config.typeFilterField);
             const QColor color = ResolveColor(m_config.typeFilterField, typeValue, role == Qt::BackgroundRole);
@@ -153,6 +159,9 @@ void EventsTableModel::RefreshAll()
 {
     beginResetModel();
     endResetModel();
+    // Re-apply search highlighting after the model reset
+    if (!m_searchTerm.isEmpty())
+        RebuildSearchMatches();
 }
 
 void EventsTableModel::RefreshColumns()
@@ -271,6 +280,54 @@ std::vector<int> EventsTableModel::ColumnWidths() const
         }
     }
     return widths;
+}
+
+// ---------------------------------------------------------------------------
+// Search / highlight
+// ---------------------------------------------------------------------------
+
+void EventsTableModel::SetSearchTerm(const QString& term, bool caseSensitive)
+{
+    m_searchTerm           = term;
+    m_searchCaseSensitive  = caseSensitive;
+    RebuildSearchMatches();
+
+    // Repaint background of all visible cells
+    const int rows = rowCount(QModelIndex());
+    const int cols = columnCount(QModelIndex());
+    if (rows > 0 && cols > 0)
+        emit dataChanged(index(0, 0), index(rows - 1, cols - 1), {Qt::BackgroundRole});
+}
+
+void EventsTableModel::RebuildSearchMatches()
+{
+    m_matchedRows.clear();
+    m_matchedRowSet.clear();
+
+    if (m_searchTerm.isEmpty())
+        return;
+
+    const Qt::CaseSensitivity cs =
+        m_searchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    const int rows = rowCount(QModelIndex());
+
+    for (int row = 0; row < rows; ++row)
+    {
+        const int actualIdx = ResolveToActualIndex(row);
+        if (actualIdx < 0 || actualIdx >= static_cast<int>(m_events.Size()))
+            continue;
+
+        const auto& event = m_events.GetEvent(actualIdx);
+        for (const auto& [key, value] : event.getEventItems())
+        {
+            if (QString::fromStdString(value).contains(m_searchTerm, cs))
+            {
+                m_matchedRows.push_back(row);
+                m_matchedRowSet.insert(row);
+                break; // one match per row is enough
+            }
+        }
+    }
 }
 
 void EventsTableModel::RebuildVisibleColumns()

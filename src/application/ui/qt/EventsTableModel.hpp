@@ -2,12 +2,13 @@
 
 #include <QAbstractTableModel>
 #include <QColor>
+#include <QString>
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
 
+#include <unordered_set>
 #include <vector>
-
 #include <unordered_map>
 
 namespace ui::qt
@@ -36,6 +37,11 @@ class EventsTableModel : public QAbstractTableModel
     void ClearFilter(); // Clear filtering and show all events
     const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
 
+    // ── Search / highlight ────────────────────────────────────────────────
+    void SetSearchTerm(const QString& term, bool caseSensitive);
+    int  MatchCount() const { return static_cast<int>(m_matchedRows.size()); }
+    const std::vector<int>& MatchedRows() const { return m_matchedRows; }
+
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;
     std::vector<int> ColumnWidths() const;
@@ -58,6 +64,14 @@ class EventsTableModel : public QAbstractTableModel
     const config::Config& m_config;
     bool m_hasSourceColumn {false}; // Track if source column is currently shown
     bool m_filteringActive {false}; // Track if filtering is active (distinguish empty from no filter)
+
+    // Search
+    QString                    m_searchTerm;
+    bool                       m_searchCaseSensitive {false};
+    std::vector<int>           m_matchedRows;    ///< model row indices with at least one matching cell
+    std::unordered_set<int>    m_matchedRowSet;  ///< O(1) lookup used in data()
+
+    void RebuildSearchMatches();
 };
 
 } // namespace ui::qt
