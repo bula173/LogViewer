@@ -99,7 +99,6 @@ class MainWindow : public QMainWindow,
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
-    void HandleTypeFilterChanged();
     void OnExtendedFiltersChanged();
     void OnOpenFileRequested();
     void OnClearDataRequested();

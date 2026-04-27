@@ -439,8 +439,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     if (m_typeFilterView)
     {
-        m_typeFilterView->SetOnFilterChanged(
-            [this]() { HandleTypeFilterChanged(); });
+        // Filter is only applied when the user clicks the Apply button.
+        // CheckBox changes are intentionally not wired to immediate apply.
     }
 
     if (m_filtersPanel)
@@ -985,12 +985,6 @@ void MainWindow::HandleDroppedFile(const QString& path)
 }
 
 void MainWindow::OnApplyFilterClicked()
-{
-    if (m_presenter)
-        m_presenter->ApplySelectedTypeFilters();
-}
-
-void MainWindow::HandleTypeFilterChanged()
 {
     if (m_presenter)
         m_presenter->ApplySelectedTypeFilters();
