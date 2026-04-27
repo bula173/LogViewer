@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['parsedata_0',['parsedata',['../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3',1,'parser::CsvParser::ParseData()'],['../d3/d8b/classparser_1_1IDataParser.html#a31fd56f340c1d0adb872f3ef93e76d96',1,'parser::IDataParser::ParseData(const std::filesystem::path &amp;filepath)=0'],['../d3/d8b/classparser_1_1IDataParser.html#adfce47886f1b6d071a8e8b051512b1d5',1,'parser::IDataParser::ParseData(std::istream &amp;input)=0'],['../db/d5c/classparser_1_1XmlParser.html#a8fd2bb3e889f5993db1871e8dae12327',1,'parser::XmlParser::ParseData(const std::filesystem::path &amp;filepath) override'],['../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e',1,'parser::XmlParser::ParseData(std::istream &amp;input) override'],['../d9/dd2/classparser_1_1CsvParser.html#a80cb8fb7bf441dade1c628bfd2057d7d',1,'parser::CsvParser::ParseData(const std::filesystem::path &amp;filepath) override']]],
+  ['parseline_1',['ParseLine',['../d9/dd2/classparser_1_1CsvParser.html#a950cc39a1763a44fde2081865d6f8986',1,'parser::CsvParser']]],
+  ['parsemanifest_2',['ParseManifest',['../d8/d08/namespaceplugin_1_1anonymous__namespace_02PluginManager_8cpp_03.html#a90270f5fa946134032a05d609d185f03',1,'plugin::anonymous_namespace{PluginManager.cpp}']]],
+  ['parserstate_3',['ParserState',['../de/d53/structparser_1_1ParserState.html#a0407be63081b9f0b6a210024cbb6b1fb',1,'parser::ParserState']]],
+  ['parseversion_4',['ParseVersion',['../d8/d08/namespaceplugin_1_1anonymous__namespace_02PluginManager_8cpp_03.html#aefd5cd2814804d544b8b4540cd6ed074',1,'plugin::anonymous_namespace{PluginManager.cpp}']]],
+  ['parsexmlconfig_5',['ParseXmlConfig',['../d2/d5e/classconfig_1_1Config.html#ab65348eae165bf007104f84568484df3',1,'config::Config']]],
+  ['performsearch_6',['PerformSearch',['../d5/dc9/classui_1_1MainWindowPresenter.html#a644a24987d04832fe7398a41e1240649',1,'ui::MainWindowPresenter']]],
+  ['platformid_7',['PlatformId',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#a81d33366b2048071ca4adc6a39f946cf',1,'ui::qt::UpdateChecker']]],
+  ['plugindownloadcomplete_8',['PluginDownloadComplete',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#a65ef132ac04e06164ecb4fd091b58924',1,'ui::qt::UpdateChecker']]],
+  ['plugindownloadfailed_9',['PluginDownloadFailed',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#ae38584c5c9f7130e0a3addccaca4b1de',1,'ui::qt::UpdateChecker']]],
+  ['plugindownloadprogress_10',['PluginDownloadProgress',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#a4ccb6495e8a4ca4d2108266246062750',1,'ui::qt::UpdateChecker']]],
+  ['plugineventbus_11',['plugineventbus',['../da/d30/classplugin_1_1PluginEventBus.html#a1a521d84e5d558f045144a15d071e599',1,'plugin::PluginEventBus::PluginEventBus(const PluginEventBus &amp;)=delete'],['../da/d30/classplugin_1_1PluginEventBus.html#ad17c5a6793aadcda41a1cf340f7436ba',1,'plugin::PluginEventBus::PluginEventBus()=default']]],
+  ['pluginevents_5fgeteventjsonbridge_12',['PluginEvents_GetEventJsonBridge',['../d6/d40/namespaceui_1_1qt.html#a4f0b63cfd892ef57974198d29d2f175a',1,'ui::qt']]],
+  ['pluginevents_5fgetsizebridge_13',['PluginEvents_GetSizeBridge',['../d6/d40/namespaceui_1_1qt.html#a9b1095ad1ffe19865758ab336bb5c1e8',1,'ui::qt']]],
+  ['pluginhostui_5fsetcurrentitembridge_14',['PluginHostUi_SetCurrentItemBridge',['../d6/d40/namespaceui_1_1qt.html#a8a4882a0ad2e3814a64d3feb8658527a',1,'ui::qt']]],
+  ['pluginmanager_15',['pluginmanager',['../d3/d67/classplugin_1_1PluginManager.html#a87f718e35b4d317efabe38cdd874a92e',1,'plugin::PluginManager::PluginManager()=default'],['../d3/d67/classplugin_1_1PluginManager.html#a489b90a8d9b6b739400af848a71d7608',1,'plugin::PluginManager::PluginManager(const PluginManager &amp;)=delete']]],
+  ['populateactortable_16',['PopulateActorTable',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a186e229c0897f261a3d61c55a55d93a7',1,'ui::qt::ActorsPanel']]],
+  ['populatecolumncombo_17',['PopulateColumnCombo',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a126d9d7c625653a78b1257b56b3d0a44',1,'ui::qt::StatsSummaryPanel']]],
+  ['populatecolumns_18',['PopulateColumns',['../dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#ad32895656cc009f234267a979d7a648f',1,'ui::qt::FilterEditorDialog']]],
+  ['populatefieldcombo_19',['PopulateFieldCombo',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#ac85122ddca902e9c20d5f68a793a494d',1,'ui::qt::ActorsPanel']]],
+  ['probeoptionalpluginexports_20',['ProbeOptionalPluginExports',['../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1',1,'plugin']]],
+  ['processpendingevents_21',['processpendingevents',['../d3/d1f/classui_1_1IMainWindowView.html#a7acbd0e2fb6d5fbb03b39814f461ee6d',1,'ui::IMainWindowView::ProcessPendingEvents()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad887d0d6f83400ad418829ec770a0e4a',1,'ui::qt::MainWindow::ProcessPendingEvents()']]],
+  ['progressupdated_22',['progressupdated',['../d5/d44/classmvc_1_1MainController.html#a39271f275c01f6be7440db6ba4c3d6a0',1,'mvc::MainController::ProgressUpdated()'],['../df/d79/classparser_1_1IDataParserObserver.html#adf85054486791ae77f6aa94f9a5308c7',1,'parser::IDataParserObserver::ProgressUpdated()'],['../d5/dc9/classui_1_1MainWindowPresenter.html#add4fdfe724cece484e8c3928f97c25ca',1,'ui::MainWindowPresenter::ProgressUpdated()']]],
+  ['publishevent_23',['PublishEvent',['../da/d30/classplugin_1_1PluginEventBus.html#a76dec9cd6ec75b5644e1ade5983d0020',1,'plugin::PluginEventBus']]]
+];

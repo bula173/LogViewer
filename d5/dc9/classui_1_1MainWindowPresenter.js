@@ -1,0 +1,25 @@
+var classui_1_1MainWindowPresenter =
+[
+    [ "MainWindowPresenter", "d5/dc9/classui_1_1MainWindowPresenter.html#a8684e0398f917955ab36baf083abad55", null ],
+    [ "ApplySelectedTypeFilters", "d5/dc9/classui_1_1MainWindowPresenter.html#a33d622391250170f0d45bde63a77a6de", null ],
+    [ "ClampToInt", "d5/dc9/classui_1_1MainWindowPresenter.html#a2e9738f61f8d9d62dd0eceba96494979", null ],
+    [ "clearAllData", "d5/dc9/classui_1_1MainWindowPresenter.html#aacbfc22de178260f192034b401500511", null ],
+    [ "IsParsing", "d5/dc9/classui_1_1MainWindowPresenter.html#a947e18ac352cb60cea01e9fbfeed98e6", null ],
+    [ "LoadLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#aef19a1d1a61f61089b2117a66b8c378d", null ],
+    [ "MergeLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68", null ],
+    [ "NewEventBatchFound", "d5/dc9/classui_1_1MainWindowPresenter.html#a03f399ae7a5c5a63833caf1e31e5c69c", null ],
+    [ "NewEventFound", "d5/dc9/classui_1_1MainWindowPresenter.html#a5e1ecebcaddb328e51b02118191e2ab6", null ],
+    [ "PerformSearch", "d5/dc9/classui_1_1MainWindowPresenter.html#a644a24987d04832fe7398a41e1240649", null ],
+    [ "ProgressUpdated", "d5/dc9/classui_1_1MainWindowPresenter.html#add4fdfe724cece484e8c3928f97c25ca", null ],
+    [ "SetItemDetailsVisible", "d5/dc9/classui_1_1MainWindowPresenter.html#a756c0a2b4394ff6fb63711e95edf902c", null ],
+    [ "UpdateTypeFilters", "d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6", null ],
+    [ "m_controller", "d5/dc9/classui_1_1MainWindowPresenter.html#afe36c376faa78876afac65bf5933849b", null ],
+    [ "m_events", "d5/dc9/classui_1_1MainWindowPresenter.html#a0458c5b5e22d54846975d97675bc877c", null ],
+    [ "m_eventsListView", "d5/dc9/classui_1_1MainWindowPresenter.html#a1d18799442090edcb702267e8196b95c", null ],
+    [ "m_isParsing", "d5/dc9/classui_1_1MainWindowPresenter.html#a59b120f58efb1122edae3a6f5d5f9ab8", null ],
+    [ "m_itemDetailsView", "d5/dc9/classui_1_1MainWindowPresenter.html#abb0677272a7d56e3164f016522541ff0", null ],
+    [ "m_progressConfigured", "d5/dc9/classui_1_1MainWindowPresenter.html#ad736ff7c238a92fad4fecb5474c386fe", null ],
+    [ "m_searchResultsView", "d5/dc9/classui_1_1MainWindowPresenter.html#adbe71ce1b854b23dd4f1bd05880790c4", null ],
+    [ "m_typeFilterView", "d5/dc9/classui_1_1MainWindowPresenter.html#abd1512da92e4306ade5d6ae27cdba2a2", null ],
+    [ "m_view", "d5/dc9/classui_1_1MainWindowPresenter.html#a1a2af749766e06abd6bd6e476fbb073f", null ]
+];

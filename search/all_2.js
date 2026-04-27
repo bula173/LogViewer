@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['2_200_0',['Phase 3: Enhanced Events &amp; Extensibility (v1.2.0)',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md185',1,'']]],
+  ['2_201_20supported_20operating_20systems_1',['2.1 Supported Operating Systems',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md576',1,'']]],
+  ['2_201_3a_20raw_20pointer_20observer_20pattern_2',['Issue 2.1: Raw Pointer Observer Pattern',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md173',1,'']]],
+  ['2_202_20hardware_3',['2.2 Hardware',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md577',1,'']]],
+  ['2_202_3a_20no_20observer_20lifecycle_20events_4',['Issue 2.2: No Observer Lifecycle Events',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md174',1,'']]],
+  ['2_203_20runtime_20dependencies_5',['2.3 Runtime Dependencies',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md578',1,'']]],
+  ['2_20analysis_20panel_20main_20content_6',['2. Analysis Panel (Main Content)',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md56',1,'']]],
+  ['2_20build_20the_20example_20plugin_7',['2. Build the Example Plugin',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md618',1,'']]],
+  ['2_20business_20logic_20layer_8',['2. Business Logic Layer',['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md131',1,'']]],
+  ['2_20configure_20in_20app_9',['2. Configure in App',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md295',1,'']]],
+  ['2_20create_20plugin_20project_10',['2. Create Plugin Project',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md657',1,'']]],
+  ['2_20event_20display_11',['3.1.2 Event Display',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md583',1,'']]],
+  ['2_20export_20c_20abi_20functions_12',['2. Export C-ABI Functions',['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md546',1,'']]],
+  ['2_20implement_20chat_20method_20with_20curl_13',['2. Implement Chat Method with CURL',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md401',1,'']]],
+  ['2_20performance_20requirements_14',['3.2 Performance Requirements',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md588',1,'']]],
+  ['2_20start_20ollama_20service_15',['2. Start Ollama Service',['../d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html#autotoc_md36',1,'']]],
+  ['2_20strong_20original_20id_20preservation_20strong_16',['2. &lt;strong&gt;Original ID Preservation&lt;/strong&gt;',['../d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md458',1,'']]],
+  ['2_20system_20requirements_20sys_17',['2. System Requirements (SYS)',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md575',1,'']]],
+  ['20_20features_20not_20recognized_18',['C++20 Features Not Recognized',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md230',1,'']]],
+  ['2_3a_20duplicate_20panel_20creation_20functions_19',['Issue 1.2: Duplicate Panel Creation Functions',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md169',1,'']]],
+  ['2_3a_20implement_20basicplugin_20cpp_20',['Step 2: Implement BasicPlugin.cpp',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md628',1,'']]],
+  ['2_3a_20mvc_20observer_20pattern_20issues_21',['Part 2: MVC Observer Pattern Issues',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md172',1,'']]],
+  ['2_3a_20no_20observer_20lifecycle_20events_22',['Issue 2.2: No Observer Lifecycle Events',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md174',1,'']]],
+  ['2_3a_20plugin_20system_20v1_201_200_23',['Phase 2: Plugin System (v1.1.0)',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md184',1,'']]]
+];

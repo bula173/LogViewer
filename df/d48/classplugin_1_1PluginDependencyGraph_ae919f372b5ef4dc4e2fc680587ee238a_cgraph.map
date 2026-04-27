@@ -1,0 +1,36 @@
+<map id="plugin::PluginDependencyGraph::GetInitializationOrder" name="plugin::PluginDependencyGraph::GetInitializationOrder">
+<area shape="rect" id="Node000001" title="Gets plugins in valid initialization order." alt="" coords="5,207,215,247"/>
+<area shape="rect" id="Node000002" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="524,269,669,295"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,245,263,257,393,270,510,277,510,282,392,275,262,262,195,250"/>
+<area shape="rect" id="Node000005" href="$df/d48/classplugin_1_1PluginDependencyGraph.html#a04de4f4dd8dec5fe61822653853a5225" title="Topological sort using DFS." alt="" coords="263,207,453,247"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="215,225,249,225,249,230,215,230"/>
+<area shape="rect" id="Node000006" href="$df/d48/classplugin_1_1PluginDependencyGraph.html#a0acbf002bd6506247961b1b7d23ec893" title="Validates that no circular dependencies exist." alt="" coords="263,119,453,159"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="164,205,262,169,283,161,285,166,264,174,165,210"/>
+<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="924,212,1105,237"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="669,272,876,247,936,237,937,242,876,253,670,278"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1153,212,1312,237"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1105,222,1140,222,1140,227,1105,227"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="314,208,311,198,318,188,334,183,358,181,386,184,401,191,398,196,384,189,358,186,335,188,321,193,316,199,319,206"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="437,157,455,169,472,191,480,214,486,235,503,255,513,261,510,266,500,259,482,237,474,215,468,194,452,173,434,162"/>
+<area shape="rect" id="Node000007" href="$dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title="Constructs an error result." alt="" coords="537,29,656,55"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="399,117,500,72,541,57,543,62,502,76,402,121"/>
+<area shape="rect" id="Node000010" href="$dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title="Constructs a successful result." alt="" coords="955,55,1074,80"/>
+<area shape="poly" id="edge21_Node000006_Node000010" title=" " alt="" coords="453,126,941,73,942,78,454,132"/>
+<area shape="rect" id="Node000011" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="741,147,875,172"/>
+<area shape="poly" id="edge15_Node000006_Node000011" title=" " alt="" coords="454,141,727,153,727,158,454,146"/>
+<area shape="rect" id="Node000012" href="$df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3" title="Checks for cycle using depth&#45;first search." alt="" coords="501,205,692,245"/>
+<area shape="poly" id="edge17_Node000006_Node000012" title=" " alt="" coords="420,157,454,169,531,197,529,202,452,174,418,162"/>
+<area shape="rect" id="Node000008" href="$dd/d2d/classutil_1_1Result.html#a66e41af0d2126616617a9dcd1b5bfaf8" title="Maps the success value to a new type." alt="" coords="743,29,873,55"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="656,47,729,48,729,53,656,53"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="743,36,669,36,669,31,743,31"/>
+<area shape="poly" id="edge12_Node000008_Node000008" title=" " alt="" coords="774,31,767,21,771,11,785,5,808,3,837,6,848,15,845,20,834,11,808,8,786,10,775,15,772,20,778,28"/>
+<area shape="rect" id="Node000009" href="$dd/d2d/classutil_1_1Result.html#a8d455d2fdaef142f06b40231094eb086" title="Checks if the result contains a success value." alt="" coords="950,5,1079,31"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="872,32,936,24,937,30,873,37"/>
+<area shape="poly" id="edge13_Node000008_Node000010" title=" " alt="" coords="852,52,942,64,941,70,851,57"/>
+<area shape="poly" id="edge14_Node000010_Node000008" title=" " alt="" coords="971,57,886,45,887,40,972,52"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="850,170,962,205,960,210,848,175"/>
+<area shape="poly" id="edge18_Node000012_Node000012" title=" " alt="" coords="557,205,555,195,561,186,575,180,597,178,621,181,635,188,632,193,620,186,597,183,576,185,564,190,560,196,562,204"/>
+<area shape="rect" id="Node000013" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="740,212,876,237"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="693,222,726,222,726,227,693,227"/>
+<area shape="poly" id="edge20_Node000013_Node000003" title=" " alt="" coords="876,222,910,222,910,227,876,227"/>
+</map>
