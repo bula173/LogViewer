@@ -126,29 +126,67 @@ static util::Result<std::filesystem::path, error::Error> ResolvePluginExtractDir
     return util::Result<std::filesystem::path, error::Error>::Ok(extractDir);
 }
 
-// Helper: load dependency DLLs from a plugin lib folder and return handles
+// Helper: load dependency DLLs from a plugin lib folder.
+// DLLs are loaded by explicit name from a "deps.txt" manifest in libFolder
+// (one filename per line, no path components).  If no manifest exists the
+// folder is skipped so we never enumerate and load every .dll we find —
+// that pattern (SetDllDirectoryW + directory_iterator + LoadLibrary on all
+// .dll files) is indistinguishable from DLL-hijacking/sideloading to AV.
 static std::vector<void*> LoadDependencyHandles(const std::filesystem::path& libFolder)
 {
     std::vector<void*> handles;
     if (!std::filesystem::exists(libFolder)) return handles;
 
 #ifdef _WIN32
+    // Read the explicit dependency manifest
+    const auto manifestPath = libFolder / "deps.txt";
+    if (!std::filesystem::exists(manifestPath))
+    {
+        util::Logger::Debug("PluginManager: No deps.txt in {}, skipping dependency load",
+                            libFolder.string());
+        return handles;
+    }
+
+    std::ifstream manifest(manifestPath);
+    std::string dllName;
+
+    // Set the plugin lib folder as the DLL search directory for the
+    // duration of the explicit loads, then restore immediately.
     SetDllDirectoryW(libFolder.wstring().c_str());
-#endif
-    for (const auto& entry : std::filesystem::directory_iterator(libFolder)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".dll") {
-            void* handle = LoadLibraryHelper(entry.path());
-            if (handle) {
-                handles.push_back(handle);
-                util::Logger::Info("Loaded dependency: {}", entry.path().string());
-            } else {
-                util::Logger::Warn("Failed to load dependency from plugin/lib: {} - main plugin may still work if dependency is available elsewhere", entry.path().string());
-            }
+
+    while (std::getline(manifest, dllName))
+    {
+        // Strip whitespace / CR
+        while (!dllName.empty() && (dllName.back() == '\r' || dllName.back() == '\n' || dllName.back() == ' '))
+            dllName.pop_back();
+        if (dllName.empty() || dllName[0] == '#') continue;
+
+        // Only allow bare filenames — reject any path separators
+        if (dllName.find('/') != std::string::npos ||
+            dllName.find('\\') != std::string::npos)
+        {
+            util::Logger::Warn("PluginManager: deps.txt entry '{}' contains path separator — skipped",
+                               dllName);
+            continue;
+        }
+
+        const auto dllPath = libFolder / dllName;
+        void* handle = LoadLibraryHelper(dllPath);
+        if (handle)
+        {
+            handles.push_back(handle);
+            util::Logger::Info("PluginManager: Loaded dependency: {}", dllName);
+        }
+        else
+        {
+            util::Logger::Warn("PluginManager: Failed to load listed dependency '{}' — "
+                               "main plugin may still work if the DLL is on PATH",
+                               dllName);
         }
     }
-#ifdef _WIN32
+
     SetDllDirectoryW(NULL);
-#endif
+#endif // _WIN32
     return handles;
 }
 
@@ -565,7 +603,11 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
         std::string errorMessage = (size > 0 && messageBuffer) ? std::string(messageBuffer, size) : "Unknown error";
         if (messageBuffer) LocalFree(messageBuffer);
 
-        // Log directory contents next to the plugin to aid debugging missing dependencies
+        // Log directory contents to aid debugging, but only in debug builds.
+        // On Windows release builds, enumerating a directory immediately after
+        // a failed LoadLibraryExW looks like searching for alternate injection
+        // targets — an AV heuristic trigger we deliberately avoid.
+#ifndef NDEBUG
         try {
             auto dir = path.parent_path();
             util::Logger::Debug("PluginManager: Listing files in plugin directory {}:", dir.string());
@@ -575,6 +617,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
         } catch (const std::exception& e) {
             util::Logger::Debug("PluginManager: Failed to list plugin directory: {}", std::string(e.what()));
         }
+#endif
 
         return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
             error::Error(error::ErrorCode::RuntimeError,

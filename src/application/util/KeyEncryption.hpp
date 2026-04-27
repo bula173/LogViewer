@@ -37,10 +37,7 @@ public:
     static bool IsEncrypted(const std::string& value);
 
 private:
-    static std::string GetDeviceKey();
-    static std::string XorCipher(const std::string& input, const std::string& key);
-    static std::string Base64Encode(const std::string& input);
-    static std::string Base64Decode(const std::string& input);
+    // Implementation helpers are internal to KeyEncryption.cpp
 };
 
 } // namespace util

@@ -117,37 +117,19 @@ std::string OpenAIClient::SendPrompt(const std::string& prompt,
 
 bool OpenAIClient::IsAvailable() const
 {
+    // Return true iff an API key is configured — do NOT make a live network
+    // probe here.  A blocking curl_easy_perform() call from this method (which
+    // can be invoked on the UI thread or from a background thread) creates the
+    // pattern:  background thread + outbound TCP connection that looks like a
+    // C2 beacon to Windows Defender's heuristic engine.  The actual API
+    // availability is validated implicitly when the first real prompt is sent.
     if (m_apiKey.empty())
     {
         PLUGIN_LOG(PLUGIN_LOG_WARN, "OpenAI API key is not configured");
         return false;
     }
-    
-    try
-    {
-        // Try a minimal request to test the connection and API key
-        const nlohmann::json request = {
-            {"model", m_model},
-            {"messages", nlohmann::json::array({
-                {{"role", "user"}, {"content", "test"}}
-            })},
-            {"max_tokens", 1}
-        };
-        
-        const std::string authHeader = "Authorization: Bearer " + m_apiKey;
-        const std::string response = SendHttpPost("/chat/completions", 
-                                                  request.dump(), 
-                                                  authHeader);
-        
-        // If we get any response without exception, the API is available
-        PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI API health check successful");
-        return !response.empty();
-    }
-    catch (const std::exception& e)
-    {
-        PLUGIN_LOG(PLUGIN_LOG_WARN, "OpenAI API health check failed: {}", e.what());
-        return false;
-    }
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI API key is configured (len={})", m_apiKey.size());
+    return true;
 }
 
 void OpenAIClient::SetModelName(const std::string& model)

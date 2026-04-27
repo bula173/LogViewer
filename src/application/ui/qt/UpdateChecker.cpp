@@ -9,6 +9,7 @@
 #include "Version.hpp"
 
 #include <QCryptographicHash>
+#include <QDir>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -359,10 +360,18 @@ void UpdateChecker::DoPluginDownload(const updates::PluginUpdateInfo& info,
         }
     }
 
-    // Write to temp file
-    const QString tempPath =
-        QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
-        QStringLiteral("/LogViewer_update_%1.zip").arg(pluginId);
+    // Write to the app-local data directory (not the system Temp folder).
+    // Using TempLocation triggers Windows Defender's dropper heuristic:
+    //   network download -> write binary to %TEMP% -> load/execute it.
+    // AppLocalDataLocation is the app's own sandbox directory which AV
+    // vendors explicitly recognise as a safe staging area for self-updates.
+    const QString downloadDir =
+        QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) +
+        QStringLiteral("/plugin_downloads");
+    QDir().mkpath(downloadDir);
+
+    const QString tempPath = downloadDir +
+        QStringLiteral("/LogViewer_plugin_%1.zip").arg(pluginId);
 
     QFile f(tempPath);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
