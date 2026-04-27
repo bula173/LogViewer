@@ -12,8 +12,9 @@ var searchData=
   ['kpatterncolumn_9',['kPatternColumn',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#ae2b5640c7782b4cfefb7944256db1981',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
   ['kprogressyieldinterval_10',['kProgressYieldInterval',['../d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03.html#ac3ed6e071f5f0fe2f82bb9366eccd306',1,'ui::anonymous_namespace{MainWindowPresenter.cpp}']]],
   ['kqtappname_11',['kQtAppName',['../d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#a2ffd91e89808a06ae22db64e0737d21c',1,'anonymous_namespace{MyAppQt.cpp}']]],
-  ['ksupportedapimajor_12',['kSupportedApiMajor',['../d3/d7e/namespaceplugin.html#a9aa698e59c3fd8b3d4306c69236009ca',1,'plugin']]],
-  ['ksupportedapimaxminor_13',['kSupportedApiMaxMinor',['../d3/d7e/namespaceplugin.html#a782eaf515f3baf4013807ffef5b40d3d',1,'plugin']]],
-  ['ksupportedapiminminor_14',['kSupportedApiMinMinor',['../d3/d7e/namespaceplugin.html#abf303654e9e7a4fd5339007149f4f109',1,'plugin']]],
-  ['ktargetcolumn_15',['kTargetColumn',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]]
+  ['kstatickey_12',['kStaticKey',['../d6/d72/namespaceutil.html#aae76787d929b7b1a4fe9e733c2bd6007',1,'util']]],
+  ['ksupportedapimajor_13',['kSupportedApiMajor',['../d3/d7e/namespaceplugin.html#a9aa698e59c3fd8b3d4306c69236009ca',1,'plugin']]],
+  ['ksupportedapimaxminor_14',['kSupportedApiMaxMinor',['../d3/d7e/namespaceplugin.html#a782eaf515f3baf4013807ffef5b40d3d',1,'plugin']]],
+  ['ksupportedapiminminor_15',['kSupportedApiMinMinor',['../d3/d7e/namespaceplugin.html#abf303654e9e7a4fd5339007149f4f109',1,'plugin']]],
+  ['ktargetcolumn_16',['kTargetColumn',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]]
 ];

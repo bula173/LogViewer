@@ -42,7 +42,7 @@ var searchData=
   ['createplugintab_39',['createPluginTab',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a939d506f99c58b4780203024c991f3f2',1,'ui::qt::MainWindow']]],
   ['createstrategy_40',['createStrategy',['../d8/d6b/namespacefilters.html#a608458e323943224ef04efa1781a17ca',1,'filters']]],
   ['createtab_41',['CreateTab',['../d4/d51/classplugin_1_1IPlugin.html#a653df883dd9963b6233d174ee4be2627',1,'plugin::IPlugin']]],
-  ['critical_42',['critical',['../d3/dc4/classutil_1_1ILogger.html#a80b0b25ea3f252f78ac64b308ff19ffd',1,'util::ILogger::critical()'],['../dd/d6b/classutil_1_1SpdLogger.html#ac87b1d90282df17cc73e2bef148df839',1,'util::SpdLogger::critical()'],['../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65',1,'util::Logger::Critical()']]],
+  ['critical_42',['critical',['../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65',1,'util::Logger::Critical()'],['../d3/dc4/classutil_1_1ILogger.html#a80b0b25ea3f252f78ac64b308ff19ffd',1,'util::ILogger::critical()'],['../dd/d6b/classutil_1_1SpdLogger.html#ac87b1d90282df17cc73e2bef148df839',1,'util::SpdLogger::critical()']]],
   ['csvparser_43',['CsvParser',['../d9/dd2/classparser_1_1CsvParser.html#a434889da3e025b66398baca58c83bd2f',1,'parser::CsvParser']]],
   ['current_44',['current',['../d8/d16/namespaceVersion.html#a2a52fceba26d3d00378c737bb1ec62e2',1,'Version']]],
   ['currentactualrow_45',['CurrentActualRow',['../d6/d26/classui_1_1qt_1_1EventsTableView.html#ae1652647aaf93d338c1fcb1a85a6315c',1,'ui::qt::EventsTableView']]],

@@ -22,5 +22,8 @@ var namespaceutil =
     ] ],
     [ "Err", "d6/d72/namespaceutil.html#a721283df15ed8bc045349e77c0105ca2", null ],
     [ "Ok", "d6/d72/namespaceutil.html#ae8d6b0e720e0df213bab5886d6d25585", null ],
-    [ "ENCRYPTED_PREFIX", "d6/d72/namespaceutil.html#a73a122113c600604a80846a7faef3f1c", null ]
+    [ "XorHexDecode", "d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa", null ],
+    [ "XorHexEncode", "d6/d72/namespaceutil.html#ac1be93e401211382b4627e33dd7dbfe2", null ],
+    [ "ENCRYPTED_PREFIX", "d6/d72/namespaceutil.html#a73a122113c600604a80846a7faef3f1c", null ],
+    [ "kStaticKey", "d6/d72/namespaceutil.html#aae76787d929b7b1a4fe9e733c2bd6007", null ]
 ];

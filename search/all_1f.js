@@ -9,5 +9,6 @@ var searchData=
   ['xmlparser_2ecpp_6',['xmlParser.cpp',['../d9/d88/xmlParser_8cpp.html',1,'']]],
   ['xmlparser_2ehpp_7',['xmlParser.hpp',['../da/d8a/xmlParser_8hpp.html',1,'']]],
   ['xmlrootelement_8',['xmlRootElement',['../d2/d5e/classconfig_1_1Config.html#ab59b95820df7b0fa4cc38cf64dd90cc5',1,'config::Config']]],
-  ['xorcipher_9',['XorCipher',['../dc/d46/classutil_1_1KeyEncryption.html#a8e3f97430c2ede91d3ce4f931d1258d9',1,'util::KeyEncryption']]]
+  ['xorhexdecode_9',['XorHexDecode',['../d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa',1,'util']]],
+  ['xorhexencode_10',['XorHexEncode',['../d6/d72/namespaceutil.html#ac1be93e401211382b4627e33dd7dbfe2',1,'util']]]
 ];

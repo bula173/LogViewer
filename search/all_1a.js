@@ -68,7 +68,7 @@ var searchData=
   ['setid_65',['SetId',['../d1/d00/classdb_1_1LogEvent.html#a275a27ee1ca3db20941aea3ea266c44f',1,'db::LogEvent']]],
   ['setinstance_66',['SetInstance',['../d2/d44/classutil_1_1Logger.html#aa868425fa61431216f070dc984e23bc5',1,'util::Logger']]],
   ['setitemdetailsvisible_67',['SetItemDetailsVisible',['../d5/dc9/classui_1_1MainWindowPresenter.html#a756c0a2b4394ff6fb63711e95edf902c',1,'ui::MainWindowPresenter']]],
-  ['setlevel_68',['setlevel',['../d2/d44/classutil_1_1Logger.html#a968bd841094970766ca8ed048454757c',1,'util::Logger::SetLevel()'],['../d3/dc4/classutil_1_1ILogger.html#a901ddec794355bebc97d2b467dc4999a',1,'util::ILogger::setLevel()'],['../dd/d6b/classutil_1_1SpdLogger.html#a8d3813bf2d1b5b01d378cc39a3800766',1,'util::SpdLogger::setLevel()']]],
+  ['setlevel_68',['setlevel',['../dd/d6b/classutil_1_1SpdLogger.html#a8d3813bf2d1b5b01d378cc39a3800766',1,'util::SpdLogger::setLevel()'],['../d2/d44/classutil_1_1Logger.html#a968bd841094970766ca8ed048454757c',1,'util::Logger::SetLevel()'],['../d3/dc4/classutil_1_1ILogger.html#a901ddec794355bebc97d2b467dc4999a',1,'util::ILogger::setLevel()']]],
   ['setlicense_69',['SetLicense',['../d4/d51/classplugin_1_1IPlugin.html#af32e73f6f52e0f095517989675e3b69a',1,'plugin::IPlugin']]],
   ['setmatchinfo_70',['SetMatchInfo',['../dd/d79/classui_1_1qt_1_1SearchBar.html#a14228aea66bf0d2039291ec4168cf1b1',1,'ui::qt::SearchBar']]],
   ['setobserver_71',['setobserver',['../dc/d38/classui_1_1ISearchResultsView.html#aa76eb4e01a74ba0e1ae22d2d59bba811',1,'ui::ISearchResultsView::SetObserver()'],['../d9/dfd/classui_1_1qt_1_1SearchResultsView.html#a33331e9d907398b8fdea813e4c498ed5',1,'ui::qt::SearchResultsView::SetObserver()']]],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ok_0',['ok',['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok()'],['../d6/d72/namespaceutil.html#ae8d6b0e720e0df213bab5886d6d25585',1,'util::Ok()'],['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok()']]],
+  ['ok_0',['ok',['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok()'],['../d6/d72/namespaceutil.html#ae8d6b0e720e0df213bab5886d6d25585',1,'util::Ok()'],['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok()']]],
   ['onaboutrequested_1',['OnAboutRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a4795b9da13a0d7ea2fc2e99b4752fd6b',1,'ui::qt::MainWindow']]],
   ['onactualrowchanged_2',['OnActualRowChanged',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429',1,'ui::qt::ItemDetailsView']]],
   ['onaddcolormapping_3',['OnAddColorMapping',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#aeb1baafe292d7bfe2b5ae2ade2fce98e',1,'ui::qt::StructuredConfigDialog']]],
