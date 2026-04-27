@@ -1,6 +1,55 @@
 # Code Signing Setup
 
-This directory contains scripts and configuration for code signing Windows executables.
+This directory contains scripts and configuration for code signing on Windows and macOS,
+including automated signing via GitHub Actions.
+
+## GitHub Actions — Automated Signing (Recommended)
+
+The `release.yml` workflow signs binaries automatically when the relevant repository
+secrets are configured. Signing steps are skipped gracefully when secrets are absent,
+so unsigned release builds still work without any secret configuration.
+
+### Required GitHub Secrets
+
+Navigate to **Settings → Secrets and variables → Actions** in the repository, then add:
+
+#### macOS signing
+
+| Secret | Description |
+|---|---|
+| `MACOS_CERTIFICATE` | Base64-encoded Developer ID Application `.p12` certificate |
+| `MACOS_CERTIFICATE_PWD` | Password for the `.p12` file |
+| `MACOS_CERTIFICATE_NAME` | Full certificate CN, e.g. `Developer ID Application: Name (TEAMID)` |
+| `MACOS_KEYCHAIN_PWD` | Any strong random password used for the temporary CI keychain |
+| `APPLE_ID` | Apple ID email used for notarization |
+| `APPLE_TEAM_ID` | 10-character Apple Team ID |
+| `APPLE_APP_SPECIFIC_PASSWORD` | App-specific password generated at appleid.apple.com |
+
+**Export your certificate:**
+```bash
+# On your Mac, export from Keychain Access as .p12, then encode:
+base64 -i DeveloperID.p12 | pbcopy   # copies base64 to clipboard
+```
+
+**Notarization** is only attempted when `APPLE_ID` is set and requires a valid
+Developer ID Application certificate (not just a self-signed one).
+
+#### Windows signing
+
+| Secret | Description |
+|---|---|
+| `WINDOWS_CERTIFICATE` | Base64-encoded code-signing `.pfx` certificate |
+| `WINDOWS_CERTIFICATE_PWD` | Password for the `.pfx` file |
+
+**Encode your certificate:**
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("cert.pfx")) | Set-Clipboard
+```
+
+Both the `LogViewer.exe` executable and the NSIS installer are signed when these
+secrets are present. SHA-256 digest + RFC 3161 timestamping via DigiCert is used.
+
+---
 
 ## ⚠️ Important Security Notice
 
