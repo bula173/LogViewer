@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: release-${{ github.ref }}
-  cancel-in-progress: false  # Never cancel a release in progress
+  cancel-in-progress: true  # Cancel stale runs when tag is force-pushed; only latest run publishes
 
 permissions:
   contents: write   # Required to create GitHub Release and upload assets
@@ -512,6 +512,7 @@ jobs:
           body_path: changelog.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
+          overwrite: true
           files: |
             release-assets/**/LogViewer-*.tar.gz
             release-assets/**/LogViewer-*.deb
