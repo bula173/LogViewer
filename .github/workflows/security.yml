@@ -150,3 +150,162 @@ jobs:
           fi
           # Informational only — don't fail the build
           exit 0
+
+  # ─── Windows AV / Defender Analysis ────────────────────────────────────────
+  # Builds the Windows installer and scans it with Windows Defender + VirusTotal
+  # to identify what triggers false-positive detections.
+  windows-av-scan:
+    name: Windows AV Scan
+    runs-on: windows-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+    env:
+      HAS_VT_KEY: ${{ secrets.VT_API_KEY != '' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          cache: true
+          install: >-
+            base-devel git zip
+            mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+            mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-ccache mingw-w64-x86_64-qt6-base
+            mingw-w64-x86_64-qt6-charts mingw-w64-x86_64-qt6-tools
+            mingw-w64-x86_64-libarchive mingw-w64-x86_64-libssh
+            mingw-w64-x86_64-curl mingw-w64-x86_64-nsis
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          cmake -B build -S . \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
+            -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
+            -DCMAKE_PREFIX_PATH=/mingw64 \
+            -DGUI_FRAMEWORK=QT \
+            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
+          cmake --build build --parallel
+
+      - name: Package NSIS installer
+        shell: msys2 {0}
+        working-directory: build
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          cmake --install . --config Release --prefix _staging
+          cpack -G NSIS -C Release --config CPackConfig.cmake
+          mkdir -p ../dist
+          find . -maxdepth 1 -name "LogViewer-*-win64.exe" -exec cp {} ../dist/ \;
+          find . -maxdepth 1 -name "LogViewer.exe"         -exec cp {} ../dist/ \;
+
+      - name: Show binary metadata
+        shell: pwsh
+        run: |
+          Write-Host "=== File info ==="
+          Get-ChildItem dist\ | Format-Table Name, Length, LastWriteTime
+          Write-Host ""
+          Write-Host "=== Authenticode signature ==="
+          Get-ChildItem dist\*.exe | ForEach-Object {
+            $sig = Get-AuthenticodeSignature $_.FullName
+            Write-Host "$($_.Name): Status=$($sig.Status)  Signer=$($sig.SignerCertificate.Subject)"
+          }
+
+      - name: Windows Defender — update signatures
+        shell: pwsh
+        run: |
+          Write-Host "Updating Defender signatures..."
+          # Update-MpSignature requires admin; use MpCmdRun instead
+          & "C:\Program Files\Windows Defender\MpCmdRun.exe" -SignatureUpdate 2>&1 | Write-Host
+          $status = Get-MpComputerStatus
+          Write-Host "AntivirusSignatureVersion: $($status.AntivirusSignatureVersion)"
+          Write-Host "AntivirusSignatureLastUpdated: $($status.AntivirusSignatureLastUpdated)"
+
+      - name: Windows Defender — scan exe
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem dist\*.exe
+          foreach ($f in $files) {
+            Write-Host "=== Scanning $($f.Name) ==="
+            # Run a targeted scan and capture the full output
+            $result = & "C:\Program Files\Windows Defender\MpCmdRun.exe" `
+              -Scan -ScanType 3 -File $f.FullName -DisableRemediation 2>&1
+            Write-Host $result
+            # Exit code 2 = threat found; surface as warning, not failure
+            if ($LASTEXITCODE -eq 2) {
+              Write-Warning "THREAT DETECTED in $($f.Name)"
+              # Extract threat name from Defender event log
+              $events = Get-WinEvent -LogName "Microsoft-Windows-Windows Defender/Operational" `
+                -MaxEvents 10 -ErrorAction SilentlyContinue |
+                Where-Object { $_.Id -in @(1006, 1116, 1117) }
+              foreach ($e in $events) {
+                Write-Host "Event $($e.Id): $($e.Message)"
+              }
+            } elseif ($LASTEXITCODE -eq 0) {
+              Write-Host "✅ Clean: $($f.Name)"
+            } else {
+              Write-Host "ℹ️  Exit code $LASTEXITCODE for $($f.Name)"
+            }
+          }
+
+      - name: VirusTotal scan (optional — requires VT_API_KEY secret)
+        if: env.HAS_VT_KEY == 'true'
+        shell: pwsh
+        env:
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        run: |
+          $files = Get-ChildItem dist\*.exe
+          foreach ($f in $files) {
+            Write-Host "=== Uploading $($f.Name) to VirusTotal ==="
+            $response = Invoke-RestMethod `
+              -Uri "https://www.virustotal.com/api/v3/files" `
+              -Method POST `
+              -Headers @{ "x-apikey" = $env:VT_API_KEY } `
+              -Form @{ file = Get-Item $f.FullName }
+            $analysisId = $response.data.id
+            Write-Host "Analysis ID: $analysisId"
+            # Poll until complete (max ~3 min)
+            $url = "https://www.virustotal.com/api/v3/analyses/$analysisId"
+            $attempts = 0
+            do {
+              Start-Sleep -Seconds 15
+              $analysis = Invoke-RestMethod -Uri $url `
+                -Headers @{ "x-apikey" = $env:VT_API_KEY }
+              $status = $analysis.data.attributes.status
+              $attempts++
+              Write-Host "Status: $status (attempt $attempts)"
+            } while ($status -ne "completed" -and $attempts -lt 12)
+
+            if ($status -eq "completed") {
+              $stats  = $analysis.data.attributes.stats
+              $malicious = $stats.malicious
+              $suspicious = $stats.suspicious
+              $total = ($stats.PSObject.Properties | Measure-Object -Property Value -Sum).Sum
+              Write-Host ""
+              Write-Host "=== VirusTotal Results for $($f.Name) ==="
+              Write-Host "Malicious : $malicious / $total"
+              Write-Host "Suspicious: $suspicious / $total"
+              Write-Host "Report    : https://www.virustotal.com/gui/file/$($analysis.data.links.item -replace '.*/files/','')"
+              # List engines that flagged it
+              $results = $analysis.data.attributes.results
+              $results.PSObject.Properties |
+                Where-Object { $_.Value.category -in @("malicious","suspicious") } |
+                ForEach-Object { Write-Host "  [$($_.Value.category)] $($_.Name): $($_.Value.result)" }
+            }
+          }
+
+      - name: Upload binaries as artifact (for manual analysis)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-av-scan-binaries
+          path: dist/*.exe
+          retention-days: 7
