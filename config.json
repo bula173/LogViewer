@@ -1,6 +1,6 @@
 {
             "default_parser": "xml",
-            "logging": {"level": "debug"},
+            "logging": {"level": "warn"},
             "parsers": {
                 "xml": {
                     "rootElement": "events",

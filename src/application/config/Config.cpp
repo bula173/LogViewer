@@ -310,9 +310,22 @@ void Config::LoadConfig()
 
 void Config::SetupLogPath()
 {
-    // Set the log path based on the application name
+    // On Windows, default to console-only logging (no log file).
+    //
+    // Rationale: the parser runs on a background thread (QtConcurrent::run).
+    // Parser code calls Logger::Debug/Info which, when a file sink is active,
+    // writes to a log file from that thread.  The resulting pattern —
+    //   background thread  +  reads user file  +  writes separate file
+    // — is precisely the behaviour Windows Defender's Wacatac.C!ml ML
+    // heuristic is trained to detect as ransomware.
+    //
+    // File logging on Windows can be enabled explicitly by the user via
+    // the config.json "logging" → "logFile" key.
+#ifndef _WIN32
     std::filesystem::path logPath = GetDefaultLogPath();
     m_logPath = logPath.string();
+#endif
+    // On Windows: m_logPath stays empty → Logger initialises without a file sink.
 }
 
 void Config::SaveConfig()
