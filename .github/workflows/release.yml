@@ -108,6 +108,8 @@ jobs:
     env:
       BUILD_DIR: ${{ github.workspace }}/build
       CCACHE_DIR: ${{ github.workspace }}/.ccache
+      HAS_MACOS_CERT: ${{ secrets.MACOS_CERTIFICATE != '' }}
+      HAS_APPLE_ID: ${{ secrets.APPLE_ID != '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -162,7 +164,7 @@ jobs:
             --gtest_output="xml:dist/test-results/results.xml"
 
       - name: Sign macOS app bundle
-        if: ${{ secrets.MACOS_CERTIFICATE != '' }}
+        if: env.HAS_MACOS_CERT == 'true'
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
@@ -187,7 +189,7 @@ jobs:
           echo "macOS app bundle signed successfully"
 
       - name: Notarize macOS app bundle
-        if: ${{ secrets.APPLE_ID != '' }}
+        if: env.HAS_APPLE_ID == 'true'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -238,6 +240,7 @@ jobs:
     env:
       BUILD_DIR: ${{ github.workspace }}\build
       CCACHE_DIR: ${{ github.workspace }}\.ccache
+      HAS_WIN_CERT: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -307,7 +310,7 @@ jobs:
           "$BUILD_DIR/tests/bin/LogViewer_tests.exe"
 
       - name: Sign Windows executable
-        if: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
+        if: env.HAS_WIN_CERT == 'true'
         shell: pwsh
         env:
           WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
@@ -339,7 +342,7 @@ jobs:
             -exec cp {} $GITHUB_WORKSPACE/dist/packages/ \;
 
       - name: Sign Windows installer
-        if: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
+        if: env.HAS_WIN_CERT == 'true'
         shell: pwsh
         env:
           WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
