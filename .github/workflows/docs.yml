@@ -1,0 +1,39 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:     [ "v*" ]
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write   # needed to push to gh-pages
+
+jobs:
+  doxygen:
+    name: Build & Deploy Doxygen
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Doxygen + Graphviz
+        run: sudo apt-get install -y --no-install-recommends doxygen graphviz
+
+      - name: Build Doxygen HTML
+        run: doxygen Doxyfile
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/html
+          # Keep previous builds — don't wipe history
+          keep_files: false
+          commit_message: "docs: update Doxygen for ${{ github.ref_name }}"
