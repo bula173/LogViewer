@@ -2,8 +2,20 @@ name: Documentation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "qt" ]
     tags:     [ "v*" ]
+    paths:
+      - 'docs/**'
+      - 'src/**/*.hpp'
+      - 'src/**/*.cpp'
+      - 'Doxyfile'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'src/**/*.hpp'
+      - 'src/**/*.cpp'
+      - 'Doxyfile'
   workflow_dispatch:
 
 concurrency:
@@ -32,11 +44,18 @@ jobs:
       - name: Build Doxygen HTML
         run: doxygen Doxyfile
 
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-html
+          path: docs/html/
+          retention-days: 14
+
       - name: Deploy to gh-pages
+        if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/html
-          # Keep previous builds — don't wipe history
           keep_files: false
           commit_message: "docs: update Doxygen for ${{ github.ref_name }}"
