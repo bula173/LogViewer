@@ -223,24 +223,33 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         m_view.SetSearchControlsEnabled(true);
         m_view.UpdateStatusText(previousStatus);
         UpdateTypeFilters();
-        if (m_eventsListView)
-            m_eventsListView->RefreshView();
         if (m_itemDetailsView)
             m_itemDetailsView->RefreshView();
         std::rethrow_exception(parseException);
     }
 
+    // Show events immediately — before the O(n) UpdateTypeFilters pass.
+    // ClearFilter() puts the model in unfiltered mode so rowCount() returns
+    // m_events.Size() directly without any index vector.
+    if (m_eventsListView)
+    {
+        m_eventsListView->ClearFilter();
+        m_eventsListView->RefreshView();
+    }
+    if (m_itemDetailsView)
+        m_itemDetailsView->RefreshView();
+
     m_view.UpdateStatusText("Data ready. Path: " + path.string());
     m_view.ToggleProgressVisibility(false);
     m_view.SetSearchControlsEnabled(true);
+    m_view.ProcessPendingEvents();
+
+    // Build the type-filter list and apply initial filter state.
+    // ApplySelectedTypeFilters will call ClearFilter() again when all types
+    // are checked (the common case), keeping the O(1) unfiltered path.
     UpdateTypeFilters();
-    if (m_eventsListView)
-        m_eventsListView->RefreshView();
-    if (m_itemDetailsView)
-        m_itemDetailsView->RefreshView();
     m_isParsing = false;
     m_progressConfigured = false;
-    m_view.ProcessPendingEvents();
 }
 
 void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
@@ -424,7 +433,16 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
             "Filtered events count: {}", filteredIndices.size());
     }
 
-    m_eventsListView->SetFilteredEvents(filteredIndices);
+    // If every event passes the filter, use the O(1) unfiltered path instead
+    // of storing and indexing an n-element identity vector.
+    if (filteredIndices.size() == m_events.Size())
+    {
+        m_eventsListView->ClearFilter();
+    }
+    else
+    {
+        m_eventsListView->SetFilteredEvents(filteredIndices);
+    }
     m_eventsListView->RefreshView();
 
     m_view.UpdateStatusText(previousStatus);

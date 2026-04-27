@@ -30,6 +30,7 @@ class EventsTableView : public QTableView,
     void RefreshView() override;
     void SetFilteredEvents(
         const std::vector<unsigned long>& filteredIndices) override;
+    void ClearFilter() override;
     void UpdateColors() override;
     const std::vector<unsigned long>* GetFilteredIndices() const;
 

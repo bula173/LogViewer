@@ -23,6 +23,8 @@ class IEventsListView
     /** @brief Applies filtered indices so only selected events are shown. */
     virtual void SetFilteredEvents(
         const std::vector<unsigned long>& filteredIndices) = 0;
+    /** @brief Clears any active filter; all events become visible via O(1) path. */
+    virtual void ClearFilter() = 0;
     /** @brief Updates row colors or other visual embellishments. */
     virtual void UpdateColors() = 0;
 };

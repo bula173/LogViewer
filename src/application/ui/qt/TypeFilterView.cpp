@@ -46,8 +46,8 @@ TypeFilterView::TypeFilterView(QWidget* parent)
                 InvertSelection();
         });
 
-    connect(m_listWidget, &QListWidget::itemChanged, this,
-        [this](QListWidgetItem*) { NotifyChanged(); });
+    // Intentionally no itemChanged connection: checkboxes are purely visual
+    // state. The Apply button is the only trigger for filter application.
 }
 
 void TypeFilterView::SetOnFilterChanged(std::function<void()> handler)
@@ -67,7 +67,6 @@ void TypeFilterView::ReplaceTypes(
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setCheckState(checkedByDefault ? Qt::Checked : Qt::Unchecked);
     }
-    NotifyChanged();
 }
 
 void TypeFilterView::ShowControl(bool show)
@@ -98,7 +97,6 @@ void TypeFilterView::InvertSelection()
             item->setCheckState(state);
         }
     }
-    NotifyChanged();
 }
 
 std::vector<std::string> TypeFilterView::CheckedTypes() const
@@ -133,7 +131,6 @@ void TypeFilterView::SetAll(Qt::CheckState state)
         if (auto* item = m_listWidget->item(i))
             item->setCheckState(state);
     }
-    NotifyChanged();
 }
 
 } // namespace ui::qt

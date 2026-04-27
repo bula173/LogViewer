@@ -151,6 +151,15 @@ void EventsTableView::SetFilteredEvents(
     viewport()->update();
 }
 
+void EventsTableView::ClearFilter()
+{
+    if (!m_model)
+        return;
+
+    m_model->ClearFilter();
+    viewport()->update();
+}
+
 const std::vector<unsigned long>* EventsTableView::GetFilteredIndices() const
 {
     if (!m_model)

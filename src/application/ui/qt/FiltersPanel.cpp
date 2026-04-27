@@ -339,22 +339,10 @@ void FiltersPanel::HandleLoad()
     emit RequestApplyFilters();
 }
 
-void FiltersPanel::HandleItemChanged(QTableWidgetItem* item)
+void FiltersPanel::HandleItemChanged(QTableWidgetItem* /*item*/)
 {
-    if (!item || item->column() != kEnabledColumn)
-        return;
-
-    const QString filterName = item->data(Qt::UserRole).toString();
-    if (filterName.isEmpty())
-        return;
-
-    const bool enabled = item->checkState() == Qt::Checked;
-    filters::FilterManager::getInstance().enableFilter(
-        filterName.toStdString(), enabled);
-    HandleFilterResult(filters::FilterManager::getInstance().saveFilters(),
-        tr("Saving filters after Toggle"));
-    RefreshFilters();
-    emit RequestApplyFilters();
+    // Nothing to do — wait for the Apply button. This prevents multiple
+    // filter updates while the user is editing.
 }
 
 void FiltersPanel::HandleSelectionChanged()
