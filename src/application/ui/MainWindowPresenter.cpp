@@ -10,8 +10,7 @@
 #include <string>
 #include <vector>
 
-#include <QEventLoop>
-#include <QTimer>
+#include <QCoreApplication>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include "Config.hpp"
@@ -167,12 +166,11 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     parser->RegisterObserver(&bgObserver);
 
     std::exception_ptr parseException;
-    std::atomic<bool> parsingDone{false};
 
     // Use Qt thread pool instead of a raw OS thread — avoids the
     // CreateThread+file-I/O+sleep pattern that triggers AV heuristics.
     QFuture<void> parseFuture = QtConcurrent::run(
-        [&parser, &path, &parseException, &parsingDone]()
+        [&parser, &path, &parseException]()
         {
             try
             {
@@ -182,18 +180,20 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
             {
                 parseException = std::current_exception();
             }
-            parsingDone.store(true, std::memory_order_release);
         });
 
     // Main thread: keep UI responsive at ~60 Hz while background parses.
-    // QEventLoop+QTimer replaces the sleep_for busy-wait loop.
+    // processEvents(maxTime) avoids both sleep_for (AV heuristic) and a
+    // nested QEventLoop (which can delay repaints after the loop exits).
     {
         uint32_t lastDisplayedProgress = 0;
-        QEventLoop eventLoop;
-        QTimer uiTimer;
-        uiTimer.setInterval(16); // ~60 Hz
-        QObject::connect(&uiTimer, &QTimer::timeout, [&]()
+        while (!parseFuture.isFinished())
         {
+            // Process pending events for up to 16 ms (~60 Hz), then check
+            // progress.  This is equivalent to the original sleep_for loop
+            // but uses Qt's message pump instead of a bare OS sleep.
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 16);
+
             const uint32_t total =
                 bgObserver.totalProgress.load(std::memory_order_relaxed);
             const uint32_t current =
@@ -209,14 +209,7 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
                 m_view.UpdateProgressValue(ClampToInt(current));
                 lastDisplayedProgress = current;
             }
-
-            if (parsingDone.load(std::memory_order_acquire))
-            {
-                eventLoop.quit();
-            }
-        });
-        uiTimer.start();
-        eventLoop.exec();
+        }
     }
 
     parseFuture.waitForFinished();
