@@ -203,23 +203,20 @@ jobs:
           export PATH="/mingw64/bin:$PATH"
           cmake --install . --config Release --prefix _staging
           cpack -G NSIS -C Release --config CPackConfig.cmake || true
-          # Debug: show what cpack produced
-          echo "=== Files in build dir after cpack ==="
-          find . -maxdepth 1 \( -name "*.exe" -o -name "*.nsis" \) 2>/dev/null || echo "(none)"
-          mkdir -p "$GITHUB_WORKSPACE/dist"
-          # Copy any exe in the build root (NSIS installer + raw exe)
-          find . -maxdepth 1 -name "*.exe" -exec cp {} "$GITHUB_WORKSPACE/dist/" \;
-          echo "=== Files copied to dist ==="
-          ls -lh "$GITHUB_WORKSPACE/dist/" || echo "(empty)"
+          # Debug: show what cpack produced (CPack may output to workspace dist/packages/)
+          echo "=== All exe files under workspace ==="
+          find "$GITHUB_WORKSPACE" -name "*.exe" 2>/dev/null || echo "(none)"
+          echo "=== Files in dist (recursive) ==="
+          find "$GITHUB_WORKSPACE/dist" -type f 2>/dev/null || echo "(empty)"
 
       - name: Show binary metadata
         shell: pwsh
         run: |
-          Write-Host "=== Files in dist ==="
-          Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -ErrorAction SilentlyContinue | Format-Table Name, Length, LastWriteTime
+          Write-Host "=== Files in dist (recursive) ==="
+          Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -Recurse -ErrorAction SilentlyContinue | Format-Table FullName, Length, LastWriteTime
           Write-Host ""
           Write-Host "=== Authenticode signature ==="
-          Get-ChildItem "$env:GITHUB_WORKSPACE\dist\*.exe" -ErrorAction SilentlyContinue | ForEach-Object {
+          Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -Recurse -Filter "*.exe" -ErrorAction SilentlyContinue | ForEach-Object {
             $sig = Get-AuthenticodeSignature $_.FullName
             Write-Host "$($_.Name): Status=$($sig.Status)  Signer=$($sig.SignerCertificate.Subject)"
           }
@@ -237,8 +234,8 @@ jobs:
       - name: Windows Defender — scan exe
         shell: pwsh
         run: |
-          $files = Get-ChildItem "$env:GITHUB_WORKSPACE\dist\*.exe" -ErrorAction SilentlyContinue
-          if (-not $files) { Write-Warning "No exe files found in dist\. Skipping scan."; exit 0 }
+          $files = Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -Recurse -Filter "*.exe" -ErrorAction SilentlyContinue
+          if (-not $files) { Write-Warning "No exe files found under dist\. Skipping scan."; exit 0 }
           foreach ($f in $files) {
             Write-Host "=== Scanning $($f.Name) ==="
             $result = & "C:\Program Files\Windows Defender\MpCmdRun.exe" `
@@ -265,7 +262,7 @@ jobs:
         env:
           VT_API_KEY: ${{ secrets.VT_API_KEY }}
         run: |
-          $files = Get-ChildItem "$env:GITHUB_WORKSPACE\dist\*.exe" -ErrorAction SilentlyContinue
+          $files = Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -Recurse -Filter "*.exe" -ErrorAction SilentlyContinue
           foreach ($f in $files) {
             Write-Host "=== Uploading $($f.Name) to VirusTotal ==="
             $response = Invoke-RestMethod `
@@ -310,5 +307,5 @@ jobs:
         if: always()
         with:
           name: windows-av-scan-binaries
-          path: ${{ github.workspace }}/dist/*.exe
+          path: ${{ github.workspace }}/dist/**/*.exe
           retention-days: 7
