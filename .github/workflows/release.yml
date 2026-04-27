@@ -338,7 +338,8 @@ jobs:
           cmake --install . --config Release --prefix _staging
           cpack -G NSIS -C Release --config CPackConfig.cmake
           mkdir -p $GITHUB_WORKSPACE/dist/packages
-          find . -maxdepth 1 -name "*.exe" \
+          # Only copy the NSIS installer (LogViewer-*-win64.exe), not the raw exe
+          find . -maxdepth 1 -name "LogViewer-*-win64.exe" \
             -exec cp {} $GITHUB_WORKSPACE/dist/packages/ \;
 
       - name: Sign Windows installer
@@ -512,9 +513,9 @@ jobs:
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
           files: |
-            release-assets/**/*.tar.gz
-            release-assets/**/*.deb
-            release-assets/**/*.exe
+            release-assets/**/LogViewer-*.tar.gz
+            release-assets/**/LogViewer-*.deb
+            release-assets/**/LogViewer-*-win64.exe
             staged-plugins/*.zip
             plugins_manifest.json
           fail_on_unmatched_files: false
