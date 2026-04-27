@@ -18,9 +18,6 @@
 #include <string>
 #include <string_view>
 
-// std
-#include <chrono>
-
 namespace util {
 
 /**
@@ -97,8 +94,12 @@ public:
             logger->set_level(toSpdlogLevel(level));
             spdlog::set_default_logger(logger);
             m_logger = std::move(logger);
+            // Flush on every log call (trace and above covers all levels).
+            // Do NOT use spdlog::flush_every(): it spawns a background thread
+            // that sleeps periodically and then flushes to disk — the exact
+            // pattern (background thread + timed sleep + file I/O) that
+            // triggers Windows Defender's ransomware ML heuristic (Wacatac.C!ml).
             spdlog::flush_on(spdlog::level::trace);
-            spdlog::flush_every(std::chrono::seconds(1)); // Auto flush every second
         }
     }
 

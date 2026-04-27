@@ -1811,19 +1811,7 @@ std::vector<int> MainWindow::GetRowsToExport() const
     auto* m = m_eventsView ? m_eventsView->model() : nullptr;
     if (!m) return {};
 
-    // Prefer the current selection if any rows are explicitly selected.
-    const QModelIndexList sel =
-        m_eventsView->selectionModel() ? m_eventsView->selectionModel()->selectedIndexes()
-                                       : QModelIndexList{};
-
-    std::set<int> rowSet;
-    for (const auto& idx : sel)
-        rowSet.insert(idx.row());
-
-    if (!rowSet.empty())
-        return {rowSet.begin(), rowSet.end()};
-
-    // Nothing selected — export every visible (filtered) row.
+    // Always export all visible (filtered) rows regardless of selection.
     const int n = m->rowCount();
     std::vector<int> all;
     all.reserve(static_cast<size_t>(n));

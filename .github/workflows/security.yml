@@ -239,24 +239,35 @@ jobs:
         run: |
           $files = Get-ChildItem "$env:GITHUB_WORKSPACE\dist" -Recurse -Filter "*.exe" -ErrorAction SilentlyContinue
           if (-not $files) { Write-Warning "No exe files found under dist\. Skipping scan."; exit 0 }
+          $threatFound = $false
           foreach ($f in $files) {
             Write-Host "=== Scanning $($f.Name) ==="
             $result = & "C:\Program Files\Windows Defender\MpCmdRun.exe" `
               -Scan -ScanType 3 -File $f.FullName -DisableRemediation 2>&1
             Write-Host $result
             if ($LASTEXITCODE -eq 2) {
-              Write-Warning "THREAT DETECTED in $($f.Name)"
+              $threatFound = $true
+              Write-Error "THREAT DETECTED in $($f.Name)"
               $events = Get-WinEvent -LogName "Microsoft-Windows-Windows Defender/Operational" `
                 -MaxEvents 10 -ErrorAction SilentlyContinue |
                 Where-Object { $_.Id -in @(1006, 1116, 1117) }
               foreach ($e in $events) {
                 Write-Host "Event $($e.Id): $($e.Message)"
               }
+              # Write summary for GitHub UI
+              Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## :rotating_light: Windows Defender Threat Detected`n"
+              Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "**File:** ``$($f.Name)``  "
+              Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "**Action:** Review Defender events above and investigate the flagged binary."
             } elseif ($LASTEXITCODE -eq 0) {
-              Write-Host "✅ Clean: $($f.Name)"
+              Write-Host "Clean: $($f.Name)"
             } else {
-              Write-Host "ℹ️  Exit code $LASTEXITCODE for $($f.Name)"
+              Write-Host "Exit code $LASTEXITCODE for $($f.Name)"
             }
+          }
+          if ($threatFound) {
+            Write-Host ""
+            Write-Host "One or more threats were detected. Failing the workflow."
+            exit 1
           }
 
       - name: VirusTotal scan (optional — requires VT_API_KEY secret)
@@ -302,6 +313,11 @@ jobs:
               $results.PSObject.Properties |
                 Where-Object { $_.Value.category -in @("malicious","suspicious") } |
                 ForEach-Object { Write-Host "  [$($_.Value.category)] $($_.Name): $($_.Value.result)" }
+              if ($malicious -gt 0) {
+                Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## :rotating_light: VirusTotal: $malicious/$total engines flagged ``$($f.Name)```n"
+                Write-Error "$malicious engine(s) flagged $($f.Name) as malicious on VirusTotal. Failing the workflow."
+                exit 1
+              }
             }
           }
 
