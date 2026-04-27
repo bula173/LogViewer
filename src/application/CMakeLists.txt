@@ -25,12 +25,7 @@ target_link_libraries(application_core
         fmt::fmt
 )
 
-# DPAPI (CryptProtectData/CryptUnprotectData) lives in Crypt32.
-# #pragma comment(lib, ...) only works with MSVC; MinGW/MSYS2 needs the CMake
-# target_link_libraries path.
-if(WIN32)
-    target_link_libraries(application_core PRIVATE Crypt32)
-endif()
+# KeyEncryption uses only standard C++ (XOR + hex); no platform crypto libs needed.
 
 # Set library properties
 set_target_properties(application_core PROPERTIES
