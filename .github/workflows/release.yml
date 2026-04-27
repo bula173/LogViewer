@@ -504,6 +504,11 @@ jobs:
             done
           done
 
+      - name: Delete existing release if present
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete ${{ github.ref_name }} --yes 2>/dev/null || true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -512,7 +517,7 @@ jobs:
           body_path: changelog.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
-          overwrite: true
+          overwrite_files: true
           files: |
             release-assets/**/LogViewer-*.tar.gz
             release-assets/**/LogViewer-*.deb
