@@ -366,6 +366,10 @@ void MainWindowPresenter::UpdateTypeFilters()
 
     m_view.UpdateStatusText(previousStatus);
     m_view.RefreshLayout();
+
+    // Apply the filter immediately so the table reflects the initial
+    // checked state (all types checked = show all events).
+    ApplySelectedTypeFilters();
 }
 
 void MainWindowPresenter::ApplySelectedTypeFilters()
