@@ -1,4 +1,5 @@
 #include "KeyEncryption.hpp"
+#include <cstring>
 #include <string_view>
 
 namespace util
