@@ -16,6 +16,9 @@ permissions:
   id-token: write   # Required for GitHub OIDC token (Sigstore attestation)
   attestations: write  # Required to write build provenance attestations
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   # ─── Build all three platforms in parallel ──────────────────────────────────
   build-linux:

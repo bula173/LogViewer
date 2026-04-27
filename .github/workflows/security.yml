@@ -19,6 +19,9 @@ permissions:
   pull-requests: write   # Needed to post dependency review comments on PRs
   security-events: write # Needed to upload SARIF results to GitHub Security tab
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   # ─── Dependency Review (PRs only) ───────────────────────────────────────────
   # Blocks PRs that introduce dependencies with known vulnerabilities

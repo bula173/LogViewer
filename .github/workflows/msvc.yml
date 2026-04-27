@@ -19,6 +19,7 @@ on:
 env:
   build: '${{ github.workspace }}/build'
   QT_VERSION: '6.7.3'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read

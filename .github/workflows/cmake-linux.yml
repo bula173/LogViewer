@@ -15,6 +15,9 @@ permissions:
   checks: write       # Required for test result annotations
   pull-requests: write # Required for PR comments
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
