@@ -2,15 +2,17 @@
 
 #include <algorithm>
 #include <atomic>
-#include <chrono>
 #include <cstddef>
 #include <exception>
 #include <filesystem>
 #include <limits>
 #include <set>
 #include <string>
-#include <thread>
 #include <vector>
+
+#include <QEventLoop>
+#include <QTimer>
+#include <QtConcurrent/QtConcurrentRun>
 
 #include "Config.hpp"
 #include "Error.hpp"
@@ -167,7 +169,9 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     std::exception_ptr parseException;
     std::atomic<bool> parsingDone{false};
 
-    std::thread parseThread(
+    // Use Qt thread pool instead of a raw OS thread — avoids the
+    // CreateThread+file-I/O+sleep pattern that triggers AV heuristics.
+    QFuture<void> parseFuture = QtConcurrent::run(
         [&parser, &path, &parseException, &parsingDone]()
         {
             try
@@ -181,13 +185,15 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
             parsingDone.store(true, std::memory_order_release);
         });
 
-    // Main thread: keep UI responsive at ~60 Hz while background parses
+    // Main thread: keep UI responsive at ~60 Hz while background parses.
+    // QEventLoop+QTimer replaces the sleep_for busy-wait loop.
     {
         uint32_t lastDisplayedProgress = 0;
-        while (!parsingDone.load(std::memory_order_acquire))
+        QEventLoop eventLoop;
+        QTimer uiTimer;
+        uiTimer.setInterval(16); // ~60 Hz
+        QObject::connect(&uiTimer, &QTimer::timeout, [&]()
         {
-            m_view.ProcessPendingEvents();
-
             const uint32_t total =
                 bgObserver.totalProgress.load(std::memory_order_relaxed);
             const uint32_t current =
@@ -204,11 +210,16 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
                 lastDisplayedProgress = current;
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(16));
-        }
+            if (parsingDone.load(std::memory_order_acquire))
+            {
+                eventLoop.quit();
+            }
+        });
+        uiTimer.start();
+        eventLoop.exec();
     }
 
-    parseThread.join();
+    parseFuture.waitForFinished();
     m_events.ResumeNotifications();
 
     if (parseException)

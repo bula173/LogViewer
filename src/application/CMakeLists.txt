@@ -4,7 +4,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_library(application_core)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Charts Network Concurrent)
 find_package(LibArchive REQUIRED)
 find_package(EXPAT REQUIRED)
 
@@ -19,6 +19,7 @@ target_link_libraries(application_core
         Qt6::Widgets
         Qt6::Charts
         Qt6::Network
+        Qt6::Concurrent
         nlohmann_json::nlohmann_json
         spdlog::spdlog
         fmt::fmt
