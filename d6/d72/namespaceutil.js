@@ -25,5 +25,5 @@ var namespaceutil =
     [ "XorHexDecode", "d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa", null ],
     [ "XorHexEncode", "d6/d72/namespaceutil.html#ac1be93e401211382b4627e33dd7dbfe2", null ],
     [ "ENCRYPTED_PREFIX", "d6/d72/namespaceutil.html#a73a122113c600604a80846a7faef3f1c", null ],
-    [ "kStaticKey", "d6/d72/namespaceutil.html#aae76787d929b7b1a4fe9e733c2bd6007", null ]
+    [ "kObfKey", "d6/d72/namespaceutil.html#a09f42159da196169f4eb6d4a00b5417a", null ]
 ];

@@ -850,7 +850,7 @@ var NAVTREEINDEX =
 "d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md146",
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#a3d4078f9f144fc591e61f252f0990ac4",
 "d5/d32/classui_1_1qt_1_1UpdateDialog.html#a8bc8164b9de25c38ed78571ff8dce991",
-"d6/d72/namespaceutil.html#a721283df15ed8bc045349e77c0105ca2",
+"d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa",
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a5206cab7251b4b26b13bb023edd89759",
 "d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md56",
 "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md228",
