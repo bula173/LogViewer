@@ -517,7 +517,6 @@ jobs:
           body_path: changelog.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
-          overwrite_files: true
           files: |
             release-assets/**/LogViewer-*.tar.gz
             release-assets/**/LogViewer-*.deb
