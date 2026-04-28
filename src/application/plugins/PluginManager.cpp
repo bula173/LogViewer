@@ -304,7 +304,7 @@ namespace {
             // Reject any entry whose resolved path escapes the extraction root.
             auto extractDirCanonical = std::filesystem::weakly_canonical(extractDir);
             auto rel = std::filesystem::relative(outputPath, extractDirCanonical);
-            if (!rel.empty() && rel.native().find("..") != std::filesystem::path::string_type::npos) {
+            if (!rel.empty() && rel.generic_string().find("..") != std::string::npos) {
                 util::Logger::Warn("ExtractZipPlugin: Skipping path-traversal entry: {}", rawName);
                 archive_read_data_skip(a);
                 continue;
