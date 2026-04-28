@@ -53,6 +53,7 @@
 #include <QKeySequence>
 #include <QDockWidget>
 #include <QShortcut>
+#include <QtConcurrent/QtConcurrent>
 
 #include <set>
 
@@ -536,7 +537,9 @@ void MainWindow::SetupMenus()
     auto* reloadPluginsAction = toolsMenu->addAction(tr("&Reload Plugins"));
     reloadPluginsAction->setShortcut(QKeySequence(tr("Ctrl+Shift+P")));
     connect(reloadPluginsAction, &QAction::triggered, this, [this]() {
+        UpdateStatusText("Reloading plugins...");
         reloadPlugins();
+        UpdateStatusText("Plugins reloaded");
         QMessageBox::information(this, tr("Plugins"), tr("Plugins reloaded successfully"));
     });
 
@@ -589,6 +592,7 @@ void MainWindow::SetupMenus()
             addDockWidget(Qt::BottomDockWidgetArea, m_bottomDock);
             m_bottomDock->show();
         }
+        UpdateStatusText("Layout reset");
     });
 
     // Help menu
@@ -692,6 +696,25 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
         QTimer::singleShot(30000, m_updateChecker, &UpdateChecker::CheckAsync);
         util::Logger::Info("[MainWindow] Update check scheduled (startup)");
     }
+
+    // Set up the async filter watcher. The finished() signal is delivered on
+    // the main thread so all UI calls inside the lambda are safe.
+    m_filterWatcher = new QFutureWatcher<std::vector<unsigned long>>(this);
+    connect(m_filterWatcher, &QFutureWatcher<std::vector<unsigned long>>::finished,
+            this, [this]() {
+                const auto filteredIndices = m_filterWatcher->result();
+                util::Logger::Debug("[MainWindow] ApplyExtendedFilters (async): {} events, {} matches",
+                    m_events ? m_events->Size() : 0, filteredIndices.size());
+                m_eventsView->SetFilteredEvents(filteredIndices);
+                m_eventsView->RefreshView();
+                ToggleProgressVisibility(false);
+                ConfigureProgressRange(100); // reset from indeterminate
+                const auto total   = m_events ? m_events->Size() : 0;
+                const auto matched = filteredIndices.size();
+                UpdateStatusText(
+                    QString("Filters applied: %1 of %2 events").arg(matched).arg(total).toStdString());
+                m_filteringInProgress = false;
+            });
 
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");
 }
@@ -1095,19 +1118,23 @@ void MainWindow::ApplyExtendedFilters()
     if (!m_eventsView || !m_events || m_events->Size() == 0)
         return;
 
-    const std::string previousStatus = CurrentStatusText();
+    // Prevent re-entrant filter runs: drop rapid changes while a run is active.
+    // The filter will reflect the final UI state once the current run finishes.
+    if (m_filteringInProgress)
+        return;
+
+    m_filteringInProgress = true;
     UpdateStatusText("Applying filters...");
+    ToggleProgressVisibility(true);
+    ConfigureProgressRange(0); // 0,0 = indeterminate busy animation
 
-    auto filteredIndices =
-        filters::FilterManager::getInstance().applyFilters(*m_events);
-
-    util::Logger::Debug("[MainWindow] ApplyExtendedFilters: {} events, {} matches",
-        m_events->Size(), filteredIndices.size());
-
-    m_eventsView->SetFilteredEvents(filteredIndices);
-    m_eventsView->RefreshView();
-
-    UpdateStatusText(previousStatus);
+    // Read-only access to EventsContainer from the worker thread is safe:
+    // no writes occur during a filter pass.
+    const db::EventsContainer* events = m_events;
+    m_filterWatcher->setFuture(
+        QtConcurrent::run([events]() -> std::vector<unsigned long> {
+            return filters::FilterManager::getInstance().applyFilters(*events);
+        }));
 }
 
 void MainWindow::ShowError(const QString& title, const QString& message)
@@ -1795,18 +1822,21 @@ void MainWindow::reloadPlugins() {
 void MainWindow::OnSetDarkTheme()
 {
     ApplyTheme(*qApp, 0);
+    UpdateStatusText("Theme: Dark");
     util::Logger::Info("[MainWindow] Dark theme applied");
 }
 
 void MainWindow::OnSetLightTheme()
 {
     ApplyTheme(*qApp, 1);
+    UpdateStatusText("Theme: Light");
     util::Logger::Info("[MainWindow] Light theme applied");
 }
 
 void MainWindow::OnSetSystemTheme()
 {
     ApplyTheme(*qApp, 2);
+    UpdateStatusText("Theme: System");
     util::Logger::Info("[MainWindow] System theme applied");
 }
 
@@ -1831,7 +1861,7 @@ void MainWindow::OnExportCsvRequested()
         QMessageBox::information(this, tr("Export"), tr("No data to export."));
         return;
     }
-
+    UpdateStatusText("Exporting to CSV...");
     QFileDialog dialog(this, tr("Export to CSV"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("CSV files (*.csv);;All files (*.*)"));
@@ -1846,8 +1876,11 @@ void MainWindow::OnExportCsvRequested()
         return;
 
     if (!ExportManager::ToCsv(*m_eventsView->model(), rows, path)) {
+        UpdateStatusText("Export failed.");
         QMessageBox::warning(this, tr("Export Failed"),
                              tr("Could not write to:\n%1").arg(path));
+    } else {
+        UpdateStatusText(QString("Exported CSV: %1").arg(path).toStdString());
     }
 }
 
@@ -1858,7 +1891,7 @@ void MainWindow::OnExportJsonRequested()
         QMessageBox::information(this, tr("Export"), tr("No data to export."));
         return;
     }
-
+    UpdateStatusText("Exporting to JSON...");
     QFileDialog dialog(this, tr("Export to JSON"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("JSON files (*.json);;All files (*.*)"));
@@ -1873,8 +1906,11 @@ void MainWindow::OnExportJsonRequested()
         return;
 
     if (!ExportManager::ToJson(*m_eventsView->model(), rows, path)) {
+        UpdateStatusText("Export failed.");
         QMessageBox::warning(this, tr("Export Failed"),
                              tr("Could not write to:\n%1").arg(path));
+    } else {
+        UpdateStatusText(QString("Exported JSON: %1").arg(path).toStdString());
     }
 }
 
@@ -1885,7 +1921,7 @@ void MainWindow::OnExportXmlRequested()
         QMessageBox::information(this, tr("Export"), tr("No data to export."));
         return;
     }
-
+    UpdateStatusText("Exporting to XML...");
     QFileDialog dialog(this, tr("Export to XML"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("XML files (*.xml);;All files (*.*)"));
@@ -1900,8 +1936,11 @@ void MainWindow::OnExportXmlRequested()
         return;
 
     if (!ExportManager::ToXml(*m_eventsView->model(), rows, path)) {
+        UpdateStatusText("Export failed.");
         QMessageBox::warning(this, tr("Export Failed"),
                              tr("Could not write to:\n%1").arg(path));
+    } else {
+        UpdateStatusText(QString("Exported XML: %1").arg(path).toStdString());
     }
 }
 

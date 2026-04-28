@@ -8,7 +8,9 @@
 #include "IPluginObserver.hpp"
 
 #include <QMainWindow>
+#include <QFutureWatcher>
 #include <memory>
+#include <vector>
 
 class QLineEdit;
 class QPushButton;
@@ -207,6 +209,10 @@ class MainWindow : public QMainWindow,
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     
+    // Async filter state — prevents re-entrant filter runs while a worker is active
+    QFutureWatcher<std::vector<unsigned long>>* m_filterWatcher {nullptr};
+    bool m_filteringInProgress {false};
+
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index
     std::map<std::string, int> m_pluginFilterTabIndices;  // Maps plugin ID to filter tab index
