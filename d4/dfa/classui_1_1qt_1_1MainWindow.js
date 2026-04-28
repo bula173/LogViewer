@@ -3,6 +3,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2", null ],
     [ "~MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b", null ],
     [ "AddToRecentFiles", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aab4a6ccc925c8e7d1acb47626433eae8", null ],
+    [ "ApplyActorFilter", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17", null ],
     [ "ApplyExtendedFilters", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a7c2e347b687a76c79f89aaadf619c163", null ],
     [ "ConfigureProgressRange", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a688d44fe3dbcf5c4c1bfd0089f62bc83", null ],
     [ "CreateHostContainerForPluginWidget", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a75784f48db36faf9237ec1b4dc00ac86", null ],

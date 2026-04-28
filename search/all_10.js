@@ -75,7 +75,7 @@ var searchData=
   ['installation_20steps_72',['Installation Steps',['../d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html#autotoc_md34',1,'']]],
   ['installer_73',['Windows Installer',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md253',1,'']]],
   ['installing_20your_20plugin_74',['Installing Your Plugin',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md670',1,'']]],
-  ['instance_75',['instance',['../da/dab/classui_1_1UiServices.html#a5db4ba330f323be4572a08de428d9c06',1,'ui::UiServices::Instance()'],['../d4/dfa/structplugin_1_1PluginLoadInfo.html#ae98b8856904ab8ab97db5343cf161ea1',1,'plugin::PluginLoadInfo::instance']]],
+  ['instance_75',['instance',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#ae98b8856904ab8ab97db5343cf161ea1',1,'plugin::PluginLoadInfo::instance'],['../da/dab/classui_1_1UiServices.html#a5db4ba330f323be4572a08de428d9c06',1,'ui::UiServices::Instance()']]],
   ['int_5fto_5fuint_76',['int_to_uint',['../dd/d4f/namespacewx__utils.html#aacb67812858bd439a5cb1e71dea6f2c2',1,'wx_utils']]],
   ['integration_77',['integration',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md340',1,'CI/CD Integration'],['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html',1,'Cloud AI Provider Integration'],['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md238',1,'Continuous Integration'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md331',1,'Integration'],['../d2/d33/md_docs_2OPENAI__INTEGRATION.html',1,'OpenAI Integration']]],
   ['integration_20architecture_78',['AI Integration Architecture',['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md138',1,'']]],

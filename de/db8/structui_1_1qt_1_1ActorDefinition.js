@@ -7,5 +7,6 @@ var structui_1_1qt_1_1ActorDefinition =
     [ "enabled", "de/db8/structui_1_1qt_1_1ActorDefinition.html#a651e58b29fe8d7782b0a408117dd077c", null ],
     [ "field", "de/db8/structui_1_1qt_1_1ActorDefinition.html#a1ec93f03571613c1c0e8863454a5aada", null ],
     [ "name", "de/db8/structui_1_1qt_1_1ActorDefinition.html#ab367681dff4fd79f686fa439792b88da", null ],
-    [ "pattern", "de/db8/structui_1_1qt_1_1ActorDefinition.html#af93d586615da2b28790c17346d122c0a", null ]
+    [ "pattern", "de/db8/structui_1_1qt_1_1ActorDefinition.html#af93d586615da2b28790c17346d122c0a", null ],
+    [ "useCaptures", "de/db8/structui_1_1qt_1_1ActorDefinition.html#a36624f623cbc3a1c3bab6dae46b1a0fe", null ]
 ];
