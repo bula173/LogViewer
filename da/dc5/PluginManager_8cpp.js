@@ -1,8 +1,8 @@
 var PluginManager_8cpp =
 [
     [ "plugin::anonymous_namespace{PluginManager.cpp}::VersionParts", "df/d14/structplugin_1_1anonymous__namespace_02PluginManager_8cpp_03_1_1VersionParts.html", "df/d14/structplugin_1_1anonymous__namespace_02PluginManager_8cpp_03_1_1VersionParts" ],
-    [ "AppPluginDecrypt", "da/dc5/PluginManager_8cpp.html#a61173c9e94c71bd9e8a25553d7a88f1f", null ],
-    [ "AppPluginEncrypt", "da/dc5/PluginManager_8cpp.html#aa5ffa1f8f78d78569879137bb8b36611", null ],
+    [ "AppPluginKeyDecode", "da/dc5/PluginManager_8cpp.html#a22ac085c47ab06769707bf57e79ef3df", null ],
+    [ "AppPluginKeyEncode", "da/dc5/PluginManager_8cpp.html#a617bb5b4ecc03475e674ecb862143043", null ],
     [ "AppPluginLog", "da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7", null ],
     [ "ExtractZipPlugin", "da/dc5/PluginManager_8cpp.html#adc3b850b69a15baad4e04f04d5aabed5", null ],
     [ "IsApiVersionCompatible", "da/dc5/PluginManager_8cpp.html#a7c5d8cd3c8825346642b1b81bd42bd32", null ],
