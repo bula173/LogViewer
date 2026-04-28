@@ -2,9 +2,7 @@
 
 #include "ActorDefinition.hpp"
 
-#include <QComboBox>
 #include <QLabel>
-#include <QPushButton>
 #include <QTableWidget>
 #include <QWidget>
 
@@ -26,15 +24,10 @@ namespace ui::qt {
 /**
  * @brief Panel showing aggregate statistics per "actor" in the visible event set.
  *
- * Two operating modes:
- *  - **Defined-actor mode**: when actor definitions (regexp) are supplied via
- *    SetDefinitions(), events are matched against those patterns and attributed
- *    to the first matching named actor.
- *  - **Auto-detect mode** (fallback): unique values of the selected field are
- *    treated as actors (original behaviour).
+ * Actors are derived exclusively from the regexp-based definitions supplied via
+ * SetDefinitions(). When no definitions are active the table is empty.
  *
- * Clicking a row instantly filters the events view to that actor's events.
- * "Clear Filter" resets to showing all visible events.
+ * Clicking a row filters the events view to that actor’s events.
  */
 class ActorsPanel : public QWidget
 {
@@ -64,10 +57,8 @@ class ActorsPanel : public QWidget
 
   private:
     void BuildLayout();
-    void PopulateFieldCombo();
     void FilterByActor(const std::string& actorValue);
     void RefreshWithDefinitions(const std::vector<unsigned long>& vis);
-    void RefreshAutoDetect(const std::vector<unsigned long>& vis);
     void PopulateActorTable(size_t totalVisible);
 
     /// Returns the indices of currently visible events.
@@ -76,11 +67,8 @@ class ActorsPanel : public QWidget
     db::EventsContainer& m_events;
     EventsTableView*      m_eventsView;
 
-    QComboBox*    m_fieldCombo  {nullptr};
-    QPushButton*  m_clearBtn    {nullptr};
     QTableWidget* m_table       {nullptr};
     QLabel*       m_statusLabel {nullptr};
-    QLabel*       m_modeLabel   {nullptr};
 
     std::map<std::string, ActorData>  m_actorCache;   ///< actor value → aggregated data
     std::vector<ActorDefinition>      m_definitions;  ///< regexp-based actor definitions

@@ -660,6 +660,17 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
         m_actorsPanel->SetDefinitions(m_actorDefPanel->Definitions());
     }
 
+    // Connect actor definition panel filter buttons
+    if (m_actorDefPanel && m_eventsView) {
+        connect(m_actorDefPanel, &ActorDefinitionsPanel::RequestApplyFilter,
+                this, &MainWindow::ApplyActorFilter);
+        connect(m_actorDefPanel, &ActorDefinitionsPanel::RequestClearFilter,
+                this, [this]() {
+                    m_eventsView->ClearFilter();
+                    UpdateStatusText("Actor filter cleared");
+                });
+    }
+
     // Search bar (Ctrl+F)
     if (m_searchBar && m_eventsView) {
         // Text / case changes → update model highlights and navigate to first match
@@ -1134,6 +1145,95 @@ void MainWindow::ApplyExtendedFilters()
     m_filterWatcher->setFuture(
         QtConcurrent::run([events]() -> std::vector<unsigned long> {
             return filters::FilterManager::getInstance().applyFilters(*events);
+        }));
+}
+
+void MainWindow::ApplyActorFilter()
+{
+    if (!m_eventsView || !m_events || !m_actorDefPanel)
+        return;
+    if (m_filteringInProgress)
+        return;
+
+    const auto& defs = m_actorDefPanel->Definitions();
+    const bool hasEnabled = std::any_of(defs.begin(), defs.end(),
+                                        [](const ActorDefinition& d) { return d.enabled; });
+    if (!hasEnabled)
+    {
+        UpdateStatusText("No enabled actor definitions — filter not applied");
+        return;
+    }
+
+    // Build compiled definition list (matching ActorsPanel::RefreshWithDefinitions logic)
+    struct CompiledDef {
+        std::string        field;
+        QRegularExpression re;
+        bool               useCaptures;
+    };
+    std::vector<CompiledDef> compiled;
+    for (const auto& def : defs)
+    {
+        if (!def.enabled || def.pattern.empty()) continue;
+        QRegularExpression re(QString::fromStdString(def.pattern));
+        if (!re.isValid()) continue;
+        compiled.push_back({def.field, std::move(re), def.useCaptures});
+    }
+
+    if (compiled.empty())
+    {
+        UpdateStatusText("No valid actor patterns — filter not applied");
+        return;
+    }
+
+    UpdateStatusText("Applying actor filter…");
+    ToggleProgressVisibility(true);
+    ConfigureProgressRange(0);
+    m_filteringInProgress = true;
+
+    // GetEvent() is not const-qualified but performs read-only access;
+    // no writes occur during a filter pass so concurrent reads are safe.
+    db::EventsContainer* events = m_events;
+    // Copy compiled defs so we can capture by value across the thread boundary
+    auto compiledCopy = compiled;
+    m_filterWatcher->setFuture(
+        QtConcurrent::run([events, compiledCopy = std::move(compiledCopy)]()
+                          -> std::vector<unsigned long> {
+            const size_t total = events->Size();
+            std::vector<unsigned long> matched;
+            matched.reserve(total);
+            for (size_t i = 0; i < total; ++i)
+            {
+                const db::LogEvent& ev = events->GetEvent(static_cast<int>(i));
+                for (const auto& cdef : compiledCopy)
+                {
+                    auto testField = [&](const std::string& val) -> bool {
+                        const QRegularExpressionMatch m =
+                            cdef.re.match(QString::fromStdString(val));
+                        if (!m.hasMatch()) return false;
+                        if (cdef.useCaptures)
+                        {
+                            for (int g = 1; g <= cdef.re.captureCount(); ++g)
+                                if (!m.captured(g).isEmpty()) return true;
+                            return false;
+                        }
+                        return true;
+                    };
+
+                    bool hit = false;
+                    if (cdef.field.empty())
+                    {
+                        for (const auto& [key, val] : ev.getEventItems())
+                            if (testField(val)) { hit = true; break; }
+                    }
+                    else
+                    {
+                        hit = testField(ev.findByKey(cdef.field));
+                    }
+
+                    if (hit) { matched.push_back(static_cast<unsigned long>(i)); break; }
+                }
+            }
+            return matched;
         }));
 }
 

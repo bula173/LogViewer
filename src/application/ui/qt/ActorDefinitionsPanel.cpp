@@ -10,6 +10,7 @@
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QFormLayout>
+#include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -65,19 +66,41 @@ void ActorDefinitionsPanel::BuildLayout()
 
     auto* infoLabel = new QLabel(
         tr("Define actors by name and a regular expression.\n"
-           "Each matching event will be attributed to that actor."),
+           "Each matching event will be attributed to that actor.\n"
+           "Enable \"Use captures\" to derive actor names from regexp capture groups."),
         this);
     infoLabel->setWordWrap(true);
+    static const QString kTooltip = tr(
+        "<b>How to define actors</b><br>"
+        "<b>Name</b> — display label used in the Actors table.<br>"
+        "<b>Field</b> — log field to match against (leave empty to search all fields).<br>"
+        "<b>Pattern</b> — ECMAScript regular expression tested against the field value.<br>"
+        "<b>Use captures</b> — when checked, each capture group <code>(…)</code> in the "
+        "pattern produces a <em>separate actor</em> named after the captured text.<br>"
+        "<br>"
+        "<b>Examples</b><br>"
+        "Simple match (no captures):<br>"
+        "&nbsp;&nbsp;Name: <i>Auth service</i>, Field: <i>service</i>, Pattern: <code>auth.*</code><br>"
+        "Capture groups (dynamic actors):<br>"
+        "&nbsp;&nbsp;Name: <i>User</i>, Field: <i>message</i>, "
+        "Pattern: <code>user=(\\w+)</code> — actor name = captured word<br>"
+        "Multiple captures:<br>"
+        "&nbsp;&nbsp;Pattern: <code>(alice|bob|carol)</code> — one actor per alternative match"
+    );
+    infoLabel->setToolTip(kTooltip);
     layout->addWidget(infoLabel);
 
     // ── Table ─────────────────────────────────────────────────────────────
-    m_table = new QTableWidget(0, 4, this);
+    m_table = new QTableWidget(0, 5, this);
     m_table->setHorizontalHeaderLabels(
-        {tr("On"), tr("Name"), tr("Field"), tr("Pattern (regexp)")});
+        {tr("On"), tr("Name"), tr("Field"), tr("Pattern (regexp)"), tr("Captures")});
     m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
     m_table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
     m_table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+    m_table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    m_table->horizontalHeader()->setToolTip(tr(
+        "Captures: when ✓, each () group in the pattern produces a separate actor"));
     m_table->setColumnWidth(1, 110);
     m_table->setColumnWidth(2, 90);
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -90,7 +113,7 @@ void ActorDefinitionsPanel::BuildLayout()
     // ── Status label ─────────────────────────────────────────────────────
     m_statusLabel = new QLabel(this);
     m_statusLabel->setWordWrap(true);
-    m_statusLabel->setStyleSheet("font-style: italic; color: gray;");
+    m_statusLabel->setStyleSheet("font-style: italic;");
     layout->addWidget(m_statusLabel);
 
     // ── Buttons: Add / Edit / Remove ─────────────────────────────────────
@@ -115,6 +138,18 @@ void ActorDefinitionsPanel::BuildLayout()
     btnRow2->addWidget(loadBtn);
     layout->addLayout(btnRow2);
 
+    // ── Buttons: Apply Filter / Clear Filter ─────────────────────────────
+    auto* btnRow3      = new QHBoxLayout();
+    m_applyFilterBtn   = new QPushButton(tr("Apply Filter"), this);
+    m_clearFilterBtn   = new QPushButton(tr("Clear Filter"), this);
+    m_applyFilterBtn->setToolTip(tr("Filter the events view to only show events "
+                                    "matching the enabled actor definitions"));
+    m_clearFilterBtn->setToolTip(tr("Remove the actor filter and show all events"));
+    m_applyFilterBtn->setDefault(false);
+    btnRow3->addWidget(m_applyFilterBtn);
+    btnRow3->addWidget(m_clearFilterBtn);
+    layout->addLayout(btnRow3);
+
     // ── Connections ───────────────────────────────────────────────────────
     connect(addBtn,     &QPushButton::clicked, this, &ActorDefinitionsPanel::HandleAdd);
     connect(m_editBtn,  &QPushButton::clicked, this, &ActorDefinitionsPanel::HandleEdit);
@@ -128,6 +163,10 @@ void ActorDefinitionsPanel::BuildLayout()
             this, [this](int, int) { HandleEdit(); });
     connect(m_table,    &QTableWidget::itemChanged,
             this, &ActorDefinitionsPanel::HandleItemChanged);
+    connect(m_applyFilterBtn, &QPushButton::clicked,
+            this, &ActorDefinitionsPanel::RequestApplyFilter);
+    connect(m_clearFilterBtn, &QPushButton::clicked,
+            this, &ActorDefinitionsPanel::RequestClearFilter);
 }
 
 // ---------------------------------------------------------------------------
@@ -152,9 +191,17 @@ void ActorDefinitionsPanel::RebuildTable()
         m_table->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(def.field)));
         m_table->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(def.pattern)));
 
+        auto* capItem = new QTableWidgetItem(def.useCaptures ? tr("\u2713") : QString());
+        capItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        capItem->setTextAlignment(Qt::AlignCenter);
+        capItem->setToolTip(def.useCaptures
+            ? tr("Each capture group () produces a separate actor")
+            : tr("Actor name is fixed (no capture groups used)"));
+        m_table->setItem(row, 4, capItem);
+
         if (!def.enabled)
         {
-            for (int c = 1; c < 4; ++c)
+            for (int c = 1; c < 5; ++c)
                 if (auto* it = m_table->item(row, c))
                     it->setForeground(QColor(150, 150, 150));
         }
@@ -375,7 +422,7 @@ void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
     // Update row text colour to reflect enabled state
     {
         m_rebuilding = true;
-        for (int c = 1; c < 4; ++c)
+        for (int c = 1; c < 5; ++c)
             if (auto* it = m_table->item(row, c))
                 it->setForeground(on ? QColor() : QColor(150, 150, 150));
         m_rebuilding = false;
@@ -392,8 +439,43 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
 {
     QDialog dlg(this);
     dlg.setWindowTitle(isNew ? tr("Add Actor") : tr("Edit Actor"));
-    dlg.setMinimumWidth(420);
+    dlg.setMinimumWidth(480);
 
+    // ── Guideline box ─────────────────────────────────────────────────────
+    auto* guideBox    = new QGroupBox(tr("How actor matching works"), &dlg);
+    auto* guideLayout = new QVBoxLayout(guideBox);
+    guideLayout->setSpacing(4);
+
+    auto makeGuideLabel = [&](const QString& text) {
+        auto* lbl = new QLabel(text, guideBox);
+        lbl->setWordWrap(true);
+        lbl->setTextFormat(Qt::RichText);
+        return lbl;
+    };
+
+    guideLayout->addWidget(makeGuideLabel(
+        tr("<b>Mode 1 – Fixed name</b> (default)<br>"
+           "The pattern is matched against the chosen field (or all fields). "
+           "Every matching event is attributed to the actor <i>Name</i> you enter above.<br>"
+           "<i>Example:</i> Name&nbsp;=&nbsp;<tt>Auth</tt>, "
+           "Pattern&nbsp;=&nbsp;<tt>auth.*service</tt>")));
+
+    auto* sep = new QFrame(guideBox);
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Sunken);
+    guideLayout->addWidget(sep);
+
+    guideLayout->addWidget(makeGuideLabel(
+        tr("<b>Mode 2 – Capture groups</b> (check the box below)<br>"
+           "Each <tt>(&hellip;)</tt> group in the pattern becomes a <i>separate actor</i> "
+           "named after the text it captured. The Name field is used only as a label "
+           "in the definitions list.<br>"
+           "<i>Examples:</i><br>"
+           "&nbsp;&bull;&nbsp;<tt>user=(\\w+)</tt> &rarr; actor = word after <tt>user=</tt><br>"
+           "&nbsp;&bull;&nbsp;<tt>(alice|bob|carol)</tt> &rarr; one actor per alternative<br>"
+           "&nbsp;&bull;&nbsp;<tt>host-(\\d+)</tt> &rarr; actor = the captured digits")));
+
+    // ── Form fields ───────────────────────────────────────────────────────
     auto* form = new QFormLayout();
 
     auto* nameEdit    = new QLineEdit(QString::fromStdString(def.name),    &dlg);
@@ -401,6 +483,11 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     auto* patternEdit = new QLineEdit(QString::fromStdString(def.pattern), &dlg);
     auto* enabledBox  = new QCheckBox(tr("Enabled"), &dlg);
     enabledBox->setChecked(def.enabled);
+    auto* captureBox  = new QCheckBox(tr("Use capture groups as actors"), &dlg);
+    captureBox->setChecked(def.useCaptures);
+    captureBox->setToolTip(tr(
+        "When checked, each () group in the pattern produces a separate actor "
+        "named after the captured text. Requires at least one capture group."));
 
     fieldEdit->setPlaceholderText(tr("(empty = any field)"));
     patternEdit->setPlaceholderText(tr("Regular expression …"));
@@ -411,10 +498,11 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     form->addRow(tr("Name:"),    nameEdit);
     form->addRow(tr("Field:"),   fieldEdit);
     form->addRow(tr("Pattern:"), patternEdit);
+    form->addRow(QString(),      captureBox);
     form->addRow(QString(),      enabledBox);
     form->addRow(QString(),      statusLabel);
 
-    // Live regexp validation
+    // Live regexp validation + capture hint
     auto validate = [&]() {
         const QString pat = patternEdit->text().trimmed();
         if (pat.isEmpty())
@@ -424,18 +512,36 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
             return;
         }
         QRegularExpression re(pat);
-        if (re.isValid())
+        if (!re.isValid())
+        {
+            statusLabel->setText(tr("✗ ") + re.errorString());
+            statusLabel->setStyleSheet("color: red;");
+            return;
+        }
+        const int groups = re.captureCount();
+        if (groups > 0 && !captureBox->isChecked())
+        {
+            statusLabel->setText(
+                tr("✓ Valid — pattern has %1 capture group(s). "
+                   "Check \"Use capture groups\" to use them as actor names.")
+                .arg(groups));
+            statusLabel->setStyleSheet("color: orange;");
+        }
+        else if (groups == 0 && captureBox->isChecked())
+        {
+            statusLabel->setText(
+                tr("⚠ No capture groups found. "
+                   "Add (...) groups or uncheck \"Use capture groups\"."));
+            statusLabel->setStyleSheet("color: orange;");
+        }
+        else
         {
             statusLabel->setText(tr("✓ Valid regexp"));
             statusLabel->setStyleSheet("color: green;");
         }
-        else
-        {
-            statusLabel->setText(tr("✗ ") + re.errorString());
-            statusLabel->setStyleSheet("color: red;");
-        }
     };
     connect(patternEdit, &QLineEdit::textChanged, &dlg, validate);
+    connect(captureBox, &QCheckBox::stateChanged, &dlg, [&](int) { validate(); });
     validate();
 
     auto* buttons = new QDialogButtonBox(
@@ -453,20 +559,29 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
                 tr("Pattern is not a valid regular expression:\n%1").arg(re.errorString()));
             return;
         }
+        if (captureBox->isChecked() && re.captureCount() == 0)
+        {
+            QMessageBox::warning(&dlg, tr("Validation"),
+                tr("\"Use capture groups\" is enabled but the pattern contains no capture groups.\n"
+                   "Add at least one group with parentheses, e.g. (\\w+), or disable this option."));
+            return;
+        }
         dlg.accept();
     });
     connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
 
     auto* mainLayout = new QVBoxLayout(&dlg);
+    mainLayout->addWidget(guideBox);
     mainLayout->addLayout(form);
     mainLayout->addWidget(buttons);
 
     if (dlg.exec() != QDialog::Accepted) return false;
 
-    def.name    = nameEdit->text().trimmed().toStdString();
-    def.field   = fieldEdit->text().trimmed().toStdString();
-    def.pattern = patternEdit->text().trimmed().toStdString();
-    def.enabled = enabledBox->isChecked();
+    def.name        = nameEdit->text().trimmed().toStdString();
+    def.field       = fieldEdit->text().trimmed().toStdString();
+    def.pattern     = patternEdit->text().trimmed().toStdString();
+    def.enabled     = enabledBox->isChecked();
+    def.useCaptures = captureBox->isChecked();
     return true;
 }
 
@@ -518,9 +633,12 @@ void ActorDefinitionsPanel::SetStatus(const QString& msg, bool isError)
 {
     if (!m_statusLabel) return;
     m_statusLabel->setText(msg);
-    m_statusLabel->setStyleSheet(
-        isError ? "font-style: italic; color: #c0392b;"
-                : "font-style: italic; color: #27ae60;");
+    // For errors use red; for success/info inherit the palette text colour so
+    // it remains readable on both light and dark themes.
+    if (isError)
+        m_statusLabel->setStyleSheet("font-style: italic; color: #c0392b;");
+    else
+        m_statusLabel->setStyleSheet("font-style: italic;");
 }
 
 } // namespace ui::qt

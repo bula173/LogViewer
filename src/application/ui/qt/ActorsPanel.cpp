@@ -1,16 +1,13 @@
 #include "ActorsPanel.hpp"
 
 #include "ActorDefinition.hpp"
-#include "Config.hpp"
 #include "EventsContainer.hpp"
 #include "EventsTableView.hpp"
 
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QRegularExpression>
-#include <QSignalBlocker>
 #include <QVBoxLayout>
 
 #include <algorithm>
@@ -35,20 +32,6 @@ void ActorsPanel::BuildLayout()
     layout->setContentsMargins(6, 6, 6, 6);
     layout->setSpacing(6);
 
-    // ── Field selector ────────────────────────────────────────────────────
-    // Mode label (shown above the field row)
-    m_modeLabel = new QLabel(tr("Mode: auto-detect"), this);
-    m_modeLabel->setStyleSheet("color: gray; font-style: italic;");
-    layout->addWidget(m_modeLabel);
-
-    auto* fieldRow = new QHBoxLayout();
-    fieldRow->addWidget(new QLabel(tr("Actor field:"), this));
-    m_fieldCombo = new QComboBox(this);
-    m_fieldCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_fieldCombo->setToolTip(tr("Select the log field that identifies individual actors"));
-    fieldRow->addWidget(m_fieldCombo);
-    layout->addLayout(fieldRow);
-
     // ── Actors table ──────────────────────────────────────────────────────
     m_table = new QTableWidget(0, 6, this);
     m_table->setHorizontalHeaderLabels(
@@ -71,39 +54,16 @@ void ActorsPanel::BuildLayout()
     m_table->setSortingEnabled(true);
     layout->addWidget(m_table, 1);
 
-    // ── Action buttons ────────────────────────────────────────────────────
-    auto* btnRow = new QHBoxLayout();
-    m_clearBtn = new QPushButton(tr("Clear Filter"), this);
-    m_clearBtn->setEnabled(false);
-    btnRow->addStretch();
-    btnRow->addWidget(m_clearBtn);
-    layout->addLayout(btnRow);
-
     // ── Status label ──────────────────────────────────────────────────────
     m_statusLabel = new QLabel(tr("No data"), this);
     m_statusLabel->setAlignment(Qt::AlignRight);
     layout->addWidget(m_statusLabel);
 
     // ── Connections ───────────────────────────────────────────────────────
-    connect(m_fieldCombo, &QComboBox::currentIndexChanged, this, [this](int) {
-        // Persist the chosen field
-        config::GetConfig().actorField = m_fieldCombo->currentText().toStdString();
-        config::GetConfig().SaveConfig();
-        Refresh();
-    });
-
     connect(m_table, &QTableWidget::cellClicked, this, [this](int row, int) {
         auto* item = m_table->item(row, 0);
         if (!item) return;
         FilterByActor(item->text().toStdString());
-        m_clearBtn->setEnabled(true);
-    });
-
-    connect(m_clearBtn, &QPushButton::clicked, this, [this]() {
-        if (m_eventsView)
-            m_eventsView->SetFilteredEvents({});
-        m_clearBtn->setEnabled(false);
-        m_table->clearSelection();
     });
 }
 
@@ -113,7 +73,6 @@ void ActorsPanel::BuildLayout()
 
 void ActorsPanel::Refresh()
 {
-    PopulateFieldCombo();
     const auto vis = VisibleIndices();
     m_actorCache.clear();
 
@@ -123,19 +82,12 @@ void ActorsPanel::Refresh()
 
     if (hasDefinitions)
     {
-        m_modeLabel->setText(tr("Mode: regexp definitions (%1 active)")
-            .arg(std::count_if(m_definitions.begin(), m_definitions.end(),
-                               [](const ActorDefinition& d){ return d.enabled; })));
-        m_modeLabel->setStyleSheet("color: #0070c0; font-style: italic;");
-        m_fieldCombo->setEnabled(false);
         RefreshWithDefinitions(vis);
     }
     else
     {
-        m_modeLabel->setText(tr("Mode: auto-detect by field"));
-        m_modeLabel->setStyleSheet("color: gray; font-style: italic;");
-        m_fieldCombo->setEnabled(true);
-        RefreshAutoDetect(vis);
+        // No definitions — leave table empty
+        m_statusLabel->setText(tr("Define actors in the \"Actor Definitions\" panel"));
     }
 }
 
@@ -197,6 +149,7 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
         std::string           name;
         std::string           field; // empty = any field
         QRegularExpression    re;
+        bool                  useCaptures {false};
     };
     std::vector<CompiledDef> compiled;
     for (const auto& def : m_definitions)
@@ -204,7 +157,7 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
         if (!def.enabled || def.pattern.empty()) continue;
         QRegularExpression re(QString::fromStdString(def.pattern));
         if (!re.isValid()) continue;
-        compiled.push_back({def.name, def.field, std::move(re)});
+        compiled.push_back({def.name, def.field, std::move(re), def.useCaptures});
     }
 
     for (unsigned long idx : vis)
@@ -213,13 +166,33 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
 
         for (const auto& cdef : compiled)
         {
+            auto processMatch = [&](const QRegularExpressionMatch& m) {
+                if (!m.hasMatch()) return false;
+                if (cdef.useCaptures)
+                {
+                    // Each non-empty capture group becomes a distinct actor
+                    bool anyCapture = false;
+                    for (int g = 1; g <= cdef.re.captureCount(); ++g)
+                    {
+                        const QString captured = m.captured(g);
+                        if (captured.isEmpty()) continue;
+                        AccumulateEventStats(
+                            m_actorCache[captured.toStdString()], ev, idx);
+                        anyCapture = true;
+                    }
+                    return anyCapture;
+                }
+                // Fixed actor name mode
+                AccumulateEventStats(m_actorCache[cdef.name], ev, idx);
+                return true;
+            };
+
             bool matched = false;
             if (cdef.field.empty())
             {
-                // Match against all field values
                 for (const auto& [key, val] : ev.getEventItems())
                 {
-                    if (cdef.re.match(QString::fromStdString(val)).hasMatch())
+                    if (processMatch(cdef.re.match(QString::fromStdString(val))))
                     {
                         matched = true;
                         break;
@@ -229,30 +202,12 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
             else
             {
                 const std::string val = ev.findByKey(cdef.field);
-                matched = cdef.re.match(QString::fromStdString(val)).hasMatch();
+                matched = processMatch(cdef.re.match(QString::fromStdString(val)));
             }
 
             if (matched)
-            {
-                AccumulateEventStats(m_actorCache[cdef.name], ev, idx);
                 break; // first matching definition wins
-            }
         }
-    }
-
-    PopulateActorTable(vis.size());
-}
-
-void ActorsPanel::RefreshAutoDetect(const std::vector<unsigned long>& vis)
-{
-    const std::string field = m_fieldCombo->currentText().toStdString();
-
-    for (unsigned long idx : vis)
-    {
-        const db::LogEvent& ev    = m_events.GetEvent(static_cast<int>(idx));
-        const std::string   actor = ev.findByKey(field);
-        if (actor.empty()) continue;
-        AccumulateEventStats(m_actorCache[actor], ev, idx);
     }
 
     PopulateActorTable(vis.size());
@@ -307,29 +262,6 @@ void ActorsPanel::PopulateActorTable(size_t totalVisible)
 // ---------------------------------------------------------------------------
 // Private helpers
 // ---------------------------------------------------------------------------
-
-void ActorsPanel::PopulateFieldCombo()
-{
-    auto* model = m_eventsView ? m_eventsView->model() : nullptr;
-    if (!model) return;
-
-    const QString preferred =
-        QString::fromStdString(config::GetConfig().actorField);
-
-    const QSignalBlocker blocker(m_fieldCombo);
-    m_fieldCombo->clear();
-
-    const int cols = model->columnCount();
-    for (int c = 0; c < cols; ++c)
-    {
-        m_fieldCombo->addItem(
-            model->headerData(c, Qt::Horizontal, Qt::DisplayRole).toString());
-    }
-
-    // Select the persisted field (or default to first column)
-    const int idx = m_fieldCombo->findText(preferred);
-    m_fieldCombo->setCurrentIndex(idx >= 0 ? idx : 0);
-}
 
 void ActorsPanel::FilterByActor(const std::string& actorValue)
 {

@@ -19,21 +19,26 @@ struct ActorDefinition
     std::string pattern;  ///< ECMAScript/QRegularExpression pattern
     std::string field;    ///< Log field to match against (empty = any field)
     bool        enabled {true};
+    /// When true, each named or numbered capture group in @p pattern is treated
+    /// as a separate actor instead of using @p name as the actor name.
+    bool        useCaptures {false};
 
     // ── JSON round-trip ──────────────────────────────────────────────────
     [[nodiscard]] nlohmann::json ToJson() const
     {
         return {{"name", name}, {"pattern", pattern},
-                {"field", field}, {"enabled", enabled}};
+                {"field", field}, {"enabled", enabled},
+                {"useCaptures", useCaptures}};
     }
 
     static ActorDefinition FromJson(const nlohmann::json& j)
     {
         ActorDefinition d;
-        d.name    = j.value("name",    "");
-        d.pattern = j.value("pattern", "");
-        d.field   = j.value("field",   "");
-        d.enabled = j.value("enabled", true);
+        d.name        = j.value("name",        "");
+        d.pattern     = j.value("pattern",     "");
+        d.field       = j.value("field",       "");
+        d.enabled     = j.value("enabled",     true);
+        d.useCaptures = j.value("useCaptures", false);
         return d;
     }
 

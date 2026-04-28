@@ -127,6 +127,7 @@ class MainWindow : public QMainWindow,
     void InitializePresenter(mvc::IController& controller,
         db::EventsContainer& events);
     void ApplyExtendedFilters();
+    void ApplyActorFilter();
     void SetupMenus();
     void RefreshRecentFilesMenu();
     void AddToRecentFiles(const QString& filePath);

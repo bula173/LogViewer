@@ -38,6 +38,11 @@ class ActorDefinitionsPanel : public QWidget
 
   signals:
     void DefinitionsChanged(const std::vector<ActorDefinition>& defs);
+    /// Emitted when the user clicks "Apply Filter" — caller should filter events
+    /// to those matching the current enabled actor definitions.
+    void RequestApplyFilter();
+    /// Emitted when the user clicks "Clear Filter".
+    void RequestClearFilter();
 
   private slots:
     void HandleAdd();
@@ -64,6 +69,8 @@ class ActorDefinitionsPanel : public QWidget
     QTableWidget* m_table    {nullptr};
     QPushButton*  m_editBtn  {nullptr};
     QPushButton*  m_removeBtn{nullptr};
+    QPushButton*  m_applyFilterBtn {nullptr};
+    QPushButton*  m_clearFilterBtn {nullptr};
     QLabel*       m_statusLabel {nullptr};
 
     std::vector<ActorDefinition> m_definitions;
