@@ -44,7 +44,7 @@ extern "C" void AppPluginLog(int level, const char* message)
     }
 }
 
-extern "C" char* AppPluginEncrypt(const char* input)
+extern "C" char* AppPluginKeyEncode(const char* input)
 {
     if (!input) return nullptr;
     try {
@@ -56,7 +56,7 @@ extern "C" char* AppPluginEncrypt(const char* input)
     } catch (...) { return nullptr; }
 }
 
-extern "C" char* AppPluginDecrypt(const char* input)
+extern "C" char* AppPluginKeyDecode(const char* input)
 {
     if (!input) return nullptr;
     try {
@@ -293,7 +293,22 @@ namespace {
         
         struct archive_entry* entry;
         while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-            std::filesystem::path outputPath = extractDir / archive_entry_pathname(entry);
+            const char* rawName = archive_entry_pathname(entry);
+            if (!rawName) { archive_read_data_skip(a); continue; }
+
+            // Guard against Zip Slip: resolve the candidate path and verify it
+            // stays inside extractDir before writing anything to disk.
+            std::filesystem::path outputPath = std::filesystem::weakly_canonical(
+                extractDir / std::filesystem::path(rawName).lexically_normal());
+
+            // Reject any entry whose resolved path escapes the extraction root.
+            auto extractDirCanonical = std::filesystem::weakly_canonical(extractDir);
+            auto rel = std::filesystem::relative(outputPath, extractDirCanonical);
+            if (!rel.empty() && rel.native().find("..") != std::filesystem::path::string_type::npos) {
+                util::Logger::Warn("ExtractZipPlugin: Skipping path-traversal entry: {}", rawName);
+                archive_read_data_skip(a);
+                continue;
+            }
 
             if (archive_entry_filetype(entry) == AE_IFDIR) {
                 std::filesystem::create_directories(outputPath);
@@ -302,10 +317,15 @@ namespace {
                     std::filesystem::create_directories(parent);
                 }
                 std::ofstream outFile(outputPath, std::ios::binary);
+                if (!outFile.is_open()) {
+                    util::Logger::Error("ExtractZipPlugin: Failed to open output file: {}", outputPath.string());
+                    archive_read_data_skip(a);
+                    continue;
+                }
                 const void* buff;
                 size_t size;
                 int64_t offset;
-                
+
                 while (archive_read_data_block(a, &buff, &size, &offset) == ARCHIVE_OK) {
                     outFile.write(static_cast<const char*>(buff), static_cast<std::streamsize>(size));
                 }
@@ -335,7 +355,7 @@ PluginManager& PluginManager::GetInstance()
     static bool callbacksRegistered = false;
     if (!callbacksRegistered) {
         PluginLogger_Register(&AppPluginLog);
-        PluginKeyEncryption_Register(&AppPluginEncrypt, &AppPluginDecrypt);
+        PluginKeyEncryption_Register(&AppPluginKeyEncode, &AppPluginKeyDecode);
         callbacksRegistered = true;
         util::Logger::Debug("PluginManager: Registered plugin API callbacks");
     }

@@ -103,8 +103,9 @@ const char* Plugin_GetMetadataJson(PluginHandle handle) {
     
     // Must malloc a copy since the caller will free() it
     size_t len = strlen(json);
-    char* copy = (char*)malloc(len + 1);
-    strcpy(copy, json);
+    char* copy = static_cast<char*>(malloc(len + 1));
+    if (!copy) return nullptr;
+    memcpy(copy, json, len + 1);
     return copy;
 }
 
@@ -153,8 +154,9 @@ EXPORT_PLUGIN_SYMBOL
 const char* Plugin_GetLastError(PluginHandle handle) {
     const char* error = "No error";
     size_t len = strlen(error);
-    char* copy = (char*)malloc(len + 1);
-    strcpy(copy, error);
+    char* copy = static_cast<char*>(malloc(len + 1));
+    if (!copy) return nullptr;
+    memcpy(copy, error, len + 1);
     return copy;
 }
 
