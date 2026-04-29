@@ -221,6 +221,13 @@ void XmlParser::ParseData(std::istream& input)
     if (!parser)
         throw error::Error("XmlParser::ParseData failed to create XML parser");
 
+    // RAII guard: frees the parser on every exit path (normal, exception, unknown).
+    struct ParserGuard
+    {
+        XML_Parser p;
+        ~ParserGuard() { if (p) XML_ParserFree(p); }
+    } parserGuard{parser};
+
     state.parserHandle = parser;
     XML_SetUserData(parser, &state);
     XML_SetStartElementHandler(parser, StartElementHandler);
@@ -309,22 +316,19 @@ void XmlParser::ParseData(std::istream& input)
         util::Logger::Debug("XmlParser::ParseData finished. Processed: {}",
             state.bytesProcessed);
         NotifyProgressUpdated();
-        XML_ParserFree(parser);
+        // Parser freed by ParserGuard RAII on scope exit.
     }
     catch (const error::Error&)
     {
-        XML_ParserFree(parser);
         throw;
     }
     catch (const std::exception& e)
     {
-        XML_ParserFree(parser);
         throw error::Error(std::string("XmlParser::ParseData (istream) failed: ") +
             e.what());
     }
     catch (...)
     {
-        XML_ParserFree(parser);
         throw error::Error(
             "XmlParser::ParseData (istream) failed due to unknown error");
     }

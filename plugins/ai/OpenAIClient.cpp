@@ -31,6 +31,14 @@ OpenAIClient::OpenAIClient(const std::string& apiKey,
     , m_baseUrl(baseUrl)
     , m_providerName(providerName)
 {
+    // Reject API keys that contain CR or LF — they would inject extra HTTP
+    // headers into the Authorization field (HTTP header injection).
+    if (m_apiKey.find_first_of("\r\n") != std::string::npos)
+    {
+        PLUGIN_LOG(PLUGIN_LOG_ERROR,
+            "OpenAIClient: API key contains illegal whitespace characters — rejected");
+        m_apiKey.clear(); // treat as missing; SendPrompt / IsAvailable handle empty
+    }
     PLUGIN_LOG(PLUGIN_LOG_INFO, "OpenAIClient initialized with model: {}", m_model);
 }
 
@@ -142,43 +150,44 @@ std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
                                        const std::string& jsonBody,
                                        const std::string& authHeader) const
 {
-    CURL* curl = curl_easy_init();
+    // RAII wrappers so both the CURL handle and the header list are freed on
+    // every exit path (normal return, exception, or early throw).
+    struct CurlDeleter  { void operator()(CURL*       p) const { if (p) curl_easy_cleanup(p);  } };
+    struct SlistDeleter { void operator()(curl_slist* p) const { if (p) curl_slist_free_all(p); } };
+
+    std::unique_ptr<CURL,       CurlDeleter > curl(curl_easy_init());
     if (!curl)
-    {
         throw std::runtime_error("Failed to initialize CURL for OpenAI request");
-    }
 
     std::string responseData;
     const std::string fullUrl = m_baseUrl + endpoint;
 
-    curl_easy_setopt(curl, CURLOPT_URL, fullUrl.c_str());
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
-    
+    curl_easy_setopt(curl.get(), CURLOPT_URL,           fullUrl.c_str());
+    curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS,    jsonBody.c_str());
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,     &responseData);
+
     // Use configurable timeout from config
     const int timeout = config::GetConfig().aiTimeoutSeconds;
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, static_cast<long>(timeout));
+    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, static_cast<long>(timeout));
 
     // Set headers with Bearer token authentication
-    struct curl_slist* headers = nullptr;
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    headers = curl_slist_append(headers, authHeader.c_str());
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    std::unique_ptr<curl_slist, SlistDeleter> headers(
+        curl_slist_append(nullptr, "Content-Type: application/json"));
+    headers.reset(curl_slist_append(headers.release(), authHeader.c_str()));
+    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers.get());
 
     PLUGIN_LOG(PLUGIN_LOG_DEBUG, "OpenAI POST request to: {}", fullUrl);
 
-    const CURLcode res = curl_easy_perform(curl);
-    
+    const CURLcode res = curl_easy_perform(curl.get());
+
     long httpCode = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
-    
-    curl_slist_free_all(headers);
-    curl_easy_cleanup(curl);
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &httpCode);
+    // RAII destructors free headers and curl handle here automatically.
 
     if (res != CURLE_OK)
     {
-        const std::string errorMsg = std::string("OpenAI API request failed: ") + 
+        const std::string errorMsg = std::string("OpenAI API request failed: ") +
                                      curl_easy_strerror(res);
         PLUGIN_LOG(PLUGIN_LOG_ERROR, "OpenAI API request failed: {}", curl_easy_strerror(res));
         throw std::runtime_error(errorMsg);
