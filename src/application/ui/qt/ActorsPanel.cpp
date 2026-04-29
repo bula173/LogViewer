@@ -6,6 +6,7 @@
 
 #include <QClipboard>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFontDatabase>
@@ -675,7 +676,9 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
 void ActorsPanel::ShowSequenceDiagram()
 {
     // ── 1. Determine which actor names to include ─────────────────────────
-    // Use tree selection; fall back to all actors when nothing is selected.
+    // Only checked actors participate in the diagram. If items are also
+    // tree-selected, restrict further to the intersection of selected+checked.
+    // This way unchecking an actor always removes it from the diagram.
     std::set<std::string> selectedActors;
     const QList<QTreeWidgetItem*> sel = m_tree->selectedItems();
     if (!sel.isEmpty())
@@ -684,31 +687,53 @@ void ActorsPanel::ShowSequenceDiagram()
         {
             if (item->childCount() == 0)
             {
-                // Leaf item (fixed-name actor or capture-group child)
-                selectedActors.insert(
-                    item->data(0, Qt::UserRole + 1).toString().toStdString());
+                // Leaf item: include only if checked
+                if (item->checkState(0) == Qt::Checked)
+                    selectedActors.insert(
+                        item->data(0, Qt::UserRole + 1).toString().toStdString());
             }
             else
             {
-                // Group header: include all children
+                // Group header: include checked children
                 for (int c = 0; c < item->childCount(); ++c)
-                    selectedActors.insert(
-                        item->child(c)->data(0, Qt::UserRole + 1)
-                            .toString().toStdString());
+                {
+                    QTreeWidgetItem* child = item->child(c);
+                    if (child->checkState(0) == Qt::Checked)
+                        selectedActors.insert(
+                            child->data(0, Qt::UserRole + 1).toString().toStdString());
+                }
             }
         }
     }
     else
     {
-        for (const auto& [defName, group] : m_groupedCache)
-            for (const auto& [actorName, data] : group.actors)
-                selectedActors.insert(actorName);
+        // No tree selection: fall back to all CHECKED actors
+        for (int g = 0; g < m_tree->topLevelItemCount(); ++g)
+        {
+            QTreeWidgetItem* top = m_tree->topLevelItem(g);
+            if (top->childCount() == 0)
+            {
+                if (top->checkState(0) == Qt::Checked)
+                    selectedActors.insert(
+                        top->data(0, Qt::UserRole + 1).toString().toStdString());
+            }
+            else
+            {
+                for (int c = 0; c < top->childCount(); ++c)
+                {
+                    QTreeWidgetItem* child = top->child(c);
+                    if (child->checkState(0) == Qt::Checked)
+                        selectedActors.insert(
+                            child->data(0, Qt::UserRole + 1).toString().toStdString());
+                }
+            }
+        }
     }
 
     if (selectedActors.empty())
     {
         QMessageBox::information(this, tr("Sequence Diagram"),
-            tr("No actors available. Load a log file first."));
+            tr("No checked actors. Check at least one actor in the list above."));
         return;
     }
 
@@ -735,10 +760,14 @@ void ActorsPanel::ShowSequenceDiagram()
     receiverEdit->setToolTip(tr("Log field used as the message receiver"));
     labelEdit->setToolTip(tr(
         "Log field used as the arrow label (comma-separated list tried in order)"));
+    auto* showTsCheck = new QCheckBox(tr("Show timestamps"), dlg);
+    showTsCheck->setChecked(true);
+    showTsCheck->setToolTip(tr("Prepend the event timestamp to each arrow label"));
     form->addRow(tr("Sender field:"),   senderEdit);
     form->addRow(tr("Receiver field:"), receiverEdit);
     form->addRow(tr("Label field:"),    labelEdit);
     form->addRow(tr("Max events:"),     maxSpin);
+    form->addRow(QString(),             showTsCheck);
     mainLayout->addLayout(form);
 
     // ── Output text ───────────────────────────────────────────────────────
@@ -771,13 +800,14 @@ void ActorsPanel::ShowSequenceDiagram()
     const std::map<std::string, GroupData> cachedGroups = m_groupedCache;
     const std::set<std::string>            actors       = selectedActors;
 
-    auto generate = [senderEdit, receiverEdit, labelEdit, maxSpin, output,
-                     cachedGroups, actors, this]()
+    auto generate = [senderEdit, receiverEdit, labelEdit, maxSpin, showTsCheck,
+                     output, cachedGroups, actors, this]()
     {
         const std::string senderField   = senderEdit->text().trimmed().toStdString();
         const std::string receiverField = receiverEdit->text().trimmed().toStdString();
         const std::string labelField    = labelEdit->text().trimmed().toStdString();
         const int         maxEvents     = maxSpin->value();
+        const bool        showTs        = showTsCheck->isChecked();
 
         if (senderField.empty() || receiverField.empty())
         {
@@ -838,6 +868,18 @@ void ActorsPanel::ShowSequenceDiagram()
                 if (!label.empty()) break;
             }
             if (label.empty()) label = "(event)";
+
+            // Optionally prepend timestamp
+            if (showTs)
+            {
+                static const std::vector<std::string> kTsF {
+                    "timestamp", "time", "datetime", "@timestamp", "date"};
+                for (const auto& tf : kTsF)
+                {
+                    const std::string ts = ev.findByKey(tf);
+                    if (!ts.empty()) { label = ts + " | " + label; break; }
+                }
+            }
 
             // Sanitise label: strip newlines
             for (char& c : label)

@@ -600,6 +600,11 @@ void MainWindow::SetupMenus()
     auto* checkUpdatesAction = helpMenu->addAction(tr("Check for &Updates..."));
     connect(checkUpdatesAction, &QAction::triggered, this,
             &MainWindow::OnCheckForUpdates);
+    auto* reportIssueAction = helpMenu->addAction(tr("&Report an Issue..."));
+    connect(reportIssueAction, &QAction::triggered, this, []() {
+        QDesktopServices::openUrl(
+            QUrl(QStringLiteral("https://github.com/Nerdbergev/LogViewer/issues/new")));
+    });
     helpMenu->addSeparator();
     auto* aboutAction = helpMenu->addAction(tr("&About"));
     connect(aboutAction, &QAction::triggered, this, [this]() {
