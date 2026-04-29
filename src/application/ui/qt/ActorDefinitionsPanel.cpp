@@ -580,7 +580,7 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
         }
     };
     connect(patternEdit, &QLineEdit::textChanged, &dlg, validate);
-    connect(captureBox, &QCheckBox::checkStateChanged, &dlg, [&](Qt::CheckState) { validate(); });
+    connect(captureBox, &QCheckBox::toggled, &dlg, [&](bool) { validate(); });
     validate();
 
     auto* buttons = new QDialogButtonBox(
@@ -668,9 +668,9 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     });
 
     // Show / hide group when capture-group mode is toggled
-    connect(captureBox, &QCheckBox::checkStateChanged, &dlg,
-            [subActorGroup](Qt::CheckState state) {
-                subActorGroup->setVisible(state == Qt::Checked);
+    connect(captureBox, &QCheckBox::toggled, &dlg,
+            [subActorGroup](bool checked) {
+                subActorGroup->setVisible(checked);
             });
 
     mainLayout->addWidget(subActorGroup);
