@@ -660,6 +660,13 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
         m_actorsPanel->SetDefinitions(m_actorDefPanel->Definitions());
     }
 
+    // Back-channel: actor direction changes made via context menu in Actors panel
+    // are forwarded to ActorDefinitionsPanel which persists them.
+    if (m_actorsPanel && m_actorDefPanel) {
+        connect(m_actorsPanel, &ActorsPanel::ActorDirectionChanged,
+                m_actorDefPanel, &ActorDefinitionsPanel::UpdateActorDirection);
+    }
+
     // Connect actor definition panel filter buttons
     if (m_actorDefPanel && m_eventsView) {
         connect(m_actorDefPanel, &ActorDefinitionsPanel::RequestApplyFilter,

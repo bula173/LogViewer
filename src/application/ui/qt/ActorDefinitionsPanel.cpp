@@ -91,18 +91,20 @@ void ActorDefinitionsPanel::BuildLayout()
     layout->addWidget(infoLabel);
 
     // ── Table ─────────────────────────────────────────────────────────────
-    m_table = new QTableWidget(0, 5, this);
+    m_table = new QTableWidget(0, 6, this);
     m_table->setHorizontalHeaderLabels(
-        {tr("On"), tr("Name"), tr("Field"), tr("Pattern (regexp)"), tr("Captures")});
+        {tr("On"), tr("Name"), tr("Field"), tr("Pattern (regexp)"), tr("Captures"), tr("Directed To")});
     m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
     m_table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
     m_table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     m_table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    m_table->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Interactive);
     m_table->horizontalHeader()->setToolTip(tr(
         "Captures: when ✓, each () group in the pattern produces a separate actor"));
     m_table->setColumnWidth(1, 110);
     m_table->setColumnWidth(2, 90);
+    m_table->setColumnWidth(5, 110);
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -199,9 +201,17 @@ void ActorDefinitionsPanel::RebuildTable()
             : tr("Actor name is fixed (no capture groups used)"));
         m_table->setItem(row, 4, capItem);
 
+        auto* directedToItem = new QTableWidgetItem(QString::fromStdString(def.directedTo));
+        directedToItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        directedToItem->setToolTip(def.directedTo.empty()
+            ? tr("No target actor specified")
+            : tr("Events from this actor are directed to: %1")
+                  .arg(QString::fromStdString(def.directedTo)));
+        m_table->setItem(row, 5, directedToItem);
+
         if (!def.enabled)
         {
-            for (int c = 1; c < 5; ++c)
+            for (int c = 1; c < 6; ++c)
                 if (auto* it = m_table->item(row, c))
                     it->setForeground(QColor(150, 150, 150));
         }
@@ -422,7 +432,7 @@ void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
     // Update row text colour to reflect enabled state
     {
         m_rebuilding = true;
-        for (int c = 1; c < 5; ++c)
+        for (int c = 1; c < 6; ++c)
             if (auto* it = m_table->item(row, c))
                 it->setForeground(on ? QColor() : QColor(150, 150, 150));
         m_rebuilding = false;
@@ -489,18 +499,47 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
         "When checked, each () group in the pattern produces a separate actor "
         "named after the captured text. Requires at least one capture group."));
 
+    // ── Directed-to combo ─────────────────────────────────────────────────
+    auto* directedToCombo = new QComboBox(&dlg);
+    directedToCombo->setEditable(true);
+    directedToCombo->setInsertPolicy(QComboBox::NoInsert);
+    directedToCombo->addItem(tr("(none)"), QString());
+    for (const auto& d : m_definitions)
+    {
+        const QString dname = QString::fromStdString(d.name);
+        if (dname != QString::fromStdString(def.name))
+            directedToCombo->addItem(dname, dname);
+    }
+    // Pre-select the current value
+    if (def.directedTo.empty())
+    {
+        directedToCombo->setCurrentIndex(0);
+    }
+    else
+    {
+        const int idx = directedToCombo->findData(QString::fromStdString(def.directedTo));
+        if (idx >= 0)
+            directedToCombo->setCurrentIndex(idx);
+        else
+            directedToCombo->setEditText(QString::fromStdString(def.directedTo));
+    }
+    directedToCombo->setToolTip(tr(
+        "Actor that receives events from this actor. "
+        "Shown as '→ target' next to the actor name in the Actors panel."));
+
     fieldEdit->setPlaceholderText(tr("(empty = any field)"));
     patternEdit->setPlaceholderText(tr("Regular expression …"));
 
     auto* statusLabel = new QLabel(&dlg);
     statusLabel->setWordWrap(true);
 
-    form->addRow(tr("Name:"),    nameEdit);
-    form->addRow(tr("Field:"),   fieldEdit);
-    form->addRow(tr("Pattern:"), patternEdit);
-    form->addRow(QString(),      captureBox);
-    form->addRow(QString(),      enabledBox);
-    form->addRow(QString(),      statusLabel);
+    form->addRow(tr("Name:"),        nameEdit);
+    form->addRow(tr("Field:"),       fieldEdit);
+    form->addRow(tr("Pattern:"),     patternEdit);
+    form->addRow(QString(),          captureBox);
+    form->addRow(tr("Directed to:"), directedToCombo);
+    form->addRow(QString(),          enabledBox);
+    form->addRow(QString(),          statusLabel);
 
     // Live regexp validation + capture hint
     auto validate = [&]() {
@@ -541,7 +580,7 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
         }
     };
     connect(patternEdit, &QLineEdit::textChanged, &dlg, validate);
-    connect(captureBox, &QCheckBox::stateChanged, &dlg, [&](int) { validate(); });
+    connect(captureBox, &QCheckBox::checkStateChanged, &dlg, [&](Qt::CheckState) { validate(); });
     validate();
 
     auto* buttons = new QDialogButtonBox(
@@ -573,6 +612,68 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     auto* mainLayout = new QVBoxLayout(&dlg);
     mainLayout->addWidget(guideBox);
     mainLayout->addLayout(form);
+
+    // ── Subactor directions table (visible only in capture-group mode) ────
+    auto* subActorGroup = new QGroupBox(
+        tr("Subactor Directed-To Overrides"), &dlg);
+    subActorGroup->setToolTip(tr(
+        "For each captured subactor name, specify which actor it sends events to.\n"
+        "Overrides the definition-level 'Directed to' for that specific subactor.\n"
+        "Right-click actors in the Actors panel to set these interactively."));
+    subActorGroup->setVisible(captureBox->isChecked());
+    auto* subActorLayout = new QVBoxLayout(subActorGroup);
+
+    auto* subActorTable = new QTableWidget(0, 2, subActorGroup);
+    subActorTable->setHorizontalHeaderLabels(
+        {tr("Subactor Name"), tr("Directed To")});
+    subActorTable->horizontalHeader()->setSectionResizeMode(
+        0, QHeaderView::Stretch);
+    subActorTable->horizontalHeader()->setSectionResizeMode(
+        1, QHeaderView::Stretch);
+    subActorTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    subActorTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    subActorTable->verticalHeader()->hide();
+    subActorTable->setAlternatingRowColors(true);
+
+    // Pre-populate from existing subActorDirectedTo
+    for (const auto& [k, v] : def.subActorDirectedTo)
+    {
+        const int r = subActorTable->rowCount();
+        subActorTable->insertRow(r);
+        subActorTable->setItem(r, 0,
+            new QTableWidgetItem(QString::fromStdString(k)));
+        subActorTable->setItem(r, 1,
+            new QTableWidgetItem(QString::fromStdString(v)));
+    }
+    subActorLayout->addWidget(subActorTable);
+
+    auto* subBtnRow    = new QHBoxLayout();
+    auto* addSubBtn    = new QPushButton(tr("Add"),    subActorGroup);
+    auto* removeSubBtn = new QPushButton(tr("Remove"), subActorGroup);
+    subBtnRow->addWidget(addSubBtn);
+    subBtnRow->addWidget(removeSubBtn);
+    subBtnRow->addStretch();
+    subActorLayout->addLayout(subBtnRow);
+
+    connect(addSubBtn, &QPushButton::clicked, &dlg, [subActorTable]() {
+        const int r = subActorTable->rowCount();
+        subActorTable->insertRow(r);
+        subActorTable->setItem(r, 0, new QTableWidgetItem(QString()));
+        subActorTable->setItem(r, 1, new QTableWidgetItem(QString()));
+        subActorTable->editItem(subActorTable->item(r, 0));
+    });
+    connect(removeSubBtn, &QPushButton::clicked, &dlg, [subActorTable]() {
+        const int r = subActorTable->currentRow();
+        if (r >= 0) subActorTable->removeRow(r);
+    });
+
+    // Show / hide group when capture-group mode is toggled
+    connect(captureBox, &QCheckBox::checkStateChanged, &dlg,
+            [subActorGroup](Qt::CheckState state) {
+                subActorGroup->setVisible(state == Qt::Checked);
+            });
+
+    mainLayout->addWidget(subActorGroup);
     mainLayout->addWidget(buttons);
 
     if (dlg.exec() != QDialog::Accepted) return false;
@@ -582,12 +683,62 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     def.pattern     = patternEdit->text().trimmed().toStdString();
     def.enabled     = enabledBox->isChecked();
     def.useCaptures = captureBox->isChecked();
+    // Read directedTo: prefer the editable text; treat "(none)" as empty
+    {
+        const QString dt = directedToCombo->currentText().trimmed();
+        def.directedTo = (dt == tr("(none)")) ? std::string{} : dt.toStdString();
+    }
+    // Read subactor directed-to table.
+    // Only clear existing overrides when captures mode is still active;
+    // if the user toggled captures off, preserve the map so it's not
+    // lost if they re-enable captures later.
+    if (def.useCaptures)
+    {
+        def.subActorDirectedTo.clear();
+        for (int r = 0; r < subActorTable->rowCount(); ++r)
+        {
+            const QTableWidgetItem* nameIt   = subActorTable->item(r, 0);
+            const QTableWidgetItem* targetIt = subActorTable->item(r, 1);
+            if (!nameIt || !targetIt) continue;
+            const std::string k = nameIt->text().trimmed().toStdString();
+            const std::string v = targetIt->text().trimmed().toStdString();
+            if (!k.empty() && !v.empty())
+                def.subActorDirectedTo[k] = v;
+        }
+    }
     return true;
 }
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+void ActorDefinitionsPanel::UpdateActorDirection(
+    const QString& defName,
+    const QString& actorName,
+    bool           isSubActor,
+    const QString& target)
+{
+    for (auto& def : m_definitions)
+    {
+        if (def.name != defName.toStdString()) continue;
+
+        if (isSubActor)
+        {
+            if (target.isEmpty())
+                def.subActorDirectedTo.erase(actorName.toStdString());
+            else
+                def.subActorDirectedTo[actorName.toStdString()] = target.toStdString();
+        }
+        else
+        {
+            def.directedTo = target.toStdString();
+        }
+        break;
+    }
+    RebuildTable();
+    EmitAndSave();
+}
 
 void ActorDefinitionsPanel::EmitAndSave()
 {

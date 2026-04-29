@@ -3,7 +3,9 @@
 #include "ActorDefinition.hpp"
 
 #include <QLabel>
-#include <QTableWidget>
+#include <QPushButton>
+#include <QString>
+#include <QTreeWidget>
 #include <QWidget>
 
 #include <map>
@@ -45,6 +47,16 @@ class ActorsPanel : public QWidget
     /// Update actor definitions; triggers an immediate Refresh().
     void SetDefinitions(const std::vector<ActorDefinition>& defs);
 
+  signals:
+    /// Emitted when the user sets or clears a directed-to relationship via the
+    /// context menu. isSubActor=true → update subActorDirectedTo[actorName];
+    /// isSubActor=false → update definition-level directedTo.
+    /// An empty target means "clear".
+    void ActorDirectionChanged(const QString& defName,
+                               const QString& actorName,
+                               bool           isSubActor,
+                               const QString& target);
+
   public:
     struct ActorData
     {
@@ -55,11 +67,20 @@ class ActorsPanel : public QWidget
         std::set<std::string>      types;
     };
 
+    /// Groups actors produced by one ActorDefinition.
+    struct GroupData
+    {
+        bool                             useCaptures {false};
+        std::map<std::string, ActorData> actors; ///< actor name → aggregated data
+    };
+
   private:
     void BuildLayout();
-    void FilterByActor(const std::string& actorValue);
+    void ApplyCheckedFilter();
     void RefreshWithDefinitions(const std::vector<unsigned long>& vis);
-    void PopulateActorTable(size_t totalVisible);
+    void PopulateActorTree(size_t totalVisible);
+    void ShowSequenceDiagram();
+    void ShowActorContextMenu(const QPoint& pos);
 
     /// Returns the indices of currently visible events.
     std::vector<unsigned long> VisibleIndices() const;
@@ -67,11 +88,14 @@ class ActorsPanel : public QWidget
     db::EventsContainer& m_events;
     EventsTableView*      m_eventsView;
 
-    QTableWidget* m_table       {nullptr};
-    QLabel*       m_statusLabel {nullptr};
+    QTreeWidget* m_tree        {nullptr};
+    QLabel*      m_statusLabel {nullptr};
+    QPushButton* m_seqDiagBtn  {nullptr};
 
-    std::map<std::string, ActorData>  m_actorCache;   ///< actor value → aggregated data
-    std::vector<ActorDefinition>      m_definitions;  ///< regexp-based actor definitions
+    std::map<std::string, GroupData> m_groupedCache;   ///< def name → grouped actor data
+    std::vector<ActorDefinition>     m_definitions;    ///< regexp-based actor definitions
+    std::set<std::string>            m_uncheckedActors; ///< "defName\0actorName" keys
+    bool                             m_ignoreNextRefresh {false}; ///< suppress rebuild after actor filter
 };
 
 } // namespace ui::qt

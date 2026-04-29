@@ -3,6 +3,7 @@
 #include "ActorDefinition.hpp"
 
 #include <QWidget>
+#include <QString>
 #include <vector>
 
 class QTableWidget;
@@ -53,6 +54,14 @@ class ActorDefinitionsPanel : public QWidget
     void HandleLoad();
     void HandleSelectionChanged();
     void HandleItemChanged(QTableWidgetItem* item);
+
+  public slots:
+    /// Called from ActorsPanel when the user sets or clears a directed-to
+    /// relationship via the context menu in the Actors tree.
+    void UpdateActorDirection(const QString& defName,
+                              const QString& actorName,
+                              bool           isSubActor,
+                              const QString& target);
 
   private:
     void BuildLayout();
