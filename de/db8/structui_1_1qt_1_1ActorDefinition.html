@@ -108,11 +108,13 @@ Collaboration diagram for ui::qt::ActorDefinition:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d25/structui_1_1qt_1_1ActorDefinition__coll__graph.png" border="0" usemap="#aui_1_1qt_1_1ActorDefinition_coll__map" alt="Collaboration graph"/></div>
 <map name="aui_1_1qt_1_1ActorDefinition_coll__map" id="aui_1_1qt_1_1ActorDefinition_coll__map">
-<area shape="rect" title="Describes a named actor matched by a regular expression." alt="" coords="5,163,157,288"/>
-<area shape="rect" title=" " alt="" coords="12,5,63,71"/>
-<area shape="poly" title=" " alt="" coords="37,71,37,104,41,138,44,146,38,148,36,139,31,104,32,71"/>
-<area shape="rect" title=" " alt="" coords="105,5,148,71"/>
-<area shape="poly" title=" " alt="" coords="121,72,103,147,98,146,116,70"/>
+<area shape="rect" title="Describes a named actor matched by a regular expression." alt="" coords="68,192,220,317"/>
+<area shape="rect" title=" " alt="" coords="5,13,56,78"/>
+<area shape="poly" title=" " alt="" coords="35,78,42,122,58,167,65,177,60,180,54,169,37,123,30,79"/>
+<area shape="rect" title=" " alt="" coords="123,13,165,78"/>
+<area shape="poly" title=" " alt="" coords="147,78,147,175,141,175,141,78"/>
+<area shape="rect" title=" " alt="" coords="193,5,343,85"/>
+<area shape="poly" title=" " alt="" coords="267,86,258,127,241,169,233,182,228,179,236,167,253,126,262,85"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -141,10 +143,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a1ec93f03571613c1c0e8863454a5aada" id="r_a1ec93f03571613c1c0e8863454a5aada"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a1ec93f03571613c1c0e8863454a5aada">field</a></td></tr>
 <tr class="memdesc:a1ec93f03571613c1c0e8863454a5aada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log field to match against (empty = any field)  <br /></td></tr>
 <tr class="separator:a1ec93f03571613c1c0e8863454a5aada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cfa95ce11a054d1ee39fb14ec9b3c4" id="r_ad4cfa95ce11a054d1ee39fb14ec9b3c4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#ad4cfa95ce11a054d1ee39fb14ec9b3c4">directedTo</a></td></tr>
+<tr class="memdesc:ad4cfa95ce11a054d1ee39fb14ec9b3c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the actor this actor's events are directed to (optional)  <br /></td></tr>
+<tr class="separator:ad4cfa95ce11a054d1ee39fb14ec9b3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a651e58b29fe8d7782b0a408117dd077c" id="r_a651e58b29fe8d7782b0a408117dd077c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a651e58b29fe8d7782b0a408117dd077c">enabled</a> {true}</td></tr>
 <tr class="separator:a651e58b29fe8d7782b0a408117dd077c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36624f623cbc3a1c3bab6dae46b1a0fe" id="r_a36624f623cbc3a1c3bab6dae46b1a0fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36624f623cbc3a1c3bab6dae46b1a0fe">useCaptures</a> {false}</td></tr>
 <tr class="separator:a36624f623cbc3a1c3bab6dae46b1a0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ca5056f756929d32e93f8370c26197" id="r_a36ca5056f756929d32e93f8370c26197"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197">subActorDirectedTo</a></td></tr>
+<tr class="separator:a36ca5056f756929d32e93f8370c26197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Describes a named actor matched by a regular expression. </p>
@@ -272,34 +279,40 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/db8/structui_1_1qt_1_1ActorDefinition_a445e7536a5d738eefc09b4ed2b6b3ac1_icgraph.png" border="0" usemap="#ade/db8/structui_1_1qt_1_1ActorDefinition_a445e7536a5d738eefc09b4ed2b6b3ac1_icgraph" alt=""/></div>
 <map name="ade/db8/structui_1_1qt_1_1ActorDefinition_a445e7536a5d738eefc09b4ed2b6b3ac1_icgraph" id="ade/db8/structui_1_1qt_1_1ActorDefinition_a445e7536a5d738eefc09b4ed2b6b3ac1_icgraph">
-<area shape="rect" title=" " alt="" coords="933,255,1093,295"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5648e4d1e53c1e545689de5914bec41c" title=" " alt="" coords="719,133,885,173"/>
-<area shape="poly" title=" " alt="" coords="964,250,837,176,839,171,967,245"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#af877979165804d8d9e6ebb45e590d3e9" title=" " alt="" coords="719,255,885,295"/>
-<area shape="poly" title=" " alt="" coords="919,277,885,277,885,272,919,272"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aca52edd7302be021fba38058b2ff38a3" title=" " alt="" coords="719,340,885,380"/>
-<area shape="poly" title=" " alt="" coords="952,302,853,342,851,338,950,297"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a4ff5b5197b8b839f293c43141a1c781c" title=" " alt="" coords="488,5,655,45"/>
-<area shape="poly" title=" " alt="" coords="766,127,722,92,669,60,642,48,644,43,672,55,725,88,769,122"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a87d782770e3fdb5f7dd43128d938383f" title=" " alt="" coords="488,69,655,109"/>
-<area shape="poly" title=" " alt="" coords="715,132,643,112,645,107,717,127"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a67bdc6d7bbbc2ae4fbe5d689906fb5cb" title=" " alt="" coords="472,133,671,173"/>
-<area shape="poly" title=" " alt="" coords="705,156,671,156,671,151,705,151"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a21bce09e541db33e7c4d53f969964611" title=" " alt="" coords="488,197,655,237"/>
-<area shape="poly" title=" " alt="" coords="717,180,645,200,643,195,715,174"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="257,197,424,237"/>
-<area shape="poly" title=" " alt="" coords="483,54,474,59,435,92,401,130,355,198,351,195,397,127,431,88,470,55,480,49"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,197,209,237"/>
-<area shape="poly" title=" " alt="" coords="243,220,210,220,210,215,243,215"/>
-<area shape="poly" title=" " alt="" coords="488,117,473,124,414,161,366,199,363,195,411,157,471,119,486,112"/>
-<area shape="poly" title=" " alt="" coords="486,180,414,200,413,195,485,174"/>
-<area shape="poly" title=" " alt="" coords="474,220,424,220,424,215,474,215"/>
-<area shape="poly" title=" " alt="" coords="705,274,593,267,472,252,414,240,415,235,472,247,593,261,705,269"/>
-<area shape="poly" title=" " alt="" coords="704,343,592,315,471,279,381,240,383,235,473,273,593,310,706,338"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a856446ae8b57c389ce142f516ba72a2f" title=" " alt="" coords="488,363,655,403"/>
-<area shape="poly" title=" " alt="" coords="705,381,655,386,655,381,705,376"/>
-<area shape="poly" title=" " alt="" coords="495,359,471,346,436,320,404,291,356,239,360,236,408,288,439,316,473,342,497,355"/>
-<area shape="poly" title=" " alt="" coords="668,362,718,357,719,362,668,367"/>
+<area shape="rect" title=" " alt="" coords="940,319,1100,359"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5648e4d1e53c1e545689de5914bec41c" title=" " alt="" coords="725,165,892,205"/>
+<area shape="poly" title=" " alt="" coords="979,313,836,208,839,203,982,308"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#af877979165804d8d9e6ebb45e590d3e9" title=" " alt="" coords="725,319,892,359"/>
+<area shape="poly" title=" " alt="" coords="926,341,892,341,892,336,926,336"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aca52edd7302be021fba38058b2ff38a3" title=" " alt="" coords="725,404,892,444"/>
+<area shape="poly" title=" " alt="" coords="958,366,860,406,858,402,956,361"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a4ff5b5197b8b839f293c43141a1c781c" title=" " alt="" coords="491,197,658,237"/>
+<area shape="poly" title=" " alt="" coords="712,201,659,209,658,203,711,196"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a87d782770e3fdb5f7dd43128d938383f" title=" " alt="" coords="491,261,658,301"/>
+<area shape="poly" title=" " alt="" coords="760,214,678,252,646,264,644,259,676,247,757,209"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a67bdc6d7bbbc2ae4fbe5d689906fb5cb" title=" " alt="" coords="475,69,674,109"/>
+<area shape="poly" title=" " alt="" coords="757,161,676,124,644,112,646,107,678,119,760,157"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a21bce09e541db33e7c4d53f969964611" title=" " alt="" coords="491,133,658,173"/>
+<area shape="poly" title=" " alt="" coords="711,175,658,167,659,162,712,169"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aa073b8fb763eae396225121081e08be4" title=" " alt="" coords="472,5,677,45"/>
+<area shape="poly" title=" " alt="" coords="781,156,735,107,707,81,676,60,652,48,654,43,679,55,710,77,739,103,785,152"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="257,261,424,301"/>
+<area shape="poly" title=" " alt="" coords="488,244,415,264,414,259,487,238"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,261,209,301"/>
+<area shape="poly" title=" " alt="" coords="243,284,210,284,210,279,243,279"/>
+<area shape="poly" title=" " alt="" coords="478,284,424,284,424,279,478,279"/>
+<area shape="poly" title=" " alt="" coords="483,118,474,123,435,156,401,194,355,262,351,259,397,191,431,152,470,119,480,113"/>
+<area shape="poly" title=" " alt="" coords="488,181,473,188,414,225,366,263,363,259,411,221,471,183,486,176"/>
+<area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#a49675c9000dedc574d6fd847eacf6c63" title=" " alt="" coords="267,5,415,45"/>
+<area shape="poly" title=" " alt="" coords="458,28,415,28,415,23,458,23"/>
+<area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2" title=" " alt="" coords="34,5,181,45"/>
+<area shape="poly" title=" " alt="" coords="253,28,181,28,181,23,253,23"/>
+<area shape="poly" title=" " alt="" coords="712,338,596,331,472,316,414,304,415,299,472,311,597,325,712,333"/>
+<area shape="poly" title=" " alt="" coords="711,407,596,379,471,341,382,304,384,299,473,336,597,373,713,402"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a856446ae8b57c389ce142f516ba72a2f" title=" " alt="" coords="491,427,658,467"/>
+<area shape="poly" title=" " alt="" coords="712,445,659,450,658,445,711,440"/>
+<area shape="poly" title=" " alt="" coords="495,423,471,410,436,385,404,356,356,303,360,300,408,352,439,380,473,406,498,419"/>
+<area shape="poly" title=" " alt="" coords="671,426,725,421,725,426,672,431"/>
 </map>
 </div>
 
@@ -331,6 +344,22 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad4cfa95ce11a054d1ee39fb14ec9b3c4" name="ad4cfa95ce11a054d1ee39fb14ec9b3c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4cfa95ce11a054d1ee39fb14ec9b3c4">&#9670;&#160;</a></span>directedTo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string ui::qt::ActorDefinition::directedTo</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Name of the actor this actor's events are directed to (optional) </p>
+
+</div>
+</div>
 <a id="a651e58b29fe8d7782b0a408117dd077c" name="a651e58b29fe8d7782b0a408117dd077c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a651e58b29fe8d7782b0a408117dd077c">&#9670;&#160;</a></span>enabled</h2>
 
@@ -390,6 +419,21 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>ECMAScript/QRegularExpression pattern. </p>
+
+</div>
+</div>
+<a id="a36ca5056f756929d32e93f8370c26197" name="a36ca5056f756929d32e93f8370c26197"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36ca5056f756929d32e93f8370c26197">&#9670;&#160;</a></span>subActorDirectedTo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, std::string&gt; ui::qt::ActorDefinition::subActorDirectedTo</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Per-subactor overrides: subactor name → target actor name (capture-group mode). Falls back to directedTo for subactors not listed here. </p>
 
 </div>
 </div>

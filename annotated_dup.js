@@ -70,6 +70,9 @@ var annotated_dup =
     ] ],
     [ "ui", "d3/df6/namespaceui.html", [
       [ "qt", "d6/d40/namespaceui_1_1qt.html", [
+        [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
+          [ "ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem" ]
+        ] ],
         [ "ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", "de/db8/structui_1_1qt_1_1ActorDefinition" ],
         [ "ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel" ],
         [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
@@ -123,6 +126,7 @@ var annotated_dup =
     [ "QObject", "d9/d5b/classQObject.html", null ],
     [ "QTableView", "d8/d5e/classQTableView.html", null ],
     [ "QTreeWidget", "d3/d5f/classQTreeWidget.html", null ],
+    [ "QTreeWidgetItem", "d1/d15/classQTreeWidgetItem.html", null ],
     [ "QWidget", "d8/ded/classQWidget.html", null ],
     [ "Version", "d4/d46/structVersion.html", null ]
 ];

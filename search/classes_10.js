@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['uiservices_0',['UiServices',['../da/dab/classui_1_1UiServices.html',1,'ui']]],
-  ['unixtodateplugin_1',['UnixToDatePlugin',['../df/dac/classconfig_1_1UnixToDatePlugin.html',1,'config']]],
-  ['updatechecker_2',['UpdateChecker',['../de/d35/classui_1_1qt_1_1UpdateChecker.html',1,'ui::qt']]],
-  ['updatecheckresult_3',['UpdateCheckResult',['../dd/d5c/structupdates_1_1UpdateCheckResult.html',1,'updates']]],
-  ['updatedialog_4',['UpdateDialog',['../d5/d32/classui_1_1qt_1_1UpdateDialog.html',1,'ui::qt']]],
-  ['updatesettings_5',['UpdateSettings',['../d3/d63/structconfig_1_1Config_1_1UpdateSettings.html',1,'config::Config']]]
+  ['tcyclocplugin_0',['TCyclocPlugin',['../d8/de9/classconfig_1_1TCyclocPlugin.html',1,'config']]],
+  ['trackconditionplugin_1',['TrackConditionPlugin',['../d4/d6b/classconfig_1_1TrackConditionPlugin.html',1,'config']]],
+  ['translationresult_2',['TranslationResult',['../dd/d7c/structconfig_1_1TranslationResult.html',1,'config']]],
+  ['typefilterview_3',['TypeFilterView',['../d3/df9/classui_1_1qt_1_1TypeFilterView.html',1,'ui::qt']]]
 ];

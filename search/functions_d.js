@@ -16,7 +16,7 @@ var searchData=
   ['pluginevents_5fgetsizebridge_13',['PluginEvents_GetSizeBridge',['../d6/d40/namespaceui_1_1qt.html#a9b1095ad1ffe19865758ab336bb5c1e8',1,'ui::qt']]],
   ['pluginhostui_5fsetcurrentitembridge_14',['PluginHostUi_SetCurrentItemBridge',['../d6/d40/namespaceui_1_1qt.html#a8a4882a0ad2e3814a64d3feb8658527a',1,'ui::qt']]],
   ['pluginmanager_15',['pluginmanager',['../d3/d67/classplugin_1_1PluginManager.html#a489b90a8d9b6b739400af848a71d7608',1,'plugin::PluginManager::PluginManager(const PluginManager &amp;)=delete'],['../d3/d67/classplugin_1_1PluginManager.html#a87f718e35b4d317efabe38cdd874a92e',1,'plugin::PluginManager::PluginManager()=default']]],
-  ['populateactortable_16',['PopulateActorTable',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a186e229c0897f261a3d61c55a55d93a7',1,'ui::qt::ActorsPanel']]],
+  ['populateactortree_16',['PopulateActorTree',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#abc5b834aa0b0abb883137663405510fb',1,'ui::qt::ActorsPanel']]],
   ['populatecolumncombo_17',['PopulateColumnCombo',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a126d9d7c625653a78b1257b56b3d0a44',1,'ui::qt::StatsSummaryPanel']]],
   ['populatecolumns_18',['PopulateColumns',['../dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#ad32895656cc009f234267a979d7a648f',1,'ui::qt::FilterEditorDialog']]],
   ['probeoptionalpluginexports_19',['ProbeOptionalPluginExports',['../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1',1,'plugin']]],

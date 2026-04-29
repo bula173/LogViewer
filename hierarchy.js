@@ -16,6 +16,7 @@ var hierarchy =
     [ "filters::FilterCondition", "dc/d53/structfilters_1_1FilterCondition.html", null ],
     [ "filters::FilterManager", "d5/db4/classfilters_1_1FilterManager.html", null ],
     [ "plugin::FunctionRegistry< FnType >", "d9/d75/classplugin_1_1FunctionRegistry.html", null ],
+    [ "ui::qt::ActorsPanel::GroupData", "d9/df9/structui_1_1qt_1_1ActorsPanel_1_1GroupData.html", null ],
     [ "IContrloler", "d2/d41/classIContrloler.html", null ],
     [ "mvc::IController", "d1/d06/classmvc_1_1IController.html", [
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ]
@@ -119,6 +120,9 @@ var hierarchy =
     ] ],
     [ "QTreeWidget", "d3/d5f/classQTreeWidget.html", [
       [ "ui::qt::SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", null ]
+    ] ],
+    [ "QTreeWidgetItem", "d1/d15/classQTreeWidgetItem.html", [
+      [ "ui::qt::anonymous_namespace{ActorsPanel.cpp}::ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", null ]
     ] ],
     [ "QWidget", "d8/ded/classQWidget.html", [
       [ "ui::qt::ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", null ],

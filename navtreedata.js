@@ -844,22 +844,22 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md261",
-"d2/d5e/classconfig_1_1Config.html#a422afbcc6ec072dd11356e9b45a6a5e9",
-"d3/d67/classplugin_1_1PluginManager.html#aab7b54d7ad4b08e54e30a5ed4590c816",
-"d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md156",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a46431851332be08297e89eb36f40c216",
-"d5/d32/classui_1_1qt_1_1UpdateDialog.html#ab52b34ec8c3be85d3982ba2265579685",
-"d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a5571de38e56111a9745abab5cc548c93",
-"d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md60",
-"d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md233",
-"d9/dd2/classparser_1_1CsvParser.html#ab7ce010d20a53a9aba0cb83c965392f6",
-"da/ddc/namespacemvc.html",
-"dd/d0e/namespaceui_1_1qt_1_1ExportManager.html",
-"dd/dc2/classdb_1_1EventsContainer.html#aaed5363927f1baab3e7994dc91404538",
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a04de4f4dd8dec5fe61822653853a5225",
-"namespacemembers_vars.html"
+"d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md260",
+"d2/d5e/classconfig_1_1Config.html#a1b05334459ccf4da13cefcf1c86e16dc",
+"d3/d67/classplugin_1_1PluginManager.html#a87f718e35b4d317efabe38cdd874a92e",
+"d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md143",
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#a37c81c525cc79372c9017f3be6d108e7",
+"d5/d32/classui_1_1qt_1_1UpdateDialog.html#a1d1d5ded66f6e6dd8fddf5aabb5b4617",
+"d6/d4a/classui_1_1IEventsListView.html#a37c3ada3f30f22f2cbac4152ba541a3e",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a4a89d9c9b1262b54598456a2a460652e",
+"d8/d16/namespaceVersion.html",
+"d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md211",
+"d9/dd2/classparser_1_1CsvParser.html#a5ef5b41b121c679c37fbae6617f39848",
+"da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md290",
+"dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a87d782770e3fdb5f7dd43128d938383f",
+"dd/dc2/classdb_1_1EventsContainer.html#a1c3a6e4eca84c6a25e070235973a99c3",
+"de/db8/structui_1_1qt_1_1ActorDefinition.html#a445e7536a5d738eefc09b4ed2b6b3ac1",
+"index.html#autotoc_md12"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

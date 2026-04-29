@@ -1,7 +1,7 @@
 var KeyEncryption_8cpp =
 [
-    [ "XorHexDecode", "df/dc7/KeyEncryption_8cpp.html#a6368ad3d1ffa3f5937ee5985adf621aa", null ],
-    [ "XorHexEncode", "df/dc7/KeyEncryption_8cpp.html#ac1be93e401211382b4627e33dd7dbfe2", null ],
-    [ "ENCRYPTED_PREFIX", "df/dc7/KeyEncryption_8cpp.html#a73a122113c600604a80846a7faef3f1c", null ],
-    [ "kObfKey", "df/dc7/KeyEncryption_8cpp.html#a09f42159da196169f4eb6d4a00b5417a", null ]
+    [ "Base64Decode", "df/dc7/KeyEncryption_8cpp.html#a22f0dda98ec359698c1ceaae46f836e6", null ],
+    [ "Base64Encode", "df/dc7/KeyEncryption_8cpp.html#a5850c65ff5aa0bf11868a1aba4b727af", null ],
+    [ "ENCODED_PREFIX", "df/dc7/KeyEncryption_8cpp.html#ac36ec596197a8e45000f8d892a09900c", null ],
+    [ "kBase64Chars", "df/dc7/KeyEncryption_8cpp.html#a3369ad35d3a607dd14dc07919febcace", null ]
 ];

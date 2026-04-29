@@ -2,7 +2,7 @@ var searchData=
 [
   ['icontroller_0',['IController',['../d1/d06/classmvc_1_1IController.html#a1fb97e7a90d897a16c2d287be2938c62',1,'mvc::IController']]],
   ['imodel_1',['IModel',['../dc/d2d/classmvc_1_1IModel.html#a8fa71a57f92461eb590a80852cfa7c03',1,'mvc::IModel']]],
-  ['info_2',['info',['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()'],['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()']]],
+  ['info_2',['info',['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()'],['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()']]],
   ['initcolorstab_3',['InitColorsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#acaf9ac5e19e0aef3e4e08d4b19b1d5c6',1,'ui::qt::StructuredConfigDialog']]],
   ['initcolumnstab_4',['InitColumnsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0d65ae5a699de44cc24395a4f73f541a',1,'ui::qt::StructuredConfigDialog']]],
   ['initdictionarytab_5',['InitDictionaryTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a765ca581f174717d96aa46043af628b6',1,'ui::qt::StructuredConfigDialog']]],

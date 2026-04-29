@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hextoasciiplugin_0',['HexToAsciiPlugin',['../d3/de9/classconfig_1_1HexToAsciiPlugin.html',1,'config']]]
+  ['groupdata_0',['GroupData',['../d9/df9/structui_1_1qt_1_1ActorsPanel_1_1GroupData.html',1,'ui::qt::ActorsPanel']]]
 ];

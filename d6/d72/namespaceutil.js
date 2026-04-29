@@ -20,10 +20,10 @@ var namespaceutil =
       [ "Critical", "d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a278d01e5af56273bae1bb99a98b370cd", null ],
       [ "Off", "d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7ad15305d7a4e34e02489c74a5ef542f36", null ]
     ] ],
+    [ "Base64Decode", "d6/d72/namespaceutil.html#a22f0dda98ec359698c1ceaae46f836e6", null ],
+    [ "Base64Encode", "d6/d72/namespaceutil.html#a5850c65ff5aa0bf11868a1aba4b727af", null ],
     [ "Err", "d6/d72/namespaceutil.html#a721283df15ed8bc045349e77c0105ca2", null ],
     [ "Ok", "d6/d72/namespaceutil.html#ae8d6b0e720e0df213bab5886d6d25585", null ],
-    [ "XorHexDecode", "d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa", null ],
-    [ "XorHexEncode", "d6/d72/namespaceutil.html#ac1be93e401211382b4627e33dd7dbfe2", null ],
-    [ "ENCRYPTED_PREFIX", "d6/d72/namespaceutil.html#a73a122113c600604a80846a7faef3f1c", null ],
-    [ "kObfKey", "d6/d72/namespaceutil.html#a09f42159da196169f4eb6d4a00b5417a", null ]
+    [ "ENCODED_PREFIX", "d6/d72/namespaceutil.html#ac36ec596197a8e45000f8d892a09900c", null ],
+    [ "kBase64Chars", "d6/d72/namespaceutil.html#a3369ad35d3a607dd14dc07919febcace", null ]
 ];

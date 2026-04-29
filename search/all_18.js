@@ -11,13 +11,14 @@ var searchData=
   ['qt_20version_8',['Qt Version',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md214',1,'']]],
   ['qtableview_9',['QTableView',['../d8/d5e/classQTableView.html',1,'']]],
   ['qtreewidget_10',['QTreeWidget',['../d3/d5f/classQTreeWidget.html',1,'']]],
-  ['quality_11',['Code Quality',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md191',1,'']]],
-  ['quality_20checklist_12',['Code Quality Checklist',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md373',1,'']]],
-  ['quality_20checks_13',['Code Quality Checks',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236',1,'']]],
-  ['quality_20tools_14',['Code Quality Tools',['../index.html#autotoc_md10',1,'']]],
-  ['quick_20reference_15',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]],
-  ['quick_20start_16',['quick start',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md200',1,'Quick Start'],['../index.html#autotoc_md7',1,'Quick Start'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md322',1,'Quick Start'],['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md363',1,'Quick Start'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md534',1,'Quick Start']]],
-  ['quick_20start_205_20minutes_17',['Quick Start (5 Minutes)',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md616',1,'']]],
-  ['quotecsvfield_18',['QuoteCsvField',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html#a2e225de5c983c19212c9b5209df9575a',1,'ui::qt::ExportManager::anonymous_namespace{ExportManager.cpp}']]],
-  ['qwidget_19',['QWidget',['../d8/ded/classQWidget.html',1,'']]]
+  ['qtreewidgetitem_11',['QTreeWidgetItem',['../d1/d15/classQTreeWidgetItem.html',1,'']]],
+  ['quality_12',['Code Quality',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md191',1,'']]],
+  ['quality_20checklist_13',['Code Quality Checklist',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md373',1,'']]],
+  ['quality_20checks_14',['Code Quality Checks',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236',1,'']]],
+  ['quality_20tools_15',['Code Quality Tools',['../index.html#autotoc_md10',1,'']]],
+  ['quick_20reference_16',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]],
+  ['quick_20start_17',['quick start',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md200',1,'Quick Start'],['../index.html#autotoc_md7',1,'Quick Start'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md322',1,'Quick Start'],['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md363',1,'Quick Start'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md534',1,'Quick Start']]],
+  ['quick_20start_205_20minutes_18',['Quick Start (5 Minutes)',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md616',1,'']]],
+  ['quotecsvfield_19',['QuoteCsvField',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html#a2e225de5c983c19212c9b5209df9575a',1,'ui::qt::ExportManager::anonymous_namespace{ExportManager.cpp}']]],
+  ['qwidget_20',['QWidget',['../d8/ded/classQWidget.html',1,'']]]
 ];

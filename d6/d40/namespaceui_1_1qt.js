@@ -1,8 +1,6 @@
 var namespaceui_1_1qt =
 [
-    [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
-      [ "AccumulateEventStats", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html#aa2bcdb3218ddb97792d7a38c9c5b60ad", null ]
-    ] ],
+    [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03" ],
     [ "anonymous_namespace{FilterEditorDialog.cpp}", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html", [
       [ "kColumnFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190", null ],
       [ "kParameterFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf", null ]

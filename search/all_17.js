@@ -148,7 +148,7 @@ var searchData=
   ['pluginupdateinfo_145',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]],
   ['pointer_20management_146',['Issue 1.1: Type-Unsafe Function Pointer Management',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md168',1,'']]],
   ['pointer_20observer_20pattern_147',['Issue 2.1: Raw Pointer Observer Pattern',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md173',1,'']]],
-  ['populateactortable_148',['PopulateActorTable',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a186e229c0897f261a3d61c55a55d93a7',1,'ui::qt::ActorsPanel']]],
+  ['populateactortree_148',['PopulateActorTree',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#abc5b834aa0b0abb883137663405510fb',1,'ui::qt::ActorsPanel']]],
   ['populatecolumncombo_149',['PopulateColumnCombo',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a126d9d7c625653a78b1257b56b3d0a44',1,'ui::qt::StatsSummaryPanel']]],
   ['populatecolumns_150',['PopulateColumns',['../dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#ad32895656cc009f234267a979d7a648f',1,'ui::qt::FilterEditorDialog']]],
   ['portability_20requirements_151',['3.6 Portability Requirements',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md592',1,'']]],

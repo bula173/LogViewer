@@ -8,7 +8,5 @@ var searchData=
   ['xmlparser_5',['xmlparser',['../db/d5c/classparser_1_1XmlParser.html',1,'parser::XmlParser'],['../db/d5c/classparser_1_1XmlParser.html#a9100433d60db6d99323769b039d72c67',1,'parser::XmlParser::XmlParser()']]],
   ['xmlparser_2ecpp_6',['xmlParser.cpp',['../d9/d88/xmlParser_8cpp.html',1,'']]],
   ['xmlparser_2ehpp_7',['xmlParser.hpp',['../da/d8a/xmlParser_8hpp.html',1,'']]],
-  ['xmlrootelement_8',['xmlRootElement',['../d2/d5e/classconfig_1_1Config.html#ab59b95820df7b0fa4cc38cf64dd90cc5',1,'config::Config']]],
-  ['xorhexdecode_9',['XorHexDecode',['../d6/d72/namespaceutil.html#a6368ad3d1ffa3f5937ee5985adf621aa',1,'util']]],
-  ['xorhexencode_10',['XorHexEncode',['../d6/d72/namespaceutil.html#ac1be93e401211382b4627e33dd7dbfe2',1,'util']]]
+  ['xmlrootelement_8',['xmlRootElement',['../d2/d5e/classconfig_1_1Config.html#ab59b95820df7b0fa4cc38cf64dd90cc5',1,'config::Config']]]
 ];

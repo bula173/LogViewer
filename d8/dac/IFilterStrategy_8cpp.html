@@ -103,27 +103,30 @@ $(document).ready(function(){initNavTree('d8/dac/IFilterStrategy_8cpp.html','../
 <div class="textblock"><code>#include &quot;<a class="el" href="../../da/d4d/IFilterStrategy_8hpp_source.html">IFilterStrategy.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d9/d11/Logger_8hpp_source.html">Logger.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
-<code>#include &lt;unordered_map&gt;</code><br />
-<code>#include &lt;regex&gt;</code><br />
 <code>#include &lt;cctype&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;regex&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for IFilterStrategy.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d65/IFilterStrategy_8cpp__incl.png" border="0" usemap="#asrc_2application_2filters_2IFilterStrategy_8cpp" alt=""/></div>
 <map name="asrc_2application_2filters_2IFilterStrategy_8cpp" id="asrc_2application_2filters_2IFilterStrategy_8cpp">
-<area shape="rect" title="Implementation of filter matching strategies." alt="" coords="456,5,615,45"/>
+<area shape="rect" title="Implementation of filter matching strategies." alt="" coords="492,5,651,45"/>
 <area shape="rect" href="../../da/d4d/IFilterStrategy_8hpp.html" title="Strategy interface for different filter matching algorithms." alt="" coords="120,93,260,119"/>
-<area shape="poly" title=" " alt="" coords="456,47,254,93,253,88,455,42"/>
+<area shape="poly" title=" " alt="" coords="492,46,260,93,259,88,491,40"/>
 <area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="311,93,405,119"/>
-<area shape="poly" title=" " alt="" coords="494,48,398,90,395,85,492,43"/>
+<area shape="poly" title=" " alt="" coords="521,48,403,91,402,86,519,43"/>
 <area shape="rect" title=" " alt="" coords="429,93,514,119"/>
-<area shape="poly" title=" " alt="" coords="522,47,492,84,488,81,518,44"/>
-<area shape="rect" title=" " alt="" coords="539,93,663,119"/>
-<area shape="poly" title=" " alt="" coords="553,44,584,81,580,84,549,47"/>
-<area shape="rect" title=" " alt="" coords="687,93,746,119"/>
-<area shape="poly" title=" " alt="" coords="580,43,678,85,676,90,578,48"/>
-<area shape="rect" title=" " alt="" coords="771,93,836,119"/>
-<area shape="poly" title=" " alt="" coords="600,43,758,89,757,94,599,48"/>
+<area shape="poly" title=" " alt="" coords="549,48,499,87,496,82,545,43"/>
+<area shape="rect" title=" " alt="" coords="539,93,604,119"/>
+<area shape="poly" title=" " alt="" coords="574,46,574,79,569,79,569,46"/>
+<area shape="rect" title=" " alt="" coords="629,93,693,119"/>
+<area shape="poly" title=" " alt="" coords="595,44,639,82,635,86,591,48"/>
+<area shape="rect" title=" " alt="" coords="717,93,775,119"/>
+<area shape="poly" title=" " alt="" coords="614,43,709,85,707,90,612,48"/>
+<area shape="rect" title=" " alt="" coords="800,93,924,119"/>
+<area shape="poly" title=" " alt="" coords="642,43,807,87,806,92,640,48"/>
 <area shape="rect" title=" " alt="" coords="93,174,170,199"/>
 <area shape="poly" title=" " alt="" coords="183,120,150,164,146,161,179,117"/>
 <area shape="rect" title=" " alt="" coords="194,174,253,199"/>
@@ -167,6 +170,8 @@ Variables</h2></td></tr>
 <tr class="separator:aacbf2939ddb6941e2b0215738e3196a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a874c02999dff02fba1abf14e7ad98c08" id="r_a874c02999dff02fba1abf14e7ad98c08"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dac/IFilterStrategy_8cpp.html#a874c02999dff02fba1abf14e7ad98c08">MAX_CACHE_SIZE</a> = 100</td></tr>
 <tr class="separator:a874c02999dff02fba1abf14e7ad98c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8681f16c66dd27fa61dd89e4ea14f7be" id="r_a8681f16c66dd27fa61dd89e4ea14f7be"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dac/IFilterStrategy_8cpp.html#a8681f16c66dd27fa61dd89e4ea14f7be">s_regexCacheMutex</a></td></tr>
+<tr class="separator:a8681f16c66dd27fa61dd89e4ea14f7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Implementation of filter matching strategies. </p>
@@ -206,6 +211,28 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::unordered_map&lt;std::string, std::regex&gt; s_regexCache</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8681f16c66dd27fa61dd89e4ea14f7be" name="a8681f16c66dd27fa61dd89e4ea14f7be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8681f16c66dd27fa61dd89e4ea14f7be">&#9670;&#160;</a></span>s_regexCacheMutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex s_regexCacheMutex</td>
         </tr>
       </table>
   </td>

@@ -19,6 +19,7 @@ var classui_1_1qt_1_1ActorDefinitionsPanel =
     [ "RequestApplyFilter", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a819c8d0c304ed04896c02fc112b4fd22", null ],
     [ "RequestClearFilter", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a4e487458978954d1bdd233fcc73fb8c1", null ],
     [ "SetStatus", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a01ba35c9fa3df7aedb3f934197ed52ce", null ],
+    [ "UpdateActorDirection", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aa073b8fb763eae396225121081e08be4", null ],
     [ "m_applyFilterBtn", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a2684377db926db7d8b5fbb48de3f6600", null ],
     [ "m_clearFilterBtn", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a73b859aff5265dafa905bdc827c49b7f", null ],
     [ "m_currentFilePath", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aed55451641cca9fe784abdb145542f9c", null ],

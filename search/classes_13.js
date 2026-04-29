@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xmlparser_0',['XmlParser',['../db/d5c/classparser_1_1XmlParser.html',1,'parser']]]
+  ['wildcardstrategy_0',['WildcardStrategy',['../d4/d6e/classfilters_1_1WildcardStrategy.html',1,'filters']]]
 ];
