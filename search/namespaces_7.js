@@ -6,8 +6,9 @@ var searchData=
   ['ui_3a_3aqt_3a_3aanonymous_5fnamespace_7bactorspanel_2ecpp_7d_3',['anonymous_namespace{ActorsPanel.cpp}',['../d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aanonymous_5fnamespace_7bfiltereditordialog_2ecpp_7d_4',['anonymous_namespace{FilterEditorDialog.cpp}',['../dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aanonymous_5fnamespace_7bfilterspanel_2ecpp_7d_5',['anonymous_namespace{FiltersPanel.cpp}',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html',1,'ui::qt']]],
-  ['ui_3a_3aqt_3a_3aexportmanager_6',['ExportManager',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html',1,'ui::qt']]],
-  ['ui_3a_3aqt_3a_3aexportmanager_3a_3aanonymous_5fnamespace_7bexportmanager_2ecpp_7d_7',['anonymous_namespace{ExportManager.cpp}',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html',1,'ui::qt::ExportManager']]],
-  ['updates_8',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
-  ['util_9',['util',['../d6/d72/namespaceutil.html',1,'']]]
+  ['ui_3a_3aqt_3a_3aanonymous_5fnamespace_7bpatternanalysispanel_2ecpp_7d_6',['anonymous_namespace{PatternAnalysisPanel.cpp}',['../d5/dfe/namespaceui_1_1qt_1_1anonymous__namespace_02PatternAnalysisPanel_8cpp_03.html',1,'ui::qt']]],
+  ['ui_3a_3aqt_3a_3aexportmanager_7',['ExportManager',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html',1,'ui::qt']]],
+  ['ui_3a_3aqt_3a_3aexportmanager_3a_3aanonymous_5fnamespace_7bexportmanager_2ecpp_7d_8',['anonymous_namespace{ExportManager.cpp}',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html',1,'ui::qt::ExportManager']]],
+  ['updates_9',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
+  ['util_10',['util',['../d6/d72/namespaceutil.html',1,'']]]
 ];

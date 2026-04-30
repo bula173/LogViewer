@@ -10,6 +10,8 @@ var searchData=
   ['filtereditordialog_2ehpp_7',['FilterEditorDialog.hpp',['../d3/d69/FilterEditorDialog_8hpp.html',1,'']]],
   ['filtermanager_2ecpp_8',['FilterManager.cpp',['../df/da7/FilterManager_8cpp.html',1,'']]],
   ['filtermanager_2ehpp_9',['FilterManager.hpp',['../d4/d19/FilterManager_8hpp.html',1,'']]],
-  ['filterspanel_2ecpp_10',['FiltersPanel.cpp',['../d0/d34/FiltersPanel_8cpp.html',1,'']]],
-  ['filterspanel_2ehpp_11',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]]
+  ['filterprofilespanel_2ecpp_10',['FilterProfilesPanel.cpp',['../d2/db8/FilterProfilesPanel_8cpp.html',1,'']]],
+  ['filterprofilespanel_2ehpp_11',['FilterProfilesPanel.hpp',['../d0/d66/FilterProfilesPanel_8hpp.html',1,'']]],
+  ['filterspanel_2ecpp_12',['FiltersPanel.cpp',['../d0/d34/FiltersPanel_8cpp.html',1,'']]],
+  ['filterspanel_2ehpp_13',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]]
 ];

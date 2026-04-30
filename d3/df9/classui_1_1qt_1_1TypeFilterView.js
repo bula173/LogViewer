@@ -9,6 +9,7 @@ var classui_1_1qt_1_1TypeFilterView =
     [ "ReplaceTypes", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5d93d571b95d0257f703fa46e70b4ba8", null ],
     [ "SelectAll", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#ad3ada358e936f3ef37e3857c6deb12db", null ],
     [ "SetAll", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a0d5824d717315b738856c68578fb5d76", null ],
+    [ "SetCheckedTypes", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a766f47a9aacfdf525774677bc77cbb53", null ],
     [ "SetOnFilterChanged", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a25a997ec8a3e3c1ecba5b18a724d7104", null ],
     [ "ShowControl", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a3bec799cda7d56d034f857431cdc036f", null ],
     [ "m_listWidget", "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5e0ae0b3b9b13fbdda451ea95746c17f", null ],

@@ -10,7 +10,7 @@ var searchData=
   ['loaddependencyhandles_7',['LoadDependencyHandles',['../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225',1,'plugin']]],
   ['loadfilters_8',['loadFilters',['../d5/db4/classfilters_1_1FilterManager.html#ac6ed54e7ff7d60cb119c09fafd065623',1,'filters::FilterManager']]],
   ['loadfiltersfrompath_9',['loadFiltersFromPath',['../d5/db4/classfilters_1_1FilterManager.html#a58352779507a36e620b3cd142710e1fc',1,'filters::FilterManager']]],
-  ['loadfromfile_10',['LoadFromFile',['../d9/da7/classconfig_1_1FieldTranslator.html#a6fd59d919c4360582e2351c160c3274c',1,'config::FieldTranslator']]],
+  ['loadfromfile_10',['loadfromfile',['../d9/da7/classconfig_1_1FieldTranslator.html#a6fd59d919c4360582e2351c160c3274c',1,'config::FieldTranslator::LoadFromFile()'],['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e',1,'ui::qt::FilterProfilesPanel::LoadFromFile()']]],
   ['loadlibraryhelper_11',['LoadLibraryHelper',['../d8/d08/namespaceplugin_1_1anonymous__namespace_02PluginManager_8cpp_03.html#ab722d34fdb12488086fd6dbc427d582a',1,'plugin::anonymous_namespace{PluginManager.cpp}']]],
   ['loadlogfile_12',['loadlogfile',['../d5/dc9/classui_1_1MainWindowPresenter.html#aef19a1d1a61f61089b2117a66b8c378d',1,'ui::MainWindowPresenter::LoadLogFile()'],['../d5/d44/classmvc_1_1MainController.html#ae947c16c7a5decf345def9b6cf17f14d',1,'mvc::MainController::LoadLogFile()'],['../d1/d06/classmvc_1_1IController.html#ae1ca182d809b11e02a048677d8e9455b',1,'mvc::IController::LoadLogFile()']]],
   ['loadplugin_13',['LoadPlugin',['../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d',1,'plugin::PluginManager']]],

@@ -455,19 +455,23 @@ Here is the caller graph for this function:</div>
 
 <p>Notifies all registered views that the model's data has changed. </p>
 <p>This method should be called whenever the model's data is updated to ensure all views are refreshed with the latest information.</p>
-<dl class="section note"><dt>Note</dt><dd>Views should implement OnDataUpdated() to handle this notification </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Views should implement OnDataUpdated() to handle this notification.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd><code><a class="el" href="../../dc/d2d/classmvc_1_1IModel.html" title="Interface for model components in the MVC architecture.">IModel</a></code> stores raw pointers. Callers must call <code><a class="el" href="../../dc/d2d/classmvc_1_1IModel.html#a130db4ec5dbe8deeb41647606fa2a3b0" title="Registers a view to receive data update notifications.">RegisterOndDataUpdated()</a></code> before a view is destroyed. Prefer <code><a class="el" href="../../da/d80/classmvc_1_1IModelObservable.html" title="Improved IModel with weak_ptr observers for automatic cleanup.">IModelObservable</a></code> for new code — it uses <code>std::weak_ptr</code> and cleans up automatically. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/d2d/classmvc_1_1IModel_aecc89af25b0685af5395062d6c9b2adb_cgraph.png" border="0" usemap="#adc/d2d/classmvc_1_1IModel_aecc89af25b0685af5395062d6c9b2adb_cgraph" alt=""/></div>
 <map name="adc/d2d/classmvc_1_1IModel_aecc89af25b0685af5395062d6c9b2adb_cgraph" id="adc/d2d/classmvc_1_1IModel_aecc89af25b0685af5395062d6c9b2adb_cgraph">
-<area shape="rect" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="5,5,243,31"/>
+<area shape="rect" title="Notifies all registered views that the model&#39;s data has changed." alt="" coords="5,31,243,56"/>
 <area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="291,5,428,31"/>
-<area shape="poly" title=" " alt="" coords="243,15,277,15,277,21,243,21"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="476,5,657,31"/>
-<area shape="poly" title=" " alt="" coords="428,15,462,15,462,21,428,21"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="705,5,864,31"/>
-<area shape="poly" title=" " alt="" coords="657,15,692,15,692,21,657,21"/>
+<area shape="poly" title=" " alt="" coords="242,28,277,24,277,29,242,33"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="291,55,427,80"/>
+<area shape="poly" title=" " alt="" coords="243,53,278,56,277,62,242,58"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="476,31,657,56"/>
+<area shape="poly" title=" " alt="" coords="429,24,463,28,462,33,428,29"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="705,31,864,56"/>
+<area shape="poly" title=" " alt="" coords="657,41,692,41,692,46,657,46"/>
+<area shape="poly" title=" " alt="" coords="427,57,462,53,463,58,428,62"/>
 </map>
 </div>
 <div class="dynheader">
@@ -536,11 +540,11 @@ Here is the caller graph for this function:</div>
 <p>Registers a view to receive data update notifications. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">view</td><td>Pointer to the view object to register </td></tr>
+    <tr><td class="paramname">view</td><td>Pointer to the view object to register. Must remain valid for the entire lifetime of this model (or until manually removed — though <code><a class="el" href="../../dc/d2d/classmvc_1_1IModel.html" title="Interface for model components in the MVC architecture.">IModel</a></code> has no UnregisterView).</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>The view must implement the <a class="el" href="../../d3/dba/classmvc_1_1IView.html" title="Interface for view components in the MVC architecture.">IView</a> interface and remain valid for the lifetime of the model </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="../../da/d58/deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Prefer <code>IModelObservable::RegisterView(std::shared_ptr&lt;IView&gt;)</code> which manages view lifetime automatically via <code>std::weak_ptr</code>. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">

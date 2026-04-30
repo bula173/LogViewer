@@ -17,7 +17,7 @@ var classdb_1_1EventsContainer =
     [ "SetCurrentItem", "dd/dc2/classdb_1_1EventsContainer.html#a3fc32ef754405956b1d385968266639c", null ],
     [ "Size", "dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664", null ],
     [ "SuspendNotifications", "dd/dc2/classdb_1_1EventsContainer.html#a15c2bf78cbdfa732a52a7db0078abfec", null ],
-    [ "m_currentItem", "dd/dc2/classdb_1_1EventsContainer.html#af918d530a5226198a55dcc1891295fd6", null ],
+    [ "m_currentItem", "dd/dc2/classdb_1_1EventsContainer.html#acef32ebcec29e674e21d49aa4ccc7941", null ],
     [ "m_data", "dd/dc2/classdb_1_1EventsContainer.html#a551b1a5de03069665bda95df6cfe047a", null ],
     [ "m_mutex", "dd/dc2/classdb_1_1EventsContainer.html#ab65d87924a1501344a9c6b5cf13e34e0", null ],
     [ "m_notificationsEnabled", "dd/dc2/classdb_1_1EventsContainer.html#abc2ab1247bad3db7fcf879062be665c4", null ],

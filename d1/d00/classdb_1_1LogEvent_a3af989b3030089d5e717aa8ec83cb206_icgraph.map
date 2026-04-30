@@ -1,37 +1,44 @@
 <map id="db::LogEvent::getEventItems" name="db::LogEvent::getEventItems">
-<area shape="rect" id="Node000001" title="Gets a const reference to the event&#39;s data items." alt="" coords="1089,277,1299,302"/>
-<area shape="rect" id="Node000002" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17" title=" " alt="" coords="878,348,1025,388"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1141,309,1015,350,1013,345,1140,304"/>
-<area shape="rect" id="Node000005" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0" title=" " alt="" coords="866,173,1037,213"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1147,274,1002,216,1004,211,1149,269"/>
-<area shape="rect" id="Node000014" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a4238fdfadd98e5ae5ec517423a3682c4" title=" " alt="" coords="861,269,1041,309"/>
-<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1076,292,1042,292,1042,287,1076,287"/>
-<area shape="rect" id="Node000003" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a49675c9000dedc574d6fd847eacf6c63" title=" " alt="" coords="200,280,348,320"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="864,362,348,310,348,305,865,357"/>
-<area shape="rect" id="Node000004" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2" title=" " alt="" coords="5,191,152,231"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="216,277,123,233,125,229,218,272"/>
-<area shape="rect" id="Node000006" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429" title=" " alt="" coords="633,197,807,237"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="852,206,808,211,807,206,852,201"/>
-<area shape="rect" id="Node000008" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a187ae88b0f3eca4d215c9c1ad889202e" title="Called when the current item index in the model is updated." alt="" coords="627,133,813,173"/>
-<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="852,179,813,172,814,167,853,174"/>
-<area shape="rect" id="Node000009" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a9eff40ad09d7634302990ee70e24542f" title="Refreshes the details view content." alt="" coords="635,69,805,109"/>
-<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="902,169,812,124,782,112,784,107,814,119,905,164"/>
-<area shape="rect" id="Node000007" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ab116e7d43395ccdfb11e6f37b9a3a0" title=" " alt="" coords="201,191,347,231"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="619,219,348,214,348,209,619,213"/>
-<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="187,213,152,213,152,208,187,208"/>
-<area shape="rect" id="Node000010" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#aa288f7326335a5ef49a89d2b588bff65" title=" " alt="" coords="396,5,579,45"/>
-<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="633,68,560,48,561,43,634,63"/>
-<area shape="rect" id="Node000012" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a37c81c525cc79372c9017f3be6d108e7" title=" " alt="" coords="414,133,561,173"/>
-<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="634,116,561,136,560,131,633,110"/>
-<area shape="rect" id="Node000013" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a4450012c6a01556d263957578047d67b" title="Called when the model&#39;s data is updated." alt="" coords="402,69,573,109"/>
-<area shape="poly" id="edge14_Node000009_Node000013" title=" " alt="" coords="621,92,573,92,573,87,621,87"/>
-<area shape="rect" id="Node000011" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a2f0569ea3845a4ecfcad18cad1e7ed0d" title=" " alt="" coords="201,67,347,107"/>
-<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="405,52,345,69,343,64,403,47"/>
-<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="231,117,113,193,110,188,228,112"/>
-<area shape="rect" id="Node000015" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="651,269,789,309"/>
-<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="847,292,790,292,790,287,847,287"/>
-<area shape="poly" id="edge17_Node000015_Node000003" title=" " alt="" coords="637,299,579,303,348,304,348,299,579,297,637,294"/>
-<area shape="rect" id="Node000016" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Update actor definitions; triggers an immediate Refresh()." alt="" coords="418,248,557,288"/>
-<area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="637,284,557,277,557,272,637,279"/>
-<area shape="poly" id="edge19_Node000016_Node000003" title=" " alt="" coords="405,283,349,292,348,286,404,278"/>
+<area shape="rect" id="Node000001" title="Gets a const reference to the event&#39;s data items." alt="" coords="1136,345,1345,370"/>
+<area shape="rect" id="Node000002" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17" title=" " alt="" coords="915,455,1062,495"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1201,378,1034,457,1032,452,1198,374"/>
+<area shape="rect" id="Node000005" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0" title=" " alt="" coords="903,159,1074,199"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1209,339,1017,201,1020,197,1212,334"/>
+<area shape="rect" id="Node000014" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ae59d12c8c240f6f621f1517a039334b3" title="Recompute all analyses from the current visible event set." alt="" coords="889,369,1088,409"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1127,374,1089,379,1088,374,1127,369"/>
+<area shape="rect" id="Node000017" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a4238fdfadd98e5ae5ec517423a3682c4" title=" " alt="" coords="899,305,1079,345"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="1127,346,1078,339,1079,334,1127,340"/>
+<area shape="rect" id="Node000003" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a49675c9000dedc574d6fd847eacf6c63" title=" " alt="" coords="200,312,348,352"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="902,494,796,507,667,512,598,508,528,499,460,483,395,460,359,438,328,409,285,354,290,351,332,406,362,434,397,455,462,478,529,494,598,503,667,507,796,502,902,489"/>
+<area shape="rect" id="Node000004" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2" title=" " alt="" coords="5,69,152,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="246,303,94,111,98,108,250,299"/>
+<area shape="rect" id="Node000006" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429" title=" " alt="" coords="655,35,829,75"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="934,155,782,77,784,72,937,150"/>
+<area shape="rect" id="Node000008" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a187ae88b0f3eca4d215c9c1ad889202e" title="Called when the current item index in the model is updated." alt="" coords="649,191,835,231"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="890,194,836,201,835,196,889,189"/>
+<area shape="rect" id="Node000009" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a9eff40ad09d7634302990ee70e24542f" title="Refreshes the details view content." alt="" coords="657,127,827,167"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="889,169,827,160,828,155,890,163"/>
+<area shape="rect" id="Node000007" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ab116e7d43395ccdfb11e6f37b9a3a0" title=" " alt="" coords="201,5,347,45"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="640,51,347,33,348,27,641,46"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="200,52,141,72,139,67,198,47"/>
+<area shape="rect" id="Node000010" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#aa288f7326335a5ef49a89d2b588bff65" title=" " alt="" coords="404,63,587,103"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="650,126,572,105,574,100,652,121"/>
+<area shape="rect" id="Node000012" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a37c81c525cc79372c9017f3be6d108e7" title=" " alt="" coords="422,127,569,167"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="643,149,569,149,569,144,643,144"/>
+<area shape="rect" id="Node000013" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a4450012c6a01556d263957578047d67b" title="Called when the model&#39;s data is updated." alt="" coords="410,191,581,231"/>
+<area shape="poly" id="edge14_Node000009_Node000013" title=" " alt="" coords="652,173,574,193,572,188,650,168"/>
+<area shape="rect" id="Node000011" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a2f0569ea3845a4ecfcad18cad1e7ed0d" title=" " alt="" coords="201,69,347,109"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="390,88,348,90,348,84,390,83"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="187,92,152,92,152,87,187,87"/>
+<area shape="poly" id="edge18_Node000014_Node000003" title=" " alt="" coords="904,415,800,437,671,452,602,454,532,451,462,441,395,424,365,410,336,392,293,354,296,350,340,388,367,406,397,419,463,436,532,445,602,449,671,446,799,431,903,410"/>
+<area shape="rect" id="Node000015" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a591b295e6c77d043df8b7ab4e0dfb17e" title=" " alt="" coords="643,369,841,409"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="875,392,842,392,842,387,875,387"/>
+<area shape="rect" id="Node000016" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ad0445fedb97b6bbad1e7cdd1ebe983e1" title=" " alt="" coords="396,369,595,409"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="629,392,595,392,595,387,629,387"/>
+<area shape="rect" id="Node000018" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="673,305,811,345"/>
+<area shape="poly" id="edge20_Node000017_Node000018" title=" " alt="" coords="885,328,811,328,811,323,885,323"/>
+<area shape="poly" id="edge21_Node000018_Node000003" title=" " alt="" coords="659,329,348,334,348,328,659,324"/>
+<area shape="rect" id="Node000019" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Update actor definitions; triggers an immediate Refresh()." alt="" coords="426,255,565,295"/>
+<area shape="poly" id="edge22_Node000018_Node000019" title=" " alt="" coords="658,311,564,291,565,286,659,306"/>
+<area shape="poly" id="edge23_Node000019_Node000003" title=" " alt="" coords="413,299,349,315,348,310,412,293"/>
 </map>

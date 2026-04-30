@@ -805,6 +805,7 @@ var NAVTREE =
       [ "Build with LogViewer", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md677", null ],
       [ "Tips", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md678", null ]
     ] ],
+    [ "Deprecated List", "da/d58/deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -844,22 +845,22 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md260",
-"d2/d5e/classconfig_1_1Config.html#a1b05334459ccf4da13cefcf1c86e16dc",
-"d3/d67/classplugin_1_1PluginManager.html#a87f718e35b4d317efabe38cdd874a92e",
-"d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md143",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a37c81c525cc79372c9017f3be6d108e7",
-"d5/d32/classui_1_1qt_1_1UpdateDialog.html#a1d1d5ded66f6e6dd8fddf5aabb5b4617",
-"d6/d4a/classui_1_1IEventsListView.html#a37c3ada3f30f22f2cbac4152ba541a3e",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a4a89d9c9b1262b54598456a2a460652e",
-"d8/d16/namespaceVersion.html",
-"d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md211",
-"d9/dd2/classparser_1_1CsvParser.html#a5ef5b41b121c679c37fbae6617f39848",
-"da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md290",
-"dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a87d782770e3fdb5f7dd43128d938383f",
-"dd/dc2/classdb_1_1EventsContainer.html#a1c3a6e4eca84c6a25e070235973a99c3",
-"de/db8/structui_1_1qt_1_1ActorDefinition.html#a445e7536a5d738eefc09b4ed2b6b3ac1",
-"index.html#autotoc_md12"
+"d1/d38/md_docs_2BUILDING__DOCUMENTATION.html",
+"d2/d40/classui_1_1qt_1_1ActorsPanel.html#ac1914ce5f1adfe3ed84f88c4be383c3e",
+"d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70",
+"d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5d93d571b95d0257f703fa46e70b4ba8",
+"d4/dda/TimeRangeFilterPanel_8hpp.html",
+"d4/dfa/structplugin_1_1PluginLoadInfo.html#aa154570738d0c4c49dc1f81ef850628f",
+"d6/d26/classui_1_1qt_1_1EventsTableView.html#a13b0d98e213448d3f4a2fe4e5572f890",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0277e8447fc55f4f0131b0fa6aa14706",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac49071e6dfa139b5d9d8ffb0f79e3ab2",
+"d8/da3/IPlugin_8hpp.html#a3cb64108b93d0491104872a6a15fa3bda9a83ab0d60fed7c37d928ccb30d1b6ae",
+"d9/d75/classplugin_1_1FunctionRegistry.html#a839ffa71e2844f48bc02cfabb7b8efc3",
+"da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad4e2ef99fbfceedfc4d39a937370d175",
+"dc/d03/classparser_1_1ParserFactory.html#a4cc82a6d204dc907e7e4aec21efd6be5",
+"dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#a07a7bfa9761b3fd2137e8fcf57f79232",
+"de/d0e/classfilters_1_1ExactMatchStrategy.html#a2000e095fbadecf3df82d32f6ba10117",
+"df/d48/classplugin_1_1PluginDependencyGraph.html#aba306d9de28be60316d841d61a4e9b56"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

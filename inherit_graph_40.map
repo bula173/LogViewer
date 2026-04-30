@@ -1,5 +1,37 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$d0/d7f/classui_1_1IErrorPresenter.html" title="Presents user&#45;facing error information via the current UI backend." alt="" coords="5,5,144,31"/>
-<area shape="rect" id="Node000001" href="$d4/d5b/classui_1_1NoopErrorPresenter.html" title="Logger&#45;backed fallback when no concrete UI presenter is registered." alt="" coords="192,5,361,31"/>
-<area shape="poly" id="edge34_Node000000_Node000001" title=" " alt="" coords="158,15,192,15,192,21,158,21"/>
+<area shape="rect" id="Node000000" href="$d9/df7/classui_1_1IEventDetailsView.html" title="Interface describing the event details panel." alt="" coords="5,5,167,31"/>
+<area shape="rect" id="Node000001" href="$dc/d5e/classui_1_1IItemDetailsView.html" title="Toolkit&#45;agnostic interface for the item/event details pane." alt="" coords="215,5,369,31"/>
+<area shape="poly" id="edge35_Node000000_Node000001" title=" " alt="" coords="181,15,214,15,214,21,181,21"/>
+<area shape="rect" id="Node000002" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html" title=" " alt="" coords="435,55,605,80"/>
+<area shape="poly" id="edge36_Node000001_Node000002" title=" " alt="" coords="365,31,461,52,460,57,364,36"/>
+<area shape="rect" id="Node000005" href="$d6/d4a/classui_1_1IEventsListView.html" title="Interface describing the primary events list view used by the UI." alt="" coords="219,104,365,129"/>
+<area shape="rect" id="Node000004" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html" title=" " alt="" coords="433,104,607,129"/>
+<area shape="poly" id="edge37_Node000005_Node000004" title=" " alt="" coords="379,114,433,114,433,119,379,119"/>
+<area shape="rect" id="Node000017" href="$df/d7e/classui_1_1ITypeFilterView.html" title="Toolkit&#45;neutral interface for the type filter checklist panel." alt="" coords="221,203,363,228"/>
+<area shape="rect" id="Node000016" href="$d3/df9/classui_1_1qt_1_1TypeFilterView.html" title="Qt&#45;backed implementation of the log&#45;event type filter panel." alt="" coords="441,177,599,203"/>
+<area shape="poly" id="edge38_Node000017_Node000016" title=" " alt="" coords="376,203,440,196,441,201,377,209"/>
+<area shape="rect" id="Node000003" href="$d3/dba/classmvc_1_1IView.html" title="Interface for view components in the MVC architecture." alt="" coords="245,55,339,80"/>
+<area shape="poly" id="edge40_Node000003_Node000002" title=" " alt="" coords="353,65,434,65,434,70,353,70"/>
+<area shape="poly" id="edge39_Node000003_Node000004" title=" " alt="" coords="353,78,461,101,460,107,352,83"/>
+<area shape="rect" id="Node000006" href="$d8/d5e/classQTableView.html" title=" " alt="" coords="243,153,341,179"/>
+<area shape="poly" id="edge41_Node000006_Node000004" title=" " alt="" coords="354,150,460,127,461,132,355,155"/>
+<area shape="rect" id="Node000007" href="$d8/ded/classQWidget.html" title=" " alt="" coords="253,365,331,391"/>
+<area shape="poly" id="edge46_Node000007_Node000002" title=" " alt="" coords="306,352,336,301,367,238,379,196,382,159,390,124,400,107,416,89,433,78,436,82,419,93,404,110,395,126,387,160,384,196,372,240,341,303,311,355"/>
+<area shape="poly" id="edge51_Node000007_Node000016" title=" " alt="" coords="303,351,321,319,346,281,378,243,416,212,439,200,442,205,419,216,382,247,350,284,325,322,308,354"/>
+<area shape="rect" id="Node000008" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html" title="Left&#45;dock panel for defining named actors by regular expression." alt="" coords="437,277,603,317"/>
+<area shape="poly" id="edge42_Node000007_Node000008" title=" " alt="" coords="336,358,416,327,455,314,457,319,418,333,338,363"/>
+<area shape="rect" id="Node000009" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html" title="Panel showing aggregate statistics per &quot;actor&quot; in the visible event set." alt="" coords="451,341,589,367"/>
+<area shape="poly" id="edge43_Node000007_Node000009" title=" " alt="" coords="345,370,450,359,451,364,345,375"/>
+<area shape="rect" id="Node000010" href="$da/d47/classui_1_1qt_1_1FilterProfilesPanel.html" title="Panel for saving and restoring named filter profiles." alt="" coords="431,391,609,416"/>
+<area shape="poly" id="edge44_Node000007_Node000010" title=" " alt="" coords="345,381,431,391,430,396,345,386"/>
+<area shape="rect" id="Node000011" href="$d8/db0/classui_1_1qt_1_1FiltersPanel.html" title=" " alt="" coords="451,440,589,465"/>
+<area shape="poly" id="edge45_Node000007_Node000011" title=" " alt="" coords="334,394,418,426,459,437,458,443,416,431,333,399"/>
+<area shape="rect" id="Node000012" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html" title="Panel for detecting recurring structures and correlations across log events." alt="" coords="421,489,619,515"/>
+<area shape="poly" id="edge47_Node000007_Node000012" title=" " alt="" coords="317,399,361,438,389,459,418,476,448,487,446,492,416,480,386,463,358,443,313,402"/>
+<area shape="rect" id="Node000013" href="$dd/d79/classui_1_1qt_1_1SearchBar.html" title="Compact browser&#45;style inline search bar for the events table." alt="" coords="455,539,585,564"/>
+<area shape="poly" id="edge48_Node000007_Node000013" title=" " alt="" coords="309,401,353,464,383,497,419,525,456,540,454,545,416,530,380,501,348,467,305,404"/>
+<area shape="rect" id="Node000014" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html" title="Docked panel showing aggregate statistics for the currently visible events." alt="" coords="423,588,617,613"/>
+<area shape="poly" id="edge49_Node000007_Node000014" title=" " alt="" coords="305,403,321,442,345,488,378,535,419,575,439,586,437,590,416,579,373,539,340,491,316,444,300,405"/>
+<area shape="rect" id="Node000015" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html" title="Panel for filtering events by a timestamp range." alt="" coords="417,227,623,252"/>
+<area shape="poly" id="edge50_Node000007_Node000015" title=" " alt="" coords="310,353,355,307,384,283,416,262,447,250,449,255,419,267,388,287,359,311,314,357"/>
 </map>

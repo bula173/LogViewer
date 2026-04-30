@@ -1,0 +1,25 @@
+var classui_1_1qt_1_1PatternAnalysisPanel =
+[
+    [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ad0445fedb97b6bbad1e7cdd1ebe983e1", null ],
+    [ "BuildLayout", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a591b295e6c77d043df8b7ab4e0dfb17e", null ],
+    [ "MergeTokens", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a6e9c484ed5ca13ef4e9aea2dd6fcda3a", null ],
+    [ "Refresh", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ae59d12c8c240f6f621f1517a039334b3", null ],
+    [ "RefreshCooccurrence", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a9a349b6b911e7601b8be0c7c338310ce", null ],
+    [ "RefreshNgrams", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a2c7df8db4d244c489926e6ab27c1524c", null ],
+    [ "RefreshTemplates", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a071e700e1f24a185d484407985989caa", null ],
+    [ "RenderTemplate", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a4ea3bdc3095d1866b30bd7ae256f8174", null ],
+    [ "TemplateSelected", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a136169fa990f26063b9dd03c1710b56b", null ],
+    [ "Tokenise", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a903de34d594474145974c5597e0740f5", null ],
+    [ "VisibleIndices", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a620271dbc983d325f567cc06ca164e17", null ],
+    [ "m_coocTable", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a8ee3de476cfe6d507f69ddb91e2e55d2", null ],
+    [ "m_events", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ab8cf31fb7211ab9d2e8e100aa2467afd", null ],
+    [ "m_eventsView", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#aaa337ea6bf28077002c30e56ce6a0f30", null ],
+    [ "m_msgFieldCombo", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#add02990bcaf6df3fe7566fa378b096d9", null ],
+    [ "m_ngramSizeCombo", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a22d3bc8ff61f41435f0c5a2215f82802", null ],
+    [ "m_ngramTable", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#adfadb1f64a80a9ca43eaea2f3d04ab08", null ],
+    [ "m_ngramTopNSpin", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#af41a3b2bc0ce926ea6379666a1c502c6", null ],
+    [ "m_tabs", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a6cbd617e7bbac5242dd1f296d84babdb", null ],
+    [ "m_templateMatches", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a435b11b95be4c69f8abc5e1672265166", null ],
+    [ "m_templateTable", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ac2b5268bd3cf82923a18156f907fe78c", null ],
+    [ "m_windowSpin", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a57821f9efa52299a75fddfb90ecb1a06", null ]
+];

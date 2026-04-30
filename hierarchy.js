@@ -2,6 +2,7 @@ var hierarchy =
 [
     [ "ui::qt::ActorsPanel::ActorData", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html", null ],
     [ "ui::qt::ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", null ],
+    [ "ui::qt::ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", null ],
     [ "updates::AppUpdateInfo", "d5/d29/structupdates_1_1AppUpdateInfo.html", null ],
     [ "config::ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", null ],
     [ "config::ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", null ],
@@ -15,9 +16,9 @@ var hierarchy =
     [ "filters::Filter", "d9/d12/classfilters_1_1Filter.html", null ],
     [ "filters::FilterCondition", "dc/d53/structfilters_1_1FilterCondition.html", null ],
     [ "filters::FilterManager", "d5/db4/classfilters_1_1FilterManager.html", null ],
+    [ "ui::qt::FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", null ],
     [ "plugin::FunctionRegistry< FnType >", "d9/d75/classplugin_1_1FunctionRegistry.html", null ],
     [ "ui::qt::ActorsPanel::GroupData", "d9/df9/structui_1_1qt_1_1ActorsPanel_1_1GroupData.html", null ],
-    [ "IContrloler", "d2/d41/classIContrloler.html", null ],
     [ "mvc::IController", "d1/d06/classmvc_1_1IController.html", [
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ]
     ] ],
@@ -127,10 +128,13 @@ var hierarchy =
     [ "QWidget", "d8/ded/classQWidget.html", [
       [ "ui::qt::ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", null ],
       [ "ui::qt::ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", null ],
+      [ "ui::qt::FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", null ],
       [ "ui::qt::FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", null ],
       [ "ui::qt::ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", null ],
+      [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],
       [ "ui::qt::SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", null ],
       [ "ui::qt::StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", null ],
+      [ "ui::qt::TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", null ],
       [ "ui::qt::TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", null ]
     ] ],
     [ "util::Result< T, E >", "dd/d2d/classutil_1_1Result.html", null ],
@@ -138,6 +142,7 @@ var hierarchy =
       [ "error::Error", "d7/d0d/classerror_1_1Error.html", null ]
     ] ],
     [ "mvc::SearchResultRow", "de/d74/structmvc_1_1SearchResultRow.html", null ],
+    [ "ui::qt::TimeRangeFilterPanel::State", "d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html", null ],
     [ "config::TranslationResult", "dd/d7c/structconfig_1_1TranslationResult.html", null ],
     [ "ui::UiServices", "da/dab/classui_1_1UiServices.html", null ],
     [ "updates::UpdateCheckResult", "dd/d5c/structupdates_1_1UpdateCheckResult.html", null ],

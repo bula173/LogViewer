@@ -9,5 +9,5 @@ var searchData=
   ['validatenocycles_6',['ValidateNoCycles',['../df/d48/classplugin_1_1PluginDependencyGraph.html#a0acbf002bd6506247961b1b7d23ec893',1,'plugin::PluginDependencyGraph']]],
   ['version_7',['version',['../d1/d14/structVersion_1_1Version.html#a3729ce3ab2fdc7c0eb2c46f9414fcf78',1,'Version::Version::Version()'],['../d1/d14/structVersion_1_1Version.html#abc511228cf9f58cfba871e19cbb31a0d',1,'Version::Version::Version(long long version)']]],
   ['versiongreater_8',['VersionGreater',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#abe8cde870317322fbd93eb8fb598a6f3',1,'ui::qt::UpdateChecker']]],
-  ['visibleindices_9',['visibleindices',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a2b30c1b45eb48b2c1fbd38a23118c09a',1,'ui::qt::ActorsPanel::VisibleIndices()'],['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#aa6d99f439b1bc2302f2911e9d899a643',1,'ui::qt::StatsSummaryPanel::VisibleIndices()']]]
+  ['visibleindices_9',['visibleindices',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a2b30c1b45eb48b2c1fbd38a23118c09a',1,'ui::qt::ActorsPanel::VisibleIndices()'],['../dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a620271dbc983d325f567cc06ca164e17',1,'ui::qt::PatternAnalysisPanel::VisibleIndices()'],['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#aa6d99f439b1bc2302f2911e9d899a643',1,'ui::qt::StatsSummaryPanel::VisibleIndices()']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['xmleventelement_0',['xmlEventElement',['../d2/d5e/classconfig_1_1Config.html#a8e683d74f2805bec9b2b289f672fa025',1,'config::Config']]],
-  ['xmlrootelement_1',['xmlRootElement',['../d2/d5e/classconfig_1_1Config.html#ab59b95820df7b0fa4cc38cf64dd90cc5',1,'config::Config']]]
+  ['wasconverted_0',['wasConverted',['../dd/d7c/structconfig_1_1TranslationResult.html#aa94f87ac1084919bf92e3133e1ffb400',1,'config::TranslationResult']]],
+  ['website_1',['website',['../de/d25/structplugin_1_1PluginMetadata.html#a9a19f88b574143f13c9e5dc4341775d4',1,'plugin::PluginMetadata']]],
+  ['width_2',['width',['../db/deb/structconfig_1_1ColumnConfig.html#a4ab9081149e4bd839eaf220231e0b592',1,'config::ColumnConfig']]]
 ];

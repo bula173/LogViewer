@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['wasconverted_0',['wasConverted',['../dd/d7c/structconfig_1_1TranslationResult.html#aa94f87ac1084919bf92e3133e1ffb400',1,'config::TranslationResult']]],
-  ['website_1',['website',['../de/d25/structplugin_1_1PluginMetadata.html#a9a19f88b574143f13c9e5dc4341775d4',1,'plugin::PluginMetadata']]],
-  ['width_2',['width',['../db/deb/structconfig_1_1ColumnConfig.html#a4ab9081149e4bd839eaf220231e0b592',1,'config::ColumnConfig']]]
+  ['valuemap_0',['valueMap',['../d1/de4/structconfig_1_1FieldDictionary.html#a299bbad0d88b8831917d72e1a136e970',1,'config::FieldDictionary']]],
+  ['version_1',['version',['../de/d25/structplugin_1_1PluginMetadata.html#aebf57eb6ce15f624f035bf7949f00ef7',1,'plugin::PluginMetadata::version'],['../d5/d29/structupdates_1_1AppUpdateInfo.html#ac6a101830b6a67690de61af20b2ed2f5',1,'updates::AppUpdateInfo::version']]]
 ];
