@@ -223,11 +223,13 @@ bool FieldTranslator::SaveToFile(const std::string& filePath) const
 void FieldTranslator::SetTranslation(const FieldDictionary& translation)
 {
     m_dictionary[translation.key] = translation;
+    m_lowercaseKeyCache[ToLower(translation.key)] = translation.key;
 }
 
 void FieldTranslator::RemoveTranslation(const std::string& key)
 {
     m_dictionary.erase(key);
+    m_lowercaseKeyCache.erase(ToLower(key));
 }
 
 } // namespace config
