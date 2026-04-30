@@ -207,6 +207,7 @@ jobs:
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
+        continue-on-error: true  # artifact service is occasionally flaky; build success matters more
         with:
           name: windows-${{ matrix.build_type }}-installer
           path: dist/packages/*.exe
