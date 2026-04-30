@@ -4,6 +4,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <set>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialog>
