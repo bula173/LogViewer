@@ -4,6 +4,7 @@
 #include "ExportManager.hpp"
 #include "FilterManager.hpp"
 #include "StatsSummaryPanel.hpp"
+#include "PatternAnalysisPanel.hpp"
 #include "ActorsPanel.hpp"
 #include "ActorDefinitionsPanel.hpp"
 #include "SearchBar.hpp"
@@ -16,6 +17,8 @@
 #include "ItemDetailsView.hpp"
 #include "SearchResultsView.hpp"
 #include "TypeFilterView.hpp"
+#include "TimeRangeFilterPanel.hpp"
+#include "FilterProfilesPanel.hpp"
 #include "LogFileLoadDialog.hpp"
 #include "Logger.hpp"
 #include "Config.hpp"
@@ -291,6 +294,17 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_actorDefPanel = new ActorDefinitionsPanel(m_filterTabs);
     m_filterTabs->addTab(m_actorDefPanel, "Actor Definitions");
 
+    // ── Time Range Filter tab ─────────────────────────────────────────────
+    if (m_events)
+    {
+        m_timeRangePanel = new TimeRangeFilterPanel(*m_events, m_eventsView, m_filterTabs);
+        m_filterTabs->addTab(m_timeRangePanel, tr("Time Filter"));
+    }
+
+    // ── Filter Profiles tab ───────────────────────────────────────────────
+    m_profilesPanel = new FilterProfilesPanel(m_filterTabs);
+    m_filterTabs->addTab(m_profilesPanel, tr("Profiles"));
+
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
@@ -341,6 +355,10 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // ===== MAIN TAB: Statistics Summary =====
     m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
+
+    // ===== MAIN TAB: Pattern Analysis =====
+    m_patternPanel = new PatternAnalysisPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_patternPanel, tr("Patterns"));
 
     // ===== MAIN TAB: Actors =====
     m_actorsPanel = new ActorsPanel(events, m_eventsView, this);
@@ -651,6 +669,12 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_statsPanel, &StatsSummaryPanel::Refresh);
     }
 
+    // Connect pattern analysis panel to model resets
+    if (m_patternPanel && m_eventsView && m_eventsView->model()) {
+        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
+                m_patternPanel, &PatternAnalysisPanel::Refresh);
+    }
+
     // Connect actors panel to model resets
     if (m_actorsPanel && m_eventsView && m_eventsView->model()) {
         connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
@@ -670,6 +694,22 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     if (m_actorsPanel && m_actorDefPanel) {
         connect(m_actorsPanel, &ActorsPanel::ActorDirectionChanged,
                 m_actorDefPanel, &ActorDefinitionsPanel::UpdateActorDirection);
+    }
+
+    // Time range filter → refresh actors after apply/clear
+    if (m_timeRangePanel && m_actorsPanel) {
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
+                m_actorsPanel, &ActorsPanel::Refresh);
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
+                m_actorsPanel, &ActorsPanel::Refresh);
+    }
+
+    // Filter profiles
+    if (m_profilesPanel) {
+        connect(m_profilesPanel, &FilterProfilesPanel::SaveRequested,
+                this, &MainWindow::OnProfileSaveRequested);
+        connect(m_profilesPanel, &FilterProfilesPanel::ProfileLoadRequested,
+                this, &MainWindow::OnProfileLoadRequested);
     }
 
     // Connect actor definition panel filter buttons
@@ -2184,6 +2224,59 @@ void MainWindow::OnApplyPluginUpdate(QString pluginId, QString tempZipPath)
 
     util::Logger::Info("[MainWindow] Plugin {} updated successfully", id);
     UpdateStatusText(tr("Plugin %1 updated").arg(pluginId).toStdString());
+}
+
+void MainWindow::OnProfileSaveRequested(const QString& name)
+{
+    if (!m_profilesPanel) return;
+
+    FilterProfile fp;
+    fp.name = name.toStdString();
+
+    if (m_timeRangePanel)
+        fp.timeRange = m_timeRangePanel->GetState();
+
+    if (m_actorsPanel)
+    {
+        const auto keys = m_actorsPanel->GetUncheckedActors();
+        fp.uncheckedActors.assign(keys.begin(), keys.end());
+    }
+
+    if (m_typeFilterView && !m_typeFilterView->Empty())
+    {
+        fp.hasTypeFilter = true;
+        fp.checkedTypes  = m_typeFilterView->CheckedTypes();
+    }
+
+    m_profilesPanel->StoreProfile(fp);
+}
+
+void MainWindow::OnProfileLoadRequested(const FilterProfile& profile)
+{
+    // Apply time range filter
+    if (m_timeRangePanel)
+    {
+        m_timeRangePanel->SetState(profile.timeRange);
+        if (profile.timeRange.active)
+            m_timeRangePanel->Apply();
+        else
+            m_timeRangePanel->Clear();
+    }
+
+    // Restore actor check state
+    if (m_actorsPanel)
+    {
+        std::set<std::string> unchecked(
+            profile.uncheckedActors.begin(), profile.uncheckedActors.end());
+        m_actorsPanel->RestoreUncheckedActors(unchecked);
+    }
+
+    // Restore type filter (only when the profile captured one)
+    if (profile.hasTypeFilter && m_typeFilterView)
+    {
+        m_typeFilterView->SetCheckedTypes(profile.checkedTypes);
+        OnApplyFilterClicked();
+    }
 }
 
 } // namespace ui::qt

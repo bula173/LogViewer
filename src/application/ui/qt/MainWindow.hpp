@@ -58,10 +58,14 @@ class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
 class StatsSummaryPanel;
+class PatternAnalysisPanel;
 class ActorsPanel;
 class ActorDefinitionsPanel;
 class SearchBar;
 class UpdateChecker;
+class TimeRangeFilterPanel;
+class FilterProfilesPanel;
+struct FilterProfile;
 
 class MainWindow : public QMainWindow,
                    public ui::IMainWindowView,
@@ -117,6 +121,9 @@ class MainWindow : public QMainWindow,
     void OnCheckForUpdates();
     void OnUpdateCheckComplete(updates::UpdateCheckResult result);
     void OnApplyPluginUpdate(QString pluginId, QString tempZipPath);
+    /// Gathers filter state from all panels and forwards it to FilterProfilesPanel::StoreProfile().
+    void OnProfileSaveRequested(const QString& name);
+    void OnProfileLoadRequested(const FilterProfile& profile);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -203,10 +210,13 @@ class MainWindow : public QMainWindow,
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
     StatsSummaryPanel*      m_statsPanel   {nullptr};
+    PatternAnalysisPanel*   m_patternPanel {nullptr};
     ActorsPanel*            m_actorsPanel  {nullptr};
     ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
     SearchBar*              m_searchBar    {nullptr};
     UpdateChecker*          m_updateChecker{nullptr};
+    TimeRangeFilterPanel*   m_timeRangePanel{nullptr};
+    FilterProfilesPanel*    m_profilesPanel {nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     

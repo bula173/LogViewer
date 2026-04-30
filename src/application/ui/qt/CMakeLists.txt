@@ -18,6 +18,7 @@ target_sources(application_core
         EventsTableView.cpp
         ExportManager.cpp
         StatsSummaryPanel.cpp
+        PatternAnalysisPanel.cpp
         UpdateChecker.cpp
         UpdateDialog.cpp
         FilterEditorDialog.cpp
@@ -29,6 +30,8 @@ target_sources(application_core
         ConfigEditorDialog.cpp
         StructuredConfigDialog.cpp
         LogFileLoadDialog.cpp
+        TimeRangeFilterPanel.cpp
+        FilterProfilesPanel.cpp
         ${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp
@@ -38,6 +41,7 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp
         ${CMAKE_CURRENT_LIST_DIR}/StatsSummaryPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/PatternAnalysisPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/UpdateChecker.hpp
         ${CMAKE_CURRENT_LIST_DIR}/UpdateDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/FilterEditorDialog.hpp
@@ -48,6 +52,8 @@ target_sources(application_core
         ${CMAKE_CURRENT_LIST_DIR}/SearchResultsView.hpp
         ${CMAKE_CURRENT_LIST_DIR}/StructuredConfigDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/TimeRangeFilterPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/FilterProfilesPanel.hpp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp>
@@ -58,6 +64,7 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EventsTableView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StatsSummaryPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/PatternAnalysisPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/UpdateChecker.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/UpdateDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/FilterEditorDialog.hpp>
@@ -68,6 +75,8 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/SearchResultsView.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StructuredConfigDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TypeFilterView.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TimeRangeFilterPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/FilterProfilesPanel.hpp>
         $<INSTALL_INTERFACE:ConfigEditorDialog.hpp>
         $<INSTALL_INTERFACE:ActorDefinition.hpp>
         $<INSTALL_INTERFACE:ActorDefinitionsPanel.hpp>
@@ -77,6 +86,7 @@ target_sources(application_core
         $<INSTALL_INTERFACE:EventsTableView.hpp>
         $<INSTALL_INTERFACE:ExportManager.hpp>
         $<INSTALL_INTERFACE:StatsSummaryPanel.hpp>
+        $<INSTALL_INTERFACE:PatternAnalysisPanel.hpp>
         $<INSTALL_INTERFACE:UpdateChecker.hpp>
         $<INSTALL_INTERFACE:UpdateDialog.hpp>
         $<INSTALL_INTERFACE:FilterEditorDialog.hpp>
@@ -87,5 +97,7 @@ target_sources(application_core
         $<INSTALL_INTERFACE:SearchResultsView.hpp>
         $<INSTALL_INTERFACE:StructuredConfigDialog.hpp>
         $<INSTALL_INTERFACE:TypeFilterView.hpp>
+        $<INSTALL_INTERFACE:TimeRangeFilterPanel.hpp>
+        $<INSTALL_INTERFACE:FilterProfilesPanel.hpp>
 )
 
