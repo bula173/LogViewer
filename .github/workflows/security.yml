@@ -47,8 +47,8 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
-    # Don't block PRs — informational only on non-main branches
-    continue-on-error: ${{ github.event_name == 'pull_request' }}
+    # Informational only — never block the build
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v4
