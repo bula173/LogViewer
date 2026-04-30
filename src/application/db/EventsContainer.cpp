@@ -83,9 +83,10 @@ const LogEvent& EventsContainer::GetEvent(const int index)
 
 int EventsContainer::GetCurrentItemIndex()
 {
+    const int idx = m_currentItem.load(std::memory_order_relaxed);
     util::Logger::Trace("EventsContainer::GetCurrentItemIndex called, returning {}",
-        m_currentItem);
-    return m_currentItem;
+        idx);
+    return idx;
 }
 
 void EventsContainer::SetCurrentItem(const int item)
@@ -97,7 +98,7 @@ void EventsContainer::SetCurrentItem(const int item)
      * synchronization between the UI selection and the data model.
      */
     util::Logger::Trace("EventsContainer::SetCurrentItem called with item: {}", item);
-    m_currentItem = item;
+    m_currentItem.store(item, std::memory_order_relaxed);
     for (auto v : m_views)
     {
         util::Logger::Trace("EventsContainer::SetCurrentItem notifying view of "

@@ -14,7 +14,7 @@ class MainController : public IController, public parser::IDataParserObserver {
 public:
     explicit MainController(db::EventsContainer& events);
 
-    std::vector<std::string> GetSearchColumns() const override;
+    [[nodiscard]] std::vector<std::string> GetSearchColumns() const override;
 
     void SearchEvents(const std::string& query,
         const std::vector<std::string>& columns,

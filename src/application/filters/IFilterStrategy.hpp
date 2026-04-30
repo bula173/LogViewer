@@ -70,7 +70,7 @@ public:
      * @par Thread Safety:
      * Must be thread-safe for concurrent calls.
      */
-    virtual bool matches(const std::string& value,
+    [[nodiscard]] virtual bool matches(const std::string& value,
                         const std::string& pattern,
                         bool caseSensitive) const = 0;
 
@@ -112,7 +112,7 @@ class RegexFilterStrategy : public IFilterStrategy {
 public:
     RegexFilterStrategy() = default;
 
-    bool matches(const std::string& value,
+    [[nodiscard]] bool matches(const std::string& value,
                 const std::string& pattern,
                 bool caseSensitive) const override;
 
@@ -145,7 +145,7 @@ class ExactMatchStrategy : public IFilterStrategy {
 public:
     ExactMatchStrategy() = default;
 
-    bool matches(const std::string& value,
+    [[nodiscard]] bool matches(const std::string& value,
                 const std::string& pattern,
                 bool caseSensitive) const override;
 
@@ -180,7 +180,7 @@ public:
     explicit FuzzyMatchStrategy(int maxDistance = 2)
         : m_maxDistance(maxDistance) {}
 
-    bool matches(const std::string& value,
+    [[nodiscard]] bool matches(const std::string& value,
                 const std::string& pattern,
                 bool caseSensitive) const override;
 
@@ -223,7 +223,7 @@ class WildcardStrategy : public IFilterStrategy {
 public:
     WildcardStrategy() = default;
 
-    bool matches(const std::string& value,
+    [[nodiscard]] bool matches(const std::string& value,
                 const std::string& pattern,
                 bool caseSensitive) const override;
 

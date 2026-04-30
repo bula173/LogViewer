@@ -45,9 +45,12 @@ class IModel
     /**
      * @brief Registers a view to receive data update notifications.
      *
-     * @param view Pointer to the view object to register
-     * @note The view must implement the IView interface and remain valid for
-     * the lifetime of the model
+     * @param view Pointer to the view object to register.  Must remain valid
+     *             for the entire lifetime of this model (or until manually
+     *             removed — though @c IModel has no UnregisterView).
+     *
+     * @deprecated Prefer @c IModelObservable::RegisterView(std::shared_ptr<IView>)
+     *             which manages view lifetime automatically via @c std::weak_ptr.
      */
     virtual void RegisterOndDataUpdated(IView* view)
     {
@@ -61,14 +64,22 @@ class IModel
      * This method should be called whenever the model's data is updated to
      * ensure all views are refreshed with the latest information.
      *
-     * @note Views should implement OnDataUpdated() to handle this notification
+     * @note Views should implement OnDataUpdated() to handle this notification.
+     *
+     * @warning @c IModel stores raw pointers.  Callers must call
+     *          @c RegisterOndDataUpdated() before a view is destroyed.
+     *          Prefer @c IModelObservable for new code — it uses @c std::weak_ptr
+     *          and cleans up automatically.
      */
     virtual void NotifyDataChanged()
     {
         util::Logger::Trace("Notifying {} registered views", m_views.size());
-        for (auto v : m_views)
+        for (auto* v : m_views)
         {
-            v->OnDataUpdated();
+            if (v) [[likely]]
+                v->OnDataUpdated();
+            else
+                util::Logger::Warn("IModel::NotifyDataChanged: null view pointer detected");
         }
     }
 

@@ -3,6 +3,10 @@
  * @brief Interface for controller components in the MVC architecture.
  * @author LogViewer Development Team
  * @date 2025
+ *
+ * @note The file name retains its original spelling for backward compatibility
+ *       with existing include directives.  The class inside is @c IController
+ *       (correct spelling).
  */
 #ifndef MVC_ICONTRLOLER_HPP
 #define MVC_ICONTRLOLER_HPP
@@ -21,25 +25,32 @@ class IDataParserObserver;
 
 namespace mvc
 {
-/** * @class IContrloler
- * @brief Interface for controller components in the MVC architecture.
- *
- * This interface defines the methods that any controller component must
- * implement to handle user input and interact with the model and views.
- */
 /**
- * @note This interface is designed to be implemented by classes that represent
- *       the controller logic in the application, coordinating between models
- * and views.
+ * @brief Result row returned by IController::SearchEvents() for each matching event.
+ *
+ * Contains the event ID, the field that matched, the matched text, and a
+ * column-value snapshot that the search-results panel can display directly
+ * without re-querying the container.
  */
 struct SearchResultRow
 {
-    int eventId {0};
-  std::string matchedKey;
-    std::string matchedText;
+    int                      eventId {0};
+    std::string              matchedKey;
+    std::string              matchedText;
     std::vector<std::string> columnValues;
 };
 
+/**
+ * @class IController
+ * @brief Toolkit-agnostic controller interface for the MVC architecture.
+ *
+ * Implementations coordinate between the data model (EventsContainer) and
+ * the view layer.  The default implementation is @c mvc::MainController.
+ *
+ * @note The file that declares this interface is named @c IControler.hpp
+ *       (one 'l') for historical reasons.  Include that file, not this
+ *       Doxygen-rendered name.
+ */
 class IController
 {
   public:

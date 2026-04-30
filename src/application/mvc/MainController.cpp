@@ -10,6 +10,9 @@
 
 namespace mvc {
 
+/// Default column names used for search when no visible columns are configured.
+static constexpr std::array kDefaultSearchColumns{"timestamp", "type", "info"};
+
 MainController::MainController(db::EventsContainer& events)
     : m_events(events)
 {
@@ -29,7 +32,7 @@ std::vector<std::string> MainController::GetSearchColumns() const
 
     if (columns.empty())
     {
-        columns = {"timestamp", "type", "info"};
+        columns.assign(kDefaultSearchColumns.begin(), kDefaultSearchColumns.end());
     }
 
     return columns;

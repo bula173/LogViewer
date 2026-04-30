@@ -213,9 +213,9 @@ class Filter
     std::vector<FilterCondition> conditions;
 
     // Methods
-    bool matches(const std::string& value) const;
-    bool matches(const db::LogEvent& event) const;
-    bool matchesParameter(const db::LogEvent& event) const;
+    [[nodiscard]] bool matches(const std::string& value) const;
+    [[nodiscard]] bool matches(const db::LogEvent& event) const;
+    [[nodiscard]] bool matchesParameter(const db::LogEvent& event) const;
     std::vector<unsigned long> applyToIndices(const std::vector<unsigned long>& inputIndices, const mvc::IModel& model) const;
     void compile();
     bool searchParameterRecursive(

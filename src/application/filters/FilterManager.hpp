@@ -64,7 +64,7 @@ class FilterManager
     /**
      * @brief Load filters from the default filters.json path.
      */
-    FilterResult loadFilters();
+    [[nodiscard]] FilterResult loadFilters();
     /**
      * @brief Persist filters to the default filters.json path.
      */
@@ -79,7 +79,7 @@ class FilterManager
 
     // Custom path methods
     [[nodiscard]] FilterResult saveFiltersToPath(const std::string& path) const;
-    FilterResult loadFiltersFromPath(const std::string& path);
+    [[nodiscard]] FilterResult loadFiltersFromPath(const std::string& path);
 
   private:
     FilterManager();

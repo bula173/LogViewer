@@ -272,8 +272,10 @@ class EventsContainer : public mvc::IModel
 
   private:
     std::vector<LogEvent> m_data; ///< Internal storage for events
-    int m_currentItem {
-      -1}; ///< Currently selected item index (-1 = no selection)
+    /// Currently selected item index (-1 = no selection).
+    /// Declared atomic so that GetCurrentItemIndex() / SetCurrentItem()
+    /// are safe without acquiring m_mutex.
+    std::atomic<int> m_currentItem {-1};
     mutable std::shared_mutex m_mutex; ///< Reader-writer lock for thread safety
     /// When false, AddEvent/AddEventBatch skip NotifyDataChanged so that
     /// Qt widget calls are not made from a background parser thread.
