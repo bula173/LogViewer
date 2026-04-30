@@ -80,4 +80,56 @@ struct ActorDefinition
     }
 };
 
+// ---------------------------------------------------------------------------
+
+/**
+ * @brief Type-safe composite key identifying a single actor row in ActorsPanel.
+ *
+ * An actor row is uniquely identified by the pair
+ * *(definition name, actor name)*.  The keys are stored in
+ * @c ActorsPanel::m_uncheckedActors and @c FilterProfile::uncheckedActors as
+ * plain strings so that they can be serialised to JSON without extra ceremony.
+ *
+ * ### Encoding format
+ * The two components are joined with a NUL character (`\\0`) which cannot
+ * appear in either name (names come from QRegularExpression capture groups
+ * and user-entered strings, neither of which allows NUL).
+ *
+ * @par Usage
+ * @code
+ * // Build a key from two strings:
+ * std::string key = ActorKey::Encode("MyDef", "Server");
+ *
+ * // Decompose a stored key:
+ * auto [defName, actorName] = ActorKey::Decode(key);
+ * @endcode
+ */
+struct ActorKey
+{
+    std::string defName;   ///< Name of the owning ActorDefinition
+    std::string actorName; ///< Matched actor name (or capture-group value)
+
+    /// Encodes @p defName and @p actorName into a single opaque key string.
+    [[nodiscard]] static std::string Encode(std::string_view defName,
+                                            std::string_view actorName)
+    {
+        std::string key;
+        key.reserve(defName.size() + 1 + actorName.size());
+        key.append(defName);
+        key += '\0';
+        key.append(actorName);
+        return key;
+    }
+
+    /// Decodes an opaque key string produced by @c Encode().
+    /// Returns a default-constructed @c ActorKey if @p key is malformed.
+    [[nodiscard]] static ActorKey Decode(const std::string& key)
+    {
+        const auto pos = key.find('\0');
+        if (pos == std::string::npos)
+            return {};
+        return {key.substr(0, pos), key.substr(pos + 1)};
+    }
+};
+
 } // namespace ui::qt

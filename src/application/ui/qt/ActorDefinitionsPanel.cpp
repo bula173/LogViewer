@@ -504,11 +504,15 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     directedToCombo->setEditable(true);
     directedToCombo->setInsertPolicy(QComboBox::NoInsert);
     directedToCombo->addItem(tr("(none)"), QString());
-    for (const auto& d : m_definitions)
     {
-        const QString dname = QString::fromStdString(d.name);
-        if (dname != QString::fromStdString(def.name))
+        std::set<std::string> seen;
+        for (const auto& d : m_definitions)
+        {
+            if (d.name == def.name) continue; // exclude self
+            if (!seen.insert(d.name).second) continue; // deduplicate same-name defs
+            const QString dname = QString::fromStdString(d.name);
             directedToCombo->addItem(dname, dname);
+        }
     }
     // Pre-select the current value
     if (def.directedTo.empty())
@@ -732,9 +736,10 @@ void ActorDefinitionsPanel::UpdateActorDirection(
         }
         else
         {
+            // Update ALL definitions sharing this actor name so that "Set Directed To"
+            // from the context menu applies consistently across all matching patterns.
             def.directedTo = target.toStdString();
         }
-        break;
     }
     RebuildTable();
     EmitAndSave();

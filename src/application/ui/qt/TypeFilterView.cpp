@@ -8,6 +8,8 @@
 #include <QString>
 #include <QVBoxLayout>
 
+#include <set>
+
 namespace ui::qt
 {
 
@@ -130,6 +132,25 @@ void TypeFilterView::SetAll(Qt::CheckState state)
     {
         if (auto* item = m_listWidget->item(i))
             item->setCheckState(state);
+    }
+}
+
+void TypeFilterView::SetCheckedTypes(const std::vector<std::string>& types)
+{
+    if (types.empty())
+    {
+        SelectAll();
+        return;
+    }
+    const std::set<std::string> typeSet(types.begin(), types.end());
+    QSignalBlocker blocker(m_listWidget);
+    for (int i = 0; i < m_listWidget->count(); ++i)
+    {
+        if (auto* item = m_listWidget->item(i))
+        {
+            const bool checked = typeSet.count(item->text().toStdString()) > 0;
+            item->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+        }
     }
 }
 

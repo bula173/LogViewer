@@ -126,10 +126,9 @@ void ActorsPanel::Refresh()
         {
             if (top->checkState(0) != Qt::Checked)
             {
-                const std::string key =
-                    top->data(0, Qt::UserRole).toString().toStdString() + '\0' +
-                    top->data(0, Qt::UserRole + 1).toString().toStdString();
-                m_uncheckedActors.insert(key);
+                m_uncheckedActors.insert(
+                    ActorKey::Encode(top->data(0, Qt::UserRole).toString().toStdString(),
+                                     top->data(0, Qt::UserRole + 1).toString().toStdString()));
             }
         }
         else
@@ -139,10 +138,9 @@ void ActorsPanel::Refresh()
                 QTreeWidgetItem* ch = top->child(c);
                 if (ch->checkState(0) != Qt::Checked)
                 {
-                    const std::string key =
-                        ch->data(0, Qt::UserRole).toString().toStdString() + '\0' +
-                        ch->data(0, Qt::UserRole + 1).toString().toStdString();
-                    m_uncheckedActors.insert(key);
+                    m_uncheckedActors.insert(
+                        ActorKey::Encode(ch->data(0, Qt::UserRole).toString().toStdString(),
+                                         ch->data(0, Qt::UserRole + 1).toString().toStdString()));
                 }
             }
         }
@@ -175,6 +173,40 @@ void ActorsPanel::SetDefinitions(const std::vector<ActorDefinition>& defs)
 {
     m_definitions = defs;
     Refresh();
+}
+
+void ActorsPanel::RestoreUncheckedActors(const std::set<std::string>& unchecked)
+{
+    m_uncheckedActors = unchecked;
+
+    // Walk the tree and apply check states without triggering the normal signal handler.
+    QSignalBlocker blocker(m_tree);
+    for (int g = 0; g < m_tree->topLevelItemCount(); ++g)
+    {
+        QTreeWidgetItem* topItem = m_tree->topLevelItem(g);
+        if (topItem->childCount() == 0)
+        {
+            const auto key = ActorKey::Encode(
+                topItem->data(0, Qt::UserRole).toString().toStdString(),
+                topItem->data(0, Qt::UserRole + 1).toString().toStdString());
+            topItem->setCheckState(0,
+                m_uncheckedActors.count(key) ? Qt::Unchecked : Qt::Checked);
+        }
+        else
+        {
+            for (int c = 0; c < topItem->childCount(); ++c)
+            {
+                QTreeWidgetItem* child = topItem->child(c);
+                const auto key = ActorKey::Encode(
+                    child->data(0, Qt::UserRole).toString().toStdString(),
+                    child->data(0, Qt::UserRole + 1).toString().toStdString());
+                child->setCheckState(0,
+                    m_uncheckedActors.count(key) ? Qt::Unchecked : Qt::Checked);
+            }
+        }
+    }
+
+    ApplyCheckedFilter();
 }
 
 // ---------------------------------------------------------------------------
@@ -324,38 +356,51 @@ void ActorsPanel::PopulateActorTree(size_t totalVisible)
     m_tree->setSortingEnabled(false);
     m_tree->clear();
 
-    // Build fast lookup from definition name → definition pointer
-    std::map<std::string, const ActorDefinition*> defByName;
+    // Build fast lookup from definition name → all definitions with that name.
+    // Multiple definitions sharing the same actor name are supported so that
+    // different patterns can each be directed to a different target actor.
+    std::map<std::string, std::vector<const ActorDefinition*>> defByName;
     for (const auto& def : m_definitions)
-        defByName[def.name] = &def;
+        defByName[def.name].push_back(&def);
 
     // Helper: format actor display name with optional "→ target" suffix.
+    // Collects all unique directedTo values across every definition sharing
+    // this actor name, so multi-target actors display as "Actor → A, B".
     // For subactors (children of a capture-group), subActorDirectedTo is
     // checked first, then the definition-level directedTo as a fallback.
     auto makeActorLabel = [&](const std::string& actorName,
                                const std::string& dName,
                                bool               isSubActor) -> QString {
-        std::string target;
+        std::set<std::string> targets;
         const auto dit = defByName.find(dName);
         if (dit != defByName.end())
         {
-            const ActorDefinition* def = dit->second;
-            if (isSubActor)
+            for (const ActorDefinition* def : dit->second)
             {
-                const auto sit = def->subActorDirectedTo.find(actorName);
-                target = (sit != def->subActorDirectedTo.end())
-                             ? sit->second
-                             : def->directedTo; // fallback
-            }
-            else
-            {
-                target = def->directedTo;
+                std::string target;
+                if (isSubActor)
+                {
+                    const auto sit = def->subActorDirectedTo.find(actorName);
+                    target = (sit != def->subActorDirectedTo.end())
+                                 ? sit->second
+                                 : def->directedTo; // fallback
+                }
+                else
+                {
+                    target = def->directedTo;
+                }
+                if (!target.empty())
+                    targets.insert(target);
             }
         }
-        if (!target.empty())
+        if (!targets.empty())
+        {
+            QStringList tlist;
+            for (const auto& t : targets)
+                tlist << QString::fromStdString(t);
             return QString("%1  \u2192 %2")
-                .arg(QString::fromStdString(actorName),
-                     QString::fromStdString(target));
+                .arg(QString::fromStdString(actorName), tlist.join(", "));
+        }
         return QString::fromStdString(actorName);
     };
 
@@ -389,8 +434,7 @@ void ActorsPanel::PopulateActorTree(size_t totalVisible)
             item->setData(0, Qt::UserRole,     QString::fromStdString(defName));
             item->setData(0, Qt::UserRole + 1, QString::fromStdString(actorName));
             // Restore previous check state
-            const std::string key = defName + '\0' + actorName;
-            if (m_uncheckedActors.count(key))
+            if (m_uncheckedActors.count(ActorKey::Encode(defName, actorName)))
                 item->setCheckState(0, Qt::Unchecked);
         }
         else
@@ -440,8 +484,7 @@ void ActorsPanel::PopulateActorTree(size_t totalVisible)
                 child->setData(0, Qt::UserRole,     QString::fromStdString(defName));
                 child->setData(0, Qt::UserRole + 1, QString::fromStdString(actorName));
                 // Restore previous check state
-                const std::string key = defName + '\0' + actorName;
-                if (m_uncheckedActors.count(key))
+                if (m_uncheckedActors.count(ActorKey::Encode(defName, actorName)))
                     child->setCheckState(0, Qt::Unchecked);
             }
             groupItem->setExpanded(true);
@@ -492,7 +535,7 @@ void ActorsPanel::ApplyCheckedFilter()
             }
             else
             {
-                m_uncheckedActors.insert(defName + '\0' + actorName);
+                m_uncheckedActors.insert(ActorKey::Encode(defName, actorName));
             }
         }
         else
@@ -507,7 +550,7 @@ void ActorsPanel::ApplyCheckedFilter()
                     child->data(0, Qt::UserRole + 1).toString().toStdString();
                 if (child->checkState(0) != Qt::Checked)
                 {
-                    m_uncheckedActors.insert(defName + '\0' + actorName);
+                    m_uncheckedActors.insert(ActorKey::Encode(defName, actorName));
                     continue;
                 }
                 const auto git = m_groupedCache.find(defName);
@@ -574,23 +617,32 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
     const std::string actorName = item->data(0, Qt::UserRole + 1).toString().toStdString();
     const bool        isSubActor = (item->parent() != nullptr);
 
-    // Determine current "directed to" value so the dialog can pre-fill it
-    std::string currentTarget;
+    // Collect all current "directed to" values across all definitions sharing
+    // this actor name so the dialog can pre-fill and indicate multi-target state.
+    std::vector<std::string> allCurrentTargets;
     for (const auto& def : m_definitions)
     {
         if (def.name != defName) continue;
+        std::string t;
         if (isSubActor)
         {
             const auto it = def.subActorDirectedTo.find(actorName);
-            currentTarget = (it != def.subActorDirectedTo.end())
-                                ? it->second : def.directedTo;
+            t = (it != def.subActorDirectedTo.end()) ? it->second : def.directedTo;
         }
         else
         {
-            currentTarget = def.directedTo;
+            t = def.directedTo;
         }
-        break;
+        if (!t.empty())
+            allCurrentTargets.push_back(t);
     }
+    std::sort(allCurrentTargets.begin(), allCurrentTargets.end());
+    allCurrentTargets.erase(
+        std::unique(allCurrentTargets.begin(), allCurrentTargets.end()),
+        allCurrentTargets.end());
+    // Single target string for pre-filling (empty when multiple differ)
+    const std::string currentTarget =
+        (allCurrentTargets.size() == 1) ? allCurrentTargets[0] : std::string{};
 
     QMenu menu(this);
     const QString label = isSubActor
@@ -598,7 +650,7 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
         : tr("Set Directed To…");
     menu.addAction(label);
     QAction* const clearAction = menu.addAction(tr("Clear Directed To"));
-    clearAction->setEnabled(!currentTarget.empty());
+    clearAction->setEnabled(!allCurrentTargets.empty());
 
     QAction* chosen = menu.exec(m_tree->viewport()->mapToGlobal(pos));
     if (!chosen) return;
@@ -625,12 +677,36 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
     infoLabel->setWordWrap(true);
     layout->addWidget(infoLabel);
 
-    // Collect all known actor names for the combo (deduplicated)
+    if (allCurrentTargets.size() > 1)
+    {
+        QStringList tlist;
+        for (const auto& t : allCurrentTargets)
+            tlist << QString::fromStdString(t);
+        auto* multiLabel = new QLabel(
+            tr("(currently: %1 — setting here updates all definitions named \"%2\")")                .arg(tlist.join(", "), QString::fromStdString(defName)), &dlg);
+        multiLabel->setWordWrap(true);
+        multiLabel->setStyleSheet("font-style: italic; color: gray;");
+        layout->addWidget(multiLabel);
+    }
+
+    // Collect all known actor names for the combo (deduplicated).
+    // Include user-defined actor names first (from definitions), then any
+    // additional actor names discovered in event data.
     auto* combo = new QComboBox(&dlg);
     combo->setEditable(true);
     combo->addItem(tr("(none)"), QString());
     {
         std::set<std::string> seen;
+        // 1. User-defined actor names (definitions panel)
+        for (const auto& def : m_definitions)
+        {
+            if (!def.enabled || def.name.empty()) continue;
+            if (def.name == actorName) continue;
+            if (!seen.insert(def.name).second) continue;
+            combo->addItem(QString::fromStdString(def.name),
+                           QString::fromStdString(def.name));
+        }
+        // 2. Sub-actor names discovered in event data (capture-group definitions)
         for (const auto& [dName, group] : m_groupedCache)
             for (const auto& [aName, data] : group.actors)
                 if (aName != actorName && seen.insert(aName).second)
