@@ -48,10 +48,15 @@ class EventsTableView : public QTableView,
   signals:
     void CurrentActualRowChanged(int actualRow);
     void MatchInfoChanged(int current, int total);
+    /// Emitted when the user chooses "Bookmark Event" from the context menu.
+    void BookmarkRequested(int actualRow);
+    /// Emitted when the user chooses "Add to Scenario" from the context menu.
+    void AddToScenarioRequested(int actualRow);
 
   private:
     void InitializeView();
     void ConnectSelectionSignals();
+    void ShowContextMenu(const QPoint& pos);
     void ResizeColumnsToConfiguration();
     void ScrollToMatchIndex(int matchIndex);
 

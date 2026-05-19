@@ -43,6 +43,7 @@ include(cmake/EnableSanitizers.cmake)
 include(cmake/Cppcheck.cmake)
 include(cmake/ClangTidy.cmake)
 include(cmake/ClangFormat.cmake)
+include(cmake/GenerateInstallManifest.cmake)
 
 # ---------------------------------------------------------------------------
 # Subproject detection — when used via FetchContent only build the SDK

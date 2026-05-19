@@ -59,6 +59,10 @@ class EventsTableView;
 class FiltersPanel;
 class StatsSummaryPanel;
 class PatternAnalysisPanel;
+class TimelineChartPanel;
+class TraceViewerPanel;
+class BookmarksPanel;
+class ScenariosPanel;
 class ActorsPanel;
 class ActorDefinitionsPanel;
 class SearchBar;
@@ -124,6 +128,8 @@ class MainWindow : public QMainWindow,
     /// Gathers filter state from all panels and forwards it to FilterProfilesPanel::StoreProfile().
     void OnProfileSaveRequested(const QString& name);
     void OnProfileLoadRequested(const FilterProfile& profile);
+    void OnSaveSession();
+    void OnOpenSession();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -199,6 +205,8 @@ class MainWindow : public QMainWindow,
     int m_mainPanelIndex {-1};
     db::EventsContainer* m_events {nullptr};
     
+    QString m_currentLogFilePath;
+
     // Recent files
     std::vector<QString> m_recentFiles;
     QMenu* m_recentFilesMenu {nullptr};
@@ -209,9 +217,13 @@ class MainWindow : public QMainWindow,
     std::shared_ptr<ai::IAIService> m_pluginService;  // TODO: Generalize beyond AI-specific interface
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
-    StatsSummaryPanel*      m_statsPanel   {nullptr};
-    PatternAnalysisPanel*   m_patternPanel {nullptr};
-    ActorsPanel*            m_actorsPanel  {nullptr};
+    StatsSummaryPanel*      m_statsPanel    {nullptr};
+    PatternAnalysisPanel*   m_patternPanel  {nullptr};
+    TimelineChartPanel*     m_timelinePanel {nullptr};
+    TraceViewerPanel*       m_tracePanel    {nullptr};
+    BookmarksPanel*         m_bookmarksPanel{nullptr};
+    ScenariosPanel*         m_scenariosPanel{nullptr};
+    ActorsPanel*            m_actorsPanel   {nullptr};
     ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
     SearchBar*              m_searchBar    {nullptr};
     UpdateChecker*          m_updateChecker{nullptr};
