@@ -78,6 +78,16 @@ if(WIN32 AND NOT UNIX)
             "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CPACK_GUI_DISPLAY_NAME}.lnk'
             Delete '$DESKTOP\\\\${CPACK_GUI_DISPLAY_NAME}.lnk'"
         )
+        
+        # Fix file permissions to allow regular users to run the app without admin rights
+        # This prevents "Access Denied" errors when running from Program Files
+        # Requires: NSIS AccessControl plugin (usually included by default)
+        set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+            "\\n  ; Ensure installed files are readable and executable by all users"
+            "\\n  ; This prevents the application from requiring admin rights at runtime"
+            "\\n  AccessControl::GrantOnFile '$INSTDIR' '(BU)' 'GenericRead + GenericExecute + GenericWrite'"
+            "\\n  AccessControl::GrantOnFile '$INSTDIR\\\\*.*' '(BU)' 'GenericRead + GenericExecute + GenericWrite'"
+        )
     else()
         message(FATAL_ERROR "NSIS not found! Install with: pacman -S mingw-w64-x86_64-nsis")
     endif()

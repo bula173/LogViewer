@@ -10,6 +10,7 @@ file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "*.cpp")
 add_executable(
   ${PROJECT_NAME}_tests
   ${TEST_SOURCES}
+  BuiltinConversionPluginsTest.cpp
 )
 
 configure_file(
