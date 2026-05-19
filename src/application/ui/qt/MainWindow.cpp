@@ -5,6 +5,10 @@
 #include "FilterManager.hpp"
 #include "StatsSummaryPanel.hpp"
 #include "PatternAnalysisPanel.hpp"
+#include "TimelineChartPanel.hpp"
+#include "TraceViewerPanel.hpp"
+#include "BookmarksPanel.hpp"
+#include "ScenariosPanel.hpp"
 #include "ActorsPanel.hpp"
 #include "ActorDefinitionsPanel.hpp"
 #include "SearchBar.hpp"
@@ -63,6 +67,7 @@
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
+#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -364,6 +369,22 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_actorsPanel = new ActorsPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_actorsPanel, tr("Actors"));
 
+    // ===== MAIN TAB: Timeline (interactive event-distribution chart) =====
+    m_timelinePanel = new TimelineChartPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_timelinePanel, tr("Timeline"));
+
+    // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
+    m_tracePanel = new TraceViewerPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_tracePanel, tr("Traces"));
+
+    // ===== MAIN TAB: Bookmarks (annotate and navigate events) =====
+    m_bookmarksPanel = new BookmarksPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_bookmarksPanel, tr("Bookmarks"));
+
+    // ===== MAIN TAB: Scenarios (named event collections for export) =====
+    m_scenariosPanel = new ScenariosPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_scenariosPanel, tr("Scenarios"));
+
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
     connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
@@ -504,6 +525,16 @@ void MainWindow::SetupMenus()
     m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
     m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
     RefreshRecentFilesMenu();
+
+    fileMenu->addSeparator();
+
+    auto* openSessionAction = fileMenu->addAction(tr("Open Session…"));
+    openSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+O")));
+    connect(openSessionAction, &QAction::triggered, this, &MainWindow::OnOpenSession);
+
+    auto* saveSessionAction = fileMenu->addAction(tr("Save Session…"));
+    saveSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
+    connect(saveSessionAction, &QAction::triggered, this, &MainWindow::OnSaveSession);
 
     fileMenu->addSeparator();
 
@@ -681,6 +712,17 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_actorsPanel, &ActorsPanel::Refresh);
     }
 
+    // Connect timeline, trace viewer to model resets
+    if (m_timelinePanel && m_eventsView && m_eventsView->model()) {
+        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
+                m_timelinePanel, &TimelineChartPanel::Refresh);
+    }
+
+    if (m_tracePanel && m_eventsView && m_eventsView->model()) {
+        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
+                m_tracePanel, &TraceViewerPanel::Refresh);
+    }
+
     // Connect actor definitions → actors panel
     if (m_actorDefPanel && m_actorsPanel) {
         connect(m_actorDefPanel, &ActorDefinitionsPanel::DefinitionsChanged,
@@ -696,12 +738,45 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_actorDefPanel, &ActorDefinitionsPanel::UpdateActorDirection);
     }
 
-    // Time range filter → refresh actors after apply/clear
+    // Time range filter → refresh actors, timeline, and trace viewer after apply/clear
     if (m_timeRangePanel && m_actorsPanel) {
         connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
                 m_actorsPanel, &ActorsPanel::Refresh);
         connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
                 m_actorsPanel, &ActorsPanel::Refresh);
+    }
+
+    if (m_timeRangePanel && m_timelinePanel) {
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
+                m_timelinePanel, &TimelineChartPanel::Refresh);
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
+                m_timelinePanel, &TimelineChartPanel::Refresh);
+    }
+
+    if (m_timeRangePanel && m_tracePanel) {
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
+                m_tracePanel, &TraceViewerPanel::Refresh);
+        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
+                m_tracePanel, &TraceViewerPanel::Refresh);
+    }
+
+    // Bookmarks: right-click in events table → add bookmark; activate bookmark → switch tab + scroll
+    if (m_eventsView && m_bookmarksPanel) {
+        connect(m_eventsView, &EventsTableView::BookmarkRequested,
+                m_bookmarksPanel, &BookmarksPanel::AddBookmarkForRow);
+
+        connect(m_bookmarksPanel, &BookmarksPanel::NavigateToEvent,
+                this, [this](int actualRow) {
+                    if (m_contentTabs)
+                        m_contentTabs->setCurrentIndex(0);
+                    m_eventsView->ScrollToActualRow(actualRow);
+                });
+    }
+
+    // Scenarios: right-click in events table → add event to active scenario
+    if (m_eventsView && m_scenariosPanel) {
+        connect(m_eventsView, &EventsTableView::AddToScenarioRequested,
+                m_scenariosPanel, &ScenariosPanel::AddEventFromRow);
     }
 
     // Filter profiles
@@ -1031,6 +1106,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     UpdateStatusText(message.toStdString());
                     m_presenter->LoadLogFile(filePath);
                     m_presenter->SetItemDetailsVisible(true);
+                    m_currentLogFilePath = path;
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
                     UpdateStatusText(readyMsg.toStdString());
                     AddToRecentFiles(path);  // Add to recent files
@@ -1058,6 +1134,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             UpdateStatusText(message.toStdString());
             m_presenter->LoadLogFile(filePath);
             m_presenter->SetItemDetailsVisible(true);
+            m_currentLogFilePath = path;
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
             UpdateStatusText(readyMsg.toStdString());
             AddToRecentFiles(path);  // Add to recent files
@@ -1110,6 +1187,103 @@ void MainWindow::OnOpenFileRequested()
         filePath.toStdString());
 
     HandleDroppedFile(filePath);
+}
+
+void MainWindow::OnSaveSession()
+{
+    QFileDialog dialog(this, tr("Save Session"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("json");
+    dialog.setNameFilter(tr("LogViewer Session (*.json);;All files (*.*)"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    try
+    {
+        nlohmann::json session;
+        session["version"]   = 1;
+        session["log_file"]  = m_currentLogFilePath.toStdString();
+        session["bookmarks"] = m_bookmarksPanel ? m_bookmarksPanel->GetSessionData()
+                                                : nlohmann::json::array();
+        session["scenarios"] = m_scenariosPanel ? m_scenariosPanel->GetSessionData()
+                                                : nlohmann::json::array();
+
+        std::ofstream f(path.toStdString());
+        if (!f)
+            throw std::runtime_error("Cannot open file for writing");
+        f << session.dump(2);
+        UpdateStatusText(tr("Session saved to %1").arg(path).toStdString());
+    }
+    catch (const std::exception& ex)
+    {
+        ShowError(tr("Save Session"), tr("Failed to save session: %1").arg(ex.what()));
+    }
+}
+
+void MainWindow::OnOpenSession()
+{
+    QFileDialog dialog(this, tr("Open Session"));
+    dialog.setNameFilter(tr("LogViewer Session (*.json);;All files (*.*)"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    try
+    {
+        std::ifstream f(path.toStdString());
+        if (!f)
+            throw std::runtime_error("Cannot open session file");
+
+        const nlohmann::json session = nlohmann::json::parse(f);
+
+        // Load the log file if present
+        const std::string logFile = session.value("log_file", std::string{});
+        if (!logFile.empty() && std::filesystem::exists(logFile))
+        {
+            // Clear current data first, then load
+            if (m_searchResults) m_searchResults->Clear();
+            if (m_searchEdit)    m_searchEdit->clear();
+            if (m_events)        m_events->Clear();
+
+            const std::filesystem::path fp(logFile);
+            UpdateStatusText(tr("Loading %1 …").arg(QString::fromStdString(logFile)).toStdString());
+            m_presenter->LoadLogFile(fp);
+            m_presenter->SetItemDetailsVisible(true);
+            m_currentLogFilePath = QString::fromStdString(logFile);
+            AddToRecentFiles(m_currentLogFilePath);
+        }
+        else if (!logFile.empty())
+        {
+            QMessageBox::warning(this, tr("Open Session"),
+                tr("Log file not found:\n%1\n\nBookmarks and scenarios will be restored without log data.")
+                    .arg(QString::fromStdString(logFile)));
+        }
+
+        // Restore panels
+        if (m_bookmarksPanel && session.contains("bookmarks"))
+            m_bookmarksPanel->LoadSessionData(session["bookmarks"]);
+        if (m_scenariosPanel && session.contains("scenarios"))
+            m_scenariosPanel->LoadSessionData(session["scenarios"]);
+
+        UpdateStatusText(tr("Session loaded from %1").arg(path).toStdString());
+    }
+    catch (const std::exception& ex)
+    {
+        ShowError(tr("Open Session"), tr("Failed to load session: %1").arg(ex.what()));
+    }
 }
 
 void MainWindow::OnClearDataRequested()

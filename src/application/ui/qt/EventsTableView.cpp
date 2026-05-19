@@ -10,6 +10,8 @@
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QKeySequence>
+#include <QMenu>
+#include <QPoint>
 #include <QTableWidget>
 #include <QVBoxLayout>
 
@@ -82,6 +84,10 @@ void EventsTableView::InitializeView()
     });
 
     m_events.RegisterOndDataUpdated(this);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &QTableView::customContextMenuRequested,
+            this, &EventsTableView::ShowContextMenu);
 }
 
 void EventsTableView::ConnectSelectionSignals()
@@ -304,6 +310,43 @@ void EventsTableView::ScrollToMatchIndex(int matchIndex)
     if (selectionModel())
         selectionModel()->setCurrentIndex(
             idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}
+
+void EventsTableView::ShowContextMenu(const QPoint& pos)
+{
+    const int row = CurrentActualRow();
+
+    QMenu menu(this);
+
+    auto* copyAction = menu.addAction(tr("Copy\tCtrl+C"));
+    menu.addSeparator();
+    auto* bookmarkAction = menu.addAction(tr("Bookmark Event…"));
+    bookmarkAction->setEnabled(row >= 0);
+    auto* scenarioAction = menu.addAction(tr("Add to Scenario…"));
+    scenarioAction->setEnabled(row >= 0);
+
+    QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
+    if (!chosen) return;
+
+    if (chosen == copyAction)
+    {
+        for (QAction* a : actions())
+        {
+            if (a->shortcut() == QKeySequence::Copy)
+            {
+                a->trigger();
+                break;
+            }
+        }
+    }
+    else if (chosen == bookmarkAction && row >= 0)
+    {
+        emit BookmarkRequested(row);
+    }
+    else if (chosen == scenarioAction && row >= 0)
+    {
+        emit AddToScenarioRequested(row);
+    }
 }
 
 } // namespace ui::qt

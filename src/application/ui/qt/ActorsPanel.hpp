@@ -62,20 +62,30 @@ class ActorsPanel : public QWidget
 
   signals:
     /// Emitted when the user changes the actor direction in a context menu.
-    /// Arguments: (definition name, actor name, new target actor name)
+    /// Arguments: (definition name, actor name, isSubActor, new target actor name)
     void ActorDirectionChanged(const QString& defName, const QString& actorName,
-                               const QString& newTarget);
+                               bool isSubActor, const QString& newTarget);
 
-  private:
-    struct GroupedActorData
+  public:
+    /// Per-actor statistics accumulated during a Refresh pass.
+    struct ActorData
     {
         std::vector<unsigned long> indices;
         std::string                firstSeen;
         std::string                lastSeen;
         size_t                     errorCount {0};
         std::set<std::string>      types;
-        std::string                directedTo;
     };
+
+  private:
+    struct GroupedActorData
+    {
+        std::map<std::string, ActorData> actors;
+        bool                             useCaptures {false};
+    };
+
+    /// Alias used in the sequence-diagram lambda capture.
+    using GroupData = GroupedActorData;
 
     void BuildLayout();
     void RefreshWithDefinitions(const std::vector<unsigned long>& vis);
@@ -83,6 +93,7 @@ class ActorsPanel : public QWidget
     void ApplyCheckedFilter();
     void ShowActorContextMenu(const QPoint& pos);
     void ShowSequenceDiagram();
+    [[nodiscard]] std::vector<unsigned long> VisibleIndices() const;
 
     db::EventsContainer& m_events;
     EventsTableView*      m_eventsView;

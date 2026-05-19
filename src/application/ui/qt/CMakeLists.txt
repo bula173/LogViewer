@@ -19,6 +19,10 @@ target_sources(application_core
         ExportManager.cpp
         StatsSummaryPanel.cpp
         PatternAnalysisPanel.cpp
+        TimelineChartPanel.cpp
+        TraceViewerPanel.cpp
+        BookmarksPanel.cpp
+        ScenariosPanel.cpp
         UpdateChecker.cpp
         UpdateDialog.cpp
         FilterEditorDialog.cpp
@@ -32,6 +36,10 @@ target_sources(application_core
         LogFileLoadDialog.cpp
         TimeRangeFilterPanel.cpp
         FilterProfilesPanel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/TimelineChartPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/TraceViewerPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/BookmarksPanel.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/ScenariosPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ConfigEditorDialog.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinition.hpp
         ${CMAKE_CURRENT_LIST_DIR}/ActorDefinitionsPanel.hpp
@@ -65,6 +73,10 @@ target_sources(application_core
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ExportManager.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/StatsSummaryPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/PatternAnalysisPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TimelineChartPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/TraceViewerPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/BookmarksPanel.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ScenariosPanel.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/UpdateChecker.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/UpdateDialog.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/FilterEditorDialog.hpp>
@@ -87,6 +99,10 @@ target_sources(application_core
         $<INSTALL_INTERFACE:ExportManager.hpp>
         $<INSTALL_INTERFACE:StatsSummaryPanel.hpp>
         $<INSTALL_INTERFACE:PatternAnalysisPanel.hpp>
+        $<INSTALL_INTERFACE:TimelineChartPanel.hpp>
+        $<INSTALL_INTERFACE:TraceViewerPanel.hpp>
+        $<INSTALL_INTERFACE:BookmarksPanel.hpp>
+        $<INSTALL_INTERFACE:ScenariosPanel.hpp>
         $<INSTALL_INTERFACE:UpdateChecker.hpp>
         $<INSTALL_INTERFACE:UpdateDialog.hpp>
         $<INSTALL_INTERFACE:FilterEditorDialog.hpp>
