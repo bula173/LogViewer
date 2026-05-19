@@ -6,5 +6,6 @@ var searchData=
   ['s_5fregexcachemutex_3',['s_regexCacheMutex',['../d8/dac/IFilterStrategy_8cpp.html#a8681f16c66dd27fa61dd89e4ea14f7be',1,'IFilterStrategy.cpp']]],
   ['sha256_4',['sha256',['../db/da4/structupdates_1_1PluginUpdateInfo.html#a2a3222684c026e1692e50dac075fc61f',1,'updates::PluginUpdateInfo']]],
   ['strategy_5',['strategy',['../dc/d53/structfilters_1_1FilterCondition.html#ac2478a414bdca0a6fe440519ee664af1',1,'filters::FilterCondition']]],
-  ['subactordirectedto_6',['subActorDirectedTo',['../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197',1,'ui::qt::ActorDefinition']]]
+  ['subactordirectedto_6',['subActorDirectedTo',['../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197',1,'ui::qt::ActorDefinition']]],
+  ['summary_7',['summary',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#a51a82029fe74aa70379cd28c780ccd82',1,'ui::qt::BookmarksPanel::Bookmark::summary'],['../d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html#ab30aa4edde1126ceb86ab5c7f41929b5',1,'ui::qt::ScenariosPanel::ScenarioEvent::summary']]]
 ];

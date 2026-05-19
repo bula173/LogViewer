@@ -73,10 +73,14 @@ var annotated_dup =
         [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
           [ "ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem" ]
         ] ],
+        [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", [
+          [ "TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem" ]
+        ] ],
         [ "ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", "de/db8/structui_1_1qt_1_1ActorDefinition" ],
         [ "ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel" ],
         [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
         [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
+        [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
         [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
         [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
         [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
@@ -88,11 +92,14 @@ var annotated_dup =
         [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
         [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
         [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel" ],
+        [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
         [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
         [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
+        [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
         [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],
+        [ "TraceViewerPanel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel" ],
         [ "TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", "d3/df9/classui_1_1qt_1_1TypeFilterView" ],
         [ "UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", "de/d35/classui_1_1qt_1_1UpdateChecker" ],
         [ "UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", "d5/d32/classui_1_1qt_1_1UpdateDialog" ]

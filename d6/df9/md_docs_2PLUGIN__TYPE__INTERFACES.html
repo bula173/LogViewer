@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d6/df9/md_docs_2PLUGIN__TYPE__INTERFAC
   <div class="headertitle"><div class="title">Plugin System: Type-Specific Interfaces</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md563"></a> <b>⚠️ DEPRECATED DOCUMENT:</b> This document describes the old <code>IPlugin</code> C++ interface, which is <b>no longer used</b>.</p>
-<h1><a class="anchor" id="autotoc_md564"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md575"></a> <b>⚠️ DEPRECATED DOCUMENT:</b> This document describes the old <code>IPlugin</code> C++ interface, which is <b>no longer used</b>.</p>
+<h1><a class="anchor" id="autotoc_md576"></a>
 Current Implementation</h1>
 <p>Modern LogViewer plugins use <b>C-ABI exports only</b> (pure C interface). See the following for current documentation:</p>
 <ul>
@@ -103,10 +103,10 @@ Current Implementation</h1>
 <li><b><a href="../../../examples/BasicPlugin/">Basic Plugin Example</a></b> - Working example code</li>
 <li><b><a class="el" href="../../d1/d53/md_docs_2PLUGIN__SYSTEM.html">PLUGIN_SYSTEM.md</a></b> - Architecture overview</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md565"></a>
+<h1><a class="anchor" id="autotoc_md577"></a>
 Legacy: Type-Specific Interfaces (Deprecated)</h1>
 <p>This section is kept for historical reference only. Do not use the patterns described below.</p>
-<h2><a class="anchor" id="autotoc_md566"></a>
+<h2><a class="anchor" id="autotoc_md578"></a>
 Old IPlugin Interface</h2>
 <p><b>DEPRECATED - Do not use.</b> The <code>IPlugin</code> C++ interface has been replaced with C-ABI exports:</p>
 <div class="fragment"><div class="line"><span class="comment">// OLD (Do not use)</span></div>
@@ -126,7 +126,7 @@ Old IPlugin Interface</h2>
 <div class="line">    <span class="comment">// ... other C-ABI exports</span></div>
 <div class="line">}</div>
 <div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md567"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md579"></a>
 Migration to C-ABI</h2>
 <p>If you have an old plugin using <code>IPlugin</code>, migrate it to use C-ABI:</p>
 <ol type="1">
@@ -136,7 +136,7 @@ Migration to C-ABI</h2>
 <li>Use <code>find_package(LogViewer CONFIG REQUIRED)</code> in CMakeLists.txt</li>
 <li>Follow the <a href="../../../examples/BasicPlugin/">Basic Plugin Example</a> pattern</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md568"></a>
+<h1><a class="anchor" id="autotoc_md580"></a>
 Summary</h1>
 <p>✅ <b>Current</b>: C-ABI plugin interface (stable, compiler-agnostic) <br  />
  ❌ <b>Deprecated</b>: C++ IPlugin interface (no longer supported) </p>

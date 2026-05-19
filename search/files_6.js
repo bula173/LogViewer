@@ -10,10 +10,11 @@ var searchData=
   ['imainwindowview_2ehpp_7',['IMainWindowView.hpp',['../dd/d4d/IMainWindowView_8hpp.html',1,'']]],
   ['imodel_2ehpp_8',['IModel.hpp',['../d1/d03/IModel_8hpp.html',1,'']]],
   ['imodelobservable_2ehpp_9',['IModelObservable.hpp',['../d9/dfd/IModelObservable_8hpp.html',1,'']]],
-  ['iplugin_2ehpp_10',['IPlugin.hpp',['../d8/da3/IPlugin_8hpp.html',1,'']]],
-  ['ipluginobserver_2ehpp_11',['IPluginObserver.hpp',['../d4/db4/IPluginObserver_8hpp.html',1,'']]],
-  ['itemdetailsview_2ecpp_12',['ItemDetailsView.cpp',['../d4/d23/ItemDetailsView_8cpp.html',1,'']]],
-  ['itemdetailsview_2ehpp_13',['ItemDetailsView.hpp',['../d7/d60/ItemDetailsView_8hpp.html',1,'']]],
-  ['iuipanels_2ehpp_14',['IUiPanels.hpp',['../dc/d91/IUiPanels_8hpp.html',1,'']]],
-  ['iview_2ehpp_15',['IView.hpp',['../d2/d7e/IView_8hpp.html',1,'']]]
+  ['installation_5fmanifest_2emd_10',['INSTALLATION_MANIFEST.md',['../d9/d26/INSTALLATION__MANIFEST_8md.html',1,'']]],
+  ['iplugin_2ehpp_11',['IPlugin.hpp',['../d8/da3/IPlugin_8hpp.html',1,'']]],
+  ['ipluginobserver_2ehpp_12',['IPluginObserver.hpp',['../d4/db4/IPluginObserver_8hpp.html',1,'']]],
+  ['itemdetailsview_2ecpp_13',['ItemDetailsView.cpp',['../d4/d23/ItemDetailsView_8cpp.html',1,'']]],
+  ['itemdetailsview_2ehpp_14',['ItemDetailsView.hpp',['../d7/d60/ItemDetailsView_8hpp.html',1,'']]],
+  ['iuipanels_2ehpp_15',['IUiPanels.hpp',['../dc/d91/IUiPanels_8hpp.html',1,'']]],
+  ['iview_2ehpp_16',['IView.hpp',['../d2/d7e/IView_8hpp.html',1,'']]]
 ];

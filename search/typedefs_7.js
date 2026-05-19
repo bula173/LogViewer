@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pluginfactoryfunc_0',['PluginFactoryFunc',['../d3/d7e/namespaceplugin.html#abe93f0704ff6ba19ec06c0d1996495c6',1,'plugin']]]
+  ['observerptr_0',['ObserverPtr',['../da/d30/classplugin_1_1PluginEventBus.html#a175c255e5096e88349606f6ba355587b',1,'plugin::PluginEventBus']]]
 ];

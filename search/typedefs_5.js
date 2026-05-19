@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lookupindex_0',['LookupIndex',['../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e',1,'db::LogEvent']]]
+  ['json_0',['json',['../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37',1,'config']]]
 ];

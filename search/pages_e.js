@@ -10,7 +10,7 @@ var searchData=
   ['static_20analysis_20with_20cppcheck_7',['Static Analysis with Cppcheck',['../d5/d22/md_docs_2CPPCHECK.html',1,'']]],
   ['strategy_20update_8',['Event Merge Strategy Update',['../d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html',1,'']]],
   ['summary_9',['Plugin System Implementation Summary',['../d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html',1,'']]],
-  ['system_10',['LogViewer Plugin System',['../d1/d53/md_docs_2PLUGIN__SYSTEM.html',1,'']]],
+  ['system_10',['system',['../de/d6a/md_docs_2INSTALLATION__MANIFEST.html',1,'LogViewer Installation Manifest System'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html',1,'LogViewer Plugin System']]],
   ['system_20guide_20and_20improvements_11',['Build System Guide and Improvements',['../d8/ddc/md_docs_2BUILD__GUIDE.html',1,'']]],
   ['system_20implementation_20summary_12',['Plugin System Implementation Summary',['../d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html',1,'']]],
   ['system_3a_20type_20specific_20interfaces_13',['Plugin System: Type-Specific Interfaces',['../d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html',1,'']]]

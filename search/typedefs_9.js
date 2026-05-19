@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['valuecolormap_0',['ValueColorMap',['../d6/d7f/namespaceconfig.html#acf60dfb1f88cc7c69929f68dae4c10f3',1,'config']]],
-  ['viewptr_1',['ViewPtr',['../da/d80/classmvc_1_1IModelObservable.html#aad040bba908aac23d9f30971989815cf',1,'mvc::IModelObservable']]]
+  ['readresult_0',['ReadResult',['../d5/dc4/namespaceanonymous__namespace_02xmlParser_8cpp_03.html#a4d48f20f1861332d36e31643c9ab45f5',1,'anonymous_namespace{xmlParser.cpp}']]]
 ];

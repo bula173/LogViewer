@@ -1,9 +1,10 @@
 var classui_1_1qt_1_1ActorsPanel =
 [
     [ "ActorData", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData" ],
-    [ "GroupData", "d9/df9/structui_1_1qt_1_1ActorsPanel_1_1GroupData.html", "d9/df9/structui_1_1qt_1_1ActorsPanel_1_1GroupData" ],
+    [ "GroupedActorData", "de/dff/structui_1_1qt_1_1ActorsPanel_1_1GroupedActorData.html", "de/dff/structui_1_1qt_1_1ActorsPanel_1_1GroupedActorData" ],
+    [ "GroupData", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a5e91363cfc0e8946ea9484930ca5cc04", null ],
     [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a91393c229ae8c7f5fca2b72c908e2a92", null ],
-    [ "ActorDirectionChanged", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#aa3210f1fb76fbd3c65b1d4c88a9b2e3e", null ],
+    [ "ActorDirectionChanged", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#afb30b19f23a0902cae49b3f02da1119e", null ],
     [ "ApplyCheckedFilter", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ac1914ce5f1adfe3ed84f88c4be383c3e", null ],
     [ "BuildLayout", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae779423b8e04bb7fd673e452e6f39be2", null ],
     [ "GetUncheckedActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a33b00ce76100b1d6712d091521ea8967", null ],
@@ -18,7 +19,7 @@ var classui_1_1qt_1_1ActorsPanel =
     [ "m_definitions", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a31f002060ff2a70e3b377176e9828bd7", null ],
     [ "m_events", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#aa15dc68217b5631f8a03c72e9edc96e5", null ],
     [ "m_eventsView", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a7d5cd4a58deda0dc8890c75503ac9591", null ],
-    [ "m_groupedCache", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a21513b07bf39fe3f363b700099c689da", null ],
+    [ "m_groupedCache", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a7cdd48b9036f4af89c20aa6bcb7a9b44", null ],
     [ "m_ignoreNextRefresh", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9b31d67f0c9026a37c5a1e72db5769f8", null ],
     [ "m_seqDiagBtn", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae96d1d5f544d51377c0d5f6ec11a2c37", null ],
     [ "m_statusLabel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a1daf21eeaf70fe40c762bedd2af89c56", null ],

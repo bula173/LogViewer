@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['itemhighlightmap_0',['ItemHighlightMap',['../d6/d7f/namespaceconfig.html#a24ffae7110e0a30690dfa78229399349',1,'config']]]
+  ['groupdata_0',['GroupData',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a5e91363cfc0e8946ea9484930ca5cc04',1,'ui::qt::ActorsPanel']]]
 ];

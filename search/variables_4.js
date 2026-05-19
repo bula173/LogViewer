@@ -6,5 +6,6 @@ var searchData=
   ['eventbatch_3',['eventBatch',['../de/d53/structparser_1_1ParserState.html#a284e91d89bcf9681823aed7d4e8e2a37',1,'parser::ParserState']]],
   ['eventid_4',['eventid',['../de/d74/structmvc_1_1SearchResultRow.html#a98b01985af5c157f90b19f16905a2c29',1,'mvc::SearchResultRow::eventId'],['../de/d53/structparser_1_1ParserState.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState::eventId']]],
   ['eventitems_5',['eventItems',['../de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
-  ['eventssincelastnotify_6',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]]
+  ['events_6',['events',['../d6/d35/structui_1_1qt_1_1ScenariosPanel_1_1Scenario.html#abd70c6901425518da4e1a3385a6ab4a4',1,'ui::qt::ScenariosPanel::Scenario']]],
+  ['eventssincelastnotify_7',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]]
 ];
