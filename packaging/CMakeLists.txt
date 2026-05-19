@@ -264,8 +264,40 @@ else()
 endif()
 
 #------------------------------------------------------------------------------
+# Generate installation manifest
+# This file tracks installed libraries and versions to prevent overwriting
+# up-to-date files during installation of new versions
 
-message(STATUS "")
+set(MANIFEST_OUTPUT_FILE "${CMAKE_BINARY_DIR}/LogViewer_install_manifest.json")
+
+generate_install_manifest(
+    OUTPUT_FILE "${MANIFEST_OUTPUT_FILE}"
+    INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
+    LIBRARIES "Qt5Core;Qt5Gui;Qt5Widgets;Qt5Network;Qt5Xml;Qt5Concurrent"
+)
+
+# Install manifest with the application
+if(APPLE)
+    install(FILES "${MANIFEST_OUTPUT_FILE}"
+        DESTINATION .
+        COMPONENT application
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+        RENAME .logviewer_manifest.json)
+elseif(WIN32)
+    install(FILES "${MANIFEST_OUTPUT_FILE}"
+        DESTINATION .
+        COMPONENT application
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+else()
+    # Linux - install to config directory
+    install(FILES "${MANIFEST_OUTPUT_FILE}"
+        DESTINATION etc/LogViewer
+        COMPONENT application
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+        RENAME .logviewer_manifest.json)
+endif()
+
+#------------------------------------------------------------------------------
 message(STATUS "    == Packaging overview for ${PROJECT_NAME} ==")
 message(STATUS "Version:              ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH} ${VERSION_TYPE} @ ${VERSION_HOST}")
 message(STATUS "Install prefix:       ${CMAKE_INSTALL_PREFIX}")
