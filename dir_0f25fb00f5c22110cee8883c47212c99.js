@@ -27,6 +27,7 @@ var dir_0f25fb00f5c22110cee8883c47212c99 =
     [ "LogFileLoadDialog.hpp", "d2/de5/LogFileLoadDialog_8hpp.html", "d2/de5/LogFileLoadDialog_8hpp" ],
     [ "MainWindow.cpp", "d3/db7/MainWindow_8cpp.html", "d3/db7/MainWindow_8cpp" ],
     [ "MainWindow.hpp", "da/d6e/MainWindow_8hpp.html", "da/d6e/MainWindow_8hpp" ],
+    [ "PanelUtils.hpp", "d4/d63/PanelUtils_8hpp.html", "d4/d63/PanelUtils_8hpp" ],
     [ "PatternAnalysisPanel.cpp", "d0/df7/PatternAnalysisPanel_8cpp.html", "d0/df7/PatternAnalysisPanel_8cpp" ],
     [ "PatternAnalysisPanel.hpp", "db/da2/PatternAnalysisPanel_8hpp.html", "db/da2/PatternAnalysisPanel_8hpp" ],
     [ "ScenariosPanel.cpp", "d9/df5/ScenariosPanel_8cpp.html", null ],

@@ -10,6 +10,7 @@ var searchData=
   ['ui_3a_3aqt_3a_3aanonymous_5fnamespace_7btraceviewerpanel_2ecpp_7d_7',['anonymous_namespace{TraceViewerPanel.cpp}',['../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aexportmanager_8',['ExportManager',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aexportmanager_3a_3aanonymous_5fnamespace_7bexportmanager_2ecpp_7d_9',['anonymous_namespace{ExportManager.cpp}',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html',1,'ui::qt::ExportManager']]],
-  ['updates_10',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
-  ['util_11',['util',['../d6/d72/namespaceutil.html',1,'']]]
+  ['ui_3a_3aqt_3a_3apanel_5futils_10',['panel_utils',['../da/d7a/namespaceui_1_1qt_1_1panel__utils.html',1,'ui::qt']]],
+  ['updates_11',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
+  ['util_12',['util',['../d6/d72/namespaceutil.html',1,'']]]
 ];

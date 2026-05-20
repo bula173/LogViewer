@@ -16,6 +16,12 @@ var namespaceui_1_1qt =
     ] ],
     [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" ],
     [ "ExportManager", "dd/d0e/namespaceui_1_1qt_1_1ExportManager.html", "dd/d0e/namespaceui_1_1qt_1_1ExportManager" ],
+    [ "panel_utils", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html", [
+      [ "ParseTimestamp", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ab2f966654f2a7f4a939fc64f9883f879", null ],
+      [ "VisibleIndices", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ad5785d4af4328360ec0b8f49d3d5e6ca", null ],
+      [ "kMsgFields", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aec6290a54fa4dbb87977f185c71dbeb2", null ],
+      [ "kTsFields", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aa30f57968bd4b4c632f8c9fa7968faa6", null ]
+    ] ],
     [ "ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", "de/db8/structui_1_1qt_1_1ActorDefinition" ],
     [ "ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel" ],
     [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
