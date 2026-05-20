@@ -238,6 +238,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             eventsLayout->addWidget(m_eventsView);
 
             m_contentTabs->addTab(eventsContainer, "Events");
+            m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+                tr("Browse, search, and filter log events"));
         }
 
         // AI UI provided by plugins; initialize service holder only
@@ -360,30 +362,44 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // ===== MAIN TAB: Statistics Summary =====
     m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Field value distributions, counts, and summary metrics for loaded events"));
 
     // ===== MAIN TAB: Pattern Analysis =====
     m_patternPanel = new PatternAnalysisPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_patternPanel, tr("Patterns"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Detect recurring message patterns and show frequency analysis"));
 
     // ===== MAIN TAB: Actors =====
     m_actorsPanel = new ActorsPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_actorsPanel, tr("Actors"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Events grouped by actor or service, based on actor definitions — click to filter"));
 
     // ===== MAIN TAB: Timeline (interactive event-distribution chart) =====
     m_timelinePanel = new TimelineChartPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_timelinePanel, tr("Timeline"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Event volume over time, colour-coded by log level — click a bar to filter to that time bucket"));
 
     // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
     m_tracePanel = new TraceViewerPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_tracePanel, tr("Traces"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Group events by a correlation field (trace ID, session, request…) — double-click a group to filter"));
 
     // ===== MAIN TAB: Bookmarks (annotate and navigate events) =====
     m_bookmarksPanel = new BookmarksPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_bookmarksPanel, tr("Bookmarks"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Annotate events with labels; double-click or Go To to jump back to the event in the Events tab"));
 
     // ===== MAIN TAB: Scenarios (named event collections for export) =====
     m_scenariosPanel = new ScenariosPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_scenariosPanel, tr("Scenarios"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Build named, ordered event collections and export them as plain text, Markdown, or JSON Lines"));
 
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
@@ -598,9 +614,26 @@ void MainWindow::SetupMenus()
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
-    
+
     viewMenu->addSeparator();
-    
+
+    // Tabs submenu — one checkable action per built-in content tab
+    auto* tabsMenu = viewMenu->addMenu(tr("&Tabs"));
+    for (int i = 0; i < m_contentTabs->count(); ++i)
+    {
+        auto* action = tabsMenu->addAction(m_contentTabs->tabText(i));
+        action->setCheckable(true);
+        action->setChecked(true);
+        action->setToolTip(m_contentTabs->tabToolTip(i));
+        const int idx = i;
+        connect(action, &QAction::toggled, this, [this, idx](bool visible) {
+            if (m_contentTabs)
+                m_contentTabs->tabBar()->setTabVisible(idx, visible);
+        });
+    }
+
+    viewMenu->addSeparator();
+
     // Theme submenu
     auto* themeMenu = viewMenu->addMenu(tr("&Theme"));
     
