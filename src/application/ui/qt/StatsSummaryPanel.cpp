@@ -1,11 +1,9 @@
 #include "StatsSummaryPanel.hpp"
 
 #include "Config.hpp"
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
 #include <QBarCategoryAxis>
-#include <QBarSeries>
 #include <QBarSet>
 #include <QBrush>
 #include <QChart>
@@ -81,18 +79,6 @@ void StatsSummaryPanel::BuildLayout()
         m_typeChartView->setChart(new QChart());
         typeLayout->addWidget(m_typeChartView);
         layout->addWidget(typeBox);
-    }
-
-    // ── Events Over Time section ──────────────────────────────────────────
-    {
-        auto* timeBox    = new QGroupBox(tr("Events Over Time"), inner);
-        auto* timeLayout = new QVBoxLayout(timeBox);
-        m_timeChartView  = new QChartView(timeBox);
-        m_timeChartView->setRenderHint(QPainter::Antialiasing);
-        m_timeChartView->setMinimumHeight(200);
-        m_timeChartView->setChart(new QChart());
-        timeLayout->addWidget(m_timeChartView);
-        layout->addWidget(timeBox);
     }
 
     // ── Top N Values section ──────────────────────────────────────────────
@@ -177,7 +163,6 @@ void StatsSummaryPanel::Refresh()
     const auto indices = VisibleIndices();   // compute once, share everywhere
     RefreshSummaryTable(indices);
     RefreshTypeChart(indices);
-    RefreshTimeChart(indices);
     RefreshTopNTable(indices);
     RefreshFieldStats(indices);
 }
@@ -222,39 +207,18 @@ void StatsSummaryPanel::PopulateColumnCombo()
 // Static helpers
 // ---------------------------------------------------------------------------
 
-QDateTime StatsSummaryPanel::ParseTimestamp(const QString& s)
-{
-    QDateTime dt = QDateTime::fromString(s, Qt::ISODateWithMs);
-    if (dt.isValid()) return dt;
-    dt = QDateTime::fromString(s, Qt::ISODate);
-    if (dt.isValid()) return dt;
-    for (const char* fmt : {"yyyy-MM-dd HH:mm:ss.zzz",
-                            "yyyy-MM-dd HH:mm:ss",
-                            "dd/MMM/yyyy:HH:mm:ss"}) {
-        dt = QDateTime::fromString(s, QString::fromLatin1(fmt));
-        if (dt.isValid()) return dt;
-    }
-    bool ok = false;
-    const qint64 epoch = s.toLongLong(&ok);
-    if (ok) return QDateTime::fromSecsSinceEpoch(epoch);
-    return {};
-}
-
 std::string StatsSummaryPanel::DetectTimestampField(
     db::EventsContainer&              events,
     const std::vector<unsigned long>& indices)
 {
-    static const std::vector<std::string> kCandidates{
-        "timestamp", "time", "datetime", "@timestamp", "date"};
-
-    for (const auto& candidate : kCandidates)
+    for (const auto& candidate : panel_utils::kTsFields)
     {
         for (unsigned long idx : indices)
         {
             const std::string val =
                 events.GetEvent(static_cast<int>(idx)).findByKey(candidate);
             if (!val.empty() &&
-                ParseTimestamp(QString::fromStdString(val)).isValid())
+                panel_utils::ParseTimestamp(QString::fromStdString(val)).isValid())
                 return candidate;
         }
     }
@@ -288,7 +252,7 @@ void StatsSummaryPanel::RefreshSummaryTable(
     {
         for (unsigned long idx : indices)
         {
-            const QDateTime dt = ParseTimestamp(QString::fromStdString(
+            const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(
                 m_events.GetEvent(static_cast<int>(idx)).findByKey(tsField)));
             if (!dt.isValid()) continue;
             if (!tMin.isValid() || dt < tMin) tMin = dt;
@@ -315,7 +279,7 @@ void StatsSummaryPanel::RefreshSummaryTable(
     addRow(tr("Total loaded"), QString::number(static_cast<qulonglong>(totalEvents)));
 
     const double visPct = totalEvents > 0
-        ? 100.0 * visibleEvents / static_cast<double>(totalEvents)
+        ? 100.0 * static_cast<double>(visibleEvents) / static_cast<double>(totalEvents)
         : 0.0;
     addRow(tr("Visible (filtered)"),
            QString("%1  (%2%)").arg(visibleEvents).arg(visPct, 0, 'f', 1));
@@ -342,7 +306,7 @@ void StatsSummaryPanel::RefreshSummaryTable(
                        .arg(secs, 2, 10, QChar('0')));
 
             const double rate = spanSecs > 0
-                ? visibleEvents * 60.0 / static_cast<double>(spanSecs)
+                ? static_cast<double>(visibleEvents) * 60.0 / static_cast<double>(spanSecs)
                 : 0.0;
             addRow(tr("Avg. rate"),
                    QString("%1 events/min").arg(rate, 0, 'f', 1));
@@ -443,102 +407,6 @@ void StatsSummaryPanel::RefreshTypeChart(const std::vector<unsigned long>& indic
 }
 
 // ---------------------------------------------------------------------------
-// Time histogram
-// ---------------------------------------------------------------------------
-
-void StatsSummaryPanel::RefreshTimeChart(const std::vector<unsigned long>& indices)
-{
-    auto* chart = new QChart();
-    chart->setTitle(tr("Events Over Time"));
-    chart->setAnimationOptions(QChart::NoAnimation);
-    chart->legend()->hide();
-    chart->setMargins(QMargins(4, 4, 4, 4));
-
-    const std::string tsField = DetectTimestampField(m_events, indices);
-    if (tsField.empty() || indices.empty())
-    {
-        chart->setTitle(tr("Events Over Time (no timestamp field found)"));
-        m_timeChartView->setChart(chart);
-        return;
-    }
-
-    std::vector<QDateTime> times;
-    times.reserve(indices.size());
-    for (unsigned long idx : indices)
-    {
-        const QDateTime dt = ParseTimestamp(QString::fromStdString(
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(tsField)));
-        if (dt.isValid()) times.push_back(dt);
-    }
-
-    if (times.size() < 2)
-    {
-        chart->setTitle(tr("Events Over Time (insufficient timestamp data)"));
-        m_timeChartView->setChart(chart);
-        return;
-    }
-
-    const QDateTime tMin      = *std::min_element(times.begin(), times.end());
-    const QDateTime tMax      = *std::max_element(times.begin(), times.end());
-    const qint64    spanSecs  = tMin.secsTo(tMax);
-    const int       buckets   = std::min(20, static_cast<int>(times.size()));
-    const qint64    bucketSecs= std::max(qint64(1), spanSecs / buckets);
-    const QString   labelFmt  = spanSecs > 86400 ? "MM-dd HH:mm" : "HH:mm:ss";
-
-    std::vector<int> bucketCounts(static_cast<size_t>(buckets), 0);
-    for (const QDateTime& dt : times)
-    {
-        qint64 offset = tMin.secsTo(dt);
-        int b = static_cast<int>(offset / bucketSecs);
-        if (b >= buckets) b = buckets - 1;
-        bucketCounts[static_cast<size_t>(b)]++;
-    }
-
-    auto* barSet = new QBarSet("count");
-    QStringList categories;
-    QStringList tooltips;
-
-    for (int i = 0; i < buckets; ++i)
-    {
-        const int       cnt        = bucketCounts[static_cast<size_t>(i)];
-        const QDateTime bucketStart= tMin.addSecs(i * bucketSecs);
-        const QDateTime bucketEnd  = tMin.addSecs((i + 1) * bucketSecs);
-        *barSet << cnt;
-        categories << bucketStart.toString(labelFmt);
-        tooltips   << QString("%1 → %2\nEvents: %3")
-                          .arg(bucketStart.toString("yyyy-MM-dd HH:mm:ss"))
-                          .arg(bucketEnd.toString("yyyy-MM-dd HH:mm:ss"))
-                          .arg(cnt);
-    }
-
-    connect(barSet, &QBarSet::hovered, this,
-            [tooltips](bool status, int index) {
-                if (status && index >= 0 && index < tooltips.size())
-                    QToolTip::showText(QCursor::pos(), tooltips.at(index));
-                else
-                    QToolTip::hideText();
-            });
-
-    auto* series = new QBarSeries();
-    series->append(barSet);
-    series->setLabelsVisible(false);
-    chart->addSeries(series);
-
-    auto* axisX = new QBarCategoryAxis();
-    axisX->append(categories);
-    axisX->setLabelsAngle(-45);
-    chart->addAxis(axisX, Qt::AlignBottom);
-    series->attachAxis(axisX);
-
-    auto* axisY = new QValueAxis();
-    axisY->setLabelFormat("%d");
-    chart->addAxis(axisY, Qt::AlignLeft);
-    series->attachAxis(axisY);
-
-    m_timeChartView->setChart(chart);
-}
-
-// ---------------------------------------------------------------------------
 // Top-N table
 // ---------------------------------------------------------------------------
 
@@ -614,9 +482,14 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
     const int    cols  = model->columnCount();
     const size_t total = indices.size();
 
-    // For very large datasets only track fill %; unique counting is capped.
+    // For very large datasets: stride-sample to avoid O(n×cols) UI freeze.
+    // A sample of 50 000 rows gives < 1 % statistical error on fill rate.
+    constexpr size_t kFieldStatsSample   = 50'000;
     constexpr size_t kUniqueTrackingLimit = 50'000;
-    const bool trackUniques = (total <= kUniqueTrackingLimit);
+    const size_t step        = total > kFieldStatsSample ? total / kFieldStatsSample : 1;
+    const size_t sampleTotal = (total + step - 1) / step;
+    const bool   sampled     = step > 1;
+    const bool   trackUniques = (sampleTotal <= kUniqueTrackingLimit);
 
     m_fieldStatsTable->setRowCount(cols);
 
@@ -628,10 +501,10 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
         std::set<QString> uniqueVals;
         int filled = 0;
 
-        for (unsigned long idx : indices)
+        for (size_t si = 0; si < total; si += step)
         {
             const QString val = model->data(
-                model->index(static_cast<int>(idx), c),
+                model->index(static_cast<int>(indices[si]), c),
                 Qt::DisplayRole).toString();
             if (!val.isEmpty())
             {
@@ -641,7 +514,7 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
         }
 
         const double fillPct =
-            total > 0 ? 100.0 * filled / static_cast<double>(total) : 0.0;
+            sampleTotal > 0 ? 100.0 * filled / static_cast<double>(sampleTotal) : 0.0;
 
         const QString uniqueStr = trackUniques
             ? QString::number(uniqueVals.size())
@@ -650,9 +523,11 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
         auto* nameItem   = new QTableWidgetItem(colName);
         auto* uniqueItem = new QTableWidgetItem(uniqueStr);
         auto* fillItem   = new QTableWidgetItem(
-            QString("%1%").arg(fillPct, 0, 'f', 1));
+            sampled ? QString("%1%~").arg(fillPct, 0, 'f', 1)
+                    : QString("%1%").arg(fillPct, 0, 'f', 1));
 
         nameItem->setToolTip(colName); // full name if column is narrow
+        if (sampled) fillItem->setToolTip(tr("Approximate — computed from a %1-row sample").arg(sampleTotal));
         uniqueItem->setTextAlignment(Qt::AlignCenter);
         fillItem->setTextAlignment(Qt::AlignCenter);
 

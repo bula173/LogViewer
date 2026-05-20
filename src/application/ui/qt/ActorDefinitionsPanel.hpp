@@ -11,6 +11,10 @@ class QTableWidgetItem;
 class QPushButton;
 class QLabel;
 
+namespace db {
+class EventsContainer;
+}
+
 namespace ui::qt {
 
 /**
@@ -37,6 +41,8 @@ class ActorDefinitionsPanel : public QWidget
         return m_definitions;
     }
 
+    void SetEventsSource(db::EventsContainer* events) { m_events = events; }
+
   signals:
     void DefinitionsChanged(const std::vector<ActorDefinition>& defs);
     /// Emitted when the user clicks "Apply Filter" — caller should filter events
@@ -52,6 +58,7 @@ class ActorDefinitionsPanel : public QWidget
     void HandleSave();
     void HandleSaveAs();
     void HandleLoad();
+    void HandleDiscover();
     void HandleSelectionChanged();
     void HandleItemChanged(QTableWidgetItem* item);
 
@@ -85,6 +92,7 @@ class ActorDefinitionsPanel : public QWidget
     std::vector<ActorDefinition> m_definitions;
     std::string                  m_currentFilePath; ///< last saved/loaded path
     bool                         m_rebuilding {false}; ///< true while RebuildTable runs
+    db::EventsContainer*         m_events     {nullptr};
 };
 
 } // namespace ui::qt

@@ -1,7 +1,6 @@
 #include "ScenariosPanel.hpp"
 
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -437,8 +436,6 @@ void ScenariosPanel::OnExport()
     });
 
     // ── Generate function ─────────────────────────────────────────────────
-    // Capture by value where needed — the dialog is non-modal, so local
-    // references would dangle once this function returns.
     const std::vector<ScenarioEvent> scenarioEvents = sc->events;
 
     auto generate = [this, &allFields, &checkBoxes, rbPlain, rbJson,
@@ -509,23 +506,10 @@ void ScenariosPanel::OnExport()
             }
             else // JSON Lines
             {
-                out += '{';
-                bool first = true;
+                nlohmann::json obj;
                 for (const auto& f : selected)
-                {
-                    const std::string val = ev.findByKey(f);
-                    if (!first) out += ", ";
-                    first = false;
-                    // Basic JSON string escaping
-                    QString qval = QString::fromStdString(val);
-                    qval.replace('\\', "\\\\");
-                    qval.replace('"',  "\\\"");
-                    qval.replace('\n', "\\n");
-                    out += QString("\"%1\": \"%2\"")
-                               .arg(QString::fromStdString(f))
-                               .arg(qval);
-                }
-                out += "}\n";
+                    obj[f] = ev.findByKey(f);
+                out += QString::fromStdString(obj.dump()) + '\n';
             }
         }
 
@@ -580,13 +564,11 @@ void ScenariosPanel::UpdateScenarioCombo(int selectIndex)
     m_scenarioCombo->clear();
     for (const auto& sc : m_scenarios)
         m_scenarioCombo->addItem(QString::fromStdString(sc.name));
-    m_scenarioCombo->blockSignals(false);
-
-    // Trigger OnScenarioChanged explicitly
     if (selectIndex >= 0 && selectIndex < static_cast<int>(m_scenarios.size()))
         m_scenarioCombo->setCurrentIndex(selectIndex);
     else
         m_scenarioCombo->setCurrentIndex(-1);
+    m_scenarioCombo->blockSignals(false);
 
     OnScenarioChanged(m_scenarioCombo->currentIndex());
 }
@@ -613,17 +595,12 @@ void ScenariosPanel::FillEventStrings(ScenarioEvent& se) const
 
     const db::LogEvent& ev = m_events.GetEvent(se.row);
 
-    static const std::vector<std::string> kTsFields{
-        "timestamp", "time", "datetime", "@timestamp", "date"};
-    static const std::vector<std::string> kMsgFields{
-        "message", "msg", "text", "description", "body"};
-
-    for (const auto& f : kTsFields)
+    for (const auto& f : panel_utils::kTsFields)
     {
         se.timestamp = ev.findByKey(f);
         if (!se.timestamp.empty()) break;
     }
-    for (const auto& f : kMsgFields)
+    for (const auto& f : panel_utils::kMsgFields)
     {
         se.summary = ev.findByKey(f);
         if (!se.summary.empty()) break;

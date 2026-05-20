@@ -339,6 +339,10 @@ void PatternAnalysisPanel::RefreshTemplates(
 
     std::vector<TemplateEntry> entries;
 
+    // Cap per-type clustering to avoid O(n×c²) blow-up on large groups.
+    // 5 000 events per type gives reliable pattern coverage without blocking.
+    constexpr size_t kMaxClusterEvents = 5'000;
+
     for (auto& [typeName, typeIndices] : byType)
     {
         // Within the type group, build templates by iteratively merging
@@ -347,8 +351,10 @@ void PatternAnalysisPanel::RefreshTemplates(
         // Otherwise start a new template.
         std::vector<TemplateEntry> clusters;
 
-        for (unsigned long idx : typeIndices)
+        const size_t processCount = std::min(typeIndices.size(), kMaxClusterEvents);
+        for (size_t ei = 0; ei < processCount; ++ei)
         {
+            const unsigned long idx = typeIndices[ei];
             const std::string msg =
                 m_events.GetEvent(static_cast<int>(idx)).findByKey(msgField);
             const std::vector<std::string> toks = Tokenise(msg);

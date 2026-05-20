@@ -1,9 +1,12 @@
 #include "ActorDefinitionsPanel.hpp"
 
 #include "Config.hpp"
+#include "EventsContainer.hpp"
 
 #include <nlohmann/json.hpp>
 
+#include <algorithm>
+#include <map>
 #include <set>
 
 #include <QCheckBox>
@@ -133,13 +136,19 @@ void ActorDefinitionsPanel::BuildLayout()
     layout->addLayout(btnRow1);
 
     // ── Buttons: Save / Save As / Load ───────────────────────────────────
-    auto* btnRow2   = new QHBoxLayout();
-    auto* saveBtn   = new QPushButton(tr("Save"),      this);
-    auto* saveAsBtn = new QPushButton(tr("Save As…"),  this);
-    auto* loadBtn   = new QPushButton(tr("Load…"),     this);
+    auto* btnRow2     = new QHBoxLayout();
+    auto* saveBtn     = new QPushButton(tr("Save"),        this);
+    auto* saveAsBtn   = new QPushButton(tr("Save As…"),    this);
+    auto* loadBtn     = new QPushButton(tr("Load…"),       this);
+    auto* discoverBtn = new QPushButton(tr("Discover…"),   this);
+    discoverBtn->setToolTip(tr(
+        "Scan the loaded log data and suggest actor fields automatically.\n"
+        "Fields with a moderate number of distinct values (2–200) are candidates.\n"
+        "You can review, select, and import the suggestions."));
     btnRow2->addWidget(saveBtn);
     btnRow2->addWidget(saveAsBtn);
     btnRow2->addWidget(loadBtn);
+    btnRow2->addWidget(discoverBtn);
     layout->addLayout(btnRow2);
 
     // ── Buttons: Apply Filter / Clear Filter ─────────────────────────────
@@ -161,6 +170,7 @@ void ActorDefinitionsPanel::BuildLayout()
     connect(saveBtn,    &QPushButton::clicked, this, &ActorDefinitionsPanel::HandleSave);
     connect(saveAsBtn,  &QPushButton::clicked, this, &ActorDefinitionsPanel::HandleSaveAs);
     connect(loadBtn,    &QPushButton::clicked, this, &ActorDefinitionsPanel::HandleLoad);
+    connect(discoverBtn,&QPushButton::clicked, this, &ActorDefinitionsPanel::HandleDiscover);
     connect(m_table,    &QTableWidget::itemSelectionChanged,
             this, &ActorDefinitionsPanel::HandleSelectionChanged);
     connect(m_table,    &QTableWidget::cellDoubleClicked,
@@ -411,6 +421,190 @@ void ActorDefinitionsPanel::HandleLoad()
     {
         QMessageBox::warning(this, tr("Load Error"),
             tr("Could not load actors: %1").arg(QString::fromStdString(e.what())));
+    }
+}
+
+void ActorDefinitionsPanel::HandleDiscover()
+{
+    if (!m_events || m_events->Size() == 0)
+    {
+        QMessageBox::information(this, tr("Discover Actors"),
+            tr("No log data is loaded. Open a log file first."));
+        return;
+    }
+
+    // ── Scan up to 10K events, collect per-field unique values ───────────
+    constexpr size_t kScanLimit = 10'000;
+    const size_t total = static_cast<size_t>(m_events->Size());
+    const size_t step = total > kScanLimit ? total / kScanLimit : 1;
+
+    // field → set of distinct values seen (capped at 201 to detect overflow)
+    std::map<std::string, std::set<std::string>> fieldValues;
+    for (size_t i = 0; i < total; i += step)
+    {
+        const auto& ev = m_events->GetEvent(static_cast<int>(i));
+        for (const auto& [k, v] : ev.getEventItems())
+        {
+            auto& vals = fieldValues[k];
+            if (vals.size() <= 201) vals.insert(v);
+        }
+    }
+
+    // ── Score each field ─────────────────────────────────────────────────
+    // Actor-hint keywords raise score; skip fields with too few or too many unique values.
+    static const std::vector<std::string> kActorHints = {
+        "actor", "user", "username", "userid", "source", "src",
+        "host", "hostname", "service", "component", "module",
+        "process", "proc", "sender", "client", "server", "peer",
+        "origin", "agent", "role", "owner"
+    };
+
+    struct Candidate {
+        std::string field;
+        int         uniqueCount;
+        int         score;
+        std::vector<std::string> samples; // up to 5 sample values
+    };
+    std::vector<Candidate> candidates;
+
+    for (auto& [field, vals] : fieldValues)
+    {
+        const int unique = static_cast<int>(vals.size());
+        if (unique < 2 || unique > 200) continue;
+
+        // Check if this field is already covered by an existing definition
+        bool alreadyCovered = false;
+        for (const auto& def : m_definitions)
+            if (def.field == field) { alreadyCovered = true; break; }
+        if (alreadyCovered) continue;
+
+        int score = 0;
+        const std::string lower = [&]() {
+            std::string s = field;
+            std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+            return s;
+        }();
+        for (const auto& hint : kActorHints)
+            if (lower.find(hint) != std::string::npos) { score += 10; break; }
+
+        // Prefer moderate cardinality (2–30) over large (31–200)
+        if (unique <= 30) score += 5;
+
+        std::vector<std::string> samples;
+        for (const auto& v : vals)
+        {
+            if (static_cast<int>(samples.size()) >= 5) break;
+            if (!v.empty()) samples.push_back(v);
+        }
+
+        candidates.push_back({field, unique, score, std::move(samples)});
+    }
+
+    // Sort: score desc, then unique count asc
+    std::sort(candidates.begin(), candidates.end(),
+        [](const Candidate& a, const Candidate& b) {
+            if (a.score != b.score) return a.score > b.score;
+            return a.uniqueCount < b.uniqueCount;
+        });
+
+    if (candidates.empty())
+    {
+        QMessageBox::information(this, tr("Discover Actors"),
+            tr("No suitable actor fields found in the loaded log data.\n\n"
+               "Suitable fields have between 2 and 200 distinct values.\n"
+               "Fields already covered by existing definitions are skipped."));
+        return;
+    }
+
+    // ── Review dialog ─────────────────────────────────────────────────────
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr("Discovered Actor Fields"));
+    dlg.setMinimumWidth(560);
+    dlg.setMinimumHeight(400);
+
+    auto* mainLayout = new QVBoxLayout(&dlg);
+
+    auto* info = new QLabel(
+        tr("The following fields were found in the log data with a moderate number of "
+           "distinct values. Select the fields you want to import as actor definitions.\n"
+           "Each selected field will be imported with pattern <tt>(.+)</tt> and "
+           "\"Use captures\" enabled, so every distinct value becomes its own actor."), &dlg);
+    info->setWordWrap(true);
+    info->setTextFormat(Qt::RichText);
+    mainLayout->addWidget(info);
+
+    auto* candTable = new QTableWidget(static_cast<int>(candidates.size()), 4, &dlg);
+    candTable->setHorizontalHeaderLabels(
+        {tr("Import"), tr("Field"), tr("Unique values"), tr("Sample values")});
+    candTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    candTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+    candTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    candTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+    candTable->setColumnWidth(1, 130);
+    candTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    candTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    candTable->verticalHeader()->hide();
+    candTable->setAlternatingRowColors(true);
+
+    for (int r = 0; r < static_cast<int>(candidates.size()); ++r)
+    {
+        const auto& c = candidates[static_cast<size_t>(r)];
+
+        auto* checkItem = new QTableWidgetItem();
+        checkItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
+        checkItem->setCheckState(c.score >= 10 ? Qt::Checked : Qt::Unchecked);
+        candTable->setItem(r, 0, checkItem);
+
+        candTable->setItem(r, 1, new QTableWidgetItem(QString::fromStdString(c.field)));
+        candTable->setItem(r, 2, new QTableWidgetItem(QString::number(c.uniqueCount)));
+
+        QString sampleText;
+        for (const auto& s : c.samples)
+        {
+            if (!sampleText.isEmpty()) sampleText += ", ";
+            sampleText += QString::fromStdString(s);
+        }
+        candTable->setItem(r, 3, new QTableWidgetItem(sampleText));
+    }
+    mainLayout->addWidget(candTable, 1);
+
+    auto* buttons = new QDialogButtonBox(
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg);
+    buttons->button(QDialogButtonBox::Ok)->setText(tr("Import Selected"));
+    connect(buttons, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    mainLayout->addWidget(buttons);
+
+    if (dlg.exec() != QDialog::Accepted) return;
+
+    // ── Import selected fields ────────────────────────────────────────────
+    int imported = 0;
+    for (int r = 0; r < candTable->rowCount(); ++r)
+    {
+        const auto* checkItem = candTable->item(r, 0);
+        if (!checkItem || checkItem->checkState() != Qt::Checked) continue;
+
+        const std::string field = candidates[static_cast<size_t>(r)].field;
+
+        ActorDefinition def;
+        def.name        = field;
+        def.field       = field;
+        def.pattern     = "(.+)";
+        def.useCaptures = true;
+        def.enabled     = true;
+        m_definitions.push_back(def);
+        ++imported;
+    }
+
+    if (imported > 0)
+    {
+        RebuildTable();
+        EmitAndSave();
+        SetStatus(tr("Imported %1 actor definition(s) from discovery.").arg(imported), false);
+    }
+    else
+    {
+        SetStatus(tr("No fields selected for import."), false);
     }
 }
 
