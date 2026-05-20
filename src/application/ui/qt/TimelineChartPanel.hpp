@@ -47,12 +47,6 @@ class TimelineChartPanel : public QWidget
   private:
     void BuildLayout();
 
-    /// Returns visible event indices (filtered, or all if no filter is active).
-    [[nodiscard]] std::vector<unsigned long> VisibleIndices() const;
-
-    /// Parse a string to QDateTime using common log timestamp formats.
-    [[nodiscard]] static QDateTime ParseTimestamp(const QString& s);
-
     /// Return the name of the first field whose values parse as timestamps,
     /// or empty if none is found.
     [[nodiscard]] static std::string DetectTimestampField(

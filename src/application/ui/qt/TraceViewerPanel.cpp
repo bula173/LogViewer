@@ -1,9 +1,7 @@
 #include "TraceViewerPanel.hpp"
 
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
-#include <QDateTime>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
@@ -17,23 +15,6 @@
 namespace ui::qt {
 
 namespace {
-
-QDateTime ParseTimestamp(const QString& s)
-{
-    QDateTime dt = QDateTime::fromString(s, Qt::ISODateWithMs);
-    if (dt.isValid()) return dt;
-    dt = QDateTime::fromString(s, Qt::ISODate);
-    if (dt.isValid()) return dt;
-    for (const char* fmt : {"yyyy-MM-dd HH:mm:ss.zzz", "yyyy-MM-dd HH:mm:ss"})
-    {
-        dt = QDateTime::fromString(s, QString::fromLatin1(fmt));
-        if (dt.isValid()) return dt;
-    }
-    bool ok = false;
-    const qint64 e = s.toLongLong(&ok);
-    if (ok) return QDateTime::fromSecsSinceEpoch(e);
-    return {};
-}
 
 /// QTreeWidgetItem that sorts numeric columns (Events, Errors, Duration) correctly.
 class TraceTreeItem : public QTreeWidgetItem
@@ -198,11 +179,9 @@ void TraceViewerPanel::RebuildTree(const QString& field)
     m_tree->clear();
     m_traceEvents.clear();
 
-    const std::vector<unsigned long> vis = VisibleIndices();
+    const std::vector<unsigned long> vis = panel_utils::VisibleIndices(m_eventsView, m_events);
     const std::string fieldStr = field.toStdString();
 
-    static const std::vector<std::string> kTsFields{
-        "timestamp", "time", "datetime", "@timestamp", "date"};
     static const std::vector<std::string> kErrFields{"level", "severity", "type"};
     static const std::vector<std::string> kErrValues{
         "error", "ERROR", "Error", "critical", "CRITICAL", "fatal", "FATAL"};
@@ -225,11 +204,11 @@ void TraceViewerPanel::RebuildTree(const QString& field)
         auto& td = traces[traceId];
         td.indices.push_back(idx);
 
-        for (const auto& tsf : kTsFields)
+        for (const auto& tsf : panel_utils::kTsFields)
         {
             const std::string ts = logEv.findByKey(tsf);
             if (ts.empty()) continue;
-            const QDateTime dt = ParseTimestamp(QString::fromStdString(ts));
+            const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(ts));
             if (!dt.isValid()) continue;
             if (!td.firstSeen.isValid() || dt < td.firstSeen) td.firstSeen = dt;
             if (!td.lastSeen.isValid()  || dt > td.lastSeen)  td.lastSeen  = dt;
@@ -293,18 +272,6 @@ void TraceViewerPanel::RebuildTree(const QString& field)
             .arg(field)
             .arg(withValue)
             .arg(vis.size()));
-}
-
-std::vector<unsigned long> TraceViewerPanel::VisibleIndices() const
-{
-    const std::vector<unsigned long>* f = m_eventsView->GetFilteredIndices();
-    if (f && !f->empty()) return *f;
-    const size_t total = m_events.Size();
-    std::vector<unsigned long> all;
-    all.reserve(total);
-    for (size_t i = 0; i < total; ++i)
-        all.push_back(static_cast<unsigned long>(i));
-    return all;
 }
 
 } // namespace ui::qt

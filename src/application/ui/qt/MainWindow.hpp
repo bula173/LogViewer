@@ -10,6 +10,7 @@
 #include <QMainWindow>
 #include <QFutureWatcher>
 #include <memory>
+#include <set>
 #include <vector>
 
 class QLineEdit;
@@ -106,6 +107,8 @@ class MainWindow : public QMainWindow,
                       const std::string& pluginId,
                       plugin::IPlugin* plugin) override;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -139,6 +142,11 @@ class MainWindow : public QMainWindow,
     void InitializeUi(db::EventsContainer& events);
     void InitializePresenter(mvc::IController& controller,
         db::EventsContainer& events);
+
+    // Lazy panel refresh: mark all analysis panels dirty and schedule a
+    // single debounced refresh of whichever tab is currently visible.
+    void MarkAnalysisPanelsDirty();
+    void RefreshCurrentAnalysisPanel();
     void ApplyExtendedFilters();
     void ApplyActorFilter();
     void SetupMenus();
@@ -235,6 +243,14 @@ class MainWindow : public QMainWindow,
     // Async filter state — prevents re-entrant filter runs while a worker is active
     QFutureWatcher<std::vector<unsigned long>>* m_filterWatcher {nullptr};
     bool m_filteringInProgress {false};
+
+    // Lazy analysis-panel refresh — panels only recompute when visible
+    QTimer*             m_panelRefreshTimer  {nullptr};
+    std::set<QWidget*>  m_dirtyPanels;
+    // Debounced in-panel search — avoids O(n×m) rebuild on every keystroke
+    QTimer*             m_searchDebounceTimer {nullptr};
+    QString             m_pendingSearchTerm;
+    bool                m_pendingSearchCase  {false};
 
     // Plugin management
     std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index

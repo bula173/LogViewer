@@ -1,8 +1,7 @@
 #include "ActorsPanel.hpp"
 
 #include "ActorDefinition.hpp"
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
 #include <QClipboard>
 #include <QComboBox>
@@ -241,13 +240,11 @@ void AccumulateEventStats(
 {
     data.indices.push_back(idx);
 
-    static const std::vector<std::string> kTsFields {
-        "timestamp", "time", "datetime", "@timestamp", "date"};
     static const std::vector<std::string> kErrFields {"level", "severity", "type"};
     static const std::vector<std::string> kErrValues {
         "error", "ERROR", "Error", "critical", "CRITICAL", "fatal", "FATAL"};
 
-    for (const auto& f : kTsFields)
+    for (const auto& f : panel_utils::kTsFields)
     {
         const std::string ts = ev.findByKey(f);
         if (!ts.empty())

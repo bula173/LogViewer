@@ -1,7 +1,6 @@
 #include "BookmarksPanel.hpp"
 
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
 #include <QGuiApplication>
 #include <QClipboard>
@@ -134,13 +133,8 @@ void BookmarksPanel::DoAddBookmark(int actualRow, const std::string& label)
 
     const db::LogEvent& ev = m_events.GetEvent(actualRow);
 
-    static const std::vector<std::string> kMsgFields{
-        "message", "msg", "text", "description", "body"};
-    static const std::vector<std::string> kTsFields{
-        "timestamp", "time", "datetime", "@timestamp", "date"};
-
     std::string summary;
-    for (const auto& f : kMsgFields)
+    for (const auto& f : panel_utils::kMsgFields)
     {
         summary = ev.findByKey(f);
         if (!summary.empty()) break;
@@ -154,7 +148,7 @@ void BookmarksPanel::DoAddBookmark(int actualRow, const std::string& label)
         summary = summary.substr(0, 77) + "...";
 
     std::string ts;
-    for (const auto& f : kTsFields)
+    for (const auto& f : panel_utils::kTsFields)
     {
         ts = ev.findByKey(f);
         if (!ts.empty()) break;

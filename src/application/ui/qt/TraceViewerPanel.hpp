@@ -53,9 +53,6 @@ class TraceViewerPanel : public QWidget
     /// Rebuild the tree for the given correlation @p field.
     void RebuildTree(const QString& field);
 
-    /// Returns visible event indices (filtered, or all if no filter is active).
-    [[nodiscard]] std::vector<unsigned long> VisibleIndices() const;
-
     db::EventsContainer& m_events;
     EventsTableView*     m_eventsView;
 

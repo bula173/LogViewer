@@ -1,8 +1,7 @@
 #include "TimelineChartPanel.hpp"
 
 #include "Config.hpp"
-#include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "PanelUtils.hpp"
 
 #include <QAbstractBarSeries>
 #include <QBarCategoryAxis>
@@ -91,7 +90,7 @@ void TimelineChartPanel::Refresh()
     chart->setMargins(QMargins(4, 4, 4, 4));
     m_bucketEvents.clear();
 
-    const auto vis = VisibleIndices();
+    const auto vis = panel_utils::VisibleIndices(m_eventsView, m_events);
 
     if (vis.empty())
     {
@@ -117,7 +116,7 @@ void TimelineChartPanel::Refresh()
     timed.reserve(vis.size());
     for (unsigned long idx : vis)
     {
-        const QDateTime dt = ParseTimestamp(QString::fromStdString(
+        const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(
             m_events.GetEvent(static_cast<int>(idx)).findByKey(tsField)));
         if (dt.isValid())
             timed.emplace_back(dt, idx);
@@ -263,49 +262,17 @@ void TimelineChartPanel::Refresh()
 // Helpers
 // ---------------------------------------------------------------------------
 
-std::vector<unsigned long> TimelineChartPanel::VisibleIndices() const
-{
-    const std::vector<unsigned long>* f = m_eventsView->GetFilteredIndices();
-    if (f && !f->empty()) return *f;
-    const size_t total = m_events.Size();
-    std::vector<unsigned long> all;
-    all.reserve(total);
-    for (size_t i = 0; i < total; ++i)
-        all.push_back(static_cast<unsigned long>(i));
-    return all;
-}
-
-QDateTime TimelineChartPanel::ParseTimestamp(const QString& s)
-{
-    QDateTime dt = QDateTime::fromString(s, Qt::ISODateWithMs);
-    if (dt.isValid()) return dt;
-    dt = QDateTime::fromString(s, Qt::ISODate);
-    if (dt.isValid()) return dt;
-    for (const char* fmt : {"yyyy-MM-dd HH:mm:ss.zzz",
-                            "yyyy-MM-dd HH:mm:ss",
-                            "dd/MMM/yyyy:HH:mm:ss"})
-    {
-        dt = QDateTime::fromString(s, QString::fromLatin1(fmt));
-        if (dt.isValid()) return dt;
-    }
-    bool ok = false;
-    const qint64 epoch = s.toLongLong(&ok);
-    if (ok) return QDateTime::fromSecsSinceEpoch(epoch);
-    return {};
-}
-
 std::string TimelineChartPanel::DetectTimestampField(
     db::EventsContainer&              events,
     const std::vector<unsigned long>& indices)
 {
-    static const std::vector<std::string> kCandidates{
-        "timestamp", "time", "datetime", "@timestamp", "date"};
-    for (const auto& c : kCandidates)
+    for (const auto& c : panel_utils::kTsFields)
         for (unsigned long idx : indices)
         {
             const std::string val =
                 events.GetEvent(static_cast<int>(idx)).findByKey(c);
-            if (!val.empty() && ParseTimestamp(QString::fromStdString(val)).isValid())
+            if (!val.empty() &&
+                panel_utils::ParseTimestamp(QString::fromStdString(val)).isValid())
                 return c;
         }
     return {};

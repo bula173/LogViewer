@@ -37,6 +37,7 @@
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDragEnterEvent>
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QHBoxLayout>
@@ -60,6 +61,8 @@
 #include <QKeySequence>
 #include <QDockWidget>
 #include <QShortcut>
+#include <QToolTip>
+#include <QHelpEvent>
 #include <QtConcurrent/QtConcurrent>
 
 #include <set>
@@ -67,7 +70,6 @@
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
-#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -219,6 +221,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         }
             // Ensure we always have a central widget before returning
             setCentralWidget(m_contentTabs);
+        m_contentTabs->tabBar()->installEventFilter(this);
 
         // Events view tab — wrapped in a container that holds the search bar
         m_eventsView = new EventsTableView(events, m_contentTabs);
@@ -238,6 +241,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             eventsLayout->addWidget(m_eventsView);
 
             m_contentTabs->addTab(eventsContainer, "Events");
+            m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+                tr("Browse, search, and filter log events"));
         }
 
         // AI UI provided by plugins; initialize service holder only
@@ -297,6 +302,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
     // ── Actor Definitions tab (left panel) ───────────────────────────────
     m_actorDefPanel = new ActorDefinitionsPanel(m_filterTabs);
+    if (m_events) m_actorDefPanel->SetEventsSource(m_events);
     m_filterTabs->addTab(m_actorDefPanel, "Actor Definitions");
 
     // ── Time Range Filter tab ─────────────────────────────────────────────
@@ -360,30 +366,44 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // ===== MAIN TAB: Statistics Summary =====
     m_statsPanel = new StatsSummaryPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_statsPanel, tr("Statistics"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Field value distributions, counts, and summary metrics for loaded events"));
 
     // ===== MAIN TAB: Pattern Analysis =====
     m_patternPanel = new PatternAnalysisPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_patternPanel, tr("Patterns"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Detect recurring message patterns and show frequency analysis"));
 
     // ===== MAIN TAB: Actors =====
     m_actorsPanel = new ActorsPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_actorsPanel, tr("Actors"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Events grouped by actor or service, based on actor definitions — click to filter"));
 
     // ===== MAIN TAB: Timeline (interactive event-distribution chart) =====
     m_timelinePanel = new TimelineChartPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_timelinePanel, tr("Timeline"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Event volume over time, colour-coded by log level — click a bar to filter to that time bucket"));
 
     // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
     m_tracePanel = new TraceViewerPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_tracePanel, tr("Traces"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Group events by a correlation field (trace ID, session, request…) — double-click a group to filter"));
 
     // ===== MAIN TAB: Bookmarks (annotate and navigate events) =====
     m_bookmarksPanel = new BookmarksPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_bookmarksPanel, tr("Bookmarks"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Annotate events with labels; double-click or Go To to jump back to the event in the Events tab"));
 
     // ===== MAIN TAB: Scenarios (named event collections for export) =====
     m_scenariosPanel = new ScenariosPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_scenariosPanel, tr("Scenarios"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Build named, ordered event collections and export them as plain text, Markdown, or JSON Lines"));
 
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
@@ -598,9 +618,26 @@ void MainWindow::SetupMenus()
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
-    
+
     viewMenu->addSeparator();
-    
+
+    // Tabs submenu — one checkable action per built-in content tab
+    auto* tabsMenu = viewMenu->addMenu(tr("&Tabs"));
+    for (int i = 0; i < m_contentTabs->count(); ++i)
+    {
+        auto* action = tabsMenu->addAction(m_contentTabs->tabText(i));
+        action->setCheckable(true);
+        action->setChecked(true);
+        action->setToolTip(m_contentTabs->tabToolTip(i));
+        const int idx = i;
+        connect(action, &QAction::toggled, this, [this, idx](bool visible) {
+            if (m_contentTabs)
+                m_contentTabs->tabBar()->setTabVisible(idx, visible);
+        });
+    }
+
+    viewMenu->addSeparator();
+
     // Theme submenu
     auto* themeMenu = viewMenu->addMenu(tr("&Theme"));
     
@@ -694,33 +731,26 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     // Set up observers
     m_searchResults->SetObserver(this);
 
-    // Connect stats panel to model resets (covers both data load and filter changes)
-    if (m_statsPanel && m_eventsView && m_eventsView->model()) {
+    // Lazy analysis-panel refresh ─────────────────────────────────────────
+    // Model resets (filter / load) mark all analysis panels dirty and start a
+    // 150 ms debounce timer.  Only the currently visible tab is refreshed when
+    // the timer fires or when the user switches tabs.  This prevents cascading
+    // 5× O(n) recomputes on every filter change and keeps the UI responsive.
+    m_panelRefreshTimer = new QTimer(this);
+    m_panelRefreshTimer->setSingleShot(true);
+    m_panelRefreshTimer->setInterval(150);
+    connect(m_panelRefreshTimer, &QTimer::timeout,
+            this, &MainWindow::RefreshCurrentAnalysisPanel);
+
+    if (m_eventsView && m_eventsView->model()) {
         connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
-                m_statsPanel, &StatsSummaryPanel::Refresh);
+                this, &MainWindow::MarkAnalysisPanelsDirty);
     }
 
-    // Connect pattern analysis panel to model resets
-    if (m_patternPanel && m_eventsView && m_eventsView->model()) {
-        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
-                m_patternPanel, &PatternAnalysisPanel::Refresh);
-    }
-
-    // Connect actors panel to model resets
-    if (m_actorsPanel && m_eventsView && m_eventsView->model()) {
-        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
-                m_actorsPanel, &ActorsPanel::Refresh);
-    }
-
-    // Connect timeline, trace viewer to model resets
-    if (m_timelinePanel && m_eventsView && m_eventsView->model()) {
-        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
-                m_timelinePanel, &TimelineChartPanel::Refresh);
-    }
-
-    if (m_tracePanel && m_eventsView && m_eventsView->model()) {
-        connect(m_eventsView->model(), &QAbstractItemModel::modelReset,
-                m_tracePanel, &TraceViewerPanel::Refresh);
+    // Tab switch → refresh the newly-visible panel if its data is stale
+    if (m_contentTabs) {
+        connect(m_contentTabs, &QTabWidget::currentChanged,
+                this, [this](int) { RefreshCurrentAnalysisPanel(); });
     }
 
     // Connect actor definitions → actors panel
@@ -738,26 +768,12 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_actorDefPanel, &ActorDefinitionsPanel::UpdateActorDirection);
     }
 
-    // Time range filter → refresh actors, timeline, and trace viewer after apply/clear
-    if (m_timeRangePanel && m_actorsPanel) {
+    // Time range filter → mark all analysis panels dirty (same debounce path)
+    if (m_timeRangePanel) {
         connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
-                m_actorsPanel, &ActorsPanel::Refresh);
+                this, &MainWindow::MarkAnalysisPanelsDirty);
         connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
-                m_actorsPanel, &ActorsPanel::Refresh);
-    }
-
-    if (m_timeRangePanel && m_timelinePanel) {
-        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
-                m_timelinePanel, &TimelineChartPanel::Refresh);
-        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
-                m_timelinePanel, &TimelineChartPanel::Refresh);
-    }
-
-    if (m_timeRangePanel && m_tracePanel) {
-        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
-                m_tracePanel, &TraceViewerPanel::Refresh);
-        connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterCleared,
-                m_tracePanel, &TraceViewerPanel::Refresh);
+                this, &MainWindow::MarkAnalysisPanelsDirty);
     }
 
     // Bookmarks: right-click in events table → add bookmark; activate bookmark → switch tab + scroll
@@ -800,9 +816,20 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
 
     // Search bar (Ctrl+F)
     if (m_searchBar && m_eventsView) {
-        // Text / case changes → update model highlights and navigate to first match
+        // Debounce: buffer 150 ms of keystrokes before the O(n×m) match rebuild.
+        m_searchDebounceTimer = new QTimer(this);
+        m_searchDebounceTimer->setSingleShot(true);
+        m_searchDebounceTimer->setInterval(150);
+        connect(m_searchDebounceTimer, &QTimer::timeout, this, [this]() {
+            if (m_eventsView)
+                m_eventsView->SetSearchTerm(m_pendingSearchTerm, m_pendingSearchCase);
+        });
         connect(m_searchBar, &SearchBar::SearchChanged,
-                m_eventsView, &EventsTableView::SetSearchTerm);
+                this, [this](const QString& term, bool cs) {
+                    m_pendingSearchTerm = term;
+                    m_pendingSearchCase = cs;
+                    m_searchDebounceTimer->start();
+                });
         connect(m_searchBar, &SearchBar::NavigatePrev,
                 m_eventsView, &EventsTableView::NavigateToPrevMatch);
         connect(m_searchBar, &SearchBar::NavigateNext,
@@ -831,6 +858,18 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     // most AV sandbox run limits while still checking promptly for the user.
     if (m_updateChecker && ShouldCheckForUpdates())
     {
+        // Show UpdateDialog non-modally when startup check finds an update.
+        // Single-shot so only fires once per startup (the permanent
+        // OnUpdateCheckComplete still runs to update the badge).
+        connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
+                this, [this](updates::UpdateCheckResult result) {
+                    if (!result.HasAnyUpdate()) return;
+                    auto* dlg = new UpdateDialog(result, m_updateChecker, this);
+                    connect(dlg, &UpdateDialog::ApplyPluginUpdate,
+                            this, &MainWindow::OnApplyPluginUpdate);
+                    dlg->setAttribute(Qt::WA_DeleteOnClose);
+                    dlg->show();
+                }, static_cast<Qt::ConnectionType>(Qt::SingleShotConnection));
         QTimer::singleShot(30000, m_updateChecker, &UpdateChecker::CheckAsync);
         util::Logger::Info("[MainWindow] Update check scheduled (startup)");
     }
@@ -1033,6 +1072,22 @@ void MainWindow::OnSearchRequested()
         m_presenter->PerformSearch();
 }
 
+bool MainWindow::eventFilter(QObject* watched, QEvent* event)
+{
+    if (m_contentTabs && watched == m_contentTabs->tabBar()
+            && event->type() == QEvent::ToolTip)
+    {
+        const auto* he = static_cast<const QHelpEvent*>(event);
+        const int idx = m_contentTabs->tabBar()->tabAt(he->pos());
+        if (idx >= 0)
+            QToolTip::showText(he->globalPos(), m_contentTabs->tabToolTip(idx));
+        else
+            QToolTip::hideText();
+        return true;
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent* event)
 {
     if (event && event->mimeData() && event->mimeData()->hasUrls())
@@ -1215,10 +1270,11 @@ void MainWindow::OnSaveSession()
         session["scenarios"] = m_scenariosPanel ? m_scenariosPanel->GetSessionData()
                                                 : nlohmann::json::array();
 
-        std::ofstream f(path.toStdString());
-        if (!f)
+        QFile f(path);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
             throw std::runtime_error("Cannot open file for writing");
-        f << session.dump(2);
+        const std::string json = session.dump(2);
+        f.write(json.data(), static_cast<qint64>(json.size()));
         UpdateStatusText(tr("Session saved to %1").arg(path).toStdString());
     }
     catch (const std::exception& ex)
@@ -1243,11 +1299,12 @@ void MainWindow::OnOpenSession()
 
     try
     {
-        std::ifstream f(path.toStdString());
-        if (!f)
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
             throw std::runtime_error("Cannot open session file");
-
-        const nlohmann::json session = nlohmann::json::parse(f);
+        const QByteArray data = f.readAll();
+        const nlohmann::json session = nlohmann::json::parse(
+            data.constData(), data.constData() + data.size());
 
         // Load the log file if present
         const std::string logFile = session.value("log_file", std::string{});
@@ -2451,6 +2508,39 @@ void MainWindow::OnProfileLoadRequested(const FilterProfile& profile)
         m_typeFilterView->SetCheckedTypes(profile.checkedTypes);
         OnApplyFilterClicked();
     }
+}
+
+void MainWindow::MarkAnalysisPanelsDirty()
+{
+    if (m_statsPanel)   m_dirtyPanels.insert(m_statsPanel);
+    if (m_patternPanel) m_dirtyPanels.insert(m_patternPanel);
+    if (m_actorsPanel)  m_dirtyPanels.insert(m_actorsPanel);
+    if (m_timelinePanel) m_dirtyPanels.insert(m_timelinePanel);
+    if (m_tracePanel)   m_dirtyPanels.insert(m_tracePanel);
+
+    // Restart the timer — rapid filter changes collapse into one refresh.
+    if (m_panelRefreshTimer)
+        m_panelRefreshTimer->start();
+}
+
+void MainWindow::RefreshCurrentAnalysisPanel()
+{
+    if (!m_contentTabs) return;
+    QWidget* current = m_contentTabs->currentWidget();
+    if (!m_dirtyPanels.count(current)) return;
+
+    m_dirtyPanels.erase(current);
+
+    if (current == m_statsPanel)
+        m_statsPanel->Refresh();
+    else if (current == m_patternPanel)
+        m_patternPanel->Refresh();
+    else if (current == m_actorsPanel)
+        m_actorsPanel->Refresh();
+    else if (current == m_timelinePanel)
+        m_timelinePanel->Refresh();
+    else if (current == m_tracePanel)
+        m_tracePanel->Refresh();
 }
 
 } // namespace ui::qt
