@@ -163,4 +163,9 @@ class Config
 
 Config& GetConfig();
 
+/// Returns the directory that holds plugin ZIPs bundled with the installer
+/// (e.g. C:\Program Files\LogViewer\plugins on Windows).
+/// Returns an empty path on platforms where this concept doesn't apply.
+std::filesystem::path GetInstalledPluginsDir();
+
 } // namespace config

@@ -1644,6 +1644,40 @@ void MainWindow::loadPlugins() {
     }
 #endif
 
+#ifdef _WIN32
+    // On Windows, also scan the installer's plugins directory (e.g. Program Files\LogViewer\plugins\).
+    // Plugin ZIPs found there are only READ (discovery); extraction always goes to %APPDATA%,
+    // so no write access to Program Files is ever needed.
+    {
+        const std::filesystem::path installedPlugins =
+            config::GetInstalledPluginsDir();
+        std::error_code ec;
+        if (!installedPlugins.empty() && std::filesystem::exists(installedPlugins, ec))
+        {
+            util::Logger::Info("[MainWindow] Scanning installed plugins dir: {}",
+                               installedPlugins.string());
+            for (const auto& entry :
+                 std::filesystem::directory_iterator(installedPlugins, ec))
+            {
+                if (entry.path().extension() != ".zip") continue;
+                // Skip if already discovered (user copied the same ZIP to %APPDATA%\plugins)
+                const auto canonical =
+                    std::filesystem::weakly_canonical(entry.path(), ec);
+                bool already = false;
+                for (const auto& p : discoveredPlugins)
+                    if (std::filesystem::weakly_canonical(p, ec) == canonical)
+                    { already = true; break; }
+                if (!already)
+                {
+                    discoveredPlugins.push_back(entry.path());
+                    util::Logger::Info("[MainWindow] Found installed plugin ZIP: {}",
+                                       entry.path().string());
+                }
+            }
+        }
+    }
+#endif
+
     util::Logger::Info("[MainWindow] Discovered {} plugins", discoveredPlugins.size());
     
     for (const auto& pluginPath : discoveredPlugins) {

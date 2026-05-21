@@ -17,9 +17,23 @@ namespace config
 {
 
 namespace {
+// Returns the directory that holds the bundled read-only config templates
+// (etc/config.json, etc/field_dictionary.json).  All three platform branches
+// resolve relative to the *executable*, not the CWD, so the result is stable
+// regardless of how the app is launched (shortcut, shell, double-click).
 std::filesystem::path GetInstalledEtcDir()
 {
-#ifdef __APPLE__
+#ifdef _WIN32
+    wchar_t buf[MAX_PATH] = {};
+    if (GetModuleFileNameW(nullptr, buf, MAX_PATH) > 0)
+    {
+        std::error_code ec;
+        auto exePath = std::filesystem::weakly_canonical(
+            std::filesystem::path(buf), ec);
+        if (!ec)
+            return exePath.parent_path() / "etc";
+    }
+#elif defined(__APPLE__)
     // Resolve: <App>.app/Contents/MacOS/<exe> -> <App>.app/Contents/Resources/etc
     uint32_t size = 0;
     _NSGetExecutablePath(nullptr, &size);
@@ -30,11 +44,14 @@ std::filesystem::path GetInstalledEtcDir()
         if (_NSGetExecutablePath(buffer.data(), &size) == 0)
         {
             std::error_code ec;
-            auto exePath = std::filesystem::weakly_canonical(std::filesystem::path(buffer), ec);
+            auto exePath = std::filesystem::weakly_canonical(
+                std::filesystem::path(buffer), ec);
             if (!ec)
             {
-                auto resourcesEtc = exePath.parent_path() / ".." / "Resources" / "etc";
-                resourcesEtc = std::filesystem::weakly_canonical(resourcesEtc, ec);
+                auto resourcesEtc =
+                    exePath.parent_path() / ".." / "Resources" / "etc";
+                resourcesEtc =
+                    std::filesystem::weakly_canonical(resourcesEtc, ec);
                 if (!ec && std::filesystem::exists(resourcesEtc))
                     return resourcesEtc;
             }
@@ -42,12 +59,11 @@ std::filesystem::path GetInstalledEtcDir()
     }
 #endif
 
-    // Fallback: attempt to use current working directory
-    // Note: current_path() can throw if CWD no longer exists
+    // Linux / fallback: adjacent etc/ relative to CWD (dev builds).
+    // Note: current_path() can throw if CWD no longer exists.
     try
     {
-        auto cwd = std::filesystem::current_path();
-        auto etcDir = cwd / "etc";
+        auto etcDir = std::filesystem::current_path() / "etc";
         util::Logger::Debug("Using fallback etc directory: {}", etcDir.string());
         return etcDir;
     }
@@ -55,12 +71,28 @@ std::filesystem::path GetInstalledEtcDir()
     {
         util::Logger::Warn(
             "Cannot determine etc directory - CWD inaccessible: {}", e.what());
-        // Return a reasonable fallback (application home directory)
-        // This directory likely doesn't exist, but that's handled by callers
         return std::filesystem::path("/etc");
     }
 }
-} // namespace
+
+} // namespace (anonymous)
+
+// Public: directory that holds plugin ZIPs bundled with the installer.
+std::filesystem::path GetInstalledPluginsDir()
+{
+#ifdef _WIN32
+    wchar_t buf[MAX_PATH] = {};
+    if (GetModuleFileNameW(nullptr, buf, MAX_PATH) > 0)
+    {
+        std::error_code ec;
+        auto exePath = std::filesystem::weakly_canonical(
+            std::filesystem::path(buf), ec);
+        if (!ec)
+            return exePath.parent_path() / "plugins";
+    }
+#endif
+    return {};
+}
 
 static Config configInstance;
 // This is a singleton instance of the Config class
