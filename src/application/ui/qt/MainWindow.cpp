@@ -1,4 +1,5 @@
 #include "MainWindow.hpp"
+#include "StartupSplash.hpp"
 
 #include "EventsContainer.hpp"
 #include "ExportManager.hpp"
@@ -123,31 +124,41 @@ static void PluginHostUi_SetCurrentItemBridge(void* hostOpaque, int itemIndex)
 
 
 MainWindow::MainWindow(mvc::IController& controller,
-    db::EventsContainer& events, QWidget* parent)
-    : QMainWindow(parent)
+    db::EventsContainer& events, StartupSplash* splash, QWidget* parent)
+    : QMainWindow(parent), m_splash(splash)
 {
     m_events = &events;
     util::Logger::Info("[MainWindow] Initializing main window");
 
+    auto splashStep = [this](const QString& msg) {
+        util::Logger::Debug("[MainWindow] {}", msg.toStdString());
+        if (m_splash) m_splash->Step(msg);
+    };
+    auto splashWarn = [this](const QString& msg) {
+        util::Logger::Warn("[MainWindow] {}", msg.toStdString());
+        if (m_splash) m_splash->Warn(msg);
+    };
+
     try {
-        LoadRecentFiles();  // Load recent files early
+        splashStep(tr("Loading recent files…"));
+        LoadRecentFiles();
+
+        splashStep(tr("Building user interface…"));
         InitializeUi(events);
-        util::Logger::Debug("[MainWindow] UI initialization completed");
 
+        splashStep(tr("Setting up menus…"));
         SetupMenus();
-        util::Logger::Debug("[MainWindow] Menu setup completed");
 
+        splashStep(tr("Initializing controller…"));
         InitializePresenter(controller, events);
-        util::Logger::Debug("[MainWindow] Presenter initialization completed");
 
-        // Setup plugin manager with callback
+        splashStep(tr("Setting up plugin system…"));
         setupPluginManager();
-        util::Logger::Debug("[MainWindow] Plugin manager setup completed");
 
-        // Load plugins and create plugin tabs
+        splashStep(tr("Loading plugins…"));
         loadPlugins();
-        util::Logger::Debug("[MainWindow] Plugin initialization completed");
 
+        splashStep(tr("Restoring window layout…"));
         util::Logger::Info("[MainWindow] Main window initialized successfully");
 
         // Restore window layout disabled due to crashes with corrupted/legacy settings
@@ -174,7 +185,9 @@ MainWindow::MainWindow(mvc::IController& controller,
 
     } catch (const std::exception& ex) {
         util::Logger::Error("[MainWindow] Initialization failed: {}", ex.what());
-        throw; // Re-throw to let the application handle it
+        if (m_splash)
+            m_splash->Error(tr("Startup error: %1").arg(QString::fromUtf8(ex.what())));
+        throw;
     }
 }
 
@@ -1679,13 +1692,18 @@ void MainWindow::loadPlugins() {
 #endif
 
     util::Logger::Info("[MainWindow] Discovered {} plugins", discoveredPlugins.size());
-    
+    if (m_splash)
+        m_splash->Step(tr("Loading %1 plugin(s)…").arg(discoveredPlugins.size()));
+
     for (const auto& pluginPath : discoveredPlugins) {
-        // Load the plugin
         auto loadResult = pluginManager.LoadPlugin(pluginPath);
         if (loadResult.isErr()) {
+            const QString name =
+                QString::fromStdString(pluginPath.stem().string());
             util::Logger::Error("[MainWindow] Failed to load plugin: {}",
                 pluginPath.string());
+            if (m_splash)
+                m_splash->Warn(tr("Plugin '%1' failed to load").arg(name));
             continue;
         }
         

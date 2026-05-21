@@ -4,11 +4,11 @@
 #include "Version.hpp"
 #include "MainController.hpp"
 #include "qt/MainWindow.hpp"
+#include "qt/StartupSplash.hpp"
 #include "qt/ThemeSwitcher.hpp"
 #include "Logger.hpp"
 
 #include <QApplication>
-#include <QMessageBox>
 #include <QDir>
 #include <QStandardPaths>
 #include <QLibraryInfo>
@@ -30,118 +30,95 @@ constexpr const char* kQtAppName = "LogViewer";
 
 void ApplyModernStyle(QApplication& app)
 {
-    // Apply dark theme by default
     ApplyTheme(app, 0);
-    
-    // Set application font for better typography
-    // Use system default font with better sizing
+
     QFont appFont = app.font();
     appFont.setPointSize(10);
     appFont.setStyleStrategy(QFont::PreferAntialias);
     app.setFont(appFont);
 }
 
-bool SetupConfig()
-{
-    auto& config = config::GetConfig();
-    config.SetAppName(kQtAppName);
-    config.LoadConfig();
-    return true;
-}
-
-bool SetupLogging()
-{
-    auto& config = config::GetConfig();
-    config.SetAppName(kQtAppName);
-    util::Logger::Initialize(
-        util::Logger::fromStrLevel(config.logLevel), config.GetAppLogPath());
-    util::Logger::Info("Logging initialized for Qt UI");
-    util::Logger::Info(
-            "Logging configuration loaded from config file. Log level: {}",
-            config.logLevel);
-        util::Logger::Info("Log file path: {}", config.GetAppLogPath());
-    return true;
-}
-
-void ShowFatalMessage(const QString& text)
-{
-    util::Logger::Error("Fatal error: {}", text.toStdString());
-}
-
 } // namespace
 
 int main(int argc, char** argv)
 {
-    
-
     try
     {
-        SetupLogging();
-        util::Logger::Info("Starting LogViewer Qt application");
-        util::Logger::Info("Initializing configuration");
-        util::Logger::Info("PrintConfig: ");
-        config::GetConfig().GetPrintConfig();
-        SetupConfig();
-
-    }
-    catch (const error::Error& ex)
-    {
-        ShowFatalMessage(QString::fromStdString(ex.what()));
-        return EXIT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        ShowFatalMessage(QStringLiteral("Qt initialization failed: ") +
-            QString::fromUtf8(ex.what()));
-        return EXIT_FAILURE;
-    }
-
-    try
-    {
-        // Create QApplication on the stack for proper cleanup
+        // QApplication must exist before any Qt widgets (including the splash).
         QApplication app(argc, argv);
-        util::Logger::Info("QApplication created successfully");
 
-        // Set application properties
         app.setApplicationName(kQtAppName);
-        app.setApplicationVersion(QString::fromStdString(Version::current().asShortStr()));
+        app.setApplicationVersion(
+            QString::fromStdString(Version::current().asShortStr()));
         app.setOrganizationName("LogViewer");
         app.setOrganizationDomain("logviewer.app");
-        
-        // Apply modern styling
+
         ApplyModernStyle(app);
 
-        // Verify QApplication is properly initialized
-        if (!QApplication::instance()) {
-            ShowFatalMessage("Failed to create QApplication instance");
-            return EXIT_FAILURE;
+        // ── Splash screen ─────────────────────────────────────────────────
+        ui::qt::StartupSplash splash(app.applicationVersion());
+        splash.show();
+
+        // ── Logging ───────────────────────────────────────────────────────
+        splash.Step(QObject::tr("Initializing logging…"));
+        try
+        {
+            auto& cfg = config::GetConfig();
+            cfg.SetAppName(kQtAppName);
+            util::Logger::Initialize(
+                util::Logger::fromStrLevel(cfg.logLevel), cfg.GetAppLogPath());
+            util::Logger::Info("Logging initialized for Qt UI");
+        }
+        catch (const std::exception& e)
+        {
+            splash.Warn(QObject::tr("Logging setup warning: %1")
+                            .arg(QString::fromUtf8(e.what())));
         }
 
-        util::Logger::Info("Qt application properties set successfully");
+        // ── Configuration ─────────────────────────────────────────────────
+        splash.Step(QObject::tr("Loading configuration…"));
+        try
+        {
+            auto& cfg = config::GetConfig();
+            cfg.SetAppName(kQtAppName);
+            cfg.LoadConfig();
+            util::Logger::Info("Configuration loaded successfully");
+        }
+        catch (const std::exception& e)
+        {
+            const QString msg = QObject::tr("Configuration error: %1")
+                                    .arg(QString::fromUtf8(e.what()));
+            splash.Error(msg);
+            util::Logger::Error("Configuration load failed: {}", e.what());
+        }
+
+        // ── Main window ───────────────────────────────────────────────────
+        splash.Step(QObject::tr("Building user interface…"));
 
         db::EventsContainer events;
         mvc::MainController controller(events);
 
-        ui::qt::MainWindow window(controller, events);
+        ui::qt::MainWindow window(controller, events, &splash);
+
         window.show();
+        splash.Finish(&window); // blocks here if any errors were reported
 
         util::Logger::Info("Main window shown successfully");
-
         return app.exec();
-    } catch (const error::Error& ex)
+    }
+    catch (const error::Error& ex)
     {
-        ShowFatalMessage(QString::fromStdString(ex.what()));
+        util::Logger::Error("Fatal error: {}", ex.what());
         return EXIT_FAILURE;
     }
     catch (const std::exception& ex)
     {
-        ShowFatalMessage(QStringLiteral("Qt runtime error: ") +
-            QString::fromUtf8(ex.what()));
-        return EXIT_FAILURE;
-    } catch (...)
-    {
-        ShowFatalMessage(QStringLiteral("An unknown fatal error occurred. This may be due to missing Qt libraries."));
+        util::Logger::Error("Fatal Qt error: {}", ex.what());
         return EXIT_FAILURE;
     }
-
+    catch (...)
+    {
+        util::Logger::Error("Unknown fatal error during startup");
+        return EXIT_FAILURE;
+    }
 }

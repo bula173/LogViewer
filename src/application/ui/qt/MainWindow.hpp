@@ -53,6 +53,7 @@ class MainWindowPresenter;
 namespace ui::qt
 {
 
+class StartupSplash;
 class SearchResultsView;
 class TypeFilterView;
 class ItemDetailsView;
@@ -82,7 +83,7 @@ class MainWindow : public QMainWindow,
 
   public:
     MainWindow(mvc::IController& controller, db::EventsContainer& events,
-        QWidget* parent = nullptr);
+        StartupSplash* splash = nullptr, QWidget* parent = nullptr);
     ~MainWindow() override;
 
     // IMainWindowView implementation
@@ -182,6 +183,8 @@ class MainWindow : public QMainWindow,
     void RemoveLeftPanel();
     void RemoveBottomPanel();
     void RemoveRightPanel();
+
+    StartupSplash* m_splash {nullptr}; ///< non-owning; valid only during construction
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};

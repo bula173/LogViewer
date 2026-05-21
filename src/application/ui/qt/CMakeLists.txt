@@ -36,7 +36,9 @@ target_sources(application_core
         LogFileLoadDialog.cpp
         TimeRangeFilterPanel.cpp
         FilterProfilesPanel.cpp
+        StartupSplash.cpp
         ${CMAKE_CURRENT_LIST_DIR}/PanelUtils.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/StartupSplash.hpp
         ${CMAKE_CURRENT_LIST_DIR}/TimelineChartPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/TraceViewerPanel.hpp
         ${CMAKE_CURRENT_LIST_DIR}/BookmarksPanel.hpp
