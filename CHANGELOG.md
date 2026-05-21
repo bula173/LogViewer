@@ -2,6 +2,12 @@
 
 All notable changes to LogViewer are documented here.
 
+## [1.5.2] — 2026-05-21
+
+### Bug fixes
+
+- **Plugin extraction on Windows** ([#9](https://github.com/bula173/LogViewer/issues/9)) — the Zip Slip guard used a hardcoded `"/"` suffix appended to a `weakly_canonical()` path, which returns native backslash separators on Windows. The resulting mismatch caused every entry in the ZIP to be silently rejected as a path-traversal attempt, leaving an empty extraction directory with no `config.json`. Replaced the fragile string-prefix check with `lexically_relative()` which is portable and separator-agnostic. Also moved the canonical-root computation outside the per-entry loop.
+
 ## [1.5.1] — 2026-05-21
 
 ### Bug fixes

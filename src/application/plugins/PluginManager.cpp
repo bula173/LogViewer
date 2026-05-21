@@ -291,6 +291,9 @@ namespace {
             return false;
         }
         
+        // Compute once — used on every entry for the Zip Slip guard.
+        const auto extractDirCanonical = std::filesystem::weakly_canonical(extractDir);
+
         struct archive_entry* entry;
         while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
             const char* rawName = archive_entry_pathname(entry);
@@ -298,18 +301,16 @@ namespace {
 
             // Guard against Zip Slip: resolve the candidate path and verify it
             // stays inside extractDir before writing anything to disk.
-            std::filesystem::path outputPath = std::filesystem::weakly_canonical(
+            const std::filesystem::path outputPath = std::filesystem::weakly_canonical(
                 extractDir / std::filesystem::path(rawName).lexically_normal());
 
-            // Reject any entry whose resolved path escapes the extraction root.
-            // Use a prefix check on the canonical string representations rather
-            // than relative() + string-contains(".."), which can be bypassed by
-            // symlinks or platform-specific path representations.
-            auto extractDirCanonical = std::filesystem::weakly_canonical(extractDir);
-            const std::string extractDirStr = extractDirCanonical.string() + "/";
-            if (outputPath.string().substr(0,
-                    std::min(outputPath.string().size(), extractDirStr.size())) != extractDirStr
-                && outputPath != extractDirCanonical)
+            // Use path-component comparison (lexically_relative) instead of a
+            // string-prefix check.  The string approach breaks on Windows because
+            // weakly_canonical() returns native backslash separators while the
+            // hardcoded "/" appended to the root string produces a mismatch —
+            // causing every legitimate entry to be silently skipped.
+            const auto rel = outputPath.lexically_relative(extractDirCanonical);
+            if (rel.empty() || *rel.begin() == std::filesystem::path(".."))
             {
                 util::Logger::Warn("ExtractZipPlugin: Skipping path-traversal entry: {}", rawName);
                 archive_read_data_skip(a);
