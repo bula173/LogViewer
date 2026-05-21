@@ -25,7 +25,7 @@ var searchData=
   ['chat_20panel_20bottom_20dock_22',['3. Chat Panel (Bottom Dock)',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md57',1,'']]],
   ['chatgpt_23',['OpenAI / ChatGPT',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md279',1,'']]],
   ['checkasync_24',['CheckAsync',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#aa1130dc0de9c552f3b68bc72a7651664',1,'ui::qt::UpdateChecker']]],
-  ['checkedtypes_25',['checkedtypes',['../df/d7e/classui_1_1ITypeFilterView.html#aadb38484baf16b472c07bf7eccc79b15',1,'ui::ITypeFilterView::CheckedTypes()'],['../d3/df9/classui_1_1qt_1_1TypeFilterView.html#a60fdb69c145d9d043313538ffa4d3939',1,'ui::qt::TypeFilterView::CheckedTypes()'],['../db/d6d/structui_1_1qt_1_1FilterProfile.html#aa646361bc31169231172e11fa702504d',1,'ui::qt::FilterProfile::checkedTypes']]],
+  ['checkedtypes_25',['checkedtypes',['../db/d6d/structui_1_1qt_1_1FilterProfile.html#aa646361bc31169231172e11fa702504d',1,'ui::qt::FilterProfile::checkedTypes'],['../df/d7e/classui_1_1ITypeFilterView.html#aadb38484baf16b472c07bf7eccc79b15',1,'ui::ITypeFilterView::CheckedTypes()'],['../d3/df9/classui_1_1qt_1_1TypeFilterView.html#a60fdb69c145d9d043313538ffa4d3939',1,'ui::qt::TypeFilterView::CheckedTypes()']]],
   ['checker_26',['checker',['../d5/d32/classui_1_1qt_1_1UpdateDialog.html#a2d43d7cb32b8d2cbac2f7e1fc4855433',1,'ui::qt::UpdateDialog']]],
   ['checking_20ai_20provider_20capabilities_27',['Checking AI Provider Capabilities',['../d1/df7/md_docs_2API__EXAMPLES.html#autotoc_md109',1,'']]],
   ['checkintervaldays_28',['checkIntervalDays',['../d3/d63/structconfig_1_1Config_1_1UpdateSettings.html#a91f5c652081e7e393e307be774ded3f7',1,'config::Config::UpdateSettings']]],

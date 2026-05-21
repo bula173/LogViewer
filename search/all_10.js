@@ -47,7 +47,7 @@ var searchData=
   ['in_20url_44',['Google (API Key in URL)',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md289',1,'']]],
   ['incremental_20builds_45',['Incremental Builds',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md220',1,'']]],
   ['indices_46',['indices',['../d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html#aa56deae6c48aa74b279c0642c2928136',1,'ui::qt::ActorsPanel::ActorData']]],
-  ['info_47',['info',['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()'],['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()'],['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a4059b0251f66a18cb56f544728796875',1,'util::Info']]],
+  ['info_47',['info',['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()'],['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a4059b0251f66a18cb56f544728796875',1,'util::Info']]],
   ['information_48',['For More Information',['../d1/df7/md_docs_2API__EXAMPLES.html#autotoc_md124',1,'']]],
   ['initcolorstab_49',['InitColorsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#acaf9ac5e19e0aef3e4e08d4b19b1d5c6',1,'ui::qt::StructuredConfigDialog']]],
   ['initcolumnstab_50',['InitColumnsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0d65ae5a699de44cc24395a4f73f541a',1,'ui::qt::StructuredConfigDialog']]],
