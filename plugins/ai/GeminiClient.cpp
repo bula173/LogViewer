@@ -29,9 +29,8 @@ GeminiClient::GeminiClient(const std::string& apiKey,
     , m_baseUrl(baseUrl)
 {
     PLUGIN_LOG(PLUGIN_LOG_INFO,
-        "GeminiClient initialized: model='{}' baseUrl='{}' keyLen={} keyPrefix='{}'",
-        m_model, m_baseUrl, m_apiKey.size(),
-        m_apiKey.size() >= 6 ? m_apiKey.substr(0, 6) + "..." : "(empty)");
+        "GeminiClient initialized: model='{}' baseUrl='{}' keyConfigured={}",
+        m_model, m_baseUrl, !m_apiKey.empty());
 }
 
 std::string GeminiClient::SendPrompt(const std::string& prompt,
@@ -131,8 +130,7 @@ std::string GeminiClient::SendPrompt(const std::string& prompt,
 bool GeminiClient::IsAvailable() const
 {
     const bool available = !m_apiKey.empty();
-    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "GeminiClient::IsAvailable() = {} (keyLen={})",
-        available, m_apiKey.size());
+    PLUGIN_LOG(PLUGIN_LOG_DEBUG, "GeminiClient::IsAvailable() = {}", available);
     return available;
 }
 
@@ -161,7 +159,9 @@ std::string GeminiClient::SendHttpPost(const std::string& endpoint,
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
-    
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+
     // Use configurable timeout from config
     const int timeout = config::GetConfig().aiTimeoutSeconds;
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, static_cast<long>(timeout));

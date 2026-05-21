@@ -166,6 +166,8 @@ std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
     curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS,    jsonBody.c_str());
     curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,     &responseData);
+    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, 1L);
+    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, 2L);
 
     // Use configurable timeout from config
     const int timeout = config::GetConfig().aiTimeoutSeconds;

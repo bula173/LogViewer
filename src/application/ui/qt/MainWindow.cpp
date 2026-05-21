@@ -66,7 +66,9 @@
 #include <QToolTip>
 #include <QHelpEvent>
 #include <QtConcurrent/QtConcurrent>
+#include <QScopeGuard>
 
+#include <climits>
 #include <set>
 
 #include <nlohmann/json.hpp>
@@ -91,7 +93,8 @@ static int PluginEvents_GetSizeBridge(void* handle)
 {
     if (!handle) return 0;
     auto container = static_cast<db::EventsContainer*>(handle);
-    return static_cast<int>(container->Size());
+    const size_t sz = container->Size();
+    return static_cast<int>(std::min(sz, static_cast<size_t>(INT_MAX)));
 }
 
 static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
@@ -194,9 +197,15 @@ MainWindow::MainWindow(mvc::IController& controller,
 
 MainWindow::~MainWindow()
 {
+    // Stop timers before any member teardown so pending callbacks don't fire
+    // against partially-destroyed state.
+    if (m_panelRefreshTimer)   m_panelRefreshTimer->stop();
+    if (m_searchDebounceTimer) m_searchDebounceTimer->stop();
+    if (m_filterWatcher)       m_filterWatcher->cancel();
+
     // Save recent files before cleanup
     SaveRecentFiles();
-    
+
     // Clean up presenter first to ensure proper disconnection before Qt widgets are destroyed
     m_presenter.reset();
 
@@ -893,18 +902,24 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     m_filterWatcher = new QFutureWatcher<std::vector<unsigned long>>(this);
     connect(m_filterWatcher, &QFutureWatcher<std::vector<unsigned long>>::finished,
             this, [this]() {
-                const auto filteredIndices = m_filterWatcher->result();
-                util::Logger::Debug("[MainWindow] ApplyExtendedFilters (async): {} events, {} matches",
-                    m_events ? m_events->Size() : 0, filteredIndices.size());
-                m_eventsView->SetFilteredEvents(filteredIndices);
-                m_eventsView->RefreshView();
-                ToggleProgressVisibility(false);
-                ConfigureProgressRange(100); // reset from indeterminate
-                const auto total   = m_events ? m_events->Size() : 0;
-                const auto matched = filteredIndices.size();
-                UpdateStatusText(
-                    QString("Filters applied: %1 of %2 events").arg(matched).arg(total).toStdString());
-                m_filteringInProgress = false;
+                // Always reset the flag, even if an exception occurs below.
+                const auto resetFlag = qScopeGuard([this]{ m_filteringInProgress = false; });
+                try {
+                    const auto filteredIndices = m_filterWatcher->result();
+                    util::Logger::Debug("[MainWindow] ApplyExtendedFilters (async): {} events, {} matches",
+                        m_events ? m_events->Size() : 0, filteredIndices.size());
+                    m_eventsView->SetFilteredEvents(filteredIndices);
+                    m_eventsView->RefreshView();
+                    ToggleProgressVisibility(false);
+                    ConfigureProgressRange(100);
+                    const auto total   = m_events ? m_events->Size() : 0;
+                    const auto matched = filteredIndices.size();
+                    UpdateStatusText(
+                        QString("Filters applied: %1 of %2 events").arg(matched).arg(total).toStdString());
+                } catch (const std::exception& ex) {
+                    util::Logger::Error("[MainWindow] Error in filter result handler: {}", ex.what());
+                    ToggleProgressVisibility(false);
+                }
             });
 
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");

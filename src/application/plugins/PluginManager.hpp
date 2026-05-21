@@ -55,6 +55,13 @@ struct PluginLoadInfo
 
     // Optional plugin function to receive host UI callbacks (e.g. set current event)
     void* pluginSetHostUiCallbacks = nullptr;
+
+    // Prevent accidental copies — void* handles are not reference-counted.
+    PluginLoadInfo() = default;
+    PluginLoadInfo(PluginLoadInfo&&) = default;
+    PluginLoadInfo& operator=(PluginLoadInfo&&) = default;
+    PluginLoadInfo(const PluginLoadInfo&) = delete;
+    PluginLoadInfo& operator=(const PluginLoadInfo&) = delete;
 };
 
 /**

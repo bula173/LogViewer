@@ -484,8 +484,9 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
 
     // For very large datasets: stride-sample to avoid O(n×cols) UI freeze.
     // A sample of 50 000 rows gives < 1 % statistical error on fill rate.
-    constexpr size_t kFieldStatsSample   = 50'000;
+    constexpr size_t kFieldStatsSample    = 50'000;
     constexpr size_t kUniqueTrackingLimit = 50'000;
+    constexpr size_t kMaxUniquesPerField  = 1'000;
     const size_t step        = total > kFieldStatsSample ? total / kFieldStatsSample : 1;
     const size_t sampleTotal = (total + step - 1) / step;
     const bool   sampled     = step > 1;
@@ -509,16 +510,19 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
             if (!val.isEmpty())
             {
                 ++filled;
-                if (trackUniques) uniqueVals.insert(val);
+                if (trackUniques && uniqueVals.size() < kMaxUniquesPerField)
+                    uniqueVals.insert(val);
             }
         }
 
         const double fillPct =
             sampleTotal > 0 ? 100.0 * filled / static_cast<double>(sampleTotal) : 0.0;
 
-        const QString uniqueStr = trackUniques
-            ? QString::number(uniqueVals.size())
-            : tr(">50k");
+        const QString uniqueStr = !trackUniques
+            ? tr(">50k")
+            : (uniqueVals.size() >= kMaxUniquesPerField
+               ? tr(">%1").arg(kMaxUniquesPerField)
+               : QString::number(uniqueVals.size()));
 
         auto* nameItem   = new QTableWidgetItem(colName);
         auto* uniqueItem = new QTableWidgetItem(uniqueStr);

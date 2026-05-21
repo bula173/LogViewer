@@ -415,34 +415,33 @@ std::vector<std::filesystem::path> PluginManager::DiscoverPlugins()
     util::Logger::Info("PluginManager: Discovering plugins in: {}",
         m_pluginsDirectory.string());
 
-    try
+    std::error_code iterEc;
+    for (const auto& entry :
+         std::filesystem::directory_iterator(m_pluginsDirectory, iterEc))
     {
-        for (const auto& entry : std::filesystem::directory_iterator(m_pluginsDirectory))
-        {
-            if (!entry.is_regular_file() && !entry.is_directory())
-                continue;
-
-            const auto& path = entry.path();
-            // Only consider extracted plugin directories as discoverable plugins.
-            // ZIP archives may be present but we only act on directories that
-            // contain a plugin payload (config.json). This avoids double-loading
-            // or extracting archives unintentionally.
-            if (std::filesystem::is_directory(path)) {
-                auto manifest = path / "config.json";
-                if (std::filesystem::exists(manifest)) {
-                    plugins.push_back(path);
-                    util::Logger::Debug("PluginManager: Found extracted plugin: {}", path.string());
-                } else {
-                    util::Logger::Debug("PluginManager: Ignoring directory without config.json: {}", path.string());
-                }
-            } else {
-                util::Logger::Debug("PluginManager: Ignoring non-directory plugin entry: {}", path.string());
-            }
+        if (iterEc) {
+            util::Logger::Warn("PluginManager: Error iterating plugins dir: {}",
+                               iterEc.message());
+            iterEc.clear();
+            continue;
         }
-    }
-    catch (const std::exception& e)
-    {
-        util::Logger::Error("PluginManager: Error discovering plugins: {}", e.what());
+
+        std::error_code entryEc;
+        if (!entry.is_directory(entryEc) || entryEc) {
+            util::Logger::Debug("PluginManager: Ignoring non-directory plugin entry: {}",
+                                entry.path().string());
+            continue;
+        }
+
+        const auto& path = entry.path();
+        std::error_code manifestEc;
+        if (std::filesystem::exists(path / "config.json", manifestEc) && !manifestEc) {
+            plugins.push_back(path);
+            util::Logger::Debug("PluginManager: Found extracted plugin: {}", path.string());
+        } else {
+            util::Logger::Debug("PluginManager: Ignoring directory without config.json: {}",
+                                path.string());
+        }
     }
 
     util::Logger::Info("PluginManager: Discovered {} plugins", plugins.size());
@@ -490,6 +489,19 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     }
 
     std::filesystem::path actualPluginPath = extractDir / (*manifest)["entry"].get<std::string>();
+
+    // Guard against path traversal in the "entry" field (e.g. "../../evil.dll").
+    {
+        std::error_code ec;
+        const auto extractCanonical = std::filesystem::weakly_canonical(extractDir, ec);
+        const auto entryCanonical   = std::filesystem::weakly_canonical(actualPluginPath, ec);
+        const std::string root = extractCanonical.string() + "/";
+        if (!ec && entryCanonical.string().substr(0, root.size()) != root) {
+            return util::Result<std::string, error::Error>::Err(
+                error::Error("Plugin 'entry' path escapes plugin directory: " +
+                             actualPluginPath.string()));
+        }
+    }
 
     // Optional: validate metadata id/version if present
     if (manifest->contains("id") && !(*manifest)["id"].is_string()) {
@@ -742,8 +754,9 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                 try {
                     const char* js = metaFn_(handle_);
                     if (js) {
-                        nlohmann::json j = nlohmann::json::parse(js);
+                        std::string jsStr(js);
                         PluginApi_FreeString(const_cast<char*>(js));
+                        nlohmann::json j = nlohmann::json::parse(jsStr);
                         meta_.id = j.value("id", "");
                         meta_.name = j.value("name", "");
                         meta_.version = j.value("version", "");
@@ -889,8 +902,9 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
                 try {
                     const char* js = metaFn_(handle_);
                     if (js) {
-                        nlohmann::json j = nlohmann::json::parse(js);
+                        std::string jsStr(js);
                         PluginApi_FreeString(const_cast<char*>(js));
+                        nlohmann::json j = nlohmann::json::parse(jsStr);
                         meta_.id = j.value("id", "");
                         meta_.name = j.value("name", "");
                         meta_.version = j.value("version", "");
