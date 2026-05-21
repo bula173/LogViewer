@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UpdateChecker.hpp"
+#include "utils/UpdateChecker.hpp"
 #include "UpdateInfo.hpp"
 
 #include <QDialog>

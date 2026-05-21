@@ -62,16 +62,15 @@ if(EXCLUDE_APP AND EXISTS "${EXCLUDE_APP}")
     message(STATUS "Application provided DLLs: ${APP_PROVIDED_DLL_NAMES}")
 endif()
 
-# Copy all resolved MinGW/MSYS2 DLLs
+# Copy all resolved MinGW/MSYS2 DLLs and collect their names for deps.txt.
 set(COPIED_COUNT 0)
+set(DEPS_LIST "")
 foreach(DEP ${RESOLVED_DEPS})
     # Only copy DLLs from the toolchain directory used to build (skip Windows system DLLs)
-    # Consider a dependency part of the toolchain if its resolved path contains the compiler directory
     string(FIND "${DEP}" "${COMPILER_DIR}" TOOLCHAIN_MATCH)
     if(NOT TOOLCHAIN_MATCH EQUAL -1)
         get_filename_component(DLL_NAME "${DEP}" NAME)
-        # If application provided DLLs are known, skip any dependency whose
-        # filename is present in that set.
+        # Skip DLLs already provided by the main application.
         if(APP_PROVIDED_DLL_NAMES)
             list(FIND APP_PROVIDED_DLL_NAMES "${DLL_NAME}" _found)
             if(NOT _found EQUAL -1)
@@ -79,14 +78,25 @@ foreach(DEP ${RESOLVED_DEPS})
                 continue()
             endif()
         endif()
-        
+
         if(NOT EXISTS "${DEST_DIR}/${DLL_NAME}")
             file(COPY "${DEP}" DESTINATION "${DEST_DIR}")
             message(STATUS "Copied: ${DLL_NAME}")
             math(EXPR COPIED_COUNT "${COPIED_COUNT} + 1")
         endif()
+        list(APPEND DEPS_LIST "${DLL_NAME}")
     endif()
 endforeach()
+
+# Write deps.txt so PluginManager::LoadDependencyHandles knows which DLLs to
+# pre-load (and in which search directory) before the plugin itself is loaded.
+# Without this file the helper returns early and libcurl / libstdc++ etc. are
+# not on the loader's path when LoadLibrary runs on the plugin DLL.
+if(DEPS_LIST)
+    list(JOIN DEPS_LIST "\n" DEPS_CONTENT)
+    file(WRITE "${DEST_DIR}/deps.txt" "${DEPS_CONTENT}\n")
+    message(STATUS "Written deps.txt with ${COPIED_COUNT} entries to ${DEST_DIR}")
+endif()
 
 # Warn about unresolved dependencies (optional)
 if(UNRESOLVED_DEPS)

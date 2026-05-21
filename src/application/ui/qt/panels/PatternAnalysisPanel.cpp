@@ -2,7 +2,7 @@
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "events/EventsTableView.hpp"
 
 #include <QDateTime>
 #include <QGroupBox>

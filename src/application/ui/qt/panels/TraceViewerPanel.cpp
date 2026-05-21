@@ -1,6 +1,6 @@
 #include "TraceViewerPanel.hpp"
 
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QHBoxLayout>
 #include <QHeaderView>

@@ -8,6 +8,7 @@
 #include "ParserFactory.hpp"
 #include "xml/xmlParser.hpp"
 #include "csv/CsvParser.hpp"
+#include "asc/AscParser.hpp"
 #include "Logger.hpp"
 #include <algorithm>
 
@@ -32,9 +33,13 @@ void ParserFactory::InitializeDefaults()
         return std::make_unique<CsvParser>();
     });
 
-    // Future parsers can be registered here:
-    // Register(".json", []() { return std::make_unique<JsonParser>(); });
-    // Register(".log", []() { return std::make_unique<TextParser>(); });
+    // Register ASC (Vector CANalyzer) parser — no DBC by default; callers that
+    // need DBC decoding should create AscParser directly and pass it to the
+    // presenter's LoadLogFile(parser) overload.
+    Register(".asc", []() {
+        util::Logger::Debug("Creating AscParser instance");
+        return std::make_unique<AscParser>();
+    });
 }
 
 void ParserFactory::EnsureInitialized()

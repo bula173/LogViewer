@@ -7,7 +7,7 @@
 #include "TimeRangeFilterPanel.hpp"
 
 #include "EventsContainer.hpp"
-#include "EventsTableView.hpp"
+#include "events/EventsTableView.hpp"
 
 #include <QComboBox>
 #include <QFormLayout>

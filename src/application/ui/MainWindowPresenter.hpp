@@ -32,6 +32,16 @@ class MainWindowPresenter : public parser::IDataParserObserver
     /** @brief Parses and loads a log file, updating shared UI state. */
     void LoadLogFile(const std::filesystem::path& path);
 
+    /**
+     * @brief Loads a log file using a pre-configured parser instance.
+     *
+     * Use this overload when the caller needs to pass a parser with custom
+     * construction-time parameters (e.g. AscParser with a DBC path).
+     * The parser must not yet have any observers registered.
+     */
+    void LoadLogFile(std::unique_ptr<parser::IDataParser> parser,
+                     const std::filesystem::path& path);
+
     /** @brief Parses and merges a log file with existing data, sorted by timestamp. 
      *  @param path Path to the log file to merge
      *  @param existingAlias User-friendly name for existing log data
@@ -64,6 +74,9 @@ class MainWindowPresenter : public parser::IDataParserObserver
   private:
     static int ClampToInt(std::size_t value);
     void clearAllData();
+    void RunParserAsync(std::unique_ptr<parser::IDataParser> parser,
+                        const std::filesystem::path& path,
+                        const std::string& previousStatus);
 
     IMainWindowView& m_view;
     mvc::IController& m_controller;

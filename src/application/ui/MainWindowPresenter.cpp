@@ -104,14 +104,13 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     m_progressConfigured = false;
 
     m_view.UpdateStatusText("Clear...");
-    clearAllData();                  // notifies views on main thread - OK
+    clearAllData();
     m_view.SetSearchControlsEnabled(false);
     m_view.ToggleProgressVisibility(true);
     m_view.ConfigureProgressRange(100);
     m_view.UpdateProgressValue(0);
     m_view.UpdateStatusText("Loading ...");
 
-    // Create parser on main thread before handing off to background
     auto parserResult = parser::ParserFactory::CreateFromFile(path);
     if (!parserResult.isOk())
     {
@@ -122,8 +121,35 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         m_view.UpdateStatusText(previousStatus);
         throw parserResult.error();
     }
-    auto parser = parserResult.unwrap();
 
+    RunParserAsync(parserResult.unwrap(), path, previousStatus);
+}
+
+void MainWindowPresenter::LoadLogFile(std::unique_ptr<parser::IDataParser> parser,
+                                      const std::filesystem::path& path)
+{
+    if (m_isParsing)
+        throw error::Error("A file is already being processed");
+
+    const std::string previousStatus = m_view.CurrentStatusText();
+    m_isParsing = true;
+    m_progressConfigured = false;
+
+    m_view.UpdateStatusText("Clear...");
+    clearAllData();
+    m_view.SetSearchControlsEnabled(false);
+    m_view.ToggleProgressVisibility(true);
+    m_view.ConfigureProgressRange(100);
+    m_view.UpdateProgressValue(0);
+    m_view.UpdateStatusText("Loading ...");
+
+    RunParserAsync(std::move(parser), path, previousStatus);
+}
+
+void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> parser,
+                                         const std::filesystem::path& path,
+                                         const std::string& previousStatus)
+{
     // Suppress per-batch view notifications while the background thread fills
     // m_events.  Without this, every batch would call Qt widget methods from
     // the background thread (undefined behaviour) AND trigger dozens of full
@@ -145,7 +171,6 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
 
         void ProgressUpdated() override
         {
-            // Background thread: safe to read parser state here
             currentProgress.store(parserPtr->GetCurrentProgress(),
                                   std::memory_order_relaxed);
             totalProgress.store(parserPtr->GetTotalProgress(),
@@ -183,15 +208,10 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         });
 
     // Main thread: keep UI responsive at ~60 Hz while background parses.
-    // processEvents(maxTime) avoids both sleep_for (AV heuristic) and a
-    // nested QEventLoop (which can delay repaints after the loop exits).
     {
         uint32_t lastDisplayedProgress = 0;
         while (!parseFuture.isFinished())
         {
-            // Process pending events for up to 16 ms (~60 Hz), then check
-            // progress.  This is equivalent to the original sleep_for loop
-            // but uses Qt's message pump instead of a bare OS sleep.
             QCoreApplication::processEvents(QEventLoop::AllEvents, 16);
 
             const uint32_t total =
@@ -228,9 +248,6 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         std::rethrow_exception(parseException);
     }
 
-    // Show events immediately — before the O(n) UpdateTypeFilters pass.
-    // ClearFilter() puts the model in unfiltered mode so rowCount() returns
-    // m_events.Size() directly without any index vector.
     if (m_eventsListView)
     {
         m_eventsListView->ClearFilter();
@@ -244,9 +261,6 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     m_view.SetSearchControlsEnabled(true);
     m_view.ProcessPendingEvents();
 
-    // Build the type-filter list and apply initial filter state.
-    // ApplySelectedTypeFilters will call ClearFilter() again when all types
-    // are checked (the common case), keeping the O(1) unfiltered path.
     UpdateTypeFilters();
     m_isParsing = false;
     m_progressConfigured = false;

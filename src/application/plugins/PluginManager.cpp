@@ -531,7 +531,7 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
         // Append to manager's dependency handle list
         for (auto h : handles) m_dependencyHandles.push_back(h);
     } else {
-        util::Logger::Warn("Plugin lib folder does not exist: {}", libFolder.string());
+        util::Logger::Debug("PluginManager: No lib folder for plugin (expected on non-Windows)");
     }
     
     // Load the plugin library, passing expected API version from manifest

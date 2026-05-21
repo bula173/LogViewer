@@ -1,6 +1,6 @@
 #include "FiltersPanel.hpp"
 
-#include "FilterEditorDialog.hpp"
+#include "dialogs/FilterEditorDialog.hpp"
 #include "Logger.hpp"
 
 #include <QColor>

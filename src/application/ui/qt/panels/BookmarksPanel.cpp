@@ -1,6 +1,6 @@
 #include "BookmarksPanel.hpp"
 
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QGuiApplication>
 #include <QClipboard>
