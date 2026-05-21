@@ -9,5 +9,6 @@ var Config_8hpp =
     [ "ItemHighlightMap", "df/db4/Config_8hpp.html#a24ffae7110e0a30690dfa78229399349", null ],
     [ "json", "df/db4/Config_8hpp.html#a5f7e2c5cc76af7d5515d1d3024aaec37", null ],
     [ "ValueColorMap", "df/db4/Config_8hpp.html#acf60dfb1f88cc7c69929f68dae4c10f3", null ],
-    [ "GetConfig", "df/db4/Config_8hpp.html#ab663d5ad12e8df0dd19bf1c6b8857fab", null ]
+    [ "GetConfig", "df/db4/Config_8hpp.html#ab663d5ad12e8df0dd19bf1c6b8857fab", null ],
+    [ "GetInstalledPluginsDir", "df/db4/Config_8hpp.html#a57cb6feeff1c166570d89fe6915aebf2", null ]
 ];

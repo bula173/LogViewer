@@ -26,6 +26,7 @@ var namespaceconfig =
     [ "json", "d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37", null ],
     [ "ValueColorMap", "d6/d7f/namespaceconfig.html#acf60dfb1f88cc7c69929f68dae4c10f3", null ],
     [ "GetConfig", "d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab", null ],
+    [ "GetInstalledPluginsDir", "d6/d7f/namespaceconfig.html#a57cb6feeff1c166570d89fe6915aebf2", null ],
     [ "RegisterBuiltinConversionPlugins", "d6/d7f/namespaceconfig.html#a791ae9fbbde9f4b8949bbf47968f7a05", null ],
     [ "configInstance", "d6/d7f/namespaceconfig.html#a48ae5137390f6f43c531ab73a99a7296", null ]
 ];
