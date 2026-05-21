@@ -2,7 +2,7 @@ var searchData=
 [
   ['main_0',['main',['../d3/d44/MyAppQt_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'MyAppQt.cpp']]],
   ['maincontroller_1',['MainController',['../d5/d44/classmvc_1_1MainController.html#a8dfdc2915474d407129d939f4e9e8639',1,'mvc::MainController']]],
-  ['mainwindow_2',['MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2',1,'ui::qt::MainWindow']]],
+  ['mainwindow_2',['MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db',1,'ui::qt::MainWindow']]],
   ['mainwindowpresenter_3',['MainWindowPresenter',['../d5/dc9/classui_1_1MainWindowPresenter.html#a8684e0398f917955ab36baf083abad55',1,'ui::MainWindowPresenter']]],
   ['map_4',['map',['../dd/d2d/classutil_1_1Result.html#a66e41af0d2126616617a9dcd1b5bfaf8',1,'util::Result']]],
   ['maperr_5',['mapErr',['../dd/d2d/classutil_1_1Result.html#aeffb2100573574d2f3e2a849859197c3',1,'util::Result']]],

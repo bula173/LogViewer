@@ -7,7 +7,8 @@ var searchData=
   ['searchresultrow_4',['SearchResultRow',['../de/d74/structmvc_1_1SearchResultRow.html',1,'mvc']]],
   ['searchresultsview_5',['SearchResultsView',['../d9/dfd/classui_1_1qt_1_1SearchResultsView.html',1,'ui::qt']]],
   ['spdlogger_6',['SpdLogger',['../dd/d6b/classutil_1_1SpdLogger.html',1,'util']]],
-  ['state_7',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
-  ['statssummarypanel_8',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
-  ['structuredconfigdialog_9',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
+  ['startupsplash_7',['StartupSplash',['../d7/dda/classui_1_1qt_1_1StartupSplash.html',1,'ui::qt']]],
+  ['state_8',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
+  ['statssummarypanel_9',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
+  ['structuredconfigdialog_10',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
 ];

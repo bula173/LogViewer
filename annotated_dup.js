@@ -95,6 +95,7 @@ var annotated_dup =
         [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
+        [ "StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", "d7/dda/classui_1_1qt_1_1StartupSplash" ],
         [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
         [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
         [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],

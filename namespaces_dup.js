@@ -3,9 +3,6 @@ var namespaces_dup =
     [ "ai", "de/d58/namespaceai.html", null ],
     [ "anonymous_namespace{MyAppQt.cpp}", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html", [
       [ "ApplyModernStyle", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#afb42b685164ecbec2720d91b1cdeb053", null ],
-      [ "SetupConfig", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#ae95cff5bc309f9418acad83f41e2f2b6", null ],
-      [ "SetupLogging", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#ae4f334ab0b408f4f4df15e9d83a550fc", null ],
-      [ "ShowFatalMessage", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#ab4027511dbe508fb2d2b73e593c00cbd", null ],
       [ "kQtAppName", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#a2ffd91e89808a06ae22db64e0737d21c", null ]
     ] ],
     [ "anonymous_namespace{xmlParser.cpp}", "d5/dc4/namespaceanonymous__namespace_02xmlParser_8cpp_03.html", [

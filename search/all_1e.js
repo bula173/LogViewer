@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['warn_0',['warn',['../d3/dc4/classutil_1_1ILogger.html#af97d064f78d61461c67e070128039700',1,'util::ILogger::warn()'],['../dd/d6b/classutil_1_1SpdLogger.html#a1ecb66fe1e01fd7cad9c598a1c725440',1,'util::SpdLogger::warn()'],['../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306',1,'util::Logger::Warn()']]],
+  ['warn_0',['warn',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a9dbf647322b1659fbaac669150ae9d87',1,'ui::qt::StartupSplash::Warn()'],['../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306',1,'util::Logger::Warn()'],['../d3/dc4/classutil_1_1ILogger.html#af97d064f78d61461c67e070128039700',1,'util::ILogger::warn()'],['../dd/d6b/classutil_1_1SpdLogger.html#a1ecb66fe1e01fd7cad9c598a1c725440',1,'util::SpdLogger::warn()']]],
   ['warning_1',['Warning',['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'util']]],
   ['warnings_2',['warnings',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md343',1,'Common Warnings'],['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md243',1,'Enable All Warnings'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md342',1,'Fail on Warnings'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md336',1,'Suppressing Warnings']]],
   ['wasconverted_3',['wasConverted',['../dd/d7c/structconfig_1_1TranslationResult.html#aa94f87ac1084919bf92e3133e1ffb400',1,'config::TranslationResult']]],
@@ -9,7 +9,7 @@ var searchData=
   ['when_20to_20use_20each_20pattern_6',['When to Use Each Pattern',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md376',1,'']]],
   ['widget_20system_7',['Dock Widget System',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md384',1,'']]],
   ['width_8',['width',['../db/deb/structconfig_1_1ColumnConfig.html#a4ab9081149e4bd839eaf220231e0b592',1,'config::ColumnConfig']]],
-  ['wildcardstrategy_9',['wildcardstrategy',['../d4/d6e/classfilters_1_1WildcardStrategy.html#abf82ac5e8209bd1ab3d4c8da0e3183da',1,'filters::WildcardStrategy::WildcardStrategy()'],['../d4/d6e/classfilters_1_1WildcardStrategy.html',1,'filters::WildcardStrategy']]],
+  ['wildcardstrategy_9',['wildcardstrategy',['../d4/d6e/classfilters_1_1WildcardStrategy.html',1,'filters::WildcardStrategy'],['../d4/d6e/classfilters_1_1WildcardStrategy.html#abf82ac5e8209bd1ab3d4c8da0e3183da',1,'filters::WildcardStrategy::WildcardStrategy()']]],
   ['windows_10',['windows',['../de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md461',1,'Example Installation Script (NSIS - Windows)'],['../d0/dff/md_docs_2SANITIZERS.html#autotoc_md626',1,'MinGW/Windows'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md568',1,'Windows']]],
   ['windows_20installer_11',['Windows Installer',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md253',1,'']]],
   ['windows_20mingw_12',['Windows (MinGW)',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md650',1,'']]],

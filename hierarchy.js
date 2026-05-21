@@ -137,6 +137,7 @@ var hierarchy =
       [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],
       [ "ui::qt::ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", null ],
       [ "ui::qt::SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", null ],
+      [ "ui::qt::StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", null ],
       [ "ui::qt::StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", null ],
       [ "ui::qt::TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", null ],
       [ "ui::qt::TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", null ],

@@ -36,6 +36,8 @@ var dir_0f25fb00f5c22110cee8883c47212c99 =
     [ "SearchBar.hpp", "d7/d52/SearchBar_8hpp.html", "d7/d52/SearchBar_8hpp" ],
     [ "SearchResultsView.cpp", "da/d96/SearchResultsView_8cpp.html", null ],
     [ "SearchResultsView.hpp", "d1/d12/SearchResultsView_8hpp.html", "d1/d12/SearchResultsView_8hpp" ],
+    [ "StartupSplash.cpp", "df/d98/StartupSplash_8cpp.html", null ],
+    [ "StartupSplash.hpp", "dd/dd4/StartupSplash_8hpp.html", "dd/dd4/StartupSplash_8hpp" ],
     [ "StatsSummaryPanel.cpp", "df/d30/StatsSummaryPanel_8cpp.html", null ],
     [ "StatsSummaryPanel.hpp", "d0/d13/StatsSummaryPanel_8hpp.html", "d0/d13/StatsSummaryPanel_8hpp" ],
     [ "StructuredConfigDialog.cpp", "d8/d1a/StructuredConfigDialog_8cpp.html", null ],

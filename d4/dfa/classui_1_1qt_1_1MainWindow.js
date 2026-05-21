@@ -1,6 +1,6 @@
 var classui_1_1qt_1_1MainWindow =
 [
-    [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a582df581493d5447da938b9f1ce351d2", null ],
+    [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db", null ],
     [ "~MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b", null ],
     [ "AddToRecentFiles", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aab4a6ccc925c8e7d1acb47626433eae8", null ],
     [ "ApplyActorFilter", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17", null ],
@@ -120,6 +120,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "m_searchDebounceTimer", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a5a09dd2a70e193351737ab9a67789b27", null ],
     [ "m_searchEdit", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af74c23249feb8641ed02da9172e6e56f", null ],
     [ "m_searchResults", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a225309f239330dc130453411f4913094", null ],
+    [ "m_splash", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aa30a65bff351aa3d35d3306a1051a92c", null ],
     [ "m_statsPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a5b4a49f1463c8938a0e4d85277b35f13", null ],
     [ "m_statusLabel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a0904caee6ac57620d1c801f8d43bf6f1", null ],
     [ "m_timelinePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a1c8a7efd650e417fc96668e023b5453d", null ],
