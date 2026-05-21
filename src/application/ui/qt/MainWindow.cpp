@@ -41,6 +41,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QStandardPaths>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
@@ -1239,6 +1240,8 @@ void MainWindow::OnOpenFileRequested()
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     #endif
     dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv);;All files (*.*)"));
+    dialog.setDirectory(LastDir("logFile",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     if (dialog.exec() != QDialog::Accepted) {
         util::Logger::Debug("[MainWindow] OnOpenFileRequested: dialog cancelled");
         return;
@@ -1251,6 +1254,7 @@ void MainWindow::OnOpenFileRequested()
         return;
     }
 
+    SaveLastDir("logFile", filePath);
     util::Logger::Info("[MainWindow] OnOpenFileRequested path={}",
         filePath.toStdString());
 
@@ -1263,6 +1267,8 @@ void MainWindow::OnSaveSession()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("json");
     dialog.setNameFilter(tr("LogViewer Session (*.json);;All files (*.*)"));
+    dialog.setDirectory(LastDir("session",
+        QString::fromStdString(config::GetConfig().GetDefaultAppPath().string())));
 #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 #endif
@@ -1272,6 +1278,8 @@ void MainWindow::OnSaveSession()
     const QString path = dialog.selectedFiles().value(0);
     if (path.isEmpty())
         return;
+
+    SaveLastDir("session", path);
 
     try
     {
@@ -1300,6 +1308,8 @@ void MainWindow::OnOpenSession()
 {
     QFileDialog dialog(this, tr("Open Session"));
     dialog.setNameFilter(tr("LogViewer Session (*.json);;All files (*.*)"));
+    dialog.setDirectory(LastDir("session",
+        QString::fromStdString(config::GetConfig().GetDefaultAppPath().string())));
 #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 #endif
@@ -1309,6 +1319,8 @@ void MainWindow::OnOpenSession()
     const QString path = dialog.selectedFiles().value(0);
     if (path.isEmpty())
         return;
+
+    SaveLastDir("session", path);
 
     try
     {
@@ -1536,6 +1548,18 @@ void MainWindow::ApplyActorFilter()
 void MainWindow::ShowError(const QString& title, const QString& message)
 {
     QMessageBox::critical(this, title, message);
+}
+
+QString MainWindow::LastDir(const QString& key, const QString& fallback)
+{
+    QSettings s("LogViewer", "LogViewer");
+    return s.value("lastDir/" + key, fallback).toString();
+}
+
+void MainWindow::SaveLastDir(const QString& key, const QString& filePath)
+{
+    QSettings s("LogViewer", "LogViewer");
+    s.setValue("lastDir/" + key, QFileInfo(filePath).absolutePath());
 }
 
 void MainWindow::OnConfigChanged()
@@ -2301,6 +2325,8 @@ void MainWindow::OnExportCsvRequested()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("CSV files (*.csv);;All files (*.*)"));
     dialog.setDefaultSuffix(QStringLiteral("csv"));
+    dialog.setDirectory(LastDir("export",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
 #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 #endif
@@ -2309,6 +2335,7 @@ void MainWindow::OnExportCsvRequested()
     const QString path = dialog.selectedFiles().value(0);
     if (path.isEmpty())
         return;
+    SaveLastDir("export", path);
 
     if (!ExportManager::ToCsv(*m_eventsView->model(), rows, path)) {
         UpdateStatusText("Export failed.");
@@ -2331,6 +2358,8 @@ void MainWindow::OnExportJsonRequested()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("JSON files (*.json);;All files (*.*)"));
     dialog.setDefaultSuffix(QStringLiteral("json"));
+    dialog.setDirectory(LastDir("export",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
 #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 #endif
@@ -2339,6 +2368,7 @@ void MainWindow::OnExportJsonRequested()
     const QString path = dialog.selectedFiles().value(0);
     if (path.isEmpty())
         return;
+    SaveLastDir("export", path);
 
     if (!ExportManager::ToJson(*m_eventsView->model(), rows, path)) {
         UpdateStatusText("Export failed.");
@@ -2361,6 +2391,8 @@ void MainWindow::OnExportXmlRequested()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setNameFilter(tr("XML files (*.xml);;All files (*.*)"));
     dialog.setDefaultSuffix(QStringLiteral("xml"));
+    dialog.setDirectory(LastDir("export",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
 #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 #endif
@@ -2369,6 +2401,7 @@ void MainWindow::OnExportXmlRequested()
     const QString path = dialog.selectedFiles().value(0);
     if (path.isEmpty())
         return;
+    SaveLastDir("export", path);
 
     if (!ExportManager::ToXml(*m_eventsView->model(), rows, path)) {
         UpdateStatusText("Export failed.");

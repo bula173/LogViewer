@@ -157,6 +157,11 @@ class MainWindow : public QMainWindow,
     void SaveRecentFiles();
     void ShowError(const QString& title, const QString& message);
     std::vector<int> GetRowsToExport() const;
+
+    /// Return the last directory used for @p key, or @p fallback if unset.
+    static QString LastDir(const QString& key, const QString& fallback);
+    /// Persist the parent directory of @p filePath for @p key.
+    static void SaveLastDir(const QString& key, const QString& filePath);
     bool ShouldCheckForUpdates() const;
     void setupPluginManager();
     void loadPlugins();

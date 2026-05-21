@@ -2,6 +2,14 @@
 
 All notable changes to LogViewer are documented here.
 
+## [1.5.1] — 2026-05-21
+
+### Bug fixes
+
+- **File dialog directories** — all file dialogs (Open Log, Save/Open Session, Export CSV/JSON/XML) now open in the last-used directory (persisted via `QSettings`) rather than the application install path. Falls back to Documents on first run.
+- **Startup splash** — init progress and errors are now shown in a custom splash window at startup; users can acknowledge any issues before the main window appears.
+- **Plugin ZIP packaging** — fixed a build-system issue where `config.json` was not reliably included in the plugin ZIP archive on configurations where the DLL output directory differs from the CMake binary directory (e.g. multi-config generators).
+
 ## [1.5.0] — 2026-05-20
 
 ### New features

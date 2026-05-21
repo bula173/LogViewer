@@ -130,10 +130,13 @@ if(WIN32)
     add_custom_command(
         OUTPUT ${PACKAGE_ARCHIVE}
         DEPENDS ${PLUGIN_NAME} ${PLUGIN_CONFIG}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${PLUGIN_CONFIG}"
+            "$<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PACKAGE_ARCHIVE}" --format=zip
-            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json
-            $<TARGET_FILE:${PLUGIN_NAME}>
-            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/lib
+            config.json
+            $<TARGET_FILE_NAME:${PLUGIN_NAME}>
+            lib
         COMMENT "Creating ZIP archive for ai_provider (with dependencies)"
         VERBATIM
         WORKING_DIRECTORY $<TARGET_FILE_DIR:${PLUGIN_NAME}>
@@ -143,9 +146,12 @@ else()
     add_custom_command(
         OUTPUT ${PACKAGE_ARCHIVE}
         DEPENDS ${PLUGIN_NAME} ${PLUGIN_CONFIG}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${PLUGIN_CONFIG}"
+            "$<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PACKAGE_ARCHIVE}" --format=zip
-            $<TARGET_FILE_DIR:${PLUGIN_NAME}>/config.json
-            $<TARGET_FILE:${PLUGIN_NAME}>
+            config.json
+            $<TARGET_FILE_NAME:${PLUGIN_NAME}>
         COMMENT "Creating ZIP archive for ai_provider"
         VERBATIM
         WORKING_DIRECTORY $<TARGET_FILE_DIR:${PLUGIN_NAME}>
