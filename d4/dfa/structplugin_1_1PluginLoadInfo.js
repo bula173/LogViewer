@@ -1,5 +1,10 @@
 var structplugin_1_1PluginLoadInfo =
 [
+    [ "PluginLoadInfo", "d4/dfa/structplugin_1_1PluginLoadInfo.html#a3150c04415e65d6ed3a243bf5b1dcf40", null ],
+    [ "PluginLoadInfo", "d4/dfa/structplugin_1_1PluginLoadInfo.html#af1fe5f4e389bcd4ab712536c2a128532", null ],
+    [ "PluginLoadInfo", "d4/dfa/structplugin_1_1PluginLoadInfo.html#a6562d10fa01f41995015bf2bc58de090", null ],
+    [ "operator=", "d4/dfa/structplugin_1_1PluginLoadInfo.html#ace649fc1e5b88910edf034447c7c109f", null ],
+    [ "operator=", "d4/dfa/structplugin_1_1PluginLoadInfo.html#a94ddb4400cc9bc45db14d5c82ea02cf4", null ],
     [ "autoLoad", "d4/dfa/structplugin_1_1PluginLoadInfo.html#a698b4c470bd5f842225f0dcc7335703e", null ],
     [ "enabled", "d4/dfa/structplugin_1_1PluginLoadInfo.html#a86fe010178c27c899a3503e7bea58485", null ],
     [ "instance", "d4/dfa/structplugin_1_1PluginLoadInfo.html#ae98b8856904ab8ab97db5343cf161ea1", null ],

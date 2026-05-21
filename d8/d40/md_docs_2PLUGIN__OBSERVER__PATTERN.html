@@ -259,7 +259,7 @@ Best Practices</h1>
 <li><b>Unregister on Destruction</b>: Always unregister observers before they're destroyed <div class="fragment"><div class="line">~MainWindow() {</div>
 <div class="line">    <a class="code hl_function" href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a>().<a class="code hl_function" href="../../d3/d67/classplugin_1_1PluginManager.html#a48580cbff49621e96858a3c6c52abcfc">UnregisterObserver</a>(<span class="keyword">this</span>);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassplugin_1_1PluginManager_html_a48580cbff49621e96858a3c6c52abcfc"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a48580cbff49621e96858a3c6c52abcfc">plugin::PluginManager::UnregisterObserver</a></div><div class="ttdeci">void UnregisterObserver(IPluginObserver *observer)</div><div class="ttdoc">Unregisters an observer.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:1405</div></div>
+<div class="ttc" id="aclassplugin_1_1PluginManager_html_a48580cbff49621e96858a3c6c52abcfc"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a48580cbff49621e96858a3c6c52abcfc">plugin::PluginManager::UnregisterObserver</a></div><div class="ttdeci">void UnregisterObserver(IPluginObserver *observer)</div><div class="ttdoc">Unregisters an observer.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:1419</div></div>
 </div><!-- fragment --></li>
 <li><b>Handle All Events</b>: Use switch statement with all cases or default <div class="fragment"><div class="line"><span class="keywordtype">void</span> OnPluginEvent(PluginEvent event, ...) {</div>
 <div class="line">    <span class="keywordflow">switch</span> (event) {</div>

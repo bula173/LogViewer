@@ -18,7 +18,7 @@ var searchData=
   ['topologicalsort_15',['TopologicalSort',['../df/d48/classplugin_1_1PluginDependencyGraph.html#a04de4f4dd8dec5fe61822653853a5225',1,'plugin::PluginDependencyGraph']]],
   ['tospdloglevel_16',['toSpdlogLevel',['../dd/d6b/classutil_1_1SpdLogger.html#a6b1db445e8dbd72552c49fd7fb0afada',1,'util::SpdLogger']]],
   ['toxml_17',['ToXml',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html#a5599d6589accf97ce056cccd05bf9c04',1,'ui::qt::ExportManager']]],
-  ['trace_18',['trace',['../dd/d6b/classutil_1_1SpdLogger.html#ab23dd250d02a77313a92eb2b1aac0013',1,'util::SpdLogger::trace()'],['../d3/dc4/classutil_1_1ILogger.html#a1315ba9159219be77b501d9880ede56e',1,'util::ILogger::trace()'],['../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993',1,'util::Logger::Trace()']]],
+  ['trace_18',['trace',['../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993',1,'util::Logger::Trace()'],['../dd/d6b/classutil_1_1SpdLogger.html#ab23dd250d02a77313a92eb2b1aac0013',1,'util::SpdLogger::trace()'],['../d3/dc4/classutil_1_1ILogger.html#a1315ba9159219be77b501d9880ede56e',1,'util::ILogger::trace()']]],
   ['traceviewerpanel_19',['TraceViewerPanel',['../dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a0f1fb2655baa7c21004c5aad49992c91',1,'ui::qt::TraceViewerPanel']]],
   ['translate_20',['Translate',['../d9/da7/classconfig_1_1FieldTranslator.html#a76e2bd03acaa42929e2036811ae535f7',1,'config::FieldTranslator']]],
   ['trim_21',['Trim',['../d9/dd2/classparser_1_1CsvParser.html#a3efda6906ed45b161766bb7283ff61da',1,'parser::CsvParser']]],
