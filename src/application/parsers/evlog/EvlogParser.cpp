@@ -35,11 +35,9 @@ static constexpr size_t kOff_severity   = 20;  // int32
 static constexpr size_t kOff_uid        = 24;  // uint32
 static constexpr size_t kOff_gid        = 28;  // uint32
 static constexpr size_t kOff_pid        = 32;  // int32
-static constexpr size_t kOff_pgrp       = 36;  // int32
 static constexpr size_t kOff_tv_sec     = 40;  // int32
 static constexpr size_t kOff_tv_nsec    = 44;  // int32
 static constexpr size_t kOff_flags      = 48;  // uint32
-static constexpr size_t kOff_thread     = 52;  // uint32
 static constexpr size_t kOff_processor  = 56;  // int32
 
 // log_flags bit masks
@@ -454,6 +452,10 @@ void EvlogParser::ParseStream(std::istream& input)
         char uidBuf[12];
         std::snprintf(uidBuf, sizeof(uidBuf), "%u", uid);
         items.emplace_back("uid", uidBuf);
+
+        char gidBuf[12];
+        std::snprintf(gidBuf, sizeof(gidBuf), "%u", gid);
+        items.emplace_back("gid", gidBuf);
 
         char recBuf[12];
         std::snprintf(recBuf, sizeof(recBuf), "%u", recid);

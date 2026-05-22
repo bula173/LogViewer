@@ -801,6 +801,14 @@ void MainWindow::SetupMenus()
 
     viewMenu->addSeparator();
 
+    auto* jumpAction = viewMenu->addAction(tr("Go to &Timestamp…"));
+    jumpAction->setShortcut(QKeySequence(tr("Ctrl+G")));
+    connect(jumpAction, &QAction::triggered, this, [this]() {
+        if (m_eventsView) m_eventsView->JumpToTimestamp();
+    });
+
+    viewMenu->addSeparator();
+
     // Tabs submenu — one checkable action per built-in content tab
     auto* tabsMenu = viewMenu->addMenu(tr("&Tabs"));
     for (int i = 0; i < m_contentTabs->count(); ++i)

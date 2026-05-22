@@ -156,7 +156,7 @@ static std::optional<EvlogTemplateField> ParseFieldDecl(std::string line)
 static void CommitTemplate(EvlogTemplate& tmpl,
     std::map<std::pair<int32_t,uint32_t>, EvlogTemplate>& out)
 {
-    if (tmpl.facility < 0 || tmpl.eventType == 0 && tmpl.fields.empty()) return;
+    if (tmpl.facility < 0 || (tmpl.eventType == 0 && tmpl.fields.empty())) return;
     const auto key = std::make_pair(tmpl.facility, tmpl.eventType);
     out.emplace(key, std::move(tmpl));
     tmpl = {};

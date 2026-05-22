@@ -45,7 +45,7 @@ class EventsTableView : public QTableView,
     void NavigateToNextMatch();
     void NavigateToPrevMatch();
 
-  signals:
+  Q_SIGNALS:
     void CurrentActualRowChanged(int actualRow);
     void MatchInfoChanged(int current, int total);
     /// Emitted when the user chooses "Bookmark Event" from the context menu.
@@ -53,12 +53,21 @@ class EventsTableView : public QTableView,
     /// Emitted when the user chooses "Add to Scenario" from the context menu.
     void AddToScenarioRequested(int actualRow);
 
+  public Q_SLOTS:
+    /// Opens an input dialog and scrolls to the event with the nearest timestamp.
+    void JumpToTimestamp();
+
   private:
     void InitializeView();
     void ConnectSelectionSignals();
     void ShowContextMenu(const QPoint& pos);
     void ResizeColumnsToConfiguration();
     void ScrollToMatchIndex(int matchIndex);
+
+    /// Returns actual event indices for all currently selected table rows.
+    std::vector<int> SelectedActualIndices() const;
+    void CopySelectedRowsAsJson();
+    void CopySelectedRowsAsCsv();
 
     db::EventsContainer& m_events;
     EventsTableModel* m_model {nullptr};

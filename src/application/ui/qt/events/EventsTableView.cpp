@@ -5,15 +5,21 @@
 #include "EventsTableModel.hpp"
 
 #include <QHeaderView>
+#include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QAction>
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QKeySequence>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPoint>
 #include <QTableWidget>
 #include <QVBoxLayout>
+
+#include <cmath>
+#include <limits>
+#include <unordered_map>
 
 namespace ui::qt
 {
@@ -315,10 +321,18 @@ void EventsTableView::ScrollToMatchIndex(int matchIndex)
 void EventsTableView::ShowContextMenu(const QPoint& pos)
 {
     const int row = CurrentActualRow();
+    const bool hasSelection = !SelectedActualIndices().empty();
 
     QMenu menu(this);
 
     auto* copyAction = menu.addAction(tr("Copy\tCtrl+C"));
+
+    auto* copyAsMenu = menu.addMenu(tr("Copy as…"));
+    auto* copyJsonAction = copyAsMenu->addAction(tr("JSON"));
+    copyJsonAction->setEnabled(hasSelection);
+    auto* copyCsvAction  = copyAsMenu->addAction(tr("CSV (with header)"));
+    copyCsvAction->setEnabled(hasSelection);
+
     menu.addSeparator();
     auto* bookmarkAction = menu.addAction(tr("Bookmark Event…"));
     bookmarkAction->setEnabled(row >= 0);
@@ -339,6 +353,8 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
             }
         }
     }
+    else if (chosen == copyJsonAction)  { CopySelectedRowsAsJson(); }
+    else if (chosen == copyCsvAction)   { CopySelectedRowsAsCsv();  }
     else if (chosen == bookmarkAction && row >= 0)
     {
         emit BookmarkRequested(row);
@@ -347,6 +363,179 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
     {
         emit AddToScenarioRequested(row);
     }
+}
+
+// ---------------------------------------------------------------------------
+// Copy as JSON / CSV
+// ---------------------------------------------------------------------------
+
+std::vector<int> EventsTableView::SelectedActualIndices() const
+{
+    if (!selectionModel() || !m_model) return {};
+    const QModelIndexList selected = selectionModel()->selectedRows();
+    std::vector<int> result;
+    result.reserve(static_cast<size_t>(selected.size()));
+    for (const QModelIndex& idx : selected)
+    {
+        const int actual = m_model->ResolveToActualIndex(idx.row());
+        if (actual >= 0)
+            result.push_back(actual);
+    }
+    std::sort(result.begin(), result.end());
+    return result;
+}
+
+static QString JsonEscape(const QString& s)
+{
+    QString r;
+    r.reserve(s.size() + 4);
+    for (const QChar c : s) {
+        switch (c.unicode()) {
+            case '"':  r += QLatin1String("\\\""); break;
+            case '\\': r += QLatin1String("\\\\"); break;
+            case '\n': r += QLatin1String("\\n");  break;
+            case '\r': r += QLatin1String("\\r");  break;
+            case '\t': r += QLatin1String("\\t");  break;
+            default:   r += c;                      break;
+        }
+    }
+    return r;
+}
+
+static QString CsvEscape(const QString& s)
+{
+    if (s.contains(u',') || s.contains(u'"') || s.contains(u'\n'))
+        return u'"' + QString(s).replace(u'"', QLatin1String("\"\"")) + u'"';
+    return s;
+}
+
+void EventsTableView::CopySelectedRowsAsJson()
+{
+    const auto indices = SelectedActualIndices();
+    if (indices.empty()) return;
+
+    const bool multi = indices.size() > 1;
+    QString out;
+    out.reserve(512 * static_cast<int>(indices.size()));
+    if (multi) out += QLatin1String("[\n");
+
+    for (size_t i = 0; i < indices.size(); ++i) {
+        const auto& event = m_events.GetEvent(indices[i]);
+        if (multi) out += QLatin1String("  ");
+        out += QLatin1String("{\n");
+
+        const QString indent = multi ? QLatin1String("    ") : QLatin1String("  ");
+        out += indent + QLatin1String("\"id\": ") + QString::number(event.getId());
+
+        for (const auto& [key, value] : event.getEventItems()) {
+            out += QLatin1String(",\n") + indent
+                + u'"' + JsonEscape(QString::fromStdString(key)) + QLatin1String("\": \"")
+                + JsonEscape(QString::fromStdString(value)) + u'"';
+        }
+        out += u'\n';
+        if (multi) out += QLatin1String("  }");
+        else        out += u'}';
+
+        if (multi && i + 1 < indices.size()) out += u',';
+        if (multi) out += u'\n';
+    }
+
+    if (multi) out += u']';
+    QGuiApplication::clipboard()->setText(out);
+}
+
+void EventsTableView::CopySelectedRowsAsCsv()
+{
+    const auto indices = SelectedActualIndices();
+    if (indices.empty()) return;
+
+    // Collect field names in insertion order across all selected events.
+    std::vector<std::string> fieldOrder;
+    fieldOrder.push_back("id");
+    std::unordered_map<std::string, int> seen;
+    seen["id"] = 0;
+    for (const int idx : indices) {
+        for (const auto& [key, value] : m_events.GetEvent(idx).getEventItems()) {
+            if (seen.emplace(key, static_cast<int>(fieldOrder.size())).second)
+                fieldOrder.push_back(key);
+        }
+    }
+
+    QString out;
+    out.reserve(256 * static_cast<int>(indices.size() + 1));
+
+    // Header row
+    for (size_t col = 0; col < fieldOrder.size(); ++col) {
+        if (col) out += u',';
+        out += CsvEscape(QString::fromStdString(fieldOrder[col]));
+    }
+    out += u'\n';
+
+    // Data rows
+    for (const int idx : indices) {
+        const auto& event = m_events.GetEvent(idx);
+        for (size_t col = 0; col < fieldOrder.size(); ++col) {
+            if (col) out += u',';
+            const std::string val = (fieldOrder[col] == "id")
+                ? std::to_string(event.getId())
+                : event.findByKey(fieldOrder[col]);
+            out += CsvEscape(QString::fromStdString(val));
+        }
+        out += u'\n';
+    }
+
+    QGuiApplication::clipboard()->setText(out);
+}
+
+// ---------------------------------------------------------------------------
+// Jump to timestamp
+// ---------------------------------------------------------------------------
+
+void EventsTableView::JumpToTimestamp()
+{
+    bool ok = false;
+    const QString input = QInputDialog::getText(
+        this, tr("Go to Timestamp"),
+        tr("Timestamp (seconds, e.g. 1234.567):"),
+        QLineEdit::Normal, {}, &ok);
+    if (!ok || input.trimmed().isEmpty()) return;
+
+    const double target = input.trimmed().toDouble(&ok);
+    if (!ok) {
+        QMessageBox::warning(this, tr("Go to Timestamp"),
+            tr("Could not parse \"%1\" as a numeric timestamp.").arg(input));
+        return;
+    }
+
+    const int rows = m_model ? m_model->rowCount({}) : 0;
+    if (rows == 0) return;
+
+    int bestRow = -1;
+    double bestDiff = std::numeric_limits<double>::max();
+
+    for (int row = 0; row < rows; ++row) {
+        const int actual = m_model->ResolveToActualIndex(row);
+        if (actual < 0) continue;
+        const std::string ts = m_events.GetEvent(actual).findByKey("timestamp");
+        if (ts.empty()) continue;
+        bool tsOk = false;
+        const double t = QString::fromStdString(ts).toDouble(&tsOk);
+        if (!tsOk) continue;
+        const double diff = std::fabs(t - target);
+        if (diff < bestDiff) {
+            bestDiff = diff;
+            bestRow  = row;
+        }
+    }
+
+    if (bestRow < 0) {
+        QMessageBox::information(this, tr("Go to Timestamp"),
+            tr("No events with a numeric timestamp field were found."));
+        return;
+    }
+
+    const int actual = m_model->ResolveToActualIndex(bestRow);
+    ScrollToActualRow(actual);
 }
 
 } // namespace ui::qt
