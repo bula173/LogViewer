@@ -5,11 +5,23 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 ## Features
 
 ### Core
-- **Multiple Log Formats**: XML, JSON, CSV, and custom formats
+- **Multiple Log Formats**: XML, CSV, and CAN/ASC (Vector CANalyzer) — JSON coming soon
+- **DBC Signal Decoding**: Load a `.dbc` file alongside an ASC log to decode raw CAN frames into named signals
 - **High Performance**: Virtual list architecture handles millions of log entries
-- **Advanced Filtering**: Text search, regex, and type-based filters with configurable field selection
+- **Advanced Filtering**: Text search, regex, time-range, and type-based filters with configurable field selection
+- **Filter Profiles**: Save and restore named filter states for quick context switching
 - **Flexible UI**: Dock-based layout — move, float, or hide panels as needed
 - **Persistent Settings**: JSON-based configuration with platform-specific storage
+
+### Analysis Panels
+- **Signal Plot**: Plot decoded CAN signal values (`SIG:*` fields) over time — select any combination with checkboxes; auto-downsamples to 2 000 points per series
+- **Statistics**: Format-aware summary — generic key metrics for all formats; CAN-specific frame breakdown (Rx/Tx/error counts, unique IDs, frame rate) and signal ranges (min/max/avg) for ASC files
+- **Timeline Chart**: Interactive bar histogram of event volume over time with zoom and brush selection
+- **Pattern Analysis**: Template clustering that groups structurally similar log lines
+- **Trace Viewer**: Sequence-diagram-style view grouped by actor
+- **Bookmarks**: Annotate and navigate to important events
+- **Scenarios**: Define multi-step event sequences and export matches as JSON Lines
+- **Actors**: Event attribution tree built from configurable actor definitions
 
 ### AI-Assisted Analysis
 - **Multiple Providers**: Ollama (local), LM Studio (local), OpenAI, Anthropic Claude, Google Gemini, xAI Grok
@@ -216,11 +228,14 @@ Configure in Settings > AI with an API key:
 
 ## Usage
 
-1. **Open Log File** — File > Open (Cmd/Ctrl+O)
-2. **Filter** — Use the Filters panel; filter by type, text, or regex
-3. **Inspect** — Select an entry to see full details in the Details panel
-4. **AI Analysis** — Open bottom panel, write or load a prompt, click Analyze
-5. **Customize** — Drag panel title bars to rearrange; configure columns and colors in Settings
+1. **Open Log File** — File > Open (Cmd/Ctrl+O); supports XML, CSV, and `.asc` CAN logs
+2. **Load DBC** — File > Load DBC… to decode CAN signals from a `.dbc` database (optional, ASC only)
+3. **Filter** — Use the Filters panel; filter by type, text, regex, or time range
+4. **Inspect** — Select an entry to see full details in the Details panel
+5. **Plot Signals** — Switch to the *Signals* tab in the content area; check `SIG:*` fields to plot their values over time (available after loading an ASC + DBC file)
+6. **Statistics** — The *Statistics* tab shows format-aware metrics; CAN files additionally show frame counts, Rx/Tx breakdown, unique IDs, frame rate, and signal ranges
+7. **AI Analysis** — Open the bottom panel, write or load a prompt, click Analyze
+8. **Customize** — Drag panel title bars to rearrange; configure columns and colors in Settings
 
 ## Project Structure
 
@@ -229,12 +244,21 @@ LogViewer/
 ├── src/
 │   ├── application/         # Core application logic
 │   │   ├── config/          # Configuration management
+│   │   ├── db/              # EventsContainer and LogEvent data model
 │   │   ├── filters/         # Filtering system
 │   │   ├── mvc/             # Model-View-Controller patterns
-│   │   ├── parsers/         # Log parsers (XML, JSON, CSV)
+│   │   ├── parsers/         # Log parsers
+│   │   │   ├── xml/         # XML parser
+│   │   │   ├── csv/         # CSV parser
+│   │   │   ├── asc/         # CAN/ASC parser (Vector CANalyzer format)
+│   │   │   └── dbc/         # DBC parser + CAN signal decoder
 │   │   ├── plugins/         # Plugin system interfaces
 │   │   ├── ui/qt/           # Qt 6 UI components
-│   │   ├── util/            # Utilities
+│   │   │   ├── panels/      # Dock and content panels
+│   │   │   ├── dialogs/     # Modal dialogs
+│   │   │   ├── events/      # Events table model and view
+│   │   │   └── utils/       # Shared UI utilities
+│   │   ├── util/            # General utilities
 │   │   └── version/         # Version info
 │   ├── plugin_api/          # C-ABI plugin interface headers
 │   └── main/                # Application entry point
