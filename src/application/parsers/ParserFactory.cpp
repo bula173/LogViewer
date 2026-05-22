@@ -9,6 +9,8 @@
 #include "xml/xmlParser.hpp"
 #include "csv/CsvParser.hpp"
 #include "asc/AscParser.hpp"
+#include "dlt/DltParser.hpp"
+#include "evlog/EvlogParser.hpp"
 #include "Logger.hpp"
 #include <algorithm>
 
@@ -39,6 +41,18 @@ void ParserFactory::InitializeDefaults()
     Register(".asc", []() {
         util::Logger::Debug("Creating AscParser instance");
         return std::make_unique<AscParser>();
+    });
+
+    // Register DLT (AUTOSAR Diagnostic Log and Trace) parser.
+    Register(".dlt", []() {
+        util::Logger::Debug("Creating DltParser instance");
+        return std::make_unique<DltParser>();
+    });
+
+    // Register Evlog (POSIX 1003.25 Enterprise Event Logging) parser.
+    Register(".evl", []() {
+        util::Logger::Debug("Creating EvlogParser instance");
+        return std::make_unique<EvlogParser>();
     });
 }
 

@@ -78,6 +78,7 @@ class SearchBar;
 class UpdateChecker;
 class TimeRangeFilterPanel;
 class FilterProfilesPanel;
+class CanSignalTreePanel;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -142,6 +143,7 @@ class MainWindow : public QMainWindow,
     void OnSaveSession();
     void OnOpenSession();
     void OnLoadDbcRequested();
+    void OnLoadEvlogTemplatesRequested();
     void OnSaveLayoutRequested();
     void OnDeleteLayoutRequested(const QString& name);
 
@@ -230,10 +232,11 @@ class MainWindow : public QMainWindow,
     QWidget* m_bottomChatWidget {nullptr};
 
     // Dock widgets for collapsible panels
-    QDockWidget* m_filtersDock {nullptr};
-    QDockWidget* m_detailsDock {nullptr};
-    QDockWidget* m_bottomDock {nullptr};
-    QDockWidget* m_pluginLeftDock {nullptr};    // Generic plugin configuration dock (left-panel fallback)
+    QDockWidget* m_filtersDock       {nullptr};
+    QDockWidget* m_signalBrowserDock {nullptr}; // Signal Browser — tabbed alongside Filters
+    QDockWidget* m_detailsDock       {nullptr};
+    QDockWidget* m_bottomDock        {nullptr};
+    QDockWidget* m_pluginLeftDock    {nullptr}; // Generic plugin configuration dock (left-panel fallback)
     QTabWidget* m_pluginLeftTabs {nullptr};     // Tabs for multiple plugin configs / left-panel fallback
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
@@ -244,7 +247,8 @@ class MainWindow : public QMainWindow,
     db::EventsContainer* m_events {nullptr};
     
     QString m_currentLogFilePath;
-    QString m_currentDbcFilePath;   ///< Optional DBC for CAN signal decoding
+    QString m_currentDbcFilePath;          ///< Optional DBC for CAN signal decoding
+    QString m_evlogTemplateDir;            ///< Optional template dir for evlog BINARY payloads
 
     // Recent files
     std::vector<QString> m_recentFiles;
@@ -269,6 +273,7 @@ class MainWindow : public QMainWindow,
     UpdateChecker*          m_updateChecker{nullptr};
     TimeRangeFilterPanel*   m_timeRangePanel{nullptr};
     FilterProfilesPanel*    m_profilesPanel {nullptr};
+    CanSignalTreePanel*     m_canSignalTree {nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     

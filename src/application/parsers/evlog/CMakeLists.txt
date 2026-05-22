@@ -1,0 +1,12 @@
+target_sources(application_core
+    PRIVATE
+        EvlogParser.cpp
+        EvlogTemplateRegistry.cpp
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EvlogParser.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EvlogTemplate.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/EvlogTemplateRegistry.hpp>
+        $<INSTALL_INTERFACE:EvlogParser.hpp>
+        $<INSTALL_INTERFACE:EvlogTemplate.hpp>
+        $<INSTALL_INTERFACE:EvlogTemplateRegistry.hpp>
+)
