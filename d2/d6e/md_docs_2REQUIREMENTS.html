@@ -94,9 +94,9 @@ $(document).ready(function(){initNavTree('d2/d6e/md_docs_2REQUIREMENTS.html','..
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="autotoc_md582"></a> <b>Document ID</b>: LV-REQ-001 <br  />
- <b><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a></b>: 1.3 <br  />
+ <b><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a></b>: 1.4 <br  />
  <b>Status</b>: Active <br  />
- <b>Application version</b>: 1.6.x <br  />
+ <b>Application version</b>: 1.6.1+ <br  />
 </p>
 <hr  />
 <h1><a class="anchor" id="autotoc_md584"></a>
@@ -110,7 +110,18 @@ Table of Contents</h1>
 </ul>
 </li>
 <li>Software Requirements (SW)<ul>
-<li>3.1 Functional Requirements</li>
+<li>3.1 Functional Requirements<ul>
+<li>3.1.1 Log File Loading</li>
+<li>3.1.2 Event Display</li>
+<li>3.1.3 Filtering</li>
+<li>3.1.4 AI-Assisted Analysis</li>
+<li>3.1.5 Export</li>
+<li>3.1.6 Signal Visualisation</li>
+<li>3.1.7 Format-Specific Statistics</li>
+<li>3.1.8 Configuration</li>
+<li>3.1.9 Named Layouts</li>
+</ul>
+</li>
 <li>3.2 Performance Requirements</li>
 <li>3.3 Usability Requirements</li>
 <li>3.4 Reliability Requirements</li>
@@ -232,7 +243,21 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-010c   </td><td class="markdownTableBodyNone">The application MUST support loading a <b>DBC</b> CAN database file alongside an ASC log to decode raw frame bytes into named signal values (stored as <code>SIG:&lt;name&gt;</code> fields)   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-010d   </td><td class="markdownTableBodyNone">The DBC decoder MUST support both <b>Intel (little-endian)</b> and <b>Motorola (big-endian)</b> signal bit layouts   </td><td class="markdownTableBodyNone">MUST   </td></tr>
+<td class="markdownTableBodyNone">SW-010d   </td><td class="markdownTableBodyNone">The DBC decoder MUST support both <b>Intel (little-endian)</b> and <b>Motorola (big-endian)</b> signal bit layouts   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010e   </td><td class="markdownTableBodyNone">The application MUST support <b>AUTOSAR DLT</b> (Diagnostic Log and Trace) binary format (<code>.dlt</code> files)   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010f   </td><td class="markdownTableBodyNone">The DLT parser MUST decode storage headers (DLT magic), standard headers (HTYP flags, optional WEID/WSID/WTMS fields), and extended headers (AppID, ContextID, MSIN); emitted fields MUST include <code>timestamp</code>, <code>level</code>, <code>type</code>, <code>AppID</code>, <code>ContextID</code>, <code>EcuID</code>, <code>MsgCtr</code>, and <code>info</code>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010g   </td><td class="markdownTableBodyNone">The DLT parser MUST decode verbose payload arguments: bool, int8–int64, uint8–uint64, float32/64, strings, and raw data; non-verbose payloads MUST be shown as <code>MsgID=0x… [hex]</code>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010h   </td><td class="markdownTableBodyNone">The application MUST support <b>POSIX 1003.25 evlog</b> binary format (<code>.evl</code> files) as produced by <code>evlogd</code>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010i   </td><td class="markdownTableBodyNone">The evlog parser MUST decode the 60-byte little-endian <code>posix_log_entry</code> header and all payload formats: STRING (UTF-8 text), PRINTF (format string + varargs hex), BINARY (hex dump or template-decoded), NODATA; emitted fields MUST include <code>timestamp</code>, <code>level</code>, <code>facility</code>, <code>event_type</code>, <code>pid</code>, <code>uid</code>, <code>recid</code>, and optional <code>cpu</code>, <code>flags</code>, <code>info</code>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010j   </td><td class="markdownTableBodyNone">The evlog parser MUST support <b>template-based</b> BINARY payload decoding: the user provides a directory of template files (<code>.t</code>/<code>.tmpl</code>/<code>.template</code>) keyed by <code>(facility, event_type)</code> that declare typed field layouts and an optional format string; records with no matching template MUST fall back to hex dump   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010k   </td><td class="markdownTableBodyNone">The application MUST provide a <b>File → Load Evlog Templates…</b> menu action to select the template directory; the selected path MUST be used for all subsequent <code>.evl</code> file loads in the session   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md596"></a>
 3.1.2 Event Display</h3>
@@ -310,10 +335,16 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-045   </td><td class="markdownTableBodyNone">The application MUST provide a <b>Signal Plot</b> panel that plots numeric field values over time as line series   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">SW-046   </td><td class="markdownTableBodyNone">The Signal Plot panel MUST allow the user to select which signals to display via checkboxes; unselected signals MUST be hidden from the chart   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<td class="markdownTableBodyNone">SW-046   </td><td class="markdownTableBodyNone">The application MUST provide a <b>Signal Browser</b> dock panel that displays the CAN frame and signal tree loaded from a DBC file; the user selects signals to plot using checkboxes in this panel   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-047   </td><td class="markdownTableBodyNone">The Signal Plot panel MUST support both ASC float-second timestamps and ISO date timestamps for the X axis   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<td class="markdownTableBodyNone">SW-046a   </td><td class="markdownTableBodyNone">The Signal Browser dock MUST be tabbed alongside the Filters dock in the left panel area and MUST have an independent show/hide control in the View menu   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-046b   </td><td class="markdownTableBodyNone">The Signal Browser MUST be populated from the DBC structure only (not from loaded log event data) and MUST show the placeholder "Load a DBC file to see CAN frame and signal structure." when no DBC is loaded   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-046c   </td><td class="markdownTableBodyNone">Checking or unchecking signals in the Signal Browser MUST immediately update the Signal Plot chart; the Signal Plot panel MUST NOT contain its own signal selection tree   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-047   </td><td class="markdownTableBodyNone">The Signal Plot panel MUST support both ASC float-second timestamps and ISO date timestamps for the X axis   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-048   </td><td class="markdownTableBodyNone">The Signal Plot panel SHOULD downsample series to at most 2 000 points when the dataset is larger, to keep rendering responsive   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md601"></a>
@@ -342,9 +373,27 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-052   </td><td class="markdownTableBodyNone">The application MUST start with sensible defaults when no configuration file exists   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">SW-053   </td><td class="markdownTableBodyNone">The last-used DBC file path MUST be persisted and offered as a default on subsequent loads of ASC files   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
+<td class="markdownTableBodyNone">SW-053   </td><td class="markdownTableBodyNone">The last-used DBC file path MUST be persisted and offered as a default on subsequent loads of ASC files   </td><td class="markdownTableBodyNone">SHOULD    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-054   </td><td class="markdownTableBodyNone">The last-used Evlog template directory MUST be persisted across sessions and automatically applied when the next <code>.evl</code> file is loaded   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md603"></a>
+<h3><a class="anchor" id="autotoc_md603"></a>
+3.1.9 Named Layouts</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Requirement   </th><th class="markdownTableHeadNone">Priority    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-055   </td><td class="markdownTableBodyNone">The application MUST allow users to <b>save the current dock layout</b> under a user-supplied name via <b>View → Layouts → Save Layout…</b>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-056   </td><td class="markdownTableBodyNone">Saved layouts MUST be restorable via the <b>View → Layouts</b> menu; restoring a layout MUST re-apply dock geometry and tab visibility   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-057   </td><td class="markdownTableBodyNone">The application MUST ship at least two <b>built-in predefined layouts</b>: one for generic XML/CSV log viewing and one optimised for CAN/ASC analysis   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-058   </td><td class="markdownTableBodyNone">The user MUST be able to <b>delete</b> a previously saved layout via the View → Layouts menu   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-059   </td><td class="markdownTableBodyNone">Named layouts MUST be persisted across application restarts   </td><td class="markdownTableBodyNone">MUST   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md604"></a>
 3.2 Performance Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -360,7 +409,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-064   </td><td class="markdownTableBodyNone">Memory usage MUST NOT grow unboundedly when the same file is reloaded multiple times   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md604"></a>
+<h2><a class="anchor" id="autotoc_md605"></a>
 3.3 Usability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -376,7 +425,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-074   </td><td class="markdownTableBodyNone">The application MUST display the current application version in the About dialog   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md605"></a>
+<h2><a class="anchor" id="autotoc_md606"></a>
 3.4 Reliability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -390,7 +439,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-083   </td><td class="markdownTableBodyNone">Plugin load failures MUST be logged and reported to the user; they MUST NOT prevent the core application from starting   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md606"></a>
+<h2><a class="anchor" id="autotoc_md607"></a>
 3.5 Security Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -408,7 +457,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-095   </td><td class="markdownTableBodyNone">Release builds MUST be verified with GitHub Sigstore build attestations   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md607"></a>
+<h2><a class="anchor" id="autotoc_md608"></a>
 3.6 Portability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -420,7 +469,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-102   </td><td class="markdownTableBodyNone">The build system MUST use <b>CMake ≥ 3.25</b> with CMakePresets for all supported platforms   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md608"></a>
+<h2><a class="anchor" id="autotoc_md609"></a>
 3.7 Plugin System Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -437,7 +486,7 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone">SW-114   </td><td class="markdownTableBodyNone">A plugin crash SHOULD NOT cause the host application to crash (fault isolation)   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md610"></a>
+<h1><a class="anchor" id="autotoc_md611"></a>
 4. Build Requirements</h1>
 <p>These are requirements on the development toolchain, not on the end-user system.</p>
 <table class="markdownTable">
@@ -466,7 +515,7 @@ Table of Contents</h1>
 </table>
 <p>Third-party libraries bundled via CMake <code>FetchContent</code> (no separate install required): <code>gtest</code>, <code>fmt</code>, <code>gflags</code>.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md612"></a>
+<h1><a class="anchor" id="autotoc_md613"></a>
 5. Requirement Traceability</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -482,24 +531,30 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-010a – SW-010d   </td><td class="markdownTableBodyNone"><code>AscParserTest</code>, <code>DbcParserTest</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">SW-045 – SW-048   </td><td class="markdownTableBodyNone">Manual UI testing (SignalPlotPanel)    </td></tr>
+<td class="markdownTableBodyNone">SW-010e – SW-010g   </td><td class="markdownTableBodyNone"><code>DltParserTest</code> (manual), DLT sample files    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010h – SW-010k   </td><td class="markdownTableBodyNone"><code>EvlogParserTest</code> (manual), evlog sample files + template files    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-045 – SW-048   </td><td class="markdownTableBodyNone">Manual UI testing (SignalPlotPanel, CanSignalTreePanel)    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-049 – SW-049c   </td><td class="markdownTableBodyNone">Manual UI testing (StatsSummaryPanel + CanStatisticsStrategy)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-055 – SW-059   </td><td class="markdownTableBodyNone">Manual UI testing (LayoutManager, View → Layouts menu)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-010 – SW-014   </td><td class="markdownTableBodyNone">Manual UI testing    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-020 – SW-027   </td><td class="markdownTableBodyNone"><code>ModelTest</code>, <code>EventsContainerTest</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-030 – SW-036   </td><td class="markdownTableBodyNone">Manual AI integration testing    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-060 – SW-064   </td><td class="markdownTableBodyNone">Manual performance testing with <code>example_log_10k.xml</code> and generated logs    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-080 – SW-083   </td><td class="markdownTableBodyNone">Unit tests + manual error injection    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-090 – SW-095   </td><td class="markdownTableBodyNone">CI security workflow (CodeQL, Gitleaks, AV scan, attestation)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">SW-110 – SW-114   </td><td class="markdownTableBodyNone"><code>ArchitectureImprovementsTests</code>, plugin load/reject tests    </td></tr>
+<td class="markdownTableBodyNone">SW-090 – SW-095   </td><td class="markdownTableBodyNone">CI security workflow (CodeQL, Gitleaks, AV scan, attestation)    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-110 – SW-114   </td><td class="markdownTableBodyNone"><code>ArchitectureImprovementsTests</code>, plugin load/reject tests    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">BUILD-001 – BUILD-010   </td><td class="markdownTableBodyNone">CI build matrix (<code>macos-debug-qt</code>, <code>macos-release-qt</code>, etc.)   </td></tr>
 </table>
 </div></div><!-- contents -->

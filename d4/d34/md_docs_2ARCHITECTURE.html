@@ -134,6 +134,10 @@ Architecture Layers</h1>
 <div class="line">│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────┐ │        │</div>
 <div class="line">│  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │ │AscParser │ │        │</div>
 <div class="line">│  │  └────────────┘ └────────────┘ └────────────┘ └──────────┘ │        │</div>
+<div class="line">│  │  ┌────────────┐ ┌───────────────────────────┐               │        │</div>
+<div class="line">│  │  │ DltParser  │ │       EvlogParser          │               │        │</div>
+<div class="line">│  │  └────────────┘ │ + EvlogTemplateRegistry    │               │        │</div>
+<div class="line">│  │                 └───────────────────────────┘               │        │</div>
 <div class="line">│  │                                            ┌─────────────┐  │        │</div>
 <div class="line">│  │                                            │  DbcParser  │  │        │</div>
 <div class="line">│  │                                            │ + CanDecoder│  │        │</div>
@@ -172,11 +176,12 @@ Key Components</h1>
 </table>
 <p><b>MainWindow</b>: Central orchestrator</p><ul>
 <li>Qt 6-based <a class="el" href="../../df/d90/classQMainWindow.html">QMainWindow</a> with dock widget system</li>
-<li>Left dock (Filters), right dock (Details), bottom dock (AI chat / plugin panels)</li>
+<li>Left docks: <b>Filters</b> + <b>Signal Browser</b> (tabbed, <code>QDockWidget</code> each); right dock: Details; bottom dock: AI chat / plugin panels</li>
 <li>Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors</li>
 <li>Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)</li>
 <li>Implements <code>ConfigObserver</code> and <code>IPluginObserver</code> for configuration and plugin lifecycle changes</li>
-<li>Menu system for file operations, DBC loading, tools, and view management</li>
+<li>Menu system: File (Open, Load DBC, Load Evlog Templates, Export, …), View (Tabs, Layouts, …), Tools, Help</li>
+<li><code>CreateParserFor()</code> produces format-specific pre-configured parsers: <code>AscParser</code> with DBC path for <code>.asc</code>; <code>EvlogParser</code> with template directory for <code>.evl</code>; <code>ParserFactory</code> for all other types</li>
 </ul>
 <p><b>EventsTableView</b>: High-performance table display (<code>events/</code>)</p><ul>
 <li><a class="el" href="../../d8/d5e/classQTableView.html">QTableView</a> with custom EventsTableModel</li>
@@ -185,7 +190,9 @@ Key Components</h1>
 </ul>
 <p><b>Analysis Panels</b> (<code>panels/</code>)</p><ul>
 <li><b>StatsSummaryPanel</b>: Aggregate statistics with pluggable <code>IStatisticsStrategy</code> (see below)</li>
-<li><b>SignalPlotPanel</b>: Plots decoded <code>SIG:*</code> field values over time; QLineSeries per signal; downsamples to 2 000 points</li>
+<li><b>SignalPlotPanel</b>: Plots decoded <code>SIG:*</code> field values over time; QLineSeries per signal; downsamples to 2 000 points. Signal selection is delegated to <code>CanSignalTreePanel</code> — the plot has no embedded tree.</li>
+<li><b>CanSignalTreePanel</b>: Left-dock Signal Browser; shows DBC frame/signal tree with tristate checkboxes. Populated by <code>SetDatabase(DbcDatabase)</code> when a DBC is loaded. Emits <code>SignalSelectionChanged</code> → wired to <code>SignalPlotPanel::SetSelectedSignals()</code>.</li>
+<li><b>LayoutManager</b>: Serialises and restores named dock layouts. Built-in presets (XML log, CAN analysis) plus user-saved layouts; persisted across sessions.</li>
 <li><b>TimelineChartPanel</b>: Interactive event-volume bar histogram with zoom and brush</li>
 <li><b>TraceViewerPanel</b>: Sequence-diagram-style actor/event view</li>
 <li><b>PatternAnalysisPanel</b>: Template clustering of structurally similar log lines</li>
@@ -231,7 +238,11 @@ Key Components</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>.csv</code>   </td><td class="markdownTableBodyNone"><code>CsvParser</code>   </td><td class="markdownTableBodyNone"></td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>.asc</code>   </td><td class="markdownTableBodyNone"><code>AscParser</code>   </td><td class="markdownTableBodyNone">CAN/Vector CANalyzer; accepts optional DBC path   </td></tr>
+<td class="markdownTableBodyNone"><code>.asc</code>   </td><td class="markdownTableBodyNone"><code>AscParser</code>   </td><td class="markdownTableBodyNone">CAN/Vector CANalyzer; constructed with optional DBC path via <code>CreateParserFor()</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>.dlt</code>   </td><td class="markdownTableBodyNone"><code>DltParser</code>   </td><td class="markdownTableBodyNone">AUTOSAR Diagnostic Log and Trace binary    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>.evl</code>   </td><td class="markdownTableBodyNone"><code>EvlogParser</code>   </td><td class="markdownTableBodyNone">POSIX 1003.25 evlog binary; constructed with optional template directory via <code>CreateParserFor()</code>   </td></tr>
 </table>
 <p><b>AscParser</b> (<code>parsers/asc/</code>): Parses Vector CANalyzer <code>.asc</code> files line by line.</p><ul>
 <li>Each CAN frame becomes a <code>LogEvent</code> with fields: <code>timestamp</code> (float seconds), <code>type</code> (Rx/Tx/TxRq/ErrorFrame), <code>CAN_ID</code> (hex), <code>CAN_Channel</code>, <code>CAN_DLC</code>, <code>CAN_Data</code> (hex bytes), <code>CAN_IDE</code> (Standard/Extended), <code>info</code>.</li>
@@ -240,6 +251,25 @@ Key Components</h1>
 <p><b>DbcParser + CanDecoder</b> (<code>parsers/dbc/</code>): Reads <code>.dbc</code> CAN database files.</p><ul>
 <li><code>ParseDbcFile()</code> returns a <code>DbcDatabase</code> containing a map of message ID → <code>DbcMessage</code> (name, signals).</li>
 <li><code>DecodeFrame()</code> applies Intel (little-endian) or Motorola (big-endian) bit extraction to produce <code>{"SIG:&lt;name&gt;", "&lt;value&gt;"}</code> pairs.</li>
+</ul>
+<p><b>DltParser</b> (<code>parsers/dlt/</code>): Parses AUTOSAR DLT binary files (<code>.dlt</code>).</p><ul>
+<li>Detects optional storage header via <code>DLT\x01</code> magic (16-byte: magic + timestamp + ECU ID).</li>
+<li>Reads standard header (HTYP flags control presence of ECU ID, session ID, timestamp), extended header (MSIN → verbose flag, message type, log level; AppID; ContextID).</li>
+<li>Verbose payloads: iterates type-info words and decodes each argument (BOOL, SINT, UINT, FLOA, STRG, RAWD); skips VARI variable-info prefix when present.</li>
+<li>Non-verbose payloads: emits <code>MsgID=0x…</code> + hex dump.</li>
+<li>Emitted fields: <code>timestamp</code>, <code>level</code> (Off/Fatal/Error/Warn/Info/Debug/Verbose), <code>type</code> (Log/AppTrace/NwTrace/Control), <code>AppID</code>, <code>ContextID</code>, <code>EcuID</code>, <code>MsgCtr</code>, optional <code>SessionID</code>, <code>info</code>.</li>
+</ul>
+<p><b>EvlogParser</b> (<code>parsers/evlog/</code>): Parses POSIX 1003.25 evlog binary files (<code>.evl</code>).</p><ul>
+<li>Fixed 60-byte little-endian <code>posix_log_entry</code> header at known byte offsets; no file-level magic (sanity-checked via severity ≤ 7 and format ∈ {0,1,2,3}).</li>
+<li>Payload formats: <code>NODATA</code> (no payload), <code>STRING</code> (null-terminated UTF-8), <code>PRINTF</code> (format string + binary varargs shown as hex), <code>BINARY</code> (template-decoded or hex dump).</li>
+<li>Emitted fields: <code>timestamp</code> (float seconds), <code>level</code> (Emergency→Debug), <code>facility</code> (kern/user/…/local7), <code>event_type</code> (hex), <code>pid</code>, <code>uid</code>, <code>recid</code>, optional <code>cpu</code> (if ≠ 0), <code>flags</code> (comma-separated EVL_* names if set), <code>info</code>.</li>
+<li>Call <code>SetTemplateDirectory(path)</code> or <code>SetTemplateFile(path)</code> before <code>ParseData()</code> to enable template-based BINARY decoding.</li>
+</ul>
+<p><b>EvlogTemplateRegistry</b> (<code>parsers/evlog/</code>): Loads and indexes evlog template files.</p><ul>
+<li>Scans a directory for <code>.t</code>, <code>.tmpl</code>, <code>.template</code> files; parses each with a state-machine line reader.</li>
+<li>Template format: <code>facility</code>, <code>event_type</code>, <code>description</code>, <code>attributes { typed-fields }</code>, <code>format "…%name%…"</code> keywords (also supports <code>keyword%</code> evlog-native form; <code>#</code>/<code>//</code> comments; <code>---</code> record separator).</li>
+<li>Supports field types: int8–int64, uint8–uint64, float, double, fixed-size char arrays <code>char[N]</code>, variable <code>string</code>.</li>
+<li><code>Find(facility, eventType)</code> returns the matching <code>EvlogTemplate*</code> or <code>nullptr</code>; lookup is O(log n) via <code>std::map</code>.</li>
 </ul>
 <p><b>Statistics Strategy</b> (<code>ui/qt/panels/</code>): The <code>StatsSummaryPanel</code> uses <code>IStatisticsStrategy</code> to compute format-specific metrics at refresh time without coupling the panel to any particular format.</p>
 <div class="fragment"><div class="line">IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()</div>

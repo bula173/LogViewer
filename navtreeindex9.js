@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md468":[28,0],
 "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md469":[28,1],
 "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md470":[28,1,0],
 "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md471":[28,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0277e8447fc55f4f0131b0fa6aa14706":[39,0,10,1,40,76],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0277e8447fc55f4f0131b0fa6aa14706":[41,0,7,0,34,76],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a02b7f19a12c9ce6053b00aaf4a67762c":[41,0,7,0,34,91],
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a02b7f19a12c9ce6053b00aaf4a67762c":[39,0,10,1,40,91],
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a051373519cd41e80197d6c38a850264d":[41,0,7,0,34,113]
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a02b7f19a12c9ce6053b00aaf4a67762c":[39,0,10,1,40,91]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#ab18f7f67a8a9253a107ba3d615dff879":[41,0,7,0,24,21],
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab18f7f67a8a9253a107ba3d615dff879":[39,0,10,1,30,21],
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab4f68482eb16d0c632df47d5448577fb":[39,0,10,1,30,51],
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab4f68482eb16d0c632df47d5448577fb":[41,0,7,0,24,51],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#abe0cb3bc021ed12fb8a4fa02ded777f2":[41,0,7,0,29,8],
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#abe0cb3bc021ed12fb8a4fa02ded777f2":[39,0,10,1,35,8],
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#acd5db3ae503b59e5530b4f7f11c967e2":[41,0,7,0,29,4],
-"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#acd5db3ae503b59e5530b4f7f11c967e2":[39,0,10,1,35,4],
-"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ad3fc9df9b20c5045dbe2ca3cf5b2c262":[39,0,10,1,35,10]
+"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#acd5db3ae503b59e5530b4f7f11c967e2":[39,0,10,1,35,4]
 };

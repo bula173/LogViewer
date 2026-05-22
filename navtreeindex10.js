@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a051373519cd41e80197d6c38a850264d":[41,0,7,0,34,113],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a051373519cd41e80197d6c38a850264d":[39,0,10,1,40,113],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a05a80646c9e68ae39223da51d772e4a5":[41,0,7,0,34,129],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a05a80646c9e68ae39223da51d772e4a5":[39,0,10,1,40,129],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac49071e6dfa139b5d9d8ffb0f79e3ab2":[41,0,7,0,34,94],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac49071e6dfa139b5d9d8ffb0f79e3ab2":[39,0,10,1,40,94],
 "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac59790d4051d1f2ebe6defefe7c45f03":[41,0,7,0,34,137],
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac59790d4051d1f2ebe6defefe7c45f03":[39,0,10,1,40,137],
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac66b275fb3c94854876b999d98b50dd1":[41,0,7,0,34,42]
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac59790d4051d1f2ebe6defefe7c45f03":[39,0,10,1,40,137]
 };

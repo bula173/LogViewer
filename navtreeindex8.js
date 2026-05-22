@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ad3fc9df9b20c5045dbe2ca3cf5b2c262":[39,0,10,1,35,10],
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ad3fc9df9b20c5045dbe2ca3cf5b2c262":[41,0,7,0,29,10],
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#aeaadbc2f06dda1b458ca24fd4b5f2ec0":[41,0,7,0,29,12],
 "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#aeaadbc2f06dda1b458ca24fd4b5f2ec0":[39,0,10,1,35,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "d6/d26/classui_1_1qt_1_1EventsTableView.html#ae1652647aaf93d338c1fcb1a85a6315c":[41,0,7,0,12,5],
 "d6/d26/classui_1_1qt_1_1EventsTableView.html#af3bdd7dfb93a58b9cc3b5dc08cd89fa0":[39,0,10,1,18,17],
 "d6/d26/classui_1_1qt_1_1EventsTableView.html#af3bdd7dfb93a58b9cc3b5dc08cd89fa0":[41,0,7,0,12,17],
-"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html":[28],
-"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md468":[28,0]
+"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html":[28]
 };

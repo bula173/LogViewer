@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"dd/d79/classui_1_1qt_1_1SearchBar.html#a9f1baeb49ebb03e3212c36df14378fef":[41,0,7,0,27,1],
 "dd/d79/classui_1_1qt_1_1SearchBar.html#a9f1baeb49ebb03e3212c36df14378fef":[39,0,10,1,33,1],
 "dd/d79/classui_1_1qt_1_1SearchBar.html#aa00afaab127f9b7f14d00a9f34d40266":[41,0,7,0,27,13],
 "dd/d79/classui_1_1qt_1_1SearchBar.html#aa00afaab127f9b7f14d00a9f34d40266":[39,0,10,1,33,13],
@@ -239,15 +240,14 @@ var NAVTREEINDEX18 =
 "de/d35/classui_1_1qt_1_1UpdateChecker.html#aea259a895aef91ad978d6a00bac443c0":[41,0,7,0,39,7],
 "de/d35/classui_1_1qt_1_1UpdateChecker.html#aea259a895aef91ad978d6a00bac443c0":[39,0,10,1,45,7],
 "de/d35/md_docs_2SDK__GETTING__STARTED.html":[36],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md631":[36,0],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md632":[36,0,0],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md633":[36,0,1],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md634":[36,0,2],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md636":[36,1],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md637":[36,1,0],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638":[36,1,1],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md639":[36,1,1,0],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md640":[36,1,1,1],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md641":[36,1,2],
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md642":[36,1,2,0]
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md632":[36,0],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md633":[36,0,0],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md634":[36,0,1],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md635":[36,0,2],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md637":[36,1],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638":[36,1,0],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md639":[36,1,1],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md640":[36,1,1,0],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md641":[36,1,1,1],
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md642":[36,1,2]
 };
