@@ -2,6 +2,8 @@
 
 add_subdirectory(csv)
 add_subdirectory(xml)
+add_subdirectory(dbc)
+add_subdirectory(asc)
 
 # Define sources and headers for the parsers target
 target_sources(application_core

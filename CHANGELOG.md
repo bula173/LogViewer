@@ -2,6 +2,38 @@
 
 All notable changes to LogViewer are documented here.
 
+## [1.6.0] — 2026-05-22
+
+### New features
+
+- **CAN / ASC log format support** — the application now parses Vector CANalyzer `.asc` files natively. Each frame is stored as a structured event with fields `CAN_ID`, `CAN_Channel`, `CAN_DLC`, `CAN_Data`, `CAN_IDE`, `type` (Rx/Tx/TxRq/ErrorFrame), and `timestamp` (float seconds). Error frames are captured as dedicated events.
+- **DBC signal decoding** — load a `.dbc` CAN database alongside an ASC log (File → Load DBC…) to decode raw frame bytes into named signal values stored as `SIG:<name>` fields. Supports Intel (little-endian) and Motorola (big-endian) bit layouts.
+- **Signal Plot panel** — new content tab showing how decoded `SIG:*` field values change over time. Left pane lists all discovered signals with checkboxes; right pane renders one `QLineSeries` per selected signal with automatic downsampling at 2 000 points to keep rendering fast. Supports both ASC float-second timestamps and ISO date timestamps.
+- **Format-specific statistics (Strategy pattern)** — `StatsSummaryPanel` now selects a statistics strategy at refresh time based on data shape:
+  - `CanStatisticsStrategy`: shows a *CAN Bus Summary* section (total frames, Rx/Tx/TxRq/error breakdown with %, unique IDs, channels, duration, frame rate) and a *Signal Ranges* section (min/max/avg for every `SIG:*` numeric field, up to 15 signals).
+  - `GenericStatisticsStrategy`: no-op fallback for XML/CSV — the extra group box stays hidden.
+  - Adding support for a new format requires only implementing `IStatisticsStrategy`.
+
+### Bug fixes
+
+- **DbcParser signal assignment** — `rbegin()->first` on a `std::map` returns the element with the **largest** key after insertion, not the newly inserted one. When DBC files contained messages in non-ascending ID order (e.g., 1, 2047, 179), `SG_` lines following the smaller `BO_` were silently attached to the wrong message. Fixed by storing the new ID before the move and using `db.messages[newId]` directly.
+- **ThemeSwitcher include path** — `src/main/MyAppQt.cpp` used the stale flat path `"qt/ThemeSwitcher.hpp"` after the UI restructuring; updated to `"qt/utils/ThemeSwitcher.hpp"`.
+- **Duplicate test source** — `BuiltinConversionPluginsTest.cpp` was listed twice in `tests/CMakeLists.txt` (once via `GLOB` and once explicitly), causing a duplicate-compilation error on some platforms. Removed the explicit entry.
+
+### Refactoring
+
+- **Qt UI source restructuring** — the `src/application/ui/qt/` directory was reorganised into four subdirectories to improve navigability (38 files moved with full history preserved via `git mv`):
+  - `panels/` — all dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, etc.)
+  - `dialogs/` — modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, etc.)
+  - `events/` — events table model and view (EventsTableModel, EventsTableView)
+  - `utils/` — shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker)
+  - `target_include_directories` now exposes the `qt/` root so cross-subdir includes resolve with explicit prefixes (e.g. `"panels/FiltersPanel.hpp"`, `"utils/PanelUtils.hpp"`).
+
+### Testing
+
+- `AscParserTest` — 8 tests covering error frames, standard/extended frame parsing, DBC signal decoding (Intel and Motorola byte order), multi-channel files, and malformed input.
+- `DbcParserTest` — 6 tests covering symbol parsing, Intel/Motorola signal layouts, out-of-order message IDs, and file-based round-trip parsing.
+
 ## [1.5.2] — 2026-05-21
 
 ### Bug fixes

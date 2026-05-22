@@ -1,10 +1,14 @@
 #pragma once
 
+#include "IStatisticsStrategy.hpp"
+
 #include <QChartView>
 #include <QComboBox>
+#include <QGroupBox>
 #include <QSpinBox>
 #include <QTableWidget>
 #include <QWidget>
+#include <memory>
 #include <vector>
 
 class QDateTime;
@@ -51,10 +55,14 @@ class StatsSummaryPanel : public QWidget
     void BuildLayout();
 
     // ── Per-section refresh (all receive the already-computed index list) ─
+    void RefreshFormatStats   (const std::vector<unsigned long>& indices);
     void RefreshSummaryTable  (const std::vector<unsigned long>& indices);
     void RefreshTypeChart     (const std::vector<unsigned long>& indices);
     void RefreshTopNTable     (const std::vector<unsigned long>& indices);
     void RefreshFieldStats    (const std::vector<unsigned long>& indices);
+
+    /// Select the appropriate statistics strategy based on current event data.
+    [[nodiscard]] std::unique_ptr<IStatisticsStrategy> SelectStrategy() const;
 
     /// Populates the column combo from the current model header names.
     void PopulateColumnCombo();
@@ -74,12 +82,14 @@ class StatsSummaryPanel : public QWidget
     db::EventsContainer& m_events;
     EventsTableView*      m_eventsView;
 
-    QTableWidget* m_summaryTable    {nullptr}; ///< Key/value summary grid
-    QChartView*   m_typeChartView   {nullptr}; ///< Event-type horizontal bars
-    QComboBox*    m_columnCombo     {nullptr}; ///< Column selector for Top-N
-    QSpinBox*     m_topNSpin        {nullptr}; ///< How many top values to show
-    QTableWidget* m_topNTable       {nullptr}; ///< Top-N value frequency table
-    QTableWidget* m_fieldStatsTable {nullptr}; ///< Per-field unique/fill stats
+    QGroupBox*    m_formatStatsGroup {nullptr}; ///< Hidden for non-CAN formats
+    QTableWidget* m_formatStatsTable {nullptr}; ///< Format-specific rows from strategy
+    QTableWidget* m_summaryTable     {nullptr}; ///< Key/value summary grid
+    QChartView*   m_typeChartView    {nullptr}; ///< Event-type horizontal bars
+    QComboBox*    m_columnCombo      {nullptr}; ///< Column selector for Top-N
+    QSpinBox*     m_topNSpin         {nullptr}; ///< How many top values to show
+    QTableWidget* m_topNTable        {nullptr}; ///< Top-N value frequency table
+    QTableWidget* m_fieldStatsTable  {nullptr}; ///< Per-field unique/fill stats
 };
 
 } // namespace ui::qt

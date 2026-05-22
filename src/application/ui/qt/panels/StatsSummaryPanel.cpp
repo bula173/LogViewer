@@ -1,7 +1,9 @@
 #include "StatsSummaryPanel.hpp"
 
+#include "CanStatisticsStrategy.hpp"
+#include "GenericStatisticsStrategy.hpp"
 #include "Config.hpp"
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QBarCategoryAxis>
 #include <QBarSet>
@@ -49,6 +51,26 @@ void StatsSummaryPanel::BuildLayout()
     auto* layout = new QVBoxLayout(inner);
     layout->setContentsMargins(6, 6, 6, 6);
     layout->setSpacing(8);
+
+    // ── Format Statistics (strategy-driven, hidden for non-CAN formats) ──
+    {
+        m_formatStatsGroup = new QGroupBox(tr("Format Statistics"), inner);
+        auto* fl = new QVBoxLayout(m_formatStatsGroup);
+        m_formatStatsTable = new QTableWidget(0, 2, m_formatStatsGroup);
+        m_formatStatsTable->horizontalHeader()->hide();
+        m_formatStatsTable->verticalHeader()->hide();
+        m_formatStatsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        m_formatStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
+        m_formatStatsTable->horizontalHeader()->setSectionResizeMode(
+            0, QHeaderView::ResizeToContents);
+        m_formatStatsTable->horizontalHeader()->setSectionResizeMode(
+            1, QHeaderView::Stretch);
+        m_formatStatsTable->setShowGrid(false);
+        m_formatStatsTable->setAlternatingRowColors(true);
+        fl->addWidget(m_formatStatsTable);
+        m_formatStatsGroup->setVisible(false);
+        layout->addWidget(m_formatStatsGroup);
+    }
 
     // ── Summary table ─────────────────────────────────────────────────────
     {
@@ -161,10 +183,72 @@ void StatsSummaryPanel::Refresh()
 {
     PopulateColumnCombo();
     const auto indices = VisibleIndices();   // compute once, share everywhere
+    RefreshFormatStats(indices);
     RefreshSummaryTable(indices);
     RefreshTypeChart(indices);
     RefreshTopNTable(indices);
     RefreshFieldStats(indices);
+}
+
+// ---------------------------------------------------------------------------
+// Strategy selection and format-specific stats
+// ---------------------------------------------------------------------------
+
+std::unique_ptr<IStatisticsStrategy> StatsSummaryPanel::SelectStrategy() const
+{
+    if (CanStatisticsStrategy{}.Matches(m_events))
+        return std::make_unique<CanStatisticsStrategy>();
+    return std::make_unique<GenericStatisticsStrategy>();
+}
+
+void StatsSummaryPanel::RefreshFormatStats(const std::vector<unsigned long>& indices)
+{
+    const auto sections = SelectStrategy()->Compute(m_events, indices);
+
+    m_formatStatsTable->setRowCount(0);
+
+    if (sections.empty())
+    {
+        m_formatStatsGroup->setVisible(false);
+        return;
+    }
+
+    m_formatStatsGroup->setVisible(true);
+
+    for (const auto& section : sections)
+    {
+        // Bold full-width section header row
+        const int hr = m_formatStatsTable->rowCount();
+        m_formatStatsTable->insertRow(hr);
+        auto* hItem = new QTableWidgetItem(QString::fromStdString(section.title));
+        QFont bold = hItem->font();
+        bold.setBold(true);
+        hItem->setFont(bold);
+        hItem->setBackground(QBrush(palette().mid()));
+        hItem->setFlags(hItem->flags() & ~Qt::ItemIsEditable);
+        m_formatStatsTable->setItem(hr, 0, hItem);
+        m_formatStatsTable->setSpan(hr, 0, 1, 2);
+
+        for (const auto& row : section.rows)
+        {
+            const int r = m_formatStatsTable->rowCount();
+            m_formatStatsTable->insertRow(r);
+
+            auto* labelItem = new QTableWidgetItem(QString::fromStdString(row.label));
+            auto* valueItem = new QTableWidgetItem(QString::fromStdString(row.value));
+
+            QFont lf = labelItem->font();
+            lf.setBold(true);
+            labelItem->setFont(lf);
+            labelItem->setFlags(labelItem->flags() & ~Qt::ItemIsEditable);
+            valueItem->setFlags(valueItem->flags() & ~Qt::ItemIsEditable);
+
+            m_formatStatsTable->setItem(r, 0, labelItem);
+            m_formatStatsTable->setItem(r, 1, valueItem);
+        }
+    }
+
+    m_formatStatsTable->resizeRowsToContents();
 }
 
 // ---------------------------------------------------------------------------

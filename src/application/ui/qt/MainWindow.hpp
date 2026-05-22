@@ -29,6 +29,11 @@ namespace mvc
 class IController;
 }
 
+namespace parser
+{
+class IDataParser;
+}
+
 namespace db
 {
 class EventsContainer;
@@ -61,6 +66,7 @@ class EventsTableView;
 class FiltersPanel;
 class StatsSummaryPanel;
 class PatternAnalysisPanel;
+class SignalPlotPanel;
 class TimelineChartPanel;
 class TraceViewerPanel;
 class BookmarksPanel;
@@ -134,12 +140,15 @@ class MainWindow : public QMainWindow,
     void OnProfileLoadRequested(const FilterProfile& profile);
     void OnSaveSession();
     void OnOpenSession();
+    void OnLoadDbcRequested();
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;
 
     void HandleDroppedFile(const QString& path);
+    // Returns a parser appropriate for the file type, with DBC wired in for .asc files.
+    std::unique_ptr<parser::IDataParser> CreateParserFor(const std::filesystem::path& path);
     void InitializeUi(db::EventsContainer& events);
     void InitializePresenter(mvc::IController& controller,
         db::EventsContainer& events);
@@ -222,6 +231,7 @@ class MainWindow : public QMainWindow,
     db::EventsContainer* m_events {nullptr};
     
     QString m_currentLogFilePath;
+    QString m_currentDbcFilePath;   ///< Optional DBC for CAN signal decoding
 
     // Recent files
     std::vector<QString> m_recentFiles;
@@ -235,8 +245,9 @@ class MainWindow : public QMainWindow,
     QTabWidget* m_rightTabs {nullptr};
     StatsSummaryPanel*      m_statsPanel    {nullptr};
     PatternAnalysisPanel*   m_patternPanel  {nullptr};
-    TimelineChartPanel*     m_timelinePanel {nullptr};
-    TraceViewerPanel*       m_tracePanel    {nullptr};
+    SignalPlotPanel*        m_signalPlotPanel {nullptr};
+    TimelineChartPanel*     m_timelinePanel   {nullptr};
+    TraceViewerPanel*       m_tracePanel      {nullptr};
     BookmarksPanel*         m_bookmarksPanel{nullptr};
     ScenariosPanel*         m_scenariosPanel{nullptr};
     ActorsPanel*            m_actorsPanel   {nullptr};

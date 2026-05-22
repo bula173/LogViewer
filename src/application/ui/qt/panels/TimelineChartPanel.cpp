@@ -1,7 +1,7 @@
 #include "TimelineChartPanel.hpp"
 
 #include "Config.hpp"
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QAbstractBarSeries>
 #include <QBarCategoryAxis>

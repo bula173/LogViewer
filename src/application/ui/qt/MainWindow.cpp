@@ -2,36 +2,39 @@
 #include "StartupSplash.hpp"
 
 #include "EventsContainer.hpp"
-#include "ExportManager.hpp"
+#include "utils/ExportManager.hpp"
 #include "FilterManager.hpp"
-#include "StatsSummaryPanel.hpp"
-#include "PatternAnalysisPanel.hpp"
-#include "TimelineChartPanel.hpp"
-#include "TraceViewerPanel.hpp"
-#include "BookmarksPanel.hpp"
-#include "ScenariosPanel.hpp"
-#include "ActorsPanel.hpp"
-#include "ActorDefinitionsPanel.hpp"
-#include "SearchBar.hpp"
-#include "UpdateChecker.hpp"
-#include "UpdateDialog.hpp"
+#include "panels/StatsSummaryPanel.hpp"
+#include "panels/PatternAnalysisPanel.hpp"
+#include "panels/SignalPlotPanel.hpp"
+#include "panels/TimelineChartPanel.hpp"
+#include "panels/TraceViewerPanel.hpp"
+#include "panels/BookmarksPanel.hpp"
+#include "panels/ScenariosPanel.hpp"
+#include "panels/ActorsPanel.hpp"
+#include "panels/ActorDefinitionsPanel.hpp"
+#include "panels/SearchBar.hpp"
+#include "utils/UpdateChecker.hpp"
+#include "dialogs/UpdateDialog.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
-#include "EventsTableView.hpp"
-#include "FiltersPanel.hpp"
-#include "ItemDetailsView.hpp"
-#include "SearchResultsView.hpp"
-#include "TypeFilterView.hpp"
-#include "TimeRangeFilterPanel.hpp"
-#include "FilterProfilesPanel.hpp"
-#include "LogFileLoadDialog.hpp"
+#include "events/EventsTableView.hpp"
+#include "panels/FiltersPanel.hpp"
+#include "panels/ItemDetailsView.hpp"
+#include "panels/SearchResultsView.hpp"
+#include "utils/TypeFilterView.hpp"
+#include "panels/TimeRangeFilterPanel.hpp"
+#include "panels/FilterProfilesPanel.hpp"
+#include "dialogs/LogFileLoadDialog.hpp"
 #include "Logger.hpp"
 #include "Config.hpp"
-#include "ConfigEditorDialog.hpp"
-#include "StructuredConfigDialog.hpp"
+#include "dialogs/ConfigEditorDialog.hpp"
+#include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
-#include "ThemeSwitcher.hpp"
+#include "utils/ThemeSwitcher.hpp"
+#include "asc/AscParser.hpp"
+#include "ParserFactory.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -410,6 +413,12 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
         tr("Event volume over time, colour-coded by log level — click a bar to filter to that time bucket"));
 
+    // ===== MAIN TAB: Signal Plot (CAN signal values over time) =====
+    m_signalPlotPanel = new SignalPlotPanel(events, this);
+    m_contentTabs->addTab(m_signalPlotPanel, tr("Signals"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Plot decoded signal values (SIG:*) over time — select signals on the left"));
+
     // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
     m_tracePanel = new TraceViewerPanel(events, m_eventsView, this);
     m_contentTabs->addTab(m_tracePanel, tr("Traces"));
@@ -578,6 +587,11 @@ void MainWindow::SetupMenus()
     auto* saveSessionAction = fileMenu->addAction(tr("Save Session…"));
     saveSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
     connect(saveSessionAction, &QAction::triggered, this, &MainWindow::OnSaveSession);
+
+    fileMenu->addSeparator();
+
+    auto* loadDbcAction = fileMenu->addAction(tr("Load &DBC file…"));
+    connect(loadDbcAction, &QAction::triggered, this, &MainWindow::OnLoadDbcRequested);
 
     fileMenu->addSeparator();
 
@@ -1188,12 +1202,12 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     // Replace existing data
                     const QString message = QString("Loading %1 ...").arg(path);
                     UpdateStatusText(message.toStdString());
-                    m_presenter->LoadLogFile(filePath);
+                    m_presenter->LoadLogFile(CreateParserFor(filePath), filePath);
                     m_presenter->SetItemDetailsVisible(true);
                     m_currentLogFilePath = path;
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
                     UpdateStatusText(readyMsg.toStdString());
-                    AddToRecentFiles(path);  // Add to recent files
+                    AddToRecentFiles(path);
                 }
                 else // Merge
                 {
@@ -1206,7 +1220,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->SetItemDetailsVisible(true);
                     const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
                     UpdateStatusText(completeMsg.toStdString());
-                    AddToRecentFiles(path);  // Add to recent files
+                    AddToRecentFiles(path);
                 }
             }
             // If dialog was canceled, do nothing
@@ -1216,12 +1230,12 @@ void MainWindow::HandleDroppedFile(const QString& path)
             // No existing data, just load normally
             const QString message = QString("Loading %1 ...").arg(path);
             UpdateStatusText(message.toStdString());
-            m_presenter->LoadLogFile(filePath);
+            m_presenter->LoadLogFile(CreateParserFor(filePath), filePath);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = path;
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
             UpdateStatusText(readyMsg.toStdString());
-            AddToRecentFiles(path);  // Add to recent files
+            AddToRecentFiles(path);
         }
     }
     catch (const std::exception& ex)
@@ -1254,7 +1268,7 @@ void MainWindow::OnOpenFileRequested()
     #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     #endif
-    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv);;All files (*.*)"));
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv *.asc);;CAN ASC logs (*.asc);;All files (*.*)"));
     dialog.setDirectory(LastDir("logFile",
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     if (dialog.exec() != QDialog::Accepted) {
@@ -1274,6 +1288,52 @@ void MainWindow::OnOpenFileRequested()
         filePath.toStdString());
 
     HandleDroppedFile(filePath);
+}
+
+std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
+    const std::filesystem::path& path)
+{
+    std::string ext = path.extension().string();
+    std::transform(ext.begin(), ext.end(), ext.begin(),
+        [](unsigned char c){ return static_cast<char>(std::tolower(c)); });
+
+    if (ext == ".asc")
+    {
+        std::filesystem::path dbcPath;
+        if (!m_currentDbcFilePath.isEmpty())
+            dbcPath = m_currentDbcFilePath.toStdString();
+        return std::make_unique<parser::AscParser>(dbcPath);
+    }
+
+    // Fall back to the factory for all other types.
+    auto result = parser::ParserFactory::CreateFromFile(path);
+    if (result.isOk())
+        return result.unwrap();
+    throw result.error();
+}
+
+void MainWindow::OnLoadDbcRequested()
+{
+    QFileDialog dialog(this, tr("Load DBC File"));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+    dialog.setNameFilter(tr("DBC files (*.dbc);;All files (*.*)"));
+    dialog.setDirectory(LastDir("dbc",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const QString filePath = dialog.selectedFiles().value(0);
+    if (filePath.isEmpty())
+        return;
+
+    SaveLastDir("dbc", filePath);
+    m_currentDbcFilePath = filePath;
+    UpdateStatusText(tr("DBC loaded: %1 — reload ASC file to apply")
+        .arg(QFileInfo(filePath).fileName()).toStdString());
+    util::Logger::Info("[MainWindow] DBC file set: {}", filePath.toStdString());
 }
 
 void MainWindow::OnSaveSession()
@@ -1357,7 +1417,7 @@ void MainWindow::OnOpenSession()
 
             const std::filesystem::path fp(logFile);
             UpdateStatusText(tr("Loading %1 …").arg(QString::fromStdString(logFile)).toStdString());
-            m_presenter->LoadLogFile(fp);
+            m_presenter->LoadLogFile(CreateParserFor(fp), fp);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = QString::fromStdString(logFile);
             AddToRecentFiles(m_currentLogFilePath);
@@ -2615,6 +2675,7 @@ void MainWindow::MarkAnalysisPanelsDirty()
     if (m_statsPanel)   m_dirtyPanels.insert(m_statsPanel);
     if (m_patternPanel) m_dirtyPanels.insert(m_patternPanel);
     if (m_actorsPanel)  m_dirtyPanels.insert(m_actorsPanel);
+    if (m_signalPlotPanel) m_dirtyPanels.insert(m_signalPlotPanel);
     if (m_timelinePanel) m_dirtyPanels.insert(m_timelinePanel);
     if (m_tracePanel)   m_dirtyPanels.insert(m_tracePanel);
 
@@ -2637,6 +2698,8 @@ void MainWindow::RefreshCurrentAnalysisPanel()
         m_patternPanel->Refresh();
     else if (current == m_actorsPanel)
         m_actorsPanel->Refresh();
+    else if (current == m_signalPlotPanel)
+        m_signalPlotPanel->Refresh();
     else if (current == m_timelinePanel)
         m_timelinePanel->Refresh();
     else if (current == m_tracePanel)

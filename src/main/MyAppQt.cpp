@@ -5,7 +5,7 @@
 #include "MainController.hpp"
 #include "qt/MainWindow.hpp"
 #include "qt/StartupSplash.hpp"
-#include "qt/ThemeSwitcher.hpp"
+#include "qt/utils/ThemeSwitcher.hpp"
 #include "Logger.hpp"
 
 #include <QApplication>

@@ -1,0 +1,10 @@
+target_sources(application_core
+    PRIVATE
+        DbcParser.cpp
+        CanDecoder.cpp
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/DbcParser.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/CanDecoder.hpp>
+        $<INSTALL_INTERFACE:DbcParser.hpp>
+        $<INSTALL_INTERFACE:CanDecoder.hpp>
+)

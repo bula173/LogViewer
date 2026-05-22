@@ -1,7 +1,7 @@
 #include "ActorsPanel.hpp"
 
 #include "ActorDefinition.hpp"
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QClipboard>
 #include <QComboBox>

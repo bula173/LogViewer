@@ -38,9 +38,13 @@ LogViewer is a professional log file viewer application built with modern C++20 
 │  └─────────────────┘  └─────────────────┘  └─────────────────┘          │
 │  ┌──────────────────────────────────────────────────────────────┐        │
 │  │                    Parser Strategies                          │        │
-│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐               │        │
-│  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │               │        │
-│  │  └────────────┘ └────────────┘ └────────────┘               │        │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────┐ │        │
+│  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │ │AscParser │ │        │
+│  │  └────────────┘ └────────────┘ └────────────┘ └──────────┘ │        │
+│  │                                            ┌─────────────┐  │        │
+│  │                                            │  DbcParser  │  │        │
+│  │                                            │ + CanDecoder│  │        │
+│  │                                            └─────────────┘  │        │
 │  └──────────────────────────────────────────────────────────────┘        │
 │  ┌──────────────────────────────────────────────────────────────┐        │
 │  │                   AI Service Strategies                       │        │
@@ -62,36 +66,37 @@ LogViewer is a professional log file viewer application built with modern C++20 
 
 ### 1. Presentation Layer (`ui::qt` namespace)
 
+The Qt UI layer is structured into four subdirectories under `src/application/ui/qt/`:
+
+| Subdirectory | Contents |
+|---|---|
+| `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, …) |
+| `dialogs/` | Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …) |
+| `events/` | Event table model and view (EventsTableModel, EventsTableView) |
+| `utils/` | Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker) |
+
 **MainWindow**: Central orchestrator
 - Qt 6-based QMainWindow with dock widget system
-- Three dockable panels: Filters (left), Item Details (right), Tools (bottom)
-- Tab-based main content area (Events, AI Analysis)
-- Drag-and-drop file loading support
-- Implements `ConfigObserver` for configuration changes
-- Menu system for file operations, tools, and view management
+- Left dock (Filters), right dock (Details), bottom dock (AI chat / plugin panels)
+- Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors
+- Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)
+- Implements `ConfigObserver` and `IPluginObserver` for configuration and plugin lifecycle changes
+- Menu system for file operations, DBC loading, tools, and view management
 
-**EventsTableView**: High-performance table display
+**EventsTableView**: High-performance table display (`events/`)
 - QTableView with custom EventsTableModel
 - Supports millions of entries with virtual scrolling
-- Movable and resizable columns
-- Multi-selection and copy support
-- Color-coded rows based on configurable `typeFilterField`
+- Movable and resizable columns; color-coded rows based on configurable `typeFilterField`
 
-**AIAnalysisPanel**: AI-powered log analysis
-- Predefined analysis types (Summary, Error Analysis, Pattern Detection, etc.)
-- Custom prompt support with save/load functionality
-- Model selection dropdown
-- Filter-aware analysis (respects active filters)
-- Configurable max events and smart sampling
+**Analysis Panels** (`panels/`)
+- **StatsSummaryPanel**: Aggregate statistics with pluggable `IStatisticsStrategy` (see below)
+- **SignalPlotPanel**: Plots decoded `SIG:*` field values over time; QLineSeries per signal; downsamples to 2 000 points
+- **TimelineChartPanel**: Interactive event-volume bar histogram with zoom and brush
+- **TraceViewerPanel**: Sequence-diagram-style actor/event view
+- **PatternAnalysisPanel**: Template clustering of structurally similar log lines
+- **BookmarksPanel**, **ScenariosPanel**, **ActorsPanel**, **ActorDefinitionsPanel**: Event annotation, scenario matching, and actor attribution
 
-**Dock Widgets**: Flexible layout
-- **FiltersPanel**: Type filters and extended filters with multiple conditions
-- **ItemDetailsView**: Detailed event information display
-- **SearchResultsView**: Full-text search results
-- **AIChatPanel**: Interactive AI conversation about logs
-- All docks are movable, floatable, and resizable
-
-**Configuration Dialogs**:
+**Configuration Dialogs** (`dialogs/`)
 - **StructuredConfigDialog**: Tabbed configuration UI (General, Columns, Colors, AI)
 - **ConfigEditorDialog**: Raw JSON editor
 
@@ -128,6 +133,33 @@ auto parser = ParserFactory::CreateParser(filepath);
 parser->RegisterObserver(observer);
 parser->ParseData(filepath);
 ```
+
+Registered parsers (extension → class):
+
+| Extension | Parser | Notes |
+|---|---|---|
+| `.xml` | `XmlParser` | Default for unknown extensions |
+| `.csv` | `CsvParser` | |
+| `.asc` | `AscParser` | CAN/Vector CANalyzer; accepts optional DBC path |
+
+**AscParser** (`parsers/asc/`): Parses Vector CANalyzer `.asc` files line by line.
+- Each CAN frame becomes a `LogEvent` with fields: `timestamp` (float seconds), `type` (Rx/Tx/TxRq/ErrorFrame), `CAN_ID` (hex), `CAN_Channel`, `CAN_DLC`, `CAN_Data` (hex bytes), `CAN_IDE` (Standard/Extended), `info`.
+- If a DBC path is provided, `CanDecoder` is invoked per-frame to append `SIG:<name>` fields for every decoded signal.
+
+**DbcParser + CanDecoder** (`parsers/dbc/`): Reads `.dbc` CAN database files.
+- `ParseDbcFile()` returns a `DbcDatabase` containing a map of message ID → `DbcMessage` (name, signals).
+- `DecodeFrame()` applies Intel (little-endian) or Motorola (big-endian) bit extraction to produce `{"SIG:<name>", "<value>"}` pairs.
+
+**Statistics Strategy** (`ui/qt/panels/`): The `StatsSummaryPanel` uses `IStatisticsStrategy` to compute format-specific metrics at refresh time without coupling the panel to any particular format.
+
+```
+IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()
+    ▲
+    ├── CanStatisticsStrategy   — for ASC/CAN data (detects CAN_ID field)
+    └── GenericStatisticsStrategy — fallback, returns no sections (panel hides extra group)
+```
+
+`SelectStrategy()` probes the first 20 events for `CAN_ID` to pick the right implementation. Adding a new format requires only implementing `IStatisticsStrategy::Matches()` and `Compute()`.
 
 **FilterManager**: Coordinates filtering operations
 - Applies multiple filters in sequence

@@ -1,0 +1,30 @@
+VERSION ""
+
+NS_ :
+
+BS_:
+
+BU_: ECU BCM BRAKE
+
+// ============================================================
+// Engine status frame — 0x001 (8 bytes, Intel/little-endian)
+// ============================================================
+BO_ 1 EngineStatus: 8 ECU
+ SG_ RPM : 0|16@1+ (0.5,0) [0|8000] "rpm" BCM
+ SG_ Throttle : 16|8@1+ (0.392157,0) [0|100] "%" BCM
+ SG_ EngineTemp : 24|8@1- (1,-40) [-40|215] "°C" BCM
+
+// ============================================================
+// Brake pressure frame — 0x7FF (3 bytes, Intel/little-endian)
+// ============================================================
+BO_ 2047 BrakePressure: 3 BRAKE
+ SG_ FrontPressure : 0|12@1+ (0.1,0) [0|300] "bar" BCM
+ SG_ BrakeActive : 12|1@1+ (1,0) [0|1] "" BCM
+
+// ============================================================
+// Steering angle frame — 0x0B3 (8 bytes, Motorola/big-endian)
+// ============================================================
+BO_ 179 SteeringAngle: 8 BCM
+ SG_ Angle : 7|16@0- (0.1,-3276.8) [-3276.8|3276.7] "deg" ECU
+ SG_ Rate : 23|16@0- (0.1,-3276.8) [-3276.8|3276.7] "deg/s" ECU
+

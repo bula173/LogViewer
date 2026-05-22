@@ -10,7 +10,6 @@ file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "*.cpp")
 add_executable(
   ${PROJECT_NAME}_tests
   ${TEST_SOURCES}
-  BuiltinConversionPluginsTest.cpp
 )
 
 configure_file(
@@ -19,7 +18,14 @@ configure_file(
     COPYONLY
 )
 
-target_compile_definitions(${PROJECT_NAME}_tests PRIVATE TESTING)
+# Copy CAN test data files so file-path-based tests can find them.
+file(COPY ${CMAKE_SOURCE_DIR}/tests/data/
+     DESTINATION ${CMAKE_BINARY_DIR}/tests/data/)
+
+target_compile_definitions(${PROJECT_NAME}_tests PRIVATE
+    TESTING
+    LOGVIEWER_TEST_DATA_DIR="${CMAKE_BINARY_DIR}/tests/data"
+)
 
 target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
 

@@ -1,6 +1,6 @@
 #include "ScenariosPanel.hpp"
 
-#include "PanelUtils.hpp"
+#include "utils/PanelUtils.hpp"
 
 #include <QButtonGroup>
 #include <QCheckBox>

@@ -1,9 +1,9 @@
 # LogViewer — Requirements Specification
 
 **Document ID**: LV-REQ-001  
-**Version**: 1.0  
+**Version**: 1.3  
 **Status**: Active  
-**Application version**: 1.2.x  
+**Application version**: 1.6.x  
 
 ---
 
@@ -98,6 +98,10 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-007 | The application MUST handle malformed or truncated log files without crashing | MUST |
 | SW-008 | Files up to **100 000 events** MUST load within 5 seconds on reference hardware (see SYS-010/011) | MUST |
 | SW-009 | Files up to **1 000 000 events** SHOULD load within 30 seconds on reference hardware | SHOULD |
+| SW-010a | The application MUST support **CAN / ASC** log format (Vector CANalyzer `.asc` files) | MUST |
+| SW-010b | The application MUST parse CAN frames into structured events: `CAN_ID`, `CAN_Channel`, `CAN_DLC`, `CAN_Data`, `type` (Rx/Tx/ErrorFrame), and float-second `timestamp` | MUST |
+| SW-010c | The application MUST support loading a **DBC** CAN database file alongside an ASC log to decode raw frame bytes into named signal values (stored as `SIG:<name>` fields) | MUST |
+| SW-010d | The DBC decoder MUST support both **Intel (little-endian)** and **Motorola (big-endian)** signal bit layouts | MUST |
 
 #### 3.1.2 Event Display
 
@@ -141,13 +145,32 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-040 | The application MUST support exporting the currently visible (filtered) events | MUST |
 | SW-041 | Export SHOULD support at least CSV format | SHOULD |
 
-#### 3.1.6 Configuration
+#### 3.1.6 Signal Visualisation
+
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| SW-045 | The application MUST provide a **Signal Plot** panel that plots numeric field values over time as line series | MUST |
+| SW-046 | The Signal Plot panel MUST allow the user to select which signals to display via checkboxes; unselected signals MUST be hidden from the chart | MUST |
+| SW-047 | The Signal Plot panel MUST support both ASC float-second timestamps and ISO date timestamps for the X axis | MUST |
+| SW-048 | The Signal Plot panel SHOULD downsample series to at most 2 000 points when the dataset is larger, to keep rendering responsive | SHOULD |
+
+#### 3.1.7 Format-Specific Statistics
+
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| SW-049 | The Statistics panel MUST use a **Strategy pattern** so that format-specific metrics can be added without modifying the panel itself | MUST |
+| SW-049a | For **CAN/ASC** files the Statistics panel MUST display: total frame count; Rx, Tx, TxRq, and error frame counts with percentage; unique CAN ID count; channel list; recording duration; and average frame rate | MUST |
+| SW-049b | For **CAN/ASC** files with DBC signal decoding the Statistics panel MUST display min, max, and average values for each decoded `SIG:*` field | MUST |
+| SW-049c | For non-CAN formats (XML, CSV) the format-specific statistics section MUST be hidden | MUST |
+
+#### 3.1.8 Configuration
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
 | SW-050 | Application settings MUST be persisted in a JSON configuration file | MUST |
 | SW-051 | The user MUST be able to edit the configuration through the UI | MUST |
 | SW-052 | The application MUST start with sensible defaults when no configuration file exists | MUST |
+| SW-053 | The last-used DBC file path MUST be persisted and offered as a default on subsequent loads of ASC files | SHOULD |
 
 ### 3.2 Performance Requirements
 
@@ -238,6 +261,9 @@ Third-party libraries bundled via CMake `FetchContent` (no separate install requ
 | SYS-010 – SYS-016 | Manual verification on reference hardware |
 | SYS-020 – SYS-024 | CI release workflow (NSIS installer, macOS bundle) |
 | SW-001 – SW-009 | `DataParserTest`, `CsvParserTest`, `XmlParserTest` |
+| SW-010a – SW-010d | `AscParserTest`, `DbcParserTest` |
+| SW-045 – SW-048 | Manual UI testing (SignalPlotPanel) |
+| SW-049 – SW-049c | Manual UI testing (StatsSummaryPanel + CanStatisticsStrategy) |
 | SW-010 – SW-014 | Manual UI testing |
 | SW-020 – SW-027 | `ModelTest`, `EventsContainerTest` |
 | SW-030 – SW-036 | Manual AI integration testing |
