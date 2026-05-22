@@ -19,8 +19,9 @@ var searchData=
   ['isearchresultsview_16',['ISearchResultsView',['../dc/d38/classui_1_1ISearchResultsView.html',1,'ui']]],
   ['isearchresultsviewobserver_17',['ISearchResultsViewObserver',['../d3/df7/classui_1_1ISearchResultsViewObserver.html',1,'ui']]],
   ['isolatinplugin_18',['IsoLatinPlugin',['../d9/df3/classconfig_1_1IsoLatinPlugin.html',1,'config']]],
-  ['itemdetailsview_19',['ItemDetailsView',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html',1,'ui::qt']]],
-  ['itemhighlight_20',['ItemHighlight',['../de/d64/structconfig_1_1ItemHighlight.html',1,'config']]],
-  ['itypefilterview_21',['ITypeFilterView',['../df/d7e/classui_1_1ITypeFilterView.html',1,'ui']]],
-  ['iview_22',['IView',['../d3/dba/classmvc_1_1IView.html',1,'mvc']]]
+  ['istatisticsstrategy_19',['IStatisticsStrategy',['../df/dae/classui_1_1qt_1_1IStatisticsStrategy.html',1,'ui::qt']]],
+  ['itemdetailsview_20',['ItemDetailsView',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html',1,'ui::qt']]],
+  ['itemhighlight_21',['ItemHighlight',['../de/d64/structconfig_1_1ItemHighlight.html',1,'config']]],
+  ['itypefilterview_22',['ITypeFilterView',['../df/d7e/classui_1_1ITypeFilterView.html',1,'ui']]],
+  ['iview_23',['IView',['../d3/dba/classmvc_1_1IView.html',1,'mvc']]]
 ];

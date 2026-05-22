@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d5/d22/md_docs_2CPPCHECK.html','../../
   <div class="headertitle"><div class="title">Static Analysis with Cppcheck</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md320"></a> </p>
-<h1><a class="anchor" id="autotoc_md321"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md321"></a> </p>
+<h1><a class="anchor" id="autotoc_md322"></a>
 Overview</h1>
 <p>Cppcheck is integrated into the build system for static code analysis. It checks for:</p><ul>
 <li>Potential bugs</li>
@@ -104,9 +104,9 @@ Overview</h1>
 <li>Portability issues</li>
 <li>Style violations</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md322"></a>
+<h1><a class="anchor" id="autotoc_md323"></a>
 Quick Start</h1>
-<h2><a class="anchor" id="autotoc_md323"></a>
+<h2><a class="anchor" id="autotoc_md324"></a>
 Using Build Presets (Recommended)</h2>
 <div class="fragment"><div class="line"># Run cppcheck analysis</div>
 <div class="line">cmake --build --preset macos-cppcheck        # macOS</div>
@@ -126,36 +126,36 @@ Using Build Presets (Recommended)</h2>
 <div class="line"> </div>
 <div class="line"># View the report</div>
 <div class="line">cat build/macos-debug-qt/cppcheck-report.txt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md324"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md325"></a>
 Using Build Targets (Alternative)</h2>
 <div class="fragment"><div class="line"># Run cppcheck</div>
 <div class="line">cmake --build build/macos-debug-qt --target cppcheck</div>
 <div class="line"> </div>
 <div class="line"># View the report</div>
 <div class="line">cat build/macos-debug-qt/cppcheck-report.txt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md325"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md326"></a>
 Enable During Compilation</h2>
 <p>Cppcheck is <b>automatically enabled</b> for debug builds by default. To disable:</p>
 <div class="fragment"><div class="line">cmake --preset macos-debug-qt -DENABLE_CPPCHECK=OFF</div>
 <div class="line">cmake --build build/macos-debug-qt</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md326"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md327"></a>
 Available Targets</h1>
-<h2><a class="anchor" id="autotoc_md327"></a>
+<h2><a class="anchor" id="autotoc_md328"></a>
 &lt;tt&gt;cppcheck&lt;/tt&gt;</h2>
 <p>Run complete cppcheck analysis on all source files: </p><div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target cppcheck</div>
 </div><!-- fragment --><p>Output is saved to: <code>build/macos-debug-qt/cppcheck-report.txt</code></p>
-<h2><a class="anchor" id="autotoc_md328"></a>
+<h2><a class="anchor" id="autotoc_md329"></a>
 &lt;tt&gt;format&lt;/tt&gt;</h2>
 <p>Run clang-format to auto-format all code: </p><div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target format</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md329"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md330"></a>
 &lt;tt&gt;tidy&lt;/tt&gt;</h2>
 <p>Run clang-tidy for additional static analysis: </p><div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target tidy</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md330"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md331"></a>
 &lt;tt&gt;run_tools&lt;/tt&gt;</h2>
 <p>Run both format and cppcheck: </p><div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target run_tools</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md331"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md332"></a>
 Integration</h1>
-<h2><a class="anchor" id="autotoc_md332"></a>
+<h2><a class="anchor" id="autotoc_md333"></a>
 Compile-Time Checks (Default for Debug)</h2>
 <p>When <code>ENABLE_CPPCHECK=ON</code> (default for debug presets), cppcheck runs on every file during compilation:</p>
 <div class="fragment"><div class="line"># Already enabled in these presets:</div>
@@ -165,7 +165,7 @@ Compile-Time Checks (Default for Debug)</h2>
 <div class="line">- linux-debug-wx</div>
 </div><!-- fragment --><p>Warnings appear in build output: </p><div class="fragment"><div class="line">[5/70] Building CXX object src/application/db/EventsContainer.cpp.o</div>
 <div class="line">EventsContainer.cpp:58:20: warning: Consider using std::transform algorithm instead of a raw loop. [useStlAlgorithm]</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md333"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md334"></a>
 Standalone Analysis</h2>
 <p>The standalone <code>cppcheck</code> target provides a comprehensive report:</p>
 <div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target cppcheck</div>
@@ -174,9 +174,9 @@ Standalone Analysis</h2>
 <li>Pre-commit checks</li>
 <li>Generating reports</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md334"></a>
+<h1><a class="anchor" id="autotoc_md335"></a>
 Configuration</h1>
-<h2><a class="anchor" id="autotoc_md335"></a>
+<h2><a class="anchor" id="autotoc_md336"></a>
 Current Settings</h2>
 <p>The cppcheck configuration in <code>cmake/cleanCppExtensions.cmake</code>:</p>
 <div class="fragment"><div class="line">--enable=warning,performance,portability,style</div>
@@ -184,29 +184,29 @@ Current Settings</h2>
 <div class="line">--std=c++20             # C++20 standard</div>
 <div class="line">--template=gcc          # GCC-style output</div>
 <div class="line">-I src/                 # Include directories</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md336"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md337"></a>
 Suppressing Warnings</h2>
-<h3><a class="anchor" id="autotoc_md337"></a>
+<h3><a class="anchor" id="autotoc_md338"></a>
 Inline Suppression</h3>
 <div class="fragment"><div class="line"><span class="comment">// cppcheck-suppress useStlAlgorithm</span></div>
 <div class="line"><span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; item : data) {</div>
 <div class="line">    process(item);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md338"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md339"></a>
 File-Level Suppression</h3>
 <p>Already configured to suppress:</p><ul>
 <li><code>unusedFunction</code> - Functions only used in tests</li>
 <li><code>missingIncludeSystem</code> - System headers</li>
 <li><code>unmatchedSuppression</code> - Unmatched suppressions</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md339"></a>
+<h2><a class="anchor" id="autotoc_md340"></a>
 Adding More Checks</h2>
 <p>Edit <code>cmake/cleanCppExtensions.cmake</code> to enable additional checks:</p>
 <div class="fragment"><div class="line">--enable=all           # Enable all checks (can be noisy)</div>
 <div class="line">--check-level=exhaustive  # More thorough but slower</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md340"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md341"></a>
 CI/CD Integration</h1>
-<h2><a class="anchor" id="autotoc_md341"></a>
+<h2><a class="anchor" id="autotoc_md342"></a>
 GitHub Actions Example</h2>
 <div class="fragment"><div class="line">- name: Run Cppcheck</div>
 <div class="line">  run: |</div>
@@ -218,14 +218,14 @@ GitHub Actions Example</h2>
 <div class="line">  with:</div>
 <div class="line">    name: cppcheck-report</div>
 <div class="line">    path: build/linux-debug-qt/cppcheck-report.txt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md342"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md343"></a>
 Fail on Warnings</h2>
 <p>To fail the build on cppcheck warnings:</p>
 <div class="fragment"><div class="line">cmake --build build/macos-debug-qt --target cppcheck 2&gt;&amp;1 | \</div>
 <div class="line">  tee cppcheck.log &amp;&amp; ! grep -E &quot;warning|error&quot; cppcheck.log</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md343"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md344"></a>
 Common Warnings</h1>
-<h2><a class="anchor" id="autotoc_md344"></a>
+<h2><a class="anchor" id="autotoc_md345"></a>
 &lt;tt&gt;useStlAlgorithm&lt;/tt&gt;</h2>
 <p><b>Issue:</b> Loop can be replaced with STL algorithm <br  />
  <b>Example:</b> </p><div class="fragment"><div class="line"><span class="comment">// Warning</span></div>
@@ -236,15 +236,15 @@ Common Warnings</h1>
 <div class="line"><span class="comment">// Better</span></div>
 <div class="line">std::transform(items.begin(), items.end(), </div>
 <div class="line">               std::back_inserter(result), transform);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md345"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md346"></a>
 &lt;tt&gt;normalCheckLevelMaxBranches&lt;/tt&gt;</h2>
 <p><b>Issue:</b> Too many branches, analysis limited <br  />
  <b>Solution:</b> Use <code>--check-level=exhaustive</code> or simplify function</p>
-<h2><a class="anchor" id="autotoc_md346"></a>
+<h2><a class="anchor" id="autotoc_md347"></a>
 &lt;tt&gt;unknownMacro&lt;/tt&gt;</h2>
 <p><b>Issue:</b> Macro not recognized (common with GUI frameworks) <br  />
  <b>Solution:</b> Add to suppression list or configure macro</p>
-<h1><a class="anchor" id="autotoc_md347"></a>
+<h1><a class="anchor" id="autotoc_md348"></a>
 Platform Support</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -256,16 +256,16 @@ Platform Support</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Windows   </td><td class="markdownTableBodyNone">✅   </td><td class="markdownTableBodyNone">Install via MSYS2 or download from cppcheck.net   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md348"></a>
+<h1><a class="anchor" id="autotoc_md349"></a>
 Performance</h1>
 <ul>
 <li><b>Compile-time checks</b>: Adds ~5-10% to build time</li>
 <li><b>Standalone analysis</b>: ~30 seconds for full codebase</li>
 <li><b>Parallel execution</b>: Automatic</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md349"></a>
+<h1><a class="anchor" id="autotoc_md350"></a>
 Troubleshooting</h1>
-<h2><a class="anchor" id="autotoc_md350"></a>
+<h2><a class="anchor" id="autotoc_md351"></a>
 "cppcheck not found"</h2>
 <div class="fragment"><div class="line"># macOS</div>
 <div class="line">brew install cppcheck</div>
@@ -275,25 +275,25 @@ Troubleshooting</h1>
 <div class="line"> </div>
 <div class="line"># Arch</div>
 <div class="line">sudo pacman -S cppcheck</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md351"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md352"></a>
 Too Many False Positives</h2>
 <p>Disable compile-time checks: </p><div class="fragment"><div class="line">cmake --preset macos-debug-qt -DENABLE_CPPCHECK=OFF</div>
 </div><!-- fragment --><p>Use standalone target for cleaner reports.</p>
-<h2><a class="anchor" id="autotoc_md352"></a>
+<h2><a class="anchor" id="autotoc_md353"></a>
 Report Not Generated</h2>
 <p>Check build directory: </p><div class="fragment"><div class="line">ls -la build/macos-debug-qt/cppcheck-report.txt</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md353"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md354"></a>
 Additional Tools</h1>
-<h2><a class="anchor" id="autotoc_md354"></a>
+<h2><a class="anchor" id="autotoc_md355"></a>
 Clang-Tidy</h2>
 <p>For more advanced analysis: </p><div class="fragment"><div class="line">cmake --preset macos-debug-qt -DENABLE_CLANG_TIDY=ON</div>
 <div class="line">cmake --build build/macos-debug-qt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md355"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md356"></a>
 Combine All Tools</h2>
 <div class="fragment"><div class="line"># Format, analyze, and build</div>
 <div class="line">cmake --build build/macos-debug-qt --target run_tools</div>
 <div class="line">cmake --build build/macos-debug-qt</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md356"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md357"></a>
 References</h1>
 <ul>
 <li><a href="http://cppcheck.net/manual.pdf">Cppcheck Manual</a></li>

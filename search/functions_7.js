@@ -25,5 +25,6 @@ var searchData=
   ['hasmultipleconditions_22',['hasMultipleConditions',['../d9/d12/classfilters_1_1Filter.html#a54da5ec20c57d3887b6121ac862ccc74',1,'filters::Filter']]],
   ['hastranslation_23',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
   ['headerdata_24',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
-  ['hextocolor_25',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
+  ['hexbyte_25',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
+  ['hextocolor_26',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
 ];

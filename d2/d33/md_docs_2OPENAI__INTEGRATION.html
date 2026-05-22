@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d2/d33/md_docs_2OPENAI__INTEGRATION.ht
   <div class="headertitle"><div class="title">OpenAI Integration</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md479"></a> </p>
-<h1><a class="anchor" id="autotoc_md480"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md480"></a> </p>
+<h1><a class="anchor" id="autotoc_md481"></a>
 Overview</h1>
 <p>The OpenAI integration provides access to ChatGPT and other OpenAI models through the OpenAI API. This implementation follows the same pattern as other AI providers in the application.</p>
-<h1><a class="anchor" id="autotoc_md481"></a>
+<h1><a class="anchor" id="autotoc_md482"></a>
 Implementation Details</h1>
-<h2><a class="anchor" id="autotoc_md482"></a>
+<h2><a class="anchor" id="autotoc_md483"></a>
 Class: &lt;tt&gt;OpenAIClient&lt;/tt&gt;</h2>
 <p><b>Location</b>: <code>src/plugins/ai/OpenAIClient.{hpp,cpp}</code></p>
 <p><b>Dependencies</b>:</p><ul>
@@ -107,7 +107,7 @@ Class: &lt;tt&gt;OpenAIClient&lt;/tt&gt;</h2>
 <li>nlohmann/json for JSON serialization/deserialization</li>
 <li>Bearer token authentication</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md483"></a>
+<h2><a class="anchor" id="autotoc_md484"></a>
 Key Features</h2>
 <ol type="1">
 <li><b>Bearer Token Authentication</b><ul>
@@ -132,9 +132,9 @@ Key Features</h2>
 </ul>
 </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md484"></a>
+<h1><a class="anchor" id="autotoc_md485"></a>
 API Endpoints</h1>
-<h2><a class="anchor" id="autotoc_md485"></a>
+<h2><a class="anchor" id="autotoc_md486"></a>
 Chat Completions</h2>
 <ul>
 <li><b>Endpoint</b>: <code>/v1/chat/completions</code></li>
@@ -162,9 +162,9 @@ Chat Completions</h2>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md486"></a>
+<h1><a class="anchor" id="autotoc_md487"></a>
 Configuration</h1>
-<h2><a class="anchor" id="autotoc_md487"></a>
+<h2><a class="anchor" id="autotoc_md488"></a>
 Required Settings</h2>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;aiProvider&quot;: &quot;openai&quot;,</div>
@@ -173,7 +173,7 @@ Required Settings</h2>
 <div class="line">  &quot;openaiBaseUrl&quot;: &quot;https://api.openai.com&quot;,</div>
 <div class="line">  &quot;aiTimeoutSeconds&quot;: 60</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md488"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md489"></a>
 Supported Models</h2>
 <ul>
 <li>gpt-4 (default)</li>
@@ -181,7 +181,7 @@ Supported Models</h2>
 <li>gpt-3.5-turbo</li>
 <li>Any other OpenAI-compatible model</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md489"></a>
+<h1><a class="anchor" id="autotoc_md490"></a>
 Usage Example</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;ai/OpenAIClient.hpp&quot;</span></div>
 <div class="line"> </div>
@@ -198,9 +198,9 @@ Usage Example</h1>
 <div class="line">    std::string response = client.SendPrompt(<span class="stringliteral">&quot;What is C++20?&quot;</span>, <span class="keyword">nullptr</span>);</div>
 <div class="line">    std::cout &lt;&lt; response &lt;&lt; std::endl;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md490"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md491"></a>
 HTTP Implementation</h1>
-<h2><a class="anchor" id="autotoc_md491"></a>
+<h2><a class="anchor" id="autotoc_md492"></a>
 CURL Setup</h2>
 <ol type="1">
 <li>Initialize CURL handle</li>
@@ -215,16 +215,16 @@ CURL Setup</h2>
 <li>Execute request and capture response</li>
 <li>Clean up resources</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md492"></a>
+<h2><a class="anchor" id="autotoc_md493"></a>
 WriteCallback</h2>
 <ul>
 <li>Custom callback to capture HTTP response data</li>
 <li>Appends data to std::string buffer</li>
 <li>Returns total bytes processed</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md493"></a>
+<h1><a class="anchor" id="autotoc_md494"></a>
 Error Handling</h1>
-<h2><a class="anchor" id="autotoc_md494"></a>
+<h2><a class="anchor" id="autotoc_md495"></a>
 Connection Errors</h2>
 <ul>
 <li>CURL initialization failures</li>
@@ -232,7 +232,7 @@ Connection Errors</h2>
 <li>HTTP request failures</li>
 <li>All throw <code>std::runtime_error</code> with descriptive messages</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md495"></a>
+<h2><a class="anchor" id="autotoc_md496"></a>
 API Errors</h2>
 <ul>
 <li>Invalid API key → Authentication failure</li>
@@ -240,14 +240,14 @@ API Errors</h2>
 <li>Invalid model → Model not found errors</li>
 <li>All logged via <code><a class="el" href="../../d2/d44/classutil_1_1Logger.html" title="Application-wide logging singleton.">util::Logger</a></code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md496"></a>
+<h2><a class="anchor" id="autotoc_md497"></a>
 Response Parsing Errors</h2>
 <ul>
 <li>Invalid JSON → Returns error message</li>
 <li>Missing fields → Returns error message</li>
 <li>Malformed response → Returns error message</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md497"></a>
+<h1><a class="anchor" id="autotoc_md498"></a>
 Security Considerations</h1>
 <ol type="1">
 <li><b>API Key Storage</b><ul>
@@ -268,9 +268,9 @@ Security Considerations</h1>
 </ul>
 </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md498"></a>
+<h1><a class="anchor" id="autotoc_md499"></a>
 Testing</h1>
-<h2><a class="anchor" id="autotoc_md499"></a>
+<h2><a class="anchor" id="autotoc_md500"></a>
 Manual Testing</h2>
 <ol type="1">
 <li>Set valid API key in <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code></li>
@@ -278,7 +278,7 @@ Manual Testing</h2>
 <li>Select OpenAI as AI provider</li>
 <li>Send test prompts through UI</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md500"></a>
+<h2><a class="anchor" id="autotoc_md501"></a>
 Unit Testing</h2>
 <ul>
 <li>Mock CURL responses for testing</li>
@@ -286,9 +286,9 @@ Unit Testing</h2>
 <li>Verify error handling paths</li>
 <li>Test timeout behavior</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md501"></a>
+<h1><a class="anchor" id="autotoc_md502"></a>
 Troubleshooting</h1>
-<h2><a class="anchor" id="autotoc_md502"></a>
+<h2><a class="anchor" id="autotoc_md503"></a>
 Common Issues</h2>
 <p>**"OpenAI API request failed: Could not resolve host"**</p><ul>
 <li>Check internet connectivity</li>
@@ -310,13 +310,13 @@ Common Issues</h2>
 <li>Verify model name is correct</li>
 <li>Check API rate limits</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md503"></a>
+<h1><a class="anchor" id="autotoc_md504"></a>
 Integration with Factory Pattern</h1>
 <p>The OpenAI client is instantiated through <code>AIProviderFactory</code>:</p>
 <div class="fragment"><div class="line">std::unique_ptr&lt;IAIProvider&gt; provider = </div>
 <div class="line">    AIProviderFactory::CreateProvider(<span class="stringliteral">&quot;openai&quot;</span>);</div>
 </div><!-- fragment --><p>The factory reads configuration and creates the appropriate client with proper settings.</p>
-<h1><a class="anchor" id="autotoc_md504"></a>
+<h1><a class="anchor" id="autotoc_md505"></a>
 Future Enhancements</h1>
 <ol type="1">
 <li><b>Streaming Support</b><ul>
@@ -344,7 +344,7 @@ Future Enhancements</h1>
 </ul>
 </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md505"></a>
+<h1><a class="anchor" id="autotoc_md506"></a>
 References</h1>
 <ul>
 <li><a href="https://platform.openai.com/docs/api-reference">OpenAI API Documentation</a></li>

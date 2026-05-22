@@ -93,11 +93,11 @@ $(document).ready(function(){initNavTree('d4/d34/md_docs_2ARCHITECTURE.html','..
   <div class="headertitle"><div class="title">LogViewer Architecture</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md125"></a> </p>
-<h1><a class="anchor" id="autotoc_md126"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md126"></a> </p>
+<h1><a class="anchor" id="autotoc_md127"></a>
 Overview</h1>
 <p>LogViewer is a professional log file viewer application built with modern C++20 and Qt 6, following clean architecture principles and industry-standard design patterns. The application provides powerful AI-assisted log analysis, flexible filtering, and a highly customizable dock-based UI.</p>
-<h1><a class="anchor" id="autotoc_md127"></a>
+<h1><a class="anchor" id="autotoc_md128"></a>
 Core Design Principles</h1>
 <ol type="1">
 <li><b>Separation of Concerns</b>: Clear boundaries between GUI, business logic, and data layers</li>
@@ -107,7 +107,7 @@ Core Design Principles</h1>
 <li><b>Strategy Pattern</b>: Pluggable filtering and AI provider algorithms</li>
 <li><b>MVC Pattern</b>: Model-View-Controller separation for data and presentation</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md128"></a>
+<h1><a class="anchor" id="autotoc_md129"></a>
 Architecture Layers</h1>
 <div class="fragment"><div class="line">┌──────────────────────────────────────────────────────────────────────────┐</div>
 <div class="line">│                           Presentation Layer (Qt 6)                       │</div>
@@ -131,9 +131,13 @@ Architecture Layers</h1>
 <div class="line">│  └─────────────────┘  └─────────────────┘  └─────────────────┘          │</div>
 <div class="line">│  ┌──────────────────────────────────────────────────────────────┐        │</div>
 <div class="line">│  │                    Parser Strategies                          │        │</div>
-<div class="line">│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐               │        │</div>
-<div class="line">│  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │               │        │</div>
-<div class="line">│  │  └────────────┘ └────────────┘ └────────────┘               │        │</div>
+<div class="line">│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────┐ │        │</div>
+<div class="line">│  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │ │AscParser │ │        │</div>
+<div class="line">│  │  └────────────┘ └────────────┘ └────────────┘ └──────────┘ │        │</div>
+<div class="line">│  │                                            ┌─────────────┐  │        │</div>
+<div class="line">│  │                                            │  DbcParser  │  │        │</div>
+<div class="line">│  │                                            │ + CanDecoder│  │        │</div>
+<div class="line">│  │                                            └─────────────┘  │        │</div>
 <div class="line">│  └──────────────────────────────────────────────────────────────┘        │</div>
 <div class="line">│  ┌──────────────────────────────────────────────────────────────┐        │</div>
 <div class="line">│  │                   AI Service Strategies                       │        │</div>
@@ -149,44 +153,49 @@ Architecture Layers</h1>
 <div class="line">│  │EventsContainer  │  │    LogEvent     │  │     Filter      │          │</div>
 <div class="line">│  └─────────────────┘  └─────────────────┘  └─────────────────┘          │</div>
 <div class="line">└──────────────────────────────────────────────────────────────────────────┘</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md129"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md130"></a>
 Key Components</h1>
-<h2><a class="anchor" id="autotoc_md130"></a>
+<h2><a class="anchor" id="autotoc_md131"></a>
 1. Presentation Layer (&lt;tt&gt;ui::qt&lt;/tt&gt; namespace)</h2>
+<p>The Qt UI layer is structured into four subdirectories under <code>src/application/ui/qt/</code>:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Subdirectory   </th><th class="markdownTableHeadNone">Contents    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>panels/</code>   </td><td class="markdownTableBodyNone">All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, …)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>dialogs/</code>   </td><td class="markdownTableBodyNone">Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>events/</code>   </td><td class="markdownTableBodyNone">Event table model and view (EventsTableModel, EventsTableView)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>utils/</code>   </td><td class="markdownTableBodyNone">Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker)   </td></tr>
+</table>
 <p><b>MainWindow</b>: Central orchestrator</p><ul>
 <li>Qt 6-based <a class="el" href="../../df/d90/classQMainWindow.html">QMainWindow</a> with dock widget system</li>
-<li>Three dockable panels: Filters (left), Item Details (right), Tools (bottom)</li>
-<li>Tab-based main content area (Events, AI Analysis)</li>
-<li>Drag-and-drop file loading support</li>
-<li>Implements <code>ConfigObserver</code> for configuration changes</li>
-<li>Menu system for file operations, tools, and view management</li>
+<li>Left dock (Filters), right dock (Details), bottom dock (AI chat / plugin panels)</li>
+<li>Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors</li>
+<li>Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)</li>
+<li>Implements <code>ConfigObserver</code> and <code>IPluginObserver</code> for configuration and plugin lifecycle changes</li>
+<li>Menu system for file operations, DBC loading, tools, and view management</li>
 </ul>
-<p><b>EventsTableView</b>: High-performance table display</p><ul>
+<p><b>EventsTableView</b>: High-performance table display (<code>events/</code>)</p><ul>
 <li><a class="el" href="../../d8/d5e/classQTableView.html">QTableView</a> with custom EventsTableModel</li>
 <li>Supports millions of entries with virtual scrolling</li>
-<li>Movable and resizable columns</li>
-<li>Multi-selection and copy support</li>
-<li>Color-coded rows based on configurable <code>typeFilterField</code></li>
+<li>Movable and resizable columns; color-coded rows based on configurable <code>typeFilterField</code></li>
 </ul>
-<p><b>AIAnalysisPanel</b>: AI-powered log analysis</p><ul>
-<li>Predefined analysis types (Summary, Error Analysis, Pattern Detection, etc.)</li>
-<li>Custom prompt support with save/load functionality</li>
-<li>Model selection dropdown</li>
-<li>Filter-aware analysis (respects active filters)</li>
-<li>Configurable max events and smart sampling</li>
+<p><b>Analysis Panels</b> (<code>panels/</code>)</p><ul>
+<li><b>StatsSummaryPanel</b>: Aggregate statistics with pluggable <code>IStatisticsStrategy</code> (see below)</li>
+<li><b>SignalPlotPanel</b>: Plots decoded <code>SIG:*</code> field values over time; QLineSeries per signal; downsamples to 2 000 points</li>
+<li><b>TimelineChartPanel</b>: Interactive event-volume bar histogram with zoom and brush</li>
+<li><b>TraceViewerPanel</b>: Sequence-diagram-style actor/event view</li>
+<li><b>PatternAnalysisPanel</b>: Template clustering of structurally similar log lines</li>
+<li><b>BookmarksPanel</b>, <b>ScenariosPanel</b>, <b>ActorsPanel</b>, <b>ActorDefinitionsPanel</b>: Event annotation, scenario matching, and actor attribution</li>
 </ul>
-<p><b>Dock Widgets</b>: Flexible layout</p><ul>
-<li><b>FiltersPanel</b>: Type filters and extended filters with multiple conditions</li>
-<li><b>ItemDetailsView</b>: Detailed event information display</li>
-<li><b>SearchResultsView</b>: Full-text search results</li>
-<li><b>AIChatPanel</b>: Interactive AI conversation about logs</li>
-<li>All docks are movable, floatable, and resizable</li>
-</ul>
-<p><b>Configuration Dialogs</b>:</p><ul>
+<p><b>Configuration Dialogs</b> (<code>dialogs/</code>)</p><ul>
 <li><b>StructuredConfigDialog</b>: Tabbed configuration UI (General, Columns, Colors, AI)</li>
 <li><b>ConfigEditorDialog</b>: Raw JSON editor</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md131"></a>
+<h2><a class="anchor" id="autotoc_md132"></a>
 2. Business Logic Layer</h2>
 <p><b>MainWindowPresenter</b>: MVP pattern implementation</p><ul>
 <li>Coordinates between view and model</li>
@@ -213,7 +222,32 @@ Key Components</h1>
 <div class="line"><a class="code hl_namespace" href="../../d0/dd5/namespaceparser.html">parser</a>-&gt;RegisterObserver(observer);</div>
 <div class="line"><a class="code hl_namespace" href="../../d0/dd5/namespaceparser.html">parser</a>-&gt;ParseData(filepath);</div>
 <div class="ttc" id="anamespaceparser_html"><div class="ttname"><a href="../../d0/dd5/namespaceparser.html">parser</a></div><div class="ttdoc">Data parsing components and interfaces.</div><div class="ttdef"><b>Definition</b> IControler.hpp:22</div></div>
-</div><!-- fragment --><p><b>FilterManager</b>: Coordinates filtering operations</p><ul>
+</div><!-- fragment --><p>Registered parsers (extension → class):</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Extension   </th><th class="markdownTableHeadNone">Parser   </th><th class="markdownTableHeadNone">Notes    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>.xml</code>   </td><td class="markdownTableBodyNone"><code>XmlParser</code>   </td><td class="markdownTableBodyNone">Default for unknown extensions    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>.csv</code>   </td><td class="markdownTableBodyNone"><code>CsvParser</code>   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>.asc</code>   </td><td class="markdownTableBodyNone"><code>AscParser</code>   </td><td class="markdownTableBodyNone">CAN/Vector CANalyzer; accepts optional DBC path   </td></tr>
+</table>
+<p><b>AscParser</b> (<code>parsers/asc/</code>): Parses Vector CANalyzer <code>.asc</code> files line by line.</p><ul>
+<li>Each CAN frame becomes a <code>LogEvent</code> with fields: <code>timestamp</code> (float seconds), <code>type</code> (Rx/Tx/TxRq/ErrorFrame), <code>CAN_ID</code> (hex), <code>CAN_Channel</code>, <code>CAN_DLC</code>, <code>CAN_Data</code> (hex bytes), <code>CAN_IDE</code> (Standard/Extended), <code>info</code>.</li>
+<li>If a DBC path is provided, <code>CanDecoder</code> is invoked per-frame to append <code>SIG:&lt;name&gt;</code> fields for every decoded signal.</li>
+</ul>
+<p><b>DbcParser + CanDecoder</b> (<code>parsers/dbc/</code>): Reads <code>.dbc</code> CAN database files.</p><ul>
+<li><code>ParseDbcFile()</code> returns a <code>DbcDatabase</code> containing a map of message ID → <code>DbcMessage</code> (name, signals).</li>
+<li><code>DecodeFrame()</code> applies Intel (little-endian) or Motorola (big-endian) bit extraction to produce <code>{"SIG:&lt;name&gt;", "&lt;value&gt;"}</code> pairs.</li>
+</ul>
+<p><b>Statistics Strategy</b> (<code>ui/qt/panels/</code>): The <code>StatsSummaryPanel</code> uses <code>IStatisticsStrategy</code> to compute format-specific metrics at refresh time without coupling the panel to any particular format.</p>
+<div class="fragment"><div class="line">IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()</div>
+<div class="line">    ▲</div>
+<div class="line">    ├── CanStatisticsStrategy   — for ASC/CAN data (detects CAN_ID field)</div>
+<div class="line">    └── GenericStatisticsStrategy — fallback, returns no sections (panel hides extra group)</div>
+</div><!-- fragment --><p><code>SelectStrategy()</code> probes the first 20 events for <code>CAN_ID</code> to pick the right implementation. Adding a new format requires only implementing <code>IStatisticsStrategy::Matches()</code> and <code>Compute()</code>.</p>
+<p><b>FilterManager</b>: Coordinates filtering operations</p><ul>
 <li>Applies multiple filters in sequence</li>
 <li>Supports complex filter combinations</li>
 <li>Implements Strategy pattern for filter types</li>
@@ -229,7 +263,7 @@ Key Components</h1>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md132"></a>
+<h2><a class="anchor" id="autotoc_md133"></a>
 3. Data Layer (&lt;tt&gt;db&lt;/tt&gt; namespace)</h2>
 <p><b>EventsContainer</b>: High-performance event storage</p><ul>
 <li>O(1) random access</li>
@@ -244,9 +278,9 @@ Key Components</h1>
 <li>Efficient memory layout</li>
 <li>Move semantics for performance</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md133"></a>
+<h1><a class="anchor" id="autotoc_md134"></a>
 Design Patterns</h1>
-<h2><a class="anchor" id="autotoc_md134"></a>
+<h2><a class="anchor" id="autotoc_md135"></a>
 Factory Pattern</h2>
 <p><b>Purpose</b>: Abstract creation of parsers and AI clients</p>
 <p><b>ParserFactory</b>: Creates appropriate parser based on file extension </p><div class="fragment"><div class="line"><span class="keyword">class </span>ParserFactory {</div>
@@ -273,7 +307,7 @@ Factory Pattern</h2>
 <li>Client code doesn't depend on concrete classes</li>
 <li>Configuration-driven selection</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 Strategy Pattern</h2>
 <p><b>Purpose</b>: Pluggable algorithms for filtering and AI providers</p>
 <p><b>Filter Strategies</b>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>IFilterStrategy {</div>
@@ -304,7 +338,7 @@ Strategy Pattern</h2>
 <li>Testable in isolation</li>
 <li>No code changes needed to switch providers</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md136"></a>
+<h2><a class="anchor" id="autotoc_md137"></a>
 Observer Pattern</h2>
 <p><b>Purpose</b>: Decouple components and enable reactive UI</p>
 <p><b>ConfigObserver</b>: React to configuration changes </p><div class="fragment"><div class="line"><span class="keyword">class </span>ConfigObserver {</div>
@@ -323,7 +357,7 @@ Observer Pattern</h2>
 <li>Multiple components can observe same config</li>
 <li>Easy to add new observers</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md137"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 MVC/MVP Pattern</h2>
 <p><b>Purpose</b>: Separate data, presentation, and control logic</p>
 <ul>
@@ -348,9 +382,9 @@ MVC/MVP Pattern</h2>
 <li>Testable business logic (presenter can be unit tested)</li>
 <li>View can be replaced (Qt, wxWidgets, CLI, web)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md138"></a>
+<h1><a class="anchor" id="autotoc_md139"></a>
 AI Integration Architecture</h1>
-<h2><a class="anchor" id="autotoc_md139"></a>
+<h2><a class="anchor" id="autotoc_md140"></a>
 Component Overview</h2>
 <div class="fragment"><div class="line">┌──────────────────┐</div>
 <div class="line">│  AIAnalysisPanel │ (UI - Qt Widget)</div>
@@ -385,7 +419,7 @@ Component Overview</h2>
 <div class="line">│  │Client   │    │Client   │        │Client   │         │</div>
 <div class="line">│  └─────────┘    └─────────┘        └─────────┘         │</div>
 <div class="line">└──────────────────────────────────────────────────────────┘</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md140"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md141"></a>
 Plugin Architecture</h2>
 <p>AI providers are implemented as C-ABI plugins (see <a class="el" href="../../d1/d53/md_docs_2PLUGIN__SYSTEM.html">PLUGIN_SYSTEM.md</a>):</p>
 <p><b>Plugin Exports:</b></p><ul>
@@ -402,7 +436,7 @@ Plugin Architecture</h2>
 <li>ABI-stable interface across compiler versions</li>
 <li>Isolated plugin failures don't crash application</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md141"></a>
+<h2><a class="anchor" id="autotoc_md142"></a>
 AI Request Flow</h2>
 <ol type="1">
 <li>User selects analysis type in AIAnalysisPanel</li>
@@ -412,7 +446,7 @@ AI Request Flow</h2>
 <li>Prompt sent to IAIService implementation</li>
 <li>Response parsed and displayed in UI</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md142"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 Filter-Aware Analysis</h2>
 <ul>
 <li><b>No filters</b>: Analyzes all events (up to 5,000 with smart sampling)</li>
@@ -420,7 +454,7 @@ Filter-Aware Analysis</h2>
 <li>EventsTableView provides <code>GetFilteredIndices()</code> method</li>
 <li>LogAnalyzer accepts optional <code>filteredIndices</code> parameter</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Smart Sampling</h2>
 <p>For large datasets:</p><ul>
 <li>Cap at 5,000 events (configurable)</li>
@@ -428,23 +462,23 @@ Smart Sampling</h2>
 <li>Preserves representative sample</li>
 <li>Avoids overwhelming LLM context window</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md144"></a>
+<h1><a class="anchor" id="autotoc_md145"></a>
 Thread Safety</h1>
-<h2><a class="anchor" id="autotoc_md145"></a>
+<h2><a class="anchor" id="autotoc_md146"></a>
 Qt Event Loop</h2>
 <ul>
 <li>All UI operations on main thread</li>
 <li>Qt's signal/slot mechanism for cross-thread communication</li>
 <li><code>QtConcurrent</code> for AI requests in background thread</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md146"></a>
+<h2><a class="anchor" id="autotoc_md147"></a>
 Parsing Thread</h2>
 <ul>
 <li>Background thread for file parsing (future enhancement)</li>
 <li>Currently synchronous on main thread</li>
 <li>Planned: Async parsing with progress callbacks</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md147"></a>
+<h2><a class="anchor" id="autotoc_md148"></a>
 Concurrent AI Requests</h2>
 <div class="fragment"><div class="line"><span class="comment">// AI analysis runs in background thread via QtConcurrent</span></div>
 <div class="line">QFuture&lt;std::string&gt; future = QtConcurrent::run([<span class="keyword">this</span>, prompt]() {</div>
@@ -455,7 +489,7 @@ Concurrent AI Requests</h2>
 <div class="line">connect(watcher, &amp;QFutureWatcher&lt;std::string&gt;::finished,</div>
 <div class="line">    <span class="keyword">this</span>, &amp;AIAnalysisPanel::OnAnalysisComplete);</div>
 <div class="line">watcher-&gt;setFuture(future);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md148"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md149"></a>
 Data Access</h2>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsContainer {</div>
 <div class="line"><span class="keyword">private</span>:</div>
@@ -474,9 +508,9 @@ Data Access</h2>
 <div class="line">        <span class="keywordflow">return</span> m_filteredIndices;</div>
 <div class="line">    }</div>
 <div class="line">};</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md149"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md150"></a>
 Error Handling Strategy</h1>
-<h2><a class="anchor" id="autotoc_md150"></a>
+<h2><a class="anchor" id="autotoc_md151"></a>
 Result&lt;T, Error&gt; Pattern</h2>
 <p>Modern error handling without exceptions in hot paths:</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
@@ -500,7 +534,7 @@ Result&lt;T, Error&gt; Pattern</h2>
 <div class="line">    <span class="keywordflow">return</span> Result::Ok(std::move(event));</div>
 <div class="line">}</div>
 <div class="ttc" id="anamespaceerror_html"><div class="ttname"><a href="../../da/d7e/namespaceerror.html">error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:17</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md151"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md152"></a>
 Exception Hierarchy</h2>
 <div class="fragment"><div class="line">std::exception</div>
 <div class="line">  └─ error::Error (base for all app exceptions)</div>
@@ -508,7 +542,7 @@ Exception Hierarchy</h2>
 <div class="line">       ├─ error::ParseError</div>
 <div class="line">       ├─ error::FileError</div>
 <div class="line">       └─ error::FilterError</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md152"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md153"></a>
 Performance Optimizations</h1>
 <ol type="1">
 <li><b>Qt Model/View Architecture</b>: Only render visible items in table</li>
@@ -522,16 +556,16 @@ Performance Optimizations</h1>
 <li><b>Dynamic Field Access</b>: <code>findByKey()</code> for flexible event schemas</li>
 <li><b>Color Caching</b>: Qt's QBrush caching for color rendering</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md153"></a>
+<h1><a class="anchor" id="autotoc_md154"></a>
 Configuration Management</h1>
-<h2><a class="anchor" id="autotoc_md154"></a>
+<h2><a class="anchor" id="autotoc_md155"></a>
 JSON Configuration</h2>
 <p>All configuration saved to platform-specific location:</p><ul>
 <li><b>macOS</b>: <code>~/Library/Application Support/LogViewer/config.json</code></li>
 <li><b>Linux</b>: <code>~/.config/LogViewer/config.json</code></li>
 <li><b>Windows</b>: <code>APPDATA%\LogViewer\<a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md155"></a>
+<h2><a class="anchor" id="autotoc_md156"></a>
 Configuration Structure</h2>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;version&quot;: &quot;1.0&quot;,</div>
@@ -562,7 +596,7 @@ Configuration Structure</h2>
 <div class="line">    }</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md156"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md157"></a>
 Key Configuration Options</h2>
 <ul>
 <li><b>typeFilterField</b>: Configurable field for type filtering (e.g., "type", "level", "severity")</li>
@@ -571,7 +605,7 @@ Key Configuration Options</h2>
 <li><b>columns</b>: Dynamic column configuration with visibility and width</li>
 <li><b>columnColors</b>: Color mappings based on field values</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md157"></a>
+<h2><a class="anchor" id="autotoc_md158"></a>
 Observer Pattern for Config</h2>
 <p>Components register for configuration changes:</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>ConfigObserver {</div>
@@ -586,9 +620,9 @@ Observer Pattern for Config</h2>
 <div class="line">        m_eventsView-&gt;RefreshView();</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md158"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md159"></a>
 Testing Strategy</h1>
-<h2><a class="anchor" id="autotoc_md159"></a>
+<h2><a class="anchor" id="autotoc_md160"></a>
 Unit Tests</h2>
 <ul>
 <li>Google Test framework</li>
@@ -596,21 +630,21 @@ Unit Tests</h2>
 <li>Test fixtures for common scenarios</li>
 <li>80%+ code coverage goal</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md160"></a>
+<h2><a class="anchor" id="autotoc_md161"></a>
 Integration Tests</h2>
 <ul>
 <li>Full parser → filter → display pipeline</li>
 <li>Real log file samples</li>
 <li>Performance benchmarks</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md161"></a>
+<h2><a class="anchor" id="autotoc_md162"></a>
 UI Tests</h2>
 <ul>
 <li>Manual test scenarios</li>
 <li>Screenshot comparison</li>
 <li>Accessibility testing</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md162"></a>
+<h1><a class="anchor" id="autotoc_md163"></a>
 Future Enhancements</h1>
 <ol type="1">
 <li><b>Async Parsing</b>: Background thread for file parsing with progress</li>
@@ -626,7 +660,7 @@ Future Enhancements</h1>
 <li><b>Multi-File Analysis</b>: Correlate events across multiple log files</li>
 <li><b>Real-time AI Monitoring</b>: Continuous analysis with alerts</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md163"></a>
+<h1><a class="anchor" id="autotoc_md164"></a>
 References</h1>
 <ul>
 <li><a href="https://doc.qt.io/">Qt Documentation</a></li>

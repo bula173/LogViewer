@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LogViewer: src/application/ui/qt/FilterProfilesPanel.hpp File Reference</title>
+<title>LogViewer: src/application/ui/qt/panels/FilterProfilesPanel.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -108,13 +108,13 @@ $(document).ready(function(){initNavTree('d0/d66/FilterProfilesPanel_8hpp.html',
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for FilterProfilesPanel.hpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dc/ddf/FilterProfilesPanel_8hpp__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2FilterProfilesPanel_8hpp" alt=""/></div>
-<map name="asrc_2application_2ui_2qt_2FilterProfilesPanel_8hpp" id="asrc_2application_2ui_2qt_2FilterProfilesPanel_8hpp">
-<area shape="rect" title="Named filter&#45;profile save/restore panel and FilterProfile data type." alt="" coords="199,5,386,45"/>
+<div class="center"><img src="../../dc/ddf/FilterProfilesPanel_8hpp__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hpp" alt=""/></div>
+<map name="asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hpp" id="asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hpp">
+<area shape="rect" title="Named filter&#45;profile save/restore panel and FilterProfile data type." alt="" coords="175,5,410,45"/>
 <area shape="rect" href="../../d4/dda/TimeRangeFilterPanel_8hpp.html" title="Panel for filtering events by a user&#45;defined timestamp range." alt="" coords="38,93,230,119"/>
 <area shape="poly" title=" " alt="" coords="256,48,171,90,168,85,253,43"/>
 <area shape="rect" title=" " alt="" coords="5,167,84,192"/>
-<area shape="poly" title=" " alt="" coords="200,40,96,62,54,77,28,95,22,108,22,123,32,153,27,155,17,124,17,107,24,92,51,72,94,57,199,35"/>
+<area shape="poly" title=" " alt="" coords="176,44,85,65,50,79,28,95,22,108,22,123,32,153,27,155,17,124,17,107,24,92,47,74,84,60,175,39"/>
 <area shape="rect" title=" " alt="" coords="129,167,187,192"/>
 <area shape="poly" title=" " alt="" coords="288,47,270,83,244,120,219,143,192,162,189,157,216,139,240,117,266,80,283,44"/>
 <area shape="rect" title=" " alt="" coords="261,167,324,192"/>
@@ -131,13 +131,13 @@ Include dependency graph for FilterProfilesPanel.hpp:</div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../da/d83/FilterProfilesPanel_8hpp__dep__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2FilterProfilesPanel_8hppdep" alt=""/></div>
-<map name="asrc_2application_2ui_2qt_2FilterProfilesPanel_8hppdep" id="asrc_2application_2ui_2qt_2FilterProfilesPanel_8hppdep">
-<area shape="rect" title="Named filter&#45;profile save/restore panel and FilterProfile data type." alt="" coords="103,5,289,45"/>
-<area shape="rect" href="../../d2/db8/FilterProfilesPanel_8cpp.html" title="Implementation of FilterProfilesPanel and FilterProfile JSON round&#45;trip." alt="" coords="5,93,192,133"/>
-<area shape="poly" title=" " alt="" coords="166,56,122,95,118,91,163,52"/>
-<area shape="rect" href="../../d3/db7/MainWindow_8cpp.html" title=" " alt="" coords="217,93,370,133"/>
-<area shape="poly" title=" " alt="" coords="229,52,274,91,270,95,226,56"/>
+<div class="center"><img src="../../da/d83/FilterProfilesPanel_8hpp__dep__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hppdep" alt=""/></div>
+<map name="asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hppdep" id="asrc_2application_2ui_2qt_2panels_2FilterProfilesPanel_8hppdep">
+<area shape="rect" title="Named filter&#45;profile save/restore panel and FilterProfile data type." alt="" coords="73,5,307,45"/>
+<area shape="rect" href="../../d3/db7/MainWindow_8cpp.html" title=" " alt="" coords="5,93,159,133"/>
+<area shape="poly" title=" " alt="" coords="157,56,108,95,104,91,154,52"/>
+<area shape="rect" href="../../d2/db8/FilterProfilesPanel_8cpp.html" title="Implementation of FilterProfilesPanel and FilterProfile JSON round&#45;trip." alt="" coords="183,93,416,133"/>
+<area shape="poly" title=" " alt="" coords="227,52,277,91,273,95,223,56"/>
 </map>
 </div>
 </div>
@@ -167,13 +167,13 @@ Namespaces</h2></td></tr>
 <li>Type filter selection (optional; only stored when at least one type exists)</li>
 </ul>
 <p>Profiles are persisted as JSON in the application data directory (<code>&lt;appdata&gt;/filter_profiles.json</code>) and are loaded automatically on start-up.</p>
-<h3><a class="anchor" id="autotoc_md693"></a>
+<h3><a class="anchor" id="autotoc_md696"></a>
 Interaction model</h3>
 <p>The panel does <b>not</b> directly access other filter panels. Instead it delegates through MainWindow via two signals:</p><ul>
 <li><code>SaveRequested(name)</code> → MainWindow gathers state → <code>StoreProfile()</code> </li>
 <li><code>ProfileLoadRequested(profile)</code> → MainWindow applies each field to the appropriate panel</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md694"></a>
+<h3><a class="anchor" id="autotoc_md697"></a>
 Actor key encoding</h3>
 <p>Each entry in <code>FilterProfile::uncheckedActors</code> is a composite string of the form <code>"&lt;defName&gt;\0&lt;actorName&gt;"</code>. The NUL character serves as a delimiter that cannot appear in either component. Use <code>ActorKey::Encode()</code> / <code>ActorKey::Decode()</code> for safe construction and decomposition.</p>
 <dl class="section author"><dt>Author</dt><dd>LogViewer Development Team </dd></dl>
@@ -183,7 +183,7 @@ Actor key encoding</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_844f6ab5c2ae79211596f3dcdd81adb7.html">application</a></li><li class="navelem"><a class="el" href="../../dir_54b9d2c1a8e2b368b264db9cd54200e2.html">ui</a></li><li class="navelem"><a class="el" href="../../dir_0f25fb00f5c22110cee8883c47212c99.html">qt</a></li><li class="navelem"><a class="el" href="../../d0/d66/FilterProfilesPanel_8hpp.html">FilterProfilesPanel.hpp</a></li>
+    <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_844f6ab5c2ae79211596f3dcdd81adb7.html">application</a></li><li class="navelem"><a class="el" href="../../dir_54b9d2c1a8e2b368b264db9cd54200e2.html">ui</a></li><li class="navelem"><a class="el" href="../../dir_0f25fb00f5c22110cee8883c47212c99.html">qt</a></li><li class="navelem"><a class="el" href="../../dir_130743ba506c8567cd5ed797a70ce3c3.html">panels</a></li><li class="navelem"><a class="el" href="../../d0/d66/FilterProfilesPanel_8hpp.html">FilterProfilesPanel.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

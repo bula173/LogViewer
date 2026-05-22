@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LogViewer: src/application/ui/qt/TimelineChartPanel.cpp File Reference</title>
+<title>LogViewer: src/application/ui/qt/panels/TimelineChartPanel.cpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('dc/d3d/TimelineChartPanel_8cpp.html','
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="../../d8/dc9/TimelineChartPanel_8hpp_source.html">TimelineChartPanel.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../df/db4/Config_8hpp_source.html">Config.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="../../d4/d63/PanelUtils_8hpp_source.html">PanelUtils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../d4/d63/PanelUtils_8hpp_source.html">utils/PanelUtils.hpp</a>&quot;</code><br />
 <code>#include &lt;QAbstractBarSeries&gt;</code><br />
 <code>#include &lt;QBarCategoryAxis&gt;</code><br />
 <code>#include &lt;QBarSet&gt;</code><br />
@@ -122,57 +122,57 @@ $(document).ready(function(){initNavTree('dc/d3d/TimelineChartPanel_8cpp.html','
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for TimelineChartPanel.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../dd/d94/TimelineChartPanel_8cpp__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2TimelineChartPanel_8cpp" alt=""/></div>
-<map name="asrc_2application_2ui_2qt_2TimelineChartPanel_8cpp" id="asrc_2application_2ui_2qt_2TimelineChartPanel_8cpp">
-<area shape="rect" title=" " alt="" coords="1831,5,2028,45"/>
+<div class="center"><img src="../../dd/d94/TimelineChartPanel_8cpp__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2panels_2TimelineChartPanel_8cpp" alt=""/></div>
+<map name="asrc_2application_2ui_2qt_2panels_2TimelineChartPanel_8cpp" id="asrc_2application_2ui_2qt_2panels_2TimelineChartPanel_8cpp">
+<area shape="rect" title=" " alt="" coords="1839,5,2083,45"/>
 <area shape="rect" href="../../d8/dc9/TimelineChartPanel_8hpp.html" title=" " alt="" coords="345,93,522,119"/>
-<area shape="poly" title=" " alt="" coords="1830,33,1286,54,922,73,552,96,536,97,536,92,552,91,922,67,1285,49,1830,27"/>
+<area shape="poly" title=" " alt="" coords="1839,33,1282,55,919,73,552,96,536,97,536,92,552,91,919,68,1282,50,1839,28"/>
 <area shape="rect" title=" " alt="" coords="5,167,104,192"/>
-<area shape="poly" title=" " alt="" coords="1830,31,1461,38,965,52,505,71,338,83,239,96,196,109,155,126,86,162,84,157,152,121,195,104,238,91,337,78,505,66,965,47,1460,33,1830,26"/>
+<area shape="poly" title=" " alt="" coords="1839,31,1456,39,959,52,502,71,337,83,239,96,196,109,155,126,86,162,84,157,152,121,195,104,238,91,336,78,502,66,959,47,1456,34,1839,26"/>
 <area shape="rect" title=" " alt="" coords="128,167,195,192"/>
-<area shape="poly" title=" " alt="" coords="1830,30,1472,36,996,48,554,68,394,81,301,96,268,109,237,125,187,160,184,156,234,121,266,104,299,91,394,75,554,62,996,43,1472,31,1830,25"/>
+<area shape="poly" title=" " alt="" coords="1839,31,1468,37,990,48,552,68,394,81,301,96,268,109,237,125,187,160,184,156,234,121,266,104,299,91,393,75,551,62,989,43,1467,31,1839,25"/>
 <area shape="rect" title=" " alt="" coords="219,167,325,192"/>
-<area shape="poly" title=" " alt="" coords="1831,31,1463,39,979,52,547,72,402,83,357,89,333,96,317,107,304,122,284,155,280,152,299,119,314,103,331,91,355,84,401,78,546,66,979,47,1463,33,1830,26"/>
+<area shape="poly" title=" " alt="" coords="1839,31,1458,39,973,53,544,72,401,83,356,89,333,96,317,107,304,122,284,155,280,152,299,119,314,103,331,91,355,84,400,78,544,66,973,47,1458,34,1839,26"/>
 <area shape="rect" title=" " alt="" coords="504,167,589,192"/>
-<area shape="poly" title=" " alt="" coords="1831,29,1533,32,1151,41,966,50,804,61,680,77,637,86,609,96,593,107,579,122,559,155,555,152,575,119,589,103,607,91,635,81,679,71,803,56,965,44,1151,36,1533,27,1831,24"/>
+<area shape="poly" title=" " alt="" coords="1839,29,1530,32,1146,41,962,50,802,61,679,77,637,86,609,96,593,107,579,122,559,155,555,152,575,119,589,103,607,91,635,81,678,71,801,56,962,44,1146,36,1529,27,1839,24"/>
 <area shape="rect" title=" " alt="" coords="1065,394,1124,419"/>
-<area shape="poly" title=" " alt="" coords="1831,32,1722,39,1590,50,1446,69,1305,96,1202,124,1105,169,1042,203,1014,221,990,240,973,261,964,284,964,309,976,337,991,356,1010,371,1053,392,1051,397,1007,376,987,360,971,340,959,310,959,283,968,258,987,236,1011,217,1039,198,1103,164,1200,119,1303,91,1446,64,1589,45,1721,33,1830,27"/>
+<area shape="poly" title=" " alt="" coords="1839,33,1726,39,1591,51,1447,69,1305,96,1202,124,1105,169,1042,203,1014,221,990,240,973,261,964,284,964,309,976,337,991,356,1010,371,1053,392,1051,397,1007,376,987,360,971,340,959,310,959,283,968,258,987,236,1011,217,1039,198,1103,164,1200,119,1303,91,1446,64,1590,45,1725,34,1839,27"/>
 <area shape="rect" href="../../df/db4/Config_8hpp.html" title=" " alt="" coords="1316,93,1407,119"/>
-<area shape="poly" title=" " alt="" coords="1831,40,1645,63,1421,96,1420,91,1644,58,1830,35"/>
+<area shape="poly" title=" " alt="" coords="1840,42,1647,64,1421,96,1420,91,1646,59,1839,36"/>
 <area shape="rect" title=" " alt="" coords="652,394,703,419"/>
-<area shape="poly" title=" " alt="" coords="1831,34,1498,56,1328,74,1259,84,1206,96,1162,111,1129,127,1055,169,969,207,901,233,837,264,760,315,724,350,695,384,691,381,720,346,757,311,834,260,899,228,967,202,1052,164,1126,123,1160,106,1205,91,1258,79,1327,69,1497,51,1830,29"/>
-<area shape="rect" href="../../d4/d63/PanelUtils_8hpp.html" title=" " alt="" coords="1431,93,1545,119"/>
-<area shape="poly" title=" " alt="" coords="1831,47,1559,95,1558,90,1830,42"/>
-<area shape="rect" title=" " alt="" coords="2735,167,2831,192"/>
-<area shape="poly" title=" " alt="" coords="1831,29,1736,34,1649,49,1618,61,1599,76,1595,84,1595,93,1610,117,1628,124,1666,131,1791,141,2155,154,2523,160,2716,164,2721,165,2721,170,2716,169,2523,165,2155,160,1790,147,1665,136,1626,129,1606,121,1590,95,1590,83,1595,72,1615,56,1648,44,1736,29,1830,24"/>
-<area shape="rect" title=" " alt="" coords="1621,93,1769,119"/>
-<area shape="poly" title=" " alt="" coords="1874,48,1743,92,1741,87,1872,43"/>
-<area shape="rect" title=" " alt="" coords="1793,93,1935,119"/>
-<area shape="poly" title=" " alt="" coords="1916,47,1884,84,1880,81,1911,44"/>
-<area shape="rect" title=" " alt="" coords="1959,93,2033,119"/>
-<area shape="poly" title=" " alt="" coords="1947,44,1979,81,1975,84,1943,47"/>
-<area shape="rect" title=" " alt="" coords="2057,93,2124,119"/>
-<area shape="poly" title=" " alt="" coords="1969,43,2056,85,2053,90,1967,48"/>
-<area shape="rect" title=" " alt="" coords="2148,93,2215,119"/>
-<area shape="poly" title=" " alt="" coords="1990,43,2135,88,2134,93,1989,48"/>
-<area shape="rect" title=" " alt="" coords="2239,93,2350,119"/>
-<area shape="poly" title=" " alt="" coords="2017,43,2228,88,2227,93,2016,48"/>
-<area shape="rect" title=" " alt="" coords="2375,93,2452,119"/>
-<area shape="poly" title=" " alt="" coords="2029,37,2181,60,2362,91,2361,96,2180,65,2028,43"/>
-<area shape="rect" title=" " alt="" coords="2477,93,2622,119"/>
-<area shape="poly" title=" " alt="" coords="2029,36,2463,91,2462,96,2028,41"/>
-<area shape="rect" title=" " alt="" coords="2647,93,2743,119"/>
-<area shape="poly" title=" " alt="" coords="2029,30,2297,52,2463,69,2633,91,2633,96,2463,75,2297,58,2028,36"/>
-<area shape="rect" title=" " alt="" coords="2767,93,2878,119"/>
-<area shape="poly" title=" " alt="" coords="2028,29,2347,51,2548,68,2754,91,2754,96,2547,74,2347,56,2028,35"/>
-<area shape="rect" title=" " alt="" coords="2903,93,2988,119"/>
-<area shape="poly" title=" " alt="" coords="2028,26,2190,33,2403,44,2643,63,2889,91,2889,96,2643,68,2402,50,2190,38,2028,32"/>
-<area shape="rect" title=" " alt="" coords="3012,93,3068,119"/>
-<area shape="poly" title=" " alt="" coords="2028,23,2208,25,2448,34,2720,55,2861,71,2999,91,2998,96,2860,76,2720,60,2448,39,2208,30,2028,28"/>
-<area shape="rect" title=" " alt="" coords="3093,93,3158,119"/>
-<area shape="poly" title=" " alt="" coords="2028,24,2220,26,2479,35,2776,55,2929,71,3079,91,3079,96,2928,76,2775,61,2479,40,2220,31,2028,29"/>
-<area shape="rect" title=" " alt="" coords="3183,93,3225,119"/>
-<area shape="poly" title=" " alt="" coords="2028,26,2278,32,2602,44,2924,63,3061,76,3169,91,3169,97,3061,81,2924,69,2602,50,2278,37,2028,31"/>
+<area shape="poly" title=" " alt="" coords="1839,35,1497,57,1328,74,1259,85,1206,96,1162,111,1129,127,1055,169,969,207,901,233,837,264,760,315,724,350,695,384,691,381,720,346,757,311,834,260,899,228,967,202,1052,164,1126,123,1160,106,1205,91,1258,79,1327,69,1497,51,1839,29"/>
+<area shape="rect" href="../../d4/d63/PanelUtils_8hpp.html" title=" " alt="" coords="1431,93,1577,119"/>
+<area shape="poly" title=" " alt="" coords="1852,48,1584,94,1584,88,1851,43"/>
+<area shape="rect" title=" " alt="" coords="2783,167,2879,192"/>
+<area shape="poly" title=" " alt="" coords="1839,30,1750,36,1672,52,1645,63,1629,78,1627,86,1628,94,1642,117,1660,124,1699,131,1825,142,2195,154,2568,160,2764,164,2769,165,2769,170,2764,169,2568,165,2195,160,1825,147,1698,136,1658,129,1638,121,1622,96,1621,85,1625,75,1642,59,1671,46,1749,31,1839,25"/>
+<area shape="rect" title=" " alt="" coords="1653,93,1801,119"/>
+<area shape="poly" title=" " alt="" coords="1906,48,1775,92,1773,87,1904,43"/>
+<area shape="rect" title=" " alt="" coords="1825,93,1967,119"/>
+<area shape="poly" title=" " alt="" coords="1948,47,1916,84,1912,81,1943,44"/>
+<area shape="rect" title=" " alt="" coords="1991,93,2065,119"/>
+<area shape="poly" title=" " alt="" coords="1979,44,2011,81,2007,84,1975,47"/>
+<area shape="rect" title=" " alt="" coords="2089,93,2156,119"/>
+<area shape="poly" title=" " alt="" coords="2001,43,2088,85,2085,90,1999,48"/>
+<area shape="rect" title=" " alt="" coords="2180,93,2247,119"/>
+<area shape="poly" title=" " alt="" coords="2022,43,2167,88,2166,93,2021,48"/>
+<area shape="rect" title=" " alt="" coords="2271,93,2382,119"/>
+<area shape="poly" title=" " alt="" coords="2049,43,2260,88,2259,93,2048,48"/>
+<area shape="rect" title=" " alt="" coords="2407,93,2484,119"/>
+<area shape="poly" title=" " alt="" coords="2084,41,2228,62,2394,91,2393,96,2227,67,2083,46"/>
+<area shape="rect" title=" " alt="" coords="2509,93,2654,119"/>
+<area shape="poly" title=" " alt="" coords="2084,39,2495,91,2494,96,2083,44"/>
+<area shape="rect" title=" " alt="" coords="2679,93,2775,119"/>
+<area shape="poly" title=" " alt="" coords="2084,32,2347,54,2665,91,2665,96,2346,59,2083,37"/>
+<area shape="rect" title=" " alt="" coords="2799,93,2910,119"/>
+<area shape="poly" title=" " alt="" coords="2084,31,2398,52,2590,69,2786,91,2785,96,2589,75,2397,58,2083,36"/>
+<area shape="rect" title=" " alt="" coords="2935,93,3020,119"/>
+<area shape="poly" title=" " alt="" coords="2084,27,2455,45,2686,64,2921,91,2921,96,2685,69,2454,51,2084,33"/>
+<area shape="rect" title=" " alt="" coords="3044,93,3100,119"/>
+<area shape="poly" title=" " alt="" coords="2084,23,2266,26,2500,35,2763,56,2898,71,3031,91,3030,96,2897,77,2763,61,2500,41,2266,31,2083,28"/>
+<area shape="rect" title=" " alt="" coords="3125,93,3190,119"/>
+<area shape="poly" title=" " alt="" coords="2084,24,2278,26,2533,36,2819,56,2966,72,3111,91,3110,96,2966,77,2819,62,2532,42,2278,32,2083,29"/>
+<area shape="rect" title=" " alt="" coords="3215,93,3257,119"/>
+<area shape="poly" title=" " alt="" coords="2084,26,2337,33,2654,45,2965,64,3097,77,3202,91,3201,97,3096,82,2965,69,2653,50,2337,38,2084,32"/>
 <area shape="poly" title=" " alt="" coords="373,121,118,169,117,164,372,116"/>
 <area shape="poly" title=" " alt="" coords="390,121,209,168,208,163,389,116"/>
 <area shape="poly" title=" " alt="" coords="408,121,312,163,310,159,406,116"/>
@@ -220,15 +220,15 @@ Include dependency graph for TimelineChartPanel.cpp:</div>
 <area shape="poly" title=" " alt="" coords="1205,341,717,403,717,398,1205,336"/>
 <area shape="poly" title=" " alt="" coords="1097,339,1097,380,1092,380,1092,339"/>
 <area shape="poly" title=" " alt="" coords="1659,266,1647,304,1635,324,1619,341,1580,360,1526,375,1461,386,1391,394,1249,404,1138,408,1138,402,1248,399,1390,389,1461,381,1525,369,1578,355,1616,337,1631,321,1642,301,1654,265"/>
-<area shape="poly" title=" " alt="" coords="1546,113,1677,137,1733,151,1763,165,1770,178,1771,191,1760,218,1722,267,1691,310,1674,326,1649,341,1606,357,1547,369,1402,389,1253,401,1138,406,1137,401,1253,395,1401,383,1546,364,1604,351,1647,336,1671,322,1687,306,1718,264,1755,216,1766,191,1765,179,1759,169,1732,156,1676,142,1545,119"/>
-<area shape="poly" title=" " alt="" coords="1546,112,1588,116,1751,127,1879,129,2006,137,2080,147,2167,164,2276,188,2322,206,2375,238,2408,260,2436,283,2445,296,2450,310,2448,325,2439,340,2412,367,2383,381,2355,386,2325,386,2260,380,2225,381,2186,389,2179,391,2178,386,2185,384,2224,376,2261,375,2325,381,2354,381,2382,376,2409,362,2435,337,2443,323,2445,311,2441,299,2432,287,2405,264,2372,242,2319,211,2275,193,2166,169,2079,153,2006,142,1879,134,1751,132,1588,121,1545,117"/>
+<area shape="poly" title=" " alt="" coords="1578,112,1687,130,1734,145,1751,154,1763,165,1770,178,1771,192,1760,219,1722,267,1691,310,1674,326,1649,341,1606,357,1547,369,1402,389,1253,401,1138,406,1137,401,1253,395,1401,383,1546,364,1604,351,1647,336,1671,322,1687,306,1718,264,1755,216,1765,191,1765,179,1759,168,1748,159,1732,150,1686,135,1577,117"/>
+<area shape="poly" title=" " alt="" coords="1578,112,1620,116,1738,122,1841,121,1933,118,2018,117,2101,123,2186,142,2230,158,2276,179,2375,238,2408,260,2436,283,2445,296,2450,310,2448,325,2439,340,2412,367,2383,381,2355,386,2325,386,2260,380,2225,381,2186,389,2179,391,2178,386,2185,384,2224,376,2261,375,2325,381,2354,381,2382,376,2409,362,2435,337,2443,323,2445,311,2441,299,2432,287,2405,264,2372,242,2273,184,2228,163,2184,148,2100,129,2018,122,1933,123,1841,127,1738,128,1620,121,1577,117"/>
 <area shape="rect" href="../../df/d0f/EventsContainer_8hpp.html" title="Container class for managing collections of LogEvent objects." alt="" coords="1998,167,2154,192"/>
-<area shape="poly" title=" " alt="" coords="1546,113,1564,116,1985,166,1984,171,1564,121,1545,119"/>
-<area shape="rect" href="../../da/dc1/EventsTableView_8hpp.html" title=" " alt="" coords="2501,240,2659,265"/>
-<area shape="poly" title=" " alt="" coords="1546,112,1588,116,1676,120,1785,120,2040,118,2170,121,2292,128,2399,141,2444,152,2482,164,2507,177,2529,194,2564,228,2561,232,2526,198,2504,182,2480,169,2442,157,2398,147,2292,133,2170,126,2040,124,1785,125,1676,125,1588,121,1545,117"/>
+<area shape="poly" title=" " alt="" coords="1578,114,1985,164,1984,169,1577,119"/>
+<area shape="rect" href="../../da/dc1/EventsTableView_8hpp.html" title=" " alt="" coords="2501,240,2707,265"/>
+<area shape="poly" title=" " alt="" coords="1578,112,1620,116,1810,121,2054,122,2180,125,2297,132,2401,145,2482,164,2512,177,2540,194,2584,229,2581,233,2537,198,2509,182,2480,169,2400,150,2297,138,2179,131,2054,128,1810,126,1620,121,1577,118"/>
 <area shape="rect" title=" " alt="" coords="2829,313,2899,339"/>
-<area shape="poly" title=" " alt="" coords="1546,112,1588,116,1792,124,2055,128,2318,138,2430,149,2519,164,2613,194,2702,232,2779,272,2836,304,2833,309,2777,276,2700,237,2611,199,2518,169,2429,154,2317,143,2055,133,1792,129,1588,121,1545,117"/>
-<area shape="poly" title=" " alt="" coords="1546,114,1564,116,1739,130,1888,136,2140,138,2393,141,2541,149,2716,164,2721,165,2721,170,2716,169,2541,154,2393,146,2140,143,1887,142,1739,135,1564,121,1545,119"/>
+<area shape="poly" title=" " alt="" coords="1578,112,1620,116,1758,123,1875,125,2074,121,2170,121,2272,126,2388,140,2523,164,2581,178,2625,193,2721,238,2784,271,2837,304,2834,308,2781,276,2719,242,2623,198,2580,183,2522,169,2387,145,2272,132,2170,126,2074,126,1875,130,1758,129,1620,121,1577,118"/>
+<area shape="poly" title=" " alt="" coords="1578,114,1596,116,1774,128,1924,134,2180,136,2436,140,2587,148,2764,164,2769,165,2769,170,2764,169,2587,153,2436,145,2180,141,1924,139,1774,133,1596,121,1578,120"/>
 <area shape="poly" title=" " alt="" coords="2132,190,2172,208,2190,221,2205,239,2208,252,2205,266,2196,291,2184,314,2154,383,2149,380,2179,312,2191,289,2200,265,2203,252,2200,241,2187,225,2170,212,2130,195"/>
 <area shape="rect" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="1834,313,1945,339"/>
 <area shape="poly" title=" " alt="" coords="2053,195,2015,215,1975,242,1939,274,1910,305,1906,301,1935,270,1972,238,2013,211,2051,190"/>
@@ -267,13 +267,13 @@ Include dependency graph for TimelineChartPanel.cpp:</div>
 <area shape="poly" title=" " alt="" coords="2292,336,2370,378,2367,383,2290,341"/>
 <area shape="rect" title=" " alt="" coords="2511,387,2659,427"/>
 <area shape="poly" title=" " alt="" coords="2316,336,2499,381,2497,386,2315,341"/>
-<area shape="poly" title=" " alt="" coords="2572,267,2536,304,2511,325,2483,341,2440,358,2403,367,2336,373,2269,374,2230,379,2186,389,2179,392,2177,387,2185,384,2229,374,2268,369,2336,367,2402,362,2438,353,2480,336,2508,320,2532,301,2569,264"/>
-<area shape="poly" title=" " alt="" coords="2549,268,2429,311,2427,306,2547,263"/>
+<area shape="poly" title=" " alt="" coords="2593,268,2547,305,2516,325,2482,341,2439,356,2401,365,2335,370,2268,373,2230,379,2186,389,2179,392,2177,387,2185,384,2229,373,2268,368,2335,365,2401,359,2438,351,2480,336,2513,320,2544,300,2590,263"/>
+<area shape="poly" title=" " alt="" coords="2569,268,2432,312,2430,307,2568,263"/>
 <area shape="rect" href="../../dc/dd2/IEventsView_8hpp.html" title=" " alt="" coords="2551,313,2681,339"/>
-<area shape="poly" title=" " alt="" coords="2588,264,2606,300,2602,302,2584,267"/>
+<area shape="poly" title=" " alt="" coords="2609,265,2614,299,2609,300,2603,266"/>
 <area shape="rect" title=" " alt="" coords="2705,313,2804,339"/>
-<area shape="poly" title=" " alt="" coords="2609,263,2714,306,2712,310,2607,268"/>
-<area shape="poly" title=" " alt="" coords="2626,263,2816,310,2815,315,2625,268"/>
+<area shape="poly" title=" " alt="" coords="2629,263,2719,305,2716,310,2627,268"/>
+<area shape="poly" title=" " alt="" coords="2646,263,2816,309,2815,314,2645,268"/>
 <area shape="poly" title=" " alt="" coords="2551,339,2186,389,2178,392,2177,387,2185,384,2551,334"/>
 </map>
 </div>
@@ -290,7 +290,7 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_844f6ab5c2ae79211596f3dcdd81adb7.html">application</a></li><li class="navelem"><a class="el" href="../../dir_54b9d2c1a8e2b368b264db9cd54200e2.html">ui</a></li><li class="navelem"><a class="el" href="../../dir_0f25fb00f5c22110cee8883c47212c99.html">qt</a></li><li class="navelem"><a class="el" href="../../dc/d3d/TimelineChartPanel_8cpp.html">TimelineChartPanel.cpp</a></li>
+    <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_844f6ab5c2ae79211596f3dcdd81adb7.html">application</a></li><li class="navelem"><a class="el" href="../../dir_54b9d2c1a8e2b368b264db9cd54200e2.html">ui</a></li><li class="navelem"><a class="el" href="../../dir_0f25fb00f5c22110cee8883c47212c99.html">qt</a></li><li class="navelem"><a class="el" href="../../dir_130743ba506c8567cd5ed797a70ce3c3.html">panels</a></li><li class="navelem"><a class="el" href="../../dc/d3d/TimelineChartPanel_8cpp.html">TimelineChartPanel.cpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

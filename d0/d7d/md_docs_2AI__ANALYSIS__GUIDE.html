@@ -93,11 +93,11 @@ $(document).ready(function(){initNavTree('d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.ht
   <div class="headertitle"><div class="title">AI Log Analysis Setup Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md30"></a> </p>
-<h1><a class="anchor" id="autotoc_md31"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md31"></a> </p>
+<h1><a class="anchor" id="autotoc_md32"></a>
 Overview</h1>
 <p>LogViewer includes AI-powered log analysis through a plugin architecture. The AI provider plugin keeps all your log data private on your machine by using local AI models (Ollama) or cloud providers (OpenAI, Anthropic, Google, xAI).</p>
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md33"></a>
 Plugin Architecture</h1>
 <p>The AI analysis functionality is provided by the <code>ai_provider</code> plugin, which:</p><ul>
 <li>Loads as a ZIP package from the application installation</li>
@@ -106,7 +106,7 @@ Plugin Architecture</h1>
 <li>Adds bottom chat panel for interactive queries</li>
 <li>Logs all operations to application logs with <code>[plugin]</code> prefix</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md33"></a>
+<h1><a class="anchor" id="autotoc_md34"></a>
 Features</h1>
 <p>The AI can analyze your logs in several ways:</p>
 <ol type="1">
@@ -116,20 +116,20 @@ Features</h1>
 <li><b>Root Cause Analysis</b> - Identify why problems occurred</li>
 <li><b>Timeline</b> - Narrative walkthrough of events</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md34"></a>
+<h1><a class="anchor" id="autotoc_md35"></a>
 Installation Steps</h1>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 1. Install Ollama</h2>
 <p><b>macOS:</b> </p><div class="fragment"><div class="line">brew install ollama</div>
 </div><!-- fragment --><p>Or download from: <a href="https://ollama.ai">https://ollama.ai</a></p>
 <p><b>Linux:</b> </p><div class="fragment"><div class="line">curl -fsSL https://ollama.ai/install.sh | sh</div>
 </div><!-- fragment --><p><b>Windows:</b> Download installer from: <a href="https://ollama.ai">https://ollama.ai</a></p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 2. Start Ollama Service</h2>
 <p><b>macOS/Linux:</b> </p><div class="fragment"><div class="line">ollama serve</div>
 </div><!-- fragment --><p><b>Windows:</b> Ollama runs automatically as a Windows service after installation. No manual start needed!</p>
 <p>This starts the local server on <code><a href="http://localhost:11434">http://localhost:11434</a></code></p>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 3. Download AI Model</h2>
 <p><b>Recommended for log analysis:</b> </p><div class="fragment"><div class="line">ollama pull qwen2.5-coder:7b</div>
 </div><!-- fragment --><p><b>Alternative models:</b> </p><div class="fragment"><div class="line"># Fast and lightweight (good for quick summaries)</div>
@@ -141,7 +141,7 @@ Installation Steps</h1>
 <div class="line"># Balanced option</div>
 <div class="line">ollama pull llama3.1:8b      # 4.7GB</div>
 </div><!-- fragment --><p>See "Model Selection" section below for comparison.</p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md39"></a>
 4. Using AI Analysis</h2>
 <ol type="1">
 <li>Load a log file in LogViewer</li>
@@ -153,7 +153,7 @@ Installation Steps</h1>
 <li>Wait for results (typically 10-30 seconds)</li>
 </ol>
 <p><b>Note:</b> The application uses filter-aware analysis. If you have active filters (e.g., showing only ERROR events), the AI will analyze only the filtered results.</p>
-<h2><a class="anchor" id="autotoc_md39"></a>
+<h2><a class="anchor" id="autotoc_md40"></a>
 5. Configure Timeout (For Slow Machines)</h2>
 <ol type="1">
 <li>Go to Edit → Config → AI tab</li>
@@ -161,7 +161,7 @@ Installation Steps</h1>
 <li>For slow machines or large analyses, increase to 600-900 seconds</li>
 <li>Click Save</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md40"></a>
+<h1><a class="anchor" id="autotoc_md41"></a>
 Model Selection</h1>
 <p>LogViewer includes a model selector in the AI Analysis panel. Choose based on your needs:</p>
 <table class="markdownTable">
@@ -181,7 +181,7 @@ Model Selection</h1>
 <td class="markdownTableBodyNone">Llama 3.2 1B   </td><td class="markdownTableBodyNone">Very fast, basic   </td><td class="markdownTableBodyNone">⚡⚡⚡⚡⚡   </td><td class="markdownTableBodyNone">⭐⭐   </td><td class="markdownTableBodyNone">1.3GB   </td></tr>
 </table>
 <p><b>Note:</b> Models must be downloaded first using <code>ollama pull &lt;model-name&gt;</code>.</p>
-<h1><a class="anchor" id="autotoc_md41"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Configuration</h1>
 <p>All AI settings can be configured through the UI:</p>
 <ol type="1">
@@ -199,16 +199,16 @@ Configuration</h1>
 </li>
 </ol>
 <p>Configuration is saved to <code>~/Library/Application Support/LogViewer/config.json</code> (macOS) or equivalent on other platforms.</p>
-<h1><a class="anchor" id="autotoc_md42"></a>
+<h1><a class="anchor" id="autotoc_md43"></a>
 Troubleshooting</h1>
-<h2><a class="anchor" id="autotoc_md43"></a>
+<h2><a class="anchor" id="autotoc_md44"></a>
 "Ollama not available" status</h2>
 <ul>
 <li>Ensure Ollama is running: <code>ollama serve</code></li>
 <li>Check if the port is correct (default: 11434)</li>
 <li>Verify model is downloaded: <code>ollama list</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md45"></a>
 Slow analysis or timeouts</h2>
 <ul>
 <li><b>Increase timeout</b>: Edit → Config → AI tab → Request Timeout (increase to 600+ seconds)</li>
@@ -217,17 +217,17 @@ Slow analysis or timeouts</h2>
 <li>Ensure your CPU/GPU has enough resources</li>
 <li>Check system load (close other heavy applications)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md45"></a>
+<h2><a class="anchor" id="autotoc_md46"></a>
 Connection errors</h2>
 <ul>
 <li>Check firewall settings</li>
 <li>Verify Ollama is listening on localhost:11434</li>
 <li>Try restarting Ollama service</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 Privacy</h1>
 <p>All analysis happens locally on your machine. No log data is sent to external servers.</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md48"></a>
 Performance</h1>
 <ul>
 <li>Initial analysis may take 30-60 seconds as the model loads</li>
@@ -235,14 +235,14 @@ Performance</h1>
 <li>Analyzing 100 events typically takes 15-30 seconds</li>
 <li>Memory usage: 4-8GB depending on model</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Architecture</h1>
 <div class="fragment"><div class="line">LogViewer</div>
 <div class="line">    ├── AIAnalysisPanel (Qt UI)</div>
 <div class="line">    ├── LogAnalyzer (Formats logs, builds prompts)</div>
 <div class="line">    ├── OllamaClient (HTTP communication)</div>
 <div class="line">    └── Ollama Server (Local LLM)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md49"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md50"></a>
 Future Enhancements</h1>
 <p>Potential additions:</p><ul>
 <li>Real-time analysis as logs load</li>

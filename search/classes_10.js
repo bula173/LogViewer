@@ -6,9 +6,12 @@ var searchData=
   ['searchbar_3',['SearchBar',['../dd/d79/classui_1_1qt_1_1SearchBar.html',1,'ui::qt']]],
   ['searchresultrow_4',['SearchResultRow',['../de/d74/structmvc_1_1SearchResultRow.html',1,'mvc']]],
   ['searchresultsview_5',['SearchResultsView',['../d9/dfd/classui_1_1qt_1_1SearchResultsView.html',1,'ui::qt']]],
-  ['spdlogger_6',['SpdLogger',['../dd/d6b/classutil_1_1SpdLogger.html',1,'util']]],
-  ['startupsplash_7',['StartupSplash',['../d7/dda/classui_1_1qt_1_1StartupSplash.html',1,'ui::qt']]],
-  ['state_8',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
-  ['statssummarypanel_9',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
-  ['structuredconfigdialog_10',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
+  ['signalplotpanel_6',['SignalPlotPanel',['../d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html',1,'ui::qt']]],
+  ['spdlogger_7',['SpdLogger',['../dd/d6b/classutil_1_1SpdLogger.html',1,'util']]],
+  ['startupsplash_8',['StartupSplash',['../d7/dda/classui_1_1qt_1_1StartupSplash.html',1,'ui::qt']]],
+  ['state_9',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
+  ['statrow_10',['StatRow',['../d9/d3b/structui_1_1qt_1_1StatRow.html',1,'ui::qt']]],
+  ['statssection_11',['StatsSection',['../d2/d71/structui_1_1qt_1_1StatsSection.html',1,'ui::qt']]],
+  ['statssummarypanel_12',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
+  ['structuredconfigdialog_13',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
 ];

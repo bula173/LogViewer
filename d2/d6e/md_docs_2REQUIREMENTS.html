@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d2/d6e/md_docs_2REQUIREMENTS.html','..
   <div class="headertitle"><div class="title">LogViewer — Requirements Specification</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md581"></a> <b>Document ID</b>: LV-REQ-001 <br  />
- <b><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a></b>: 1.0 <br  />
+<div class="textblock"><p><a class="anchor" id="autotoc_md582"></a> <b>Document ID</b>: LV-REQ-001 <br  />
+ <b><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a></b>: 1.3 <br  />
  <b>Status</b>: Active <br  />
- <b>Application version</b>: 1.2.x <br  />
+ <b>Application version</b>: 1.6.x <br  />
 </p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md583"></a>
+<h1><a class="anchor" id="autotoc_md584"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Purpose and Scope</li>
@@ -123,7 +123,7 @@ Table of Contents</h1>
 <li>Requirement Traceability</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md585"></a>
+<h1><a class="anchor" id="autotoc_md586"></a>
 1. Purpose and Scope</h1>
 <p>This document defines the system and software requirements for <b>LogViewer</b>, a cross-platform desktop application for inspecting, filtering, and analysing log files. It covers:</p>
 <ul>
@@ -143,9 +143,9 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone"><b>MAY</b>   </td><td class="markdownTableBodyNone">Optional — nice-to-have   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md587"></a>
+<h1><a class="anchor" id="autotoc_md588"></a>
 2. System Requirements (SYS)</h1>
-<h2><a class="anchor" id="autotoc_md588"></a>
+<h2><a class="anchor" id="autotoc_md589"></a>
 2.1 Supported Operating Systems</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -161,7 +161,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SYS-005   </td><td class="markdownTableBodyNone">The application MAY run on earlier OS versions but this is not tested or guaranteed   </td><td class="markdownTableBodyNone">MAY   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md589"></a>
+<h2><a class="anchor" id="autotoc_md590"></a>
 2.2 Hardware</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -181,7 +181,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SYS-016   </td><td class="markdownTableBodyNone"><b>Network</b>: Internet access is required only for AI provider features; the core viewer works offline   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md590"></a>
+<h2><a class="anchor" id="autotoc_md591"></a>
 2.3 Runtime Dependencies</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -198,11 +198,11 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone">SYS-024   </td><td class="markdownTableBodyNone">User configuration and application data MUST be stored in the platform-standard user data directory (<code>QStandardPaths</code>)   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md592"></a>
+<h1><a class="anchor" id="autotoc_md593"></a>
 3. Software Requirements (SW)</h1>
-<h2><a class="anchor" id="autotoc_md593"></a>
+<h2><a class="anchor" id="autotoc_md594"></a>
 3.1 Functional Requirements</h2>
-<h3><a class="anchor" id="autotoc_md594"></a>
+<h3><a class="anchor" id="autotoc_md595"></a>
 3.1.1 Log File Loading</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -224,9 +224,17 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-008   </td><td class="markdownTableBodyNone">Files up to <b>100 000 events</b> MUST load within 5 seconds on reference hardware (see SYS-010/011)   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-009   </td><td class="markdownTableBodyNone">Files up to <b>1 000 000 events</b> SHOULD load within 30 seconds on reference hardware   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
+<td class="markdownTableBodyNone">SW-009   </td><td class="markdownTableBodyNone">Files up to <b>1 000 000 events</b> SHOULD load within 30 seconds on reference hardware   </td><td class="markdownTableBodyNone">SHOULD    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010a   </td><td class="markdownTableBodyNone">The application MUST support <b>CAN / ASC</b> log format (Vector CANalyzer <code>.asc</code> files)   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010b   </td><td class="markdownTableBodyNone">The application MUST parse CAN frames into structured events: <code>CAN_ID</code>, <code>CAN_Channel</code>, <code>CAN_DLC</code>, <code>CAN_Data</code>, <code>type</code> (Rx/Tx/ErrorFrame), and float-second <code>timestamp</code>   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-010c   </td><td class="markdownTableBodyNone">The application MUST support loading a <b>DBC</b> CAN database file alongside an ASC log to decode raw frame bytes into named signal values (stored as <code>SIG:&lt;name&gt;</code> fields)   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010d   </td><td class="markdownTableBodyNone">The DBC decoder MUST support both <b>Intel (little-endian)</b> and <b>Motorola (big-endian)</b> signal bit layouts   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md595"></a>
+<h3><a class="anchor" id="autotoc_md596"></a>
 3.1.2 Event Display</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -242,7 +250,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-014   </td><td class="markdownTableBodyNone">Column widths MUST be user-adjustable and SHOULD persist across sessions   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md596"></a>
+<h3><a class="anchor" id="autotoc_md597"></a>
 3.1.3 Filtering</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -264,7 +272,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-027   </td><td class="markdownTableBodyNone">Search results MUST be highlighted in the table and navigable with next/previous controls   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md597"></a>
+<h3><a class="anchor" id="autotoc_md598"></a>
 3.1.4 AI-Assisted Analysis</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -284,7 +292,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-036   </td><td class="markdownTableBodyNone">AI analysis MUST respect the active filter — only visible/filtered events are sent for analysis   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md598"></a>
+<h3><a class="anchor" id="autotoc_md599"></a>
 3.1.5 Export</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -294,8 +302,36 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-041   </td><td class="markdownTableBodyNone">Export SHOULD support at least CSV format   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md599"></a>
-3.1.6 Configuration</h3>
+<h3><a class="anchor" id="autotoc_md600"></a>
+3.1.6 Signal Visualisation</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Requirement   </th><th class="markdownTableHeadNone">Priority    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-045   </td><td class="markdownTableBodyNone">The application MUST provide a <b>Signal Plot</b> panel that plots numeric field values over time as line series   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-046   </td><td class="markdownTableBodyNone">The Signal Plot panel MUST allow the user to select which signals to display via checkboxes; unselected signals MUST be hidden from the chart   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-047   </td><td class="markdownTableBodyNone">The Signal Plot panel MUST support both ASC float-second timestamps and ISO date timestamps for the X axis   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-048   </td><td class="markdownTableBodyNone">The Signal Plot panel SHOULD downsample series to at most 2 000 points when the dataset is larger, to keep rendering responsive   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md601"></a>
+3.1.7 Format-Specific Statistics</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Requirement   </th><th class="markdownTableHeadNone">Priority    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-049   </td><td class="markdownTableBodyNone">The Statistics panel MUST use a <b>Strategy pattern</b> so that format-specific metrics can be added without modifying the panel itself   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-049a   </td><td class="markdownTableBodyNone">For <b>CAN/ASC</b> files the Statistics panel MUST display: total frame count; Rx, Tx, TxRq, and error frame counts with percentage; unique CAN ID count; channel list; recording duration; and average frame rate   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-049b   </td><td class="markdownTableBodyNone">For <b>CAN/ASC</b> files with DBC signal decoding the Statistics panel MUST display min, max, and average values for each decoded <code>SIG:*</code> field   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-049c   </td><td class="markdownTableBodyNone">For non-CAN formats (XML, CSV) the format-specific statistics section MUST be hidden   </td><td class="markdownTableBodyNone">MUST   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md602"></a>
+3.1.8 Configuration</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Requirement   </th><th class="markdownTableHeadNone">Priority    </th></tr>
@@ -304,9 +340,11 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-051   </td><td class="markdownTableBodyNone">The user MUST be able to edit the configuration through the UI   </td><td class="markdownTableBodyNone">MUST    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-052   </td><td class="markdownTableBodyNone">The application MUST start with sensible defaults when no configuration file exists   </td><td class="markdownTableBodyNone">MUST   </td></tr>
+<td class="markdownTableBodyNone">SW-052   </td><td class="markdownTableBodyNone">The application MUST start with sensible defaults when no configuration file exists   </td><td class="markdownTableBodyNone">MUST    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-053   </td><td class="markdownTableBodyNone">The last-used DBC file path MUST be persisted and offered as a default on subsequent loads of ASC files   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md600"></a>
+<h2><a class="anchor" id="autotoc_md603"></a>
 3.2 Performance Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -322,7 +360,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-064   </td><td class="markdownTableBodyNone">Memory usage MUST NOT grow unboundedly when the same file is reloaded multiple times   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md601"></a>
+<h2><a class="anchor" id="autotoc_md604"></a>
 3.3 Usability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -338,7 +376,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-074   </td><td class="markdownTableBodyNone">The application MUST display the current application version in the About dialog   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md602"></a>
+<h2><a class="anchor" id="autotoc_md605"></a>
 3.4 Reliability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -352,7 +390,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-083   </td><td class="markdownTableBodyNone">Plugin load failures MUST be logged and reported to the user; they MUST NOT prevent the core application from starting   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md603"></a>
+<h2><a class="anchor" id="autotoc_md606"></a>
 3.5 Security Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -370,7 +408,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-095   </td><td class="markdownTableBodyNone">Release builds MUST be verified with GitHub Sigstore build attestations   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md604"></a>
+<h2><a class="anchor" id="autotoc_md607"></a>
 3.6 Portability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -382,7 +420,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-102   </td><td class="markdownTableBodyNone">The build system MUST use <b>CMake ≥ 3.25</b> with CMakePresets for all supported platforms   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md605"></a>
+<h2><a class="anchor" id="autotoc_md608"></a>
 3.7 Plugin System Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -399,7 +437,7 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone">SW-114   </td><td class="markdownTableBodyNone">A plugin crash SHOULD NOT cause the host application to crash (fault isolation)   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md607"></a>
+<h1><a class="anchor" id="autotoc_md610"></a>
 4. Build Requirements</h1>
 <p>These are requirements on the development toolchain, not on the end-user system.</p>
 <table class="markdownTable">
@@ -428,7 +466,7 @@ Table of Contents</h1>
 </table>
 <p>Third-party libraries bundled via CMake <code>FetchContent</code> (no separate install required): <code>gtest</code>, <code>fmt</code>, <code>gflags</code>.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md609"></a>
+<h1><a class="anchor" id="autotoc_md612"></a>
 5. Requirement Traceability</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -442,20 +480,26 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-001 – SW-009   </td><td class="markdownTableBodyNone"><code>DataParserTest</code>, <code>CsvParserTest</code>, <code>XmlParserTest</code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-010a – SW-010d   </td><td class="markdownTableBodyNone"><code>AscParserTest</code>, <code>DbcParserTest</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-045 – SW-048   </td><td class="markdownTableBodyNone">Manual UI testing (SignalPlotPanel)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">SW-049 – SW-049c   </td><td class="markdownTableBodyNone">Manual UI testing (StatsSummaryPanel + CanStatisticsStrategy)    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-010 – SW-014   </td><td class="markdownTableBodyNone">Manual UI testing    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-020 – SW-027   </td><td class="markdownTableBodyNone"><code>ModelTest</code>, <code>EventsContainerTest</code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-030 – SW-036   </td><td class="markdownTableBodyNone">Manual AI integration testing    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-060 – SW-064   </td><td class="markdownTableBodyNone">Manual performance testing with <code>example_log_10k.xml</code> and generated logs    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-080 – SW-083   </td><td class="markdownTableBodyNone">Unit tests + manual error injection    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">SW-090 – SW-095   </td><td class="markdownTableBodyNone">CI security workflow (CodeQL, Gitleaks, AV scan, attestation)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">SW-110 – SW-114   </td><td class="markdownTableBodyNone"><code>ArchitectureImprovementsTests</code>, plugin load/reject tests    </td></tr>
+<td class="markdownTableBodyNone">SW-090 – SW-095   </td><td class="markdownTableBodyNone">CI security workflow (CodeQL, Gitleaks, AV scan, attestation)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">SW-110 – SW-114   </td><td class="markdownTableBodyNone"><code>ArchitectureImprovementsTests</code>, plugin load/reject tests    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">BUILD-001 – BUILD-010   </td><td class="markdownTableBodyNone">CI build matrix (<code>macos-debug-qt</code>, <code>macos-release-qt</code>, etc.)   </td></tr>
 </table>
 </div></div><!-- contents -->

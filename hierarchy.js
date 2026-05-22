@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html", null ],
     [ "ui::qt::ActorsPanel::ActorData", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html", null ],
     [ "ui::qt::ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", null ],
     [ "ui::qt::ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", null ],
@@ -11,6 +12,9 @@ var hierarchy =
     [ "config::ConfigObserver", "d0/d90/classconfig_1_1ConfigObserver.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
+    [ "parser::dbc::DbcDatabase", "d1/db6/structparser_1_1dbc_1_1DbcDatabase.html", null ],
+    [ "parser::dbc::DbcMessage", "d9/d4f/structparser_1_1dbc_1_1DbcMessage.html", null ],
+    [ "parser::dbc::DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", null ],
     [ "plugin::PluginDependencyGraph::DependencyNode", "d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html", null ],
     [ "config::FieldDictionary", "d1/de4/structconfig_1_1FieldDictionary.html", null ],
     [ "config::FieldTranslator", "d9/da7/classconfig_1_1FieldTranslator.html", null ],
@@ -24,6 +28,7 @@ var hierarchy =
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ]
     ] ],
     [ "parser::IDataParser", "d3/d8b/classparser_1_1IDataParser.html", [
+      [ "parser::AscParser", "dd/dfa/classparser_1_1AscParser.html", null ],
       [ "parser::CsvParser", "d9/dd2/classparser_1_1CsvParser.html", null ],
       [ "parser::XmlParser", "db/d5c/classparser_1_1XmlParser.html", null ]
     ] ],
@@ -80,13 +85,18 @@ var hierarchy =
     [ "ui::ISearchResultsViewObserver", "d3/df7/classui_1_1ISearchResultsViewObserver.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
+    [ "ui::qt::IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", [
+      [ "ui::qt::CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", null ],
+      [ "ui::qt::GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", null ]
+    ] ],
     [ "config::ItemHighlight", "de/d64/structconfig_1_1ItemHighlight.html", null ],
     [ "ui::ITypeFilterView", "df/d7e/classui_1_1ITypeFilterView.html", [
       [ "ui::qt::TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", null ]
     ] ],
     [ "mvc::IView", "d3/dba/classmvc_1_1IView.html", [
       [ "ui::qt::EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", null ],
-      [ "ui::qt::ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", null ]
+      [ "ui::qt::ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", null ],
+      [ "ui::qt::SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", null ]
     ] ],
     [ "util::KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", null ],
     [ "db::LogEvent", "d1/d00/classdb_1_1LogEvent.html", null ],
@@ -137,6 +147,7 @@ var hierarchy =
       [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],
       [ "ui::qt::ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", null ],
       [ "ui::qt::SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", null ],
+      [ "ui::qt::SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", null ],
       [ "ui::qt::StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", null ],
       [ "ui::qt::StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", null ],
       [ "ui::qt::TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", null ],
@@ -152,6 +163,8 @@ var hierarchy =
     [ "ui::qt::ScenariosPanel::ScenarioEvent", "d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html", null ],
     [ "mvc::SearchResultRow", "de/d74/structmvc_1_1SearchResultRow.html", null ],
     [ "ui::qt::TimeRangeFilterPanel::State", "d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html", null ],
+    [ "ui::qt::StatRow", "d9/d3b/structui_1_1qt_1_1StatRow.html", null ],
+    [ "ui::qt::StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", null ],
     [ "config::TranslationResult", "dd/d7c/structconfig_1_1TranslationResult.html", null ],
     [ "ui::UiServices", "da/dab/classui_1_1UiServices.html", null ],
     [ "updates::UpdateCheckResult", "dd/d5c/structupdates_1_1UpdateCheckResult.html", null ],

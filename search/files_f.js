@@ -1,13 +1,20 @@
 var searchData=
 [
-  ['themeswitcher_2ehpp_0',['ThemeSwitcher.hpp',['../d8/d5b/ThemeSwitcher_8hpp.html',1,'']]],
-  ['thirdpartywarnings_2ehpp_1',['ThirdPartyWarnings.hpp',['../d2/de7/ThirdPartyWarnings_8hpp.html',1,'']]],
-  ['timelinechartpanel_2ecpp_2',['TimelineChartPanel.cpp',['../dc/d3d/TimelineChartPanel_8cpp.html',1,'']]],
-  ['timelinechartpanel_2ehpp_3',['TimelineChartPanel.hpp',['../d8/dc9/TimelineChartPanel_8hpp.html',1,'']]],
-  ['timerangefilterpanel_2ecpp_4',['TimeRangeFilterPanel.cpp',['../da/d47/TimeRangeFilterPanel_8cpp.html',1,'']]],
-  ['timerangefilterpanel_2ehpp_5',['TimeRangeFilterPanel.hpp',['../d4/dda/TimeRangeFilterPanel_8hpp.html',1,'']]],
-  ['traceviewerpanel_2ecpp_6',['TraceViewerPanel.cpp',['../d2/db4/TraceViewerPanel_8cpp.html',1,'']]],
-  ['traceviewerpanel_2ehpp_7',['TraceViewerPanel.hpp',['../d7/d4a/TraceViewerPanel_8hpp.html',1,'']]],
-  ['typefilterview_2ecpp_8',['TypeFilterView.cpp',['../d1/d5a/TypeFilterView_8cpp.html',1,'']]],
-  ['typefilterview_2ehpp_9',['TypeFilterView.hpp',['../d1/d0e/TypeFilterView_8hpp.html',1,'']]]
+  ['sanitizers_2emd_0',['SANITIZERS.md',['../dd/d1e/SANITIZERS_8md.html',1,'']]],
+  ['scenariospanel_2ecpp_1',['ScenariosPanel.cpp',['../d9/df5/ScenariosPanel_8cpp.html',1,'']]],
+  ['scenariospanel_2ehpp_2',['ScenariosPanel.hpp',['../d1/dbe/ScenariosPanel_8hpp.html',1,'']]],
+  ['sdk_5fgetting_5fstarted_2emd_3',['SDK_GETTING_STARTED.md',['../d8/de1/SDK__GETTING__STARTED_8md.html',1,'']]],
+  ['sdk_5fquick_5freference_2emd_4',['SDK_QUICK_REFERENCE.md',['../df/dae/SDK__QUICK__REFERENCE_8md.html',1,'']]],
+  ['searchbar_2ecpp_5',['SearchBar.cpp',['../df/d71/SearchBar_8cpp.html',1,'']]],
+  ['searchbar_2ehpp_6',['SearchBar.hpp',['../d7/d52/SearchBar_8hpp.html',1,'']]],
+  ['searchresultsview_2ecpp_7',['SearchResultsView.cpp',['../da/d96/SearchResultsView_8cpp.html',1,'']]],
+  ['searchresultsview_2ehpp_8',['SearchResultsView.hpp',['../d1/d12/SearchResultsView_8hpp.html',1,'']]],
+  ['signalplotpanel_2ecpp_9',['SignalPlotPanel.cpp',['../d2/d3b/SignalPlotPanel_8cpp.html',1,'']]],
+  ['signalplotpanel_2ehpp_10',['SignalPlotPanel.hpp',['../dc/d4a/SignalPlotPanel_8hpp.html',1,'']]],
+  ['startupsplash_2ecpp_11',['StartupSplash.cpp',['../df/d98/StartupSplash_8cpp.html',1,'']]],
+  ['startupsplash_2ehpp_12',['StartupSplash.hpp',['../dd/dd4/StartupSplash_8hpp.html',1,'']]],
+  ['statssummarypanel_2ecpp_13',['StatsSummaryPanel.cpp',['../df/d30/StatsSummaryPanel_8cpp.html',1,'']]],
+  ['statssummarypanel_2ehpp_14',['StatsSummaryPanel.hpp',['../d0/d13/StatsSummaryPanel_8hpp.html',1,'']]],
+  ['structuredconfigdialog_2ecpp_15',['StructuredConfigDialog.cpp',['../d8/d1a/StructuredConfigDialog_8cpp.html',1,'']]],
+  ['structuredconfigdialog_2ehpp_16',['StructuredConfigDialog.hpp',['../da/dcc/StructuredConfigDialog_8hpp.html',1,'']]]
 ];

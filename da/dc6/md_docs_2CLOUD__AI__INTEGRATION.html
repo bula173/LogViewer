@@ -93,18 +93,18 @@ $(document).ready(function(){initNavTree('da/dc6/md_docs_2CLOUD__AI__INTEGRATION
   <div class="headertitle"><div class="title">Cloud AI Provider Integration</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md275"></a> The application now supports multiple AI providers including cloud services (ChatGPT, Claude, Gemini, Grok).</p>
-<h1><a class="anchor" id="autotoc_md276"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md276"></a> The application now supports multiple AI providers including cloud services (ChatGPT, Claude, Gemini, Grok).</p>
+<h1><a class="anchor" id="autotoc_md277"></a>
 Supported Providers</h1>
-<h2><a class="anchor" id="autotoc_md277"></a>
+<h2><a class="anchor" id="autotoc_md278"></a>
 Local Providers (No API Key Required)</h2>
 <ul>
 <li><b>Ollama</b> - <code><a href="http://localhost:11434">http://localhost:11434</a></code> - Free, open-source, runs locally</li>
 <li><b>LM Studio</b> - <code><a href="http://localhost:1234">http://localhost:1234</a></code> - Free, runs any GGUF model locally</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md278"></a>
+<h2><a class="anchor" id="autotoc_md279"></a>
 Cloud Providers (API Key Required)</h2>
-<h3><a class="anchor" id="autotoc_md279"></a>
+<h3><a class="anchor" id="autotoc_md280"></a>
 OpenAI / ChatGPT</h3>
 <ul>
 <li><b>Provider Code</b>: <code>openai</code></li>
@@ -113,7 +113,7 @@ OpenAI / ChatGPT</h3>
 <li><b>Get API Key</b>: <a href="https://platform.openai.com/api-keys">https://platform.openai.com/api-keys</a></li>
 <li><b>Pricing</b>: Pay per token</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md280"></a>
+<h3><a class="anchor" id="autotoc_md281"></a>
 Anthropic / Claude</h3>
 <ul>
 <li><b>Provider Code</b>: <code>anthropic</code></li>
@@ -122,7 +122,7 @@ Anthropic / Claude</h3>
 <li><b>Get API Key</b>: <a href="https://console.anthropic.com/">https://console.anthropic.com/</a></li>
 <li><b>Pricing</b>: Pay per token</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md281"></a>
+<h3><a class="anchor" id="autotoc_md282"></a>
 Google / Gemini</h3>
 <ul>
 <li><b>Provider Code</b>: <code>google</code></li>
@@ -131,7 +131,7 @@ Google / Gemini</h3>
 <li><b>Get API Key</b>: <a href="https://ai.google.dev/">https://ai.google.dev/</a></li>
 <li><b>Pricing</b>: Free tier available, then pay per token</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md282"></a>
+<h3><a class="anchor" id="autotoc_md283"></a>
 xAI / Grok</h3>
 <ul>
 <li><b>Provider Code</b>: <code>xai</code></li>
@@ -140,9 +140,9 @@ xAI / Grok</h3>
 <li><b>Get API Key</b>: <a href="https://x.ai/api">https://x.ai/api</a></li>
 <li><b>Pricing</b>: Pay per token</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md283"></a>
+<h1><a class="anchor" id="autotoc_md284"></a>
 Configuration</h1>
-<h2><a class="anchor" id="autotoc_md284"></a>
+<h2><a class="anchor" id="autotoc_md285"></a>
 Via UI (Recommended)</h2>
 <ol type="1">
 <li>Open <b>Tools → Preferences</b></li>
@@ -152,7 +152,7 @@ Via UI (Recommended)</h2>
 <li>Adjust model name if needed</li>
 <li>Click <b>Save</b></li>
 </ol>
-<h2><a class="anchor" id="autotoc_md285"></a>
+<h2><a class="anchor" id="autotoc_md286"></a>
 Via config.json</h2>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;aiConfig&quot;: {</div>
@@ -162,21 +162,21 @@ Via config.json</h2>
 <div class="line">    &quot;defaultModel&quot;: &quot;gpt-4&quot;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md286"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md287"></a>
 API Authentication</h1>
-<h2><a class="anchor" id="autotoc_md287"></a>
+<h2><a class="anchor" id="autotoc_md288"></a>
 OpenAI, xAI (Bearer Token)</h2>
 <div class="fragment"><div class="line">Authorization: Bearer YOUR_API_KEY</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md288"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md289"></a>
 Anthropic (x-api-key Header)</h2>
 <div class="fragment"><div class="line">x-api-key: YOUR_API_KEY</div>
 <div class="line">anthropic-version: 2023-06-01</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md289"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md290"></a>
 Google (API Key in URL)</h2>
 <div class="fragment"><div class="line">https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=YOUR_API_KEY</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md290"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md291"></a>
 Implementation Status</h1>
-<h2><a class="anchor" id="autotoc_md291"></a>
+<h2><a class="anchor" id="autotoc_md292"></a>
 ✅ Completed</h2>
 <ul>
 <li>Configuration system for all providers</li>
@@ -186,7 +186,7 @@ Implementation Status</h1>
 <li>Model name configuration</li>
 <li>Config save/load</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md292"></a>
+<h2><a class="anchor" id="autotoc_md293"></a>
 🔄 To Implement in OllamaClient</h2>
 <ol type="1">
 <li><b>Add API key to HTTP headers</b> based on provider</li>
@@ -199,17 +199,17 @@ Implementation Status</h1>
 <li><b>Parse different response formats</b></li>
 <li><b>Handle provider-specific errors</b></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md293"></a>
+<h1><a class="anchor" id="autotoc_md294"></a>
 Testing Cloud Providers</h1>
-<h2><a class="anchor" id="autotoc_md294"></a>
+<h2><a class="anchor" id="autotoc_md295"></a>
 1. Get API Key</h2>
 <p>Sign up for your chosen provider and generate an API key.</p>
-<h2><a class="anchor" id="autotoc_md295"></a>
+<h2><a class="anchor" id="autotoc_md296"></a>
 2. Configure in App</h2>
 <div class="fragment"><div class="line">Provider: OpenAI / ChatGPT</div>
 <div class="line">API Key: sk-proj-xxxxxxxxxxxxx</div>
 <div class="line">Model: gpt-4</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md296"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md297"></a>
 3. Test with Simple Prompt</h2>
 <ul>
 <li>Load a log file</li>
@@ -217,7 +217,7 @@ Testing Cloud Providers</h1>
 <li>Select "Summary" analysis</li>
 <li>Click "Analyze Logs"</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md297"></a>
+<h1><a class="anchor" id="autotoc_md298"></a>
 Cost Considerations</h1>
 <p>Cloud providers charge per token:</p><ul>
 <li><b>Input tokens</b>: Your prompts + log context</li>
@@ -230,10 +230,10 @@ Cost Considerations</h1>
 <li>Grok: Pricing TBD</li>
 </ul>
 <p><b>Tip</b>: Start with free local models (Ollama) for testing, use cloud providers for production.</p>
-<h1><a class="anchor" id="autotoc_md298"></a>
+<h1><a class="anchor" id="autotoc_md299"></a>
 Security Notes</h1>
 <p>⚠️ <b>Important</b>: API keys are stored in <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> in plain text.</p>
-<h2><a class="anchor" id="autotoc_md299"></a>
+<h2><a class="anchor" id="autotoc_md300"></a>
 Best Practices:</h2>
 <ol type="1">
 <li>Never commit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> with API keys to git</li>
@@ -242,37 +242,37 @@ Best Practices:</h2>
 <li>Use API key restrictions (IP allowlists, rate limits)</li>
 <li>Monitor usage to detect unauthorized access</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md300"></a>
+<h2><a class="anchor" id="autotoc_md301"></a>
 Future Enhancement:</h2>
 <ul>
 <li>Encrypt API keys in config file</li>
 <li>Support for environment variables</li>
 <li>Keychain/credential manager integration</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md301"></a>
+<h1><a class="anchor" id="autotoc_md302"></a>
 Troubleshooting</h1>
-<h2><a class="anchor" id="autotoc_md302"></a>
+<h2><a class="anchor" id="autotoc_md303"></a>
 "API key invalid"</h2>
 <ul>
 <li>Check you copied the full key</li>
 <li>Verify key hasn't expired</li>
 <li>Ensure key has correct permissions</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md303"></a>
+<h2><a class="anchor" id="autotoc_md304"></a>
 "Rate limit exceeded"</h2>
 <ul>
 <li>Wait a few minutes</li>
 <li>Upgrade to paid tier</li>
 <li>Use local provider instead</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md304"></a>
+<h2><a class="anchor" id="autotoc_md305"></a>
 "Model not found"</h2>
 <ul>
 <li>Check model name spelling</li>
 <li>Verify model is available in your region</li>
 <li>Some models require approval</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md305"></a>
+<h1><a class="anchor" id="autotoc_md306"></a>
 Next Steps</h1>
 <p>To fully implement cloud provider support, update <code>OllamaClient.cpp</code>:</p>
 <ol type="1">

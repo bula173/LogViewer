@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d8/ddc/md_docs_2BUILD__GUIDE.html','..
   <div class="headertitle"><div class="title">Build System Guide and Improvements</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md197"></a> This document outlines the LogViewer build system configuration, available presets, and optimization strategies.</p>
-<h1><a class="anchor" id="autotoc_md198"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md198"></a> This document outlines the LogViewer build system configuration, available presets, and optimization strategies.</p>
+<h1><a class="anchor" id="autotoc_md199"></a>
 Overview</h1>
 <p>LogViewer uses <b>CMake 3.25+</b> with platform-specific presets for streamlined cross-platform building. The build system supports:</p><ul>
 <li><b>macOS</b> (Apple Silicon &amp; Intel)</li>
@@ -103,9 +103,9 @@ Overview</h1>
 </ul>
 <p><b>C++ Standard</b>: C++20 (required)</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md200"></a>
+<h1><a class="anchor" id="autotoc_md201"></a>
 Quick Start</h1>
-<h2><a class="anchor" id="autotoc_md201"></a>
+<h2><a class="anchor" id="autotoc_md202"></a>
 macOS</h2>
 <div class="fragment"><div class="line"># Debug build</div>
 <div class="line">cmake --build --preset macos-debug-build-qt</div>
@@ -115,7 +115,7 @@ macOS</h2>
 <div class="line"> </div>
 <div class="line"># Run tests</div>
 <div class="line">./build/macos-debug-qt/tests/bin/LogViewer_tests</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md202"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md203"></a>
 Linux</h2>
 <div class="fragment"><div class="line"># Debug build</div>
 <div class="line">cmake --build --preset linux-debug-build-qt</div>
@@ -125,14 +125,14 @@ Linux</h2>
 <div class="line"> </div>
 <div class="line"># Run tests</div>
 <div class="line">./build/linux-debug-qt/tests/bin/LogViewer_tests</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md203"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md204"></a>
 Windows (MSYS2)</h2>
 <div class="fragment"><div class="line">cmake --build --preset windows-msys-debug-qt</div>
 <div class="line">.\build\windows-msys-debug-qt\src\main\LogViewer.exe</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md205"></a>
+<h1><a class="anchor" id="autotoc_md206"></a>
 Build Presets</h1>
-<h2><a class="anchor" id="autotoc_md206"></a>
+<h2><a class="anchor" id="autotoc_md207"></a>
 Available Presets</h2>
 <p><b>macOS</b>:</p><ul>
 <li><code>macos-debug-build-qt</code> - Debug build with Qt</li>
@@ -148,7 +148,7 @@ Available Presets</h2>
 <li><code>windows-msys-debug-qt</code> - Debug build</li>
 <li><code>windows-msys-release-qt</code> - Release build</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md207"></a>
+<h2><a class="anchor" id="autotoc_md208"></a>
 Using Presets</h2>
 <div class="fragment"><div class="line"># List all available presets</div>
 <div class="line">cmake --list-presets</div>
@@ -168,7 +168,7 @@ Using Presets</h2>
 <div class="line"># Parallel build (use all CPU cores)</div>
 <div class="line">cmake --build --preset &lt;preset-name&gt; -j$(nproc)</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md209"></a>
+<h1><a class="anchor" id="autotoc_md210"></a>
 Build Directory Structure</h1>
 <p>All presets output to <code>build/&lt;preset-name&gt;/</code>:</p>
 <div class="fragment"><div class="line">build/</div>
@@ -191,14 +191,14 @@ Build Directory Structure</h1>
 <li>Plugins: <code>build/&lt;preset&gt;/plugins/</code></li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md211"></a>
+<h1><a class="anchor" id="autotoc_md212"></a>
 Build Configuration</h1>
-<h2><a class="anchor" id="autotoc_md212"></a>
+<h2><a class="anchor" id="autotoc_md213"></a>
 C++ Standard</h2>
 <p>LogViewer requires <b>C++20</b>. This is enforced in CMakeLists.txt:</p>
 <div class="fragment"><div class="line">set(CMAKE_CXX_STANDARD 20)</div>
 <div class="line">set(CMAKE_CXX_STANDARD_REQUIRED ON)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md213"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md214"></a>
 Compiler Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -214,7 +214,7 @@ Compiler Requirements</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Windows   </td><td class="markdownTableBodyNone">MinGW/GCC   </td><td class="markdownTableBodyNone">11.0   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md214"></a>
+<h2><a class="anchor" id="autotoc_md215"></a>
 Qt Version</h2>
 <ul>
 <li><b>Minimum</b>: Qt 6.5</li>
@@ -229,9 +229,9 @@ Qt Version</h2>
 <div class="line"># Windows (via vcpkg or Qt installer)</div>
 <div class="line">vcpkg install qt6:x64-windows</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md216"></a>
+<h1><a class="anchor" id="autotoc_md217"></a>
 Build Optimization</h1>
-<h2><a class="anchor" id="autotoc_md217"></a>
+<h2><a class="anchor" id="autotoc_md218"></a>
 Release Build Flags</h2>
 <p>Release presets automatically enable:</p><ul>
 <li><code>-O3</code> optimization</li>
@@ -239,7 +239,7 @@ Release Build Flags</h2>
 <li>Symbol stripping</li>
 </ul>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt;-release-qt -j$(nproc)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md218"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md219"></a>
 Debug Build with Full Symbols</h2>
 <p>Debug presets include:</p><ul>
 <li><code>-g</code> full debugging symbols</li>
@@ -247,7 +247,7 @@ Debug Build with Full Symbols</h2>
 <li>Assertions enabled</li>
 </ul>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt;-debug-qt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md219"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md220"></a>
 Parallel Compilation</h2>
 <p>Use all CPU cores to speed up builds:</p>
 <div class="fragment"><div class="line"># macOS/Linux</div>
@@ -255,18 +255,18 @@ Parallel Compilation</h2>
 <div class="line"> </div>
 <div class="line"># Windows</div>
 <div class="line">cmake --build --preset &lt;preset&gt; -j%NUMBER_OF_PROCESSORS%</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md220"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md221"></a>
 Incremental Builds</h2>
 <p>Only modified files are recompiled:</p>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md221"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md222"></a>
 Clean Build</h2>
 <p>Remove all generated files and rebuild:</p>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt; --clean-first</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md223"></a>
+<h1><a class="anchor" id="autotoc_md224"></a>
 Dependency Management</h1>
-<h2><a class="anchor" id="autotoc_md224"></a>
+<h2><a class="anchor" id="autotoc_md225"></a>
 Third-Party Dependencies</h2>
 <p>Located in <code>thirdparty/</code> and managed by FetchContent:</p>
 <ul>
@@ -279,7 +279,7 @@ Third-Party Dependencies</h2>
 <li><b>libarchive</b> - Archive handling</li>
 </ul>
 <p>Dependencies are automatically downloaded and built during CMake configuration.</p>
-<h2><a class="anchor" id="autotoc_md225"></a>
+<h2><a class="anchor" id="autotoc_md226"></a>
 Reducing Build Time</h2>
 <p><b>Option 1: Use Pre-built Dependencies</b> </p><div class="fragment"><div class="line"># Pass pre-built paths to CMake</div>
 <div class="line">cmake --preset &lt;preset&gt; \</div>
@@ -292,29 +292,29 @@ Reducing Build Time</h2>
 <div class="line">export CXX=&quot;ccache g++&quot;</div>
 <div class="line">cmake --build --preset &lt;preset&gt;</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md227"></a>
+<h1><a class="anchor" id="autotoc_md228"></a>
 Troubleshooting Build Issues</h1>
-<h2><a class="anchor" id="autotoc_md228"></a>
+<h2><a class="anchor" id="autotoc_md229"></a>
 Qt Not Found</h2>
 <div class="fragment"><div class="line"># Manually specify Qt path</div>
 <div class="line">cmake --preset &lt;preset&gt; -DQt6_DIR=/opt/homebrew/opt/qt/lib/cmake/Qt6</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md229"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md230"></a>
 Out of Memory During Linking</h2>
 <div class="fragment"><div class="line"># Reduce parallel jobs</div>
 <div class="line">cmake --build --preset &lt;preset&gt; -j2</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md230"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md231"></a>
 C++20 Features Not Recognized</h2>
 <div class="fragment"><div class="line"># Verify compiler version</div>
 <div class="line">gcc --version    # Should be 11+</div>
 <div class="line">clang --version  # Should be 15+</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md231"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md232"></a>
 Pre-compiled Header (PCH) Issues</h2>
 <div class="fragment"><div class="line"># Disable PCH if causing problems</div>
 <div class="line">cmake --preset &lt;preset&gt; -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md233"></a>
+<h1><a class="anchor" id="autotoc_md234"></a>
 Development Workflow</h1>
-<h2><a class="anchor" id="autotoc_md234"></a>
+<h2><a class="anchor" id="autotoc_md235"></a>
 Setup Development Environment</h2>
 <div class="fragment"><div class="line"># 1. Clone repository</div>
 <div class="line">git clone https://github.com/bula173/LogViewer.git</div>
@@ -331,7 +331,7 @@ Setup Development Environment</h2>
 <div class="line"> </div>
 <div class="line"># 5. Run application</div>
 <div class="line">./build/macos-debug-qt/src/main/LogViewer</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md235"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md236"></a>
 Iterative Development</h2>
 <p>After making code changes:</p>
 <div class="fragment"><div class="line"># Rebuild incrementally (only changed files)</div>
@@ -342,7 +342,7 @@ Iterative Development</h2>
 <div class="line"> </div>
 <div class="line"># Run application</div>
 <div class="line">./build/&lt;preset&gt;/src/main/LogViewer</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md236"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md237"></a>
 Code Quality Checks</h2>
 <div class="fragment"><div class="line"># Static analysis with cppcheck</div>
 <div class="line">cppcheck --enable=all src/</div>
@@ -353,9 +353,9 @@ Code Quality Checks</h2>
 <div class="line"># Format with clang-format</div>
 <div class="line">find src -name &quot;*.cpp&quot; -o -name &quot;*.hpp&quot; | xargs clang-format -i</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md238"></a>
+<h1><a class="anchor" id="autotoc_md239"></a>
 Continuous Integration</h1>
-<h2><a class="anchor" id="autotoc_md239"></a>
+<h2><a class="anchor" id="autotoc_md240"></a>
 GitHub Actions</h2>
 <p>Build is validated on every commit via GitHub Actions. See <code>.github/workflows/</code> for CI configuration.</p>
 <p><b>CI Runs</b>:</p><ul>
@@ -365,7 +365,7 @@ GitHub Actions</h2>
 <li>All 45+ unit tests</li>
 <li>Static analysis (cppcheck)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md240"></a>
+<h2><a class="anchor" id="autotoc_md241"></a>
 Local Pre-commit Validation</h2>
 <p>Before committing, verify:</p>
 <div class="fragment"><div class="line"># 1. Build succeeds</div>
@@ -380,24 +380,24 @@ Local Pre-commit Validation</h2>
 <div class="line"># 4. Static analysis passes</div>
 <div class="line">cppcheck --suppress=missingIncludeSystem src/</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md242"></a>
+<h1><a class="anchor" id="autotoc_md243"></a>
 Advanced Build Options</h1>
-<h2><a class="anchor" id="autotoc_md243"></a>
+<h2><a class="anchor" id="autotoc_md244"></a>
 Enable All Warnings</h2>
 <div class="fragment"><div class="line">cmake --preset &lt;preset&gt; -DCMAKE_CXX_FLAGS=&quot;-Wall -Wextra -Wpedantic&quot;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md244"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md245"></a>
 Force Color Output</h2>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt; -DFORCE_COLORED_OUTPUT=ON</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md245"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md246"></a>
 Build Verbose (Show Full Commands)</h2>
 <div class="fragment"><div class="line">cmake --build --preset &lt;preset&gt; --verbose</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md246"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md247"></a>
 Generate Compilation Database</h2>
 <div class="fragment"><div class="line">cmake --preset &lt;preset&gt; -DCMAKE_EXPORT_COMPILE_COMMANDS=ON</div>
 <div class="line">cmake --build --preset &lt;preset&gt;</div>
 <div class="line"># Generates: compile_commands.json (for IDE integration)</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md248"></a>
+<h1><a class="anchor" id="autotoc_md249"></a>
 Performance Benchmarks</h1>
 <p>Typical build times (clean build, parallel with <code>-j$(nproc)</code>):</p>
 <table class="markdownTable">
@@ -416,23 +416,23 @@ Performance Benchmarks</h1>
 </table>
 <p><b>With ccache after first build</b>: ~10-15s (incremental)</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md250"></a>
+<h1><a class="anchor" id="autotoc_md251"></a>
 Distribution and Packaging</h1>
-<h2><a class="anchor" id="autotoc_md251"></a>
+<h2><a class="anchor" id="autotoc_md252"></a>
 macOS App Bundle</h2>
 <div class="fragment"><div class="line">cmake --build --preset macos-release-build-qt</div>
 <div class="line"># Creates: build/macos-release-qt/src/main/LogViewer.app</div>
 <div class="line"># Fully self-contained, ready to distribute</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md252"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md253"></a>
 Linux Package</h2>
 <div class="fragment"><div class="line">cmake --build --preset linux-release-build-qt</div>
 <div class="line"># Creates: build/linux-release-qt/src/main/LogViewer</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md253"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md254"></a>
 Windows Installer</h2>
 <div class="fragment"><div class="line">cmake --build --preset windows-msys-release-qt</div>
 <div class="line">REM Creates executable and dependencies for packaging</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md255"></a>
+<h1><a class="anchor" id="autotoc_md256"></a>
 See Also</h1>
 <ul>
 <li><code><a class="el" href="../../d0/dd2/DEVELOPMENT_8md.html">DEVELOPMENT.md</a></code> - Development guidelines and workflows</li>

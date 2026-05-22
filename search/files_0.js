@@ -9,5 +9,7 @@ var searchData=
   ['ai_5fprovider_5fplugin_2emd_6',['AI_PROVIDER_PLUGIN.md',['../d8/d2d/AI__PROVIDER__PLUGIN_8md.html',1,'']]],
   ['api_5fexamples_2emd_7',['API_EXAMPLES.md',['../de/d33/API__EXAMPLES_8md.html',1,'']]],
   ['architecture_2emd_8',['ARCHITECTURE.md',['../da/d01/ARCHITECTURE_8md.html',1,'']]],
-  ['architecture_5fimprovements_2emd_9',['ARCHITECTURE_IMPROVEMENTS.md',['../d5/d16/ARCHITECTURE__IMPROVEMENTS_8md.html',1,'']]]
+  ['architecture_5fimprovements_2emd_9',['ARCHITECTURE_IMPROVEMENTS.md',['../d5/d16/ARCHITECTURE__IMPROVEMENTS_8md.html',1,'']]],
+  ['ascparser_2ecpp_10',['AscParser.cpp',['../dc/d73/AscParser_8cpp.html',1,'']]],
+  ['ascparser_2ehpp_11',['AscParser.hpp',['../d7/d8f/AscParser_8hpp.html',1,'']]]
 ];

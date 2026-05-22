@@ -1,6 +1,7 @@
 var namespaceui_1_1qt =
 [
     [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03" ],
+    [ "anonymous_namespace{CanStatisticsStrategy.cpp}", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03.html", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03" ],
     [ "anonymous_namespace{FilterEditorDialog.cpp}", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html", [
       [ "kColumnFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190", null ],
       [ "kParameterFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf", null ]
@@ -10,6 +11,12 @@ var namespaceui_1_1qt =
       [ "kNameColumn", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#af7c2a59790efbde0976900d4d9e3de72", null ],
       [ "kPatternColumn", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#ae2b5640c7782b4cfefb7944256db1981", null ],
       [ "kTargetColumn", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd", null ]
+    ] ],
+    [ "anonymous_namespace{ItemDetailsView.cpp}", "d6/dfd/namespaceui_1_1qt_1_1anonymous__namespace_02ItemDetailsView_8cpp_03.html", [
+      [ "IsSignalKey", "d6/dfd/namespaceui_1_1qt_1_1anonymous__namespace_02ItemDetailsView_8cpp_03.html#a946c88ab5f98e7e6dfcb8aaf041d9e92", null ],
+      [ "SetSeparatorRow", "d6/dfd/namespaceui_1_1qt_1_1anonymous__namespace_02ItemDetailsView_8cpp_03.html#a4de92458bba8e6dd2574907565f7176d", null ],
+      [ "kSignalPrefix", "d6/dfd/namespaceui_1_1qt_1_1anonymous__namespace_02ItemDetailsView_8cpp_03.html#acef2b08d037226ffba1683bcfd3c8309", null ],
+      [ "kSignalPrefixLen", "d6/dfd/namespaceui_1_1qt_1_1anonymous__namespace_02ItemDetailsView_8cpp_03.html#a992ee22d2dff8d3adb9b0d4eb59c4bb9", null ]
     ] ],
     [ "anonymous_namespace{PatternAnalysisPanel.cpp}", "d5/dfe/namespaceui_1_1qt_1_1anonymous__namespace_02PatternAnalysisPanel_8cpp_03.html", [
       [ "toEpochSecs", "d5/dfe/namespaceui_1_1qt_1_1anonymous__namespace_02PatternAnalysisPanel_8cpp_03.html#a27cf3d0370508a34fe83c4ad3af751d0", null ]
@@ -27,6 +34,7 @@ var namespaceui_1_1qt =
     [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
     [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
     [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
+    [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
     [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
     [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
     [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
@@ -34,6 +42,8 @@ var namespaceui_1_1qt =
     [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
     [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
     [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
+    [ "GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy" ],
+    [ "IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", "df/dae/classui_1_1qt_1_1IStatisticsStrategy" ],
     [ "ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", "d0/d5c/classui_1_1qt_1_1ItemDetailsView" ],
     [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
     [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
@@ -41,7 +51,10 @@ var namespaceui_1_1qt =
     [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
     [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
     [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
+    [ "SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel" ],
     [ "StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", "d7/dda/classui_1_1qt_1_1StartupSplash" ],
+    [ "StatRow", "d9/d3b/structui_1_1qt_1_1StatRow.html", "d9/d3b/structui_1_1qt_1_1StatRow" ],
+    [ "StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", "d2/d71/structui_1_1qt_1_1StatsSection" ],
     [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
     [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
     [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
@@ -52,5 +65,7 @@ var namespaceui_1_1qt =
     [ "UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", "d5/d32/classui_1_1qt_1_1UpdateDialog" ],
     [ "PluginEvents_GetEventJsonBridge", "d6/d40/namespaceui_1_1qt.html#a4f0b63cfd892ef57974198d29d2f175a", null ],
     [ "PluginEvents_GetSizeBridge", "d6/d40/namespaceui_1_1qt.html#a9b1095ad1ffe19865758ab336bb5c1e8", null ],
-    [ "PluginHostUi_SetCurrentItemBridge", "d6/d40/namespaceui_1_1qt.html#a8a4882a0ad2e3814a64d3feb8658527a", null ]
+    [ "PluginHostUi_SetCurrentItemBridge", "d6/d40/namespaceui_1_1qt.html#a8a4882a0ad2e3814a64d3feb8658527a", null ],
+    [ "kMaxPoints", "d6/d40/namespaceui_1_1qt.html#a8668dbf1ac43de327063f388f7106aff", null ],
+    [ "kPalette", "d6/d40/namespaceui_1_1qt.html#ab12bdddc2bf69763c4ff014fd138249e", null ]
 ];

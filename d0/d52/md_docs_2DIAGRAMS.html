@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d0/d52/md_docs_2DIAGRAMS.html','../../
   <div class="headertitle"><div class="title">LogViewer Architecture and Workflow Diagrams</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md425"></a> This document provides an index and explanation of all PlantUML diagrams in the LogViewer documentation. These diagrams visualize the system architecture, component relationships, and key workflows.</p>
-<h1><a class="anchor" id="autotoc_md426"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md426"></a> This document provides an index and explanation of all PlantUML diagrams in the LogViewer documentation. These diagrams visualize the system architecture, component relationships, and key workflows.</p>
+<h1><a class="anchor" id="autotoc_md427"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>System Architecture Overview</li>
@@ -102,9 +102,9 @@ Table of Contents</h1>
 <li>Sequence Diagrams</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md428"></a>
+<h1><a class="anchor" id="autotoc_md429"></a>
 System Architecture Overview</h1>
-<h2><a class="anchor" id="autotoc_md429"></a>
+<h2><a class="anchor" id="autotoc_md430"></a>
 architecture-overview.puml</h2>
 <p><b>Purpose</b>: High-level system architecture showing all major components and external integrations.</p>
 <p><b>Components</b>:</p><ul>
@@ -132,9 +132,9 @@ architecture-overview.puml</h2>
 <li>Plugin Manager loads and manages plugins</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md431"></a>
+<h1><a class="anchor" id="autotoc_md432"></a>
 Component Diagrams</h1>
-<h2><a class="anchor" id="autotoc_md432"></a>
+<h2><a class="anchor" id="autotoc_md433"></a>
 data-model.puml</h2>
 <p><b>Purpose</b>: Details the core data model classes and their relationships.</p>
 <p><b>Key Classes</b>:</p><ul>
@@ -159,7 +159,7 @@ data-model.puml</h2>
 </ul>
 <p><b>Thread Safety</b>: EventsContainer provides thread-safe access through shared_mutex (readers can run concurrently, writers get exclusive access)</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md434"></a>
+<h2><a class="anchor" id="autotoc_md435"></a>
 filter-system.puml</h2>
 <p><b>Purpose</b>: Details the filter system architecture using the Strategy pattern.</p>
 <p><b>Key Classes</b>:</p><ul>
@@ -190,7 +190,7 @@ filter-system.puml</h2>
 </ul>
 <p><b>Design Pattern</b>: Strategy pattern allows swappable matching algorithms</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md436"></a>
+<h2><a class="anchor" id="autotoc_md437"></a>
 plugin-system.puml</h2>
 <p><b>Purpose</b>: Details the plugin system architecture enabling extensibility.</p>
 <p><b>Key Interfaces</b>:</p><ul>
@@ -228,9 +228,9 @@ plugin-system.puml</h2>
 <li>Observer pattern (PluginObserver notifications)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md438"></a>
+<h1><a class="anchor" id="autotoc_md439"></a>
 Sequence Diagrams</h1>
-<h2><a class="anchor" id="autotoc_md439"></a>
+<h2><a class="anchor" id="autotoc_md440"></a>
 log-loading-workflow.puml</h2>
 <p><b>Purpose</b>: Shows the complete workflow from user selecting a log file through display.</p>
 <p><b>Workflow</b>:</p><ol type="1">
@@ -246,7 +246,7 @@ log-loading-workflow.puml</h2>
 </ol>
 <p><b>Performance</b>: Virtual scrolling enables handling of millions of events</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md441"></a>
+<h2><a class="anchor" id="autotoc_md442"></a>
 filter-workflow.puml</h2>
 <p><b>Purpose</b>: Shows how filters are created, applied, and updated.</p>
 <p><b>Workflow</b>:</p><ol type="1">
@@ -266,7 +266,7 @@ filter-workflow.puml</h2>
 </ol>
 <p><b>Design</b>: Multiple filters are applied sequentially, maintaining set intersection semantics</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md443"></a>
+<h2><a class="anchor" id="autotoc_md444"></a>
 ai-analysis-workflow.puml</h2>
 <p><b>Purpose</b>: Shows AI analysis request flow from user action to results display.</p>
 <p><b>Workflow</b>:</p><ol type="1">
@@ -288,7 +288,7 @@ ai-analysis-workflow.puml</h2>
 </ol>
 <p><b>Extensibility</b>: New AI providers can be added as plugins</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md445"></a>
+<h2><a class="anchor" id="autotoc_md446"></a>
 plugin-loading-workflow.puml</h2>
 <p><b>Purpose</b>: Shows complete plugin lifecycle from discovery through loading and cleanup.</p>
 <p><b>Lifecycle</b>:</p>
@@ -321,9 +321,9 @@ plugin-loading-workflow.puml</h2>
 <li>Stable binary interface across versions</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md447"></a>
+<h1><a class="anchor" id="autotoc_md448"></a>
 Using These Diagrams</h1>
-<h2><a class="anchor" id="autotoc_md448"></a>
+<h2><a class="anchor" id="autotoc_md449"></a>
 Generating Images</h2>
 <p><b>Option 1: VS Code Extension</b></p><ul>
 <li>Install "Markdown Preview Mermaid Support" or "PlantUML" extension</li>
@@ -339,11 +339,11 @@ Generating Images</h2>
 <div class="line"># Generate PNG/SVG</div>
 <div class="line">plantuml docs/diagrams/*.puml</div>
 <div class="line">plantuml -tsvg docs/diagrams/*.puml</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md449"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md450"></a>
 Integration with Doxygen</h2>
 <p>Reference diagrams from Doxygen documentation: </p><div class="fragment"><div class="line"> </div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md451"></a>
+<h1><a class="anchor" id="autotoc_md452"></a>
 Maintenance Notes</h1>
 <p><b>When to Update Diagrams</b>:</p><ul>
 <li>After significant architectural changes</li>
@@ -357,7 +357,7 @@ Maintenance Notes</h1>
 <li>Commit both .puml and generated images</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md453"></a>
+<h1><a class="anchor" id="autotoc_md454"></a>
 Related Documentation</h1>
 <ul>
 <li>See <code><a class="el" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries.">src/application/db/LogEvent.hpp</a></code> for data model details</li>

@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d0/de2/md_docs_2CONFIGURABLE__TYPE__FI
   <div class="headertitle"><div class="title">Configurable Type Filter Field</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md306"></a> </p>
-<h1><a class="anchor" id="autotoc_md307"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md307"></a> </p>
+<h1><a class="anchor" id="autotoc_md308"></a>
 Overview</h1>
 <p>The type filter now uses a configurable field name instead of hardcoded "type", allowing LogViewer to work with different log formats that use different field names for categorization.</p>
-<h1><a class="anchor" id="autotoc_md308"></a>
+<h1><a class="anchor" id="autotoc_md309"></a>
 Changes</h1>
-<h2><a class="anchor" id="autotoc_md309"></a>
+<h2><a class="anchor" id="autotoc_md310"></a>
 Configuration (Config.hpp/cpp)</h2>
 <ul>
 <li>Added <code>typeFilterField</code> member variable with default value <code>"type"</code></li>
@@ -107,13 +107,13 @@ Configuration (Config.hpp/cpp)</h2>
 <li><code>SaveConfig()</code> now writes: <code>j["filters"]["typeFilterField"] = typeFilterField;</code></li>
 <li><code>LoadConfig()</code> now reads the <code>filters.typeFilterField</code> setting from JSON</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md310"></a>
+<h2><a class="anchor" id="autotoc_md311"></a>
 Filter Logic (MainWindowPresenter.cpp)</h2>
 <ul>
 <li><code>UpdateTypeFilters()</code>: Now uses <code>config.typeFilterField</code> instead of hardcoded <code>"type"</code></li>
 <li><code>ApplySelectedTypeFilters()</code>: Now uses <code>config.typeFilterField</code> instead of hardcoded <code>"type"</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md311"></a>
+<h2><a class="anchor" id="autotoc_md312"></a>
 Color Logic</h2>
 <ul>
 <li><b><a class="el" href="../../d4/db5/EventsTableModel_8cpp.html">EventsTableModel.cpp</a></b>: Foreground and background colors now use <code>config.typeFilterField</code></li>
@@ -121,20 +121,20 @@ Color Logic</h2>
 <li><b>AIChatPanel.cpp</b>: Event formatting now uses <code>config.typeFilterField</code></li>
 <li><b>columnColors configuration</b>: The key in <code>columnColors</code> should match your <code>typeFilterField</code> value</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md312"></a>
+<h2><a class="anchor" id="autotoc_md313"></a>
 Default Configuration (etc/default_config.json)</h2>
 <ul>
 <li>Added <code>"filters"</code> section with <code>"typeFilterField": "level"</code></li>
 <li>This matches the example log structure which uses "level" for event types</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md313"></a>
+<h2><a class="anchor" id="autotoc_md314"></a>
 UI Configuration Dialog</h2>
 <ul>
 <li>Added to Edit → Config → General tab</li>
 <li>Field: "Type Filter Field" with placeholder text showing examples</li>
 <li>Users can change without editing JSON manually</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md314"></a>
+<h2><a class="anchor" id="autotoc_md315"></a>
 Color Configuration Dialog</h2>
 <ul>
 <li>Edit → Config → Colors tab</li>
@@ -142,7 +142,7 @@ Color Configuration Dialog</h2>
 <li>Defaults to the <code>typeFilterField</code> value for consistency</li>
 <li>Users can add color mappings for different field values</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md315"></a>
+<h1><a class="anchor" id="autotoc_md316"></a>
 Configuration Example</h1>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;filters&quot;: {</div>
@@ -158,7 +158,7 @@ Configuration Example</h1>
 <div class="line">  }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Important</b>: The key in <code>columnColors</code> (e.g., <code>"level"</code>) must match the value of <code>typeFilterField</code>. This ensures that filtering and coloring use the same field consistently.</p>
-<h1><a class="anchor" id="autotoc_md316"></a>
+<h1><a class="anchor" id="autotoc_md317"></a>
 Supported Values</h1>
 <p>The <code>typeFilterField</code> can be set to any attribute/field name in your log events:</p><ul>
 <li><code>"type"</code> - for logs that use <code>&lt;event type="ERROR"&gt;</code></li>
@@ -167,7 +167,7 @@ Supported Values</h1>
 <li><code>"priority"</code> - for logs that use <code>&lt;event priority="ERROR"&gt;</code></li>
 <li><code>"category"</code> - for logs that use <code>&lt;event category="ERROR"&gt;</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md317"></a>
+<h1><a class="anchor" id="autotoc_md318"></a>
 Benefits</h1>
 <ol type="1">
 <li><b>Flexibility</b>: Works with various log formats without code changes</li>
@@ -175,7 +175,7 @@ Benefits</h1>
 <li><b>Configurability</b>: Users can adapt LogViewer to their log structure</li>
 <li><b>Default behavior</b>: Defaults to "type" for backward compatibility</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md318"></a>
+<h1><a class="anchor" id="autotoc_md319"></a>
 Testing</h1>
 <p>To test with different field names:</p><ol type="1">
 <li>Edit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> (or <code>etc/default_config.json</code>)</li>
@@ -183,7 +183,7 @@ Testing</h1>
 <li>Load a log file that uses that field for categorization</li>
 <li>The type filter should now show values from that field</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md319"></a>
+<h1><a class="anchor" id="autotoc_md320"></a>
 Future Enhancements</h1>
 <ul>
 <li>UI configuration dialog to set <code>typeFilterField</code> without manual JSON editing</li>

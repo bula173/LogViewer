@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d0/dff/md_docs_2SANITIZERS.html','../.
   <div class="headertitle"><div class="title">AddressSanitizer Setup</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md610"></a> </p>
-<h1><a class="anchor" id="autotoc_md611"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md613"></a> </p>
+<h1><a class="anchor" id="autotoc_md614"></a>
 Overview</h1>
 <p>AddressSanitizer (ASAN) is automatically enabled for all <b>Debug</b> builds to catch memory errors:</p><ul>
 <li>Use-after-free</li>
@@ -104,7 +104,7 @@ Overview</h1>
 <li>Use-after-return</li>
 <li>Double-free</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md612"></a>
+<h1><a class="anchor" id="autotoc_md615"></a>
 Automatic Configuration</h1>
 <p>ASAN is enabled by default in the following presets:</p><ul>
 <li><code>macos-debug-wx</code></li>
@@ -112,9 +112,9 @@ Automatic Configuration</h1>
 <li><code>linux-debug-wx</code></li>
 <li><code>linux-debug-qt</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md613"></a>
+<h1><a class="anchor" id="autotoc_md616"></a>
 Building with ASAN</h1>
-<h2><a class="anchor" id="autotoc_md614"></a>
+<h2><a class="anchor" id="autotoc_md617"></a>
 macOS</h2>
 <div class="fragment"><div class="line"># Configure</div>
 <div class="line">cmake --preset macos-debug-qt</div>
@@ -124,7 +124,7 @@ macOS</h2>
 <div class="line"> </div>
 <div class="line"># Run (ASAN reports appear in terminal)</div>
 <div class="line">./dist/Debug/LogViewer.app/Contents/MacOS/LogViewer</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md615"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md618"></a>
 Linux</h2>
 <div class="fragment"><div class="line"># Configure</div>
 <div class="line">cmake --preset linux-debug-qt</div>
@@ -134,7 +134,7 @@ Linux</h2>
 <div class="line"> </div>
 <div class="line"># Run with options</div>
 <div class="line">ASAN_OPTIONS=halt_on_error=0:log_path=asan.log ./build/linux-debug-qt/src/LogViewer</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md616"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md619"></a>
 ASAN Runtime Options</h1>
 <p>Set environment variables before running:</p>
 <div class="fragment"><div class="line"># Continue on error, log to file</div>
@@ -145,7 +145,7 @@ ASAN Runtime Options</h1>
 <div class="line"> </div>
 <div class="line"># Detect stack-use-after-return (slower)</div>
 <div class="line">export ASAN_OPTIONS=detect_stack_use_after_return=1</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md617"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md620"></a>
 Common Options</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -159,7 +159,7 @@ Common Options</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>detect_stack_use_after_return</code>   </td><td class="markdownTableBodyNone">Detect stack UAF   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md618"></a>
+<h1><a class="anchor" id="autotoc_md621"></a>
 Reading ASAN Output</h1>
 <p>When ASAN detects an error, it prints:</p><ol type="1">
 <li><b>Error type</b>: e.g., "heap-use-after-free"</li>
@@ -171,12 +171,12 @@ Reading ASAN Output</h1>
 <div class="line">READ of size 4 at 0x603000000010 thread T0</div>
 <div class="line">    #0 0x4c6b8f in MainWindow::UpdateStatusText() MainWindow.cpp:489</div>
 <div class="line">    #1 0x4c7a2e in MainWindow::HandleDroppedFile() MainWindow.cpp:620</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md619"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md622"></a>
 Disabling ASAN</h1>
 <p>To build debug without ASAN:</p>
 <div class="fragment"><div class="line">cmake --preset macos-debug-qt -DLOGVIEWER_SANITIZER=None</div>
 <div class="line">cmake --build build/macos-debug-qt</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md620"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md623"></a>
 Other Sanitizers</h1>
 <p>Available sanitizers (set via <code>-DLOGVIEWER_SANITIZER=&lt;name&gt;</code>):</p><ul>
 <li><code>None</code> - Disabled</li>
@@ -186,14 +186,14 @@ Other Sanitizers</h1>
 <li><code>Memory</code> - Uninitialized reads (Linux only)</li>
 </ul>
 <p><b>Note</b>: Only one sanitizer can be active at a time.</p>
-<h1><a class="anchor" id="autotoc_md621"></a>
+<h1><a class="anchor" id="autotoc_md624"></a>
 Performance Impact</h1>
 <p>ASAN adds overhead:</p><ul>
 <li>Memory: ~2-3x increase</li>
 <li>Runtime: ~2x slower</li>
 <li>Not suitable for benchmarking</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md622"></a>
+<h1><a class="anchor" id="autotoc_md625"></a>
 Platform Support</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -205,9 +205,9 @@ Platform Support</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Windows (MSYS2)   </td><td class="markdownTableBodyNone">❌   </td><td class="markdownTableBodyNone">❌   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md623"></a>
+<h1><a class="anchor" id="autotoc_md626"></a>
 Troubleshooting</h1>
-<h2><a class="anchor" id="autotoc_md624"></a>
+<h2><a class="anchor" id="autotoc_md627"></a>
 False Positives</h2>
 <p>If you see false positives from Qt libraries, create a suppression file:</p>
 <div class="fragment"><div class="line"># Create suppressions.txt</div>
@@ -218,10 +218,10 @@ False Positives</h2>
 <div class="line"> </div>
 <div class="line"># Use it</div>
 <div class="line">export ASAN_OPTIONS=suppressions=asan_suppressions.txt</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md625"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md628"></a>
 Slow Startup</h2>
 <p>ASAN initialization can be slow. This is normal.</p>
-<h2><a class="anchor" id="autotoc_md626"></a>
+<h2><a class="anchor" id="autotoc_md629"></a>
 MinGW/Windows</h2>
 <p>AddressSanitizer is not supported on MinGW. Use Linux or macOS for memory debugging. </p>
 </div></div><!-- contents -->

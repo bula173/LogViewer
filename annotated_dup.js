@@ -45,6 +45,12 @@ var annotated_dup =
       [ "SearchResultRow", "de/d74/structmvc_1_1SearchResultRow.html", "de/d74/structmvc_1_1SearchResultRow" ]
     ] ],
     [ "parser", "d0/dd5/namespaceparser.html", [
+      [ "dbc", "d8/d04/namespaceparser_1_1dbc.html", [
+        [ "DbcDatabase", "d1/db6/structparser_1_1dbc_1_1DbcDatabase.html", "d1/db6/structparser_1_1dbc_1_1DbcDatabase" ],
+        [ "DbcMessage", "d9/d4f/structparser_1_1dbc_1_1DbcMessage.html", "d9/d4f/structparser_1_1dbc_1_1DbcMessage" ],
+        [ "DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", "d3/dc2/structparser_1_1dbc_1_1DbcSignal" ]
+      ] ],
+      [ "AscParser", "dd/dfa/classparser_1_1AscParser.html", "dd/dfa/classparser_1_1AscParser" ],
       [ "CsvParser", "d9/dd2/classparser_1_1CsvParser.html", "d9/dd2/classparser_1_1CsvParser" ],
       [ "IDataParser", "d3/d8b/classparser_1_1IDataParser.html", "d3/d8b/classparser_1_1IDataParser" ],
       [ "IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", "df/d79/classparser_1_1IDataParserObserver" ],
@@ -73,6 +79,9 @@ var annotated_dup =
         [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
           [ "ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem" ]
         ] ],
+        [ "anonymous_namespace{CanStatisticsStrategy.cpp}", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03.html", [
+          [ "Accum", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum" ]
+        ] ],
         [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", [
           [ "TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem" ]
         ] ],
@@ -81,6 +90,7 @@ var annotated_dup =
         [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
         [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
         [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
+        [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
         [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
         [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
         [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
@@ -88,6 +98,8 @@ var annotated_dup =
         [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
         [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
         [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
+        [ "GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy" ],
+        [ "IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", "df/dae/classui_1_1qt_1_1IStatisticsStrategy" ],
         [ "ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", "d0/d5c/classui_1_1qt_1_1ItemDetailsView" ],
         [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
         [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
@@ -95,7 +107,10 @@ var annotated_dup =
         [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
+        [ "SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel" ],
         [ "StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", "d7/dda/classui_1_1qt_1_1StartupSplash" ],
+        [ "StatRow", "d9/d3b/structui_1_1qt_1_1StatRow.html", "d9/d3b/structui_1_1qt_1_1StatRow" ],
+        [ "StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", "d2/d71/structui_1_1qt_1_1StatsSection" ],
         [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
         [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
         [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
