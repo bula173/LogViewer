@@ -4,6 +4,7 @@
 #include "EventsContainer.hpp"
 #include "utils/ExportManager.hpp"
 #include "FilterManager.hpp"
+#include "panels/LayoutManager.hpp"
 #include "panels/StatsSummaryPanel.hpp"
 #include "panels/PatternAnalysisPanel.hpp"
 #include "panels/SignalPlotPanel.hpp"
@@ -48,6 +49,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
+#include <QInputDialog>
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -135,6 +137,7 @@ MainWindow::MainWindow(mvc::IController& controller,
     : QMainWindow(parent), m_splash(splash)
 {
     m_events = &events;
+    m_layoutManager = std::make_unique<LayoutManager>();
     util::Logger::Info("[MainWindow] Initializing main window");
 
     auto splashStep = [this](const QString& msg) {
@@ -555,6 +558,121 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     }
 }
 
+// ---------------------------------------------------------------------------
+// Layout management
+// ---------------------------------------------------------------------------
+
+LayoutDescriptor MainWindow::CaptureLayout(const QString& name) const
+{
+    LayoutDescriptor d;
+    d.name               = name;
+    d.isBuiltIn          = false;
+    d.windowState        = saveState();
+    d.filtersDockVisible = m_filtersDock && m_filtersDock->isVisible();
+    d.detailsDockVisible = m_detailsDock && m_detailsDock->isVisible();
+    d.bottomDockVisible  = m_bottomDock  && m_bottomDock->isVisible();
+    if (m_contentTabs) {
+        d.activeTab = m_contentTabs->tabText(m_contentTabs->currentIndex());
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+            d.tabVisibility[m_contentTabs->tabText(i)] =
+                m_contentTabs->tabBar()->isTabVisible(i);
+    }
+    return d;
+}
+
+void MainWindow::ApplyLayout(const LayoutDescriptor& layout)
+{
+    // Restore full dock positions only for user layouts
+    if (!layout.isBuiltIn && !layout.windowState.isEmpty())
+        restoreState(layout.windowState);
+
+    // Dock visibility
+    if (m_filtersDock) m_filtersDock->setVisible(layout.filtersDockVisible);
+    if (m_detailsDock) m_detailsDock->setVisible(layout.detailsDockVisible);
+    if (m_bottomDock)  m_bottomDock->setVisible(layout.bottomDockVisible);
+
+    // Tab visibility + active tab
+    if (m_contentTabs) {
+        int activateIdx = -1;
+        for (int i = 0; i < m_contentTabs->count(); ++i) {
+            const QString label = m_contentTabs->tabText(i);
+            const auto it = layout.tabVisibility.find(label);
+            if (it != layout.tabVisibility.end())
+                m_contentTabs->tabBar()->setTabVisible(i, it.value());
+            if (label == layout.activeTab && m_contentTabs->tabBar()->isTabVisible(i))
+                activateIdx = i;
+        }
+        if (activateIdx >= 0) {
+            m_contentTabs->setCurrentIndex(activateIdx);
+        } else if (!m_contentTabs->tabBar()->isTabVisible(m_contentTabs->currentIndex())) {
+            for (int i = 0; i < m_contentTabs->count(); ++i) {
+                if (m_contentTabs->tabBar()->isTabVisible(i)) {
+                    m_contentTabs->setCurrentIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    UpdateStatusText(tr("Layout applied: %1").arg(layout.name).toStdString());
+}
+
+void MainWindow::RefreshLayoutMenu()
+{
+    if (!m_layoutsMenu) return;
+    m_layoutsMenu->clear();
+
+    auto* saveAction = m_layoutsMenu->addAction(tr("&Save Current Layout…"));
+    connect(saveAction, &QAction::triggered, this, &MainWindow::OnSaveLayoutRequested);
+
+    m_layoutsMenu->addSeparator();
+    m_layoutsMenu->addSection(tr("Predefined"));
+
+    for (auto& builtIn : LayoutManager::BuiltInLayouts()) {
+        auto* action = m_layoutsMenu->addAction(builtIn.name);
+        connect(action, &QAction::triggered, this,
+            [this, d = std::move(builtIn)]() { ApplyLayout(d); });
+    }
+
+    const auto& userLayouts = m_layoutManager->UserLayouts();
+    if (!userLayouts.empty()) {
+        m_layoutsMenu->addSeparator();
+        m_layoutsMenu->addSection(tr("Saved"));
+        for (const auto& d : userLayouts) {
+            auto* sub         = m_layoutsMenu->addMenu(d.name);
+            auto* applyAction  = sub->addAction(tr("Apply"));
+            auto* deleteAction = sub->addAction(tr("Delete"));
+            connect(applyAction,  &QAction::triggered, this,
+                [this, copy = d]() { ApplyLayout(copy); });
+            connect(deleteAction, &QAction::triggered, this,
+                [this, name = d.name]() { OnDeleteLayoutRequested(name); });
+        }
+    }
+}
+
+void MainWindow::OnSaveLayoutRequested()
+{
+    bool ok = false;
+    const QString name = QInputDialog::getText(
+        this, tr("Save Layout"), tr("Layout name:"),
+        QLineEdit::Normal, QString{}, &ok);
+    if (!ok || name.trimmed().isEmpty()) return;
+
+    m_layoutManager->Save(CaptureLayout(name.trimmed()));
+    RefreshLayoutMenu();
+    UpdateStatusText(tr("Layout saved: %1").arg(name).toStdString());
+}
+
+void MainWindow::OnDeleteLayoutRequested(const QString& name)
+{
+    const auto btn = QMessageBox::question(
+        this, tr("Delete Layout"),
+        tr("Delete layout \"%1\"?").arg(name));
+    if (btn != QMessageBox::Yes) return;
+    m_layoutManager->Remove(name);
+    RefreshLayoutMenu();
+}
+
 void MainWindow::SetupMenus()
 {
     auto* bar = menuBar();
@@ -672,6 +790,12 @@ void MainWindow::SetupMenus()
                 m_contentTabs->tabBar()->setTabVisible(idx, visible);
         });
     }
+
+    viewMenu->addSeparator();
+
+    // Layouts submenu — predefined and user-saved layouts
+    m_layoutsMenu = viewMenu->addMenu(tr("&Layouts"));
+    RefreshLayoutMenu();
 
     viewMenu->addSeparator();
 

@@ -4,6 +4,7 @@
 #include "IUiPanels.hpp"
 #include "ConfigObserver.hpp"
 #include "UpdateInfo.hpp"
+#include "panels/LayoutManager.hpp"
 #include <memory>
 #include "IPluginObserver.hpp"
 
@@ -141,6 +142,8 @@ class MainWindow : public QMainWindow,
     void OnSaveSession();
     void OnOpenSession();
     void OnLoadDbcRequested();
+    void OnSaveLayoutRequested();
+    void OnDeleteLayoutRequested(const QString& name);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -161,6 +164,13 @@ class MainWindow : public QMainWindow,
     void ApplyActorFilter();
     void SetupMenus();
     void RefreshRecentFilesMenu();
+    void RefreshLayoutMenu();
+
+    /// Apply a layout: restores dock state (user layouts) and tab visibility.
+    void ApplyLayout(const LayoutDescriptor& layout);
+
+    /// Capture the current window state as a named layout descriptor.
+    [[nodiscard]] LayoutDescriptor CaptureLayout(const QString& name) const;
     void AddToRecentFiles(const QString& filePath);
     void LoadRecentFiles();
     void SaveRecentFiles();
@@ -199,6 +209,9 @@ class MainWindow : public QMainWindow,
     void RemoveRightPanel();
 
     StartupSplash* m_splash {nullptr}; ///< non-owning; valid only during construction
+
+    std::unique_ptr<LayoutManager> m_layoutManager;
+    QMenu* m_layoutsMenu {nullptr};
 
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
