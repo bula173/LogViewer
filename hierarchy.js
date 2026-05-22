@@ -16,12 +16,16 @@ var hierarchy =
     [ "parser::dbc::DbcMessage", "d9/d4f/structparser_1_1dbc_1_1DbcMessage.html", null ],
     [ "parser::dbc::DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", null ],
     [ "plugin::PluginDependencyGraph::DependencyNode", "d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html", null ],
+    [ "parser::EvlogTemplate", "dc/d0f/structparser_1_1EvlogTemplate.html", null ],
+    [ "parser::EvlogTemplateField", "d5/dcd/structparser_1_1EvlogTemplateField.html", null ],
+    [ "parser::EvlogTemplateRegistry", "d7/d64/classparser_1_1EvlogTemplateRegistry.html", null ],
     [ "config::FieldDictionary", "d1/de4/structconfig_1_1FieldDictionary.html", null ],
     [ "config::FieldTranslator", "d9/da7/classconfig_1_1FieldTranslator.html", null ],
     [ "filters::Filter", "d9/d12/classfilters_1_1Filter.html", null ],
     [ "filters::FilterCondition", "dc/d53/structfilters_1_1FilterCondition.html", null ],
     [ "filters::FilterManager", "d5/db4/classfilters_1_1FilterManager.html", null ],
     [ "ui::qt::FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", null ],
+    [ "ui::qt::FrameSignals", "da/d91/structui_1_1qt_1_1FrameSignals.html", null ],
     [ "plugin::FunctionRegistry< FnType >", "d9/d75/classplugin_1_1FunctionRegistry.html", null ],
     [ "ui::qt::ActorsPanel::GroupedActorData", "de/dff/structui_1_1qt_1_1ActorsPanel_1_1GroupedActorData.html", null ],
     [ "mvc::IController", "d1/d06/classmvc_1_1IController.html", [
@@ -30,6 +34,8 @@ var hierarchy =
     [ "parser::IDataParser", "d3/d8b/classparser_1_1IDataParser.html", [
       [ "parser::AscParser", "dd/dfa/classparser_1_1AscParser.html", null ],
       [ "parser::CsvParser", "d9/dd2/classparser_1_1CsvParser.html", null ],
+      [ "parser::DltParser", "db/de9/classparser_1_1DltParser.html", null ],
+      [ "parser::EvlogParser", "d1/d55/classparser_1_1EvlogParser.html", null ],
       [ "parser::XmlParser", "db/d5c/classparser_1_1XmlParser.html", null ]
     ] ],
     [ "parser::IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", [
@@ -99,6 +105,8 @@ var hierarchy =
       [ "ui::qt::SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", null ]
     ] ],
     [ "util::KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", null ],
+    [ "ui::qt::LayoutDescriptor", "de/d5a/structui_1_1qt_1_1LayoutDescriptor.html", null ],
+    [ "ui::qt::LayoutManager", "d8/d9f/classui_1_1qt_1_1LayoutManager.html", null ],
     [ "db::LogEvent", "d1/d00/classdb_1_1LogEvent.html", null ],
     [ "util::Logger", "d2/d44/classutil_1_1Logger.html", null ],
     [ "parser::ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", null ],
@@ -141,6 +149,7 @@ var hierarchy =
       [ "ui::qt::ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", null ],
       [ "ui::qt::ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", null ],
       [ "ui::qt::BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", null ],
+      [ "ui::qt::CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", null ],
       [ "ui::qt::FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", null ],
       [ "ui::qt::FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", null ],
       [ "ui::qt::ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", null ],

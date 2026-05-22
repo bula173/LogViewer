@@ -843,7 +843,8 @@ var NAVTREE =
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
-        [ "Enumerations", "functions_enum.html", null ]
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -862,25 +863,26 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d1/d06/classmvc_1_1IController.html",
-"d1/df7/md_docs_2API__EXAMPLES.html#autotoc_md99",
-"d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md607",
-"d3/d8b/classparser_1_1IDataParser.html#a9b39377303663519b50e33e44ca20418",
-"d4/d51/classplugin_1_1IPlugin.html#aea7fb74189939ea20a2d27ad313b021a",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a5768f38133db7a8f531bc2bc7f9e2efe",
-"d5/d22/md_docs_2CPPCHECK.html#autotoc_md348",
-"d6/d26/classui_1_1qt_1_1EventsTableView.html#a28015de7a2c9b84bcf31d7c509a3d752",
-"d7/db2/classfilters_1_1FuzzyMatchStrategy.html#a68adf71d8f3da97c9f358c2d7aa56eca",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ab8017f302ed60dd4730375f4cabebfc1",
-"d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md370",
-"d9/d12/classfilters_1_1Filter.html#a4c0959fa3bc48a41962dbe6cce032c03",
-"d9/dfc/IDataParser_8hpp.html",
-"da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md288",
-"dc/d73/AscParser_8cpp.html#ac3b87f968b32770e1d504e4bc107aa94",
-"dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#a07a7bfa9761b3fd2137e8fcf57f79232",
-"dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530",
-"de/db1/CanStatisticsStrategy_8cpp.html",
-"functions_m.html"
+"d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md315",
+"d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a7026b13beb2b5a04cb866047a5e35c33",
+"d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17",
+"d3/d67/classplugin_1_1PluginManager.html#a48580cbff49621e96858a3c6c52abcfc",
+"d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5bfefdf9c4fda4bc680fb46cd57e8caf",
+"d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac45a40b6de581a04ecca19b80c690f66",
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#ab18f7f67a8a9253a107ba3d615dff879",
+"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ad3fc9df9b20c5045dbe2ca3cf5b2c262",
+"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md469",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a051373519cd41e80197d6c38a850264d",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac66b275fb3c94854876b999d98b50dd1",
+"d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md391",
+"d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#ac67e0277845911fbac4a220d3ab9463c",
+"d9/dd2/classparser_1_1CsvParser.html#ac963038053a59be8af01b920a807b8ec",
+"da/dab/classui_1_1UiServices.html#a2724f22812ce6f39c284aca916b4e2cd",
+"dc/d20/EvlogParser_8cpp.html#ac19d5a2dbd7331051b5c567ec2fd98bb",
+"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a297cc69c7494f145a2727f6f85e4d0e7",
+"dd/d79/classui_1_1qt_1_1SearchBar.html#a9f1baeb49ebb03e3212c36df14378fef",
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md643",
+"df/d7e/classui_1_1ITypeFilterView.html#aadb38484baf16b472c07bf7eccc79b15"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

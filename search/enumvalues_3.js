@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['enabled_0',['enabled',['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a00d23a76e43b46dae9ec7aa9dcbebb32',1,'plugin::Enabled'],['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474ba00d23a76e43b46dae9ec7aa9dcbebb32',1,'plugin::Enabled']]],
-  ['error_1',['error',['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa902b0d55fddef6f8d651fe1035b7d4bd',1,'plugin::Error'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a902b0d55fddef6f8d651fe1035b7d4bd',1,'util::Error']]],
-  ['erroroccurred_2',['ErrorOccurred',['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474babf8f540621d98039717e4417ca469604',1,'plugin']]],
-  ['exporter_3',['Exporter',['../d3/d7e/namespaceplugin.html#a3cb64108b93d0491104872a6a15fa3bdad353b8720fcbebe4385ef7a23a43aa22',1,'plugin']]]
+  ['dark_0',['Dark',['../d8/d5b/ThemeSwitcher_8hpp.html#ac04feb2012983293f293a8151c69a074aa18366b217ebf811ad1886e4f4f865b2',1,'ThemeSwitcher.hpp']]],
+  ['debug_1',['Debug',['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7aa603905470e2a5b8c13e96b579ef0dba',1,'util']]],
+  ['disabled_2',['disabled',['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afab9f5c797ebbf55adccdd8539a65a0241',1,'plugin::Disabled'],['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61ab9f5c797ebbf55adccdd8539a65a0241',1,'plugin::Disabled'],['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474bab9f5c797ebbf55adccdd8539a65a0241',1,'plugin::Disabled']]],
+  ['double_3',['Double',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ead909d38d705ce75386dd86e611a82f5b',1,'parser::EvlogTemplateField']]]
 ];

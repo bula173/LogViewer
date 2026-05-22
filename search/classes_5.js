@@ -10,6 +10,7 @@ var searchData=
   ['filterprofile_7',['FilterProfile',['../db/d6d/structui_1_1qt_1_1FilterProfile.html',1,'ui::qt']]],
   ['filterprofilespanel_8',['FilterProfilesPanel',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html',1,'ui::qt']]],
   ['filterspanel_9',['FiltersPanel',['../d8/db0/classui_1_1qt_1_1FiltersPanel.html',1,'ui::qt']]],
-  ['functionregistry_10',['FunctionRegistry',['../d9/d75/classplugin_1_1FunctionRegistry.html',1,'plugin']]],
-  ['fuzzymatchstrategy_11',['FuzzyMatchStrategy',['../d7/db2/classfilters_1_1FuzzyMatchStrategy.html',1,'filters']]]
+  ['framesignals_10',['FrameSignals',['../da/d91/structui_1_1qt_1_1FrameSignals.html',1,'ui::qt']]],
+  ['functionregistry_11',['FunctionRegistry',['../d9/d75/classplugin_1_1FunctionRegistry.html',1,'plugin']]],
+  ['fuzzymatchstrategy_12',['FuzzyMatchStrategy',['../d7/db2/classfilters_1_1FuzzyMatchStrategy.html',1,'filters']]]
 ];

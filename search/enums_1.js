@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['loadmode_0',['LoadMode',['../d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html#a3c4fa71adcc6cac004045a698376e2f3',1,'ui::qt::LogFileLoadDialog']]],
-  ['loglevel_1',['LogLevel',['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7',1,'util']]]
+  ['format_0',['Format',['../d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdf',1,'parser::EvlogParser']]]
 ];

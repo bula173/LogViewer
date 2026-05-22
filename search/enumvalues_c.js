@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['registered_0',['Registered',['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a6205cf9436aee7ccb42779ac5e69bd3f',1,'plugin']]],
-  ['replace_1',['Replace',['../d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html#a3c4fa71adcc6cac004045a698376e2f3a0ebe6df8a3ac338e0512acc741823fdb',1,'ui::qt::LogFileLoadDialog']]],
-  ['runtimeerror_2',['RuntimeError',['../da/d7e/namespaceerror.html#ac1e56f1d20af4ead715f13a35f4f73f2aa334b8fdd25f8fb3e632228494604ee1',1,'error']]]
+  ['panelcreated_0',['PanelCreated',['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474ba1ef3b59b07d209a34b26b8cc3183bd34',1,'plugin']]],
+  ['paneldestroyed_1',['PanelDestroyed',['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474bae5e45de0e6ae05ece1dea42c5f88e25b',1,'plugin']]],
+  ['parseerror_2',['ParseError',['../da/d7e/namespaceerror.html#ac1e56f1d20af4ead715f13a35f4f73f2ae41199faa7290c167f70f314c5e6c165',1,'error']]],
+  ['parser_3',['Parser',['../d3/d7e/namespaceplugin.html#a3cb64108b93d0491104872a6a15fa3bda9a83ab0d60fed7c37d928ccb30d1b6ae',1,'plugin']]],
+  ['printf_4',['PRINTF',['../d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdfac63f55f5769127472be7ea907fc83dc6',1,'parser::EvlogParser']]]
 ];
