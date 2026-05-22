@@ -10,6 +10,8 @@ target_sources(application_core
         MainWindow.cpp
         StartupSplash.cpp
         panels/CanStatisticsStrategy.cpp
+        panels/CanSignalTreePanel.cpp
+        panels/LayoutManager.cpp
         panels/ActorDefinitionsPanel.cpp
         panels/ActorsPanel.cpp
         panels/BookmarksPanel.cpp

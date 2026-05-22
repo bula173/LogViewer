@@ -4,6 +4,7 @@
 #include "EventsContainer.hpp"
 #include "utils/ExportManager.hpp"
 #include "FilterManager.hpp"
+#include "panels/LayoutManager.hpp"
 #include "panels/StatsSummaryPanel.hpp"
 #include "panels/PatternAnalysisPanel.hpp"
 #include "panels/SignalPlotPanel.hpp"
@@ -25,6 +26,7 @@
 #include "utils/TypeFilterView.hpp"
 #include "panels/TimeRangeFilterPanel.hpp"
 #include "panels/FilterProfilesPanel.hpp"
+#include "panels/CanSignalTreePanel.hpp"
 #include "dialogs/LogFileLoadDialog.hpp"
 #include "Logger.hpp"
 #include "Config.hpp"
@@ -34,6 +36,7 @@
 #include "PluginManager.hpp"
 #include "utils/ThemeSwitcher.hpp"
 #include "asc/AscParser.hpp"
+#include "evlog/EvlogParser.hpp"
 #include "ParserFactory.hpp"
 
 #include <QAction>
@@ -48,6 +51,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
+#include <QInputDialog>
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -135,6 +139,7 @@ MainWindow::MainWindow(mvc::IController& controller,
     : QMainWindow(parent), m_splash(splash)
 {
     m_events = &events;
+    m_layoutManager = std::make_unique<LayoutManager>();
     util::Logger::Info("[MainWindow] Initializing main window");
 
     auto splashStep = [this](const QString& msg) {
@@ -371,6 +376,18 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     tabifyDockWidget(m_filtersDock, m_pluginLeftDock);  // Tab with filters in left panel
     m_pluginLeftDock->hide(); // Hidden until plugins provide configuration UI
 
+    // ===== LEFT DOCK: Signal Browser =====
+    m_signalBrowserDock = new QDockWidget(tr("Signal Browser"), this);
+    m_signalBrowserDock->setObjectName("SignalBrowserDockWidget");
+    m_signalBrowserDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_signalBrowserDock->setFeatures(QDockWidget::DockWidgetMovable |
+                                     QDockWidget::DockWidgetFloatable |
+                                     QDockWidget::DockWidgetClosable);
+    m_canSignalTree = new CanSignalTreePanel(m_signalBrowserDock);
+    m_signalBrowserDock->setWidget(m_canSignalTree);
+    addDockWidget(Qt::LeftDockWidgetArea, m_signalBrowserDock);
+    tabifyDockWidget(m_filtersDock, m_signalBrowserDock);
+
     // ===== RIGHT DOCK: Item Details =====
     m_detailsDock = new QDockWidget("Item Details", this);
     if (!m_detailsDock) {
@@ -417,7 +434,13 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_signalPlotPanel = new SignalPlotPanel(events, this);
     m_contentTabs->addTab(m_signalPlotPanel, tr("Signals"));
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
-        tr("Plot decoded signal values (SIG:*) over time — select signals on the left"));
+        tr("Plot decoded signal values (SIG:*) over time — select signals in the Signal Browser"));
+
+    // Wire Signal Browser → Signal Plot: selection changes drive chart updates.
+    connect(m_canSignalTree, &CanSignalTreePanel::SignalSelectionChanged,
+            this, [this]() {
+                m_signalPlotPanel->SetSelectedSignals(m_canSignalTree->GetSelectedSignals());
+            });
 
     // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
     m_tracePanel = new TraceViewerPanel(events, m_eventsView, this);
@@ -555,6 +578,121 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     }
 }
 
+// ---------------------------------------------------------------------------
+// Layout management
+// ---------------------------------------------------------------------------
+
+LayoutDescriptor MainWindow::CaptureLayout(const QString& name) const
+{
+    LayoutDescriptor d;
+    d.name               = name;
+    d.isBuiltIn          = false;
+    d.windowState        = saveState();
+    d.filtersDockVisible = m_filtersDock && m_filtersDock->isVisible();
+    d.detailsDockVisible = m_detailsDock && m_detailsDock->isVisible();
+    d.bottomDockVisible  = m_bottomDock  && m_bottomDock->isVisible();
+    if (m_contentTabs) {
+        d.activeTab = m_contentTabs->tabText(m_contentTabs->currentIndex());
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+            d.tabVisibility[m_contentTabs->tabText(i)] =
+                m_contentTabs->tabBar()->isTabVisible(i);
+    }
+    return d;
+}
+
+void MainWindow::ApplyLayout(const LayoutDescriptor& layout)
+{
+    // Restore full dock positions only for user layouts
+    if (!layout.isBuiltIn && !layout.windowState.isEmpty())
+        restoreState(layout.windowState);
+
+    // Dock visibility
+    if (m_filtersDock) m_filtersDock->setVisible(layout.filtersDockVisible);
+    if (m_detailsDock) m_detailsDock->setVisible(layout.detailsDockVisible);
+    if (m_bottomDock)  m_bottomDock->setVisible(layout.bottomDockVisible);
+
+    // Tab visibility + active tab
+    if (m_contentTabs) {
+        int activateIdx = -1;
+        for (int i = 0; i < m_contentTabs->count(); ++i) {
+            const QString label = m_contentTabs->tabText(i);
+            const auto it = layout.tabVisibility.find(label);
+            if (it != layout.tabVisibility.end())
+                m_contentTabs->tabBar()->setTabVisible(i, it.value());
+            if (label == layout.activeTab && m_contentTabs->tabBar()->isTabVisible(i))
+                activateIdx = i;
+        }
+        if (activateIdx >= 0) {
+            m_contentTabs->setCurrentIndex(activateIdx);
+        } else if (!m_contentTabs->tabBar()->isTabVisible(m_contentTabs->currentIndex())) {
+            for (int i = 0; i < m_contentTabs->count(); ++i) {
+                if (m_contentTabs->tabBar()->isTabVisible(i)) {
+                    m_contentTabs->setCurrentIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    UpdateStatusText(tr("Layout applied: %1").arg(layout.name).toStdString());
+}
+
+void MainWindow::RefreshLayoutMenu()
+{
+    if (!m_layoutsMenu) return;
+    m_layoutsMenu->clear();
+
+    auto* saveAction = m_layoutsMenu->addAction(tr("&Save Current Layout…"));
+    connect(saveAction, &QAction::triggered, this, &MainWindow::OnSaveLayoutRequested);
+
+    m_layoutsMenu->addSeparator();
+    m_layoutsMenu->addSection(tr("Predefined"));
+
+    for (auto& builtIn : LayoutManager::BuiltInLayouts()) {
+        auto* action = m_layoutsMenu->addAction(builtIn.name);
+        connect(action, &QAction::triggered, this,
+            [this, d = std::move(builtIn)]() { ApplyLayout(d); });
+    }
+
+    const auto& userLayouts = m_layoutManager->UserLayouts();
+    if (!userLayouts.empty()) {
+        m_layoutsMenu->addSeparator();
+        m_layoutsMenu->addSection(tr("Saved"));
+        for (const auto& d : userLayouts) {
+            auto* sub         = m_layoutsMenu->addMenu(d.name);
+            auto* applyAction  = sub->addAction(tr("Apply"));
+            auto* deleteAction = sub->addAction(tr("Delete"));
+            connect(applyAction,  &QAction::triggered, this,
+                [this, copy = d]() { ApplyLayout(copy); });
+            connect(deleteAction, &QAction::triggered, this,
+                [this, name = d.name]() { OnDeleteLayoutRequested(name); });
+        }
+    }
+}
+
+void MainWindow::OnSaveLayoutRequested()
+{
+    bool ok = false;
+    const QString name = QInputDialog::getText(
+        this, tr("Save Layout"), tr("Layout name:"),
+        QLineEdit::Normal, QString{}, &ok);
+    if (!ok || name.trimmed().isEmpty()) return;
+
+    m_layoutManager->Save(CaptureLayout(name.trimmed()));
+    RefreshLayoutMenu();
+    UpdateStatusText(tr("Layout saved: %1").arg(name).toStdString());
+}
+
+void MainWindow::OnDeleteLayoutRequested(const QString& name)
+{
+    const auto btn = QMessageBox::question(
+        this, tr("Delete Layout"),
+        tr("Delete layout \"%1\"?").arg(name));
+    if (btn != QMessageBox::Yes) return;
+    m_layoutManager->Remove(name);
+    RefreshLayoutMenu();
+}
+
 void MainWindow::SetupMenus()
 {
     auto* bar = menuBar();
@@ -592,6 +730,10 @@ void MainWindow::SetupMenus()
 
     auto* loadDbcAction = fileMenu->addAction(tr("Load &DBC file…"));
     connect(loadDbcAction, &QAction::triggered, this, &MainWindow::OnLoadDbcRequested);
+
+    auto* loadEvlogTplAction = fileMenu->addAction(tr("Load &Evlog Templates…"));
+    connect(loadEvlogTplAction, &QAction::triggered,
+        this, &MainWindow::OnLoadEvlogTemplatesRequested);
 
     fileMenu->addSeparator();
 
@@ -652,6 +794,7 @@ void MainWindow::SetupMenus()
     // View menu for dock widgets
     auto* viewMenu = bar->addMenu(tr("&View"));
     viewMenu->addAction(m_filtersDock->toggleViewAction());
+    viewMenu->addAction(m_signalBrowserDock->toggleViewAction());
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
@@ -672,6 +815,12 @@ void MainWindow::SetupMenus()
                 m_contentTabs->tabBar()->setTabVisible(idx, visible);
         });
     }
+
+    viewMenu->addSeparator();
+
+    // Layouts submenu — predefined and user-saved layouts
+    m_layoutsMenu = viewMenu->addMenu(tr("&Layouts"));
+    RefreshLayoutMenu();
 
     viewMenu->addSeparator();
 
@@ -1305,6 +1454,14 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
         return std::make_unique<parser::AscParser>(dbcPath);
     }
 
+    if (ext == ".evl")
+    {
+        auto parser = std::make_unique<parser::EvlogParser>();
+        if (!m_evlogTemplateDir.isEmpty())
+            parser->SetTemplateDirectory(m_evlogTemplateDir.toStdString());
+        return parser;
+    }
+
     // Fall back to the factory for all other types.
     auto result = parser::ParserFactory::CreateFromFile(path);
     if (result.isOk())
@@ -1331,9 +1488,44 @@ void MainWindow::OnLoadDbcRequested()
 
     SaveLastDir("dbc", filePath);
     m_currentDbcFilePath = filePath;
-    UpdateStatusText(tr("DBC loaded: %1 — reload ASC file to apply")
-        .arg(QFileInfo(filePath).fileName()).toStdString());
+
+    const auto db = parser::dbc::ParseDbcFile(filePath.toStdString());
+    if (m_canSignalTree)
+        m_canSignalTree->SetDatabase(db);
+
+    UpdateStatusText(tr("DBC loaded: %1 (%2 messages) — reload ASC file to apply")
+        .arg(QFileInfo(filePath).fileName())
+        .arg(db.messages.size()).toStdString());
     util::Logger::Info("[MainWindow] DBC file set: {}", filePath.toStdString());
+}
+
+void MainWindow::OnLoadEvlogTemplatesRequested()
+{
+    const QString dir = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select Evlog Template Directory"),
+        LastDir("evlog_templates",
+            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+#ifdef __APPLE__
+        , QFileDialog::DontUseNativeDialog
+#endif
+    );
+
+    if (dir.isEmpty())
+        return;
+
+    SaveLastDir("evlog_templates", dir + "/dummy"); // SaveLastDir expects a file path
+    m_evlogTemplateDir = dir;
+
+    // Count templates loaded as a quick sanity check.
+    parser::EvlogTemplateRegistry reg;
+    reg.LoadFromDirectory(dir.toStdString());
+
+    UpdateStatusText(tr("Evlog templates loaded: %1 template(s) from %2 — reload .evl file to apply")
+        .arg(reg.Count())
+        .arg(QFileInfo(dir).fileName())
+        .toStdString());
+    util::Logger::Info("[MainWindow] Evlog template dir set: {}", dir.toStdString());
 }
 
 void MainWindow::OnSaveSession()

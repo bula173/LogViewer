@@ -2,6 +2,20 @@
 
 All notable changes to LogViewer are documented here.
 
+## [1.6.1] — 2026-05-22
+
+### New features
+
+- **DLT parser** — native support for AUTOSAR Diagnostic Log and Trace (`.dlt`) binary files. Parses storage headers (DLT\x01 magic), standard headers (HTYP flags, WEID/WSID/WTMS optional fields), and extended headers (AppID, ContextID, MSIN). Decodes verbose payload arguments (bool, int8–int64, uint8–uint64, float32/64, strings, raw data); non-verbose payloads are shown as `MsgID=0x… [hex]`. Emitted fields: `timestamp`, `level`, `type`, `AppID`, `ContextID`, `EcuID`, `MsgCtr`, optional `SessionID`, `info`.
+- **Evlog parser** — native support for POSIX 1003.25 Enterprise Event Logging (`.evl`) binary files as produced by `evlogd`. Reads the 60-byte little-endian `posix_log_entry` header and variable payload. Payload formats: `STRING` (UTF-8 text), `PRINTF` (format string + binary varargs shown as hex), `BINARY` (hex dump or template-decoded). Emitted fields: `timestamp`, `level` (Emergency→Debug), `facility` (kern/user/…/local7), `event_type` (hex), `pid`, `uid`, `recid`, optional `cpu`, `flags`, `info`.
+- **Evlog template support** — BINARY payloads can be decoded using evlog template files (`.t`/`.tmpl`/`.template`). Templates describe the structured binary layout of a specific `(facility, event_type)` combination with typed field declarations (`int`, `char[N]`, `string`, `float`, …) and an optional `%field%`-substitution format string. Use **File → Load Evlog Templates…** to point at a template directory; the decoder falls back to hex dump for records with no matching template.
+- **Signal Browser panel** — dedicated left-dock tab alongside the Filters panel, showing the CAN frame and signal tree from a loaded DBC file. Replacing the earlier embedding inside the Filter tab, the panel now appears as its own resizable dock widget with independent show/hide control. Populated exclusively from DBC structure (no dependency on loaded log data).
+
+### Refactoring
+
+- **Signal Plot panel** — removed the embedded signal-selection tree. Signal selection is now driven entirely from the Signal Browser dock; `SignalPlotPanel::SetSelectedSignals()` replaces the internal tree iteration. The panel displays a "Select signals in the Signal Browser panel" placeholder when no signals are chosen.
+- Signal Browser → Signal Plot wiring uses a `SignalSelectionChanged` Qt signal so the two panels remain decoupled.
+
 ## [1.6.0] — 2026-05-22
 
 ### New features

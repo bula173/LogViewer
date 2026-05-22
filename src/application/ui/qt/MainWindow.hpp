@@ -4,6 +4,7 @@
 #include "IUiPanels.hpp"
 #include "ConfigObserver.hpp"
 #include "UpdateInfo.hpp"
+#include "panels/LayoutManager.hpp"
 #include <memory>
 #include "IPluginObserver.hpp"
 
@@ -77,6 +78,7 @@ class SearchBar;
 class UpdateChecker;
 class TimeRangeFilterPanel;
 class FilterProfilesPanel;
+class CanSignalTreePanel;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -141,6 +143,9 @@ class MainWindow : public QMainWindow,
     void OnSaveSession();
     void OnOpenSession();
     void OnLoadDbcRequested();
+    void OnLoadEvlogTemplatesRequested();
+    void OnSaveLayoutRequested();
+    void OnDeleteLayoutRequested(const QString& name);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -161,6 +166,13 @@ class MainWindow : public QMainWindow,
     void ApplyActorFilter();
     void SetupMenus();
     void RefreshRecentFilesMenu();
+    void RefreshLayoutMenu();
+
+    /// Apply a layout: restores dock state (user layouts) and tab visibility.
+    void ApplyLayout(const LayoutDescriptor& layout);
+
+    /// Capture the current window state as a named layout descriptor.
+    [[nodiscard]] LayoutDescriptor CaptureLayout(const QString& name) const;
     void AddToRecentFiles(const QString& filePath);
     void LoadRecentFiles();
     void SaveRecentFiles();
@@ -200,6 +212,9 @@ class MainWindow : public QMainWindow,
 
     StartupSplash* m_splash {nullptr}; ///< non-owning; valid only during construction
 
+    std::unique_ptr<LayoutManager> m_layoutManager;
+    QMenu* m_layoutsMenu {nullptr};
+
     QLineEdit* m_searchEdit {nullptr};
     QPushButton* m_searchButton {nullptr};
     QProgressBar* m_progressBar {nullptr};
@@ -217,10 +232,11 @@ class MainWindow : public QMainWindow,
     QWidget* m_bottomChatWidget {nullptr};
 
     // Dock widgets for collapsible panels
-    QDockWidget* m_filtersDock {nullptr};
-    QDockWidget* m_detailsDock {nullptr};
-    QDockWidget* m_bottomDock {nullptr};
-    QDockWidget* m_pluginLeftDock {nullptr};    // Generic plugin configuration dock (left-panel fallback)
+    QDockWidget* m_filtersDock       {nullptr};
+    QDockWidget* m_signalBrowserDock {nullptr}; // Signal Browser — tabbed alongside Filters
+    QDockWidget* m_detailsDock       {nullptr};
+    QDockWidget* m_bottomDock        {nullptr};
+    QDockWidget* m_pluginLeftDock    {nullptr}; // Generic plugin configuration dock (left-panel fallback)
     QTabWidget* m_pluginLeftTabs {nullptr};     // Tabs for multiple plugin configs / left-panel fallback
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
@@ -231,7 +247,8 @@ class MainWindow : public QMainWindow,
     db::EventsContainer* m_events {nullptr};
     
     QString m_currentLogFilePath;
-    QString m_currentDbcFilePath;   ///< Optional DBC for CAN signal decoding
+    QString m_currentDbcFilePath;          ///< Optional DBC for CAN signal decoding
+    QString m_evlogTemplateDir;            ///< Optional template dir for evlog BINARY payloads
 
     // Recent files
     std::vector<QString> m_recentFiles;
@@ -256,6 +273,7 @@ class MainWindow : public QMainWindow,
     UpdateChecker*          m_updateChecker{nullptr};
     TimeRangeFilterPanel*   m_timeRangePanel{nullptr};
     FilterProfilesPanel*    m_profilesPanel {nullptr};
+    CanSignalTreePanel*     m_canSignalTree {nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     
