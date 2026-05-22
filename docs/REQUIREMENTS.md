@@ -1,9 +1,9 @@
 # LogViewer — Requirements Specification
 
 **Document ID**: LV-REQ-001  
-**Version**: 1.3  
+**Version**: 1.4  
 **Status**: Active  
-**Application version**: 1.6.x  
+**Application version**: 1.6.1+  
 
 ---
 
@@ -16,6 +16,15 @@
    - [2.3 Runtime Dependencies](#23-runtime-dependencies)
 3. [Software Requirements (SW)](#3-software-requirements-sw)
    - [3.1 Functional Requirements](#31-functional-requirements)
+     - [3.1.1 Log File Loading](#311-log-file-loading)
+     - [3.1.2 Event Display](#312-event-display)
+     - [3.1.3 Filtering](#313-filtering)
+     - [3.1.4 AI-Assisted Analysis](#314-ai-assisted-analysis)
+     - [3.1.5 Export](#315-export)
+     - [3.1.6 Signal Visualisation](#316-signal-visualisation)
+     - [3.1.7 Format-Specific Statistics](#317-format-specific-statistics)
+     - [3.1.8 Configuration](#318-configuration)
+     - [3.1.9 Named Layouts](#319-named-layouts)
    - [3.2 Performance Requirements](#32-performance-requirements)
    - [3.3 Usability Requirements](#33-usability-requirements)
    - [3.4 Reliability Requirements](#34-reliability-requirements)
@@ -102,6 +111,13 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-010b | The application MUST parse CAN frames into structured events: `CAN_ID`, `CAN_Channel`, `CAN_DLC`, `CAN_Data`, `type` (Rx/Tx/ErrorFrame), and float-second `timestamp` | MUST |
 | SW-010c | The application MUST support loading a **DBC** CAN database file alongside an ASC log to decode raw frame bytes into named signal values (stored as `SIG:<name>` fields) | MUST |
 | SW-010d | The DBC decoder MUST support both **Intel (little-endian)** and **Motorola (big-endian)** signal bit layouts | MUST |
+| SW-010e | The application MUST support **AUTOSAR DLT** (Diagnostic Log and Trace) binary format (`.dlt` files) | MUST |
+| SW-010f | The DLT parser MUST decode storage headers (DLT magic), standard headers (HTYP flags, optional WEID/WSID/WTMS fields), and extended headers (AppID, ContextID, MSIN); emitted fields MUST include `timestamp`, `level`, `type`, `AppID`, `ContextID`, `EcuID`, `MsgCtr`, and `info` | MUST |
+| SW-010g | The DLT parser MUST decode verbose payload arguments: bool, int8–int64, uint8–uint64, float32/64, strings, and raw data; non-verbose payloads MUST be shown as `MsgID=0x… [hex]` | MUST |
+| SW-010h | The application MUST support **POSIX 1003.25 evlog** binary format (`.evl` files) as produced by `evlogd` | MUST |
+| SW-010i | The evlog parser MUST decode the 60-byte little-endian `posix_log_entry` header and all payload formats: STRING (UTF-8 text), PRINTF (format string + varargs hex), BINARY (hex dump or template-decoded), NODATA; emitted fields MUST include `timestamp`, `level`, `facility`, `event_type`, `pid`, `uid`, `recid`, and optional `cpu`, `flags`, `info` | MUST |
+| SW-010j | The evlog parser MUST support **template-based** BINARY payload decoding: the user provides a directory of template files (`.t`/`.tmpl`/`.template`) keyed by `(facility, event_type)` that declare typed field layouts and an optional format string; records with no matching template MUST fall back to hex dump | MUST |
+| SW-010k | The application MUST provide a **File → Load Evlog Templates…** menu action to select the template directory; the selected path MUST be used for all subsequent `.evl` file loads in the session | MUST |
 
 #### 3.1.2 Event Display
 
@@ -150,7 +166,10 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | ID | Requirement | Priority |
 |----|-------------|----------|
 | SW-045 | The application MUST provide a **Signal Plot** panel that plots numeric field values over time as line series | MUST |
-| SW-046 | The Signal Plot panel MUST allow the user to select which signals to display via checkboxes; unselected signals MUST be hidden from the chart | MUST |
+| SW-046 | The application MUST provide a **Signal Browser** dock panel that displays the CAN frame and signal tree loaded from a DBC file; the user selects signals to plot using checkboxes in this panel | MUST |
+| SW-046a | The Signal Browser dock MUST be tabbed alongside the Filters dock in the left panel area and MUST have an independent show/hide control in the View menu | MUST |
+| SW-046b | The Signal Browser MUST be populated from the DBC structure only (not from loaded log event data) and MUST show the placeholder "Load a DBC file to see CAN frame and signal structure." when no DBC is loaded | MUST |
+| SW-046c | Checking or unchecking signals in the Signal Browser MUST immediately update the Signal Plot chart; the Signal Plot panel MUST NOT contain its own signal selection tree | MUST |
 | SW-047 | The Signal Plot panel MUST support both ASC float-second timestamps and ISO date timestamps for the X axis | MUST |
 | SW-048 | The Signal Plot panel SHOULD downsample series to at most 2 000 points when the dataset is larger, to keep rendering responsive | SHOULD |
 
@@ -171,6 +190,17 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-051 | The user MUST be able to edit the configuration through the UI | MUST |
 | SW-052 | The application MUST start with sensible defaults when no configuration file exists | MUST |
 | SW-053 | The last-used DBC file path MUST be persisted and offered as a default on subsequent loads of ASC files | SHOULD |
+| SW-054 | The last-used Evlog template directory MUST be persisted across sessions and automatically applied when the next `.evl` file is loaded | SHOULD |
+
+#### 3.1.9 Named Layouts
+
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| SW-055 | The application MUST allow users to **save the current dock layout** under a user-supplied name via **View → Layouts → Save Layout…** | MUST |
+| SW-056 | Saved layouts MUST be restorable via the **View → Layouts** menu; restoring a layout MUST re-apply dock geometry and tab visibility | MUST |
+| SW-057 | The application MUST ship at least two **built-in predefined layouts**: one for generic XML/CSV log viewing and one optimised for CAN/ASC analysis | MUST |
+| SW-058 | The user MUST be able to **delete** a previously saved layout via the View → Layouts menu | MUST |
+| SW-059 | Named layouts MUST be persisted across application restarts | MUST |
 
 ### 3.2 Performance Requirements
 
@@ -262,8 +292,11 @@ Third-party libraries bundled via CMake `FetchContent` (no separate install requ
 | SYS-020 – SYS-024 | CI release workflow (NSIS installer, macOS bundle) |
 | SW-001 – SW-009 | `DataParserTest`, `CsvParserTest`, `XmlParserTest` |
 | SW-010a – SW-010d | `AscParserTest`, `DbcParserTest` |
-| SW-045 – SW-048 | Manual UI testing (SignalPlotPanel) |
+| SW-010e – SW-010g | `DltParserTest` (manual), DLT sample files |
+| SW-010h – SW-010k | `EvlogParserTest` (manual), evlog sample files + template files |
+| SW-045 – SW-048 | Manual UI testing (SignalPlotPanel, CanSignalTreePanel) |
 | SW-049 – SW-049c | Manual UI testing (StatsSummaryPanel + CanStatisticsStrategy) |
+| SW-055 – SW-059 | Manual UI testing (LayoutManager, View → Layouts menu) |
 | SW-010 – SW-014 | Manual UI testing |
 | SW-020 – SW-027 | `ModelTest`, `EventsContainerTest` |
 | SW-030 – SW-036 | Manual AI integration testing |

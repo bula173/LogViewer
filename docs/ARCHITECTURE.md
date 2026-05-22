@@ -41,6 +41,10 @@ LogViewer is a professional log file viewer application built with modern C++20 
 │  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────┐ │        │
 │  │  │ XmlParser  │ │ JsonParser │ │ CsvParser  │ │AscParser │ │        │
 │  │  └────────────┘ └────────────┘ └────────────┘ └──────────┘ │        │
+│  │  ┌────────────┐ ┌───────────────────────────┐               │        │
+│  │  │ DltParser  │ │       EvlogParser          │               │        │
+│  │  └────────────┘ │ + EvlogTemplateRegistry    │               │        │
+│  │                 └───────────────────────────┘               │        │
 │  │                                            ┌─────────────┐  │        │
 │  │                                            │  DbcParser  │  │        │
 │  │                                            │ + CanDecoder│  │        │
@@ -77,11 +81,12 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 
 **MainWindow**: Central orchestrator
 - Qt 6-based QMainWindow with dock widget system
-- Left dock (Filters), right dock (Details), bottom dock (AI chat / plugin panels)
+- Left docks: **Filters** + **Signal Browser** (tabbed, `QDockWidget` each); right dock: Details; bottom dock: AI chat / plugin panels
 - Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors
 - Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)
 - Implements `ConfigObserver` and `IPluginObserver` for configuration and plugin lifecycle changes
-- Menu system for file operations, DBC loading, tools, and view management
+- Menu system: File (Open, Load DBC, Load Evlog Templates, Export, …), View (Tabs, Layouts, …), Tools, Help
+- `CreateParserFor()` produces format-specific pre-configured parsers: `AscParser` with DBC path for `.asc`; `EvlogParser` with template directory for `.evl`; `ParserFactory` for all other types
 
 **EventsTableView**: High-performance table display (`events/`)
 - QTableView with custom EventsTableModel
@@ -90,7 +95,9 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 
 **Analysis Panels** (`panels/`)
 - **StatsSummaryPanel**: Aggregate statistics with pluggable `IStatisticsStrategy` (see below)
-- **SignalPlotPanel**: Plots decoded `SIG:*` field values over time; QLineSeries per signal; downsamples to 2 000 points
+- **SignalPlotPanel**: Plots decoded `SIG:*` field values over time; QLineSeries per signal; downsamples to 2 000 points. Signal selection is delegated to `CanSignalTreePanel` — the plot has no embedded tree.
+- **CanSignalTreePanel**: Left-dock Signal Browser; shows DBC frame/signal tree with tristate checkboxes. Populated by `SetDatabase(DbcDatabase)` when a DBC is loaded. Emits `SignalSelectionChanged` → wired to `SignalPlotPanel::SetSelectedSignals()`.
+- **LayoutManager**: Serialises and restores named dock layouts. Built-in presets (XML log, CAN analysis) plus user-saved layouts; persisted across sessions.
 - **TimelineChartPanel**: Interactive event-volume bar histogram with zoom and brush
 - **TraceViewerPanel**: Sequence-diagram-style actor/event view
 - **PatternAnalysisPanel**: Template clustering of structurally similar log lines
@@ -140,7 +147,9 @@ Registered parsers (extension → class):
 |---|---|---|
 | `.xml` | `XmlParser` | Default for unknown extensions |
 | `.csv` | `CsvParser` | |
-| `.asc` | `AscParser` | CAN/Vector CANalyzer; accepts optional DBC path |
+| `.asc` | `AscParser` | CAN/Vector CANalyzer; constructed with optional DBC path via `CreateParserFor()` |
+| `.dlt` | `DltParser` | AUTOSAR Diagnostic Log and Trace binary |
+| `.evl` | `EvlogParser` | POSIX 1003.25 evlog binary; constructed with optional template directory via `CreateParserFor()` |
 
 **AscParser** (`parsers/asc/`): Parses Vector CANalyzer `.asc` files line by line.
 - Each CAN frame becomes a `LogEvent` with fields: `timestamp` (float seconds), `type` (Rx/Tx/TxRq/ErrorFrame), `CAN_ID` (hex), `CAN_Channel`, `CAN_DLC`, `CAN_Data` (hex bytes), `CAN_IDE` (Standard/Extended), `info`.
@@ -149,6 +158,25 @@ Registered parsers (extension → class):
 **DbcParser + CanDecoder** (`parsers/dbc/`): Reads `.dbc` CAN database files.
 - `ParseDbcFile()` returns a `DbcDatabase` containing a map of message ID → `DbcMessage` (name, signals).
 - `DecodeFrame()` applies Intel (little-endian) or Motorola (big-endian) bit extraction to produce `{"SIG:<name>", "<value>"}` pairs.
+
+**DltParser** (`parsers/dlt/`): Parses AUTOSAR DLT binary files (`.dlt`).
+- Detects optional storage header via `DLT\x01` magic (16-byte: magic + timestamp + ECU ID).
+- Reads standard header (HTYP flags control presence of ECU ID, session ID, timestamp), extended header (MSIN → verbose flag, message type, log level; AppID; ContextID).
+- Verbose payloads: iterates type-info words and decodes each argument (BOOL, SINT, UINT, FLOA, STRG, RAWD); skips VARI variable-info prefix when present.
+- Non-verbose payloads: emits `MsgID=0x…` + hex dump.
+- Emitted fields: `timestamp`, `level` (Off/Fatal/Error/Warn/Info/Debug/Verbose), `type` (Log/AppTrace/NwTrace/Control), `AppID`, `ContextID`, `EcuID`, `MsgCtr`, optional `SessionID`, `info`.
+
+**EvlogParser** (`parsers/evlog/`): Parses POSIX 1003.25 evlog binary files (`.evl`).
+- Fixed 60-byte little-endian `posix_log_entry` header at known byte offsets; no file-level magic (sanity-checked via severity ≤ 7 and format ∈ {0,1,2,3}).
+- Payload formats: `NODATA` (no payload), `STRING` (null-terminated UTF-8), `PRINTF` (format string + binary varargs shown as hex), `BINARY` (template-decoded or hex dump).
+- Emitted fields: `timestamp` (float seconds), `level` (Emergency→Debug), `facility` (kern/user/…/local7), `event_type` (hex), `pid`, `uid`, `recid`, optional `cpu` (if ≠ 0), `flags` (comma-separated EVL_* names if set), `info`.
+- Call `SetTemplateDirectory(path)` or `SetTemplateFile(path)` before `ParseData()` to enable template-based BINARY decoding.
+
+**EvlogTemplateRegistry** (`parsers/evlog/`): Loads and indexes evlog template files.
+- Scans a directory for `.t`, `.tmpl`, `.template` files; parses each with a state-machine line reader.
+- Template format: `facility`, `event_type`, `description`, `attributes { typed-fields }`, `format "…%name%…"` keywords (also supports `%keyword%` evlog-native form; `#`/`//` comments; `---` record separator).
+- Supports field types: int8–int64, uint8–uint64, float, double, fixed-size char arrays `char[N]`, variable `string`.
+- `Find(facility, eventType)` returns the matching `EvlogTemplate*` or `nullptr`; lookup is O(log n) via `std::map`.
 
 **Statistics Strategy** (`ui/qt/panels/`): The `StatsSummaryPanel` uses `IStatisticsStrategy` to compute format-specific metrics at refresh time without coupling the panel to any particular format.
 
