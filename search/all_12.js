@@ -81,7 +81,7 @@ var searchData=
   ['installation_5fmanifest_2emd_78',['INSTALLATION_MANIFEST.md',['../d9/d26/INSTALLATION__MANIFEST_8md.html',1,'']]],
   ['installer_79',['Windows Installer',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md254',1,'']]],
   ['installing_20your_20plugin_80',['Installing Your Plugin',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md686',1,'']]],
-  ['instance_81',['instance',['../da/dab/classui_1_1UiServices.html#a5db4ba330f323be4572a08de428d9c06',1,'ui::UiServices::Instance()'],['../d4/dfa/structplugin_1_1PluginLoadInfo.html#ae98b8856904ab8ab97db5343cf161ea1',1,'plugin::PluginLoadInfo::instance']]],
+  ['instance_81',['instance',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#ae98b8856904ab8ab97db5343cf161ea1',1,'plugin::PluginLoadInfo::instance'],['../da/dab/classui_1_1UiServices.html#a5db4ba330f323be4572a08de428d9c06',1,'ui::UiServices::Instance()']]],
   ['int16_82',['Int16',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ea39bc2ae44b184207f560ff8619823208',1,'parser::EvlogTemplateField']]],
   ['int32_83',['Int32',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01eac06129f6e6e15c09328365e553f1dc31',1,'parser::EvlogTemplateField']]],
   ['int64_84',['Int64',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01eafbde23b11d7e59af7828e81144c8b487',1,'parser::EvlogTemplateField']]],

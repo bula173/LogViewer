@@ -4,5 +4,7 @@ var searchData=
   ['json_20configuration_1',['JSON Configuration',['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md155',1,'']]],
   ['json_20in_2',['Step 4: config.json.in',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md646',1,'']]],
   ['json_20schema_3',['JSON schema',['../db/d6d/structui_1_1qt_1_1FilterProfile.html#autotoc_md704',1,'']]],
-  ['json_20template_4',['config.json Template',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md684',1,'']]]
+  ['json_20template_4',['config.json Template',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md684',1,'']]],
+  ['jsonescape_5',['JsonEscape',['../d6/d40/namespaceui_1_1qt.html#af445cb012cb412ec708d8e68c35b638f',1,'ui::qt']]],
+  ['jumptotimestamp_6',['JumpToTimestamp',['../d6/d26/classui_1_1qt_1_1EventsTableView.html#a5f3eb6a67d149d861d4a95ebdfc5686e',1,'ui::qt::EventsTableView']]]
 ];
