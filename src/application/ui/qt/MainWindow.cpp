@@ -1357,9 +1357,11 @@ void MainWindow::HandleDroppedFile(const QString& path)
                 if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Replace)
                 {
                     // Replace existing data
+                    auto parser = CreateParserFor(filePath);
+                    if (!parser) return; // user cancelled type selection
                     const QString message = QString("Loading %1 ...").arg(path);
                     UpdateStatusText(message.toStdString());
-                    m_presenter->LoadLogFile(CreateParserFor(filePath), filePath);
+                    m_presenter->LoadLogFile(std::move(parser), filePath);
                     m_presenter->SetItemDetailsVisible(true);
                     m_currentLogFilePath = path;
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
@@ -1385,9 +1387,11 @@ void MainWindow::HandleDroppedFile(const QString& path)
         else
         {
             // No existing data, just load normally
+            auto parser = CreateParserFor(filePath);
+            if (!parser) return; // user cancelled type selection
             const QString message = QString("Loading %1 ...").arg(path);
             UpdateStatusText(message.toStdString());
-            m_presenter->LoadLogFile(CreateParserFor(filePath), filePath);
+            m_presenter->LoadLogFile(std::move(parser), filePath);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = path;
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
@@ -1454,6 +1458,17 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
     std::transform(ext.begin(), ext.end(), ext.begin(),
         [](unsigned char c){ return static_cast<char>(std::tolower(c)); });
 
+    // Unknown or missing extension → ask the user.
+    const bool isKnown = (ext == ".asc" || ext == ".evl"
+                          || parser::ParserFactory::IsRegistered(ext));
+    if (!isKnown)
+    {
+        const QString chosen = PromptForFileType(path);
+        if (chosen.isEmpty())
+            return nullptr;  // user cancelled
+        ext = chosen.toStdString();
+    }
+
     if (ext == ".asc")
     {
         std::filesystem::path dbcPath;
@@ -1470,11 +1485,45 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
         return parser;
     }
 
-    // Fall back to the factory for all other types.
-    auto result = parser::ParserFactory::CreateFromFile(path);
+    // Factory handles .xml, .csv, .dlt and any plugin-registered extensions.
+    // Use path with the (possibly user-chosen) extension so the factory can dispatch.
+    const std::filesystem::path effectivePath = path.parent_path() / (path.stem().string() + ext);
+    auto result = parser::ParserFactory::CreateFromFile(effectivePath);
     if (result.isOk())
         return result.unwrap();
     throw result.error();
+}
+
+QString MainWindow::PromptForFileType(const std::filesystem::path& path)
+{
+    struct FileType { QString label; QString ext; };
+    static const std::array<FileType, 5> kTypes = {{
+        { tr("XML"),                          ".xml" },
+        { tr("CSV"),                          ".csv" },
+        { tr("CAN/ASC (Vector CANalyzer)"),   ".asc" },
+        { tr("AUTOSAR DLT"),                  ".dlt" },
+        { tr("Evlog binary (POSIX 1003.25)"), ".evl" },
+    }};
+
+    QStringList labels;
+    for (const auto& t : kTypes) labels << t.label;
+
+    bool ok = false;
+    const QString choice = QInputDialog::getItem(
+        this,
+        tr("Select File Type"),
+        tr("The file type of \"%1\" could not be determined.\n\nPlease select the format:")
+            .arg(QString::fromStdString(path.filename().string())),
+        labels, 0, false, &ok
+#ifdef __APPLE__
+        , Qt::WindowFlags{}
+#endif
+    );
+
+    if (!ok) return {};
+    for (const auto& t : kTypes)
+        if (t.label == choice) return t.ext;
+    return {};
 }
 
 void MainWindow::OnLoadDbcRequested()
@@ -1616,8 +1665,10 @@ void MainWindow::OnOpenSession()
             if (m_events)        m_events->Clear();
 
             const std::filesystem::path fp(logFile);
+            auto parser = CreateParserFor(fp);
+            if (!parser) return; // user cancelled type selection
             UpdateStatusText(tr("Loading %1 …").arg(QString::fromStdString(logFile)).toStdString());
-            m_presenter->LoadLogFile(CreateParserFor(fp), fp);
+            m_presenter->LoadLogFile(std::move(parser), fp);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = QString::fromStdString(logFile);
             AddToRecentFiles(m_currentLogFilePath);

@@ -183,6 +183,9 @@ class MainWindow : public QMainWindow,
     static QString LastDir(const QString& key, const QString& fallback);
     /// Persist the parent directory of @p filePath for @p key.
     static void SaveLastDir(const QString& key, const QString& filePath);
+    /// Show a file-type picker when the extension is unknown; returns the chosen
+    /// extension (e.g. ".evl") or an empty string if the user cancelled.
+    QString PromptForFileType(const std::filesystem::path& path);
     bool ShouldCheckForUpdates() const;
     void setupPluginManager();
     void loadPlugins();
