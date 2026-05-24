@@ -54,6 +54,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "OnSetSystemTheme", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab4f68482eb16d0c632df47d5448577fb", null ],
     [ "OnUpdateCheckComplete", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a853da6645290eb91a5375200e20c0977", null ],
     [ "ProcessPendingEvents", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ad887d0d6f83400ad418829ec770a0e4a", null ],
+    [ "PromptForFileType", "d4/dfa/classui_1_1qt_1_1MainWindow.html#adc109d23cb470de16051808109238ac8", null ],
     [ "ReadSearchQuery", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ac8aa881f4aa9a654104b166b2ad3c008", null ],
     [ "RefreshCurrentAnalysisPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a5aa04e32e35a5e0afbd86db099e59b1d", null ],
     [ "RefreshLayout", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aa71c40a741693f0d9bec161234f5bb17", null ],

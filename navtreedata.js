@@ -871,19 +871,19 @@ var NAVTREEINDEX =
 "d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5bfefdf9c4fda4bc680fb46cd57e8caf",
 "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac62633900fa155c595e333ea20847bdb",
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab4f68482eb16d0c632df47d5448577fb",
-"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#aeaadbc2f06dda1b458ca24fd4b5f2ec0",
-"d6/d26/classui_1_1qt_1_1EventsTableView.html#acdd3847787c5e9c29fe55a8efb607ccf",
-"d7/db2/classfilters_1_1FuzzyMatchStrategy.html#afbeef5643557b6dc98d3971b811eb853",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac1e625bc1fa3c4c87e4b5798acd41f68",
-"d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md380",
-"d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html",
-"d9/dd2/classparser_1_1CsvParser.html#a950cc39a1763a44fde2081865d6f8986",
-"da/daa/PluginManager_8hpp.html",
-"dc/d20/EvlogParser_8cpp.html#a6ab1921082c163333787843811f6cafc",
-"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a160a1324af929d4c74d0a47566acfc64",
-"dd/d79/classui_1_1qt_1_1SearchBar.html#a360a172b402538f9ae68ef0f515a4389",
-"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md634",
-"df/d7e/classui_1_1ITypeFilterView.html#a1cf19e225be6885479a8b731c4aeee53"
+"d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ad3fc9df9b20c5045dbe2ca3cf5b2c262",
+"d6/d26/classui_1_1qt_1_1EventsTableView.html#aca2687c5a3c9afb99c99c18154cf537c",
+"d7/db2/classfilters_1_1FuzzyMatchStrategy.html#aec535fe755b8462af852d526ecfc7a21",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac0ffb1ba1bfb6557bd0595bf6034d948",
+"d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md378",
+"d8/ded/classQWidget.html",
+"d9/dd2/classparser_1_1CsvParser.html#a85fc1a7ee1778b5c8cbaf144886b362f",
+"da/d91/structui_1_1qt_1_1FrameSignals.html#acf1c9de809d12d75007947930f69a20e",
+"dc/d20/EvlogParser_8cpp.html#a5e254809895660d824801470d5c3d06f",
+"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a148e71654cbe17e9a61dd5fec83a1fad",
+"dd/d79/classui_1_1qt_1_1SearchBar.html#a2c1b2361775596e7846567a9a3d8d212",
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md632",
+"df/d7e/classui_1_1ITypeFilterView.html#a1c454bd06683bd48b0d0f7a97e892e6c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
