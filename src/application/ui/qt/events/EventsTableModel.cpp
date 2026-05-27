@@ -417,7 +417,7 @@ bool EventsTableModel::ShouldShowSourceColumn() const
     
     for (size_t i = 0; i < samplesToCheck; ++i)
     {
-        const auto& event = m_events.GetEvent(static_cast<int>(i));
+        const auto& event = m_events.GetEvent(i);
         if (!event.GetSource().empty())
         {
             return true;
@@ -436,7 +436,7 @@ bool EventsTableModel::ShouldShowOriginalIdColumn() const
     
     for (size_t i = 0; i < samplesToCheck; ++i)
     {
-        const auto& event = m_events.GetEvent(static_cast<int>(i));
+        const auto& event = m_events.GetEvent(i);
         const std::string originalId = event.findByKey("original_id");
         if (!originalId.empty())
         {
@@ -596,8 +596,8 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     // Sort the indices based on the column values
     std::sort(indicesToSort.begin(), indicesToSort.end(),
         [this, &columnName, order](unsigned long a, unsigned long b) {
-            const auto& eventA = m_events.GetEvent(static_cast<int>(a));
-            const auto& eventB = m_events.GetEvent(static_cast<int>(b));
+            const auto& eventA = m_events.GetEvent(a);
+            const auto& eventB = m_events.GetEvent(b);
             
             QVariant valA = GetSortValue(eventA, columnName);
             QVariant valB = GetSortValue(eventB, columnName);

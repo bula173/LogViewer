@@ -117,7 +117,7 @@ void TimelineChartPanel::Refresh()
     for (unsigned long idx : vis)
     {
         const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(tsField)));
+            m_events.GetEvent(idx).findByKey(tsField)));
         if (dt.isValid())
             timed.emplace_back(dt, idx);
     }
@@ -148,7 +148,7 @@ void TimelineChartPanel::Refresh()
     for (const auto& [dt, idx] : timed)
     {
         const std::string lv =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(levelField);
+            m_events.GetEvent(idx).findByKey(levelField);
         if (!lv.empty())
             levelSet.insert(lv);
     }
@@ -202,7 +202,7 @@ void TimelineChartPanel::Refresh()
         m_bucketEvents[static_cast<size_t>(b)].push_back(idx);
 
         const std::string lv =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(levelField);
+            m_events.GetEvent(idx).findByKey(levelField);
         const std::string key = levelSet.count(lv) ? lv : *levelSet.begin();
         lvBucketCounts[key][static_cast<size_t>(b)]++;
     }
@@ -270,7 +270,7 @@ std::string TimelineChartPanel::DetectTimestampField(
         for (unsigned long idx : indices)
         {
             const std::string val =
-                events.GetEvent(static_cast<int>(idx)).findByKey(c);
+                events.GetEvent(idx).findByKey(c);
             if (!val.empty() &&
                 panel_utils::ParseTimestamp(QString::fromStdString(val)).isValid())
                 return c;

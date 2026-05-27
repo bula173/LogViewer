@@ -160,139 +160,59 @@ class IDataParser
      */
     void RegisterObserver(IDataParserObserver* observer)
     {
-        if (observer)
-        {
-            // Prevent adding the same observer multiple times
-            auto it = std::find(observers.begin(), observers.end(), observer);
-            if (it == observers.end())
-            {
-                observers.push_back(observer);
-            }
-        }
+        if (observer && std::find(observers.begin(), observers.end(), observer) == observers.end())
+            observers.push_back(observer);
     }
 
-    /**
-     * @brief Unregisters a previously registered observer.
-     *
-     * @param observer Pointer to the observer to remove
-     * @note It's safe to call this method with observers that weren't
-     * registered
-     */
     void UnregisterObserver(IDataParserObserver* observer)
     {
-        /**
-         * @brief Removes observer from the notification list.
-         *
-         * Uses std::find to locate the observer and std::vector::erase to
-         * remove it. Safe to call with null pointers or unregistered observers.
-         */
         auto it = std::find(observers.begin(), observers.end(), observer);
         if (it != observers.end())
-        {
             observers.erase(it);
-        }
     }
 
-    /**
-     * @brief Notifies all observers about a newly found event.
-     *
-     * @param event The new event to report (moved to avoid copying)
-     * @note This method should be called by derived classes when events are
-     * discovered
-     */
     void NotifyNewEvent(db::LogEvent&& event)
     {
-        /**
-         * @brief Efficient event distribution to multiple observers.
-         *
-         * Creates copies for all observers except the last one, then moves
-         * the original to the last observer to minimize unnecessary copying.
-         */
         for (auto* observer : observers)
         {
-            if (observer)
+            if (!observer) continue;
+            if (observer != observers.back())
             {
-                // Create a copy for all observers except the last one
-                if (observer != observers.back())
-                {
-                    db::LogEvent eventCopy(event.getId(),
-                        db::LogEvent::EventItems(event.getEventItems()));
-                    observer->NewEventFound(std::move(eventCopy));
-                }
-                else
-                {
-                    observer->NewEventFound(std::move(event));
-                }
+                db::LogEvent copy(event.getId(), db::LogEvent::EventItems(event.getEventItems()));
+                observer->NewEventFound(std::move(copy));
+            }
+            else
+            {
+                observer->NewEventFound(std::move(event));
             }
         }
     }
 
-    /**
-     * @brief Notifies all observers about parsing progress updates.
-     *
-     * @note This method should be called periodically by derived classes during
-     * parsing
-     */
     void NotifyProgressUpdated()
     {
-        /**
-         * @brief Simple progress notification to all registered observers.
-         *
-         * Iterates through all observers and calls their ProgressUpdated
-         * method. Null pointer checking ensures robustness against invalid
-         * observers.
-         */
         for (auto* observer : observers)
-        {
-            if (observer)
-            {
-                observer->ProgressUpdated();
-            }
-        }
+            if (observer) observer->ProgressUpdated();
     }
 
-    /**
-     * @brief Notifies all observers about a batch of newly found events.
-     *
-     * @param eventBatch Vector of (id, items) pairs representing the events
-     * @note This is more efficient than calling NotifyNewEvent multiple times
-     */
     void NotifyNewEventBatch(
         std::vector<std::pair<int, db::LogEvent::EventItems>>&& eventBatch)
     {
-        /**
-         * @brief Efficient batch event distribution with copy optimization.
-         *
-         * Similar to NotifyNewEvent, creates copies for all observers except
-         * the last one to minimize memory allocation and copying overhead.
-         */
-        if (observers.empty())
-        {
-            return;
-        }
+        if (observers.empty()) return;
 
-        // Handle all observers except the last one by sending a copy of the
-        // batch
         for (size_t i = 0; i < observers.size() - 1; ++i)
         {
             if (observers[i])
             {
-                auto eventBatchCopy =
-                    eventBatch; // Make a copy of the entire vector
-                observers[i]->NewEventBatchFound(std::move(eventBatchCopy));
+                auto copy = eventBatch;
+                observers[i]->NewEventBatchFound(std::move(copy));
             }
         }
-
-        // Handle the last observer by moving the original batch to avoid a copy
-        if (!observers.empty() && observers.back())
-        {
+        if (observers.back())
             observers.back()->NewEventBatchFound(std::move(eventBatch));
-        }
     }
 
   private:
-    std::vector<IDataParserObserver*>
-        observers; ///< List of registered observers
+    std::vector<IDataParserObserver*> observers;
 };
 
 } // namespace parser

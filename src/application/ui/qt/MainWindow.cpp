@@ -1429,7 +1429,7 @@ void MainWindow::OnOpenFileRequested()
     #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     #endif
-    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv *.asc);;CAN ASC logs (*.asc);;All files (*.*)"));
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv *.asc *.dlt *.evl);;CAN ASC logs (*.asc);;AUTOSAR DLT logs (*.dlt);;Evlog binary (*.evl);;All files (*.*)"));
     dialog.setDirectory(LastDir("logFile",
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     if (dialog.exec() != QDialog::Accepted) {
@@ -1758,28 +1758,30 @@ void MainWindow::OnExitRequested()
     close();
 }
 
+void MainWindow::RunAsyncFilter(std::function<std::vector<unsigned long>()> worker,
+                                const QString& statusMsg)
+{
+    if (m_filteringInProgress)
+        return;
+    m_filteringInProgress = true;
+    UpdateStatusText(statusMsg.toStdString());
+    ToggleProgressVisibility(true);
+    ConfigureProgressRange(0); // 0,0 = indeterminate busy animation
+    m_filterWatcher->setFuture(QtConcurrent::run(std::move(worker)));
+}
+
 void MainWindow::ApplyExtendedFilters()
 {
     if (!m_eventsView || !m_events || m_events->Size() == 0)
         return;
 
-    // Prevent re-entrant filter runs: drop rapid changes while a run is active.
-    // The filter will reflect the final UI state once the current run finishes.
-    if (m_filteringInProgress)
-        return;
-
-    m_filteringInProgress = true;
-    UpdateStatusText("Applying filters...");
-    ToggleProgressVisibility(true);
-    ConfigureProgressRange(0); // 0,0 = indeterminate busy animation
-
-    // Read-only access to EventsContainer from the worker thread is safe:
-    // no writes occur during a filter pass.
+    // Read-only access from the worker thread is safe: no writes during a filter pass.
     const db::EventsContainer* events = m_events;
-    m_filterWatcher->setFuture(
-        QtConcurrent::run([events]() -> std::vector<unsigned long> {
+    RunAsyncFilter(
+        [events]() -> std::vector<unsigned long> {
             return filters::FilterManager::getInstance().applyFilters(*events);
-        }));
+        },
+        tr("Applying filters..."));
 }
 
 void MainWindow::ApplyActorFilter()
@@ -1819,25 +1821,16 @@ void MainWindow::ApplyActorFilter()
         return;
     }
 
-    UpdateStatusText("Applying actor filter…");
-    ToggleProgressVisibility(true);
-    ConfigureProgressRange(0);
-    m_filteringInProgress = true;
-
-    // GetEvent() is not const-qualified but performs read-only access;
-    // no writes occur during a filter pass so concurrent reads are safe.
     db::EventsContainer* events = m_events;
-    // Copy compiled defs so we can capture by value across the thread boundary
-    auto compiledCopy = compiled;
-    m_filterWatcher->setFuture(
-        QtConcurrent::run([events, compiledCopy = std::move(compiledCopy)]()
+    RunAsyncFilter(
+        [events, compiledCopy = std::move(compiled)]()
                           -> std::vector<unsigned long> {
             const size_t total = events->Size();
             std::vector<unsigned long> matched;
             matched.reserve(total);
             for (size_t i = 0; i < total; ++i)
             {
-                const db::LogEvent& ev = events->GetEvent(static_cast<int>(i));
+                const db::LogEvent& ev = events->GetEvent(i);
                 for (const auto& cdef : compiledCopy)
                 {
                     auto testField = [&](const std::string& val) -> bool {
@@ -1868,7 +1861,8 @@ void MainWindow::ApplyActorFilter()
                 }
             }
             return matched;
-        }));
+        },
+        tr("Applying actor filter…"));
 }
 
 void MainWindow::ShowError(const QString& title, const QString& message)

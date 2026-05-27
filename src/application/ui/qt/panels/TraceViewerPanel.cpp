@@ -162,7 +162,7 @@ void TraceViewerPanel::PopulateFieldCombo()
     std::set<std::string> fieldNames;
     const size_t probe = std::min(m_events.Size(), size_t(200));
     for (size_t i = 0; i < probe; ++i)
-        for (const auto& [k, v] : m_events.GetEvent(static_cast<int>(i)).getEventItems())
+        for (const auto& [k, v] : m_events.GetEvent(i).getEventItems())
             fieldNames.insert(k);
 
     for (const auto& name : fieldNames)
@@ -197,7 +197,7 @@ void TraceViewerPanel::RebuildTree(const QString& field)
 
     for (unsigned long idx : vis)
     {
-        const db::LogEvent& logEv = m_events.GetEvent(static_cast<int>(idx));
+        const db::LogEvent& logEv = m_events.GetEvent(idx);
         const std::string traceId = logEv.findByKey(fieldStr);
         if (traceId.empty()) continue;
 

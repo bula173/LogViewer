@@ -10,6 +10,7 @@
 
 #include <QMainWindow>
 #include <QFutureWatcher>
+#include <functional>
 #include <memory>
 #include <set>
 #include <vector>
@@ -164,6 +165,8 @@ class MainWindow : public QMainWindow,
     void RefreshCurrentAnalysisPanel();
     void ApplyExtendedFilters();
     void ApplyActorFilter();
+    void RunAsyncFilter(std::function<std::vector<unsigned long>()> worker,
+                        const QString& statusMsg);
     void SetupMenus();
     void RefreshRecentFilesMenu();
     void RefreshLayoutMenu();

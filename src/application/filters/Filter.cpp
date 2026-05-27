@@ -285,7 +285,7 @@ std::vector<unsigned long> Filter::applyToIndices(const std::vector<unsigned lon
         // Fallback to legacy logic
         std::vector<unsigned long> result;
         for (unsigned long index : inputIndices) {
-            const auto& event = model.GetItem(static_cast<int>(index));
+            const auto& event = model.GetItem(index);
             if (matches(event)) {
                 result.push_back(index);
             }
@@ -298,7 +298,7 @@ std::vector<unsigned long> Filter::applyToIndices(const std::vector<unsigned lon
     for (const auto& condition : conditions) {
         std::vector<unsigned long> new_temp;
         for (unsigned long index : temp) {
-            const auto& event = model.GetItem(static_cast<int>(index));
+            const auto& event = model.GetItem(index);
             if (condition.matches(event)) {
                 new_temp.push_back(index);
             }

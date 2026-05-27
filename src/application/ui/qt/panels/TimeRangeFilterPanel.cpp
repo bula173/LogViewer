@@ -154,7 +154,7 @@ void TimeRangeFilterPanel::HandleAutoDetect()
     for (size_t i = 0; i < total; ++i)
     {
         const std::string ts =
-            m_events.GetEvent(static_cast<int>(i)).findByKey(field);
+            m_events.GetEvent(i).findByKey(field);
         if (ts.empty()) continue;
         if (minTs.empty() || ts < minTs) minTs = ts;
         if (maxTs.empty() || ts > maxTs) maxTs = ts;
@@ -233,7 +233,7 @@ std::vector<unsigned long> TimeRangeFilterPanel::ComputeMatchingIndices() const
     for (size_t i = 0; i < total; ++i)
     {
         const std::string ts =
-            m_events.GetEvent(static_cast<int>(i)).findByKey(field);
+            m_events.GetEvent(i).findByKey(field);
 
         // Events with no timestamp in the specified field are excluded when
         // any bound is set, because their position in the timeline is unknown.

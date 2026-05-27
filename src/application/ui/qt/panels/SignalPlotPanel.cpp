@@ -132,7 +132,7 @@ void SignalPlotPanel::RebuildChart()
     {
         for (size_t i = 0; i < std::min(total, size_t{20}); ++i)
         {
-            if (!m_events.GetItem(static_cast<int>(i)).findByKey(candidate).empty())
+            if (!m_events.GetItem(i).findByKey(candidate).empty())
             {
                 tsField = candidate;
                 break;
@@ -178,7 +178,7 @@ void SignalPlotPanel::RebuildChart()
 
         for (size_t i = 0; i < total; i += step)
         {
-            const auto& ev = m_events.GetItem(static_cast<int>(i));
+            const auto& ev = m_events.GetItem(i);
 
             double x = static_cast<double>(i);
             if (!tsField.empty())

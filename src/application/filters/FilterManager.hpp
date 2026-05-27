@@ -57,7 +57,7 @@ class FilterManager
     /**
      * @brief Apply all enabled filters and return the matching indices.
      */
-    std::vector<unsigned long> applyFilters(
+    [[nodiscard]] std::vector<unsigned long> applyFilters(
       const mvc::IModel& model) const;
 
     // Filter storage

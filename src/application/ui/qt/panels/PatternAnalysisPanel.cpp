@@ -325,7 +325,7 @@ void PatternAnalysisPanel::RefreshTemplates(
     for (unsigned long idx : indices)
     {
         const std::string t =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(typeField);
+            m_events.GetEvent(idx).findByKey(typeField);
         byType[t.empty() ? "(none)" : t].push_back(idx);
     }
 
@@ -356,7 +356,7 @@ void PatternAnalysisPanel::RefreshTemplates(
         {
             const unsigned long idx = typeIndices[ei];
             const std::string msg =
-                m_events.GetEvent(static_cast<int>(idx)).findByKey(msgField);
+                m_events.GetEvent(idx).findByKey(msgField);
             const std::vector<std::string> toks = Tokenise(msg);
 
             // Find best matching cluster
@@ -497,7 +497,7 @@ void PatternAnalysisPanel::RefreshCooccurrence(
         for (unsigned long idx : indices)
         {
             const std::string v =
-                m_events.GetEvent(static_cast<int>(idx)).findByKey(cand);
+                m_events.GetEvent(idx).findByKey(cand);
             if (!v.empty() && toEpochSecs(v) >= 0)
             {
                 tsField = cand;
@@ -526,7 +526,7 @@ void PatternAnalysisPanel::RefreshCooccurrence(
     events.reserve(indices.size());
     for (unsigned long idx : indices)
     {
-        const auto& ev = m_events.GetEvent(static_cast<int>(idx));
+        const auto& ev = m_events.GetEvent(idx);
         const qint64 ts = toEpochSecs(ev.findByKey(tsField));
         if (ts < 0) continue;
         const std::string t = ev.findByKey(typeField);
@@ -608,7 +608,7 @@ void PatternAnalysisPanel::RefreshNgrams(
     for (unsigned long idx : indices)
     {
         const std::string t =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(typeField);
+            m_events.GetEvent(idx).findByKey(typeField);
         typeSeq.push_back(t.empty() ? "(none)" : t);
     }
 

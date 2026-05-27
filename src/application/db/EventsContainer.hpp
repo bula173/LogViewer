@@ -168,7 +168,7 @@ class EventsContainer : public mvc::IModel
     * @par Complexity
     * O(1)
      */
-    const LogEvent& GetEvent(const int index);
+    [[nodiscard]] const LogEvent& GetEvent(size_t index);
 
   public: // IModel interface
     /** @brief Adds a new item to the model.
@@ -247,8 +247,8 @@ class EventsContainer : public mvc::IModel
      * @return LogEvent& Reference to the event at the specified index
      * @throws std::out_of_range if index is >= Size()
      */
-    db::LogEvent& GetItem(const int index) override;
-    const db::LogEvent& GetItem(const int index) const override;
+    db::LogEvent& GetItem(size_t index) override;
+    const db::LogEvent& GetItem(size_t index) const override;
 
     /**
      * @brief Temporarily disables view notifications during bulk loading.

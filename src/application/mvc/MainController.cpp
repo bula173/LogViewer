@@ -3,7 +3,6 @@
 #include "Config.hpp"
 #include "Error.hpp"
 #include "ParserFactory.hpp"
-#include "WxWidgetsUtils.hpp"
 
 #include <algorithm>
 #include <filesystem>
@@ -49,8 +48,7 @@ void MainController::SearchEvents(const std::string& query,
 
     for (size_t i = 0; i < total; ++i)
     {
-        const auto& event =
-            m_events.GetEvent(wx_utils::to_model_index(i));
+        const auto& event = m_events.GetEvent(i);
 
         bool matches = !hasQuery;
         std::string matchedText;

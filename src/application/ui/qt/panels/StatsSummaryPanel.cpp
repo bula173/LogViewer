@@ -300,7 +300,7 @@ std::string StatsSummaryPanel::DetectTimestampField(
         for (unsigned long idx : indices)
         {
             const std::string val =
-                events.GetEvent(static_cast<int>(idx)).findByKey(candidate);
+                events.GetEvent(idx).findByKey(candidate);
             if (!val.empty() &&
                 panel_utils::ParseTimestamp(QString::fromStdString(val)).isValid())
                 return candidate;
@@ -325,7 +325,7 @@ void StatsSummaryPanel::RefreshSummaryTable(
     for (unsigned long idx : indices)
     {
         const std::string v =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(typeField);
+            m_events.GetEvent(idx).findByKey(typeField);
         if (!v.empty()) uniqueTypes.insert(v);
     }
 
@@ -337,7 +337,7 @@ void StatsSummaryPanel::RefreshSummaryTable(
         for (unsigned long idx : indices)
         {
             const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(
-                m_events.GetEvent(static_cast<int>(idx)).findByKey(tsField)));
+                m_events.GetEvent(idx).findByKey(tsField)));
             if (!dt.isValid()) continue;
             if (!tMin.isValid() || dt < tMin) tMin = dt;
             if (!tMax.isValid() || dt > tMax) tMax = dt;
@@ -417,7 +417,7 @@ void StatsSummaryPanel::RefreshTypeChart(const std::vector<unsigned long>& indic
     for (unsigned long idx : indices)
     {
         const std::string val =
-            m_events.GetEvent(static_cast<int>(idx)).findByKey(typeField);
+            m_events.GetEvent(idx).findByKey(typeField);
         counts[val.empty() ? "(none)" : val]++;
     }
 

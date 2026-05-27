@@ -33,21 +33,17 @@ class ModelImpl : public IModel
         NotifyDataChanged();
     }
 
-    db::LogEvent& GetItem(const int index) override
+    db::LogEvent& GetItem(size_t index) override
     {
-        if (index < 0 || index >= static_cast<int>(items.size()))
-        {
+        if (index >= items.size())
             throw std::out_of_range("Invalid item index");
-        }
         return items[index];
     }
 
-    const db::LogEvent& GetItem(const int index) const override
+    const db::LogEvent& GetItem(size_t index) const override
     {
-        if (index < 0 || index >= static_cast<int>(items.size()))
-        {
+        if (index >= items.size())
             throw std::out_of_range("Invalid item index");
-        }
         return items[index];
     }
 

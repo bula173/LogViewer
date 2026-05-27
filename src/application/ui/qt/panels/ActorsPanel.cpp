@@ -294,7 +294,7 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
 
     for (unsigned long idx : vis)
     {
-        const db::LogEvent& ev = m_events.GetEvent(static_cast<int>(idx));
+        const db::LogEvent& ev = m_events.GetEvent(idx);
 
         for (const auto& cdef : compiled)
         {
@@ -924,7 +924,7 @@ void ActorsPanel::ShowSequenceDiagram()
             if (written >= maxEvents) break;
 
             const db::LogEvent& ev =
-                m_events.GetEvent(static_cast<int>(idx));
+                m_events.GetEvent(idx);
 
             const std::string from = ev.findByKey(senderField);
             const std::string to   = ev.findByKey(receiverField);

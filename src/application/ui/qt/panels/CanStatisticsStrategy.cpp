@@ -58,7 +58,7 @@ bool CanStatisticsStrategy::Matches(db::EventsContainer& events) const
     const size_t probe = std::min(events.Size(), size_t{20});
     for (size_t i = 0; i < probe; ++i)
     {
-        if (!events.GetEvent(static_cast<int>(i)).findByKey("CAN_ID").empty())
+        if (!events.GetEvent(i).findByKey("CAN_ID").empty())
             return true;
     }
     return false;
@@ -82,7 +82,7 @@ std::vector<StatsSection> CanStatisticsStrategy::Compute(
 
     for (unsigned long idx : indices)
     {
-        const auto& ev = events.GetEvent(static_cast<int>(idx));
+        const auto& ev = events.GetEvent(idx);
 
         const std::string type = ev.findByKey("type");
         if      (type == "Rx")         ++rxCount;

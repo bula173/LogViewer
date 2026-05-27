@@ -66,17 +66,8 @@ void EventsContainer::AddEventBatch(
         this->NotifyDataChanged();
 }
 
-const LogEvent& EventsContainer::GetEvent(const int index)
+const LogEvent& EventsContainer::GetEvent(size_t index)
 {
-    /**
-     * @brief Provides bounds-checked access to events (thread-safe read).
-     *
-     * Uses vector's at() method which throws std::out_of_range for invalid
-     * indices. This ensures safe access even with invalid indices from UI
-     * components.
-     * Thread-safe: Uses shared lock for concurrent reads.
-     */
-    util::Logger::Trace("EventsContainer::GetEvent called with index: {}", index);
     std::shared_lock<std::shared_mutex> lock(m_mutex);
     return this->GetItem(index);
 }
@@ -117,20 +108,16 @@ void EventsContainer::AddItem(LogEvent&& item)
     // Note: NotifyDataChanged should be called by AddEvent after releasing the lock
 }
 
-LogEvent& EventsContainer::GetItem(const int index)
+LogEvent& EventsContainer::GetItem(size_t index)
 {
     return const_cast<LogEvent&>(std::as_const(*this).GetItem(index));
 }
 
-const LogEvent& EventsContainer::GetItem(const int index) const
+const LogEvent& EventsContainer::GetItem(size_t index) const
 {
-    util::Logger::Trace("EventsContainer::GetItem const called with index: {}", index);
-    if (index < 0 || index >= static_cast<int>(m_data.size()))
-    {
-        util::Logger::Error("EventsContainer::GetItem const: index out of range");
-        throw std::out_of_range("Index out of range");
-    }
-    return m_data.at(static_cast<size_t>(index));
+    if (index >= m_data.size())
+        throw std::out_of_range("EventsContainer::GetItem: index out of range");
+    return m_data[index];
 }
 
 void EventsContainer::Clear()

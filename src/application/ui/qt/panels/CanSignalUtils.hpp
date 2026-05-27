@@ -27,7 +27,7 @@ inline std::vector<FrameSignals> BuildFrameSignalTree(db::EventsContainer& event
 
     for (size_t i = 0; i < total; ++i)
     {
-        const auto& ev  = events.GetItem(static_cast<int>(i));
+        const auto& ev  = events.GetItem(i);
         const std::string canId = ev.findByKey("CAN_ID");
         if (canId.empty()) continue;
 
