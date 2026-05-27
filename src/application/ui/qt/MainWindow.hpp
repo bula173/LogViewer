@@ -80,6 +80,7 @@ class UpdateChecker;
 class TimeRangeFilterPanel;
 class FilterProfilesPanel;
 class CanSignalTreePanel;
+class SideBySidePanel;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -279,7 +280,8 @@ class MainWindow : public QMainWindow,
     UpdateChecker*          m_updateChecker{nullptr};
     TimeRangeFilterPanel*   m_timeRangePanel{nullptr};
     FilterProfilesPanel*    m_profilesPanel {nullptr};
-    CanSignalTreePanel*     m_canSignalTree {nullptr};
+    CanSignalTreePanel*     m_canSignalTree    {nullptr};
+    SideBySidePanel*        m_sideBySidePanel  {nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     

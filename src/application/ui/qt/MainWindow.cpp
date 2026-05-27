@@ -12,6 +12,7 @@
 #include "panels/TraceViewerPanel.hpp"
 #include "panels/BookmarksPanel.hpp"
 #include "panels/ScenariosPanel.hpp"
+#include "panels/SideBySidePanel.hpp"
 #include "panels/ActorsPanel.hpp"
 #include "panels/ActorDefinitionsPanel.hpp"
 #include "panels/SearchBar.hpp"
@@ -460,6 +461,12 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
         tr("Build named, ordered event collections and export them as plain text, Markdown, or JSON Lines"));
 
+    // ===== MAIN TAB: Side-by-side comparison =====
+    m_sideBySidePanel = new SideBySidePanel(this);
+    m_contentTabs->addTab(m_sideBySidePanel, tr("Side by Side"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Load two log files side by side and synchronise them by timestamp, manual reference points, or none"));
+
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
     connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
@@ -798,6 +805,16 @@ void MainWindow::SetupMenus()
     viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
     viewMenu->addAction(m_detailsDock->toggleViewAction());
     viewMenu->addAction(m_bottomDock->toggleViewAction());
+
+    viewMenu->addSeparator();
+
+    auto* sideBySideAction = viewMenu->addAction(tr("&Side by Side Comparison"));
+    sideBySideAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
+    connect(sideBySideAction, &QAction::triggered, this, [this]() {
+        if (m_sideBySidePanel && m_contentTabs) {
+            m_contentTabs->setCurrentWidget(m_sideBySidePanel);
+        }
+    });
 
     viewMenu->addSeparator();
 
