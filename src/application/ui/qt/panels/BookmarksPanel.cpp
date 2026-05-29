@@ -1,5 +1,6 @@
 #include "BookmarksPanel.hpp"
 
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QGuiApplication>
@@ -129,9 +130,14 @@ void BookmarksPanel::OnAddBookmark()
 void BookmarksPanel::DoAddBookmark(int actualRow, const std::string& label)
 {
     if (actualRow < 0 || actualRow >= static_cast<int>(m_events.Size()))
+    {
+        util::Logger::Warn("[BookmarksPanel] Invalid bookmark row {}", actualRow);
         return;
+    }
 
-    const db::LogEvent& ev = m_events.GetEvent(actualRow);
+    util::Logger::Debug("[BookmarksPanel] Adding bookmark at row {}", actualRow);
+
+    const db::LogEvent& ev = m_events.GetEvent(static_cast<size_t>(actualRow));
 
     std::string summary;
     for (const auto& f : panel_utils::kMsgFields)
@@ -155,6 +161,7 @@ void BookmarksPanel::DoAddBookmark(int actualRow, const std::string& label)
     }
 
     m_bookmarks.push_back({actualRow, label, summary, ts});
+    util::Logger::Info("[BookmarksPanel] {} bookmark(s) total", m_bookmarks.size());
     RebuildTable();
     m_statusLabel->setText(tr("Added bookmark for event #%1").arg(actualRow));
 }
@@ -163,6 +170,7 @@ void BookmarksPanel::OnGoTo()
 {
     const int sel = SelectedTableRow();
     if (sel < 0 || sel >= static_cast<int>(m_bookmarks.size())) return;
+    util::Logger::Debug("[BookmarksPanel] Navigating to bookmarked event row {}", m_bookmarks[static_cast<size_t>(sel)].row);
     emit NavigateToEvent(m_bookmarks[static_cast<size_t>(sel)].row);
 }
 
@@ -170,6 +178,7 @@ void BookmarksPanel::OnRemove()
 {
     const int sel = SelectedTableRow();
     if (sel < 0 || sel >= static_cast<int>(m_bookmarks.size())) return;
+    util::Logger::Debug("[BookmarksPanel] Removing bookmark at index {}", sel);
     m_bookmarks.erase(m_bookmarks.begin() + sel);
     RebuildTable();
     m_statusLabel->setText(tr("%1 bookmark(s)").arg(m_bookmarks.size()));
@@ -179,9 +188,11 @@ void BookmarksPanel::OnExport()
 {
     if (m_bookmarks.empty())
     {
+        util::Logger::Warn("[BookmarksPanel] Export requested but no bookmarks available");
         m_statusLabel->setText(tr("No bookmarks to export"));
         return;
     }
+    util::Logger::Debug("[BookmarksPanel] Exporting {} bookmark(s) as Markdown", m_bookmarks.size());
 
     auto escape = [](const std::string& s) -> QString {
         QString q = QString::fromStdString(s);
@@ -256,6 +267,7 @@ void BookmarksPanel::LoadSessionData(const nlohmann::json& data)
         if (bm.row >= 0)
             m_bookmarks.push_back(std::move(bm));
     }
+    util::Logger::Info("[BookmarksPanel] Loaded {} bookmark(s) from session", m_bookmarks.size());
     RebuildTable();
 }
 

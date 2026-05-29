@@ -1,6 +1,8 @@
 #pragma once
 
 #include "EvlogTemplate.hpp"
+#include "Error.hpp"
+#include "Result.hpp"
 
 #include <filesystem>
 #include <map>
@@ -27,10 +29,13 @@ namespace parser {
 class EvlogTemplateRegistry {
 public:
     /// Load every *.t file found directly inside @p dir (non-recursive).
-    void LoadFromDirectory(const std::filesystem::path& dir);
+    /// Returns Ok on success (even if no templates were found),
+    /// or Err if the directory cannot be iterated.
+    util::Result<void, error::Error> LoadFromDirectory(const std::filesystem::path& dir);
 
     /// Load a single template file (may contain multiple templates).
-    void LoadFromFile(const std::filesystem::path& path);
+    /// Returns Ok on success, or Err if the file cannot be opened.
+    util::Result<void, error::Error> LoadFromFile(const std::filesystem::path& path);
 
     /// Look up template by (facility, event_type); nullptr if not found.
     const EvlogTemplate* Find(int32_t facility, uint32_t eventType) const;

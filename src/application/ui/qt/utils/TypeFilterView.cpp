@@ -1,5 +1,7 @@
 #include "TypeFilterView.hpp"
 
+#include "Logger.hpp"
+
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMenu>
@@ -60,6 +62,7 @@ void TypeFilterView::SetOnFilterChanged(std::function<void()> handler)
 void TypeFilterView::ReplaceTypes(
     const std::vector<std::string>& types, bool checkedByDefault)
 {
+    util::Logger::Debug("[TypeFilterView] ReplaceTypes: {} type(s), all checked={}", types.size(), checkedByDefault);
     QSignalBlocker blocker(m_listWidget);
     m_listWidget->clear();
     for (const auto& type : types)
@@ -78,16 +81,19 @@ void TypeFilterView::ShowControl(bool show)
 
 void TypeFilterView::SelectAll()
 {
+    util::Logger::Debug("[TypeFilterView] SelectAll: checking all {} type(s)", m_listWidget->count());
     SetAll(Qt::Checked);
 }
 
 void TypeFilterView::DeselectAll()
 {
+    util::Logger::Debug("[TypeFilterView] DeselectAll: unchecking all {} type(s)", m_listWidget->count());
     SetAll(Qt::Unchecked);
 }
 
 void TypeFilterView::InvertSelection()
 {
+    util::Logger::Debug("[TypeFilterView] InvertSelection: toggling {} type(s)", m_listWidget->count());
     QSignalBlocker blocker(m_listWidget);
     for (int i = 0; i < m_listWidget->count(); ++i)
     {
@@ -139,9 +145,12 @@ void TypeFilterView::SetCheckedTypes(const std::vector<std::string>& types)
 {
     if (types.empty())
     {
+        util::Logger::Debug("[TypeFilterView] SetCheckedTypes: empty list — falling back to SelectAll");
         SelectAll();
         return;
     }
+    util::Logger::Debug("[TypeFilterView] SetCheckedTypes: applying {} checked type(s) out of {} total",
+                        types.size(), m_listWidget->count());
     const std::set<std::string> typeSet(types.begin(), types.end());
     QSignalBlocker blocker(m_listWidget);
     for (int i = 0; i < m_listWidget->count(); ++i)

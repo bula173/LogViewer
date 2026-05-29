@@ -97,9 +97,19 @@ namespace {
 
     bool IsApiVersionCompatible(std::string_view version) {
         auto parts = ParseVersion(version);
-        if (!parts.ok) return false;
-        if (parts.major != kSupportedApiMajor) return false;
-        return parts.minor >= kSupportedApiMinMinor && parts.minor <= kSupportedApiMaxMinor;
+        if (!parts.ok) {
+            util::Logger::Debug("PluginManager: IsApiVersionCompatible: failed to parse version '{}'", std::string(version));
+            return false;
+        }
+        if (parts.major != kSupportedApiMajor) {
+            util::Logger::Debug("PluginManager: IsApiVersionCompatible: major version mismatch: expected {} got {}",
+                kSupportedApiMajor, parts.major);
+            return false;
+        }
+        bool compat = parts.minor >= kSupportedApiMinMinor && parts.minor <= kSupportedApiMaxMinor;
+        util::Logger::Debug("PluginManager: IsApiVersionCompatible: version='{}' minor={} range=[{},{}] -> {}",
+            std::string(version), parts.minor, kSupportedApiMinMinor, kSupportedApiMaxMinor, compat);
+        return compat;
     }
 }
 
@@ -194,9 +204,17 @@ static std::vector<void*> LoadDependencyHandles(const std::filesystem::path& lib
 static void ProbeOptionalPluginExports(void* libHandle, PluginLoadInfo& info)
 {
 #ifdef _WIN32
-    auto probe_sym = [&](const char* name)->void* { return reinterpret_cast<void*>(GetProcAddress(static_cast<HMODULE>(libHandle), name)); };
+    auto probe_sym = [&](const char* symName)->void* {
+        void* sym = reinterpret_cast<void*>(GetProcAddress(static_cast<HMODULE>(libHandle), symName));
+        util::Logger::Trace("PluginManager: Probing symbol '{}' for {}: {}", symName, info.pluginId, sym != nullptr ? "found" : "absent");
+        return sym;
+    };
 #else
-    auto probe_sym = [&](const char* name)->void* { return dlsym(libHandle, name); };
+    auto probe_sym = [&](const char* symName)->void* {
+        void* sym = dlsym(libHandle, symName);
+        util::Logger::Trace("PluginManager: Probing symbol '{}' for {}: {}", symName, info.pluginId, sym != nullptr ? "found" : "absent");
+        return sym;
+    };
 #endif
 
     // Probe for generic panel creation exports
@@ -372,11 +390,13 @@ PluginManager& PluginManager::GetInstance()
 
 PluginManager::~PluginManager()
 {
+    util::Logger::Info("PluginManager: Shutting down, unloading {} plugin(s)", m_plugins.size());
     // Unload all plugins
     for (auto& [id, info] : m_plugins)
     {
         if (info.instance)
         {
+            util::Logger::Info("PluginManager: Shutting down plugin: {}", id);
             // Ensure the plugin instance is destroyed while the library is
             // still loaded so any C-ABI destructor callbacks remain valid.
             info.instance->Shutdown();
@@ -388,6 +408,7 @@ PluginManager::~PluginManager()
             info.libraryHandle = nullptr;
         }
     }
+    util::Logger::Info("PluginManager: All plugins unloaded");
 }
 
 void PluginManager::SetPluginsDirectory(const std::filesystem::path& directory)
@@ -483,7 +504,10 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     }
 
     const std::string manifestApiVersion = (*manifest)["apiVersion"].get<std::string>();
+    util::Logger::Debug("PluginManager: Plugin manifest declares apiVersion='{}'", manifestApiVersion);
     if (!IsApiVersionCompatible(manifestApiVersion)) {
+        util::Logger::Warn("PluginManager: Plugin manifest apiVersion '{}' is not compatible with application range 1.{}-1.{}",
+            manifestApiVersion, kSupportedApiMinMinor, kSupportedApiMaxMinor);
         return util::Result<std::string, error::Error>::Err(
             error::Error(
                 "Plugin API version mismatch. Expected compatible 1.x minor (1.0-1.1), found " + manifestApiVersion));
@@ -547,12 +571,16 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     auto metadata = plugin->GetMetadata();
 
     if (metadata.apiVersion != manifestApiVersion) {
+        util::Logger::Warn("PluginManager: Plugin binary API version '{}' does not match manifest '{}' for plugin: {}",
+            metadata.apiVersion, manifestApiVersion, actualPluginPath.string());
         return util::Result<std::string, error::Error>::Err(
             error::Error("Plugin binary API version does not match manifest: " + metadata.apiVersion +
                 " vs " + manifestApiVersion));
     }
 
     if (!IsApiVersionCompatible(metadata.apiVersion)) {
+        util::Logger::Warn("PluginManager: Plugin API version '{}' incompatible with application for: {}",
+            metadata.apiVersion, actualPluginPath.string());
         return util::Result<std::string, error::Error>::Err(
             error::Error("Plugin API version incompatible with application. Expected 1.x minor (1.0-1.1), got " + metadata.apiVersion));
     }
@@ -566,12 +594,16 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     }
 
     // Initialize plugin
+    util::Logger::Info("PluginManager: Initializing plugin: {}", metadata.id);
     if (!plugin->Initialize())
     {
+        util::Logger::Error("PluginManager: Plugin initialization failed for '{}': {}",
+            metadata.id, plugin->GetLastError());
         return util::Result<std::string, error::Error>::Err(
             error::Error(error::ErrorCode::RuntimeError,
                 "Plugin initialization failed: " + plugin->GetLastError()));
     }
+    util::Logger::Info("PluginManager: Plugin initialized successfully: {}", metadata.id);
 
     // Store plugin info
     PluginLoadInfo info;
@@ -664,6 +696,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
     }
 
     // Optional pre-flight: query the plugin binary for a reported API version
+    util::Logger::Trace("PluginManager: Resolving symbol 'GetPluginBinaryApiVersion' (optional)");
     auto getBinVer = reinterpret_cast<const char*(*)()>(
         GetProcAddress(handle, "GetPluginBinaryApiVersion"));
     if (getBinVer)
@@ -696,6 +729,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
     // If present, wrap them in a small adapter that implements `IPlugin` so
     // the rest of the application can treat SDK-first plugins like regular
     // in-tree plugins.
+    util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Create'");
     auto c_create_sym = reinterpret_cast<void*(*)()>(GetProcAddress(handle, "Plugin_Create"));
     if (c_create_sym)
     {
@@ -709,10 +743,15 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
         using Plugin_GetLastError_Fn = const char* (*)(void*);
 
         auto c_create = reinterpret_cast<Plugin_Create_Fn>(c_create_sym);
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Destroy'");
         auto c_destroy = reinterpret_cast<Plugin_Destroy_Fn>(GetProcAddress(handle, "Plugin_Destroy"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_GetMetadataJson'");
         auto c_getMeta = reinterpret_cast<Plugin_GetMetadataJson_Fn>(GetProcAddress(handle, "Plugin_GetMetadataJson"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Initialize'");
         auto c_initialize = reinterpret_cast<Plugin_Initialize_Fn>(GetProcAddress(handle, "Plugin_Initialize"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Shutdown'");
         auto c_shutdown = reinterpret_cast<Plugin_Shutdown_Fn>(GetProcAddress(handle, "Plugin_Shutdown"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_GetLastError'");
         auto c_getLastErr = reinterpret_cast<Plugin_GetLastError_Fn>(GetProcAddress(handle, "Plugin_GetLastError"));
 
         if (!c_getMeta)
@@ -735,6 +774,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
 
         // Set logger callback immediately after plugin creation
         using Plugin_SetLoggerCallback_Fn = void (*)(void*, PluginLogFn);
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_SetLoggerCallback'");
         auto setLoggerSym = reinterpret_cast<Plugin_SetLoggerCallback_Fn>(GetProcAddress(handle, "Plugin_SetLoggerCallback"));
         if (setLoggerSym) {
             setLoggerSym(pluginHandle, &AppPluginLog);
@@ -801,15 +841,19 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
     }
 
 #else
+    util::Logger::Debug("PluginManager: Opening library with dlopen: {}", path.string());
     void* handle = dlopen(path.string().c_str(), RTLD_NOW | RTLD_LOCAL);
     if (!handle)
     {
         const char* error = dlerror();
+        util::Logger::Error("PluginManager: dlopen failed for '{}': {}", path.string(), error ? error : "unknown");
         return util::Result<std::unique_ptr<IPlugin>, error::Error>::Err(
             error::Error(error::ErrorCode::RuntimeError,
                 std::string("Failed to load library: ") + (error ? error : "unknown")));
     }
+    util::Logger::Debug("PluginManager: dlopen succeeded for: {}", path.string());
     // Optional pre-flight: query GetPluginBinaryApiVersion if present
+    util::Logger::Trace("PluginManager: Resolving symbol 'GetPluginBinaryApiVersion' (optional)");
     auto getBinVerSym = dlsym(handle, "GetPluginBinaryApiVersion");
     if (getBinVerSym)
     {
@@ -840,6 +884,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
     }
 
     // Require C-ABI: Plugin_Create must be exported by SDK-first plugins on Unix too.
+    util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Create'");
     auto c_create_sym_unix = dlsym(handle, "Plugin_Create");
     if (!c_create_sym_unix)
     {
@@ -860,10 +905,15 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
         using Plugin_GetLastError_Fn = const char* (*)(void*);
 
         auto c_create = reinterpret_cast<Plugin_Create_Fn>(c_create_sym_unix);
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Destroy'");
         auto c_destroy = reinterpret_cast<Plugin_Destroy_Fn>(dlsym(handle, "Plugin_Destroy"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_GetMetadataJson'");
         auto c_getMeta = reinterpret_cast<Plugin_GetMetadataJson_Fn>(dlsym(handle, "Plugin_GetMetadataJson"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Initialize'");
         auto c_initialize = reinterpret_cast<Plugin_Initialize_Fn>(dlsym(handle, "Plugin_Initialize"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_Shutdown'");
         auto c_shutdown = reinterpret_cast<Plugin_Shutdown_Fn>(dlsym(handle, "Plugin_Shutdown"));
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_GetLastError'");
         auto c_getLastErr = reinterpret_cast<Plugin_GetLastError_Fn>(dlsym(handle, "Plugin_GetLastError"));
 
         if (!c_getMeta)
@@ -885,6 +935,7 @@ util::Result<std::unique_ptr<IPlugin>, error::Error> PluginManager::LoadPluginLi
 
         // Set logger callback immediately after plugin creation
         using Plugin_SetLoggerCallback_Fn = void (*)(void*, PluginLogFn);
+        util::Logger::Trace("PluginManager: Resolving symbol 'Plugin_SetLoggerCallback'");
         auto setLoggerSym = reinterpret_cast<Plugin_SetLoggerCallback_Fn>(dlsym(handle, "Plugin_SetLoggerCallback"));
         if (setLoggerSym) {
             setLoggerSym(pluginHandle, &AppPluginLog);
@@ -960,11 +1011,13 @@ void PluginManager::UnloadLibrary(void* handle)
     if (!handle)
         return;
 
+    util::Logger::Debug("PluginManager: Unloading library handle {}", handle);
 #ifdef _WIN32
     FreeLibrary(static_cast<HMODULE>(handle));
 #else
     dlclose(handle);
 #endif
+    util::Logger::Debug("PluginManager: Library handle {} unloaded", handle);
 }
 
 util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& pluginId)

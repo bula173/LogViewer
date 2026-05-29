@@ -1,5 +1,9 @@
 #include "ExportManager.hpp"
 
+#include "Error.hpp"
+#include "Logger.hpp"
+#include "Result.hpp"
+
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -38,12 +42,22 @@ QString QuoteCsvField(const QString& value)
 
 } // namespace
 
-bool ToCsv(const QAbstractItemModel& model, const std::vector<int>& rows,
-           const QString& path)
+util::Result<void, error::Error> ToCsv(const QAbstractItemModel& model,
+                                        const std::vector<int>& rows,
+                                        const QString& path)
 {
+    using R = util::Result<void, error::Error>;
+
+    util::Logger::Debug("[ExportManager] ToCsv start: {} rows -> {}",
+                        rows.size(), path.toStdString());
+
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return false;
+    {
+        const std::string msg = "Failed to open file for CSV export: " + path.toStdString();
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
 
     QTextStream out(&file);
     out.setEncoding(QStringConverter::Utf8);
@@ -72,15 +86,27 @@ bool ToCsv(const QAbstractItemModel& model, const std::vector<int>& rows,
         out << fields.join(QLatin1Char(',')) << QLatin1Char('\n');
     }
 
-    return true;
+    util::Logger::Info("[ExportManager] CSV export complete: {} rows -> {}",
+                       rows.size(), path.toStdString());
+    return R::Ok({});
 }
 
-bool ToJson(const QAbstractItemModel& model, const std::vector<int>& rows,
-            const QString& path)
+util::Result<void, error::Error> ToJson(const QAbstractItemModel& model,
+                                         const std::vector<int>& rows,
+                                         const QString& path)
 {
+    using R = util::Result<void, error::Error>;
+
+    util::Logger::Debug("[ExportManager] ToJson start: {} rows -> {}",
+                        rows.size(), path.toStdString());
+
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return false;
+    {
+        const std::string msg = "Failed to open file for JSON export: " + path.toStdString();
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
 
     const QStringList headers = CollectHeaders(model);
     const int cols = model.columnCount();
@@ -100,15 +126,28 @@ bool ToJson(const QAbstractItemModel& model, const std::vector<int>& rows,
     }
 
     file.write(QJsonDocument(array).toJson(QJsonDocument::Indented));
-    return true;
+
+    util::Logger::Info("[ExportManager] JSON export complete: {} rows -> {}",
+                       rows.size(), path.toStdString());
+    return R::Ok({});
 }
 
-bool ToXml(const QAbstractItemModel& model, const std::vector<int>& rows,
-           const QString& path)
+util::Result<void, error::Error> ToXml(const QAbstractItemModel& model,
+                                        const std::vector<int>& rows,
+                                        const QString& path)
 {
+    using R = util::Result<void, error::Error>;
+
+    util::Logger::Debug("[ExportManager] ToXml start: {} rows -> {}",
+                        rows.size(), path.toStdString());
+
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return false;
+    {
+        const std::string msg = "Failed to open file for XML export: " + path.toStdString();
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
 
     const QStringList headers = CollectHeaders(model);
     const int cols = model.columnCount();
@@ -132,7 +171,10 @@ bool ToXml(const QAbstractItemModel& model, const std::vector<int>& rows,
 
     xml.writeEndElement(); // </events>
     xml.writeEndDocument();
-    return true;
+
+    util::Logger::Info("[ExportManager] XML export complete: {} rows -> {}",
+                       rows.size(), path.toStdString());
+    return R::Ok({});
 }
 
 } // namespace ui::qt::ExportManager

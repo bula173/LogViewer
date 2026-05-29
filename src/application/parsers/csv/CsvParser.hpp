@@ -16,7 +16,9 @@
 #include <string_view>
 #include <vector>
 
+#include "Error.hpp"
 #include "IDataParser.hpp"
+#include "Result.hpp"
 
 namespace parser
 {
@@ -126,9 +128,10 @@ class CsvParser : public IDataParser
      *
      * @param headers Vector of header names
      * @param name Header name to find
-     * @return Index of the header, or -1 if not found
+     * @return Ok(index) if found, Err if the column is absent
      */
-    int FindHeaderIndex(const std::vector<std::string>& headers, const std::string& name);
+    util::Result<size_t, error::Error> FindHeaderIndex(
+        const std::vector<std::string>& headers, const std::string& name);
 
     /**
      * @brief Trims whitespace from both ends of a string

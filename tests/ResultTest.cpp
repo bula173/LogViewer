@@ -88,7 +88,7 @@ TEST(ResultTest, UnwrapOkReturnsValue)
 TEST(ResultTest, UnwrapErrThrowsLogicError)
 {
     auto r = IntStrResult::Err("failure");
-    EXPECT_THROW(r.unwrap(), std::logic_error);
+    EXPECT_THROW((void)r.unwrap(), std::logic_error);
 }
 
 // ============================================================================
@@ -162,7 +162,7 @@ TEST(ResultTest, ErrorReturnsContainedError)
 TEST(ResultTest, ErrorOnOkThrowsLogicError)
 {
     auto r = IntStrResult::Ok(1);
-    EXPECT_THROW(r.error(), std::logic_error);
+    EXPECT_THROW((void)r.error(), std::logic_error);
 }
 
 // ============================================================================

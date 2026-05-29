@@ -1,7 +1,9 @@
 #include "EvlogParser.hpp"
 
+#include "Error.hpp"
 #include "LogEvent.hpp"
 #include "Logger.hpp"
+#include "Result.hpp"
 
 #include <cstring>
 #include <ctime>
@@ -300,16 +302,28 @@ static std::string DecodePrintf(const uint8_t* data, uint32_t size)
 // Template registry setup
 // ---------------------------------------------------------------------------
 
-void EvlogParser::SetTemplateDirectory(const std::filesystem::path& dir)
+util::Result<void, error::Error> EvlogParser::SetTemplateDirectory(const std::filesystem::path& dir)
 {
+    util::Logger::Info("[EvlogParser] loading templates from directory: {}", dir.string());
     if (!m_registry) m_registry = std::make_unique<EvlogTemplateRegistry>();
-    m_registry->LoadFromDirectory(dir);
+    const size_t before = m_registry->Count();
+    auto dirResult = m_registry->LoadFromDirectory(dir);
+    if (dirResult.isErr()) {
+        util::Logger::Warn("[EvlogParser] LoadFromDirectory failed: {}", dirResult.error().what());
+        return dirResult;
+    }
+    util::Logger::Debug("[EvlogParser] templates loaded from directory: {} new, {} total in registry",
+        m_registry->Count() - before, m_registry->Count());
+    return util::Result<void, error::Error>::Ok();
 }
 
 void EvlogParser::SetTemplateFile(const std::filesystem::path& path)
 {
+    util::Logger::Debug("[EvlogParser] loading template file: {}", path.string());
     if (!m_registry) m_registry = std::make_unique<EvlogTemplateRegistry>();
-    m_registry->LoadFromFile(path);
+    auto fileResult = m_registry->LoadFromFile(path);
+    if (fileResult.isErr())
+        util::Logger::Warn("[EvlogParser] LoadFromFile failed: {}", fileResult.error().what());
 }
 
 // ---------------------------------------------------------------------------
@@ -318,9 +332,14 @@ void EvlogParser::SetTemplateFile(const std::filesystem::path& path)
 
 void EvlogParser::ParseData(const std::filesystem::path& filepath)
 {
+    util::Logger::Debug("[EvlogParser] opening file: {}", filepath.string());
+
     std::ifstream file(filepath, std::ios::binary);
     if (!file)
+    {
+        util::Logger::Error("[EvlogParser] cannot open file: {}", filepath.string());
         throw std::runtime_error("EvlogParser: cannot open: " + filepath.string());
+    }
 
     std::error_code ec;
     const auto fsz = std::filesystem::file_size(filepath, ec);
@@ -328,24 +347,30 @@ void EvlogParser::ParseData(const std::filesystem::path& filepath)
     m_currentProgress = 0;
     m_eventId         = 0;
 
-    ParseStream(file);
+    auto result = ParseStream(file);
+    if (result.isErr())
+        util::Logger::Warn("[EvlogParser] ParseStream returned error: {}", result.error().what());
 }
 
 void EvlogParser::ParseData(std::istream& input)
 {
+    util::Logger::Debug("[EvlogParser] parsing from stream");
     m_totalProgress   = 0;
     m_currentProgress = 0;
     m_eventId         = 0;
-    ParseStream(input);
+    auto result = ParseStream(input);
+    if (result.isErr())
+        util::Logger::Warn("[EvlogParser] ParseStream returned error: {}", result.error().what());
 }
 
 // ---------------------------------------------------------------------------
 // Core streaming loop
 // ---------------------------------------------------------------------------
 
-void EvlogParser::ParseStream(std::istream& input)
+util::Result<int, error::Error> EvlogParser::ParseStream(std::istream& input)
 {
     using EventItems = db::LogEvent::EventItems;
+    using R = util::Result<int, error::Error>;
 
     std::vector<std::pair<int, EventItems>> batch;
     batch.reserve(kProgressBatch);
@@ -394,6 +419,14 @@ void EvlogParser::ParseStream(std::istream& input)
             break;
         }
 
+        // ── Warn on unrecognised facility ────────────────────────────────
+        if (std::string_view{FacilityName(facility)} == "unknown")
+            util::Logger::Warn("[EvlogParser] unknown facility code {} in recid={}", facility, recid);
+
+        // ── Per-record trace ─────────────────────────────────────────────
+        util::Logger::Trace("[EvlogParser] record #{}: recid={} sev={} fac={} fmt={} paySize={}",
+            m_eventId, recid, SeverityName(severity), FacilityName(facility), format, paySize);
+
         // ── Read variable payload ─────────────────────────────────────────
         if (paySize > 0)
         {
@@ -421,8 +454,18 @@ void EvlogParser::ParseStream(std::istream& input)
                 const EvlogTemplate* tmpl = m_registry
                     ? m_registry->Find(facility, eventType)
                     : nullptr;
-                info = tmpl ? DecodeWithTemplate(payload.data(), paySize, *tmpl)
-                            : HexDump(payload.data(), paySize);
+                if (tmpl)
+                {
+                    info = DecodeWithTemplate(payload.data(), paySize, *tmpl);
+                }
+                else
+                {
+                    if (paySize > 0)
+                        util::Logger::Warn("[EvlogParser] no template for facility={} "
+                            "event_type=0x{:08X} in recid={} — emitting hex dump",
+                            facility, eventType, recid);
+                    info = HexDump(payload.data(), paySize);
+                }
                 break;
             }
         }
@@ -495,6 +538,9 @@ void EvlogParser::ParseStream(std::istream& input)
     if (skipped > 0)
         util::Logger::Warn("[EvlogParser] {} suspect record(s) caused early stop — "
             "file may be from a 64-bit evlogd build (header size mismatch)", skipped);
+
+    util::Logger::Info("[EvlogParser] parse complete: {} record(s) emitted", m_eventId);
+    return R::Ok(m_eventId);
 }
 
 } // namespace parser

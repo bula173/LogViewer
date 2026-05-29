@@ -54,6 +54,13 @@ LogFileLoadDialog::LogFileLoadDialog(const QString& filePath, QWidget* parent)
         modeGroup);
     modeLayout->addWidget(m_mergeRadio);
 
+    modeLayout->addSpacing(5);
+
+    m_sideBySideRadio = new QRadioButton(
+        tr("Side by Side - Open both files in the comparison panel"),
+        modeGroup);
+    modeLayout->addWidget(m_sideBySideRadio);
+
     mainLayout->addWidget(modeGroup);
 
     mainLayout->addSpacing(10);
@@ -90,11 +97,15 @@ LogFileLoadDialog::LogFileLoadDialog(const QString& filePath, QWidget* parent)
 
     mainLayout->addWidget(aliasGroup);
 
-    // Enable/disable aliases based on mode
-    connect(m_replaceRadio, &QRadioButton::toggled, this, [this](bool checked) {
-        m_existingFileAliasEdit->setEnabled(!checked);
-        m_newFileAliasEdit->setEnabled(!checked);
-    });
+    // Enable alias fields only for Merge mode
+    auto updateAliasFields = [this]() {
+        const bool isMerge = m_mergeRadio->isChecked();
+        m_existingFileAliasEdit->setEnabled(isMerge);
+        m_newFileAliasEdit->setEnabled(isMerge);
+    };
+    connect(m_replaceRadio,    &QRadioButton::toggled, this, updateAliasFields);
+    connect(m_mergeRadio,      &QRadioButton::toggled, this, updateAliasFields);
+    connect(m_sideBySideRadio, &QRadioButton::toggled, this, updateAliasFields);
 
     mainLayout->addStretch();
 
@@ -109,7 +120,9 @@ LogFileLoadDialog::LogFileLoadDialog(const QString& filePath, QWidget* parent)
 
 LogFileLoadDialog::LoadMode LogFileLoadDialog::GetLoadMode() const
 {
-    return m_mergeRadio->isChecked() ? LoadMode::Merge : LoadMode::Replace;
+    if (m_mergeRadio->isChecked())      return LoadMode::Merge;
+    if (m_sideBySideRadio->isChecked()) return LoadMode::SideBySide;
+    return LoadMode::Replace;
 }
 
 QString LogFileLoadDialog::GetNewFileAlias() const

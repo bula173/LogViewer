@@ -1,5 +1,7 @@
 #include "LayoutManager.hpp"
 
+#include "Logger.hpp"
+
 #include <QSettings>
 #include <algorithm>
 
@@ -81,22 +83,41 @@ const std::vector<LayoutDescriptor>& LayoutManager::UserLayouts() const
 
 void LayoutManager::Save(LayoutDescriptor layout)
 {
+    const std::string name = layout.name.toStdString();
+    util::Logger::Debug("[LayoutManager] Save layout: '{}'", name);
+
     auto it = std::find_if(m_userLayouts.begin(), m_userLayouts.end(),
         [&](const LayoutDescriptor& d) { return d.name == layout.name; });
     if (it != m_userLayouts.end())
+    {
+        util::Logger::Debug("[LayoutManager] Overwriting existing layout '{}'", name);
         *it = std::move(layout);
+    }
     else
+    {
         m_userLayouts.push_back(std::move(layout));
+    }
     SaveToSettings();
+    util::Logger::Info("[LayoutManager] Layout '{}' saved ({} user layouts total)",
+                       name, m_userLayouts.size());
 }
 
 void LayoutManager::Remove(const QString& name)
 {
+    util::Logger::Debug("[LayoutManager] Remove layout: '{}'", name.toStdString());
+
     auto it = std::find_if(m_userLayouts.begin(), m_userLayouts.end(),
         [&](const LayoutDescriptor& d) { return d.name == name; });
-    if (it == m_userLayouts.end()) return;
+    if (it == m_userLayouts.end())
+    {
+        util::Logger::Warn("[LayoutManager] Layout '{}' not found — nothing to remove",
+                           name.toStdString());
+        return;
+    }
     m_userLayouts.erase(it);
     SaveToSettings();
+    util::Logger::Info("[LayoutManager] Layout '{}' removed ({} user layouts remaining)",
+                       name.toStdString(), m_userLayouts.size());
 }
 
 // ---------------------------------------------------------------------------
@@ -105,6 +126,9 @@ void LayoutManager::Remove(const QString& name)
 
 void LayoutManager::SaveToSettings() const
 {
+    util::Logger::Debug("[LayoutManager] SaveToSettings: persisting {} layout(s)",
+                        m_userLayouts.size());
+
     QSettings s("LogViewer", "LogViewer");
     s.beginGroup("userLayouts");
     s.remove("");   // wipe stale entries
@@ -130,12 +154,19 @@ void LayoutManager::SaveToSettings() const
 
 void LayoutManager::LoadFromSettings()
 {
+    util::Logger::Debug("[LayoutManager] LoadFromSettings: reading user layouts");
+
     m_userLayouts.clear();
     QSettings s("LogViewer", "LogViewer");
     s.beginGroup("userLayouts");
     const QStringList names = s.value("names").toStringList();
     for (const QString& name : names) {
-        if (!s.childGroups().contains(name)) continue;
+        if (!s.childGroups().contains(name))
+        {
+            util::Logger::Warn("[LayoutManager] Layout '{}' listed in names but has no settings group — skipping",
+                               name.toStdString());
+            continue;
+        }
         s.beginGroup(name);
         LayoutDescriptor d;
         d.name               = name;
@@ -153,6 +184,9 @@ void LayoutManager::LoadFromSettings()
         m_userLayouts.push_back(std::move(d));
     }
     s.endGroup(); // userLayouts
+
+    util::Logger::Info("[LayoutManager] Loaded {} user layout(s) from settings",
+                       m_userLayouts.size());
 }
 
 } // namespace ui::qt

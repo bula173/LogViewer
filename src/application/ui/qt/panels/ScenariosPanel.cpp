@@ -1,5 +1,6 @@
 #include "ScenariosPanel.hpp"
 
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QButtonGroup>
@@ -154,6 +155,7 @@ void ScenariosPanel::AddEventFromRow(int actualRow)
     // Auto-create a default scenario if none exists
     if (m_scenarios.empty())
     {
+        util::Logger::Debug("[ScenariosPanel] No scenarios exist — creating default 'Scenario 1'");
         m_scenarios.push_back({"Scenario 1", {}});
         UpdateScenarioCombo(0);
     }
@@ -166,6 +168,8 @@ void ScenariosPanel::AddEventFromRow(int actualRow)
     FillEventStrings(se);
     sc->events.push_back(std::move(se));
 
+    util::Logger::Info("[ScenariosPanel] Added event row {} to scenario '{}' ({} event(s) total)",
+                       actualRow, sc->name, sc->events.size());
     RebuildEventsTable();
     m_statusLabel->setText(
         tr("Added event #%1 to \"%2\"")
@@ -184,10 +188,17 @@ void ScenariosPanel::OnNewScenario()
         this, tr("New Scenario"), tr("Scenario name:"),
         QLineEdit::Normal,
         tr("Scenario %1").arg(m_scenarios.size() + 1), &ok);
-    if (!ok || name.trimmed().isEmpty()) return;
+    if (!ok) return;
+    if (name.trimmed().isEmpty())
+    {
+        util::Logger::Warn("[ScenariosPanel] OnNewScenario: empty scenario name entered — ignoring");
+        return;
+    }
 
+    util::Logger::Debug("[ScenariosPanel] OnNewScenario: user entered name '{}'", name.trimmed().toStdString());
     m_scenarios.push_back({name.trimmed().toStdString(), {}});
     UpdateScenarioCombo(static_cast<int>(m_scenarios.size()) - 1);
+    util::Logger::Info("[ScenariosPanel] Scenario '{}' created", name.trimmed().toStdString());
 }
 
 void ScenariosPanel::OnRenameScenario()
@@ -195,13 +206,20 @@ void ScenariosPanel::OnRenameScenario()
     Scenario* sc = ActiveScenario();
     if (!sc) return;
 
+    const std::string oldName = sc->name;
     bool ok = false;
     const QString name = QInputDialog::getText(
         this, tr("Rename Scenario"), tr("New name:"),
         QLineEdit::Normal,
         QString::fromStdString(sc->name), &ok);
-    if (!ok || name.trimmed().isEmpty()) return;
+    if (!ok) return;
+    if (name.trimmed().isEmpty())
+    {
+        util::Logger::Warn("[ScenariosPanel] OnRenameScenario: empty name entered — ignoring");
+        return;
+    }
 
+    util::Logger::Debug("[ScenariosPanel] OnRenameScenario: '{}' -> '{}'", oldName, name.trimmed().toStdString());
     sc->name = name.trimmed().toStdString();
     const int idx = m_scenarioCombo->currentIndex();
     m_scenarioCombo->blockSignals(true);
@@ -211,12 +229,15 @@ void ScenariosPanel::OnRenameScenario()
         tr("\"%1\" — %2 event(s)")
             .arg(QString::fromStdString(sc->name))
             .arg(sc->events.size()));
+    util::Logger::Info("[ScenariosPanel] Scenario renamed '{}' -> '{}'", oldName, sc->name);
 }
 
 void ScenariosPanel::OnDeleteScenario()
 {
     Scenario* sc = ActiveScenario();
     if (!sc) return;
+
+    util::Logger::Debug("[ScenariosPanel] OnDeleteScenario: '{}' ({} event(s))", sc->name, sc->events.size());
 
     const auto answer = QMessageBox::question(
         this, tr("Delete Scenario"),
@@ -226,11 +247,14 @@ void ScenariosPanel::OnDeleteScenario()
         QMessageBox::Yes | QMessageBox::No);
     if (answer != QMessageBox::Yes) return;
 
+    const std::string deletedName  = sc->name;
+    const size_t      deletedCount = sc->events.size();
     m_scenarios.erase(m_scenarios.begin() + m_activeScenario);
     const int newIdx = m_scenarios.empty() ? -1 :
         std::min(m_activeScenario, static_cast<int>(m_scenarios.size()) - 1);
     m_activeScenario = -1; // prevent OnScenarioChanged from using stale index
     UpdateScenarioCombo(newIdx);
+    util::Logger::Info("[ScenariosPanel] Scenario '{}' deleted ({} events)", deletedName, deletedCount);
 }
 
 void ScenariosPanel::OnScenarioChanged(int comboIndex)
@@ -240,6 +264,11 @@ void ScenariosPanel::OnScenarioChanged(int comboIndex)
     UpdateButtonStates();
 
     const Scenario* sc = ActiveScenario();
+    if (sc)
+        util::Logger::Debug("[ScenariosPanel] OnScenarioChanged: switched to '{}' ({} event(s))", sc->name, sc->events.size());
+    else
+        util::Logger::Debug("[ScenariosPanel] OnScenarioChanged: no scenario selected (index {})", comboIndex);
+
     m_statusLabel->setText(sc
         ? tr("\"%1\" — %2 event(s)").arg(QString::fromStdString(sc->name)).arg(sc->events.size())
         : tr("No scenario selected"));
@@ -257,6 +286,9 @@ void ScenariosPanel::OnRemoveEvent()
     const int row = SelectedEventRow();
     if (row < 0 || row >= static_cast<int>(sc->events.size())) return;
 
+    const int removedActualRow = sc->events[static_cast<size_t>(row)].row;
+    util::Logger::Debug("[ScenariosPanel] OnRemoveEvent: removing event at table row {} (actual row {}) from scenario '{}'",
+                        row, removedActualRow, sc->name);
     sc->events.erase(sc->events.begin() + row);
     RebuildEventsTable();
     m_statusLabel->setText(
@@ -272,6 +304,7 @@ void ScenariosPanel::OnMoveUp()
     const int row = SelectedEventRow();
     if (row <= 0 || row >= static_cast<int>(sc->events.size())) return;
 
+    util::Logger::Debug("[ScenariosPanel] OnMoveUp: moving event at row {} up in scenario '{}'", row, sc->name);
     std::swap(sc->events[static_cast<size_t>(row)],
               sc->events[static_cast<size_t>(row) - 1]);
     RebuildEventsTable();
@@ -285,6 +318,7 @@ void ScenariosPanel::OnMoveDown()
     const int row = SelectedEventRow();
     if (row < 0 || row + 1 >= static_cast<int>(sc->events.size())) return;
 
+    util::Logger::Debug("[ScenariosPanel] OnMoveDown: moving event at row {} down in scenario '{}'", row, sc->name);
     std::swap(sc->events[static_cast<size_t>(row)],
               sc->events[static_cast<size_t>(row) + 1]);
     RebuildEventsTable();
@@ -300,10 +334,14 @@ void ScenariosPanel::OnExport()
     const Scenario* sc = ActiveScenario();
     if (!sc || sc->events.empty())
     {
+        util::Logger::Warn("[ScenariosPanel] OnExport: no events in active scenario — export aborted");
         QMessageBox::information(this, tr("Export Scenario"),
             tr("The active scenario has no events to export."));
         return;
     }
+
+    util::Logger::Debug("[ScenariosPanel] OnExport: starting export for scenario '{}' ({} event(s))",
+                        sc->name, sc->events.size());
 
     // ── 1. Collect all field names across scenario events ─────────────────
     std::vector<std::string> allFields;
@@ -311,7 +349,7 @@ void ScenariosPanel::OnExport()
     for (const auto& se : sc->events)
     {
         if (se.row < 0 || se.row >= static_cast<int>(m_events.Size())) continue;
-        for (const auto& [k, v] : m_events.GetEvent(se.row).getEventItems())
+        for (const auto& [k, v] : m_events.GetEvent(static_cast<size_t>(se.row)).getEventItems())
             if (fieldSet.insert(k).second)
                 allFields.push_back(k);
     }
@@ -449,6 +487,7 @@ void ScenariosPanel::OnExport()
 
         if (selected.empty())
         {
+            util::Logger::Warn("[ScenariosPanel] OnExport: no fields selected for export");
             previewEdit->setPlainText(tr("// Select at least one field."));
             return;
         }
@@ -476,7 +515,7 @@ void ScenariosPanel::OnExport()
             if (se.row < 0 || se.row >= static_cast<int>(m_events.Size()))
                 continue;
 
-            const db::LogEvent& ev = m_events.GetEvent(se.row);
+            const db::LogEvent& ev = m_events.GetEvent(static_cast<size_t>(se.row));
 
             if (fmt == 0) // Plain text
             {
@@ -522,6 +561,8 @@ void ScenariosPanel::OnExport()
         }
 
         previewEdit->setPlainText(out);
+        util::Logger::Info("[ScenariosPanel] Exported {} rows to preview (scenario '{}', {} field(s), format {})",
+                           scenarioEvents.size(), sc->name, selected.size(), fmt);
     };
 
     connect(genBtn,  &QPushButton::clicked, dlg, generate);
@@ -593,7 +634,7 @@ void ScenariosPanel::FillEventStrings(ScenarioEvent& se) const
 {
     if (se.row < 0 || se.row >= static_cast<int>(m_events.Size())) return;
 
-    const db::LogEvent& ev = m_events.GetEvent(se.row);
+    const db::LogEvent& ev = m_events.GetEvent(static_cast<size_t>(se.row));
 
     for (const auto& f : panel_utils::kTsFields)
     {

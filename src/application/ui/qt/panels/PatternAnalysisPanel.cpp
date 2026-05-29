@@ -2,6 +2,7 @@
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
+#include "Logger.hpp"
 #include "events/EventsTableView.hpp"
 
 #include <QDateTime>
@@ -198,6 +199,10 @@ void PatternAnalysisPanel::BuildLayout()
 
 void PatternAnalysisPanel::Refresh()
 {
+    util::Logger::Debug("[PatternAnalysis] Refresh started: {} total events", m_events.Size());
+    if (m_events.Size() == 0)
+        util::Logger::Warn("[PatternAnalysis] Refresh called with empty container");
+
     // Repopulate message-field combo from first event's keys
     {
         m_msgFieldCombo->blockSignals(true);
@@ -313,7 +318,11 @@ void PatternAnalysisPanel::RefreshTemplates(
     m_templateMatches.clear();
     m_templateTable->setRowCount(0);
 
-    if (indices.empty() || m_events.Size() == 0) return;
+    if (indices.empty() || m_events.Size() == 0)
+    {
+        util::Logger::Warn("[PatternAnalysis] RefreshTemplates: no visible events to analyse");
+        return;
+    }
 
     const std::string msgField  =
         m_msgFieldCombo->currentText().toStdString();
@@ -415,13 +424,16 @@ void PatternAnalysisPanel::RefreshTemplates(
                   return a.count > b.count;
               });
 
+    util::Logger::Info("[PatternAnalysis] Templates complete: {} templates from {} visible events",
+        entries.size(), indices.size());
+
     m_templateTable->setRowCount(static_cast<int>(entries.size()));
 
     for (int r = 0; r < static_cast<int>(entries.size()); ++r)
     {
         const auto& e = entries[static_cast<size_t>(r)];
         const double pct =
-            total > 0 ? 100.0 * e.count / static_cast<double>(total) : 0.0;
+            total > 0 ? 100.0 * static_cast<double>(e.count) / static_cast<double>(total) : 0.0;
 
         const QString templateStr = RenderTemplate(e.tokens);
 
@@ -481,7 +493,12 @@ void PatternAnalysisPanel::RefreshCooccurrence(
     const std::vector<unsigned long>& indices)
 {
     m_coocTable->setRowCount(0);
-    if (indices.size() < 2) return;
+    if (indices.size() < 2)
+    {
+        util::Logger::Warn("[PatternAnalysis] RefreshCooccurrence: not enough visible events ({})",
+            indices.size());
+        return;
+    }
 
     const std::string& typeField = config::GetConfig().typeFilterField;
     const qint64 windowSecs = m_windowSpin->value();
@@ -566,6 +583,9 @@ void PatternAnalysisPanel::RefreshCooccurrence(
               [](const Pair& a, const Pair& b) { return a.second > b.second; });
     if (sorted.size() > 50) sorted.resize(50);
 
+    util::Logger::Info("[PatternAnalysis] Co-occurrence complete: {} unique type pairs (window={}s)",
+        sorted.size(), windowSecs);
+
     m_coocTable->setRowCount(static_cast<int>(sorted.size()));
     for (int r = 0; r < static_cast<int>(sorted.size()); ++r)
     {
@@ -596,7 +616,11 @@ void PatternAnalysisPanel::RefreshNgrams(
     const std::vector<unsigned long>& indices)
 {
     m_ngramTable->setRowCount(0);
-    if (indices.empty()) return;
+    if (indices.empty())
+    {
+        util::Logger::Warn("[PatternAnalysis] RefreshNgrams: no visible events to analyse");
+        return;
+    }
 
     const std::string& typeField = config::GetConfig().typeFilterField;
     const int n    = m_ngramSizeCombo->currentData().toInt();
@@ -638,12 +662,15 @@ void PatternAnalysisPanel::RefreshNgrams(
     if (static_cast<int>(sorted.size()) > topN)
         sorted.resize(static_cast<size_t>(topN));
 
+    util::Logger::Info("[PatternAnalysis] N-grams complete: {} unique {}-grams from {} events",
+        sorted.size(), n, indices.size());
+
     m_ngramTable->setRowCount(static_cast<int>(sorted.size()));
     for (int r = 0; r < static_cast<int>(sorted.size()); ++r)
     {
         const auto& [key, count] = sorted[static_cast<size_t>(r)];
         const double pct =
-            total > 0 ? 100.0 * count / static_cast<double>(total) : 0.0;
+            total > 0 ? 100.0 * static_cast<double>(count) / static_cast<double>(total) : 0.0;
 
         const QString qKey = QString::fromStdString(key);
         auto* seqItem = new QTableWidgetItem(qKey);

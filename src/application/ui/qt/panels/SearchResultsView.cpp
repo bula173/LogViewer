@@ -1,5 +1,7 @@
 #include "SearchResultsView.hpp"
 
+#include "Logger.hpp"
+
 #include <QAbstractItemView>
 #include <QHeaderView>
 #include <QString>
@@ -27,6 +29,7 @@ void SearchResultsView::SetObserver(ui::ISearchResultsViewObserver* observer)
 
 void SearchResultsView::BeginUpdate(const std::vector<std::string>& columns)
 {
+    util::Logger::Debug("[SearchResultsView] BeginUpdate: {} column(s)", columns.size());
     m_columns = columns;
     setUpdatesEnabled(false);
     clear();
@@ -63,12 +66,18 @@ void SearchResultsView::AppendResult(const mvc::SearchResultRow& row)
 
 void SearchResultsView::EndUpdate()
 {
+    const int count = topLevelItemCount();
+    if (count == 0)
+        util::Logger::Warn("[SearchResultsView] EndUpdate: result set is empty");
+    else
+        util::Logger::Debug("[SearchResultsView] EndUpdate: {} result(s) displayed", count);
     setUpdatesEnabled(true);
     update();
 }
 
 void SearchResultsView::Clear()
 {
+    util::Logger::Debug("[SearchResultsView] Clear: results cleared");
     m_columns.clear();
     QTreeWidget::clear();
 }

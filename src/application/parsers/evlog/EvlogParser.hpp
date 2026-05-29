@@ -1,7 +1,9 @@
 #pragma once
 
-#include "IDataParser.hpp"
+#include "Error.hpp"
 #include "EvlogTemplateRegistry.hpp"
+#include "IDataParser.hpp"
+#include "Result.hpp"
 
 #include <filesystem>
 #include <iosfwd>
@@ -76,13 +78,17 @@ class EvlogParser : public IDataParser
 
     /// Load all *.t/*.tmpl/*.template files from @p dir and use them to decode
     /// BINARY payloads. Must be called before ParseData().
-    void SetTemplateDirectory(const std::filesystem::path& dir);
+    /// Returns Err if the directory cannot be iterated (e.g. does not exist).
+    util::Result<void, error::Error> SetTemplateDirectory(const std::filesystem::path& dir);
 
     /// Load a single template file. May be called multiple times.
     void SetTemplateFile(const std::filesystem::path& path);
 
   private:
-    void ParseStream(std::istream& input);
+    /// Parse all records from @p input.
+    /// Returns the number of records emitted on success, or an error
+    /// if the stream yields zero bytes on the very first header read.
+    util::Result<int, error::Error> ParseStream(std::istream& input);
 
     uint32_t m_currentProgress {0};
     uint32_t m_totalProgress   {0};

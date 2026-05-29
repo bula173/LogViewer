@@ -1,5 +1,7 @@
 #include "SearchBar.hpp"
 
+#include "Logger.hpp"
+
 #include <QHBoxLayout>
 #include <QKeySequence>
 #include <QLabel>
@@ -85,6 +87,10 @@ SearchBar::SearchBar(QWidget* parent)
 // ---------------------------------------------------------------------------
 void SearchBar::HandleTextChanged(const QString& text)
 {
+    if (text.isEmpty())
+        util::Logger::Debug("[SearchBar] Search query cleared");
+    else
+        util::Logger::Debug("[SearchBar] Search triggered: '{}'", text.toStdString());
     emit SearchChanged(text, m_caseBtn->isChecked());
 }
 
@@ -96,6 +102,11 @@ void SearchBar::HandleCaseToggled()
 void SearchBar::SetMatchInfo(int current, int total)
 {
     const bool empty = m_edit->text().isEmpty();
+    if (total == 0 && !empty)
+        util::Logger::Warn("[SearchBar] No matches for query '{}'", m_edit->text().toStdString());
+    else if (total > 0)
+        util::Logger::Info("[SearchBar] Search returned {} result(s), showing #{}", total, current);
+
     if (total == 0)
     {
         m_matchLabel->setText(empty ? QString() : tr("No matches"));

@@ -38,7 +38,15 @@ class EventsTableView : public QTableView,
     void OnCurrentIndexUpdated(const int index) override;
 
     int CurrentActualRow() const;
-    void ScrollToActualRow(int actualRow);
+    void ScrollToActualRow(int actualRow, bool takeFocus = true);
+
+    /// Returns the actual-container row of the first fully visible row,
+    /// or -1 if the view has no model or no visible rows.
+    int FirstVisibleActualRow() const;
+
+    /// Scrolls the viewport so that @p actualRow is visible at the top
+    /// without changing the current selection or stealing focus.
+    void SyncScrollTo(int actualRow);
 
     // ── Search / highlight ────────────────────────────────────────────────
     void SetSearchTerm(const QString& term, bool caseSensitive);

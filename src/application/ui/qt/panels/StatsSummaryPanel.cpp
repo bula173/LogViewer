@@ -3,6 +3,7 @@
 #include "CanStatisticsStrategy.hpp"
 #include "GenericStatisticsStrategy.hpp"
 #include "Config.hpp"
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QBarCategoryAxis>
@@ -181,6 +182,10 @@ void StatsSummaryPanel::BuildLayout()
 
 void StatsSummaryPanel::Refresh()
 {
+    util::Logger::Debug("[StatsSummary] Refresh started: {} total events", m_events.Size());
+    if (m_events.Size() == 0)
+        util::Logger::Warn("[StatsSummary] Refresh called with empty container");
+
     PopulateColumnCombo();
     const auto indices = VisibleIndices();   // compute once, share everywhere
     RefreshFormatStats(indices);
@@ -402,6 +407,8 @@ void StatsSummaryPanel::RefreshSummaryTable(
     }
 
     m_summaryTable->resizeRowsToContents();
+    util::Logger::Info("[StatsSummary] Summary computed: {} visible of {} total, {} unique type values",
+        visibleEvents, totalEvents, uniqueTypes.size());
 }
 
 // ---------------------------------------------------------------------------
@@ -410,6 +417,12 @@ void StatsSummaryPanel::RefreshSummaryTable(
 
 void StatsSummaryPanel::RefreshTypeChart(const std::vector<unsigned long>& indices)
 {
+    if (indices.empty())
+    {
+        util::Logger::Warn("[StatsSummary] RefreshTypeChart: no visible events");
+        return;
+    }
+
     const std::string& typeField = config::GetConfig().typeFilterField;
     const size_t       total     = indices.size();
 
@@ -467,6 +480,9 @@ void StatsSummaryPanel::RefreshTypeChart(const std::vector<unsigned long>& indic
     series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);
     series->setLabelsFormat("@value");
 
+    util::Logger::Info("[StatsSummary] Type chart: {} distinct type values in {} events",
+        counts.size(), total);
+
     const int nBars = static_cast<int>(sorted.size());
     auto* chart = new QChart();
     chart->addSeries(series);
@@ -499,6 +515,7 @@ void StatsSummaryPanel::RefreshTopNTable(const std::vector<unsigned long>& indic
     auto* model = m_eventsView ? m_eventsView->model() : nullptr;
     if (!model || m_columnCombo->count() == 0)
     {
+        util::Logger::Warn("[StatsSummary] RefreshTopNTable: no model or no columns available");
         m_topNTable->setRowCount(0);
         return;
     }
@@ -521,6 +538,10 @@ void StatsSummaryPanel::RefreshTopNTable(const std::vector<unsigned long>& indic
               [](const Pair& a, const Pair& b) { return a.second > b.second; });
     if (static_cast<int>(sorted.size()) > topN)
         sorted.resize(static_cast<size_t>(topN));
+
+    util::Logger::Info("[StatsSummary] Top-N table: top {} of {} distinct values in column '{}'",
+        sorted.size(), counts.size(),
+        m_columnCombo->currentText().toStdString());
 
     m_topNTable->setRowCount(static_cast<int>(sorted.size()));
 
@@ -559,6 +580,7 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
     auto* model = m_eventsView ? m_eventsView->model() : nullptr;
     if (!model)
     {
+        util::Logger::Warn("[StatsSummary] RefreshFieldStats: no model available");
         m_fieldStatsTable->setRowCount(0);
         return;
     }
@@ -631,6 +653,8 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
     }
 
     m_fieldStatsTable->resizeRowsToContents();
+    util::Logger::Info("[StatsSummary] Field stats computed: {} columns, {} events{}",
+        cols, total, sampled ? " (sampled)" : "");
 }
 
 } // namespace ui::qt

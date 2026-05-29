@@ -1,6 +1,7 @@
 #include "AscParser.hpp"
 #include "dbc/CanDecoder.hpp"
 #include "Logger.hpp"
+#include "Error.hpp"
 
 #include <algorithm>
 #include <charconv>
@@ -81,36 +82,92 @@ AscParser::AscParser(std::filesystem::path dbcPath)
     : m_dbcPath(std::move(dbcPath))
 {}
 
-void AscParser::LoadDbc()
+util::Result<std::monostate, error::Error> AscParser::LoadDbc()
 {
-    if (m_dbcLoaded || m_dbcPath.empty())
-        return;
-    m_dbc      = dbc::ParseDbcFile(m_dbcPath);
+    using R = util::Result<std::monostate, error::Error>;
+
+    if (m_dbcLoaded)
+    {
+        util::Logger::Trace("AscParser::LoadDbc: DBC already loaded, skipping");
+        return R::Ok(std::monostate{});
+    }
+
+    if (m_dbcPath.empty())
+    {
+        util::Logger::Debug("AscParser::LoadDbc: no DBC path configured, skipping DBC decoding");
+        return R::Ok(std::monostate{});
+    }
+
+    util::Logger::Debug("AscParser::LoadDbc: loading DBC from '{}'", m_dbcPath.string());
+
+    std::error_code ec;
+    if (!std::filesystem::exists(m_dbcPath, ec) || ec)
+    {
+        util::Logger::Error("AscParser::LoadDbc: DBC file not found: '{}'", m_dbcPath.string());
+        return R::Err(error::Error(
+            error::ErrorCode::FileNotFound,
+            "AscParser: DBC file not found: " + m_dbcPath.string(),
+            /*showMsgBox=*/false));
+    }
+
+    m_dbc = dbc::ParseDbcFile(m_dbcPath);
     m_dbcLoaded = true;
+
+    if (m_dbc.messages.empty())
+    {
+        util::Logger::Warn("AscParser::LoadDbc: DBC loaded from '{}' but contains no messages",
+            m_dbcPath.string());
+    }
+    else
+    {
+        util::Logger::Info("AscParser::LoadDbc: DBC wired — {} messages loaded from '{}'",
+            m_dbc.messages.size(), m_dbcPath.string());
+    }
+
+    return R::Ok(std::monostate{});
 }
 
 void AscParser::ParseData(const std::filesystem::path& filepath)
 {
+    util::Logger::Debug("AscParser::ParseData: opening file '{}'", filepath.string());
+
     std::error_code ec;
     const auto size = std::filesystem::file_size(filepath, ec);
+    if (ec)
+        util::Logger::Warn("AscParser::ParseData: cannot determine file size for '{}': {}",
+            filepath.string(), ec.message());
+
     m_totalProgress   = ec ? 0u : static_cast<uint32_t>(size);
     m_currentProgress = 0;
     m_eventId         = 0;
 
     std::ifstream file(filepath, std::ios::binary);
     if (!file.is_open())
+    {
+        util::Logger::Error("AscParser::ParseData: cannot open '{}'", filepath.string());
         throw std::runtime_error("AscParser: cannot open '" + filepath.string() + "'");
+    }
 
-    LoadDbc();
+    util::Logger::Debug("AscParser::ParseData: file opened ({} bytes)", m_totalProgress);
+
+    const auto dbcResult = LoadDbc();
+    if (!dbcResult.isOk())
+        util::Logger::Warn("AscParser::ParseData: DBC load failed — {}", dbcResult.error().what());
+
     ParseStream(file);
 }
 
 void AscParser::ParseData(std::istream& input)
 {
+    util::Logger::Debug("AscParser::ParseData: parsing from stream (no file path)");
     m_totalProgress   = 0;
     m_currentProgress = 0;
     m_eventId         = 0;
-    LoadDbc();
+
+    const auto dbcResult = LoadDbc();
+    if (!dbcResult.isOk())
+        util::Logger::Warn("AscParser::ParseData: DBC load failed — {}", dbcResult.error().what());
+
     ParseStream(input);
 }
 
@@ -149,6 +206,8 @@ void AscParser::ParseStream(std::istream& input)
         // ErrorFrame: "   <ts>  <ch>  ErrorFrame"
         if (tokens.size() >= 3 && tokens[2] == "ErrorFrame")
         {
+            util::Logger::Trace("AscParser: ErrorFrame ts={} ch={}", tsStr, tokens[1]);
+
             db::LogEvent::EventItems items;
             items.reserve(4);
             items.emplace_back("timestamp", std::string{tsStr});
@@ -187,7 +246,14 @@ void AscParser::ParseStream(std::istream& input)
             if      (dirStr == "Rx")   typeStr = "Rx";
             else if (dirStr == "Tx")   typeStr = "Tx";
             else if (dirStr == "TxRq") typeStr = "TxRq";
-            else                       typeStr = std::string{dirStr};
+            else
+            {
+                typeStr = std::string{dirStr};
+                util::Logger::Warn("AscParser: unknown frame direction '{}' at ts={} — treating as-is",
+                    dirStr, tsStr);
+            }
+
+            util::Logger::Trace("AscParser: {} frame ID={} DLC={} ts={}", typeStr, idHex, dlcStr, tsStr);
 
             db::LogEvent::EventItems items;
             items.reserve(10);
@@ -207,8 +273,13 @@ void AscParser::ParseStream(std::istream& input)
                 {
                     items.emplace_back("CAN_MsgName", msgIt->second.name);
                     auto signals = dbc::DecodeFrame(canId, rawData, m_dbc);
+                    util::Logger::Trace("AscParser: DBC decoded {} signals for ID={}", signals.size(), idHex);
                     for (auto& sv2 : signals)
                         items.push_back(std::move(sv2));
+                }
+                else
+                {
+                    util::Logger::Trace("AscParser: ID={} not found in DBC, skipping signal decode", idHex);
                 }
             }
 
@@ -220,6 +291,12 @@ void AscParser::ParseStream(std::istream& input)
             items.emplace_back("info", std::move(info));
 
             batch.emplace_back(m_eventId++, std::move(items));
+        }
+        else if (tokens.size() >= 2)
+        {
+            // Line has tokens but matched neither ErrorFrame nor a standard CAN frame.
+            util::Logger::Warn("AscParser: skipping unrecognised line at ts={}: '{}'",
+                tsStr, sv.substr(0, 80));
         }
 
         // Flush batch periodically.
@@ -239,7 +316,7 @@ void AscParser::ParseStream(std::istream& input)
         NotifyProgressUpdated();
     }
 
-    util::Logger::Info("AscParser: parsed {} events from {} lines",
+    util::Logger::Info("AscParser: parse complete — {} events from {} lines",
         m_eventId, linesRead);
 }
 

@@ -6,6 +6,7 @@
 
 #include <QHeaderView>
 #include <QInputDialog>
+#include <QScrollBar>
 #include <QItemSelectionModel>
 #include <QAction>
 #include <QClipboard>
@@ -222,9 +223,9 @@ int EventsTableView::CurrentActualRow() const
     return m_model->ResolveToActualIndex(current.row());
 }
 
-void EventsTableView::ScrollToActualRow(int actualRow)
+void EventsTableView::ScrollToActualRow(int actualRow, bool takeFocus)
 {
-    util::Logger::Debug("[EventsTableView] ScrollToActualRow actualRow={}", actualRow);
+    util::Logger::Debug("[EventsTableView] ScrollToActualRow actualRow={} takeFocus={}", actualRow, takeFocus);
 
     if (actualRow < 0 || !m_model)
         return;
@@ -251,7 +252,7 @@ void EventsTableView::ScrollToActualRow(int actualRow)
 
     if (topRow == -1 || bottomRow == -1 || viewRow < topRow || viewRow > bottomRow)
     {
-        if (!hasFocus())
+        if (takeFocus && !hasFocus())
             setFocus(Qt::OtherFocusReason);
 
         scrollTo(idx, QAbstractItemView::PositionAtCenter);
@@ -263,7 +264,36 @@ void EventsTableView::ScrollToActualRow(int actualRow)
             idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         util::Logger::Debug("[EventsTableView] selection set to viewRow={}", viewRow);
     }
+}
 
+int EventsTableView::FirstVisibleActualRow() const
+{
+    if (!m_model) return -1;
+    // For ScrollPerItem mode (QTableView default), scrollbar value == top view row.
+    // For ScrollPerPixel, fall back to indexAt.
+    if (verticalScrollMode() == QAbstractItemView::ScrollPerItem) {
+        const int topViewRow = verticalScrollBar()->value();
+        return m_model->ResolveToActualIndex(topViewRow);
+    }
+    const QModelIndex top = indexAt(QPoint(1, 1));
+    if (!top.isValid()) return -1;
+    return m_model->ResolveToActualIndex(top.row());
+}
+
+void EventsTableView::SyncScrollTo(int actualRow)
+{
+    if (actualRow < 0 || !m_model) return;
+    const int viewRow = m_model->RowFromActualIndex(actualRow);
+    if (viewRow < 0) return;
+    // Set the scrollbar value directly — bypasses Qt's "scroll only if necessary"
+    // optimisation so the target row is always placed at the top of the viewport.
+    if (verticalScrollMode() == QAbstractItemView::ScrollPerItem) {
+        verticalScrollBar()->setValue(viewRow);
+    } else {
+        const QModelIndex idx = m_model->index(viewRow, 0);
+        if (idx.isValid())
+            scrollTo(idx, QAbstractItemView::PositionAtTop);
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -420,7 +450,7 @@ void EventsTableView::CopySelectedRowsAsJson()
     if (multi) out += QLatin1String("[\n");
 
     for (size_t i = 0; i < indices.size(); ++i) {
-        const auto& event = m_events.GetEvent(indices[i]);
+        const auto& event = m_events.GetEvent(static_cast<size_t>(indices[i]));
         if (multi) out += QLatin1String("  ");
         out += QLatin1String("{\n");
 
@@ -455,7 +485,7 @@ void EventsTableView::CopySelectedRowsAsCsv()
     std::unordered_map<std::string, int> seen;
     seen["id"] = 0;
     for (const int idx : indices) {
-        for (const auto& [key, value] : m_events.GetEvent(idx).getEventItems()) {
+        for (const auto& [key, value] : m_events.GetEvent(static_cast<size_t>(idx)).getEventItems()) {
             if (seen.emplace(key, static_cast<int>(fieldOrder.size())).second)
                 fieldOrder.push_back(key);
         }
@@ -473,7 +503,7 @@ void EventsTableView::CopySelectedRowsAsCsv()
 
     // Data rows
     for (const int idx : indices) {
-        const auto& event = m_events.GetEvent(idx);
+        const auto& event = m_events.GetEvent(static_cast<size_t>(idx));
         for (size_t col = 0; col < fieldOrder.size(); ++col) {
             if (col) out += u',';
             const std::string val = (fieldOrder[col] == "id")
@@ -516,7 +546,7 @@ void EventsTableView::JumpToTimestamp()
     for (int row = 0; row < rows; ++row) {
         const int actual = m_model->ResolveToActualIndex(row);
         if (actual < 0) continue;
-        const std::string ts = m_events.GetEvent(actual).findByKey("timestamp");
+        const std::string ts = m_events.GetEvent(static_cast<size_t>(actual)).findByKey("timestamp");
         if (ts.empty()) continue;
         bool tsOk = false;
         const double t = QString::fromStdString(ts).toDouble(&tsOk);

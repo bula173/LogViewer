@@ -1,5 +1,6 @@
 #include "TraceViewerPanel.hpp"
 
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QHBoxLayout>
@@ -124,6 +125,8 @@ void TraceViewerPanel::BuildLayout()
                 const auto it = m_traceEvents.find(key);
                 if (it != m_traceEvents.end() && !it->second.empty())
                 {
+                    util::Logger::Debug("[TraceViewer] Filtering to trace '{}' ({} events)",
+                        key, it->second.size());
                     m_eventsView->SetFilteredEvents(it->second);
                     m_clearBtn->setEnabled(true);
                 }
@@ -142,10 +145,12 @@ void TraceViewerPanel::Refresh()
     const QString field = m_fieldCombo->currentText();
     if (field.isEmpty())
     {
+        util::Logger::Warn("[TraceViewer] Refresh called but no correlation fields available");
         m_tree->clear();
         m_statusLabel->setText(tr("No fields found — load a log file first"));
         return;
     }
+    util::Logger::Debug("[TraceViewer] Refreshing trace tree with field '{}'", field.toStdString());
     RebuildTree(field);
 }
 
@@ -265,6 +270,9 @@ void TraceViewerPanel::RebuildTree(const QString& field)
     size_t withValue = 0;
     for (const auto& [id, td] : traces)
         withValue += td.indices.size();
+
+    util::Logger::Info("[TraceViewer] Rebuilt tree: {} unique '{}' value(s) across {} of {} events",
+        traces.size(), field.toStdString(), withValue, vis.size());
 
     m_statusLabel->setText(
         tr("%1 unique %2 value(s) across %3 of %4 events")

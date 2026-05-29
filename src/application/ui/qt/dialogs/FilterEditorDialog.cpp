@@ -223,6 +223,9 @@ void FilterEditorDialog::OnAddCondition()
 {
     // Create new condition from current editor values
     filters::FilterCondition newCondition = CreateConditionFromEditor();
+    util::Logger::Debug("[FilterEditor] Adding condition: field='{}', pattern='{}'",
+        newCondition.isParameterFilter ? newCondition.parameterKey : newCondition.columnName,
+        newCondition.pattern);
     m_conditions.push_back(newCondition);
     UpdateConditionList();
 
@@ -237,6 +240,12 @@ void FilterEditorDialog::OnRemoveCondition()
     const int currentRow = m_conditionsList->currentRow();
     if (currentRow < 0 || m_conditions.size() <= 1)
         return;
+
+    const auto& removedCondition = m_conditions[static_cast<size_t>(currentRow)];
+    util::Logger::Debug("[FilterEditor] Removing condition at index {}: field='{}', pattern='{}'",
+        currentRow,
+        removedCondition.isParameterFilter ? removedCondition.parameterKey : removedCondition.columnName,
+        removedCondition.pattern);
 
     // Remove the condition
     m_conditions.erase(m_conditions.begin() + currentRow);
@@ -392,6 +401,7 @@ bool FilterEditorDialog::ValidateAndPersist()
     const QString name = m_nameEdit->text().trimmed();
     if (name.isEmpty())
     {
+        util::Logger::Warn("[FilterEditor] Validation failed: filter name is empty");
         QMessageBox::warning(this, tr("Validation"),
             tr("Filter name cannot be empty."));
         m_nameEdit->setFocus();
@@ -411,6 +421,7 @@ bool FilterEditorDialog::ValidateAndPersist()
 
         if (condition.pattern.empty())
         {
+            util::Logger::Warn("[FilterEditor] Validation failed: condition {} has empty pattern", i + 1);
             QMessageBox::warning(this, tr("Validation"),
                 tr("Condition %1: Pattern cannot be empty.").arg(i + 1));
             m_conditionsList->setCurrentRow(static_cast<int>(i));
@@ -423,6 +434,7 @@ bool FilterEditorDialog::ValidateAndPersist()
         {
             if (condition.parameterKey.empty())
             {
+                util::Logger::Warn("[FilterEditor] Validation failed: condition {} has empty parameter key", i + 1);
                 QMessageBox::warning(this, tr("Validation"),
                     tr("Condition %1: Parameter key cannot be empty.").arg(i + 1));
                 m_conditionsList->setCurrentRow(static_cast<int>(i));
@@ -435,6 +447,7 @@ bool FilterEditorDialog::ValidateAndPersist()
         {
             if (condition.columnName.empty())
             {
+                util::Logger::Warn("[FilterEditor] Validation failed: condition {} has no column selected", i + 1);
                 QMessageBox::warning(this, tr("Validation"),
                     tr("Condition %1: Column cannot be empty.").arg(i + 1));
                 m_conditionsList->setCurrentRow(static_cast<int>(i));
@@ -453,6 +466,8 @@ bool FilterEditorDialog::ValidateAndPersist()
         }
         catch (const std::regex_error& ex)
         {
+            util::Logger::Warn("[FilterEditor] Validation failed: condition {} has invalid regex '{}': {}",
+                i + 1, condition.pattern, ex.what());
             QMessageBox::warning(this, tr("Validation"),
                 tr("Condition %1: Invalid regular expression: %2").arg(i + 1).arg(ex.what()));
             m_conditionsList->setCurrentRow(static_cast<int>(i));
@@ -501,6 +516,8 @@ bool FilterEditorDialog::ValidateAndPersist()
     }
 
     m_filter->compile();
+    util::Logger::Info("[FilterEditor] Filter '{}' saved with {} condition(s)",
+        m_filter->name, m_filter->conditions.size());
     return true;
 }
 

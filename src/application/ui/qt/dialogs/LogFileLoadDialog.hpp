@@ -23,7 +23,8 @@ public:
     enum class LoadMode
     {
         Replace,
-        Merge
+        Merge,
+        SideBySide
     };
 
     explicit LogFileLoadDialog(const QString& filePath, QWidget* parent = nullptr);
@@ -33,10 +34,11 @@ public:
     QString GetExistingFileAlias() const;
 
 private:
-    QRadioButton* m_replaceRadio {nullptr};
-    QRadioButton* m_mergeRadio {nullptr};
-    QLineEdit* m_newFileAliasEdit {nullptr};
-    QLineEdit* m_existingFileAliasEdit {nullptr};
+    QRadioButton* m_replaceRadio    {nullptr};
+    QRadioButton* m_mergeRadio      {nullptr};
+    QRadioButton* m_sideBySideRadio {nullptr};
+    QLineEdit*    m_newFileAliasEdit      {nullptr};
+    QLineEdit*    m_existingFileAliasEdit {nullptr};
 };
 
 } // namespace ui::qt

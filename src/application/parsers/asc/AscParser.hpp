@@ -2,6 +2,8 @@
 
 #include "IDataParser.hpp"
 #include "dbc/DbcParser.hpp"
+#include "Result.hpp"
+#include "Error.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -54,7 +56,15 @@ class AscParser : public IDataParser
     uint32_t m_totalProgress   {0};
     int      m_eventId         {0};
 
-    void LoadDbc();
+    /**
+     * @brief Loads the DBC database from m_dbcPath.
+     *
+     * Returns Ok(monostate) if no DBC path is configured or the DBC loaded
+     * successfully. Returns Err with FileNotFound/ParseError if the path is
+     * set but the file cannot be opened or parsed.
+     */
+    util::Result<std::monostate, error::Error> LoadDbc();
+
     void ParseStream(std::istream& input);
 };
 

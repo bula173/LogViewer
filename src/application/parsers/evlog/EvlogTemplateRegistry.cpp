@@ -1,4 +1,5 @@
 #include "EvlogTemplateRegistry.hpp"
+#include "Error.hpp"
 #include "Logger.hpp"
 
 #include <algorithm>
@@ -162,21 +163,30 @@ static void CommitTemplate(EvlogTemplate& tmpl,
     tmpl = {};
 }
 
-void EvlogTemplateRegistry::LoadFromFile(const std::filesystem::path& path)
+util::Result<void, error::Error> EvlogTemplateRegistry::LoadFromFile(
+    const std::filesystem::path& path)
 {
+    using R = util::Result<void, error::Error>;
+
     std::ifstream file(path);
     if (!file) {
-        util::Logger::Warn("[EvlogTemplateRegistry] cannot open: {}", path.string());
-        return;
+        util::Logger::Error("[EvlogTemplateRegistry] cannot open: {}", path.string());
+        return R::Err(error::Error(error::ErrorCode::FileNotFound,
+            "[EvlogTemplateRegistry] cannot open: " + path.string(), /*showMsgBox=*/false));
     }
+    util::Logger::Debug("[EvlogTemplateRegistry] loading template file: {}", path.string());
+
+    const size_t countBefore = m_templates.size();
 
     enum class State { Scanning, InTemplate, InAttributes };
     State state = State::Scanning;
     EvlogTemplate current;
     bool hasFacility = false;
+    int lineNo = 0;
 
     std::string line;
     while (std::getline(file, line)) {
+        ++lineNo;
         line = Trim(StripComment(line));
         if (line.empty()) continue;
 
@@ -191,7 +201,11 @@ void EvlogTemplateRegistry::LoadFromFile(const std::filesystem::path& path)
         // Inside attributes block
         if (state == State::InAttributes) {
             if (line == "}") { state = State::InTemplate; continue; }
-            if (auto f = ParseFieldDecl(line)) current.fields.push_back(*f);
+            if (auto f = ParseFieldDecl(line))
+                current.fields.push_back(*f);
+            else
+                util::Logger::Warn("[EvlogTemplateRegistry] {}:{}: malformed field declaration: '{}'",
+                    path.filename().string(), lineNo, line);
             continue;
         }
 
@@ -211,6 +225,9 @@ void EvlogTemplateRegistry::LoadFromFile(const std::filesystem::path& path)
             hasFacility = true;
             state     = State::InTemplate;
             current.facility = ParseFacility(Trim(val));
+            if (current.facility < 0)
+                util::Logger::Warn("[EvlogTemplateRegistry] {}:{}: unknown facility value: '{}'",
+                    path.filename().string(), lineNo, val);
         } else if (kwl == "event_type" && state == State::InTemplate) {
             current.eventType = ParseUint32(Trim(val));
         } else if (kwl == "description" && state == State::InTemplate) {
@@ -241,25 +258,52 @@ void EvlogTemplateRegistry::LoadFromFile(const std::filesystem::path& path)
         } else if (line == "{" && state == State::InTemplate) {
             // Standalone opening brace after "attributes"
             state = State::InAttributes;
+        } else if (state == State::InTemplate) {
+            util::Logger::Warn("[EvlogTemplateRegistry] {}:{}: unexpected keyword '{}' — ignored",
+                path.filename().string(), lineNo, kw);
         }
     }
 
     if (hasFacility) CommitTemplate(current, m_templates);
+
+    const size_t added = m_templates.size() - countBefore;
+    util::Logger::Debug("[EvlogTemplateRegistry] {} template(s) loaded from '{}'",
+        added, path.filename().string());
+    return R::Ok();
 }
 
-void EvlogTemplateRegistry::LoadFromDirectory(const std::filesystem::path& dir)
+util::Result<void, error::Error> EvlogTemplateRegistry::LoadFromDirectory(
+    const std::filesystem::path& dir)
 {
+    using R = util::Result<void, error::Error>;
+
+    const size_t countBefore = m_templates.size();
     std::error_code ec;
+
     for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
         if (!entry.is_regular_file()) continue;
         const auto ext = entry.path().extension().string();
         if (ext != ".t" && ext != ".tmpl" && ext != ".template") continue;
-        LoadFromFile(entry.path());
+        util::Logger::Debug("[EvlogTemplateRegistry] found template file: {}",
+            entry.path().filename().string());
+        auto result = LoadFromFile(entry.path());
+        if (result.isErr())
+            util::Logger::Warn("[EvlogTemplateRegistry] skipped '{}': {}",
+                entry.path().filename().string(), result.error().what());
     }
-    if (ec)
-        util::Logger::Warn("[EvlogTemplateRegistry] directory iteration error: {}", ec.message());
-    util::Logger::Info("[EvlogTemplateRegistry] loaded {} template(s) from {}",
-        m_templates.size(), dir.string());
+
+    if (ec) {
+        util::Logger::Warn("[EvlogTemplateRegistry] directory iteration error for '{}': {}",
+            dir.string(), ec.message());
+        return R::Err(error::Error(error::ErrorCode::IOError,
+            "[EvlogTemplateRegistry] directory iteration error: " + ec.message(),
+            /*showMsgBox=*/false));
+    }
+
+    const size_t added = m_templates.size() - countBefore;
+    util::Logger::Info("[EvlogTemplateRegistry] loaded {} template(s) from '{}'",
+        added, dir.string());
+    return R::Ok();
 }
 
 // ---------------------------------------------------------------------------
@@ -268,7 +312,14 @@ const EvlogTemplate* EvlogTemplateRegistry::Find(int32_t facility,
     uint32_t eventType) const
 {
     auto it = m_templates.find({facility, eventType});
-    return (it != m_templates.end()) ? &it->second : nullptr;
+    if (it != m_templates.end()) {
+        util::Logger::Trace("[EvlogTemplateRegistry] Find(facility={} eventType=0x{:X}) — found '{}'",
+            facility, eventType, it->second.description);
+        return &it->second;
+    }
+    util::Logger::Trace("[EvlogTemplateRegistry] Find(facility={} eventType=0x{:X}) — not found",
+        facility, eventType);
+    return nullptr;
 }
 
 } // namespace parser

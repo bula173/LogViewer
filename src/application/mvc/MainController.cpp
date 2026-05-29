@@ -2,6 +2,7 @@
 
 #include "Config.hpp"
 #include "Error.hpp"
+#include "Logger.hpp"
 #include "ParserFactory.hpp"
 
 #include <algorithm>
@@ -19,6 +20,7 @@ MainController::MainController(db::EventsContainer& events)
 
 std::vector<std::string> MainController::GetSearchColumns() const
 {
+    util::Logger::Debug("GetSearchColumns: building visible column list");
     std::vector<std::string> columns;
     const auto& cfg = config::GetConfig();
     for (const auto& col : cfg.columns)
@@ -31,9 +33,11 @@ std::vector<std::string> MainController::GetSearchColumns() const
 
     if (columns.empty())
     {
+        util::Logger::Debug("GetSearchColumns: no visible columns configured, using defaults");
         columns.assign(kDefaultSearchColumns.begin(), kDefaultSearchColumns.end());
     }
 
+    util::Logger::Debug("GetSearchColumns: returning {} column(s)", columns.size());
     return columns;
 }
 
@@ -43,8 +47,11 @@ void MainController::SearchEvents(const std::string& query,
     std::function<void(size_t, size_t)> progressCallback)
 {
     const size_t total = m_events.Size();
+    util::Logger::Debug("SearchEvents: starting — query='{}', columns={}, total events={}",
+        query, columns.size(), total);
 
     const bool hasQuery = !query.empty();
+    size_t matchCount = 0;
 
     for (size_t i = 0; i < total; ++i)
     {
@@ -70,6 +77,10 @@ void MainController::SearchEvents(const std::string& query,
 
         if (matches && onResult)
         {
+            ++matchCount;
+            util::Logger::Trace("SearchEvents: match at index={}, eventId={}, key='{}'",
+                i, event.getId(), matchedKey);
+
             SearchResultRow row;
             row.eventId = event.getId();
             row.matchedKey = matchedKey;
@@ -89,27 +100,42 @@ void MainController::SearchEvents(const std::string& query,
             progressCallback(i + 1, total);
         }
     }
+
+    util::Logger::Info("SearchEvents: complete — {} match(es) out of {} event(s) for query='{}'",
+        matchCount, total, query);
 }
 
 void MainController::LoadLogFile(const std::filesystem::path& filepath,
     parser::IDataParserObserver* observer)
 {
+    util::Logger::Debug("LoadLogFile: entry — path='{}'", filepath.string());
+
     if (filepath.empty())
     {
-        throw error::Error("File path is empty.");
+        util::Logger::Warn("LoadLogFile: rejected — file path is empty");
+        throw error::Error(error::ErrorCode::InvalidArgument, "File path is empty.", false);
     }
 
     if (!std::filesystem::exists(filepath))
     {
-        throw error::Error("File does not exist: " + filepath.string());
+        util::Logger::Warn("LoadLogFile: rejected — file does not exist: '{}'",
+            filepath.string());
+        throw error::Error(error::ErrorCode::FileNotFound,
+            "File does not exist: " + filepath.string(), false);
     }
 
+    util::Logger::Debug("LoadLogFile: creating parser for extension '{}'",
+        filepath.extension().string());
     auto parserResult = parser::ParserFactory::CreateFromFile(filepath);
     if (!parserResult.isOk())
     {
+        util::Logger::Warn("LoadLogFile: no parser found for '{}' — {}",
+            filepath.string(), parserResult.error().what());
         throw parserResult.error();
     }
 
+    util::Logger::Info("LoadLogFile: loading '{}' — parser ready, clearing existing events",
+        filepath.string());
     m_events.Clear();
     m_activeParser = parserResult.unwrap();
 
@@ -121,8 +147,20 @@ void MainController::LoadLogFile(const std::filesystem::path& filepath,
     {
         m_activeParser->ParseData(filepath);
     }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("LoadLogFile: parse failed for '{}' — {}",
+            filepath.string(), ex.what());
+        if (observer)
+            m_activeParser->UnregisterObserver(observer);
+        m_activeParser->UnregisterObserver(this);
+        m_activeParser.reset();
+        throw;
+    }
     catch (...)
     {
+        util::Logger::Error("LoadLogFile: parse failed for '{}' — unknown exception",
+            filepath.string());
         if (observer)
             m_activeParser->UnregisterObserver(observer);
         m_activeParser->UnregisterObserver(this);
@@ -134,6 +172,8 @@ void MainController::LoadLogFile(const std::filesystem::path& filepath,
         m_activeParser->UnregisterObserver(observer);
     m_activeParser->UnregisterObserver(this);
     m_activeParser.reset();
+    util::Logger::Info("LoadLogFile: complete — '{}', {} event(s) loaded",
+        filepath.string(), m_events.Size());
 }
 
 uint32_t MainController::GetParserCurrentProgress() const

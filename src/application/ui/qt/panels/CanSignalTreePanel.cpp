@@ -1,5 +1,7 @@
 #include "CanSignalTreePanel.hpp"
 
+#include "Logger.hpp"
+
 #include <QLabel>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -70,6 +72,7 @@ void CanSignalTreePanel::BuildLayout()
 
 void CanSignalTreePanel::SetDatabase(const parser::dbc::DbcDatabase& db)
 {
+    util::Logger::Debug("[CanSignalTree] Loading DBC database with {} message(s)", db.messages.size());
     m_db = db;
     RebuildTree();
 }
@@ -95,6 +98,7 @@ void CanSignalTreePanel::RebuildTree()
 {
     if (m_db.messages.empty())
     {
+        util::Logger::Warn("[CanSignalTree] RebuildTree called with empty DBC database");
         m_tree->hide();
         m_placeholder->show();
         return;
@@ -150,6 +154,13 @@ void CanSignalTreePanel::RebuildTree()
     }
 
     m_tree->show();
+
+    // Count total signals across all messages for the log.
+    size_t totalSignals = 0;
+    for (const auto& [id, msg] : m_db.messages)
+        totalSignals += msg.signalDefs.size();
+    util::Logger::Info("[CanSignalTree] Signal tree populated: {} frame(s), {} signal(s)",
+        m_db.messages.size(), totalSignals);
 
     if (hadSelection || !GetSelectedSignals().empty())
         emit SignalSelectionChanged();

@@ -1,9 +1,9 @@
 # LogViewer — Requirements Specification
 
 **Document ID**: LV-REQ-001  
-**Version**: 1.4  
+**Version**: 1.5  
 **Status**: Active  
-**Application version**: 1.6.1+  
+**Application version**: 1.7.0+  
 
 ---
 
@@ -25,6 +25,7 @@
      - [3.1.7 Format-Specific Statistics](#317-format-specific-statistics)
      - [3.1.8 Configuration](#318-configuration)
      - [3.1.9 Named Layouts](#319-named-layouts)
+     - [3.1.10 Side-by-Side Log Comparison](#3110-side-by-side-log-comparison)
    - [3.2 Performance Requirements](#32-performance-requirements)
    - [3.3 Usability Requirements](#33-usability-requirements)
    - [3.4 Reliability Requirements](#34-reliability-requirements)
@@ -128,6 +129,9 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-012 | The user MUST be able to select and view the full details of a single event in a detail panel | MUST |
 | SW-013 | The application MUST support **light and dark themes** | MUST |
 | SW-014 | Column widths MUST be user-adjustable and SHOULD persist across sessions | SHOULD |
+| SW-015 | The user MUST be able to copy selected events to the clipboard as plain text (Ctrl+C) | MUST |
+| SW-016 | The user SHOULD be able to copy selected events as **JSON** or **CSV** via the right-click context menu | SHOULD |
+| SW-017 | The application SHOULD provide a **Jump to Timestamp** dialog (Ctrl+G) that scrolls the events table to the nearest event for a user-supplied timestamp | SHOULD |
 
 #### 3.1.3 Filtering
 
@@ -159,7 +163,10 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | ID | Requirement | Priority |
 |----|-------------|----------|
 | SW-040 | The application MUST support exporting the currently visible (filtered) events | MUST |
-| SW-041 | Export SHOULD support at least CSV format | SHOULD |
+| SW-041 | Export MUST support **CSV** format | MUST |
+| SW-041a | Export SHOULD support **JSON** format | SHOULD |
+| SW-041b | Export SHOULD support **XML** format | SHOULD |
+| SW-042 | Selected events SHOULD be copyable as JSON or CSV directly to the clipboard via a context-menu action, independently of full-file export | SHOULD |
 
 #### 3.1.6 Signal Visualisation
 
@@ -201,6 +208,18 @@ Requirements are identified by a unique ID in the form `SYS-xxx` (system) or `SW
 | SW-057 | The application MUST ship at least two **built-in predefined layouts**: one for generic XML/CSV log viewing and one optimised for CAN/ASC analysis | MUST |
 | SW-058 | The user MUST be able to **delete** a previously saved layout via the View → Layouts menu | MUST |
 | SW-059 | Named layouts MUST be persisted across application restarts | MUST |
+
+#### 3.1.10 Side-by-Side Log Comparison
+
+| ID | Requirement | Priority |
+|----|-------------|----------|
+| SW-115 | The application MUST provide a **Side-by-Side** comparison panel that loads two independent log files and displays them in a vertically-split view | MUST |
+| SW-116 | The Side-by-Side panel MUST support **Timestamp** synchronisation: selecting a row on one side automatically scrolls the other side to the event with the nearest timestamp | MUST |
+| SW-117 | The Side-by-Side panel MUST support **Manual** synchronisation: the user marks one reference event on each side; the panel computes a constant timestamp offset and uses it for all subsequent scroll synchronisation | MUST |
+| SW-118 | The Side-by-Side panel MUST support **No synchronisation** mode where the two views scroll completely independently | MUST |
+| SW-119 | Manual synchronisation MUST handle log files with incompatible time bases (e.g. DLT absolute epoch vs ASC elapsed seconds) by computing a constant offset from the chosen reference events | MUST |
+| SW-120 | Each side of the Side-by-Side panel MUST support all file formats supported by the main log loader (XML, CSV, ASC, DLT, Evlog) | MUST |
+| SW-121 | File loading in the Side-by-Side panel MUST be performed on a background thread; the UI MUST remain responsive during loading | MUST |
 
 ### 3.2 Performance Requirements
 
@@ -292,8 +311,10 @@ Third-party libraries bundled via CMake `FetchContent` (no separate install requ
 | SYS-020 – SYS-024 | CI release workflow (NSIS installer, macOS bundle) |
 | SW-001 – SW-009 | `DataParserTest`, `CsvParserTest`, `XmlParserTest` |
 | SW-010a – SW-010d | `AscParserTest`, `DbcParserTest` |
-| SW-010e – SW-010g | `DltParserTest` (manual), DLT sample files |
-| SW-010h – SW-010k | `EvlogParserTest` (manual), evlog sample files + template files |
+| SW-010e – SW-010g | `DltParserTest`, DLT sample files |
+| SW-010h – SW-010k | `EvlogParserTest`, `EvlogTemplateRegistryTest`, evlog sample files + template files |
+| SW-015 – SW-017 | Manual UI testing (copy to clipboard, Jump to Timestamp dialog) |
+| SW-040 – SW-042 | Manual UI testing (Export CSV/JSON/XML, copy as JSON/CSV) |
 | SW-045 – SW-048 | Manual UI testing (SignalPlotPanel, CanSignalTreePanel) |
 | SW-049 – SW-049c | Manual UI testing (StatsSummaryPanel + CanStatisticsStrategy) |
 | SW-055 – SW-059 | Manual UI testing (LayoutManager, View → Layouts menu) |
@@ -304,4 +325,5 @@ Third-party libraries bundled via CMake `FetchContent` (no separate install requ
 | SW-080 – SW-083 | Unit tests + manual error injection |
 | SW-090 – SW-095 | CI security workflow (CodeQL, Gitleaks, AV scan, attestation) |
 | SW-110 – SW-114 | `ArchitectureImprovementsTests`, plugin load/reject tests |
+| SW-115 – SW-121 | Manual UI testing (SideBySidePanel, all sync modes) |
 | BUILD-001 – BUILD-010 | CI build matrix (`macos-debug-qt`, `macos-release-qt`, etc.) |

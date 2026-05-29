@@ -5,12 +5,14 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 ## Features
 
 ### Core
-- **Multiple Log Formats**: XML, CSV, and CAN/ASC (Vector CANalyzer) — JSON coming soon
+- **Multiple Log Formats**: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (`.dlt`), and POSIX Evlog (`.evl`)
 - **DBC Signal Decoding**: Load a `.dbc` file alongside an ASC log to decode raw CAN frames into named signals
+- **Evlog Template Decoding**: Load a directory of `.t`/`.tmpl`/`.template` files to decode structured BINARY evlog payloads into named fields
 - **High Performance**: Virtual list architecture handles millions of log entries
 - **Advanced Filtering**: Text search, regex, time-range, and type-based filters with configurable field selection
 - **Filter Profiles**: Save and restore named filter states for quick context switching
 - **Flexible UI**: Dock-based layout — move, float, or hide panels as needed
+- **Named Layouts**: Save and restore complete dock arrangements under custom names
 - **Persistent Settings**: JSON-based configuration with platform-specific storage
 
 ### Analysis Panels
@@ -22,6 +24,12 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 - **Bookmarks**: Annotate and navigate to important events
 - **Scenarios**: Define multi-step event sequences and export matches as JSON Lines
 - **Actors**: Event attribution tree built from configurable actor definitions
+
+### Side-by-Side Comparison
+- **Split View**: Load two log files simultaneously in a vertically-split panel
+- **Timestamp Sync**: Selecting a row on one side auto-scrolls the other to the nearest timestamp
+- **Manual Sync**: Mark a reference event on each side to compute a constant offset — useful when comparing DLT (epoch) and ASC (elapsed) logs with different time bases
+- **Independent View**: Disable sync entirely for free-scrolling on both sides
 
 ### AI-Assisted Analysis
 - **Multiple Providers**: Ollama (local), LM Studio (local), OpenAI, Anthropic Claude, Google Gemini, xAI Grok
@@ -228,14 +236,18 @@ Configure in Settings > AI with an API key:
 
 ## Usage
 
-1. **Open Log File** — File > Open (Cmd/Ctrl+O); supports XML, CSV, and `.asc` CAN logs
+1. **Open Log File** — File > Open (Ctrl+O); supports XML, CSV, `.asc` CAN, `.dlt` DLT, and `.evl` Evlog; drag and drop also works
 2. **Load DBC** — File > Load DBC… to decode CAN signals from a `.dbc` database (optional, ASC only)
-3. **Filter** — Use the Filters panel; filter by type, text, regex, or time range
-4. **Inspect** — Select an entry to see full details in the Details panel
-5. **Plot Signals** — Switch to the *Signals* tab in the content area; check `SIG:*` fields to plot their values over time (available after loading an ASC + DBC file)
-6. **Statistics** — The *Statistics* tab shows format-aware metrics; CAN files additionally show frame counts, Rx/Tx breakdown, unique IDs, frame rate, and signal ranges
-7. **AI Analysis** — Open the bottom panel, write or load a prompt, click Analyze
-8. **Customize** — Drag panel title bars to rearrange; configure columns and colors in Settings
+3. **Load Evlog Templates** — File > Load Evlog Templates… to select a directory of template files for `.evl` BINARY payload decoding
+4. **Filter** — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles
+5. **Inspect** — Select an entry to see full details in the Details panel; press Ctrl+G to jump to a specific timestamp
+6. **Copy** — Right-click events to copy as JSON or CSV; Ctrl+C copies plain text
+7. **Plot Signals** — Switch to the *Signals* tab; check `SIG:*` fields in the Signal Browser dock to plot values over time (ASC + DBC required)
+8. **Statistics** — The *Statistics* tab shows format-aware metrics; CAN files show Rx/Tx/error counts, unique IDs, frame rate, and signal ranges
+9. **Side-by-Side** — Open the *Side by Side* tab or press Ctrl+Shift+S; load two files and choose a sync mode
+10. **AI Analysis** — Open the bottom AI panel, write or load a prompt, click Analyze
+11. **Layouts** — View > Layouts to save, restore, or delete named dock arrangements
+12. **Export** — File > Export to save visible events as CSV, JSON, or XML
 
 ## Project Structure
 
@@ -324,6 +336,7 @@ brew upgrade cmake          # macOS
 
 | Document | Description |
 |----------|-------------|
+| [docs/USER_MANUAL.md](docs/USER_MANUAL.md) | End-user guide — all features with keyboard shortcuts |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design and patterns |
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Build system, code style |
 | [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md) | Detailed build instructions |

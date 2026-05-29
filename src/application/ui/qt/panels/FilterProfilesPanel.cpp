@@ -7,6 +7,7 @@
 #include "FilterProfilesPanel.hpp"
 
 #include "Config.hpp"
+#include "Logger.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -166,18 +167,22 @@ void FilterProfilesPanel::StoreProfile(const FilterProfile& profile)
     {
         if (existing.name == profile.name)
         {
+            util::Logger::Debug("[FilterProfiles] Updating existing profile '{}'", profile.name);
             existing = profile;
             RebuildList();
             SaveToFile();
+            util::Logger::Info("[FilterProfiles] Profile '{}' updated", profile.name);
             m_statusLabel->setText(
                 tr("Profile \"%1\" updated.")
                     .arg(QString::fromStdString(profile.name)));
             return;
         }
     }
+    util::Logger::Debug("[FilterProfiles] Storing new profile '{}'", profile.name);
     m_profiles.push_back(profile);
     RebuildList();
     SaveToFile();
+    util::Logger::Info("[FilterProfiles] Profile '{}' saved", profile.name);
     m_statusLabel->setText(
         tr("Profile \"%1\" saved.")
             .arg(QString::fromStdString(profile.name)));
@@ -192,6 +197,7 @@ void FilterProfilesPanel::HandleSave()
     QString name = m_nameEdit->text().trimmed();
     if (name.isEmpty())
     {
+        util::Logger::Warn("[FilterProfiles] Save requested with empty profile name");
         QMessageBox::warning(this, tr("Save Profile"),
                              tr("Please enter a profile name."));
         return;
@@ -217,10 +223,13 @@ void FilterProfilesPanel::HandleLoad()
 {
     const int row = m_list->currentRow();
     if (row < 0 || row >= static_cast<int>(m_profiles.size())) return;
-    emit ProfileLoadRequested(m_profiles[static_cast<size_t>(row)]);
+    const auto& profile = m_profiles[static_cast<size_t>(row)];
+    util::Logger::Debug("[FilterProfiles] Loading profile '{}'", profile.name);
+    emit ProfileLoadRequested(profile);
+    util::Logger::Info("[FilterProfiles] Profile '{}' loaded", profile.name);
     m_statusLabel->setText(
         tr("Profile \"%1\" loaded.")
-            .arg(QString::fromStdString(m_profiles[static_cast<size_t>(row)].name)));
+            .arg(QString::fromStdString(profile.name)));
 }
 
 void FilterProfilesPanel::HandleDelete()
@@ -234,9 +243,11 @@ void FilterProfilesPanel::HandleDelete()
             tr("Delete profile \"%1\"?").arg(name)) != QMessageBox::Yes)
         return;
 
+    util::Logger::Debug("[FilterProfiles] Deleting profile '{}'", name.toStdString());
     m_profiles.erase(m_profiles.begin() + row);
     RebuildList();
     SaveToFile();
+    util::Logger::Info("[FilterProfiles] Profile '{}' deleted", name.toStdString());
     m_statusLabel->setText(tr("Profile \"%1\" deleted.").arg(name));
 }
 
@@ -276,6 +287,8 @@ void FilterProfilesPanel::SaveToFile()
     try
     {
         const std::string path = DefaultFilePath();
+        util::Logger::Debug("[FilterProfiles] Saving {} profile(s) to '{}'",
+            m_profiles.size(), path);
         std::filesystem::create_directories(
             std::filesystem::path(path).parent_path());
 
@@ -289,6 +302,7 @@ void FilterProfilesPanel::SaveToFile()
     }
     catch (const std::exception& e)
     {
+        util::Logger::Error("[FilterProfiles] Failed to save profiles to file: {}", e.what());
         m_statusLabel->setText(
             tr("Save error: %1").arg(QString::fromStdString(e.what())));
     }
@@ -300,24 +314,43 @@ void FilterProfilesPanel::LoadFromFile()
     {
         const std::string path = DefaultFilePath();
         std::ifstream ifs(path);
-        if (!ifs.is_open()) return; // no file yet — normal on first run
+        if (!ifs.is_open())
+        {
+            util::Logger::Debug("[FilterProfiles] No profiles file found at '{}' (first run)", path);
+            return; // no file yet — normal on first run
+        }
 
+        util::Logger::Debug("[FilterProfiles] Loading profiles from '{}'", path);
         nlohmann::json j;
         ifs >> j;
-        if (!j.is_array()) return;
+        if (!j.is_array())
+        {
+            util::Logger::Warn("[FilterProfiles] Profiles file '{}' does not contain a JSON array", path);
+            return;
+        }
 
         m_profiles.clear();
+        size_t parseErrors = 0;
         for (const auto& item : j)
         {
             try { m_profiles.push_back(FilterProfile::FromJson(item)); }
-            catch (...) {}
+            catch (...) { ++parseErrors; }
         }
+        if (parseErrors > 0)
+            util::Logger::Warn("[FilterProfiles] {} profile entry/entries could not be parsed", parseErrors);
         RebuildList();
         if (!m_profiles.empty())
+        {
+            util::Logger::Info("[FilterProfiles] Loaded {} profile(s) from file", m_profiles.size());
             m_statusLabel->setText(
                 tr("Loaded %1 profile(s).").arg(m_profiles.size()));
+        }
     }
-    catch (...) {} // silently ignore missing / corrupt file
+    catch (const std::exception& e)
+    {
+        util::Logger::Error("[FilterProfiles] Error loading profiles file: {}", e.what());
+    }
+    catch (...) {} // silently ignore remaining unknown errors
 }
 
 std::string FilterProfilesPanel::DefaultFilePath()

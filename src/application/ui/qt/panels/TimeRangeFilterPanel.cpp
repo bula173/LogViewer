@@ -7,6 +7,7 @@
 #include "TimeRangeFilterPanel.hpp"
 
 #include "EventsContainer.hpp"
+#include "Logger.hpp"
 #include "events/EventsTableView.hpp"
 
 #include <QComboBox>
@@ -145,9 +146,12 @@ void TimeRangeFilterPanel::HandleAutoDetect()
         m_fieldCombo->currentText().trimmed().toStdString();
     if (field.empty())
     {
+        util::Logger::Warn("[TimeRangeFilter] Auto-detect requested but no timestamp field specified");
         m_statusLabel->setText(tr("Enter a field name first."));
         return;
     }
+
+    util::Logger::Debug("[TimeRangeFilter] Auto-detecting range for field '{}'", field);
 
     std::string minTs, maxTs;
     const size_t total = m_events.Size();
@@ -162,6 +166,7 @@ void TimeRangeFilterPanel::HandleAutoDetect()
 
     if (minTs.empty())
     {
+        util::Logger::Warn("[TimeRangeFilter] No events contain field '{}' for auto-detect", field);
         m_statusLabel->setText(
             tr("No events contain field \"%1\".")
                 .arg(QString::fromStdString(field)));
@@ -170,6 +175,8 @@ void TimeRangeFilterPanel::HandleAutoDetect()
 
     m_fromEdit->setText(QString::fromStdString(minTs));
     m_toEdit->setText(QString::fromStdString(maxTs));
+    util::Logger::Info("[TimeRangeFilter] Auto-detected range for field '{}': ['{}', '{}'] from {} events",
+        field, minTs, maxTs, total);
     m_statusLabel->setText(
         tr("Range detected from %1 events.")
             .arg(total));
@@ -184,14 +191,24 @@ void TimeRangeFilterPanel::HandleApply()
 
     if (from.empty() && to.empty())
     {
+        util::Logger::Warn("[TimeRangeFilter] Apply requested but both From and To bounds are empty");
         m_statusLabel->setText(tr("Specify at least one bound (From or To)."));
         return;
     }
+
+    if (!from.empty() && !to.empty() && from > to)
+    {
+        util::Logger::Warn("[TimeRangeFilter] Invalid range: start ('{}') > end ('{}')", from, to);
+    }
+
+    util::Logger::Debug("[TimeRangeFilter] Applying time range filter: field='{}', from='{}', to='{}'",
+        m_fieldCombo->currentText().trimmed().toStdString(), from, to);
 
     const auto indices = ComputeMatchingIndices();
 
     if (indices.empty())
     {
+        util::Logger::Info("[TimeRangeFilter] Time range applied: ['{}', '{}'] — 0 events matched", from, to);
         m_statusLabel->setText(tr("No events match the specified range."));
         m_eventsView->SetFilteredEvents(indices);
         m_active = true;
@@ -201,6 +218,8 @@ void TimeRangeFilterPanel::HandleApply()
 
     m_eventsView->SetFilteredEvents(indices);
     m_active = true;
+    util::Logger::Info("[TimeRangeFilter] Time range applied: ['{}', '{}'] — {} event(s) matched",
+        from, to, indices.size());
     m_statusLabel->setText(
         tr("Filter active: %1 event(s) in range.").arg(indices.size()));
     emit FilterApplied();
@@ -209,6 +228,7 @@ void TimeRangeFilterPanel::HandleApply()
 void TimeRangeFilterPanel::HandleClear()
 {
     if (!m_eventsView) return;
+    util::Logger::Debug("[TimeRangeFilter] Clearing time range filter");
     m_eventsView->ClearFilter();
     m_active = false;
     m_statusLabel->clear();

@@ -2,6 +2,8 @@
 
 #include "IFieldConversionPlugin.hpp"
 #include "IPluginObserver.hpp"
+#include "Result.hpp"
+#include "Error.hpp"
 #include <string>
 #include <string_view>
 #include <map>
@@ -19,7 +21,7 @@ using ConversionPluginFactory = std::function<std::unique_ptr<plugin::IFieldConv
 
 /**
  * @brief Registry for field conversion plugins
- * 
+ *
  * This registry maintains a collection of field conversion plugins that can be
  * used throughout the application for transforming field values.
  * Implements IPluginObserver to automatically register/unregister plugins
@@ -46,23 +48,23 @@ public:
     /**
      * @brief Get description for a conversion type
      * @param conversionType The conversion type name
-     * @return Description string, or empty if not found
+     * @return Ok(description) if found, Err if the conversion type is not registered
      */
-    std::string GetDescription(const std::string& conversionType) const;
+    util::Result<std::string, error::Error> GetDescription(const std::string& conversionType) const;
 
     /**
      * @brief Apply a conversion using registered plugins
      * @param conversionType The conversion type to use
      * @param value The value to convert
      * @param parameters Additional parameters
-     * @return Converted value, or original value if conversion failed/not found
+     * @return Ok(converted value) on success, Err if conversion type is not registered
      */
-    std::string ApplyConversion(const std::string& conversionType,
+    util::Result<std::string, error::Error> ApplyConversion(const std::string& conversionType,
                                std::string_view value,
                                const std::map<std::string, std::string>& parameters) const;
 
     // IPluginObserver interface
-    void OnPluginEvent(plugin::PluginEvent event, 
+    void OnPluginEvent(plugin::PluginEvent event,
                       const std::string& pluginId,
                       plugin::IPlugin* plugin) override;
 
@@ -74,7 +76,7 @@ private:
     FieldConversionPluginRegistry() = default;
     std::vector<std::pair<std::string, ConversionPluginFactory>> m_factories;
     mutable std::vector<std::unique_ptr<plugin::IFieldConversionPlugin>> m_instances;
-    
+
     // Track which plugins are registered by plugin ID
     std::map<std::string, plugin::IFieldConversionPlugin*> m_pluginConverters;
 };

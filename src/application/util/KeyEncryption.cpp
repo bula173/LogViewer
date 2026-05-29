@@ -1,4 +1,7 @@
 #include "KeyEncryption.hpp"
+
+#include "Logger.hpp"
+
 #include <cstring>
 
 namespace util
@@ -56,7 +59,12 @@ static std::string Base64Decode(const std::string& input)
     {
         if (c == '=') break;
         const char* pos = std::strchr(kBase64Chars, static_cast<unsigned char>(c));
-        if (!pos) return {};  // invalid character — corrupt value
+        if (!pos)
+        {
+            util::Logger::Warn("[KeyEncryption] Invalid Base64 character '{}' — corrupt value, returning empty",
+                               static_cast<int>(c));
+            return {};  // invalid character — corrupt value
+        }
         val   = (val << 6) | static_cast<int>(pos - kBase64Chars);
         bits += 6;
         if (bits >= 0)
@@ -74,16 +82,32 @@ static std::string Base64Decode(const std::string& input)
 
 std::string KeyEncryption::Encrypt(const std::string& plaintext)
 {
+    util::Logger::Debug("[KeyEncryption] Encrypt: {} chars", plaintext.size());
     if (plaintext.empty()) return {};
-    return std::string(ENCODED_PREFIX) + Base64Encode(plaintext);
+    const std::string result = std::string(ENCODED_PREFIX) + Base64Encode(plaintext);
+    util::Logger::Info("[KeyEncryption] Key encrypted ({} -> {} chars)",
+                       plaintext.size(), result.size());
+    return result;
 }
 
 std::string KeyEncryption::Decrypt(const std::string& ciphertext)
 {
+    util::Logger::Debug("[KeyEncryption] Decrypt: {} chars", ciphertext.size());
     if (ciphertext.empty()) return {};
     if (ciphertext.find(ENCODED_PREFIX) != 0)
+    {
+        util::Logger::Debug("[KeyEncryption] Value has no B64: prefix — returning as plaintext");
         return ciphertext;  // not encoded — return as-is (plaintext)
-    return Base64Decode(ciphertext.substr(strlen(ENCODED_PREFIX)));
+    }
+    const std::string result = Base64Decode(ciphertext.substr(strlen(ENCODED_PREFIX)));
+    if (result.empty() && ciphertext.size() > strlen(ENCODED_PREFIX))
+    {
+        util::Logger::Error("[KeyEncryption] Decrypt failed — Base64 decode returned empty for non-empty input");
+        return {};
+    }
+    util::Logger::Info("[KeyEncryption] Key decrypted ({} -> {} chars)",
+                       ciphertext.size(), result.size());
+    return result;
 }
 
 bool KeyEncryption::IsEncrypted(const std::string& value)

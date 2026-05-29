@@ -1,4 +1,5 @@
 #include "CanDecoder.hpp"
+#include "Logger.hpp"
 
 #include <cstdint>
 #include <format>
@@ -16,16 +17,23 @@ int64_t ExtractIntel(const std::vector<uint8_t>& data, uint32_t startBit, uint32
     bool isSigned)
 {
     uint64_t raw = 0;
+    bool outOfBounds = false;
     for (uint32_t i = 0; i < length; ++i)
     {
         const uint32_t bitPos  = startBit + i;
         const uint32_t byteIdx = bitPos / 8u;
         const uint32_t bitIdx  = bitPos % 8u;
         if (byteIdx >= data.size())
+        {
+            outOfBounds = true;
             break;
+        }
         if ((data[byteIdx] >> bitIdx) & 0x01u)
             raw |= (uint64_t{1} << i);
     }
+    if (outOfBounds)
+        util::Logger::Warn("CanDecoder: Intel bit extraction out-of-bounds "
+            "(startBit={} length={} dataSize={})", startBit, length, data.size());
 
     if (isSigned && length > 0 && (raw & (uint64_t{1} << (length - 1))))
     {
@@ -46,6 +54,7 @@ int64_t ExtractMotorola(const std::vector<uint8_t>& data, uint32_t startBit, uin
     // flat = (startBit / 8) * 8 + (7 - startBit % 8)
     uint64_t raw = 0;
     const uint32_t msbFlat = (startBit / 8u) * 8u + (7u - startBit % 8u);
+    bool outOfBounds = false;
 
     for (uint32_t i = 0; i < length; ++i)
     {
@@ -54,10 +63,16 @@ int64_t ExtractMotorola(const std::vector<uint8_t>& data, uint32_t startBit, uin
         const uint32_t byteIdx = bitFlat / 8u;
         const uint32_t bitIdx  = 7u - (bitFlat % 8u);  // back to data-byte bit index
         if (byteIdx >= data.size())
+        {
+            outOfBounds = true;
             break;
+        }
         if ((data[byteIdx] >> bitIdx) & 0x01u)
             raw |= (uint64_t{1} << (length - 1u - i));
     }
+    if (outOfBounds)
+        util::Logger::Warn("CanDecoder: Motorola bit extraction out-of-bounds "
+            "(startBit={} length={} dataSize={})", startBit, length, data.size());
 
     if (isSigned && length > 0 && (raw & (uint64_t{1} << (length - 1))))
     {
@@ -93,9 +108,16 @@ std::vector<std::pair<std::string, std::string>> DecodeFrame(
 {
     std::vector<std::pair<std::string, std::string>> results;
 
+    const bool dbPresent = !db.messages.empty();
+    util::Logger::Debug("CanDecoder: DecodeFrame canId=0x{:X} dataLen={} dbPresent={}",
+        canId, data.size(), dbPresent);
+
     const auto it = db.messages.find(canId);
     if (it == db.messages.end())
+    {
+        util::Logger::Warn("CanDecoder: message ID 0x{:X} not found in DBC database", canId);
         return results;
+    }
 
     const DbcMessage& msg = it->second;
     results.reserve(msg.signalDefs.size());
@@ -110,6 +132,8 @@ std::vector<std::pair<std::string, std::string>> DecodeFrame(
             valStr += ' ';
             valStr += sig.unit;
         }
+        util::Logger::Trace("CanDecoder: signal '{}' raw={} physical='{}'",
+            sig.name, raw, valStr);
         results.emplace_back("SIG:" + sig.name, std::move(valStr));
     }
 

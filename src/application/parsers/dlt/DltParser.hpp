@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Error.hpp"
 #include "IDataParser.hpp"
+#include "Result.hpp"
 
 #include <filesystem>
 #include <iosfwd>
@@ -32,7 +34,10 @@ class DltParser : public IDataParser
     uint32_t GetTotalProgress()   const override { return m_totalProgress; }
 
   private:
-    void ParseStream(std::istream& input);
+    /// Parse all messages from @p input.
+    /// Returns the number of messages emitted on success, or an error
+    /// if the stream could not be probed (e.g. immediate read failure).
+    util::Result<int, error::Error> ParseStream(std::istream& input);
 
     uint32_t m_currentProgress {0};
     uint32_t m_totalProgress   {0};

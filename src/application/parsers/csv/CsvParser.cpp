@@ -6,9 +6,10 @@
  */
 
 #include "CsvParser.hpp"
-#include "LogEvent.hpp"
 #include "Error.hpp"
+#include "LogEvent.hpp"
 #include "Logger.hpp"
+#include "Result.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -27,14 +28,17 @@ CsvParser::CsvParser()
 
 void CsvParser::ParseData(const std::filesystem::path& filepath)
 {
-    util::Logger::Debug("CsvParser::ParseData called with filepath: {}", filepath.string());
+    util::Logger::Debug("CsvParser::ParseData opening file: {}", filepath.string());
 
     std::ifstream input(filepath, std::ios::binary);
     if (!input.is_open())
     {
         throw error::Error(
+            error::ErrorCode::FileNotFound,
             "CsvParser::ParseData failed to open file: " + filepath.string());
     }
+
+    util::Logger::Debug("CsvParser::ParseData file opened, delimiter: '{}'", m_delimiter);
 
     // Use a 1 MB read buffer to reduce system-call overhead on large files.
     constexpr size_t kReadBufSize = 1024 * 1024;
@@ -50,15 +54,18 @@ void CsvParser::ParseData(const std::filesystem::path& filepath)
 
     ParseData(input);
     input.close();
+    util::Logger::Debug("CsvParser::ParseData file closed: {}", filepath.string());
 }
 
 void CsvParser::ParseData(std::istream& input)
 {
-    util::Logger::Debug("CsvParser::ParseData called with istream");
+    util::Logger::Debug("CsvParser::ParseData called with istream, delimiter: '{}'",
+        m_delimiter);
 
     if (!input.good())
     {
         throw error::Error(
+            error::ErrorCode::IOError,
             "CsvParser::ParseData: input stream is not readable");
     }
 
@@ -82,6 +89,7 @@ void CsvParser::ParseData(std::istream& input)
     std::string line;
     int eventId = 0;
     size_t lineNumber = 0;
+    size_t skippedRows = 0;
     constexpr size_t BATCH_SIZE = 5000; // larger batch = fewer mutex + notify calls
     std::vector<std::pair<int, db::LogEvent::EventItems>> eventBatch;
     eventBatch.reserve(BATCH_SIZE);
@@ -116,8 +124,7 @@ void CsvParser::ParseData(std::istream& input)
         if (lineNumber == 1 && m_hasHeaders)
         {
             headers = fields;
-            util::Logger::Debug("CsvParser: Found {} headers", headers.size());
-            
+
             // Normalize header names (trim and lowercase)
             for (auto& header : headers)
             {
@@ -125,6 +132,17 @@ void CsvParser::ParseData(std::istream& input)
                 std::transform(header.begin(), header.end(), header.begin(),
                     [](unsigned char c) { return std::tolower(c); });
             }
+
+            // Build a printable column list for the debug log
+            std::string colList;
+            for (size_t i = 0; i < headers.size(); ++i)
+            {
+                if (i > 0) colList += ", ";
+                colList += headers[i];
+            }
+            util::Logger::Debug("CsvParser: detected {} columns: [{}]",
+                headers.size(), colList);
+
             continue;
         }
 
@@ -135,13 +153,16 @@ void CsvParser::ParseData(std::istream& input)
             {
                 headers.push_back("field" + std::to_string(i));
             }
+            util::Logger::Debug(
+                "CsvParser: no header row — generated {} synthetic column names",
+                headers.size());
         }
 
         // Create event from fields
         try
         {
             db::LogEvent::EventItems items = CreateEventFromFields(fields, headers, ++eventId);
-            
+
             // Add to batch
             eventBatch.emplace_back(eventId, std::move(items));
 
@@ -159,7 +180,8 @@ void CsvParser::ParseData(std::istream& input)
         }
         catch (const std::exception& e)
         {
-            util::Logger::Warn("CsvParser: Failed to parse line {}: {}", 
+            ++skippedRows;
+            util::Logger::Warn("CsvParser: skipping row {} — parse error: {}",
                 lineNumber, e.what());
         }
     }
@@ -175,8 +197,9 @@ void CsvParser::ParseData(std::istream& input)
     m_currentProgress = m_totalProgress;
     NotifyProgressUpdated();
 
-    util::Logger::Info("CsvParser: Successfully parsed {} events from {} lines",
-        eventId, lineNumber);
+    util::Logger::Info(
+        "CsvParser: parse complete — {} events accepted, {} rows skipped, {} lines read",
+        eventId, skippedRows, lineNumber);
 }
 
 std::vector<std::string> CsvParser::ParseLine(const std::string& line)
@@ -340,7 +363,7 @@ db::LogEvent::EventItems CsvParser::CreateEventFromFields(
     }
     
     // Ensure we have at least an ID field
-    if (FindHeaderIndex(headers, "id") == -1)
+    if (FindHeaderIndex(headers, "id").isErr())
     {
         items.insert(items.begin(), std::make_pair("id", std::to_string(eventId)));
     }
@@ -348,14 +371,18 @@ db::LogEvent::EventItems CsvParser::CreateEventFromFields(
     return items;
 }
 
-int CsvParser::FindHeaderIndex(const std::vector<std::string>& headers, const std::string& name)
+util::Result<size_t, error::Error> CsvParser::FindHeaderIndex(
+    const std::vector<std::string>& headers, const std::string& name)
 {
     auto it = std::find(headers.begin(), headers.end(), name);
     if (it != headers.end())
     {
-        return static_cast<int>(std::distance(headers.begin(), it));
+        return util::Result<size_t, error::Error>::Ok(
+            static_cast<size_t>(std::distance(headers.begin(), it)));
     }
-    return -1;
+    return util::Result<size_t, error::Error>::Err(
+        error::Error(error::ErrorCode::ParseError,
+            "CsvParser: column '" + name + "' not found", false));
 }
 
 std::string CsvParser::Trim(std::string_view str)

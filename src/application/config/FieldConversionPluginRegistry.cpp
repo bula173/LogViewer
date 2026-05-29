@@ -20,6 +20,7 @@ void FieldConversionPluginRegistry::RegisterPlugin(ConversionPluginFactory facto
 
 void FieldConversionPluginRegistry::RegisterPlugin(ConversionPluginFactory factory, std::string pluginId)
 {
+    util::Logger::Debug("FieldConversionPluginRegistry: registering factory (pluginId='{}')", pluginId);
     m_factories.emplace_back(std::move(pluginId), std::move(factory));
     // Clear cached instances so they'll be recreated with new plugin
     m_instances.clear();
@@ -36,33 +37,45 @@ std::vector<std::string> FieldConversionPluginRegistry::GetAvailableConversions(
     return conversions;
 }
 
-std::string FieldConversionPluginRegistry::GetDescription(const std::string& conversionType) const
+util::Result<std::string, error::Error>
+FieldConversionPluginRegistry::GetDescription(const std::string& conversionType) const
 {
+    using R = util::Result<std::string, error::Error>;
+    util::Logger::Trace("FieldConversionPluginRegistry: GetDescription('{}')", conversionType);
     EnsureInstancesLoaded();
     for (const auto& instance : m_instances)
     {
         if (instance->GetConversionType() == conversionType)
         {
-            return instance->GetDescription();
+            return R::Ok(instance->GetDescription());
         }
     }
-    return "";
+    util::Logger::Warn("FieldConversionPluginRegistry: GetDescription — unknown conversion type '{}'",
+        conversionType);
+    return R::Err(error::Error(error::ErrorCode::InvalidArgument,
+        "Unknown conversion type: " + conversionType, /*showMsgBox=*/false));
 }
 
-std::string FieldConversionPluginRegistry::ApplyConversion(const std::string& conversionType,
-                                                          std::string_view value,
-                                                          const std::map<std::string, std::string>& parameters) const
+util::Result<std::string, error::Error>
+FieldConversionPluginRegistry::ApplyConversion(const std::string& conversionType,
+                                               std::string_view value,
+                                               const std::map<std::string, std::string>& parameters) const
 {
+    using R = util::Result<std::string, error::Error>;
+    util::Logger::Trace("FieldConversionPluginRegistry: ApplyConversion('{}', value='{}')",
+        conversionType, value);
     EnsureInstancesLoaded();
     for (const auto& instance : m_instances)
     {
         if (instance->GetConversionType() == conversionType)
         {
-            return instance->Convert(value, parameters);
+            return R::Ok(instance->Convert(value, parameters));
         }
     }
-    util::Logger::Warn("Unknown conversion type: {}", conversionType);
-    return std::string(value);
+    util::Logger::Warn("FieldConversionPluginRegistry: ApplyConversion — unknown conversion type '{}'",
+        conversionType);
+    return R::Err(error::Error(error::ErrorCode::InvalidArgument,
+        "Unknown conversion type: " + conversionType, /*showMsgBox=*/false));
 }
 
 void FieldConversionPluginRegistry::EnsureInstancesLoaded() const
@@ -70,6 +83,8 @@ void FieldConversionPluginRegistry::EnsureInstancesLoaded() const
     if (m_instances.size() == m_factories.size())
         return;
 
+    util::Logger::Debug("FieldConversionPluginRegistry: (re)loading {} plugin instance(s)",
+        m_factories.size());
     m_instances.clear();
     for (const auto& entry : m_factories)
     {
@@ -79,9 +94,13 @@ void FieldConversionPluginRegistry::EnsureInstancesLoaded() const
         }
         catch (const std::exception& ex)
         {
-            util::Logger::Error("Failed to create field conversion plugin: {}", ex.what());
+            util::Logger::Error(
+                "FieldConversionPluginRegistry: plugin factory threw for pluginId='{}': {}",
+                entry.first, ex.what());
         }
     }
+    util::Logger::Info("FieldConversionPluginRegistry: {} conversion type(s) available",
+        m_instances.size());
 }
 
 void FieldConversionPluginRegistry::OnPluginEvent(plugin::PluginEvent event, 

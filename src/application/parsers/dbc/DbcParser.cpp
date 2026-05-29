@@ -1,5 +1,7 @@
 #include "DbcParser.hpp"
+#include "Error.hpp"
 #include "Logger.hpp"
+#include "Result.hpp"
 
 #include <charconv>
 #include <fstream>
@@ -13,6 +15,8 @@ namespace parser::dbc
 
 namespace
 {
+
+using ParseSignalResult = util::Result<DbcSignal, error::Error>;
 
 // Trim leading/trailing whitespace.
 std::string_view Trim(std::string_view s)
@@ -49,11 +53,14 @@ const std::regex kSignalRe{
     R"(\[([^|]+)\|([^\]]+)\]\s*)"
     "\"([^\"]*)\""};
 
-DbcSignal ParseSignalLine(const std::string& line)
+ParseSignalResult ParseSignalLine(const std::string& line)
 {
     std::smatch m;
     if (!std::regex_search(line, m, kSignalRe))
-        throw std::runtime_error("Cannot parse signal: " + line);
+    {
+        const std::string msg = "Cannot parse signal: " + line;
+        return ParseSignalResult::Err(error::Error(error::ErrorCode::ParseError, msg, /*showMsgBox=*/false));
+    }
 
     DbcSignal sig;
     sig.name      = m[1].str();
@@ -66,7 +73,9 @@ DbcSignal ParseSignalLine(const std::string& line)
     sig.minVal    = ToDouble(m[8].str());
     sig.maxVal    = ToDouble(m[9].str());
     sig.unit      = m[10].str();
-    return sig;
+    util::Logger::Trace("DbcParser: parsed signal '{}' startBit={} length={} factor={} offset={}",
+        sig.name, sig.startBit, sig.length, sig.factor, sig.offset);
+    return ParseSignalResult::Ok(std::move(sig));
 }
 
 // BO_ <id> <name>: <dlc> <sender>
@@ -80,13 +89,18 @@ bool TryParseMessageHeader(const std::string& line, DbcMessage& msg)
     uint32_t dlc = 0;
     std::string sender;
     if (!(ss >> id >> nameColon >> dlc >> sender))
+    {
+        util::Logger::Warn("DbcParser: malformed BO_ header: '{}'", line);
         return false;
+    }
     msg.id     = id & 0x1FFFFFFFu; // strip extended-frame bit (bit 31 set by some tools)
     msg.name   = nameColon;
     if (!msg.name.empty() && msg.name.back() == ':')
         msg.name.pop_back();
     msg.dlc    = dlc;
     msg.sender = sender;
+    util::Logger::Debug("DbcParser: message header id=0x{:X} name='{}' dlc={} sender='{}'",
+        msg.id, msg.name, msg.dlc, msg.sender);
     return true;
 }
 
@@ -102,16 +116,42 @@ DbcDatabase ParseDbcFile(const std::filesystem::path& path)
     std::ifstream file(path);
     if (!file.is_open())
     {
-        util::Logger::Warn("DbcParser: cannot open '{}'", path.string());
+        util::Logger::Error("DbcParser: cannot open '{}' — file not found or not readable",
+            path.string());
         return db;
     }
+    util::Logger::Debug("DbcParser: opened '{}'", path.string());
 
     DbcMessage* current = nullptr;
     std::string line;
+    uint32_t signalCount = 0;
 
     while (std::getline(file, line))
     {
         const std::string_view trimmed = Trim(line);
+        if (trimmed.empty())
+            continue;
+
+        // Known keyword sections that reset context (VERSION, NS_, BU_, etc.)
+        // Log section entry at Debug level so we can follow the parse progression.
+        const struct { const char* prefix; size_t len; } kSections[] = {
+            {"VERSION", 7}, {"NS_", 3}, {"BU_", 3}, {"VAL_DEF_", 8},
+            {"ENVVAR_", 7}, {"SIG_VALTYPE_", 12},
+        };
+        bool isSectionKeyword = false;
+        for (const auto& s : kSections)
+        {
+            if (trimmed.substr(0, s.len) == s.prefix)
+            {
+                util::Logger::Debug("DbcParser: section '{}' in '{}'",
+                    std::string{trimmed.substr(0, s.len)}, path.filename().string());
+                isSectionKeyword = true;
+                current = nullptr;
+                break;
+            }
+        }
+        if (isSectionKeyword)
+            continue;
 
         if (trimmed.substr(0, 4) == "BO_ ")
         {
@@ -127,24 +167,46 @@ DbcDatabase ParseDbcFile(const std::filesystem::path& path)
 
         if (trimmed.substr(0, 4) == "SG_ " && current)
         {
-            try
+            auto result = ParseSignalLine(std::string{trimmed});
+            if (result.isOk())
             {
-                current->signalDefs.push_back(ParseSignalLine(std::string{trimmed}));
+                current->signalDefs.push_back(result.unwrap());
+                ++signalCount;
             }
-            catch (const std::exception& ex)
+            else
             {
-                util::Logger::Warn("DbcParser: skip malformed signal: {}", ex.what());
+                util::Logger::Warn("DbcParser: skip malformed signal: {}", result.error().what());
             }
             continue;
         }
 
+        if (trimmed.substr(0, 4) == "SG_ " && !current)
+        {
+            util::Logger::Warn("DbcParser: SG_ line outside BO_ block — skipped: '{}'",
+                std::string{trimmed.substr(0, std::min(trimmed.size(), size_t{60}))});
+            continue;
+        }
+
         // Any non-indented line outside a BO_ block resets the current message pointer.
-        if (!trimmed.empty() && trimmed[0] != ' ' && trimmed[0] != '\t' && trimmed.substr(0, 4) != "SG_ ")
+        if (trimmed[0] != ' ' && trimmed[0] != '\t')
+        {
+            // Log truly unknown/unexpected top-level tokens as Warn.
+            const struct { const char* prefix; size_t len; } kKnown[] = {
+                {"BO_TX_BU_", 9}, {"EV_", 3}, {"CM_", 3}, {"BA_DEF_", 7},
+                {"BA_", 3}, {"VAL_", 4}, {"SIG_GROUP_", 10}, {"FILTER", 6},
+            };
+            bool known = false;
+            for (const auto& k : kKnown)
+                if (trimmed.substr(0, k.len) == k.prefix) { known = true; break; }
+            if (!known)
+                util::Logger::Warn("DbcParser: unknown token '{}' — ignored",
+                    std::string{trimmed.substr(0, std::min(trimmed.size(), size_t{40}))});
             current = nullptr;
+        }
     }
 
-    util::Logger::Info("DbcParser: loaded {} messages from '{}'",
-        db.messages.size(), path.string());
+    util::Logger::Info("DbcParser: loaded {} message(s), {} signal(s) from '{}'",
+        db.messages.size(), signalCount, path.string());
     return db;
 }
 

@@ -1,7 +1,9 @@
 #include "DltParser.hpp"
 
+#include "Error.hpp"
 #include "LogEvent.hpp"
 #include "Logger.hpp"
+#include "Result.hpp"
 
 #include <cstring>
 #include <filesystem>
@@ -225,9 +227,14 @@ static std::string DecodeVerbose(const uint8_t* payload, size_t size,
 
 void DltParser::ParseData(const std::filesystem::path& filepath)
 {
+    util::Logger::Debug("[DltParser] opening file: {}", filepath.string());
+
     std::ifstream file(filepath, std::ios::binary);
     if (!file)
+    {
+        util::Logger::Error("[DltParser] cannot open file: {}", filepath.string());
         throw std::runtime_error("DltParser: cannot open: " + filepath.string());
+    }
 
     std::error_code ec;
     const auto size = std::filesystem::file_size(filepath, ec);
@@ -235,24 +242,30 @@ void DltParser::ParseData(const std::filesystem::path& filepath)
     m_currentProgress = 0;
     m_eventId         = 0;
 
-    ParseStream(file);
+    auto result = ParseStream(file);
+    if (result.isErr())
+        util::Logger::Warn("[DltParser] ParseStream returned error: {}", result.error().what());
 }
 
 void DltParser::ParseData(std::istream& input)
 {
+    util::Logger::Debug("[DltParser] parsing from stream");
     m_totalProgress   = 0;
     m_currentProgress = 0;
     m_eventId         = 0;
-    ParseStream(input);
+    auto result = ParseStream(input);
+    if (result.isErr())
+        util::Logger::Warn("[DltParser] ParseStream returned error: {}", result.error().what());
 }
 
 // ---------------------------------------------------------------------------
 // Core streaming loop
 // ---------------------------------------------------------------------------
 
-void DltParser::ParseStream(std::istream& input)
+util::Result<int, error::Error> DltParser::ParseStream(std::istream& input)
 {
     using EventItems = db::LogEvent::EventItems;
+    using R = util::Result<int, error::Error>;
 
     std::vector<std::pair<int, EventItems>> batch;
     batch.reserve(kProgressBatch);
@@ -260,9 +273,14 @@ void DltParser::ParseStream(std::istream& input)
     // ── Detect whether file uses storage headers ──────────────────────────
     uint8_t probe[4] = {};
     input.read(reinterpret_cast<char*>(probe), 4);
-    if (input.gcount() < 4) return;
+    if (input.gcount() < 4)
+    {
+        util::Logger::Debug("[DltParser] stream too short to probe magic — no messages");
+        return R::Ok(0);
+    }
 
     const bool hasStorage = (std::memcmp(probe, kMagic, 4) == 0);
+    util::Logger::Debug("[DltParser] storage headers: {}", hasStorage ? "present" : "absent");
     input.seekg(0, std::ios::beg); // rewind; the loop handles the header
 
     // ── Reusable body buffer ─────────────────────────────────────────────
@@ -363,9 +381,26 @@ void DltParser::ParseStream(std::istream& input)
             ctxId   = ReadId4(body.data() + pos + 6);
             pos    += 10;
 
-            if (type < 4) msgType = kMsgTypes[type];
+            if (type < 4)
+            {
+                msgType = kMsgTypes[type];
+            }
+            else
+            {
+                util::Logger::Warn("[DltParser] unknown message type {} in msg #{}, "
+                    "app={} ctx={}", type, m_eventId, appId, ctxId);
+            }
+
             if (type == DLT_TYPE_LOG && logLvl < 7)
                 level = kLogLevels[logLvl];
+
+            util::Logger::Trace("[DltParser] msg #{}: app={} ctx={} type={} level={} "
+                "verbose={} args={}", m_eventId, appId, ctxId, msgType, level,
+                isVerbose, numArgs);
+        }
+        else
+        {
+            util::Logger::Trace("[DltParser] msg #{}: no extended header, ctr={}", m_eventId, msgCtr);
         }
 
         // --- Payload ---
@@ -437,6 +472,9 @@ void DltParser::ParseStream(std::istream& input)
         NotifyNewEventBatch(std::move(batch));
         NotifyProgressUpdated();
     }
+
+    util::Logger::Info("[DltParser] parse complete: {} message(s) emitted", m_eventId);
+    return R::Ok(m_eventId);
 }
 
 } // namespace parser

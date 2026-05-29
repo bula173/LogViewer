@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Error.hpp"
+#include "Result.hpp"
+
 #include <QAbstractItemModel>
 #include <QString>
 #include <vector>
@@ -16,10 +19,11 @@ namespace ui::qt::ExportManager {
  * @param model  The item model (e.g. EventsTableModel) to read data from.
  * @param rows   View row indices to export (in order).
  * @param path   Destination file path.
- * @return true on success, false if the file could not be opened for writing.
+ * @return Ok on success, Err(IOError) if the file could not be opened for writing.
  */
-bool ToCsv(const QAbstractItemModel& model, const std::vector<int>& rows,
-           const QString& path);
+util::Result<void, error::Error> ToCsv(const QAbstractItemModel& model,
+                                        const std::vector<int>& rows,
+                                        const QString& path);
 
 /**
  * @brief Export the given view rows to a JSON file.
@@ -30,10 +34,11 @@ bool ToCsv(const QAbstractItemModel& model, const std::vector<int>& rows,
  * @param model  The item model to read data from.
  * @param rows   View row indices to export (in order).
  * @param path   Destination file path.
- * @return true on success, false if the file could not be opened for writing.
+ * @return Ok on success, Err(IOError) if the file could not be opened for writing.
  */
-bool ToJson(const QAbstractItemModel& model, const std::vector<int>& rows,
-            const QString& path);
+util::Result<void, error::Error> ToJson(const QAbstractItemModel& model,
+                                         const std::vector<int>& rows,
+                                         const QString& path);
 
 /**
  * @brief Export the given view rows to an XML file.
@@ -45,9 +50,10 @@ bool ToJson(const QAbstractItemModel& model, const std::vector<int>& rows,
  * @param model  The item model to read data from.
  * @param rows   View row indices to export (in order).
  * @param path   Destination file path.
- * @return true on success, false if the file could not be opened for writing.
+ * @return Ok on success, Err(IOError) if the file could not be opened for writing.
  */
-bool ToXml(const QAbstractItemModel& model, const std::vector<int>& rows,
-           const QString& path);
+util::Result<void, error::Error> ToXml(const QAbstractItemModel& model,
+                                        const std::vector<int>& rows,
+                                        const QString& path);
 
 } // namespace ui::qt::ExportManager

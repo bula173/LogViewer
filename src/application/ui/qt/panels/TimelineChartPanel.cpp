@@ -1,6 +1,7 @@
 #include "TimelineChartPanel.hpp"
 
 #include "Config.hpp"
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QAbstractBarSeries>
@@ -94,6 +95,7 @@ void TimelineChartPanel::Refresh()
 
     if (vis.empty())
     {
+        util::Logger::Warn("[TimelineChart] Refresh called with no visible events");
         chart->setTitle(tr("Events Over Time"));
         m_chartView->setChart(chart);
         m_statusLabel->setText(tr("No events"));
@@ -104,12 +106,15 @@ void TimelineChartPanel::Refresh()
     const std::string tsField = DetectTimestampField(m_events, vis);
     if (tsField.empty())
     {
+        util::Logger::Warn("[TimelineChart] No timestamp field detected in {} visible events", vis.size());
         chart->setTitle(tr("Events Over Time (no timestamp field found)"));
         m_chartView->setChart(chart);
         m_statusLabel->setText(tr("No timestamp field detected"));
         m_clearBtn->setEnabled(false);
         return;
     }
+    util::Logger::Debug("[TimelineChart] Refreshing timeline with {} visible events using field '{}'",
+        vis.size(), tsField);
 
     // ── Collect (time, index) pairs ───────────────────────────────────────
     std::vector<std::pair<QDateTime, unsigned long>> timed;
@@ -242,6 +247,8 @@ void TimelineChartPanel::Refresh()
                 if (index >= 0 && index < sz &&
                     !m_bucketEvents[static_cast<size_t>(index)].empty())
                 {
+                    util::Logger::Debug("[TimelineChart] Filtering to bucket {} ({} events)",
+                        index, m_bucketEvents[static_cast<size_t>(index)].size());
                     m_eventsView->SetFilteredEvents(
                         m_bucketEvents[static_cast<size_t>(index)]);
                     m_clearBtn->setEnabled(true);
@@ -250,6 +257,8 @@ void TimelineChartPanel::Refresh()
 
     m_chartView->setChart(chart);
 
+    util::Logger::Info("[TimelineChart] Timeline rendered: {} timestamped events, {} bucket(s)",
+        timed.size(), buckets);
     m_statusLabel->setText(
         tr("%1 events, %2 to %3")
             .arg(timed.size())

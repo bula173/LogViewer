@@ -1,6 +1,7 @@
 #include "SignalPlotPanel.hpp"
 
 #include "EventsContainer.hpp"
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QChart>
@@ -81,6 +82,7 @@ void SignalPlotPanel::Refresh()
 
 void SignalPlotPanel::SetSelectedSignals(const std::vector<std::string>& keys)
 {
+    util::Logger::Debug("[SignalPlot] Selected signals updated: {} signal(s)", keys.size());
     m_selectedSignals = keys;
     RebuildChart();
 }
@@ -117,6 +119,8 @@ void SignalPlotPanel::RebuildChart()
 
     if (m_selectedSignals.empty() || m_events.Size() == 0)
     {
+        util::Logger::Warn("[SignalPlot] No signals available for plotting (signals={}, events={})",
+            m_selectedSignals.size(), m_events.Size());
         chart->setTitle(tr("Signal Plot — select signals in the Signal Browser"));
         m_chartView->setChart(chart);
         m_statusLabel->setText(m_selectedSignals.empty()
@@ -214,6 +218,8 @@ void SignalPlotPanel::RebuildChart()
 
     if (seriesList.empty())
     {
+        util::Logger::Warn("[SignalPlot] No plottable numeric values found for {} selected signal(s)",
+            m_selectedSignals.size());
         chart->setTitle(tr("Signal Plot — no numeric values found for selected signals"));
         m_chartView->setChart(chart);
         m_statusLabel->setText(tr("No plottable values"));
@@ -243,6 +249,8 @@ void SignalPlotPanel::RebuildChart()
     m_chartView->setChart(chart);
 
     const int pts = seriesList.empty() ? 0 : seriesList.front()->count();
+    util::Logger::Info("[SignalPlot] Signal plot updated with {} signal(s), {} point(s){}",
+        seriesList.size(), pts, step > 1 ? " (downsampled)" : "");
     m_statusLabel->setText(
         tr("%1 signal(s), %2 point(s)%3")
             .arg(seriesList.size())

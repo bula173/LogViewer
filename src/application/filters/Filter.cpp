@@ -2,6 +2,9 @@
 #include "Logger.hpp"
 #include "Error.hpp"
 
+#include <algorithm>
+#include <ranges>
+
 namespace filters
 {
 
@@ -39,13 +42,20 @@ bool FilterCondition::matches(const db::LogEvent& event) const
             // For depth 0, use findByKey like the legacy code
             std::string value = event.findByKey(parameterKey);
             if (!value.empty()) {
-                return strategy && strategy->matches(value, pattern, isCaseSensitive);
+                bool result = strategy && strategy->matches(value, pattern, isCaseSensitive);
+                util::Logger::Trace("FilterCondition::matches param key='{}' pattern='{}' value='{}' -> {}",
+                    parameterKey, pattern, value, result);
+                return result;
             }
+            util::Logger::Trace("FilterCondition::matches param key='{}' not found in event", parameterKey);
             return false; // Key not found
         } else {
             // For deeper searches, traverse through the event items
             const auto& items = event.getEventItems();
-            return searchParameterRecursive(items, parameterKey, 0);
+            bool result = searchParameterRecursive(items, parameterKey, 0);
+            util::Logger::Trace("FilterCondition::matches param key='{}' depth={} recursive -> {}",
+                parameterKey, parameterDepth, result);
+            return result;
         }
     } else {
         // Regular column matching
@@ -54,14 +64,20 @@ bool FilterCondition::matches(const db::LogEvent& event) const
             for (const auto& field : event.getEventItems()) {
                 const std::string& value = event.findByKey(field.first);
                 if (strategy && strategy->matches(value, pattern, isCaseSensitive)) {
+                    util::Logger::Trace("FilterCondition::matches wildcard pattern='{}' matched field='{}'",
+                        pattern, field.first);
                     return true;
                 }
             }
+            util::Logger::Trace("FilterCondition::matches wildcard pattern='{}' no field matched", pattern);
             return false;
         } else {
             // Check specific field
             std::string valueToCheck = event.findByKey(columnName);
-            return strategy && strategy->matches(valueToCheck, pattern, isCaseSensitive);
+            bool result = strategy && strategy->matches(valueToCheck, pattern, isCaseSensitive);
+            util::Logger::Trace("FilterCondition::matches col='{}' pattern='{}' value='{}' -> {}",
+                columnName, pattern, valueToCheck, result);
+            return result;
         }
     }
 }
@@ -70,14 +86,24 @@ bool FilterCondition::searchParameterRecursive(
     const std::vector<std::pair<std::string, std::string>>& items,
     const std::string& key, int currentDepth) const
 {
+    util::Logger::Trace("FilterCondition::searchParameterRecursive key='{}' depth={}/{} items={}",
+        key, currentDepth, parameterDepth, items.size());
+
     if (currentDepth > parameterDepth && parameterDepth != 0)
+    {
+        util::Logger::Trace("FilterCondition::searchParameterRecursive depth limit reached, returning false");
         return false;
+    }
 
     for (const auto& item : items) {
         if (item.first == key) {
-            return strategy && strategy->matches(item.second, pattern, isCaseSensitive);
+            bool result = strategy && strategy->matches(item.second, pattern, isCaseSensitive);
+            util::Logger::Trace("FilterCondition::searchParameterRecursive found key='{}' value='{}' -> {}",
+                key, item.second, result);
+            return result;
         }
     }
+    util::Logger::Trace("FilterCondition::searchParameterRecursive key='{}' not found at depth {}", key, currentDepth);
     return false;
 }
 
@@ -193,29 +219,39 @@ bool Filter::matches(const db::LogEvent& event) const
     if (!conditions.empty()) {
         for (const auto& condition : conditions) {
             if (!condition.matches(event)) {
+                util::Logger::Debug("Filter '{}': condition col='{}' pattern='{}' failed -> {}",
+                    name, condition.columnName, condition.pattern, isInverted);
                 return isInverted; // If any condition fails, filter fails (unless inverted)
             }
         }
+        util::Logger::Debug("Filter '{}': all {} condition(s) passed -> {}", name, conditions.size(), !isInverted);
         return !isInverted; // All conditions passed
     }
-    
+
     // Fallback to legacy single-condition logic for backward compatibility
     if (isParameterFilter) {
-        return matchesParameter(event);
+        bool result = matchesParameter(event);
+        util::Logger::Debug("Filter '{}': parameter match key='{}' -> {}", name, parameterKey, result);
+        return result;
     } else {
         if (columnName == "*") {
             // Check all fields
             for (const auto& field : event.getEventItems()) {
                 const std::string& value = event.findByKey(field.first);
                 if (matches(value)) {
+                    util::Logger::Debug("Filter '{}': wildcard matched field='{}'", name, field.first);
                     return true;
                 }
             }
+            util::Logger::Debug("Filter '{}': wildcard pattern='{}' no field matched", name, pattern);
             return false;
         } else {
             // Check specific field
             std::string valueToCheck = event.findByKey(columnName);
-            return matches(valueToCheck);
+            bool result = matches(valueToCheck);
+            util::Logger::Debug("Filter '{}': col='{}' pattern='{}' value='{}' -> {}",
+                name, columnName, pattern, valueToCheck, result);
+            return result;
         }
     }
 }
@@ -223,7 +259,10 @@ bool Filter::matches(const db::LogEvent& event) const
 bool Filter::matchesParameter(const db::LogEvent& event) const
 {
     if (!regex)
+    {
+        util::Logger::Warn("Filter '{}': matchesParameter called but regex is not compiled", name);
         return false;
+    }
 
     // For simple parameter search (depth = 0), just check direct fields
     if (parameterDepth == 0)
@@ -233,13 +272,17 @@ bool Filter::matchesParameter(const db::LogEvent& event) const
         if (!value.empty())
         {
             bool matched = std::regex_search(value, *regex);
-            return isInverted ? !matched : matched;
+            bool result = isInverted ? !matched : matched;
+            util::Logger::Debug("Filter '{}': matchesParameter key='{}' value='{}' -> {}", name, parameterKey, value, result);
+            return result;
         }
+        util::Logger::Debug("Filter '{}': matchesParameter key='{}' not found, isInverted={}", name, parameterKey, isInverted);
         return isInverted; // Not found, so match only if inverted
     }
 
     // For deeper searches, traverse through the event items
     auto items = event.getEventItems();
+    util::Logger::Debug("Filter '{}': matchesParameter recursive key='{}' depth={}", name, parameterKey, parameterDepth);
     return searchParameterRecursive(items, parameterKey, 0);
 }
 
@@ -247,8 +290,14 @@ bool Filter::searchParameterRecursive(
     const std::vector<std::pair<std::string, std::string>>& items,
     const std::string& key, int currentDepth) const
 {
+    util::Logger::Trace("Filter '{}': searchParameterRecursive key='{}' depth={}/{} items={}",
+        name, key, currentDepth, parameterDepth, items.size());
+
     if (currentDepth > parameterDepth)
+    {
+        util::Logger::Trace("Filter '{}': searchParameterRecursive depth limit reached, returning {}", name, isInverted);
         return isInverted;
+    }
 
     for (const auto& item : items)
     {
@@ -256,7 +305,10 @@ bool Filter::searchParameterRecursive(
         if (item.first == key)
         {
             bool matched = std::regex_search(item.second, *regex);
-            return isInverted ? !matched : matched;
+            bool result = isInverted ? !matched : matched;
+            util::Logger::Trace("Filter '{}': searchParameterRecursive found key='{}' value='{}' -> {}",
+                name, key, item.second, result);
+            return result;
         }
 
         // If this item might contain nested objects (JSON-like), parse and
@@ -269,6 +321,8 @@ bool Filter::searchParameterRecursive(
             std::vector<std::pair<std::string, std::string>> nestedItems;
             // Parse item.second into nestedItems (simplified for example)
 
+            util::Logger::Trace("Filter '{}': searchParameterRecursive entering nested JSON-like item '{}'",
+                name, item.first);
             if (searchParameterRecursive(nestedItems, key, currentDepth + 1))
             {
                 return true;
@@ -276,35 +330,38 @@ bool Filter::searchParameterRecursive(
         }
     }
 
+    util::Logger::Trace("Filter '{}': searchParameterRecursive key='{}' not found at depth {}, returning {}",
+        name, key, currentDepth, isInverted);
     return isInverted; // Not found, so match only if inverted
 }
 
 std::vector<unsigned long> Filter::applyToIndices(const std::vector<unsigned long>& inputIndices, const mvc::IModel& model) const
 {
+    util::Logger::Debug("Filter '{}': applyToIndices on {} input indices, {} condition(s)",
+        name, inputIndices.size(), conditions.size());
+
     if (conditions.empty()) {
         // Fallback to legacy logic
         std::vector<unsigned long> result;
-        for (unsigned long index : inputIndices) {
-            const auto& event = model.GetItem(index);
-            if (matches(event)) {
-                result.push_back(index);
-            }
-        }
+        result.reserve(inputIndices.size());
+        std::ranges::copy_if(inputIndices, std::back_inserter(result),
+            [&](unsigned long index) { return matches(model.GetItem(index)); });
+        util::Logger::Debug("Filter '{}': applyToIndices (legacy) matched {} / {} events",
+            name, result.size(), inputIndices.size());
         return result;
     }
 
-    // Sequential filtering for multiple conditions (AND logic)
+    // Sequential AND filtering: remove non-matching entries in-place per condition.
     auto temp = inputIndices;
     for (const auto& condition : conditions) {
-        std::vector<unsigned long> new_temp;
-        for (unsigned long index : temp) {
-            const auto& event = model.GetItem(index);
-            if (condition.matches(event)) {
-                new_temp.push_back(index);
-            }
-        }
-        temp = std::move(new_temp);
+        const auto before = temp.size();
+        std::erase_if(temp, [&](unsigned long index) {
+            return !condition.matches(model.GetItem(index));
+        });
+        util::Logger::Debug("Filter '{}': condition col='{}' pattern='{}' kept {} / {} events",
+            name, condition.columnName, condition.pattern, temp.size(), before);
     }
+    util::Logger::Debug("Filter '{}': applyToIndices final result: {} events", name, temp.size());
     return temp;
 }
 
@@ -427,10 +484,11 @@ void Filter::compile()
         regex = std::make_shared<std::regex>(pattern,
             isCaseSensitive ? std::regex::ECMAScript
                             : std::regex::ECMAScript | std::regex::icase);
+        util::Logger::Debug("Filter '{}': compiled pattern='{}' caseSensitive={}", name, pattern, isCaseSensitive);
     }
     catch (const std::regex_error& e)
     {
-        util::Logger::Error("Invalid regex pattern '{}': {}", pattern, e.what());
+        util::Logger::Error("Filter '{}': invalid regex pattern '{}': {}", name, pattern, e.what());
         regex = nullptr;
     }
 }

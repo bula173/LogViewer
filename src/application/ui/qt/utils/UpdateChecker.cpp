@@ -193,6 +193,8 @@ void UpdateChecker::OnReleaseReply(QNetworkReply* reply)
     }
 
     // Step 2: fetch the manifest.
+    util::Logger::Debug("[UpdateChecker] Fetching plugin manifest from {}",
+                        manifestUrl.toStdString());
     QUrl manifestQUrl(manifestUrl);
     QNetworkRequest req{manifestQUrl};
     req.setRawHeader("User-Agent",
@@ -236,6 +238,8 @@ void UpdateChecker::OnManifestReply(QNetworkReply* reply)
     }
 
     const QJsonArray plugins = doc.object().value(QStringLiteral("plugins")).toArray();
+    util::Logger::Debug("[UpdateChecker] Plugin manifest parsed: {} plugin entries",
+                        plugins.size());
     const QString platform   = PlatformId();
     auto& pm = plugin::PluginManager::GetInstance();
 
@@ -359,6 +363,9 @@ void UpdateChecker::DoPluginDownload(const updates::PluginUpdateInfo& info,
             return;
         }
     }
+
+    if (!info.sha256.empty())
+        util::Logger::Debug("[UpdateChecker] Plugin {} checksum verified OK", info.id);
 
     // Write to the app-local data directory (not the system Temp folder).
     // Using TempLocation triggers Windows Defender's dropper heuristic:
