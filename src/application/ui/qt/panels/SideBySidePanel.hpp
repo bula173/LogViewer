@@ -39,6 +39,12 @@ public:
     explicit SideBySidePanel(QWidget* parent = nullptr);
     ~SideBySidePanel() override;
 
+    void OpenLeft(const std::filesystem::path& path);
+    void OpenRight(const std::filesystem::path& path);
+
+signals:
+    void CloseRequested();
+
 private slots:
     void OnOpenLeftFile();
     void OnOpenRightFile();
@@ -61,6 +67,7 @@ private:
 
     // ── Loading ─────────────────────────────────────────────────────────────
     void LoadFile(bool isLeft);
+    void LoadFileDirect(bool isLeft, const std::filesystem::path& path);
     void StartAsyncLoad(bool isLeft, std::unique_ptr<parser::IDataParser> parser,
                         const std::filesystem::path& path);
 
