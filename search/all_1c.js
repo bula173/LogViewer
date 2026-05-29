@@ -214,7 +214,7 @@ var searchData=
   ['strategy_20pattern_211',['Strategy Pattern',['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md137',1,'']]],
   ['strategy_20pattern_20✅_212',['Strategy Pattern ✅',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md374',1,'']]],
   ['strategy_20update_213',['Event Merge Strategy Update',['../d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html',1,'']]],
-  ['string_214',['string',['../d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdfa24fab97fc6276f6c555e22ff6bcac851',1,'parser::EvlogParser::STRING'],['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ea27118326006d3829667a400ad23d5d98',1,'parser::EvlogTemplateField::String']]],
+  ['string_214',['string',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ea27118326006d3829667a400ad23d5d98',1,'parser::EvlogTemplateField::String'],['../d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdfa24fab97fc6276f6c555e22ff6bcac851',1,'parser::EvlogParser::STRING']]],
   ['string_20handling_215',['String Handling',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md391',1,'']]],
   ['string_20returns_20malloc_20pattern_216',['String Returns (Malloc Pattern)',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md677',1,'']]],
   ['stripcomment_217',['StripComment',['../d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443',1,'parser']]],
