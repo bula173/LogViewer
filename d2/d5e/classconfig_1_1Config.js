@@ -46,7 +46,5 @@ var classconfig_1_1Config =
     [ "m_fieldTranslator", "d2/d5e/classconfig_1_1Config.html#ad191f2c5325600142bd2d0f0acc90195", null ],
     [ "m_logPath", "d2/d5e/classconfig_1_1Config.html#af67b2640145b4c20eb9a401a51421b57", null ],
     [ "typeFilterField", "d2/d5e/classconfig_1_1Config.html#a163a9f5e859fad135fb4e0e66403177e", null ],
-    [ "updates", "d2/d5e/classconfig_1_1Config.html#a7fa30bf526d61877ae555a0c8ea55bde", null ],
-    [ "xmlEventElement", "d2/d5e/classconfig_1_1Config.html#a8e683d74f2805bec9b2b289f672fa025", null ],
-    [ "xmlRootElement", "d2/d5e/classconfig_1_1Config.html#ab59b95820df7b0fa4cc38cf64dd90cc5", null ]
+    [ "updates", "d2/d5e/classconfig_1_1Config.html#a7fa30bf526d61877ae555a0c8ea55bde", null ]
 ];

@@ -145,16 +145,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive parsing notifications.  <br /></td></tr>
 <tr class="separator:abda83b8d68f9be83f416f7ae685cea6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2b109cb3475dc7dec15198f1a184963" id="r_ac2b109cb3475dc7dec15198f1a184963"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#ac2b109cb3475dc7dec15198f1a184963">UnregisterObserver</a> (<a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> *observer)</td></tr>
-<tr class="memdesc:ac2b109cb3475dc7dec15198f1a184963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a previously registered observer.  <br /></td></tr>
 <tr class="separator:ac2b109cb3475dc7dec15198f1a184963"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eb5f01158daf2c64c0e9d7e45ba4d5e" id="r_a7eb5f01158daf2c64c0e9d7e45ba4d5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e">NotifyNewEvent</a> (<a class="el" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> &amp;&amp;event)</td></tr>
-<tr class="memdesc:a7eb5f01158daf2c64c0e9d7e45ba4d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about a newly found event.  <br /></td></tr>
 <tr class="separator:a7eb5f01158daf2c64c0e9d7e45ba4d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a596df39e4d90cad4eb364aa5382ab51c" id="r_a596df39e4d90cad4eb364aa5382ab51c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c">NotifyProgressUpdated</a> ()</td></tr>
-<tr class="memdesc:a596df39e4d90cad4eb364aa5382ab51c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about parsing progress updates.  <br /></td></tr>
 <tr class="separator:a596df39e4d90cad4eb364aa5382ab51c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac66a6d032e95fb5c0f26695e2c1c5db9" id="r_ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9">NotifyNewEventBatch</a> (std::vector&lt; std::pair&lt; int, <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &gt; &gt; &amp;&amp;eventBatch)</td></tr>
-<tr class="memdesc:ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifies all observers about a batch of newly found events.  <br /></td></tr>
 <tr class="separator:ac66a6d032e95fb5c0f26695e2c1c5db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
@@ -171,7 +167,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a3bfbf717fb1a982e89d7da478ccf97d6" id="r_a3bfbf717fb1a982e89d7da478ccf97d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/de9/classparser_1_1DltParser.html#a3bfbf717fb1a982e89d7da478ccf97d6">m_eventId</a> {0}</td></tr>
 <tr class="separator:a3bfbf717fb1a982e89d7da478ccf97d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85fc1a7ee1778b5c8cbaf144886b362f" id="r_a85fc1a7ee1778b5c8cbaf144886b362f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a85fc1a7ee1778b5c8cbaf144886b362f">observers</a></td></tr>
-<tr class="memdesc:a85fc1a7ee1778b5c8cbaf144886b362f"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of registered observers.  <br /></td></tr>
 <tr class="separator:a85fc1a7ee1778b5c8cbaf144886b362f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -265,17 +260,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Notifies all observers about a newly found event. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>The new event to report (moved to avoid copying) </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section note"><dt>Note</dt><dd>This method should be called by derived classes when events are discovered </dd></dl>
-<p>Efficient event distribution to multiple observers.</p>
-<p>Creates copies for all observers except the last one, then moves the original to the last observer to minimize unnecessary copying.</p>
-
 </div>
 </div>
 <a id="ac66a6d032e95fb5c0f26695e2c1c5db9" name="ac66a6d032e95fb5c0f26695e2c1c5db9"></a>
@@ -301,23 +285,12 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Notifies all observers about a batch of newly found events. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">eventBatch</td><td>Vector of (id, items) pairs representing the events </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section note"><dt>Note</dt><dd>This is more efficient than calling NotifyNewEvent multiple times </dd></dl>
-<p>Efficient batch event distribution with copy optimization.</p>
-<p>Similar to NotifyNewEvent, creates copies for all observers except the last one to minimize memory allocation and copying overhead.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph.png" border="0" usemap="#ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" alt=""/></div>
 <map name="ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" id="ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph">
-<area shape="rect" title="Notifies all observers about a batch of newly found events." alt="" coords="448,138,620,178"/>
+<area shape="rect" title=" " alt="" coords="448,138,620,178"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a0e019323b587d204f1c323b648e49069" title=" " alt="" coords="200,5,400,31"/>
 <area shape="poly" title=" " alt="" coords="501,130,455,90,399,52,352,33,354,28,401,48,458,86,505,126"/>
 <area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="6,19,151,59"/>
@@ -370,17 +343,12 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Notifies all observers about parsing progress updates. </p>
-<dl class="section note"><dt>Note</dt><dd>This method should be called periodically by derived classes during parsing </dd></dl>
-<p>Simple progress notification to all registered observers.</p>
-<p>Iterates through all observers and calls their ProgressUpdated method. Null pointer checking ensures robustness against invalid observers.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph.png" border="0" usemap="#ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" alt=""/></div>
 <map name="ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" id="ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph">
-<area shape="rect" title="Notifies all observers about parsing progress updates." alt="" coords="464,138,644,178"/>
+<area shape="rect" title=" " alt="" coords="464,138,644,178"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a2ca85c636838cb16234df98c7518de5e" title=" " alt="" coords="200,5,416,31"/>
 <area shape="poly" title=" " alt="" coords="520,130,473,90,415,52,365,33,367,28,417,48,476,86,524,126"/>
 <area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="6,19,151,59"/>
@@ -469,9 +437,9 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="331,223,378,214,509,201,640,193,850,189,850,194,640,198,510,206,379,220,331,228"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c" title="Hex dump of up to maxBytes bytes (space&#45;separated uppercase)." alt="" coords="401,230,537,255"/>
 <area shape="poly" title=" " alt="" coords="331,240,387,240,387,245,331,245"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title="Notifies all observers about a batch of newly found events." alt="" coords="383,280,555,320"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="383,280,555,320"/>
 <area shape="poly" title=" " alt="" coords="332,259,383,273,382,279,330,264"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title="Notifies all observers about parsing progress updates." alt="" coords="379,344,559,384"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="379,344,559,384"/>
 <area shape="poly" title=" " alt="" coords="286,260,328,295,380,329,393,336,391,341,377,334,325,299,283,264"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a82199c4cc8f957704bb919e1173cbd64" title="Extract a null&#45;padded 4&#45;char ID (ECU/App/Ctx) as a trimmed std::string." alt="" coords="407,408,531,434"/>
 <area shape="poly" title=" " alt="" coords="275,261,315,327,345,363,380,394,395,402,392,407,377,398,341,367,311,330,270,264"/>
@@ -551,9 +519,9 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="331,223,378,214,509,201,640,193,850,189,850,194,640,198,510,206,379,220,331,228"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c" title="Hex dump of up to maxBytes bytes (space&#45;separated uppercase)." alt="" coords="401,230,537,255"/>
 <area shape="poly" title=" " alt="" coords="331,240,387,240,387,245,331,245"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title="Notifies all observers about a batch of newly found events." alt="" coords="383,280,555,320"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="383,280,555,320"/>
 <area shape="poly" title=" " alt="" coords="332,259,383,273,382,279,330,264"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title="Notifies all observers about parsing progress updates." alt="" coords="379,344,559,384"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="379,344,559,384"/>
 <area shape="poly" title=" " alt="" coords="286,260,328,295,380,329,393,336,391,341,377,334,325,299,283,264"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a82199c4cc8f957704bb919e1173cbd64" title="Extract a null&#45;padded 4&#45;char ID (ECU/App/Ctx) as a trimmed std::string." alt="" coords="407,408,531,434"/>
 <area shape="poly" title=" " alt="" coords="275,261,315,327,345,363,380,394,395,402,392,407,377,398,341,367,311,330,270,264"/>
@@ -614,9 +582,9 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="144,223,192,214,323,201,454,193,664,189,664,194,454,198,323,206,192,220,145,228"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c" title="Hex dump of up to maxBytes bytes (space&#45;separated uppercase)." alt="" coords="214,230,350,255"/>
 <area shape="poly" title=" " alt="" coords="144,240,201,240,201,245,144,245"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title="Notifies all observers about a batch of newly found events." alt="" coords="196,280,368,320"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="196,280,368,320"/>
 <area shape="poly" title=" " alt="" coords="145,259,197,273,195,279,143,264"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title="Notifies all observers about parsing progress updates." alt="" coords="192,344,372,384"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="192,344,372,384"/>
 <area shape="poly" title=" " alt="" coords="99,260,141,295,193,329,207,336,204,341,191,334,138,299,96,264"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#a82199c4cc8f957704bb919e1173cbd64" title="Extract a null&#45;padded 4&#45;char ID (ECU/App/Ctx) as a trimmed std::string." alt="" coords="220,408,344,434"/>
 <area shape="poly" title=" " alt="" coords="88,261,128,327,158,363,194,394,208,402,206,407,190,398,154,367,124,330,84,264"/>
@@ -711,17 +679,6 @@ Duplicate observers are automatically prevented </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Unregisters a previously registered observer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">observer</td><td>Pointer to the observer to remove </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section note"><dt>Note</dt><dd>It's safe to call this method with observers that weren't registered </dd></dl>
-<p>Removes observer from the notification list.</p>
-<p>Uses std::find to locate the observer and std::vector::erase to remove it. Safe to call with null pointers or unregistered observers.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -810,8 +767,6 @@ Duplicate observers are automatically prevented </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>List of registered observers. </p>
 
 </div>
 </div>

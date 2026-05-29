@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('da/d80/classmvc_1_1IModelObservable.ht
 </div><!--header-->
 <div class="contents">
 
-<p>Improved <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html" title="Interface for model components in the MVC architecture.">IModel</a> with weak_ptr observers for automatic cleanup.  
+<p>Improved <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">IModel</a> with weak_ptr observers for automatic cleanup.  
  <a href="../../da/d80/classmvc_1_1IModelObservable.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../d9/dfd/IModelObservable_8hpp_source.html">IModelObservable.hpp</a>&gt;</code></p>
@@ -165,7 +165,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6ece5d75ce9c24d41e27a1db464f7426"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Improved <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html" title="Interface for model components in the MVC architecture.">IModel</a> with weak_ptr observers for automatic cleanup. </p>
+<div class="textblock"><p>Improved <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">IModel</a> with weak_ptr observers for automatic cleanup. </p>
 <p>This interface replaces the raw pointer-based observer pattern with weak_ptr-based observers that automatically detect and remove destroyed views. It provides thread-safe observer notifications with reader-writer locking.</p>
 <dl class="section user"><dt>Thread Safety</dt><dd>All observer management and notification methods are thread-safe using shared_mutex for concurrent reads and exclusive writes.</dd></dl>
 <dl class="section user"><dt>Lifetime Management</dt><dd><ul>
@@ -179,7 +179,7 @@ Private Attributes</h2></td></tr>
 </div><!-- fragment --></dd></dl>
 <p>New API (recommended): </p><div class="fragment"><div class="line"><span class="keyword">auto</span> view = std::make_shared&lt;MyView&gt;();</div>
 <div class="line">model-&gt;RegisterView(view);  <span class="comment">// Shared pointer - safe!</span></div>
-</div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="../../dc/d2d/classmvc_1_1IModel.html" title="Interface for model components in the MVC architecture.">IModel</a> for backward compatibility interface </dd></dl>
+</div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">IModel</a> for backward compatibility interface </dd></dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aad040bba908aac23d9f30971989815cf" name="aad040bba908aac23d9f30971989815cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad040bba908aac23d9f30971989815cf">&#9670;&#160;</a></span>ViewPtr</h2>

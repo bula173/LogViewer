@@ -28,10 +28,12 @@ var searchData=
   ['updateitemhighlighteditorsfromselection_25',['UpdateItemHighlightEditorsFromSelection',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a622c1c97b5f54739db6d7dca26c7fac9',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightpreview_26',['UpdateItemHighlightPreview',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a5dd1c7acee115a5a46502b61bfe70b0c',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightswatches_27',['UpdateItemHighlightSwatches',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a6eeb5d53673e15605e0620284077c458',1,'ui::qt::StructuredConfigDialog']]],
-  ['updateplugindetails_28',['UpdatePluginDetails',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac40243f1e64ba54966ca20a740c51eb0',1,'ui::qt::StructuredConfigDialog']]],
-  ['updateprogressvalue_29',['updateprogressvalue',['../d3/d1f/classui_1_1IMainWindowView.html#a505eef107718d0e4130be9e8dacfe921',1,'ui::IMainWindowView::UpdateProgressValue()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9fc925d7415081537e15a6dac536531a',1,'ui::qt::MainWindow::UpdateProgressValue()']]],
-  ['updatescenariocombo_30',['UpdateScenarioCombo',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a541f7f8bbe3d8be642cce2a620853a4c',1,'ui::qt::ScenariosPanel']]],
-  ['updatestatustext_31',['updatestatustext',['../d3/d1f/classui_1_1IMainWindowView.html#a4e97c4d13b5381a7a5bb626282deb366',1,'ui::IMainWindowView::UpdateStatusText()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5',1,'ui::qt::MainWindow::UpdateStatusText()']]],
-  ['updatetypefilters_32',['UpdateTypeFilters',['../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6',1,'ui::MainWindowPresenter']]],
-  ['userlayouts_33',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
+  ['updatemanualcontrols_28',['UpdateManualControls',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#aff557759c66ac3189ad323d46e7324f6',1,'ui::qt::SideBySidePanel']]],
+  ['updateplugindetails_29',['UpdatePluginDetails',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac40243f1e64ba54966ca20a740c51eb0',1,'ui::qt::StructuredConfigDialog']]],
+  ['updateprogressvalue_30',['updateprogressvalue',['../d3/d1f/classui_1_1IMainWindowView.html#a505eef107718d0e4130be9e8dacfe921',1,'ui::IMainWindowView::UpdateProgressValue()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9fc925d7415081537e15a6dac536531a',1,'ui::qt::MainWindow::UpdateProgressValue()']]],
+  ['updatescenariocombo_31',['UpdateScenarioCombo',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a541f7f8bbe3d8be642cce2a620853a4c',1,'ui::qt::ScenariosPanel']]],
+  ['updatestatustext_32',['updatestatustext',['../d3/d1f/classui_1_1IMainWindowView.html#a4e97c4d13b5381a7a5bb626282deb366',1,'ui::IMainWindowView::UpdateStatusText()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5',1,'ui::qt::MainWindow::UpdateStatusText()']]],
+  ['updatesyncstatus_33',['UpdateSyncStatus',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab8df81b25378f325737c6c8ba89877fe',1,'ui::qt::SideBySidePanel']]],
+  ['updatetypefilters_34',['UpdateTypeFilters',['../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6',1,'ui::MainWindowPresenter']]],
+  ['userlayouts_35',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
 ];

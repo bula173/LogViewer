@@ -219,6 +219,7 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_eventsGetEventJsonFn&#160;:&#160;<a class="el" href="d3/d67/classplugin_1_1PluginManager.html#a692a25d82b3163004759bde373c70eae">plugin::PluginManager</a></li>
 <li>m_eventsGetSizeFn&#160;:&#160;<a class="el" href="d3/d67/classplugin_1_1PluginManager.html#aa632b042f52a56fe8692a63b686ce1fa">plugin::PluginManager</a></li>
 <li>m_eventsListView&#160;:&#160;<a class="el" href="d5/dc9/classui_1_1MainWindowPresenter.html#a1d18799442090edcb702267e8196b95c">ui::MainWindowPresenter</a></li>
+<li>m_eventsStack&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a89b5cc18badaaa756821370ed8fcf307">ui::qt::MainWindow</a></li>
 <li>m_eventsTable&#160;:&#160;<a class="el" href="dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a2d64fbed9a47fe6c333124d068200d0d">ui::qt::ScenariosPanel</a></li>
 <li>m_eventsView&#160;:&#160;<a class="el" href="d2/d40/classui_1_1qt_1_1ActorsPanel.html#a7d5cd4a58deda0dc8890c75503ac9591">ui::qt::ActorsPanel</a>, <a class="el" href="d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#acd00d72a4a3bad75cfafb44cd82fc7b0">ui::qt::BookmarksPanel</a>, <a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a5768f38133db7a8f531bc2bc7f9e2efe">ui::qt::MainWindow</a>, <a class="el" href="dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#aaa337ea6bf28077002c30e56ce6a0f30">ui::qt::PatternAnalysisPanel</a>, <a class="el" href="dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ab1c147adf580fc1bbcd96e66f81dd4a0">ui::qt::ScenariosPanel</a>, <a class="el" href="d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a726ea0dab9131964f54dac5725e2a6f3">ui::qt::StatsSummaryPanel</a>, <a class="el" href="d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a753b04ebbeecbd370f7a97902a7fe6b7">ui::qt::TimelineChartPanel</a>, <a class="el" href="d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a8c328df090eb4af6fa44e30fdd6ef84e">ui::qt::TimeRangeFilterPanel</a>, <a class="el" href="dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a866b78c4ee495c56fa74f51bdb28583c">ui::qt::TraceViewerPanel</a></li>
 <li>m_evlogTemplateDir&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#afac2c55f19b7f3991bfa2aeea335aacd">ui::qt::MainWindow</a></li>
@@ -241,7 +242,6 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_filtersPanel&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#ad882528ace9ce73ec108e8bac5957a06">ui::qt::MainWindow</a></li>
 <li>m_filterTabs&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a44b2138636bed3865339069fa8e69230">ui::qt::MainWindow</a></li>
 <li>m_filterTypeCombo&#160;:&#160;<a class="el" href="dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#ab4433a2a305eb30ae2744494d0882065">ui::qt::FilterEditorDialog</a></li>
-<li>m_filterWatcher&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a42aecc7592c85463dcae4f14dfb75376">ui::qt::MainWindow</a></li>
 <li>m_formatStatsGroup&#160;:&#160;<a class="el" href="d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a0e921353c328cb0da911aa5f811396f5">ui::qt::StatsSummaryPanel</a></li>
 <li>m_formatStatsTable&#160;:&#160;<a class="el" href="d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#aac398d71ae56c05a05da61246f3cb3c2">ui::qt::StatsSummaryPanel</a></li>
 <li>m_fromEdit&#160;:&#160;<a class="el" href="d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a46906a0f54c17af9aa5b54490bec5530">ui::qt::TimeRangeFilterPanel</a></li>
@@ -280,7 +280,16 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_lastUpdateResult&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a386c1018ffc3a03d14e60f61e8648263">ui::qt::MainWindow</a></li>
 <li>m_layoutManager&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#ac5b3d28f1d49be407425adac1172fb19">ui::qt::MainWindow</a></li>
 <li>m_layoutsMenu&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a9456f521ce2e83de20cd9e68b4f2bf63">ui::qt::MainWindow</a></li>
+<li>m_leftEvents&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a2ac9ea4f305935dfd8e9f7193453a7fb">ui::qt::SideBySidePanel</a></li>
+<li>m_leftFileLabel&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a83ad3e138feff4456a762721944ad60b">ui::qt::SideBySidePanel</a></li>
+<li>m_leftJob&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a1e1ed19951e2ba541ca07eef5ef30e3e">ui::qt::SideBySidePanel</a></li>
+<li>m_leftOpenBtn&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a874a68430ca85d3d827f7d32480c8836">ui::qt::SideBySidePanel</a></li>
+<li>m_leftRefRow&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ad8a1f15563e1fa5dbbf6bf1addaaf659">ui::qt::SideBySidePanel</a></li>
+<li>m_leftRefSet&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a2141edc5771b8fdab7d7e8f5f0358837">ui::qt::SideBySidePanel</a></li>
+<li>m_leftRefTs&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a25d007db7421302c16ac4a948d3302db">ui::qt::SideBySidePanel</a></li>
 <li>m_leftSplitter&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#ad6e475a7b23e91f0990e40006d75f721">ui::qt::MainWindow</a></li>
+<li>m_leftView&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ad1ef9bcce55503662aa3de8de7c3a753">ui::qt::SideBySidePanel</a></li>
+<li>m_leftWatcher&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a15c75e35ea930f3c82344127c27c299b">ui::qt::SideBySidePanel</a></li>
 <li>m_list&#160;:&#160;<a class="el" href="da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a369409fd83c20e8837ee243f3f5efe10">ui::qt::FilterProfilesPanel</a></li>
 <li>m_listWidget&#160;:&#160;<a class="el" href="d3/df9/classui_1_1qt_1_1TypeFilterView.html#a5e0ae0b3b9b13fbdda451ea95746c17f">ui::qt::TypeFilterView</a></li>
 <li>m_loadBtn&#160;:&#160;<a class="el" href="da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a22bd452888c81c5555a1b7a1d85b66ed">ui::qt::FilterProfilesPanel</a></li>
@@ -377,8 +386,17 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_replaceRadio&#160;:&#160;<a class="el" href="d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html#adac4b1f3ed8bceab986bc86a7275e802">ui::qt::LogFileLoadDialog</a></li>
 <li>m_result&#160;:&#160;<a class="el" href="d5/d32/classui_1_1qt_1_1UpdateDialog.html#ab7a9f1e962e9bda612f2791abe399382">ui::qt::UpdateDialog</a></li>
 <li>m_reverseFilteredIndices&#160;:&#160;<a class="el" href="d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ad9f4907f0dfc5da4ddef319f71c9cccc">ui::qt::EventsTableModel</a></li>
+<li>m_rightEvents&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac2529869b6bf609ee38c538fdb7491b2">ui::qt::SideBySidePanel</a></li>
+<li>m_rightFileLabel&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#afc0f1aeeb6d007ad20d161597097f3c6">ui::qt::SideBySidePanel</a></li>
+<li>m_rightJob&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a298f970b2b139076852e707d85495ab1">ui::qt::SideBySidePanel</a></li>
+<li>m_rightOpenBtn&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#aba71de7a2ada3f363df6d2ef5d83b9f7">ui::qt::SideBySidePanel</a></li>
+<li>m_rightRefRow&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a6722d78563ec5dcdac3371d5925fce5a">ui::qt::SideBySidePanel</a></li>
+<li>m_rightRefSet&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a54e95d608759fa36c6cbacbe2b7cf7d4">ui::qt::SideBySidePanel</a></li>
+<li>m_rightRefTs&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a79b58c70d5ad2c592a5bfb32ba8b94a2">ui::qt::SideBySidePanel</a></li>
 <li>m_rightSplitter&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#ae1f1db41052368a103ab305584d9e6df">ui::qt::MainWindow</a></li>
 <li>m_rightTabs&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#adcb266d90723e64d566cb509fc8c25cd">ui::qt::MainWindow</a></li>
+<li>m_rightView&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac00190d54bfaeac49a980cf4643f44b3">ui::qt::SideBySidePanel</a></li>
+<li>m_rightWatcher&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab04df0fc431098a8645b96656970ba6e">ui::qt::SideBySidePanel</a></li>
 <li>m_saveAsButton&#160;:&#160;<a class="el" href="d8/db0/classui_1_1qt_1_1FiltersPanel.html#aff63831c8da45baa93bba62f574e9ae8">ui::qt::FiltersPanel</a></li>
 <li>m_saveBtn&#160;:&#160;<a class="el" href="da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#add95097d0d4c678fcc50ed51b71986c2">ui::qt::FilterProfilesPanel</a></li>
 <li>m_saveButton&#160;:&#160;<a class="el" href="d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a07b7719b1d3ffdd8fc455b7e968226cf">ui::qt::ConfigEditorDialog</a></li>
@@ -400,7 +418,10 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_selectedPluginRow&#160;:&#160;<a class="el" href="d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ac1e625bc1fa3c4c87e4b5798acd41f68">ui::qt::StructuredConfigDialog</a></li>
 <li>m_selectedSignals&#160;:&#160;<a class="el" href="d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#a47fc2a62891846a944e8fb935df27ecf">ui::qt::SignalPlotPanel</a></li>
 <li>m_seqDiagBtn&#160;:&#160;<a class="el" href="d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae96d1d5f544d51377c0d5f6ec11a2c37">ui::qt::ActorsPanel</a></li>
+<li>m_setLeftRefBtn&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a3e9b32671f313dd31b74d92d25852571">ui::qt::SideBySidePanel</a></li>
 <li>m_setLicenseButton&#160;:&#160;<a class="el" href="d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a48ad4573f0eefce8c44a34cb6ce5f31e">ui::qt::StructuredConfigDialog</a></li>
+<li>m_setRightRefBtn&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab43ec0e2cb725ebaf135131b9d86bdb2">ui::qt::SideBySidePanel</a></li>
+<li>m_sideBySidePanel&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#ac7395e68142c32999765a40c848285bd">ui::qt::MainWindow</a></li>
 <li>m_signalBrowserDock&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ba78833a098e578dcd9418f16f49924">ui::qt::MainWindow</a></li>
 <li>m_signalPlotPanel&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#aa1ae70e024f7b8827a91a86128c34ab1">ui::qt::MainWindow</a></li>
 <li>m_source&#160;:&#160;<a class="el" href="d1/d00/classdb_1_1LogEvent.html#a32ded1250910fcd9f7aebd1e0bae599e">db::LogEvent</a></li>
@@ -410,6 +431,11 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_strategy&#160;:&#160;<a class="el" href="d9/d12/classfilters_1_1Filter.html#a8ef3ff478220e62afc4aced751461c85">filters::Filter</a></li>
 <li>m_summaryTable&#160;:&#160;<a class="el" href="d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a8c21de4632155c6998db7084ed9ae4c9">ui::qt::StatsSummaryPanel</a></li>
 <li>m_symbolName&#160;:&#160;<a class="el" href="d9/d75/classplugin_1_1FunctionRegistry.html#a8a9af584bc65173344a2ff5bab4c691f">plugin::FunctionRegistry&lt; FnType &gt;</a></li>
+<li>m_syncInProgress&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ae472b3e289f8c3a05b9324fc2dbd4831">ui::qt::SideBySidePanel</a></li>
+<li>m_syncMode&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a47f354dd4f659c828f15037cf8fbf988">ui::qt::SideBySidePanel</a></li>
+<li>m_syncModeCombo&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a2f10b14b5edad56dad05a2807b295330">ui::qt::SideBySidePanel</a></li>
+<li>m_syncOffset&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a9c0b5dec9f5e7a4be320dcf01ba802e4">ui::qt::SideBySidePanel</a></li>
+<li>m_syncStatusLabel&#160;:&#160;<a class="el" href="df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a5613b35af644ea669f164a1485dc4e6a">ui::qt::SideBySidePanel</a></li>
 <li>m_table&#160;:&#160;<a class="el" href="dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#acdc00fa0551c57c98a8a4661133b4568">ui::qt::ActorDefinitionsPanel</a>, <a class="el" href="d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#af0669a08749256e7e9b40b8ecd9c59ea">ui::qt::BookmarksPanel</a>, <a class="el" href="d8/db0/classui_1_1qt_1_1FiltersPanel.html#a894bd98f4cfe3ed5cf772538b25d310a">ui::qt::FiltersPanel</a></li>
 <li>m_tabs&#160;:&#160;<a class="el" href="dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a6cbd617e7bbac5242dd1f296d84babdb">ui::qt::PatternAnalysisPanel</a>, <a class="el" href="d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ae2bbc98030c6972dd6c392e0e98e0de4">ui::qt::StructuredConfigDialog</a></li>
 <li>m_templateMatches&#160;:&#160;<a class="el" href="dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a435b11b95be4c69f8abc5e1672265166">ui::qt::PatternAnalysisPanel</a></li>
@@ -442,8 +468,6 @@ $(document).ready(function(){initNavTree('functions_m.html',''); initResizable()
 <li>m_visibleColumnIndices&#160;:&#160;<a class="el" href="d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a91b3c0fae90ee2b60e08651f3eadd895">ui::qt::EventsTableModel</a></li>
 <li>m_weakViews&#160;:&#160;<a class="el" href="da/d80/classmvc_1_1IModelObservable.html#a6ece5d75ce9c24d41e27a1db464f7426">mvc::IModelObservable</a></li>
 <li>m_windowSpin&#160;:&#160;<a class="el" href="dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a57821f9efa52299a75fddfb90ecb1a06">ui::qt::PatternAnalysisPanel</a></li>
-<li>m_xmlEventEdit&#160;:&#160;<a class="el" href="d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#aa286d3f5fafc3edab58a4d831dd683b2">ui::qt::StructuredConfigDialog</a></li>
-<li>m_xmlRootEdit&#160;:&#160;<a class="el" href="d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a2e0d87c613b81510eeae59fcf0b23a28">ui::qt::StructuredConfigDialog</a></li>
 <li>machine&#160;:&#160;<a class="el" href="d1/d14/structVersion_1_1Version.html#af2ad22cf8c4023807460222a602400c8">Version::Version</a></li>
 <li>MainController()&#160;:&#160;<a class="el" href="d5/d44/classmvc_1_1MainController.html#a8dfdc2915474d407129d939f4e9e8639">mvc::MainController</a></li>
 <li>MainWindow()&#160;:&#160;<a class="el" href="d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db">ui::qt::MainWindow</a></li>

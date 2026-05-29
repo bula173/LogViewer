@@ -5,5 +5,6 @@ var searchData=
   ['updatechecker_2ehpp_2',['UpdateChecker.hpp',['../da/d28/UpdateChecker_8hpp.html',1,'']]],
   ['updatedialog_2ecpp_3',['UpdateDialog.cpp',['../d5/d7f/UpdateDialog_8cpp.html',1,'']]],
   ['updatedialog_2ehpp_4',['UpdateDialog.hpp',['../d9/d22/UpdateDialog_8hpp.html',1,'']]],
-  ['updateinfo_2ehpp_5',['UpdateInfo.hpp',['../dd/d84/UpdateInfo_8hpp.html',1,'']]]
+  ['updateinfo_2ehpp_5',['UpdateInfo.hpp',['../dd/d84/UpdateInfo_8hpp.html',1,'']]],
+  ['user_5fmanual_2emd_6',['USER_MANUAL.md',['../d2/dd3/USER__MANUAL_8md.html',1,'']]]
 ];

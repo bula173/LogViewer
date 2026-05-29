@@ -40,7 +40,8 @@ var hierarchy =
     ] ],
     [ "parser::IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", [
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ],
-      [ "ui::MainWindowPresenter", "d5/dc9/classui_1_1MainWindowPresenter.html", null ]
+      [ "ui::MainWindowPresenter", "d5/dc9/classui_1_1MainWindowPresenter.html", null ],
+      [ "ui::qt::SideBySidePanel::LoadJob::Observer", "d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html", null ]
     ] ],
     [ "ui::IErrorPresenter", "d0/d7f/classui_1_1IErrorPresenter.html", [
       [ "ui::NoopErrorPresenter", "d4/d5b/classui_1_1NoopErrorPresenter.html", null ]
@@ -107,6 +108,7 @@ var hierarchy =
     [ "util::KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", null ],
     [ "ui::qt::LayoutDescriptor", "de/d5a/structui_1_1qt_1_1LayoutDescriptor.html", null ],
     [ "ui::qt::LayoutManager", "d8/d9f/classui_1_1qt_1_1LayoutManager.html", null ],
+    [ "ui::qt::SideBySidePanel::LoadJob", "dd/d74/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob.html", null ],
     [ "db::LogEvent", "d1/d00/classdb_1_1LogEvent.html", null ],
     [ "util::Logger", "d2/d44/classutil_1_1Logger.html", null ],
     [ "parser::ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", null ],
@@ -156,6 +158,7 @@ var hierarchy =
       [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],
       [ "ui::qt::ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", null ],
       [ "ui::qt::SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", null ],
+      [ "ui::qt::SideBySidePanel", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html", null ],
       [ "ui::qt::SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", null ],
       [ "ui::qt::StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", null ],
       [ "ui::qt::StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", null ],

@@ -1,45 +1,46 @@
 <map id="ui::qt::MainWindow::OnLoadEvlogTemplatesRequested" name="ui::qt::MainWindow::OnLoadEvlogTemplatesRequested">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,256,192"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,171,256,211"/>
 <area shape="rect" id="Node000002" href="$d7/d64/classparser_1_1EvlogTemplateRegistry.html#ab08518342762de994e7179e1b2040ef2" title=" " alt="" coords="304,5,525,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,149,223,106,303,62,335,48,337,53,305,66,226,111,162,154"/>
-<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="620,105,748,130"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,149,233,125,303,105,384,96,465,94,541,98,607,104,606,109,541,103,465,100,384,101,305,111,235,130,174,154"/>
-<area shape="rect" id="Node000006" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a5c1e7cdae7fcf5fb50418ad80f853252" title="Return the last directory used for key, or fallback if unset." alt="" coords="341,120,488,160"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="256,155,327,147,328,152,257,161"/>
-<area shape="rect" id="Node000007" href="$d7/d64/classparser_1_1EvlogTemplateRegistry.html#a894067b6639d6c8e9f976bee1eb28fa1" title="Load every *.t file found directly inside dir (non&#45;recursive)." alt="" coords="304,184,525,224"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="257,183,291,187,290,193,256,189"/>
-<area shape="rect" id="Node000019" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#ab6b9af60819f539e700b3ea770101631" title="Persist the parent directory of filePath for key." alt="" coords="341,248,488,288"/>
-<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="184,189,305,233,330,241,328,246,303,239,182,195"/>
-<area shape="rect" id="Node000020" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5" title="Updates the status&#45;bar message." alt="" coords="341,312,488,352"/>
-<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="155,190,220,243,261,272,305,298,329,308,327,313,303,302,258,277,217,248,152,194"/>
-<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1085,130,1267,155"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="748,118,1072,135,1071,140,748,123"/>
-<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1315,130,1473,155"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1267,140,1301,140,1301,145,1267,145"/>
-<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="486,181,525,169,634,132,635,137,526,175,488,186"/>
-<area shape="rect" id="Node000008" href="$d7/d64/classparser_1_1EvlogTemplateRegistry.html#a93e31c5e37c0cc310b75ad750788d220" title="Load a single template file (may contain multiple templates)." alt="" coords="573,320,795,360"/>
-<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="496,222,526,234,592,271,648,309,645,314,589,275,524,238,494,227"/>
-<area shape="rect" id="Node000018" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="872,155,1008,181"/>
-<area shape="poly" id="edge21_Node000007_Node000018" title=" " alt="" coords="525,194,858,171,858,176,526,199"/>
-<area shape="rect" id="Node000009" href="$d0/dd5/namespaceparser.html#af1d68597be6fd557a0bcfaf42d066c8b" title=" " alt="" coords="849,254,1031,279"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="746,317,842,288,871,280,873,285,843,293,747,322"/>
-<area shape="rect" id="Node000010" href="$d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="843,303,1037,329"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="795,327,829,324,829,329,795,332"/>
-<area shape="rect" id="Node000011" href="$d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="864,353,1016,378"/>
-<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="795,348,851,354,850,359,795,354"/>
-<area shape="rect" id="Node000012" href="$d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="857,402,1023,427"/>
-<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="748,358,843,387,876,396,875,401,842,392,746,363"/>
-<area shape="rect" id="Node000014" href="$d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="1127,451,1225,477"/>
-<area shape="poly" id="edge17_Node000008_Node000014" title=" " alt="" coords="710,358,768,400,805,421,844,437,914,455,987,464,1055,467,1113,466,1113,471,1055,472,986,469,913,460,842,443,802,426,765,405,707,362"/>
-<area shape="rect" id="Node000015" href="$d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="865,503,1015,529"/>
-<area shape="poly" id="edge15_Node000008_Node000015" title=" " alt="" coords="704,358,762,419,801,452,844,482,875,496,873,501,841,486,798,457,759,423,700,362"/>
-<area shape="rect" id="Node000016" href="$d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="857,553,1023,578"/>
-<area shape="poly" id="edge16_Node000008_Node000016" title=" " alt="" coords="698,359,719,398,752,447,794,497,844,539,855,545,852,550,841,544,790,501,747,450,715,400,693,361"/>
-<area shape="rect" id="Node000017" href="$d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="877,205,1003,230"/>
-<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="710,318,769,278,842,239,863,231,864,236,844,244,771,282,713,322"/>
-<area shape="poly" id="edge19_Node000008_Node000018" title=" " alt="" coords="699,318,757,254,797,219,841,190,858,182,860,187,844,194,800,224,761,258,703,322"/>
-<area shape="rect" id="Node000013" href="$d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="1111,402,1241,427"/>
-<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="1024,412,1097,412,1097,417,1024,417"/>
-<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="1002,425,1114,448,1113,454,1001,430"/>
-<area shape="poly" id="edge20_Node000018_Node000004" title=" " alt="" coords="1008,158,1072,151,1072,156,1008,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,168,218,116,259,87,303,62,333,48,335,53,305,66,262,92,221,120,157,172"/>
+<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="620,70,748,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,168,229,138,303,112,383,96,464,86,606,79,607,84,465,91,384,101,305,117,232,143,169,173"/>
+<area shape="rect" id="Node000006" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a5c1e7cdae7fcf5fb50418ad80f853252" title="Return the last directory used for key, or fallback if unset." alt="" coords="341,235,488,275"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="221,208,328,233,327,238,220,213"/>
+<area shape="rect" id="Node000007" href="$d7/d64/classparser_1_1EvlogTemplateRegistry.html#a894067b6639d6c8e9f976bee1eb28fa1" title="Load every *.t file found directly inside dir (non&#45;recursive)." alt="" coords="304,171,525,211"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="256,188,290,188,290,193,256,193"/>
+<area shape="rect" id="Node000018" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="872,121,1008,146"/>
+<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="226,168,304,156,457,143,610,135,858,130,858,136,610,140,457,148,304,161,227,173"/>
+<area shape="rect" id="Node000019" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#ab6b9af60819f539e700b3ea770101631" title="Persist the parent directory of filePath for key." alt="" coords="341,299,488,339"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="165,209,228,246,305,284,329,293,327,298,303,289,226,251,162,213"/>
+<area shape="rect" id="Node000020" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5" title="Updates the status&#45;bar message." alt="" coords="341,363,488,403"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="150,209,214,278,257,316,305,348,329,359,327,364,303,353,254,320,210,281,146,213"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1085,95,1267,121"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="748,83,1072,100,1071,105,748,89"/>
+<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1315,95,1473,121"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1267,105,1301,105,1301,111,1267,111"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="465,168,638,98,640,103,467,173"/>
+<area shape="rect" id="Node000008" href="$d7/d64/classparser_1_1EvlogTemplateRegistry.html#a93e31c5e37c0cc310b75ad750788d220" title="Load a single template file (may contain multiple templates)." alt="" coords="573,288,795,328"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="493,208,526,220,587,249,640,279,638,283,584,254,524,225,492,213"/>
+<area shape="poly" id="edge21_Node000007_Node000018" title=" " alt="" coords="525,178,794,149,858,141,859,147,795,155,526,183"/>
+<area shape="rect" id="Node000009" href="$d0/dd5/namespaceparser.html#af1d68597be6fd557a0bcfaf42d066c8b" title=" " alt="" coords="849,469,1031,494"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="703,327,760,391,800,425,844,455,858,461,855,466,841,460,797,430,757,394,699,330"/>
+<area shape="rect" id="Node000010" href="$d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="843,518,1037,543"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="698,327,720,366,752,414,794,463,844,504,855,510,852,515,841,509,790,467,748,417,715,368,693,330"/>
+<area shape="rect" id="Node000011" href="$d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="864,170,1016,195"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="709,286,768,245,842,204,861,197,863,202,844,209,770,249,712,290"/>
+<area shape="rect" id="Node000012" href="$d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="857,219,1023,245"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="752,285,882,246,884,251,753,290"/>
+<area shape="rect" id="Node000014" href="$d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="1127,269,1225,294"/>
+<area shape="poly" id="edge17_Node000008_Node000014" title=" " alt="" coords="795,299,1112,282,1113,287,795,305"/>
+<area shape="rect" id="Node000015" href="$d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="865,321,1015,346"/>
+<area shape="poly" id="edge15_Node000008_Node000015" title=" " alt="" coords="795,316,852,322,851,327,795,322"/>
+<area shape="rect" id="Node000016" href="$d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="857,370,1023,395"/>
+<area shape="poly" id="edge16_Node000008_Node000016" title=" " alt="" coords="745,326,843,356,873,364,871,369,842,361,744,331"/>
+<area shape="rect" id="Node000017" href="$d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="877,419,1003,445"/>
+<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="713,326,771,366,844,406,864,413,862,418,842,410,768,371,710,330"/>
+<area shape="poly" id="edge19_Node000008_Node000018" title=" " alt="" coords="705,286,793,203,815,177,825,166,841,155,858,147,860,152,844,160,829,170,819,181,797,207,709,290"/>
+<area shape="rect" id="Node000013" href="$d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="1111,219,1241,245"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="1024,229,1097,229,1097,235,1024,235"/>
+<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="1002,242,1114,266,1113,271,1001,247"/>
+<area shape="poly" id="edge20_Node000018_Node000004" title=" " alt="" coords="1008,123,1072,117,1072,122,1008,129"/>
 </map>

@@ -161,7 +161,5 @@ var classui_1_1qt_1_1StructuredConfigDialog =
     [ "m_typeFilterFieldEdit", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a72ef533028f7b7f40a7b1367f26b71a9", null ],
     [ "m_unloadPluginButton", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#aefe54afeacecc6f8e6c3864c93f741c2", null ],
     [ "m_updateColorButton", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a8def2d11b859d7921711075627812d71", null ],
-    [ "m_updateItemHighlightButton", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ae696e616d47ee9576786b546aebcb408", null ],
-    [ "m_xmlEventEdit", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#aa286d3f5fafc3edab58a4d831dd683b2", null ],
-    [ "m_xmlRootEdit", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a2e0d87c613b81510eeae59fcf0b23a28", null ]
+    [ "m_updateItemHighlightButton", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#ae696e616d47ee9576786b546aebcb408", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LogViewer: Configurable Type Filter Field</title>
+<title>LogViewer: Type Filter Field — Auto-Detection and Override</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -90,64 +90,44 @@ $(document).ready(function(){initNavTree('d0/de2/md_docs_2CONFIGURABLE__TYPE__FI
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Configurable Type Filter Field</div></div>
+  <div class="headertitle"><div class="title">Type Filter Field — Auto-Detection and Override</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="autotoc_md307"></a> </p>
 <h1><a class="anchor" id="autotoc_md308"></a>
 Overview</h1>
-<p>The type filter now uses a configurable field name instead of hardcoded "type", allowing LogViewer to work with different log formats that use different field names for categorization.</p>
+<p>LogViewer automatically detects which field in your log events represents the event type or severity level. No manual configuration is required for common log formats. You can still pin a specific field name if your logs use a non-standard naming convention.</p>
 <h1><a class="anchor" id="autotoc_md309"></a>
-Changes</h1>
-<h2><a class="anchor" id="autotoc_md310"></a>
-Configuration (Config.hpp/cpp)</h2>
+Auto-Detection</h1>
+<p>When a file is loaded, <code>UpdateTypeFilters()</code> scans the first 100 events for these field names (in priority order):</p>
+<div class="fragment"><div class="line">level → type → severity → priority → category →</div>
+<div class="line">loglevel → log_level → logLevel → eventtype → event_type</div>
+</div><!-- fragment --><p>The first field that is non-empty in any of the sampled events becomes the active type filter field for that session. The detected value is held in memory but <b>not written to config</b>, so auto-detection runs fresh on each file load.</p>
+<h1><a class="anchor" id="autotoc_md310"></a>
+Fallback: User Prompt</h1>
+<p>If none of the candidate field names match any event in the first 100 rows, a modal dialog asks the user to enter the field name manually. The provided value is:</p>
 <ul>
-<li>Added <code>typeFilterField</code> member variable with default value <code>"type"</code></li>
-<li>Added <code>GetFilterConfig()</code> method to load the filter configuration from JSON</li>
-<li><code>SaveConfig()</code> now writes: <code>j["filters"]["typeFilterField"] = typeFilterField;</code></li>
-<li><code>LoadConfig()</code> now reads the <code>filters.typeFilterField</code> setting from JSON</li>
+<li>Immediately applied to the current session.</li>
+<li><b>Saved to <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code></b> so it is used automatically for future loads without prompting again.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md311"></a>
-Filter Logic (MainWindowPresenter.cpp)</h2>
+<h1><a class="anchor" id="autotoc_md311"></a>
+Manual Override (Settings)</h1>
+<p>Open <b>Tools &gt; Settings &gt; General</b> and set the <b>Type Filter Field</b>:</p>
 <ul>
-<li><code>UpdateTypeFilters()</code>: Now uses <code>config.typeFilterField</code> instead of hardcoded <code>"type"</code></li>
-<li><code>ApplySelectedTypeFilters()</code>: Now uses <code>config.typeFilterField</code> instead of hardcoded <code>"type"</code></li>
+<li><b>Non-empty value</b> — auto-detection is skipped entirely; the given field is always used.</li>
+<li><b>Empty value</b> — auto-detection runs on every file load (default behaviour).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md312"></a>
-Color Logic</h2>
-<ul>
-<li><b><a class="el" href="../../d4/db5/EventsTableModel_8cpp.html">EventsTableModel.cpp</a></b>: Foreground and background colors now use <code>config.typeFilterField</code></li>
-<li><b>EventsContainerAdapter.cpp</b> (wxWidgets): Row coloring now uses <code>config.typeFilterField</code></li>
-<li><b>AIChatPanel.cpp</b>: Event formatting now uses <code>config.typeFilterField</code></li>
-<li><b>columnColors configuration</b>: The key in <code>columnColors</code> should match your <code>typeFilterField</code> value</li>
-</ul>
-<h2><a class="anchor" id="autotoc_md313"></a>
-Default Configuration (etc/default_config.json)</h2>
-<ul>
-<li>Added <code>"filters"</code> section with <code>"typeFilterField": "level"</code></li>
-<li>This matches the example log structure which uses "level" for event types</li>
-</ul>
-<h2><a class="anchor" id="autotoc_md314"></a>
-UI Configuration Dialog</h2>
-<ul>
-<li>Added to Edit → Config → General tab</li>
-<li>Field: "Type Filter Field" with placeholder text showing examples</li>
-<li>Users can change without editing JSON manually</li>
-</ul>
-<h2><a class="anchor" id="autotoc_md315"></a>
-Color Configuration Dialog</h2>
-<ul>
-<li>Edit → Config → Colors tab</li>
-<li>Column dropdown now auto-populates with available columns</li>
-<li>Defaults to the <code>typeFilterField</code> value for consistency</li>
-<li>Users can add color mappings for different field values</li>
-</ul>
-<h1><a class="anchor" id="autotoc_md316"></a>
-Configuration Example</h1>
+<p>Saving an explicit value persists it to <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code>:</p>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;filters&quot;: {</div>
-<div class="line">    &quot;typeFilterField&quot;: &quot;level&quot;</div>
-<div class="line">  },</div>
+<div class="line">    &quot;typeFilterField&quot;: &quot;severity&quot;</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>Clearing the field and saving restores auto-detection.</p>
+<h1><a class="anchor" id="autotoc_md312"></a>
+Row Colouring</h1>
+<p>Row colours are driven by <code>columnColors</code> in the configuration, <b>not</b> limited to the type filter field. Any column can have colour rules; the first column (alphabetically by key) whose value matches an event is applied:</p>
+<div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;columnColors&quot;: {</div>
 <div class="line">    &quot;level&quot;: {</div>
 <div class="line">      &quot;ERROR&quot;: [&quot;#ffffff&quot;, &quot;#ff4200&quot;],</div>
@@ -157,39 +137,21 @@ Configuration Example</h1>
 <div class="line">    }</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><p><b>Important</b>: The key in <code>columnColors</code> (e.g., <code>"level"</code>) must match the value of <code>typeFilterField</code>. This ensures that filtering and coloring use the same field consistently.</p>
-<h1><a class="anchor" id="autotoc_md317"></a>
-Supported Values</h1>
-<p>The <code>typeFilterField</code> can be set to any attribute/field name in your log events:</p><ul>
-<li><code>"type"</code> - for logs that use <code>&lt;event type="ERROR"&gt;</code></li>
-<li><code>"level"</code> - for logs that use <code>&lt;event level="ERROR"&gt;</code></li>
-<li><code>"severity"</code> - for logs that use <code>&lt;event severity="ERROR"&gt;</code></li>
-<li><code>"priority"</code> - for logs that use <code>&lt;event priority="ERROR"&gt;</code></li>
-<li><code>"category"</code> - for logs that use <code>&lt;event category="ERROR"&gt;</code></li>
-</ul>
-<h1><a class="anchor" id="autotoc_md318"></a>
-Benefits</h1>
-<ol type="1">
-<li><b>Flexibility</b>: Works with various log formats without code changes</li>
-<li><b>Consistency</b>: All filter operations use the same field</li>
-<li><b>Configurability</b>: Users can adapt LogViewer to their log structure</li>
-<li><b>Default behavior</b>: Defaults to "type" for backward compatibility</li>
-</ol>
-<h1><a class="anchor" id="autotoc_md319"></a>
-Testing</h1>
-<p>To test with different field names:</p><ol type="1">
-<li>Edit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> (or <code>etc/default_config.json</code>)</li>
-<li>Set <code>"filters": { "typeFilterField": "level" }</code> (or other field name)</li>
-<li>Load a log file that uses that field for categorization</li>
-<li>The type filter should now show values from that field</li>
-</ol>
-<h1><a class="anchor" id="autotoc_md320"></a>
-Future Enhancements</h1>
-<ul>
-<li>UI configuration dialog to set <code>typeFilterField</code> without manual JSON editing</li>
-<li>Auto-detection of common field names on log load</li>
-<li>Multiple filter fields (type + severity + module, etc.) </li>
-</ul>
+</div><!-- fragment --><p>Configure colours in <b>Tools &gt; Settings &gt; Colors</b>.</p>
+<h1><a class="anchor" id="autotoc_md313"></a>
+XML Structure Auto-Discovery</h1>
+<p>The XML parser also requires no configuration. It discovers structure by element depth:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Depth   </th><th class="markdownTableHeadNone">Role    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Root element (any tag name, e.g. <code>&lt;events&gt;</code>, <code>&lt;log&gt;</code>)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">Event record (any tag name, e.g. <code>&lt;event&gt;</code>, <code>&lt;record&gt;</code>)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">3+   </td><td class="markdownTableBodyNone">Field — tag name becomes the key, text content the value   </td></tr>
+</table>
+<p>XML attributes on depth-2 elements are also captured as key/value pairs. No <code>rootElement</code> or <code>eventElement</code> configuration keys are needed or read. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

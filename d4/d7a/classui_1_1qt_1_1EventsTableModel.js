@@ -15,7 +15,6 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "RebuildVisibleColumns", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a11332da47f15d18dca04604b5f4a505e", null ],
     [ "RefreshAll", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a86aac1f016232fae5d1e323b5d4c8ad7", null ],
     [ "RefreshColumns", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a40a6154c2885bd90035433bf7d0a814d", null ],
-    [ "ResolveColor", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a556d8c1945363fd46e771ff36ea04569", null ],
     [ "ResolveToActualIndex", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9b84fc718fac9b1221fca90df8647986", null ],
     [ "rowCount", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3f10c466dfb42d0c979815b6708692a0", null ],
     [ "RowFromActualIndex", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6cf011f142833c9766eb2b9266c2eb92", null ],

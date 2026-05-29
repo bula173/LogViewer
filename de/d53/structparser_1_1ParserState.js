@@ -4,6 +4,8 @@ var structparser_1_1ParserState =
     [ "bytesProcessed", "de/d53/structparser_1_1ParserState.html#aa25bcb75462ad141cdd237900c275062", null ],
     [ "currentElement", "de/d53/structparser_1_1ParserState.html#aa43d2456c50ada07d596857f1a6f1ee1", null ],
     [ "currentText", "de/d53/structparser_1_1ParserState.html#a942a7959eb2ac503b7e46c042bab387b", null ],
+    [ "depth", "de/d53/structparser_1_1ParserState.html#ab63b075942850b2ab736a57f87a5388a", null ],
+    [ "discoveredEventElement", "de/d53/structparser_1_1ParserState.html#a82118ec9622df9290e5abef3ce89bc79", null ],
     [ "eventBatch", "de/d53/structparser_1_1ParserState.html#a284e91d89bcf9681823aed7d4e8e2a37", null ],
     [ "eventId", "de/d53/structparser_1_1ParserState.html#a0dd2c2afa7d74c166fb5471d883070db", null ],
     [ "eventItems", "de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0", null ],

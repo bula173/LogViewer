@@ -106,9 +106,9 @@ Inheritance diagram for ui::IMainWindowView:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/daf/classui_1_1IMainWindowView__inherit__graph.png" border="0" usemap="#aui_1_1IMainWindowView_inherit__map" alt="Inheritance graph"/></div>
 <map name="aui_1_1IMainWindowView_inherit__map" id="aui_1_1IMainWindowView_inherit__map">
-<area shape="rect" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="14,5,223,251"/>
-<area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html" title=" " alt="" coords="5,299,232,1344"/>
-<area shape="poly" title=" " alt="" coords="121,264,121,298,116,298,116,264"/>
+<area shape="rect" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="14,5,223,271"/>
+<area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html" title=" " alt="" coords="5,319,232,1284"/>
+<area shape="poly" title=" " alt="" coords="121,285,121,319,116,319,116,285"/>
 </map>
 </div>
 <div class="dynheader">
@@ -116,7 +116,7 @@ Collaboration diagram for ui::IMainWindowView:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d5b/classui_1_1IMainWindowView__coll__graph.png" border="0" usemap="#aui_1_1IMainWindowView_coll__map" alt="Collaboration graph"/></div>
 <map name="aui_1_1IMainWindowView_coll__map" id="aui_1_1IMainWindowView_coll__map">
-<area shape="rect" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="5,5,215,251"/>
+<area shape="rect" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="5,5,215,271"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -149,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae6a74fa2cae101d1603f59df6b8e33df" id="r_ae6a74fa2cae101d1603f59df6b8e33df"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1f/classui_1_1IMainWindowView.html#ae6a74fa2cae101d1603f59df6b8e33df">RefreshLayout</a> ()=0</td></tr>
 <tr class="memdesc:ae6a74fa2cae101d1603f59df6b8e33df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests a full window refresh/layout recalculation.  <br /></td></tr>
 <tr class="separator:ae6a74fa2cae101d1603f59df6b8e33df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd20b4fc1e195cb387addc69653b9b0a" id="r_abd20b4fc1e195cb387addc69653b9b0a"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d1f/classui_1_1IMainWindowView.html#abd20b4fc1e195cb387addc69653b9b0a">AskString</a> (const std::string &amp;title, const std::string &amp;prompt, const std::string &amp;defaultValue, bool &amp;ok)=0</td></tr>
+<tr class="memdesc:abd20b4fc1e195cb387addc69653b9b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows a modal input dialog.  <br /></td></tr>
+<tr class="separator:abd20b4fc1e195cb387addc69653b9b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Toolkit-agnostic contract exposing the handful of main-window interactions needed by the presenter logic. </p>
@@ -179,6 +182,83 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abd20b4fc1e195cb387addc69653b9b0a" name="abd20b4fc1e195cb387addc69653b9b0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd20b4fc1e195cb387addc69653b9b0a">&#9670;&#160;</a></span>AskString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string ui::IMainWindowView::AskString </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>prompt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>defaultValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>ok</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shows a modal input dialog. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ok</td><td>Set to true when the user accepted, false when cancelled. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The entered string, or empty if cancelled. </dd></dl>
+
+<p>Implemented in <a class="el" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9adc6b663ba377ddfba1963fb47a70e5">ui::qt::MainWindow</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/d1f/classui_1_1IMainWindowView_abd20b4fc1e195cb387addc69653b9b0a_icgraph.png" border="0" usemap="#ad3/d1f/classui_1_1IMainWindowView_abd20b4fc1e195cb387addc69653b9b0a_icgraph" alt=""/></div>
+<map name="ad3/d1f/classui_1_1IMainWindowView_abd20b4fc1e195cb387addc69653b9b0a_icgraph" id="ad3/d1f/classui_1_1IMainWindowView_abd20b4fc1e195cb387addc69653b9b0a_icgraph">
+<area shape="rect" title="Shows a modal input dialog." alt="" coords="713,37,876,77"/>
+<area shape="rect" href="../../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6" title="Rebuilds the available type filters from current events." alt="" coords="477,37,665,77"/>
+<area shape="poly" title=" " alt="" coords="700,60,666,60,666,55,700,55"/>
+<area shape="rect" href="../../d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68" title="Parses and merges a log file with existing data, sorted by timestamp." alt="" coords="241,5,429,45"/>
+<area shape="poly" title=" " alt="" coords="463,45,429,41,430,35,464,40"/>
+<area shape="rect" href="../../d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7" title=" " alt="" coords="241,69,429,109"/>
+<area shape="poly" title=" " alt="" coords="464,75,430,79,429,74,463,69"/>
+<area shape="rect" href="../../d5/dc9/classui_1_1MainWindowPresenter.html#aef19a1d1a61f61089b2117a66b8c378d" title="Parses and loads a log file, updating shared UI state." alt="" coords="5,37,193,77"/>
+<area shape="poly" title=" " alt="" coords="227,77,193,73,194,67,228,72"/>
+<area shape="rect" href="../../d5/dc9/classui_1_1MainWindowPresenter.html#a23b7dd46b83c6602fb0deffa349facc9" title="Loads a log file using a pre&#45;configured parser instance." alt="" coords="5,101,193,141"/>
+<area shape="poly" title=" " alt="" coords="228,107,194,111,193,106,227,101"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a38ef9989b7b60d01d5d9d5a0979ae951" name="a38ef9989b7b60d01d5d9d5a0979ae951"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a38ef9989b7b60d01d5d9d5a0979ae951">&#9670;&#160;</a></span>ConfigureProgressRange()</h2>
 

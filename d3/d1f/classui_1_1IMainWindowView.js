@@ -1,6 +1,7 @@
 var classui_1_1IMainWindowView =
 [
     [ "~IMainWindowView", "d3/d1f/classui_1_1IMainWindowView.html#a975ad7fc71b384ed8955f2e5bfd37903", null ],
+    [ "AskString", "d3/d1f/classui_1_1IMainWindowView.html#abd20b4fc1e195cb387addc69653b9b0a", null ],
     [ "ConfigureProgressRange", "d3/d1f/classui_1_1IMainWindowView.html#a38ef9989b7b60d01d5d9d5a0979ae951", null ],
     [ "CurrentStatusText", "d3/d1f/classui_1_1IMainWindowView.html#a86756d2d4301612609e13aae200270c6", null ],
     [ "ProcessPendingEvents", "d3/d1f/classui_1_1IMainWindowView.html#a7acbd0e2fb6d5fbb03b39814f461ee6d", null ],

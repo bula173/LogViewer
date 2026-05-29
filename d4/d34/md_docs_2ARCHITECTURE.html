@@ -166,7 +166,7 @@ Key Components</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Subdirectory   </th><th class="markdownTableHeadNone">Contents    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>panels/</code>   </td><td class="markdownTableBodyNone">All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, …)    </td></tr>
+<td class="markdownTableBodyNone"><code>panels/</code>   </td><td class="markdownTableBodyNone">All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>dialogs/</code>   </td><td class="markdownTableBodyNone">Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …)    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -197,6 +197,7 @@ Key Components</h1>
 <li><b>TraceViewerPanel</b>: Sequence-diagram-style actor/event view</li>
 <li><b>PatternAnalysisPanel</b>: Template clustering of structurally similar log lines</li>
 <li><b>BookmarksPanel</b>, <b>ScenariosPanel</b>, <b>ActorsPanel</b>, <b>ActorDefinitionsPanel</b>: Event annotation, scenario matching, and actor attribution</li>
+<li><b>SideBySidePanel</b>: Loads two independent log files and displays them in a split view with three synchronisation modes (see below)</li>
 </ul>
 <p><b>Configuration Dialogs</b> (<code>dialogs/</code>)</p><ul>
 <li><b>StructuredConfigDialog</b>: Tabbed configuration UI (General, Columns, Colors, AI)</li>
@@ -271,6 +272,16 @@ Key Components</h1>
 <li>Supports field types: int8–int64, uint8–uint64, float, double, fixed-size char arrays <code>char[N]</code>, variable <code>string</code>.</li>
 <li><code>Find(facility, eventType)</code> returns the matching <code>EvlogTemplate*</code> or <code>nullptr</code>; lookup is O(log n) via <code>std::map</code>.</li>
 </ul>
+<p><b>SideBySidePanel</b> (<code>panels/</code>): Displays two independently-loaded log files in a vertical splitter with a shared toolbar for synchronisation control.</p>
+<ul>
+<li>Three sync modes: <b>Timestamp</b> (nearest-timestamp scroll), <b>Manual</b> (user picks a reference event on each side; a constant offset <code>rightTs = leftTs + offset</code> is computed and used for all subsequent lookups), <b>None</b> (views independent).</li>
+<li>Each side owns an <code>EventsContainer</code> and <code>EventsTableView</code>; file loading runs on a background thread via <code>QtConcurrent::run</code> and <code>QFutureWatcher&lt;void&gt;</code>.</li>
+<li><b>Adapter pattern</b>: the inner <code>LoadJob::Observer</code> struct adapts <code>IDataParserObserver</code> callbacks to <code>EventsContainer::AddEvent()</code>/<code>AddEventBatch()</code> without the panel needing to implement the observer interface itself.</li>
+<li><code>SuspendNotifications()</code>/<code>ResumeNotifications()</code> are called around bulk loads to suppress per-batch UI redraws.</li>
+<li>Re-entrant sync is guarded by an <code>m_syncInProgress</code> flag that prevents left-select → scroll right → right-select → scroll left loops.</li>
+<li>Timestamp-free logs (no <code>timestamp</code> field) fall back to a row-offset arithmetic approximation based on the proportional position of the reference row.</li>
+<li><b>Async filter deduplication</b>: <code>MainWindow::RunAsyncFilter(worker, statusMsg)</code> encapsulates the <code>QFutureWatcher</code> setup, progress bar, and in-progress guard so <code>ApplyExtendedFilters()</code> and <code>ApplyActorFilter()</code> share a single implementation.</li>
+</ul>
 <p><b>Statistics Strategy</b> (<code>ui/qt/panels/</code>): The <code>StatsSummaryPanel</code> uses <code>IStatisticsStrategy</code> to compute format-specific metrics at refresh time without coupling the panel to any particular format.</p>
 <div class="fragment"><div class="line">IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()</div>
 <div class="line">    ▲</div>
@@ -286,7 +297,7 @@ Key Components</h1>
 <li>JSON-based configuration with validation</li>
 <li>Observable changes via ConfigObserver pattern</li>
 <li>Configurable fields:<ul>
-<li><code>typeFilterField</code>: Field used for type filtering/coloring (e.g., "level", "severity")</li>
+<li><code>typeFilterField</code>: Field used for type filtering/coloring — auto-detected on each file load; leave empty (default) to auto-detect, or set explicitly to pin a value for all files</li>
 <li><code>aiProvider</code>: AI service provider selection</li>
 <li><code>aiTimeoutSeconds</code>: Configurable timeout for AI requests (30-3600s)</li>
 <li>Column configurations, colors, logging level</li>
@@ -603,12 +614,10 @@ Configuration Structure</h2>
 <div class="line">    &quot;level&quot;: &quot;debug&quot;</div>
 <div class="line">  },</div>
 <div class="line">  &quot;filters&quot;: {</div>
-<div class="line">    &quot;typeFilterField&quot;: &quot;level&quot;</div>
+<div class="line">    &quot;typeFilterField&quot;: &quot;&quot;</div>
 <div class="line">  },</div>
 <div class="line">  &quot;parsers&quot;: {</div>
 <div class="line">    &quot;xml&quot;: {</div>
-<div class="line">      &quot;rootElement&quot;: &quot;events&quot;,</div>
-<div class="line">      &quot;eventElement&quot;: &quot;event&quot;,</div>
 <div class="line">      &quot;columns&quot;: [</div>
 <div class="line">        { &quot;name&quot;: &quot;id&quot;, &quot;visible&quot;: true, &quot;width&quot;: 50 },</div>
 <div class="line">        { &quot;name&quot;: &quot;timestamp&quot;, &quot;visible&quot;: true, &quot;width&quot;: 150 },</div>
@@ -626,14 +635,17 @@ Configuration Structure</h2>
 <div class="line">    }</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md157"></a>
+</div><!-- fragment --><blockquote class="doxtable">
+<p>&zwj;<b>Note on XML parsing</b>: The XML parser uses element depth to discover structure automatically — no <code>rootElement</code> or <code>eventElement</code> configuration is needed. The first element at depth 1 is treated as the root; every direct child (depth 2) is an event record; nested children (depth 3+) become key/value fields. </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md157"></a>
 Key Configuration Options</h2>
 <ul>
-<li><b>typeFilterField</b>: Configurable field for type filtering (e.g., "type", "level", "severity")</li>
+<li><b>typeFilterField</b>: Auto-detected on each file load by scanning the first 100 events for common field names (<code>level</code>, <code>type</code>, <code>severity</code>, <code>priority</code>, <code>category</code>, …). Set explicitly (in Settings &gt; General) to pin a value and skip auto-detection. Leave empty to always auto-detect; if detection fails the user is prompted.</li>
 <li><b>aiProvider</b>: AI service selection (ollama, lmstudio, openai, anthropic, google, xai)</li>
 <li><b>aiTimeoutSeconds</b>: Timeout for AI requests (30-3600 seconds)</li>
 <li><b>columns</b>: Dynamic column configuration with visibility and width</li>
-<li><b>columnColors</b>: Color mappings based on field values</li>
+<li><b>columnColors</b>: Color mappings per column — any number of columns can have color rules; the first matching column's color is applied to the row</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md158"></a>
 Observer Pattern for Config</h2>
@@ -677,17 +689,15 @@ UI Tests</h2>
 <h1><a class="anchor" id="autotoc_md163"></a>
 Future Enhancements</h1>
 <ol type="1">
-<li><b>Async Parsing</b>: Background thread for file parsing with progress</li>
 <li><b>Extended Plugin System</b>: Parser plugins, filter plugins, visualization plugins</li>
 <li><b>Network Logs</b>: Real-time log streaming via TCP/HTTP</li>
 <li><b>Database Export</b>: Export to SQLite/PostgreSQL</li>
-<li><b>Advanced Analytics</b>: Statistics, graphs, anomaly detection</li>
+<li><b>Advanced Analytics</b>: Anomaly detection, trend analysis</li>
 <li><b>Collaborative Filtering</b>: Share filter configurations</li>
 <li><b>Cloud Integration</b>: S3, Azure Blob Storage, Google Cloud Storage</li>
 <li><b>Custom AI Prompts Library</b>: Community-shared analysis templates</li>
-<li><b>Log Diff</b>: Compare two log files side-by-side</li>
 <li><b>Session Replay</b>: Record and replay user analysis workflows</li>
-<li><b>Multi-File Analysis</b>: Correlate events across multiple log files</li>
+<li><b>Multi-File Analysis</b>: Correlate events across more than two log files simultaneously</li>
 <li><b>Real-time AI Monitoring</b>: Continuous analysis with alerts</li>
 </ol>
 <h1><a class="anchor" id="autotoc_md164"></a>

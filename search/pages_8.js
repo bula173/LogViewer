@@ -11,5 +11,6 @@ var searchData=
   ['logviewer_20installation_20manifest_20system_8',['LogViewer Installation Manifest System',['../de/d6a/md_docs_2INSTALLATION__MANIFEST.html',1,'']]],
   ['logviewer_20plugin_20sdk_20getting_20started_20guide_9',['LogViewer Plugin SDK - Getting Started Guide',['../de/d35/md_docs_2SDK__GETTING__STARTED.html',1,'']]],
   ['logviewer_20plugin_20system_10',['LogViewer Plugin System',['../d1/d53/md_docs_2PLUGIN__SYSTEM.html',1,'']]],
-  ['logviewer_20sdk_20quick_20reference_11',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]]
+  ['logviewer_20sdk_20quick_20reference_11',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]],
+  ['logviewer_20user_20manual_12',['LogViewer User Manual',['../d6/dbf/md_docs_2USER__MANUAL.html',1,'']]]
 ];

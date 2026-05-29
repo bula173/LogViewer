@@ -18,7 +18,7 @@ var searchData=
   ['_7eiitemdetailsview_15',['~IItemDetailsView',['../dc/d5e/classui_1_1IItemDetailsView.html#af280633e7a5eea04914bacbe131469e6',1,'ui::IItemDetailsView']]],
   ['_7eilogger_16',['~ILogger',['../d3/dc4/classutil_1_1ILogger.html#a81835d2e46c70c9e7b94618cd470ee20',1,'util::ILogger']]],
   ['_7eimainwindowview_17',['~IMainWindowView',['../d3/d1f/classui_1_1IMainWindowView.html#a975ad7fc71b384ed8955f2e5bfd37903',1,'ui::IMainWindowView']]],
-  ['_7eimodel_18',['~IModel',['../dc/d2d/classmvc_1_1IModel.html#a6a478f5602c9e7a62180ee82000ccc9d',1,'mvc::IModel']]],
+  ['_7eimodel_18',['~IModel',['../dc/d2d/classmvc_1_1IModel.html#aa1face36267615138254e3dd32244e2f',1,'mvc::IModel']]],
   ['_7eimodelobservable_19',['~IModelObservable',['../da/d80/classmvc_1_1IModelObservable.html#a95a803e2ca516d2f128f905dfbbfe78d',1,'mvc::IModelObservable']]],
   ['_7eiplugin_20',['~IPlugin',['../d4/d51/classplugin_1_1IPlugin.html#ac3ccf70d24a71b031ab3f1f9fb9bcfc7',1,'plugin::IPlugin']]],
   ['_7eiplugineventobserver_21',['~IPluginEventObserver',['../d1/d7b/classplugin_1_1IPluginEventObserver.html#a075e303aa75af8573565148ae821f9be',1,'plugin::IPluginEventObserver']]],
@@ -30,5 +30,6 @@ var searchData=
   ['_7eiview_27',['~IView',['../d3/dba/classmvc_1_1IView.html#aa90b0409cb5cf98e72ab84a355e0ee67',1,'mvc::IView']]],
   ['_7emainwindow_28',['~MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b',1,'ui::qt::MainWindow']]],
   ['_7epluginmanager_29',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
-  ['_7exmlparser_30',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
+  ['_7esidebysidepanel_30',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
+  ['_7exmlparser_31',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
 ];
