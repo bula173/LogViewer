@@ -1,6 +1,8 @@
 #pragma once
 
 #include "FieldConversionPluginRegistry.hpp"
+#include "Result.hpp"
+#include "Error.hpp"
 #include <nlohmann/json.hpp>
 #include <map>
 #include <string>
@@ -46,9 +48,9 @@ public:
     /**
      * @brief Load dictionary from JSON file
      * @param filePath Path to the dictionary JSON file
-     * @return true if loaded successfully
+     * @return Ok({}) on success, Err with details on failure
      */
-    bool LoadFromFile(const std::string& filePath);
+    util::Result<void, error::Error> LoadFromFile(const std::string& filePath);
 
     /**
      * @brief Check if a field has a dictionary entry configured

@@ -21,15 +21,18 @@ FieldTranslator::FieldTranslator()
 
 }
 
-bool FieldTranslator::LoadFromFile(const std::string& filePath)
+util::Result<void, error::Error> FieldTranslator::LoadFromFile(const std::string& filePath)
 {
+    using VoidResult = util::Result<void, error::Error>;
+    util::Logger::Debug("FieldTranslator: loading dictionary from '{}'", filePath);
     try
     {
         std::ifstream file(filePath);
         if (!file.is_open())
         {
-            util::Logger::Error("Could not open dictionary file: {}", filePath);
-            return false;
+            util::Logger::Warn("FieldTranslator: could not open dictionary file '{}'", filePath);
+            return VoidResult::Err(error::Error(error::ErrorCode::IOError,
+                "Could not open dictionary file: " + filePath, /*showMsgBox=*/false));
         }
 
         json j;
@@ -37,8 +40,11 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
 
         if (!j.contains("translations") || !j["translations"].is_array())
         {
-            util::Logger::Error("Invalid dictionary file format: missing 'translations' array");
-            return false;
+            util::Logger::Warn("FieldTranslator: invalid format in '{}' — missing 'translations' array",
+                filePath);
+            return VoidResult::Err(error::Error(error::ErrorCode::ParseError,
+                "Invalid dictionary file format: missing 'translations' array in " + filePath,
+                /*showMsgBox=*/false));
         }
 
         m_dictionary.clear();
@@ -68,12 +74,18 @@ bool FieldTranslator::LoadFromFile(const std::string& filePath)
         // Rebuild the lowercase cache for fast lookups
         RebuildLowercaseCache();
 
-        return true;
+        util::Logger::Debug("FieldTranslator: finished parsing '{}'", filePath);
+        util::Logger::Info("FieldTranslator: loaded {} dictionary entry/entries from '{}'",
+            m_dictionary.size(), filePath);
+        return VoidResult::Ok({});
     }
     catch (const std::exception& ex)
     {
-        util::Logger::Error("Error loading dictionary from file '{}': {}", filePath, ex.what());
-        return false;
+        util::Logger::Warn("FieldTranslator: exception loading dictionary from '{}': {}",
+            filePath, ex.what());
+        return VoidResult::Err(error::Error(error::ErrorCode::RuntimeError,
+            std::string("Error loading dictionary from file '") + filePath + "': " + ex.what(),
+            /*showMsgBox=*/false));
     }
 }
 
@@ -101,7 +113,13 @@ TranslationResult FieldTranslator::Translate(std::string_view key, std::string_v
     std::string lowerKey = ToLower(key);
     auto cacheIt = m_lowercaseKeyCache.find(lowerKey);
     if (cacheIt == m_lowercaseKeyCache.end())
+    {
+        util::Logger::Trace("FieldTranslator: no translation entry for key '{}'", key);
         return result;
+    }
+
+    util::Logger::Trace("FieldTranslator: translating key '{}' with conversionType '{}'",
+        key, m_dictionary.at(cacheIt->second).conversionType);
 
     const auto& translation = m_dictionary.at(cacheIt->second);
     std::string converted = std::string(value);
@@ -110,15 +128,26 @@ TranslationResult FieldTranslator::Translate(std::string_view key, std::string_v
     if (translation.conversionType != "tooltip_only")
     {
         const auto& registry = FieldConversionPluginRegistry::GetInstance();
-        std::string pluginResult = registry.ApplyConversion(translation.conversionType, value, translation.valueMap);
+        auto convResult = registry.ApplyConversion(translation.conversionType, value, translation.valueMap);
 
-        if (pluginResult != std::string(value))
+        if (convResult.isOk())
         {
-            converted = std::string(value) + " -> " + pluginResult;
-            result.wasConverted = true;
+            std::string pluginResult = convResult.unwrap();
+            if (pluginResult != std::string(value))
+            {
+                converted = std::string(value) + " -> " + pluginResult;
+                result.wasConverted = true;
+            }
+            else
+            {
+                result.wasConverted = false;
+            }
         }
         else
         {
+            // conversionType not found in registry — leave value unchanged
+            util::Logger::Warn("FieldTranslator: conversion '{}' not available for key '{}': {}",
+                translation.conversionType, key, convResult.error().what());
             result.wasConverted = false;
         }
     }
