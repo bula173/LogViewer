@@ -53,7 +53,7 @@ var searchData=
   ['loaddependencyhandles_50',['LoadDependencyHandles',['../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225',1,'plugin']]],
   ['loaded_51',['loaded',['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474ba7381d487d18845b379422325c0a768d6',1,'plugin::Loaded']]],
   ['loadfile_52',['LoadFile',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a34be0c63980bea91de5871f41189f64c',1,'ui::qt::SideBySidePanel']]],
-  ['loadfiledirect_53',['LoadFileDirect',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a4ef0dd201bfe8e9bbda737d2b952d4f3',1,'ui::qt::SideBySidePanel']]],
+  ['loadfiledirect_53',['LoadFileDirect',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a425f4a88dcd64251380344eb2836bdbb',1,'ui::qt::SideBySidePanel']]],
   ['loadfilters_54',['loadFilters',['../d5/db4/classfilters_1_1FilterManager.html#ac6ed54e7ff7d60cb119c09fafd065623',1,'filters::FilterManager']]],
   ['loadfiltersfrompath_55',['loadFiltersFromPath',['../d5/db4/classfilters_1_1FilterManager.html#a58352779507a36e620b3cd142710e1fc',1,'filters::FilterManager']]],
   ['loadfromdirectory_56',['LoadFromDirectory',['../d7/d64/classparser_1_1EvlogTemplateRegistry.html#aff226473ebe69b7b72ad85e4ee527f86',1,'parser::EvlogTemplateRegistry']]],
