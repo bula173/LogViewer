@@ -5,7 +5,7 @@ var classconfig_1_1FieldTranslator =
     [ "FormatTooltip", "d9/da7/classconfig_1_1FieldTranslator.html#ae2a364373843ce7bfa46f633aed83197", null ],
     [ "GetAllTranslations", "d9/da7/classconfig_1_1FieldTranslator.html#ae21229ce4825ddb7d915fb582ef73c15", null ],
     [ "HasTranslation", "d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0", null ],
-    [ "LoadFromFile", "d9/da7/classconfig_1_1FieldTranslator.html#a6fd59d919c4360582e2351c160c3274c", null ],
+    [ "LoadFromFile", "d9/da7/classconfig_1_1FieldTranslator.html#a730d80700b00a4d0155ab1d28fafdf87", null ],
     [ "RebuildLowercaseCache", "d9/da7/classconfig_1_1FieldTranslator.html#ae732203d7caab08990b6069278abf06b", null ],
     [ "RemoveTranslation", "d9/da7/classconfig_1_1FieldTranslator.html#a8d9b3efd1581ce816e67bee1b9dcc5fc", null ],
     [ "SaveToFile", "d9/da7/classconfig_1_1FieldTranslator.html#a42434cf728d1234e243d500938ec2f42", null ],
