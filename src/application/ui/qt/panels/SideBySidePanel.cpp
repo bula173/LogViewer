@@ -239,8 +239,8 @@ void SideBySidePanel::OnSetRightRef()
 void SideBySidePanel::OnOpenLeftFile()  { LoadFile(true);  }
 void SideBySidePanel::OnOpenRightFile() { LoadFile(false); }
 
-void SideBySidePanel::OpenLeft(const std::filesystem::path& path)  { LoadFileDirect(true,  path); }
-void SideBySidePanel::OpenRight(const std::filesystem::path& path) { LoadFileDirect(false, path); }
+void SideBySidePanel::OpenLeft(const QString& path)  { LoadFileDirect(true,  path); }
+void SideBySidePanel::OpenRight(const QString& path) { LoadFileDirect(false, path); }
 
 void SideBySidePanel::LoadFile(bool isLeft)
 {
@@ -277,12 +277,13 @@ void SideBySidePanel::LoadFile(bool isLeft)
     (isLeft ? m_leftOpenBtn : m_rightOpenBtn)->setEnabled(false);
 }
 
-void SideBySidePanel::LoadFileDirect(bool isLeft, const std::filesystem::path& path)
+void SideBySidePanel::LoadFileDirect(bool isLeft, const QString& path)
 {
     auto* watcher = isLeft ? m_leftWatcher : m_rightWatcher;
     if (watcher->isRunning()) return;
 
-    auto result = parser::ParserFactory::CreateFromFile(path);
+    const std::filesystem::path fspath(path.toStdString());
+    auto result = parser::ParserFactory::CreateFromFile(fspath);
     if (!result.isOk()) {
         QMessageBox::critical(this, tr("Side by Side"),
             tr("Cannot open file:\n%1").arg(
@@ -290,14 +291,13 @@ void SideBySidePanel::LoadFileDirect(bool isLeft, const std::filesystem::path& p
         return;
     }
 
-    const QString qpath = QString::fromStdString(path.string());
     QLabel* lbl = isLeft ? m_leftFileLabel : m_rightFileLabel;
-    lbl->setText(QFileInfo(qpath).fileName());
+    lbl->setText(QFileInfo(path).fileName());
     lbl->setStyleSheet("color: orange; font-style: normal;");
-    lbl->setToolTip(qpath);
+    lbl->setToolTip(path);
     (isLeft ? m_leftOpenBtn : m_rightOpenBtn)->setEnabled(false);
 
-    StartAsyncLoad(isLeft, result.unwrap(), path);
+    StartAsyncLoad(isLeft, result.unwrap(), fspath);
 }
 
 void SideBySidePanel::StartAsyncLoad(bool isLeft,

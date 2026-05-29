@@ -5,6 +5,7 @@
 
 #include <QFutureWatcher>
 #include <QLabel>
+#include <QString>
 #include <QWidget>
 #include <filesystem>
 #include <memory>
@@ -39,8 +40,8 @@ public:
     explicit SideBySidePanel(QWidget* parent = nullptr);
     ~SideBySidePanel() override;
 
-    void OpenLeft(const std::filesystem::path& path);
-    void OpenRight(const std::filesystem::path& path);
+    void OpenLeft(const QString& path);
+    void OpenRight(const QString& path);
 
 signals:
     void CloseRequested();
@@ -67,7 +68,7 @@ private:
 
     // ── Loading ─────────────────────────────────────────────────────────────
     void LoadFile(bool isLeft);
-    void LoadFileDirect(bool isLeft, const std::filesystem::path& path);
+    void LoadFileDirect(bool isLeft, const QString& path);
     void StartAsyncLoad(bool isLeft, std::unique_ptr<parser::IDataParser> parser,
                         const std::filesystem::path& path);
 
