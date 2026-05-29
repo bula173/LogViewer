@@ -1,48 +1,52 @@
-# Configurable Type Filter Field
+# Type Filter Field — Auto-Detection and Override
 
 ## Overview
-The type filter now uses a configurable field name instead of hardcoded "type", allowing LogViewer to work with different log formats that use different field names for categorization.
 
-## Changes
+LogViewer automatically detects which field in your log events represents the event type or severity level. No manual configuration is required for common log formats. You can still pin a specific field name if your logs use a non-standard naming convention.
 
-### Configuration (Config.hpp/cpp)
-- Added `typeFilterField` member variable with default value `"type"`
-- Added `GetFilterConfig()` method to load the filter configuration from JSON
-- `SaveConfig()` now writes: `j["filters"]["typeFilterField"] = typeFilterField;`
-- `LoadConfig()` now reads the `filters.typeFilterField` setting from JSON
+## Auto-Detection
 
-### Filter Logic (MainWindowPresenter.cpp)
-- `UpdateTypeFilters()`: Now uses `config.typeFilterField` instead of hardcoded `"type"`
-- `ApplySelectedTypeFilters()`: Now uses `config.typeFilterField` instead of hardcoded `"type"`
+When a file is loaded, `UpdateTypeFilters()` scans the first 100 events for these field names (in priority order):
 
-### Color Logic
-- **EventsTableModel.cpp**: Foreground and background colors now use `config.typeFilterField`
-- **EventsContainerAdapter.cpp** (wxWidgets): Row coloring now uses `config.typeFilterField`
-- **AIChatPanel.cpp**: Event formatting now uses `config.typeFilterField`
-- **columnColors configuration**: The key in `columnColors` should match your `typeFilterField` value
+```
+level → type → severity → priority → category →
+loglevel → log_level → logLevel → eventtype → event_type
+```
 
-### Default Configuration (etc/default_config.json)
-- Added `"filters"` section with `"typeFilterField": "level"`
-- This matches the example log structure which uses "level" for event types
+The first field that is non-empty in any of the sampled events becomes the active type filter field for that session. The detected value is held in memory but **not written to config**, so auto-detection runs fresh on each file load.
 
-### UI Configuration Dialog
-- Added to Edit → Config → General tab
-- Field: "Type Filter Field" with placeholder text showing examples
-- Users can change without editing JSON manually
+## Fallback: User Prompt
 
-### Color Configuration Dialog
-- Edit → Config → Colors tab
-- Column dropdown now auto-populates with available columns
-- Defaults to the `typeFilterField` value for consistency
-- Users can add color mappings for different field values
+If none of the candidate field names match any event in the first 100 rows, a modal dialog asks the user to enter the field name manually. The provided value is:
 
-## Configuration Example
+- Immediately applied to the current session.
+- **Saved to `config.json`** so it is used automatically for future loads without prompting again.
+
+## Manual Override (Settings)
+
+Open **Tools > Settings > General** and set the **Type Filter Field**:
+
+- **Non-empty value** — auto-detection is skipped entirely; the given field is always used.
+- **Empty value** — auto-detection runs on every file load (default behaviour).
+
+Saving an explicit value persists it to `config.json`:
 
 ```json
 {
   "filters": {
-    "typeFilterField": "level"
-  },
+    "typeFilterField": "severity"
+  }
+}
+```
+
+Clearing the field and saving restores auto-detection.
+
+## Row Colouring
+
+Row colours are driven by `columnColors` in the configuration, **not** limited to the type filter field. Any column can have colour rules; the first column (alphabetically by key) whose value matches an event is applied:
+
+```json
+{
   "columnColors": {
     "level": {
       "ERROR": ["#ffffff", "#ff4200"],
@@ -54,30 +58,16 @@ The type filter now uses a configurable field name instead of hardcoded "type", 
 }
 ```
 
-**Important**: The key in `columnColors` (e.g., `"level"`) must match the value of `typeFilterField`. This ensures that filtering and coloring use the same field consistently.
+Configure colours in **Tools > Settings > Colors**.
 
-## Supported Values
-The `typeFilterField` can be set to any attribute/field name in your log events:
-- `"type"` - for logs that use `<event type="ERROR">`
-- `"level"` - for logs that use `<event level="ERROR">`
-- `"severity"` - for logs that use `<event severity="ERROR">`
-- `"priority"` - for logs that use `<event priority="ERROR">`
-- `"category"` - for logs that use `<event category="ERROR">`
+## XML Structure Auto-Discovery
 
-## Benefits
-1. **Flexibility**: Works with various log formats without code changes
-2. **Consistency**: All filter operations use the same field
-3. **Configurability**: Users can adapt LogViewer to their log structure
-4. **Default behavior**: Defaults to "type" for backward compatibility
+The XML parser also requires no configuration. It discovers structure by element depth:
 
-## Testing
-To test with different field names:
-1. Edit `config.json` (or `etc/default_config.json`)
-2. Set `"filters": { "typeFilterField": "level" }` (or other field name)
-3. Load a log file that uses that field for categorization
-4. The type filter should now show values from that field
+| Depth | Role |
+|-------|------|
+| 1 | Root element (any tag name, e.g. `<events>`, `<log>`) |
+| 2 | Event record (any tag name, e.g. `<event>`, `<record>`) |
+| 3+ | Field — tag name becomes the key, text content the value |
 
-## Future Enhancements
-- UI configuration dialog to set `typeFilterField` without manual JSON editing
-- Auto-detection of common field names on log load
-- Multiple filter fields (type + severity + module, etc.)
+XML attributes on depth-2 elements are also captured as key/value pairs. No `rootElement` or `eventElement` configuration keys are needed or read.

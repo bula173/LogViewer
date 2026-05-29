@@ -52,8 +52,6 @@ class EventsTableModel : public QAbstractTableModel
     bool ShouldShowOriginalIdColumn() const;
     QString ComposeCellText(const db::LogEvent& event,
         const std::string& columnName) const;
-    QColor ResolveColor(const std::string& column,
-        const std::string& value, bool background) const;
     QVariant GetSortValue(const db::LogEvent& event,
         const std::string& columnName) const;
 

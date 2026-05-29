@@ -61,6 +61,7 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QSplitter>
+#include <QStackedWidget>
 #include <QStatusBar>
 #include <QString>
 #include <QTabWidget>
@@ -73,7 +74,7 @@
 #include <QShortcut>
 #include <QToolTip>
 #include <QHelpEvent>
-#include <QtConcurrent/QtConcurrent>
+#include <QEventLoop>
 #include <QScopeGuard>
 
 #include <climits>
@@ -110,7 +111,7 @@ static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
     if (!handle) return nullptr;
     auto container = static_cast<db::EventsContainer*>(handle);
     try {
-        const auto& event = container->GetEvent(index);
+        const auto& event = container->GetEvent(static_cast<size_t>(index));
         nlohmann::json j;
         for (const auto& kv : event.getEventItems()) {
             // If duplicate keys exist, last one wins
@@ -147,10 +148,7 @@ MainWindow::MainWindow(mvc::IController& controller,
         util::Logger::Debug("[MainWindow] {}", msg.toStdString());
         if (m_splash) m_splash->Step(msg);
     };
-    auto splashWarn = [this](const QString& msg) {
-        util::Logger::Warn("[MainWindow] {}", msg.toStdString());
-        if (m_splash) m_splash->Warn(msg);
-    };
+
 
     try {
         splashStep(tr("Loading recent files…"));
@@ -210,7 +208,6 @@ MainWindow::~MainWindow()
     // against partially-destroyed state.
     if (m_panelRefreshTimer)   m_panelRefreshTimer->stop();
     if (m_searchDebounceTimer) m_searchDebounceTimer->stop();
-    if (m_filterWatcher)       m_filterWatcher->cancel();
 
     // Save recent files before cleanup
     SaveRecentFiles();
@@ -255,24 +252,34 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             setCentralWidget(m_contentTabs);
         m_contentTabs->tabBar()->installEventFilter(this);
 
-        // Events view tab — wrapped in a container that holds the search bar
+        // Events view tab — QStackedWidget with page 0 = normal view, page 1 = side-by-side
         m_eventsView = new EventsTableView(events, m_contentTabs);
         if (!m_eventsView) {
             throw std::runtime_error("Failed to create events view");
         }
 
         {
-            auto* eventsContainer = new QWidget(m_contentTabs);
-            auto* eventsLayout    = new QVBoxLayout(eventsContainer);
+            m_eventsStack = new QStackedWidget(m_contentTabs);
+
+            // Page 0: normal events view
+            auto* eventsInner  = new QWidget(m_eventsStack);
+            auto* eventsLayout = new QVBoxLayout(eventsInner);
             eventsLayout->setContentsMargins(0, 0, 0, 0);
             eventsLayout->setSpacing(0);
-
-            m_searchBar = new SearchBar(eventsContainer);
+            m_searchBar = new SearchBar(eventsInner);
             m_searchBar->setVisible(false);
             eventsLayout->addWidget(m_searchBar);
             eventsLayout->addWidget(m_eventsView);
+            m_eventsStack->addWidget(eventsInner);   // index 0
 
-            m_contentTabs->addTab(eventsContainer, "Events");
+            // Page 1: side-by-side comparison
+            m_sideBySidePanel = new SideBySidePanel(m_eventsStack);
+            m_eventsStack->addWidget(m_sideBySidePanel); // index 1
+
+            connect(m_sideBySidePanel, &SideBySidePanel::CloseRequested,
+                    this, [this]() { m_eventsStack->setCurrentIndex(0); });
+
+            m_contentTabs->addTab(m_eventsStack, "Events");
             m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
                 tr("Browse, search, and filter log events"));
         }
@@ -460,12 +467,6 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_contentTabs->addTab(m_scenariosPanel, tr("Scenarios"));
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
         tr("Build named, ordered event collections and export them as plain text, Markdown, or JSON Lines"));
-
-    // ===== MAIN TAB: Side-by-side comparison =====
-    m_sideBySidePanel = new SideBySidePanel(this);
-    m_contentTabs->addTab(m_sideBySidePanel, tr("Side by Side"));
-    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
-        tr("Load two log files side by side and synchronise them by timestamp, manual reference points, or none"));
 
     // ===== UPDATE CHECKER =====
     m_updateChecker = new UpdateChecker(this);
@@ -809,11 +810,8 @@ void MainWindow::SetupMenus()
     viewMenu->addSeparator();
 
     auto* sideBySideAction = viewMenu->addAction(tr("&Side by Side Comparison"));
-    sideBySideAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
     connect(sideBySideAction, &QAction::triggered, this, [this]() {
-        if (m_sideBySidePanel && m_contentTabs) {
-            m_contentTabs->setCurrentWidget(m_sideBySidePanel);
-        }
+        ActivateSideBySide();
     });
 
     viewMenu->addSeparator();
@@ -1085,31 +1083,6 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
         util::Logger::Info("[MainWindow] Update check scheduled (startup)");
     }
 
-    // Set up the async filter watcher. The finished() signal is delivered on
-    // the main thread so all UI calls inside the lambda are safe.
-    m_filterWatcher = new QFutureWatcher<std::vector<unsigned long>>(this);
-    connect(m_filterWatcher, &QFutureWatcher<std::vector<unsigned long>>::finished,
-            this, [this]() {
-                // Always reset the flag, even if an exception occurs below.
-                const auto resetFlag = qScopeGuard([this]{ m_filteringInProgress = false; });
-                try {
-                    const auto filteredIndices = m_filterWatcher->result();
-                    util::Logger::Debug("[MainWindow] ApplyExtendedFilters (async): {} events, {} matches",
-                        m_events ? m_events->Size() : 0, filteredIndices.size());
-                    m_eventsView->SetFilteredEvents(filteredIndices);
-                    m_eventsView->RefreshView();
-                    ToggleProgressVisibility(false);
-                    ConfigureProgressRange(100);
-                    const auto total   = m_events ? m_events->Size() : 0;
-                    const auto matched = filteredIndices.size();
-                    UpdateStatusText(
-                        QString("Filters applied: %1 of %2 events").arg(matched).arg(total).toStdString());
-                } catch (const std::exception& ex) {
-                    util::Logger::Error("[MainWindow] Error in filter result handler: {}", ex.what());
-                    ToggleProgressVisibility(false);
-                }
-            });
-
     util::Logger::Debug("[MainWindow] Presenter initialized successfully");
 }
 
@@ -1266,15 +1239,28 @@ void MainWindow::RefreshLayout()
     this->update();
 }
 
+std::string MainWindow::AskString(const std::string& title,
+    const std::string& prompt, const std::string& defaultValue, bool& ok)
+{
+    const QString result = QInputDialog::getText(
+        this,
+        QString::fromStdString(title),
+        QString::fromStdString(prompt),
+        QLineEdit::Normal,
+        QString::fromStdString(defaultValue),
+        &ok);
+    return ok ? result.toStdString() : std::string{};
+}
+
 void MainWindow::OnSearchResultActivated(long eventId)
 {
         util::Logger::Debug("[MainWindow] OnSearchResultActivated eventId={}",
             eventId);
-        for (long i = 0u; i < static_cast<long>(m_events->Size()); ++i)
+        for (size_t i = 0; i < m_events->Size(); ++i)
         {
-            if (static_cast<long>(m_events->GetEvent(static_cast<int>(i)).getId()) == eventId)            {
-                util::Logger::Debug(
-                    "[MainWindow] Matching event found at index={}", static_cast<long long>(i));
+            if (m_events->GetEvent(i).getId() == eventId)
+            {
+                util::Logger::Debug("[MainWindow] Matching event found at index={}", i);
                 m_events->SetCurrentItem(static_cast<int>(i));
                 break;
             }
@@ -1318,19 +1304,27 @@ void MainWindow::dropEvent(QDropEvent* event)
     if (!event || !event->mimeData() || !event->mimeData()->hasUrls())
         return;
 
-    const auto urls = event->mimeData()->urls();
-    if (urls.isEmpty())
+    QStringList localFiles;
+    for (const auto& url : event->mimeData()->urls())
+        if (url.isLocalFile())
+            localFiles.append(url.toLocalFile());
+
+    if (localFiles.isEmpty())
         return;
 
-    for (const auto& url : urls)
+    if (localFiles.size() >= 2)
     {
-        if (url.isLocalFile())
-        {
-            util::Logger::Info("[MainWindow] Dropped file: {}",
-                url.toLocalFile().toStdString());
-            HandleDroppedFile(url.toLocalFile());
-            break; // align with wx: only first file processed for now
-        }
+        // Two files dropped: open directly in side-by-side panel.
+        util::Logger::Info("[MainWindow] Two files dropped — opening side by side");
+        ActivateSideBySide();
+        m_sideBySidePanel->OpenLeft(localFiles[0]);
+        m_sideBySidePanel->OpenRight(localFiles[1]);
+    }
+    else
+    {
+        util::Logger::Info("[MainWindow] Dropped file: {}",
+            localFiles[0].toStdString());
+        HandleDroppedFile(localFiles[0]);
     }
 
     event->acceptProposedAction();
@@ -1385,9 +1379,8 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     UpdateStatusText(readyMsg.toStdString());
                     AddToRecentFiles(path);
                 }
-                else // Merge
+                else if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Merge)
                 {
-                    // Merge with existing data
                     const std::string existingAlias = dialog.GetExistingFileAlias().toStdString();
                     const std::string newFileAlias = dialog.GetNewFileAlias().toStdString();
                     const QString mergingMsg = QString("Merging %1 ...").arg(path);
@@ -1396,6 +1389,14 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->SetItemDetailsVisible(true);
                     const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
                     UpdateStatusText(completeMsg.toStdString());
+                    AddToRecentFiles(path);
+                }
+                else // SideBySide
+                {
+                    ActivateSideBySide();
+                    if (!m_currentLogFilePath.isEmpty())
+                        m_sideBySidePanel->OpenLeft(m_currentLogFilePath);
+                    m_sideBySidePanel->OpenRight(path);
                     AddToRecentFiles(path);
                 }
             }
@@ -1497,8 +1498,15 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
     if (ext == ".evl")
     {
         auto parser = std::make_unique<parser::EvlogParser>();
-        if (!m_evlogTemplateDir.isEmpty())
-            parser->SetTemplateDirectory(m_evlogTemplateDir.toStdString());
+        if (!m_evlogTemplateDir.isEmpty()) {
+            auto tmplDirResult = parser->SetTemplateDirectory(m_evlogTemplateDir.toStdString());
+            if (tmplDirResult.isErr()) {
+                QMessageBox::warning(this, tr("Evlog Templates"),
+                    tr("Could not load evlog templates from:\n%1\n\nPayloads will be shown as hex dumps.\n\nError: %2")
+                        .arg(m_evlogTemplateDir)
+                        .arg(QString::fromStdString(tmplDirResult.error().what())));
+            }
+        }
         return parser;
     }
 
@@ -1593,7 +1601,9 @@ void MainWindow::OnLoadEvlogTemplatesRequested()
 
     // Count templates loaded as a quick sanity check.
     parser::EvlogTemplateRegistry reg;
-    reg.LoadFromDirectory(dir.toStdString());
+    auto tmplResult = reg.LoadFromDirectory(dir.toStdString());
+    if (tmplResult.isErr())
+        util::Logger::Warn("[MainWindow] LoadFromDirectory failed: {}", tmplResult.error().what());
 
     UpdateStatusText(tr("Evlog templates loaded: %1 template(s) from %2 — reload .evl file to apply")
         .arg(reg.Count())
@@ -1775,16 +1785,46 @@ void MainWindow::OnExitRequested()
     close();
 }
 
-void MainWindow::RunAsyncFilter(std::function<std::vector<unsigned long>()> worker,
-                                const QString& statusMsg)
+void MainWindow::ActivateSideBySide()
+{
+    if (m_contentTabs)
+        m_contentTabs->setCurrentWidget(m_eventsStack);
+    if (m_eventsStack)
+        m_eventsStack->setCurrentIndex(1);
+}
+
+void MainWindow::RunFilter(std::function<std::vector<unsigned long>()> worker,
+                           const QString& statusMsg)
 {
     if (m_filteringInProgress)
         return;
     m_filteringInProgress = true;
     UpdateStatusText(statusMsg.toStdString());
     ToggleProgressVisibility(true);
-    ConfigureProgressRange(0); // 0,0 = indeterminate busy animation
-    m_filterWatcher->setFuture(QtConcurrent::run(std::move(worker)));
+    ConfigureProgressRange(0); // indeterminate busy animation
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+    std::vector<unsigned long> filteredIndices;
+    try {
+        filteredIndices = worker();
+    } catch (const std::exception& ex) {
+        util::Logger::Error("[MainWindow] Error in filter worker: {}", ex.what());
+        ToggleProgressVisibility(false);
+        m_filteringInProgress = false;
+        return;
+    }
+
+    m_filteringInProgress = false;
+    util::Logger::Debug("[MainWindow] Filter: {} events, {} matches",
+        m_events ? m_events->Size() : 0, filteredIndices.size());
+    m_eventsView->SetFilteredEvents(filteredIndices);
+    m_eventsView->RefreshView();
+    ToggleProgressVisibility(false);
+    ConfigureProgressRange(100);
+    const auto total   = m_events ? m_events->Size() : 0;
+    const auto matched = filteredIndices.size();
+    UpdateStatusText(
+        QString("Filters applied: %1 of %2 events").arg(matched).arg(total).toStdString());
 }
 
 void MainWindow::ApplyExtendedFilters()
@@ -1794,7 +1834,7 @@ void MainWindow::ApplyExtendedFilters()
 
     // Read-only access from the worker thread is safe: no writes during a filter pass.
     const db::EventsContainer* events = m_events;
-    RunAsyncFilter(
+    RunFilter(
         [events]() -> std::vector<unsigned long> {
             return filters::FilterManager::getInstance().applyFilters(*events);
         },
@@ -1839,7 +1879,7 @@ void MainWindow::ApplyActorFilter()
     }
 
     db::EventsContainer* events = m_events;
-    RunAsyncFilter(
+    RunFilter(
         [events, compiledCopy = std::move(compiled)]()
                           -> std::vector<unsigned long> {
             const size_t total = events->Size();

@@ -9,14 +9,9 @@
   "logging": {
     "level": "warn"
   },
-  "filters": {
-    "typeFilterField": "level"
-  },
   "dictionaryFilePath": "etc/field_dictionary.json",
   "parsers": {
     "xml": {
-      "rootElement": "events",
-      "eventElement": "event",
       "columns": [
         { "name": "id", "visible":true, "width": 50 },
         { "name": "timestamp", "visible":true, "width": 150 },

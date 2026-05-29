@@ -1,6 +1,5 @@
 // internal
 #include "xmlParser.hpp"
-#include "Config.hpp"
 #include "LogEvent.hpp"
 #include "Error.hpp"
 #include "Logger.hpp"
@@ -55,46 +54,49 @@ static void StartElementHandler(
     void* userData, const XML_Char* name, const XML_Char** atts)
 {
     ParserState* state = static_cast<ParserState*>(userData);
-    const auto& config = config::GetConfig();
     std::string elementName(name);
+    state->depth++;
 
-    if (!state->insideRoot)
+    if (state->depth == 1)
     {
-        if (elementName == config.xmlRootElement)
-        {
-            util::Logger::Debug(
-                "XmlParser::ParseData found root element: {}", elementName);
-            state->insideRoot = true;
-        }
-        else
-        {
-            util::Logger::Warn(
-                "XmlParser::ParseData unexpected element: {} outside root",
-                elementName);
-            // Do NOT flip insideRoot here; wait for the correct root.
-        }
+        util::Logger::Debug("XmlParser: root element <{}>", elementName);
+        state->insideRoot = true;
         return;
     }
 
-    if (elementName == config.xmlEventElement)
+    if (!state->insideRoot)
+        return;
+
+    if (state->depth == 2)
     {
+        // Every direct child of root is an event record.
+        if (state->discoveredEventElement.empty())
+        {
+            state->discoveredEventElement = elementName;
+            util::Logger::Debug("XmlParser: auto-discovered event element <{}>", elementName);
+        }
         state->insideEvent = true;
         state->eventItems.clear();
         state->eventItems.reserve(10);
-        
-        // Parse attributes if present (e.g., <event id="1" timestamp="..." />)
+
         if (atts != nullptr)
         {
             for (int i = 0; atts[i]; i += 2)
             {
                 std::string attrName(atts[i]);
                 std::string attrValue(atts[i + 1]);
+                util::Logger::Trace("XmlParser: event attribute {}=\"{}\"",
+                    attrName, attrValue);
                 state->eventItems.emplace_back(std::move(attrName), std::move(attrValue));
             }
         }
+        return;
     }
-    else if (state->insideEvent)
+
+    // depth >= 3: child element inside an event
+    if (state->insideEvent)
     {
+        util::Logger::Trace("XmlParser: child element <{}> inside event", elementName);
         state->currentElement = elementName;
         state->currentText.clear();
     }
@@ -103,33 +105,31 @@ static void StartElementHandler(
 static void EndElementHandler(void* userData, const XML_Char* name)
 {
     ParserState* state = static_cast<ParserState*>(userData);
-    const auto& config = config::GetConfig();
     std::string elementName(name);
-    if (!state->insideRoot)
+
+    if (state->depth == 2 && state->insideEvent)
     {
-        return;
-    }
-    if (elementName == config.xmlEventElement)
-    {
-        // Add event to batch instead of immediate notification
+        // Closing a direct child of root — finalise the event record.
         state->eventBatch.emplace_back(
             state->eventId++, std::move(state->eventItems));
         state->insideEvent = false;
 
-        // Send batch every N events
         if (state->eventBatch.size() >= 5000)
-        { // Large batch: fewer mutex acquires and notify calls
+        {
             state->parser->NotifyNewEventBatch(std::move(state->eventBatch));
             state->eventBatch.clear();
         }
     }
-    else if (state->insideEvent && elementName == state->currentElement)
+    else if (state->depth >= 3 && state->insideEvent && elementName == state->currentElement)
     {
+        // Closing a child element of an event — flush accumulated text.
         state->eventItems.emplace_back(
             std::move(state->currentElement), std::move(state->currentText));
         state->currentElement.clear();
         state->currentText.clear();
     }
+
+    state->depth--;
 }
 
 static void CharacterDataHandler(void* userData, const XML_Char* s, int len)
@@ -176,12 +176,14 @@ void XmlParser::ParseData(const std::filesystem::path& filepath)
     if (!input.is_open())
     {
         throw error::Error(
+            error::ErrorCode::FileNotFound,
             "XmlParser::ParseData failed to open file: " + filepath.string());
     }
 
     ParseData(input);
 
     input.close();
+    util::Logger::Debug("XmlParser::ParseData file closed: {}", filepath.string());
 }
 
 /**
@@ -313,8 +315,9 @@ void XmlParser::ParseData(std::istream& input)
         if (!state.eventBatch.empty())
             NotifyNewEventBatch(std::move(state.eventBatch));
 
-        util::Logger::Debug("XmlParser::ParseData finished. Processed: {}",
-            state.bytesProcessed);
+        util::Logger::Info(
+            "XmlParser::ParseData complete — {} events parsed, {} bytes processed",
+            state.eventId, state.bytesProcessed);
         NotifyProgressUpdated();
         // Parser freed by ParserGuard RAII on scope exit.
     }

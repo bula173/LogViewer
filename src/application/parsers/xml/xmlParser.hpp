@@ -37,8 +37,10 @@ struct ParserState
     size_t eventsSinceLastNotify = 0;
     size_t lastProgressBytes = 0;
     int eventId = 0;
+    int depth = 0;
     bool insideRoot = false;
     bool insideEvent = false;
+    std::string discoveredEventElement;
     db::LogEvent::EventItems eventItems;
     XmlParser* parser = nullptr;
     XML_Parser parserHandle = nullptr;

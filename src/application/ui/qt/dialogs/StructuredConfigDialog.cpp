@@ -103,10 +103,13 @@ void StructuredConfigDialog::InitGeneralTab()
     layout->addLayout(pathLayout);
 
     auto* form = new QFormLayout();
-    m_xmlRootEdit = new QLineEdit(m_generalTab);
-    m_xmlEventEdit = new QLineEdit(m_generalTab);
     m_typeFilterFieldEdit = new QLineEdit(m_generalTab);
-    m_typeFilterFieldEdit->setPlaceholderText(tr("e.g., type, level, severity"));
+    m_typeFilterFieldEdit->setPlaceholderText(
+        tr("auto-detect if empty  (e.g. level, type, severity)"));
+    m_typeFilterFieldEdit->setToolTip(
+        tr("Field used to populate the type/level filter.\n"
+           "Leave empty to auto-detect on each file load.\n"
+           "Set explicitly to pin the field for all files."));
     m_logLevelCombo = new QComboBox(m_generalTab);
 
     m_logLevelCombo->addItems(
@@ -115,8 +118,6 @@ void StructuredConfigDialog::InitGeneralTab()
     connect(m_logLevelCombo, &QComboBox::currentIndexChanged, this,
         &StructuredConfigDialog::OnLogLevelChanged);
 
-    form->addRow(tr("xmlRootElement"), m_xmlRootEdit);
-    form->addRow(tr("xmlEventElement"), m_xmlEventEdit);
     form->addRow(tr("Type Filter Field"), m_typeFilterFieldEdit);
     form->addRow(tr("logLevel"), m_logLevelCombo);
     
@@ -457,8 +458,6 @@ void StructuredConfigDialog::LoadConfigToUi()
     const auto& path = cfg.GetConfigFilePath();
     m_configPathLabel->setText(QString::fromStdString(path));
 
-    m_xmlRootEdit->setText(QString::fromStdString(cfg.xmlRootElement));
-    m_xmlEventEdit->setText(QString::fromStdString(cfg.xmlEventElement));
     m_typeFilterFieldEdit->setText(QString::fromStdString(cfg.typeFilterField));
 
     const QString logLevel = QString::fromStdString(cfg.logLevel);
@@ -475,7 +474,12 @@ void StructuredConfigDialog::LoadConfigToUi()
     const std::string& dictPath = cfg.GetDictionaryFilePath();
     if (!dictPath.empty() && QFile::exists(QString::fromStdString(dictPath)))
     {
-        cfg.GetMutableFieldTranslator().LoadFromFile(dictPath);
+        auto loadResult = cfg.GetMutableFieldTranslator().LoadFromFile(dictPath);
+        if (loadResult.isErr())
+        {
+            util::Logger::Warn("StructuredConfigDialog: failed to load dictionary from '{}': {}",
+                dictPath, loadResult.error().what());
+        }
     }
 
     // Note: AI configuration is now managed by plugins via their own config panels
@@ -515,11 +519,9 @@ void StructuredConfigDialog::OnSaveClicked()
 {
     auto& cfg = config::GetConfig();
 
-    cfg.xmlRootElement = m_xmlRootEdit->text().toStdString();
-    cfg.xmlEventElement = m_xmlEventEdit->text().toStdString();
-    cfg.typeFilterField = m_typeFilterFieldEdit->text().toStdString();
+    cfg.typeFilterField = m_typeFilterFieldEdit->text().trimmed().toStdString();
     cfg.logLevel = m_logLevelCombo->currentText().toStdString();
-    
+
     // Save dictionary file path
     cfg.SetDictionaryFilePath(m_dictionaryFileEdit->text().toStdString());
     
@@ -1743,12 +1745,13 @@ void StructuredConfigDialog::OnLoadDictionaryFile()
     
     // Load dictionary from selected file
     auto& cfg = config::GetConfig();
-    if (cfg.GetMutableFieldTranslator().LoadFromFile(fileName.toStdString()))
+    auto loadResult = cfg.GetMutableFieldTranslator().LoadFromFile(fileName.toStdString());
+    if (loadResult.isOk())
     {
         m_dictionaryFileEdit->setText(fileName);
         cfg.SetDictionaryFilePath(fileName.toStdString());
         RefreshDictionaryList();
-        
+
         QMessageBox::information(this, tr("Dictionary Loaded"),
             tr("Dictionary loaded successfully from:\n%1").arg(fileName));
     }

@@ -9,7 +9,6 @@
 #include "IPluginObserver.hpp"
 
 #include <QMainWindow>
-#include <QFutureWatcher>
 #include <functional>
 #include <memory>
 #include <set>
@@ -20,6 +19,7 @@ class QPushButton;
 class QProgressBar;
 class QLabel;
 class QSplitter;
+class QStackedWidget;
 class QTabWidget;
 class QWidget;
 class QDragEnterEvent;
@@ -106,6 +106,8 @@ class MainWindow : public QMainWindow,
     void UpdateProgressValue(int value) override;
     void ProcessPendingEvents() override;
     void RefreshLayout() override;
+    std::string AskString(const std::string& title, const std::string& prompt,
+        const std::string& defaultValue, bool& ok) override;
 
     // ISearchResultsViewObserver
     void OnSearchResultActivated(long eventId) override;
@@ -166,8 +168,9 @@ class MainWindow : public QMainWindow,
     void RefreshCurrentAnalysisPanel();
     void ApplyExtendedFilters();
     void ApplyActorFilter();
-    void RunAsyncFilter(std::function<std::vector<unsigned long>()> worker,
-                        const QString& statusMsg);
+    void ActivateSideBySide();
+    void RunFilter(std::function<std::vector<unsigned long>()> worker,
+                   const QString& statusMsg);
     void SetupMenus();
     void RefreshRecentFilesMenu();
     void RefreshLayoutMenu();
@@ -231,9 +234,10 @@ class MainWindow : public QMainWindow,
     QSplitter* m_bottomSplitter {nullptr};
     QSplitter* m_leftSplitter {nullptr};
     QSplitter* m_rightSplitter {nullptr};
-    QTabWidget* m_filterTabs {nullptr};
-    QTabWidget* m_contentTabs {nullptr};
-    QTabWidget* m_bottomTabs {nullptr};
+    QTabWidget*     m_filterTabs  {nullptr};
+    QTabWidget*     m_contentTabs {nullptr};
+    QStackedWidget* m_eventsStack {nullptr};
+    QTabWidget*     m_bottomTabs  {nullptr};
     EventsTableView* m_eventsView {nullptr};
     FiltersPanel* m_filtersPanel {nullptr};
     QWidget* m_bottomChatWidget {nullptr};
@@ -285,8 +289,6 @@ class MainWindow : public QMainWindow,
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     
-    // Async filter state — prevents re-entrant filter runs while a worker is active
-    QFutureWatcher<std::vector<unsigned long>>* m_filterWatcher {nullptr};
     bool m_filteringInProgress {false};
 
     // Lazy analysis-panel refresh — panels only recompute when visible

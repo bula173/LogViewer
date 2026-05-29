@@ -2,6 +2,7 @@
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
+#include "Logger.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -44,6 +45,7 @@ ActorDefinitionsPanel::ActorDefinitionsPanel(QWidget* parent)
     m_currentFilePath = DefaultFilePath();
 
     // Auto-load definitions from the default path on startup
+    util::Logger::Debug("[ActorDefinitionsPanel] Auto-loading from '{}'", m_currentFilePath);
     std::ifstream ifs(m_currentFilePath);
     if (ifs.is_open())
     {
@@ -54,10 +56,21 @@ ActorDefinitionsPanel::ActorDefinitionsPanel(QWidget* parent)
             m_definitions = ActorDefinition::ListFromJson(j);
             RebuildTable();
             if (!m_definitions.empty())
+            {
+                util::Logger::Info("[ActorDefinitionsPanel] Auto-loaded {} definition(s) from '{}'",
+                                   m_definitions.size(), m_currentFilePath);
                 SetStatus(tr("Auto-loaded %1 definition(s)").arg(m_definitions.size()), false);
+            }
+            else
+            {
+                util::Logger::Warn("[ActorDefinitionsPanel] Auto-load: file '{}' contains 0 definitions",
+                                   m_currentFilePath);
+            }
         }
         catch (const std::exception& e)
         {
+            util::Logger::Error("[ActorDefinitionsPanel] Auto-load failed for '{}': {}",
+                                m_currentFilePath, e.what());
             SetStatus(tr("Auto-load failed: %1").arg(QString::fromStdString(e.what())), true);
         }
     }
@@ -240,6 +253,7 @@ void ActorDefinitionsPanel::HandleAdd()
 {
     ActorDefinition def;
     if (!EditDefinition(def, /*isNew=*/true)) return;
+    util::Logger::Info("[ActorDefinitionsPanel] Added definition '{}'", def.name);
     m_definitions.push_back(def);
     RebuildTable();
     EmitAndSave();
@@ -257,6 +271,7 @@ void ActorDefinitionsPanel::HandleEdit()
 
     ActorDefinition def = m_definitions[static_cast<size_t>(row)];
     if (!EditDefinition(def, /*isNew=*/false)) return;
+    util::Logger::Info("[ActorDefinitionsPanel] Edited definition '{}' (row {})", def.name, row);
     m_definitions[static_cast<size_t>(row)] = def;
     RebuildTable();
     EmitAndSave();
@@ -273,6 +288,7 @@ void ActorDefinitionsPanel::HandleRemove()
             tr("Remove actor '%1'?").arg(name)) != QMessageBox::Yes)
         return;
 
+    util::Logger::Info("[ActorDefinitionsPanel] Removed definition '{}'", name.toStdString());
     m_definitions.erase(m_definitions.begin() + row);
     RebuildTable();
     EmitAndSave();
@@ -285,6 +301,8 @@ void ActorDefinitionsPanel::HandleSave()
         HandleSaveAs();
         return;
     }
+    util::Logger::Debug("[ActorDefinitionsPanel] HandleSave: {} definition(s) to '{}'",
+                        m_definitions.size(), m_currentFilePath);
 
     // Sync enabled checkboxes before saving
     for (int r = 0; r < m_table->rowCount(); ++r)
@@ -305,6 +323,8 @@ void ActorDefinitionsPanel::HandleSave()
         ofs << json;
         ofs.flush();
         if (!ofs) throw std::runtime_error("Write error");
+        util::Logger::Info("[ActorDefinitionsPanel] Saved {} definition(s) to '{}'",
+                           m_definitions.size(), m_currentFilePath);
         emit DefinitionsChanged(m_definitions);
         SetStatus(tr("Saved %1 definition(s) to %2.")
             .arg(m_definitions.size())
@@ -312,6 +332,8 @@ void ActorDefinitionsPanel::HandleSave()
     }
     catch (const std::exception& e)
     {
+        util::Logger::Error("[ActorDefinitionsPanel] Save failed for '{}': {}",
+                            m_currentFilePath, e.what());
         QMessageBox::warning(this, tr("Save Error"),
             tr("Could not save actors: %1").arg(QString::fromStdString(e.what())));
         return;
@@ -359,6 +381,7 @@ void ActorDefinitionsPanel::HandleSaveAs()
     const QString path = dlg.selectedFiles().value(0);
     if (path.isEmpty()) return;
 
+    util::Logger::Info("[ActorDefinitionsPanel] Save As: '{}'", path.toStdString());
     m_currentFilePath = path.toStdString();
     HandleSave();
 }
@@ -384,6 +407,7 @@ void ActorDefinitionsPanel::HandleLoad()
     const QString path = dlg.selectedFiles().value(0);
     if (path.isEmpty()) return;
 
+    util::Logger::Debug("[ActorDefinitionsPanel] HandleLoad: '{}'", path.toStdString());
     try
     {
         std::ifstream ifs(path.toStdString());
@@ -395,9 +419,17 @@ void ActorDefinitionsPanel::HandleLoad()
         RebuildTable();
         emit DefinitionsChanged(m_definitions);
         if (m_definitions.empty())
+        {
+            util::Logger::Warn("[ActorDefinitionsPanel] Loaded file '{}' contains 0 definitions",
+                               path.toStdString());
             SetStatus(tr("File loaded but contains 0 definitions."), true);
+        }
         else
+        {
+            util::Logger::Info("[ActorDefinitionsPanel] Loaded {} definition(s) from '{}'",
+                               m_definitions.size(), path.toStdString());
             SetStatus(tr("Loaded %1 definition(s) from file.").arg(m_definitions.size()), false);
+        }
 
         // Keep actors.json in sync so the loaded definitions survive restarts
         const std::string defaultPath = DefaultFilePath();
@@ -419,6 +451,8 @@ void ActorDefinitionsPanel::HandleLoad()
     }
     catch (const std::exception& e)
     {
+        util::Logger::Error("[ActorDefinitionsPanel] Load failed for '{}': {}",
+                            path.toStdString(), e.what());
         QMessageBox::warning(this, tr("Load Error"),
             tr("Could not load actors: %1").arg(QString::fromStdString(e.what())));
     }
@@ -428,10 +462,13 @@ void ActorDefinitionsPanel::HandleDiscover()
 {
     if (!m_events || m_events->Size() == 0)
     {
+        util::Logger::Warn("[ActorDefinitionsPanel] Discover requested but no log data loaded");
         QMessageBox::information(this, tr("Discover Actors"),
             tr("No log data is loaded. Open a log file first."));
         return;
     }
+    util::Logger::Debug("[ActorDefinitionsPanel] HandleDiscover: scanning {} event(s)",
+                        m_events->Size());
 
     // ── Scan up to 10K events, collect per-field unique values ───────────
     constexpr size_t kScanLimit = 10'000;
@@ -442,7 +479,7 @@ void ActorDefinitionsPanel::HandleDiscover()
     std::map<std::string, std::set<std::string>> fieldValues;
     for (size_t i = 0; i < total; i += step)
     {
-        const auto& ev = m_events->GetEvent(static_cast<int>(i));
+        const auto& ev = m_events->GetEvent(i);
         for (const auto& [k, v] : ev.getEventItems())
         {
             auto& vals = fieldValues[k];
@@ -509,12 +546,15 @@ void ActorDefinitionsPanel::HandleDiscover()
 
     if (candidates.empty())
     {
+        util::Logger::Warn("[ActorDefinitionsPanel] Discover: no suitable actor fields found");
         QMessageBox::information(this, tr("Discover Actors"),
             tr("No suitable actor fields found in the loaded log data.\n\n"
                "Suitable fields have between 2 and 200 distinct values.\n"
                "Fields already covered by existing definitions are skipped."));
         return;
     }
+    util::Logger::Debug("[ActorDefinitionsPanel] Discover: {} candidate field(s) found",
+                        candidates.size());
 
     // ── Review dialog ─────────────────────────────────────────────────────
     QDialog dlg(this);
@@ -598,12 +638,14 @@ void ActorDefinitionsPanel::HandleDiscover()
 
     if (imported > 0)
     {
+        util::Logger::Info("[ActorDefinitionsPanel] Discover: imported {} definition(s)", imported);
         RebuildTable();
         EmitAndSave();
         SetStatus(tr("Imported %1 actor definition(s) from discovery.").arg(imported), false);
     }
     else
     {
+        util::Logger::Debug("[ActorDefinitionsPanel] Discover: no fields selected for import");
         SetStatus(tr("No fields selected for import."), false);
     }
 }
@@ -623,6 +665,9 @@ void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
     if (row < 0 || row >= static_cast<int>(m_definitions.size())) return;
 
     const bool on = (item->checkState() == Qt::Checked);
+    util::Logger::Debug("[ActorDefinitionsPanel] Definition '{}' {}",
+                        m_definitions[static_cast<size_t>(row)].name,
+                        on ? "enabled" : "disabled");
     m_definitions[static_cast<size_t>(row)].enabled = on;
 
     // Update row text colour to reflect enabled state
@@ -919,6 +964,10 @@ void ActorDefinitionsPanel::UpdateActorDirection(
     bool           isSubActor,
     const QString& target)
 {
+    util::Logger::Info("[ActorDefinitionsPanel] UpdateActorDirection: def='{}' actor='{}' "
+                       "isSubActor={} target='{}'",
+                       defName.toStdString(), actorName.toStdString(),
+                       isSubActor, target.toStdString());
     for (auto& def : m_definitions)
     {
         if (def.name != defName.toStdString()) continue;
@@ -956,6 +1005,8 @@ void ActorDefinitionsPanel::EmitAndSave()
         std::ofstream ofs(autoSavePath);
         if (!ofs)
         {
+            util::Logger::Error("[ActorDefinitionsPanel] Auto-save: cannot open '{}'",
+                                autoSavePath);
             SetStatus(tr("Auto-save failed: cannot open %1")
                 .arg(QString::fromStdString(autoSavePath)), true);
             return;
@@ -964,14 +1015,24 @@ void ActorDefinitionsPanel::EmitAndSave()
         ofs << json;
         ofs.flush();
         if (!ofs)
+        {
+            util::Logger::Error("[ActorDefinitionsPanel] Auto-save: write error for '{}'",
+                                autoSavePath);
             SetStatus(tr("Auto-save failed: write error"), true);
+        }
         else
+        {
+            util::Logger::Debug("[ActorDefinitionsPanel] Auto-saved {} definition(s) to '{}'",
+                                m_definitions.size(), autoSavePath);
             SetStatus(tr("Auto-saved %1 definition(s) → %2")
                 .arg(m_definitions.size())
                 .arg(QString::fromStdString(autoSavePath)), false);
+        }
     }
     catch (const std::exception& e)
     {
+        util::Logger::Error("[ActorDefinitionsPanel] Auto-save exception for '{}': {}",
+                            autoSavePath, e.what());
         SetStatus(tr("Auto-save error: %1").arg(QString::fromStdString(e.what())), true);
     }
 }

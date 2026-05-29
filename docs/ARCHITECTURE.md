@@ -74,7 +74,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 
 | Subdirectory | Contents |
 |---|---|
-| `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, …) |
+| `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …) |
 | `dialogs/` | Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …) |
 | `events/` | Event table model and view (EventsTableModel, EventsTableView) |
 | `utils/` | Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker) |
@@ -102,6 +102,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 - **TraceViewerPanel**: Sequence-diagram-style actor/event view
 - **PatternAnalysisPanel**: Template clustering of structurally similar log lines
 - **BookmarksPanel**, **ScenariosPanel**, **ActorsPanel**, **ActorDefinitionsPanel**: Event annotation, scenario matching, and actor attribution
+- **SideBySidePanel**: Loads two independent log files and displays them in a split view with three synchronisation modes (see below)
 
 **Configuration Dialogs** (`dialogs/`)
 - **StructuredConfigDialog**: Tabbed configuration UI (General, Columns, Colors, AI)
@@ -178,6 +179,16 @@ Registered parsers (extension → class):
 - Supports field types: int8–int64, uint8–uint64, float, double, fixed-size char arrays `char[N]`, variable `string`.
 - `Find(facility, eventType)` returns the matching `EvlogTemplate*` or `nullptr`; lookup is O(log n) via `std::map`.
 
+**SideBySidePanel** (`panels/`): Displays two independently-loaded log files in a vertical splitter with a shared toolbar for synchronisation control.
+
+- Three sync modes: **Timestamp** (nearest-timestamp scroll), **Manual** (user picks a reference event on each side; a constant offset `rightTs = leftTs + offset` is computed and used for all subsequent lookups), **None** (views independent).
+- Each side owns an `EventsContainer` and `EventsTableView`; file loading runs on a background thread via `QtConcurrent::run` and `QFutureWatcher<void>`.
+- **Adapter pattern**: the inner `LoadJob::Observer` struct adapts `IDataParserObserver` callbacks to `EventsContainer::AddEvent()`/`AddEventBatch()` without the panel needing to implement the observer interface itself.
+- `SuspendNotifications()`/`ResumeNotifications()` are called around bulk loads to suppress per-batch UI redraws.
+- Re-entrant sync is guarded by an `m_syncInProgress` flag that prevents left-select → scroll right → right-select → scroll left loops.
+- Timestamp-free logs (no `timestamp` field) fall back to a row-offset arithmetic approximation based on the proportional position of the reference row.
+- **Async filter deduplication**: `MainWindow::RunAsyncFilter(worker, statusMsg)` encapsulates the `QFutureWatcher` setup, progress bar, and in-progress guard so `ApplyExtendedFilters()` and `ApplyActorFilter()` share a single implementation.
+
 **Statistics Strategy** (`ui/qt/panels/`): The `StatsSummaryPanel` uses `IStatisticsStrategy` to compute format-specific metrics at refresh time without coupling the panel to any particular format.
 
 ```
@@ -198,7 +209,7 @@ IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()
 - JSON-based configuration with validation
 - Observable changes via ConfigObserver pattern
 - Configurable fields:
-  - `typeFilterField`: Field used for type filtering/coloring (e.g., "level", "severity")
+  - `typeFilterField`: Field used for type filtering/coloring — auto-detected on each file load; leave empty (default) to auto-detect, or set explicitly to pin a value for all files
   - `aiProvider`: AI service provider selection
   - `aiTimeoutSeconds`: Configurable timeout for AI requests (30-3600s)
   - Column configurations, colors, logging level
@@ -534,12 +545,10 @@ All configuration saved to platform-specific location:
     "level": "debug"
   },
   "filters": {
-    "typeFilterField": "level"
+    "typeFilterField": ""
   },
   "parsers": {
     "xml": {
-      "rootElement": "events",
-      "eventElement": "event",
       "columns": [
         { "name": "id", "visible": true, "width": 50 },
         { "name": "timestamp", "visible": true, "width": 150 },
@@ -559,12 +568,14 @@ All configuration saved to platform-specific location:
 }
 ```
 
+> **Note on XML parsing**: The XML parser uses element depth to discover structure automatically — no `rootElement` or `eventElement` configuration is needed. The first element at depth 1 is treated as the root; every direct child (depth 2) is an event record; nested children (depth 3+) become key/value fields.
+
 ### Key Configuration Options
-- **typeFilterField**: Configurable field for type filtering (e.g., "type", "level", "severity")
+- **typeFilterField**: Auto-detected on each file load by scanning the first 100 events for common field names (`level`, `type`, `severity`, `priority`, `category`, …). Set explicitly (in Settings > General) to pin a value and skip auto-detection. Leave empty to always auto-detect; if detection fails the user is prompted.
 - **aiProvider**: AI service selection (ollama, lmstudio, openai, anthropic, google, xai)
 - **aiTimeoutSeconds**: Timeout for AI requests (30-3600 seconds)
 - **columns**: Dynamic column configuration with visibility and width
-- **columnColors**: Color mappings based on field values
+- **columnColors**: Color mappings per column — any number of columns can have color rules; the first matching column's color is applied to the row
 
 ### Observer Pattern for Config
 Components register for configuration changes:
@@ -604,18 +615,16 @@ void MainWindow::OnConfigChanged() {
 
 ## Future Enhancements
 
-1. **Async Parsing**: Background thread for file parsing with progress
-2. **Extended Plugin System**: Parser plugins, filter plugins, visualization plugins
-3. **Network Logs**: Real-time log streaming via TCP/HTTP
-4. **Database Export**: Export to SQLite/PostgreSQL
-5. **Advanced Analytics**: Statistics, graphs, anomaly detection
-6. **Collaborative Filtering**: Share filter configurations
-7. **Cloud Integration**: S3, Azure Blob Storage, Google Cloud Storage
-8. **Custom AI Prompts Library**: Community-shared analysis templates
-9. **Log Diff**: Compare two log files side-by-side
-10. **Session Replay**: Record and replay user analysis workflows
-11. **Multi-File Analysis**: Correlate events across multiple log files
-12. **Real-time AI Monitoring**: Continuous analysis with alerts
+1. **Extended Plugin System**: Parser plugins, filter plugins, visualization plugins
+2. **Network Logs**: Real-time log streaming via TCP/HTTP
+3. **Database Export**: Export to SQLite/PostgreSQL
+4. **Advanced Analytics**: Anomaly detection, trend analysis
+5. **Collaborative Filtering**: Share filter configurations
+6. **Cloud Integration**: S3, Azure Blob Storage, Google Cloud Storage
+7. **Custom AI Prompts Library**: Community-shared analysis templates
+8. **Session Replay**: Record and replay user analysis workflows
+9. **Multi-File Analysis**: Correlate events across more than two log files simultaneously
+10. **Real-time AI Monitoring**: Continuous analysis with alerts
 
 ## References
 

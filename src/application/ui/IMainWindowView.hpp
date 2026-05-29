@@ -40,6 +40,13 @@ class IMainWindowView
 
     /** @brief Requests a full window refresh/layout recalculation. */
     virtual void RefreshLayout() = 0;
+
+    /** @brief Shows a modal input dialog.
+     *  @param ok Set to true when the user accepted, false when cancelled.
+     *  @return The entered string, or empty if cancelled. */
+    virtual std::string AskString(const std::string& title,
+        const std::string& prompt, const std::string& defaultValue,
+        bool& ok) = 0;
 };
 
 } // namespace ui

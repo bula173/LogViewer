@@ -1,7 +1,6 @@
 #include "MainWindowPresenter.hpp"
 
 #include <algorithm>
-#include <atomic>
 #include <cstddef>
 #include <exception>
 #include <filesystem>
@@ -11,7 +10,7 @@
 #include <vector>
 
 #include <QCoreApplication>
-#include <QtConcurrent/QtConcurrentRun>
+#include <QEventLoop>
 
 #include "Config.hpp"
 #include "Error.hpp"
@@ -48,6 +47,7 @@ int MainWindowPresenter::ClampToInt(std::size_t value)
 
 void MainWindowPresenter::PerformSearch()
 {
+    util::Logger::Debug("PerformSearch: starting search");
     const auto columns = m_controller.GetSearchColumns();
     m_searchResultsView.BeginUpdate(columns);
 
@@ -63,8 +63,10 @@ void MainWindowPresenter::PerformSearch()
 
     const auto query = m_view.ReadSearchQuery();
 
-    auto appendResult = [this](const mvc::SearchResultRow& result) {
+    std::size_t resultCount = 0;
+    auto appendResult = [this, &resultCount](const mvc::SearchResultRow& result) {
         m_searchResultsView.AppendResult(result);
+        ++resultCount;
     };
 
     auto progressCallback = [this](std::size_t processed, std::size_t) {
@@ -84,9 +86,20 @@ void MainWindowPresenter::PerformSearch()
         m_view.UpdateStatusText(previousStatus);
         m_searchResultsView.EndUpdate();
         m_view.ProcessPendingEvents();
+        util::Logger::Info("PerformSearch: complete — {} result(s) for query='{}'",
+            resultCount, query);
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("PerformSearch: exception during search — {}", ex.what());
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        m_searchResultsView.EndUpdate();
+        throw;
     }
     catch (...)
     {
+        util::Logger::Error("PerformSearch: unknown exception during search");
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_searchResultsView.EndUpdate();
@@ -96,8 +109,13 @@ void MainWindowPresenter::PerformSearch()
 
 void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
 {
+    util::Logger::Info("LoadLogFile: requested — path='{}'", path.string());
+
     if (m_isParsing)
+    {
+        util::Logger::Warn("LoadLogFile: rejected — a file is already being processed");
         throw error::Error("A file is already being processed");
+    }
 
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
@@ -111,9 +129,13 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     m_view.UpdateProgressValue(0);
     m_view.UpdateStatusText("Loading ...");
 
+    util::Logger::Debug("LoadLogFile: creating parser for extension '{}'",
+        path.extension().string());
     auto parserResult = parser::ParserFactory::CreateFromFile(path);
     if (!parserResult.isOk())
     {
+        util::Logger::Warn("LoadLogFile: no parser available for '{}' — {}",
+            path.string(), parserResult.error().what());
         m_isParsing = false;
         m_progressConfigured = false;
         m_view.ToggleProgressVisibility(false);
@@ -122,14 +144,20 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
         throw parserResult.error();
     }
 
+    util::Logger::Debug("LoadLogFile: dispatching async parser for '{}'", path.string());
     RunParserAsync(parserResult.unwrap(), path, previousStatus);
 }
 
 void MainWindowPresenter::LoadLogFile(std::unique_ptr<parser::IDataParser> parser,
                                       const std::filesystem::path& path)
 {
+    util::Logger::Info("LoadLogFile (pre-built parser): requested — path='{}'", path.string());
+
     if (m_isParsing)
+    {
+        util::Logger::Warn("LoadLogFile (pre-built parser): rejected — a file is already being processed");
         throw error::Error("A file is already being processed");
+    }
 
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
@@ -143,6 +171,8 @@ void MainWindowPresenter::LoadLogFile(std::unique_ptr<parser::IDataParser> parse
     m_view.UpdateProgressValue(0);
     m_view.UpdateStatusText("Loading ...");
 
+    util::Logger::Debug("LoadLogFile (pre-built parser): dispatching async parser for '{}'",
+        path.string());
     RunParserAsync(std::move(parser), path, previousStatus);
 }
 
@@ -150,36 +180,44 @@ void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> pa
                                          const std::filesystem::path& path,
                                          const std::string& previousStatus)
 {
-    // Suppress per-batch view notifications while the background thread fills
-    // m_events.  Without this, every batch would call Qt widget methods from
-    // the background thread (undefined behaviour) AND trigger dozens of full
-    // model resets.  A single RefreshView() is done after parsing completes.
+    util::Logger::Debug("RunParserAsync: dispatching background parse task for '{}'",
+        path.string());
+
+    // Suppress per-batch view notifications while parsing so the single
+    // RefreshView() at the end triggers one clean model reset.
     m_events.SuspendNotifications();
 
-    // Observer that runs entirely on the background thread:
-    //  - adds events to m_events via its thread-safe mutex
-    //  - stores progress in atomics so the main thread can read it safely
-    struct BgObserver final : public parser::IDataParserObserver
+    // Cooperative observer: parsing runs on the main thread; ProgressUpdated()
+    // pumps the Qt event loop (excluding user input to prevent re-entrant loads)
+    // so the progress bar stays responsive without any background threads.
+    struct CoopObserver final : public parser::IDataParserObserver
     {
-        db::EventsContainer& events;
+        db::EventsContainer&       events;
         const parser::IDataParser* parserPtr;
-        std::atomic<uint32_t> currentProgress{0};
-        std::atomic<uint32_t> totalProgress{0};
+        IMainWindowView&           view;
+        bool&                      progressConfigured;
 
-        BgObserver(db::EventsContainer& ev, const parser::IDataParser* p)
-            : events(ev), parserPtr(p) {}
+        CoopObserver(db::EventsContainer& ev, const parser::IDataParser* p,
+                     IMainWindowView& v, bool& pc)
+            : events(ev), parserPtr(p), view(v), progressConfigured(pc) {}
 
         void ProgressUpdated() override
         {
-            currentProgress.store(parserPtr->GetCurrentProgress(),
-                                  std::memory_order_relaxed);
-            totalProgress.store(parserPtr->GetTotalProgress(),
-                                std::memory_order_relaxed);
+            const auto total   = parserPtr->GetTotalProgress();
+            const auto current = parserPtr->GetCurrentProgress();
+            if (total > 0 && !progressConfigured) {
+                view.ConfigureProgressRange(static_cast<int>(total));
+                progressConfigured = true;
+            }
+            view.UpdateProgressValue(static_cast<int>(current));
+            QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         }
+
         void NewEventFound(db::LogEvent&& e) override
         {
             events.AddEvent(std::move(e));
         }
+
         void NewEventBatchFound(
             std::vector<std::pair<int, db::LogEvent::EventItems>>&& batch) override
         {
@@ -187,56 +225,39 @@ void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> pa
         }
     };
 
-    BgObserver bgObserver{m_events, parser.get()};
-    parser->RegisterObserver(&bgObserver);
+    CoopObserver coopObserver{m_events, parser.get(), m_view, m_progressConfigured};
+    parser->RegisterObserver(&coopObserver);
 
     std::exception_ptr parseException;
-
-    // Use Qt thread pool instead of a raw OS thread — avoids the
-    // CreateThread+file-I/O+sleep pattern that triggers AV heuristics.
-    QFuture<void> parseFuture = QtConcurrent::run(
-        [&parser, &path, &parseException]()
-        {
-            try
-            {
-                parser->ParseData(path);
-            }
-            catch (...)
-            {
-                parseException = std::current_exception();
-            }
-        });
-
-    // Main thread: keep UI responsive at ~60 Hz while background parses.
+    try
     {
-        uint32_t lastDisplayedProgress = 0;
-        while (!parseFuture.isFinished())
-        {
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 16);
-
-            const uint32_t total =
-                bgObserver.totalProgress.load(std::memory_order_relaxed);
-            const uint32_t current =
-                bgObserver.currentProgress.load(std::memory_order_relaxed);
-
-            if (total > 0 && !m_progressConfigured)
-            {
-                m_view.ConfigureProgressRange(ClampToInt(total));
-                m_progressConfigured = true;
-            }
-            if (current != lastDisplayedProgress)
-            {
-                m_view.UpdateProgressValue(ClampToInt(current));
-                lastDisplayedProgress = current;
-            }
-        }
+        parser->ParseData(path);
+    }
+    catch (...)
+    {
+        parseException = std::current_exception();
     }
 
-    parseFuture.waitForFinished();
+    parser->UnregisterObserver(&coopObserver);
     m_events.ResumeNotifications();
 
     if (parseException)
     {
+        try
+        {
+            std::rethrow_exception(parseException);
+        }
+        catch (const std::exception& ex)
+        {
+            util::Logger::Error("RunParserAsync: parse task failed for '{}' — {}",
+                path.string(), ex.what());
+        }
+        catch (...)
+        {
+            util::Logger::Error("RunParserAsync: parse task failed for '{}' — unknown exception",
+                path.string());
+        }
+
         m_isParsing = false;
         m_progressConfigured = false;
         m_view.ToggleProgressVisibility(false);
@@ -247,6 +268,10 @@ void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> pa
             m_itemDetailsView->RefreshView();
         std::rethrow_exception(parseException);
     }
+
+    const std::size_t eventCount = m_events.Size();
+    util::Logger::Info("RunParserAsync: parse complete — '{}', {} event(s) loaded",
+        path.string(), eventCount);
 
     if (m_eventsListView)
     {
@@ -271,16 +296,22 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
                                        const std::string& newFileAlias,
                                        const std::string& timestampField)
 {
+    util::Logger::Info("MergeLogFile: start — path='{}', existingAlias='{}', newAlias='{}'",
+        path.string(), existingAlias, newFileAlias);
+
     if (m_isParsing)
+    {
+        util::Logger::Warn("MergeLogFile: rejected — a file is already being processed");
         throw error::Error("A file is already being processed");
+    }
 
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
-    
+
     // Create temporary container for new events
     db::EventsContainer tempEvents;
-    
+
     m_view.SetSearchControlsEnabled(false);
     m_view.ToggleProgressVisibility(true);
     m_view.ConfigureProgressRange(100);
@@ -291,14 +322,18 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
     {
         // Parse into temporary container using a temporary observer
         // For now, we'll use a simpler approach: parse and collect events manually
+        util::Logger::Debug("MergeLogFile: creating parser for extension '{}'",
+            path.extension().string());
         auto parserResult = parser::ParserFactory::CreateFromFile(path);
         if (!parserResult.isOk())
         {
+            util::Logger::Warn("MergeLogFile: no parser available for '{}' — {}",
+                path.string(), parserResult.error().what());
             throw parserResult.error();
         }
-        
+
         auto parser = parserResult.unwrap();
-        
+
         // Register a simple observer that adds events to tempEvents
         class TempObserver : public parser::IDataParserObserver
         {
@@ -315,18 +350,24 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
                 container.AddEventBatch(std::move(eventBatch));
             }
         };
-        
+
         TempObserver tempObserver(tempEvents);
         parser->RegisterObserver(&tempObserver);
-        
+
         parser->ParseData(path);
-        
+
         parser->UnregisterObserver(&tempObserver);
-        
+
+        util::Logger::Debug("MergeLogFile: parsed {} event(s) from '{}', merging into main container",
+            tempEvents.Size(), path.string());
+
         // Now merge the temporary container into main events
         // Pass both aliases: existing data gets existingAlias, new data gets newFileAlias
         m_events.MergeEvents(tempEvents, existingAlias, newFileAlias, timestampField);
-        
+
+        util::Logger::Info("MergeLogFile: complete — '{}', total {} event(s) after merge",
+            path.string(), m_events.Size());
+
         m_view.UpdateStatusText("Merge complete. Path: " + path.string());
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
@@ -342,12 +383,13 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
         m_progressConfigured = false;
         m_view.ProcessPendingEvents();
     }
-    catch (...)
+    catch (const std::exception& ex)
     {
+        util::Logger::Error("MergeLogFile: failed for '{}' — {}", path.string(), ex.what());
         m_view.ToggleProgressVisibility(false);
         m_view.SetSearchControlsEnabled(true);
         m_view.UpdateStatusText(previousStatus);
-        
+
         UpdateTypeFilters();
         if (m_eventsListView)
         {
@@ -356,7 +398,27 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
         }
         if (m_itemDetailsView)
             m_itemDetailsView->RefreshView();
-        
+
+        m_isParsing = false;
+        m_progressConfigured = false;
+        throw;
+    }
+    catch (...)
+    {
+        util::Logger::Error("MergeLogFile: failed for '{}' — unknown exception", path.string());
+        m_view.ToggleProgressVisibility(false);
+        m_view.SetSearchControlsEnabled(true);
+        m_view.UpdateStatusText(previousStatus);
+
+        UpdateTypeFilters();
+        if (m_eventsListView)
+        {
+            m_eventsListView->RefreshColumns(); // Refresh columns even on error
+            m_eventsListView->RefreshView();
+        }
+        if (m_itemDetailsView)
+            m_itemDetailsView->RefreshView();
+
         m_isParsing = false;
         m_progressConfigured = false;
         throw;
@@ -368,15 +430,68 @@ void MainWindowPresenter::UpdateTypeFilters()
     if (!m_typeFilterView)
         return;
 
+    util::Logger::Debug("UpdateTypeFilters: rebuilding type filter list from {} event(s)",
+        m_events.Size());
+
     const std::string previousStatus = m_view.CurrentStatusText();
     m_view.UpdateStatusText("Updating filters...");
 
     auto& config = config::GetConfig();
+
+    // If the user has an explicit preference (saved in config), use it directly.
+    // If the field is empty, try auto-detection; if that also fails, ask the user.
+    if (config.typeFilterField.empty())
+    {
+        static constexpr const char* kTypeFieldCandidates[] = {
+            "level", "type", "severity", "priority", "category",
+            "loglevel", "log_level", "logLevel", "eventtype", "event_type"
+        };
+        const std::size_t sampleSize = std::min(m_events.Size(), std::size_t{100});
+        bool detected = false;
+        for (const char* candidate : kTypeFieldCandidates)
+        {
+            for (std::size_t i = 0; i < sampleSize; ++i)
+            {
+                if (!m_events.GetEvent(i).findByKey(candidate).empty())
+                {
+                    config.typeFilterField = candidate;
+                    util::Logger::Info("UpdateTypeFilters: auto-detected type field '{}'", candidate);
+                    detected = true;
+                    break;
+                }
+            }
+            if (detected) break;
+        }
+        if (!detected)
+        {
+            util::Logger::Warn("UpdateTypeFilters: no known type field found in first {} events",
+                sampleSize);
+            bool ok = false;
+            const std::string field = m_view.AskString(
+                "Type Filter Field",
+                "No type/level field was detected in the loaded log events.\n"
+                "Enter the field name to use for type filtering\n"
+                "(e.g. level, type, severity):",
+                {}, ok);
+            if (ok && !field.empty())
+            {
+                config.typeFilterField = field;
+                util::Logger::Info("UpdateTypeFilters: user provided type field '{}'", field);
+                config.SaveConfig();
+            }
+        }
+    }
+    else
+    {
+        util::Logger::Debug("UpdateTypeFilters: using configured type field '{}'",
+            config.typeFilterField);
+    }
+
     std::set<std::string> types;
     const std::size_t total = m_events.Size();
     for (std::size_t i = 0; i < total; ++i)
     {
-        const auto& event = m_events.GetEvent(ClampToInt(i));
+        const auto& event = m_events.GetEvent(i);
         types.insert(event.findByKey(config.typeFilterField));
 
         if ((i % kProgressYieldInterval) == 0)
@@ -384,6 +499,7 @@ void MainWindowPresenter::UpdateTypeFilters()
     }
 
     std::vector<std::string> ordered(types.begin(), types.end());
+    util::Logger::Debug("UpdateTypeFilters: found {} distinct type(s)", ordered.size());
     m_typeFilterView->ReplaceTypes(ordered, true);
     m_typeFilterView->ShowControl(true);
 
@@ -425,7 +541,7 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     const std::size_t total = m_events.Size();
     for (std::size_t i = 0; i < total; ++i)
     {
-        const auto& event = m_events.GetEvent(ClampToInt(i));
+        const auto& event = m_events.GetEvent(i);
         const std::string eventType = event.findByKey(config.typeFilterField);
         const bool typeMatch = selectedTypeStrings.empty() ||
             selectedTypeStrings.count(eventType) > 0;

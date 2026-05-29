@@ -1,6 +1,8 @@
 #include "ActorsPanel.hpp"
 
 #include "ActorDefinition.hpp"
+#include "Config.hpp"
+#include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QClipboard>
@@ -114,6 +116,8 @@ void ActorsPanel::Refresh()
     }
 
     const auto vis = VisibleIndices();
+    util::Logger::Debug("[ActorsPanel] Refresh: {} visible events, {} definition(s)",
+                        vis.size(), m_definitions.size());
 
     // ── Snapshot which actors are currently unchecked so we can restore
     //    after rebuilding the tree (filter changes cause model reset → Refresh).
@@ -162,6 +166,7 @@ void ActorsPanel::Refresh()
     }
     else
     {
+        util::Logger::Debug("[ActorsPanel] No enabled definitions — clearing actor tree");
         QSignalBlocker blocker(m_tree);
         m_tree->clear();
         m_statusLabel->setText(tr("Define actors in the \"Actor Definitions\" panel"));
@@ -170,12 +175,15 @@ void ActorsPanel::Refresh()
 
 void ActorsPanel::SetDefinitions(const std::vector<ActorDefinition>& defs)
 {
+    util::Logger::Debug("[ActorsPanel] SetDefinitions: {} definition(s)", defs.size());
     m_definitions = defs;
     Refresh();
 }
 
 void ActorsPanel::RestoreUncheckedActors(const std::set<std::string>& unchecked)
 {
+    util::Logger::Debug("[ActorsPanel] RestoreUncheckedActors: {} unchecked actor(s)",
+                        unchecked.size());
     m_uncheckedActors = unchecked;
 
     // Walk the tree and apply check states without triggering the normal signal handler.
@@ -271,6 +279,7 @@ void AccumulateEventStats(
 
 void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
 {
+    util::Logger::Debug("[ActorsPanel] RefreshWithDefinitions: {} visible events", vis.size());
     // Pre-compile regexps for enabled definitions
     struct CompiledDef
     {
@@ -284,7 +293,12 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
     {
         if (!def.enabled || def.pattern.empty()) continue;
         QRegularExpression re(QString::fromStdString(def.pattern));
-        if (!re.isValid()) continue;
+        if (!re.isValid())
+        {
+            util::Logger::Warn("[ActorsPanel] Invalid regexp for definition '{}': {}",
+                               def.name, re.errorString().toStdString());
+            continue;
+        }
         compiled.push_back({def.name, def.field, std::move(re), def.useCaptures});
     }
 
@@ -491,6 +505,11 @@ void ActorsPanel::PopulateActorTree(size_t totalVisible)
     m_tree->setSortingEnabled(true);
     m_tree->sortByColumn(1, Qt::DescendingOrder);
 
+    util::Logger::Info("[ActorsPanel] Loaded {} actor(s) from {} visible event(s)",
+                       totalActors, totalVisible);
+    if (totalActors == 0)
+        util::Logger::Warn("[ActorsPanel] No actors matched — check definition patterns");
+
     m_statusLabel->setText(
         tr("%1 actor(s) in %2 event(s)").arg(totalActors).arg(totalVisible));
 }
@@ -564,6 +583,7 @@ void ActorsPanel::ApplyCheckedFilter()
 
     if (combined.empty())
     {
+        util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: no actors checked, clearing filter");
         m_ignoreNextRefresh = true;
         m_eventsView->ClearFilter();
         return;
@@ -575,11 +595,15 @@ void ActorsPanel::ApplyCheckedFilter()
     // If every actor is checked the union equals the base set — just clear the filter.
     if (m_uncheckedActors.empty())
     {
+        util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: all actors checked, clearing filter");
         m_ignoreNextRefresh = true;
         m_eventsView->ClearFilter();
         return;
     }
 
+    util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: {} event(s) pass actor filter "
+                        "({} actor(s) unchecked)",
+                        combined.size(), m_uncheckedActors.size());
     m_ignoreNextRefresh = true;
     m_eventsView->SetFilteredEvents(combined);
 }
@@ -654,6 +678,8 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
 
     if (chosen == clearAction)
     {
+        util::Logger::Info("[ActorsPanel] Cleared directed-to for actor '{}' (def '{}')",
+                           actorName, defName);
         emit ActorDirectionChanged(
             QString::fromStdString(defName),
             QString::fromStdString(actorName),
@@ -735,11 +761,14 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
     if (dlg.exec() != QDialog::Accepted) return;
 
     const QString target = combo->currentText().trimmed();
+    const QString emittedTarget = (target == tr("(none)") ? QString() : target);
+    util::Logger::Info("[ActorsPanel] Set directed-to for actor '{}' (def '{}') → '{}'",
+                       actorName, defName, emittedTarget.toStdString());
     emit ActorDirectionChanged(
         QString::fromStdString(defName),
         QString::fromStdString(actorName),
         isSubActor,
-        target == tr("(none)") ? QString() : target);
+        emittedTarget);
 }
 
 // ---------------------------------------------------------------------------
@@ -748,6 +777,7 @@ void ActorsPanel::ShowActorContextMenu(const QPoint& pos)
 
 void ActorsPanel::ShowSequenceDiagram()
 {
+    util::Logger::Debug("[ActorsPanel] ShowSequenceDiagram requested");
     // ── 1. Determine which actor names to include ─────────────────────────
     // Only checked actors participate in the diagram. If items are also
     // tree-selected, restrict further to the intersection of selected+checked.
@@ -805,10 +835,98 @@ void ActorsPanel::ShowSequenceDiagram()
 
     if (selectedActors.empty())
     {
+        util::Logger::Warn("[ActorsPanel] ShowSequenceDiagram: no checked actors selected");
         QMessageBox::information(this, tr("Sequence Diagram"),
             tr("No checked actors. Check at least one actor in the list above."));
         return;
     }
+
+    util::Logger::Info("[ActorsPanel] Generating sequence diagram for {} actor(s)",
+                       selectedActors.size());
+
+    // ── Auto-detect field names ───────────────────────────────────────────
+    // All known actor names (for value-based field scanning)
+    std::set<std::string> allActorNames;
+    for (const auto& [defName, group] : m_groupedCache)
+        for (const auto& [actorName, data] : group.actors)
+            allActorNames.insert(actorName);
+
+    // Definition names that own the selected actors
+    std::set<std::string> selectedDefNames;
+    for (const auto& [defName, group] : m_groupedCache)
+        for (const auto& [actorName, data] : group.actors)
+            if (selectedActors.count(actorName))
+                { selectedDefNames.insert(defName); break; }
+
+    // Event indices for selected actors
+    std::set<unsigned long> previewIndices;
+    for (const auto& [defName, group] : m_groupedCache)
+        for (const auto& [actorName, data] : group.actors)
+            if (selectedActors.count(actorName))
+                for (unsigned long idx : data.indices)
+                    previewIndices.insert(idx);
+
+    // Count how often each field's value is a known actor name
+    std::map<std::string, int> fieldActorHits;
+    {
+        size_t scanned = 0;
+        for (unsigned long idx : previewIndices)
+        {
+            if (++scanned > 300) break;
+            const db::LogEvent& ev = m_events.GetEvent(idx);
+            for (const auto& [key, val] : ev.getEventItems())
+                if (allActorNames.count(val))
+                    fieldActorHits[key]++;
+        }
+    }
+    std::vector<std::pair<std::string, int>> fieldsByHits(
+        fieldActorHits.begin(), fieldActorHits.end());
+    std::sort(fieldsByHits.begin(), fieldsByHits.end(),
+        [](const auto& a, const auto& b){ return a.second > b.second; });
+
+    // Sender: prefer the definition's explicit field, then highest-hit scan result
+    std::string autoSender;
+    for (const auto& def : m_definitions)
+    {
+        if (!def.enabled || def.field.empty() || !selectedDefNames.count(def.name)) continue;
+        autoSender = def.field;
+        break;
+    }
+    if (autoSender.empty() && !fieldsByHits.empty())
+        autoSender = fieldsByHits[0].first;
+    if (autoSender.empty()) autoSender = "actor";
+
+    // Receiver: second-highest-hit field, then common names, then same as sender
+    std::string autoReceiver;
+    for (const auto& [field, hits] : fieldsByHits)
+        if (field != autoSender) { autoReceiver = field; break; }
+    if (autoReceiver.empty() && !previewIndices.empty())
+    {
+        static constexpr const char* kRecvCandidates[] = {
+            "target", "to", "dest", "destination", "receiver", "dst"};
+        const db::LogEvent& sample = m_events.GetEvent(*previewIndices.begin());
+        for (const char* c : kRecvCandidates)
+            if (!sample.findByKey(c).empty()) { autoReceiver = c; break; }
+    }
+    if (autoReceiver.empty()) autoReceiver = autoSender;
+
+    // Label: first known label-like field present in sample events
+    std::string autoLabel;
+    if (!previewIndices.empty())
+    {
+        static constexpr const char* kLabelCandidates[] = {
+            "action", "message", "msg", "info", "description",
+            "text", "payload", "event", "data", "name"};
+        const db::LogEvent& sample = m_events.GetEvent(*previewIndices.begin());
+        for (const char* c : kLabelCandidates)
+            if (!sample.findByKey(c).empty()) { autoLabel = c; break; }
+    }
+    if (autoLabel.empty()) autoLabel = config::GetConfig().typeFilterField;
+    if (autoLabel.empty()) autoLabel = "action";
+
+    util::Logger::Debug("[ActorsPanel] Sequence diagram field hints: "
+        "sender='{}', receiver='{}', label='{}'",
+        autoSender, autoReceiver, autoLabel);
 
     // ── 2. Build dialog ───────────────────────────────────────────────────
     auto* dlg = new QDialog(this);
@@ -822,9 +940,9 @@ void ActorsPanel::ShowSequenceDiagram()
 
     // ── Options form ──────────────────────────────────────────────────────
     auto* form         = new QFormLayout();
-    auto* senderEdit   = new QLineEdit("actor",  dlg);
-    auto* receiverEdit = new QLineEdit("target", dlg);
-    auto* labelEdit    = new QLineEdit("action", dlg);
+    auto* senderEdit   = new QLineEdit(QString::fromStdString(autoSender),   dlg);
+    auto* receiverEdit = new QLineEdit(QString::fromStdString(autoReceiver), dlg);
+    auto* labelEdit    = new QLineEdit(QString::fromStdString(autoLabel),    dlg);
     auto* maxSpin      = new QSpinBox(dlg);
     maxSpin->setRange(1, 5000);
     maxSpin->setValue(300);
@@ -969,11 +1087,25 @@ void ActorsPanel::ShowSequenceDiagram()
         }
 
         if (written == 0)
+        {
+            util::Logger::Warn("[ActorsPanel] Sequence diagram: no matching events "
+                               "for sender='{}' / receiver='{}'",
+                               senderField, receiverField);
             puml += "' No matching events found with the given field names.\n";
+        }
         else if (written >= maxEvents && indexSet.size() > static_cast<size_t>(maxEvents))
+        {
+            util::Logger::Info("[ActorsPanel] Sequence diagram: {} event(s) written "
+                               "(truncated from {} candidates)",
+                               written, indexSet.size());
             puml += QString("\n' Truncated — showing first %1 of %2 candidate events\n")
                         .arg(maxEvents)
                         .arg(indexSet.size());
+        }
+        else
+        {
+            util::Logger::Info("[ActorsPanel] Sequence diagram: {} event(s) written", written);
+        }
 
         puml += "@enduml\n";
         output->setPlainText(puml);

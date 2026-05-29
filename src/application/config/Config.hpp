@@ -142,15 +142,13 @@ class Config
 
   public: // xml config
     std::string appName {"LogViewer"};
-    std::string xmlRootElement;
-    std::string xmlEventElement;
     std::vector<ColumnConfig> columns;
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
     ItemHighlightMap itemHighlights;  // Item details view highlighting by key name
     
     // Filter configuration
-    std::string typeFilterField {"type"};  // Field to use for type filtering (e.g., "type", "level", "severity")
+    std::string typeFilterField {};  // Empty = auto-detect; set by user to override
     std::string actorField {"actor"};      // Field to use for actor identification in Actors panel
 
     // Update settings

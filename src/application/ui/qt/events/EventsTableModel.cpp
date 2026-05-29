@@ -6,6 +6,7 @@
 #include <QVariant>
 
 #include "LogEvent.hpp"
+#include "Logger.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -54,7 +55,11 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
 
     // Safety check: ensure actualIndex is within bounds
     if (actualIndex >= static_cast<int>(m_events.Size()))
+    {
+        util::Logger::Warn("[EventsTableModel] data(): actualIndex {} is out of range (size {})",
+            actualIndex, m_events.Size());
         return {};
+    }
 
     const auto& columns = m_config.GetColumns();
     if (index.column() < 0 ||
@@ -82,7 +87,7 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
         columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
     }
     
-    const auto& event = m_events.GetEvent(actualIndex);
+    const auto& event = m_events.GetEvent(static_cast<size_t>(actualIndex));
 
     switch (role)
     {
@@ -98,11 +103,19 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
             {
                 return QBrush(QColor(255, 235, 59, 160)); // amber-yellow, semi-transparent
             }
-            // Apply color to entire row based on configured typeFilterField
-            const std::string typeValue = event.findByKey(m_config.typeFilterField);
-            const QColor color = ResolveColor(m_config.typeFilterField, typeValue, role == Qt::BackgroundRole);
-            if (color.isValid())
-                return QBrush(color);
+            // Apply row color from the first matching column color definition.
+            const bool isBg = (role == Qt::BackgroundRole);
+            for (const auto& [colName, valueMap] : m_config.columnColors)
+            {
+                const std::string val = event.findByKey(colName);
+                if (val.empty()) continue;
+                const auto it = valueMap.find(val);
+                if (it == valueMap.end()) continue;
+                const QColor color(QString::fromStdString(
+                    isBg ? it->second.bg : it->second.fg));
+                if (color.isValid())
+                    return QBrush(color);
+            }
             break;
         }
         default:
@@ -157,6 +170,9 @@ void EventsTableModel::SyncWithContainer()
 
 void EventsTableModel::RefreshAll()
 {
+    util::Logger::Debug("[EventsTableModel] RefreshAll: {} rows (filtering={})",
+        m_filteringActive ? m_filteredIndices.size() : m_events.Size(),
+        m_filteringActive);
     beginResetModel();
     endResetModel();
     // Re-apply search highlighting after the model reset
@@ -166,6 +182,7 @@ void EventsTableModel::RefreshAll()
 
 void EventsTableModel::RefreshColumns()
 {
+    util::Logger::Debug("[EventsTableModel] RefreshColumns called");
     // Store old column count
     const int oldColumnCount = static_cast<int>(m_visibleColumnIndices.size());
     
@@ -177,6 +194,8 @@ void EventsTableModel::RefreshColumns()
     // If column count changed, notify the view properly
     if (newColumnCount != oldColumnCount)
     {
+        util::Logger::Debug("[EventsTableModel] RefreshColumns: column count changed {} -> {}; full reset",
+            oldColumnCount, newColumnCount);
         // Model structure changed - need to reset
         beginResetModel();
         endResetModel();
@@ -204,6 +223,8 @@ void EventsTableModel::UpdateColors()
 void EventsTableModel::SetFilteredIndices(
     const std::vector<unsigned long>& indices)
 {
+    util::Logger::Debug("[EventsTableModel] SetFilteredIndices: {} filtered rows (of {} total)",
+        indices.size(), m_events.Size());
     m_filteredIndices = indices;
     m_filteringActive = true; // Mark that filtering is now active
     
@@ -220,6 +241,8 @@ void EventsTableModel::SetFilteredIndices(
 
 void EventsTableModel::ClearFilter()
 {
+    util::Logger::Debug("[EventsTableModel] ClearFilter: showing all {} events",
+        m_events.Size());
     m_filteredIndices.clear();
     m_reverseFilteredIndices.clear();
     m_filteringActive = false; // Mark that filtering is no longer active
@@ -317,7 +340,7 @@ void EventsTableModel::RebuildSearchMatches()
         if (actualIdx < 0 || actualIdx >= static_cast<int>(m_events.Size()))
             continue;
 
-        const auto& event = m_events.GetEvent(actualIdx);
+        const auto& event = m_events.GetEvent(static_cast<size_t>(actualIdx));
         for (const auto& [key, value] : event.getEventItems())
         {
             if (QString::fromStdString(value).contains(m_searchTerm, cs))
@@ -489,25 +512,6 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
     return QString::fromStdString(combined);
 }
 
-QColor EventsTableModel::ResolveColor(const std::string& column,
-    const std::string& value, bool background) const
-{
-    if (column.empty() || value.empty())
-        return {};
-
-    const auto& colorMap = m_config.columnColors;
-    const auto columnIt = colorMap.find(column);
-    if (columnIt == colorMap.end())
-        return {};
-
-    const auto valueIt = columnIt->second.find(value);
-    if (valueIt == columnIt->second.end())
-        return {};
-
-    const auto& colorCode = background ? valueIt->second.bg : valueIt->second.fg;
-    QColor color(QString::fromStdString(colorCode));
-    return color.isValid() ? color : QColor {};
-}
 
 QVariant EventsTableModel::GetSortValue(const db::LogEvent& event,
     const std::string& columnName) const
@@ -576,6 +580,9 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
             return;
         columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
     }
+
+    util::Logger::Debug("[EventsTableModel] sort: column {} ({}), order {}",
+        column, columnName, order == Qt::AscendingOrder ? "asc" : "desc");
 
     emit layoutAboutToBeChanged();
 

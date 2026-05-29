@@ -3,6 +3,7 @@
 #include "EventsContainer.hpp"
 #include "LogEvent.hpp"
 #include "Config.hpp"
+#include "Logger.hpp"
 
 #include <QAction>
 #include <QClipboard>
@@ -145,12 +146,14 @@ void ItemDetailsView::DisplayEvent(int actualRow)
 
     if (actualRow < 0 || actualRow >= static_cast<int>(m_events.Size()))
     {
+        util::Logger::Warn("[ItemDetails] DisplayEvent called with out-of-range row {} (size={})",
+            actualRow, m_events.Size());
         m_details->setRowCount(0);
         m_currentlyDisplayedRow = -1;
         return;
     }
 
-    const auto& event = m_events.GetItem(actualRow);
+    const auto& event = m_events.GetItem(static_cast<size_t>(actualRow));
     const auto& items = event.getEventItems();
 
     // Partition into regular fields and SIG: signal fields.
@@ -272,6 +275,9 @@ void ItemDetailsView::DisplayEvent(int actualRow)
 
     m_details->resizeColumnsToContents();
     m_details->resizeRowsToContents();
+    util::Logger::Debug("[ItemDetails] Displayed event row {} ({} field(s){})",
+        actualRow, regularItems.size(),
+        hasSignals ? ", with CAN signals" : "");
     m_currentlyDisplayedRow = actualRow;
 }
 

@@ -180,55 +180,72 @@ void Config::LoadConfig()
             if (!defaultInstalled.empty())
             {
                 std::ifstream defaultFile(defaultInstalled);
-                json defaultConfig;
-                defaultFile >> defaultConfig;
-                defaultFile.close();
-
-                // Get current application version
-                Version::Version currentVersion = Version::current();
-
-                // Check if user config has version
-                Version::Version userVersion;
-                if (userConfig.contains("version") && userConfig["version"].is_object())
+                if (!defaultFile.is_open())
                 {
-                    userVersion.major = userConfig["version"].value("major", 0);
-                    userVersion.minor = userConfig["version"].value("minor", 0);
-                    userVersion.patch = userConfig["version"].value("patch", 0);
-                    userVersion.type = userConfig["version"].value("type", "");
+                    util::Logger::Warn("Config migration: cannot open default config template at '{}'",
+                        defaultInstalled.string());
                 }
                 else
                 {
-                    // No version in user config, assume it needs migration
-                    userVersion = Version::Version(); // Version 0.0.0
-                }
+                    json defaultConfig;
+                    defaultFile >> defaultConfig;
+                    defaultFile.close();
 
-                util::Logger::Info("User config version: {}, Current app version: {}",
-                    userVersion.asShortStr(), currentVersion.asShortStr());
+                    // Get current application version
+                    Version::Version currentVersion = Version::current();
 
-                // Only merge if versions differ
-                if (userVersion != currentVersion)
-                {
-                    // Merge configs (user settings take precedence, new fields added)
-                    json merged = MergeConfigs(userConfig, defaultConfig);
+                    // Check if user config has version
+                    Version::Version userVersion;
+                    if (userConfig.contains("version") && userConfig["version"].is_object())
+                    {
+                        userVersion.major = userConfig["version"].value("major", 0);
+                        userVersion.minor = userConfig["version"].value("minor", 0);
+                        userVersion.patch = userConfig["version"].value("patch", 0);
+                        userVersion.type = userConfig["version"].value("type", "");
+                    }
+                    else
+                    {
+                        // No version in user config, assume it needs migration
+                        userVersion = Version::Version(); // Version 0.0.0
+                    }
 
-                    // Add current version to merged config
-                    merged["version"] = {
-                        {"major", currentVersion.major},
-                        {"minor", currentVersion.minor},
-                        {"patch", currentVersion.patch},
-                        {"type", currentVersion.type}
-                    };
-
-                    // Save merged config back
-                    std::ofstream outFile(m_configFilePath);
-                    outFile << merged.dump(4);
-                    outFile.close();
-                    util::Logger::Info("Config migrated from {} to {} with new fields",
+                    util::Logger::Info("User config version: {}, Current app version: {}",
                         userVersion.asShortStr(), currentVersion.asShortStr());
-                }
-                else
-                {
-                    util::Logger::Info("Config version matches application version, no migration needed");
+
+                    // Only merge if versions differ
+                    if (userVersion != currentVersion)
+                    {
+                        // Merge configs (user settings take precedence, new fields added)
+                        json merged = MergeConfigs(userConfig, defaultConfig);
+
+                        // Add current version to merged config
+                        merged["version"] = {
+                            {"major", currentVersion.major},
+                            {"minor", currentVersion.minor},
+                            {"patch", currentVersion.patch},
+                            {"type", currentVersion.type}
+                        };
+
+                        // Save merged config back
+                        std::ofstream outFile(m_configFilePath);
+                        if (!outFile.is_open())
+                        {
+                            util::Logger::Error(
+                                "Config migration: cannot write merged config to '{}'",
+                                m_configFilePath);
+                        }
+                        else
+                        {
+                            outFile << merged.dump(4);
+                            outFile.close();
+                            util::Logger::Info("Config migrated from {} to {} with new fields",
+                                userVersion.asShortStr(), currentVersion.asShortStr());
+                        }
+                    }
+                    else
+                    {
+                        util::Logger::Info("Config version matches application version, no migration needed");
+                    }
                 }
             }
         }
@@ -316,8 +333,12 @@ void Config::LoadConfig()
             if (!m_dictionaryFilePath.empty() && std::filesystem::exists(m_dictionaryFilePath))
             {
                 util::Logger::Info("Loading field dictionary from: {}", m_dictionaryFilePath);
-                m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
-
+                auto loadResult = m_fieldTranslator.LoadFromFile(m_dictionaryFilePath);
+                if (loadResult.isErr())
+                {
+                    util::Logger::Warn("Failed to load field dictionary from '{}': {}",
+                        m_dictionaryFilePath, loadResult.error().what());
+                }
             }
         }
 
@@ -344,15 +365,13 @@ void Config::SetupLogPath()
 {
     // On Windows, default to console-only logging (no log file).
     //
-    // Rationale: the parser runs on a background thread (QtConcurrent::run).
-    // Parser code calls Logger::Debug/Info which, when a file sink is active,
-    // writes to a log file from that thread.  The resulting pattern —
-    //   background thread  +  reads user file  +  writes separate file
-    // — is precisely the behaviour Windows Defender's Wacatac.C!ml ML
-    // heuristic is trained to detect as ransomware.
+    // Parsing runs cooperatively on the main thread; even so, the combination of
+    //   reads user file  +  writes separate log file
+    // can trigger Windows Defender's Wacatac.C!ml ML heuristic (ransomware-like
+    // pattern).  Disabling the file sink by default avoids the false positive.
     //
-    // File logging on Windows can be enabled explicitly by the user via
-    // the config.json "logging" → "logFile" key.
+    // File logging on Windows can be enabled explicitly via the config.json
+    // "logging" → "logFile" key.
 #ifndef _WIN32
     std::filesystem::path logPath = GetDefaultLogPath();
     m_logPath = logPath.string();
@@ -378,8 +397,6 @@ void Config::SaveConfig()
 
         // Set the JSON data from the configuration parameters
         // Example: j["someParameter"] = m_someParameter;
-        j["parsers"]["xml"]["rootElement"] = xmlRootElement;
-        j["parsers"]["xml"]["eventElement"] = xmlEventElement;
         j["parsers"]["xml"]["columns"] = json::array();
         for (const auto& col : columns)
         {
@@ -485,25 +502,6 @@ void Config::ParseXmlConfig(const json& j)
         return;
     }
 
-    // Set the configuration parameters from the JSON data
-    if (parser["xml"].contains("rootElement"))
-    {
-        xmlRootElement = parser["xml"]["rootElement"].get<std::string>();
-    }
-    else
-    {
-        util::Logger::Warn("Missing 'rootElement' in config file.");
-    }
-
-    if (parser["xml"].contains("eventElement"))
-    {
-        xmlEventElement = parser["xml"]["eventElement"].get<std::string>();
-    }
-    else
-    {
-        util::Logger::Warn("Missing 'eventElement' in config file.");
-    }
-
     if (parser["xml"].contains("columns"))
     {
         for (const auto& col : parser["xml"]["columns"])
@@ -550,21 +548,13 @@ void Config::GetFilterConfig(const json& j)
         if (filterConfig.contains("typeFilterField"))
         {
             typeFilterField = filterConfig["typeFilterField"].get<std::string>();
-            util::Logger::Info("Type filter field set to: {}", typeFilterField);
-        }
-        else
-        {
-            util::Logger::Info("No 'typeFilterField' in filter config, using default: type");
+            util::Logger::Info("Type filter field loaded from config: '{}'", typeFilterField);
         }
         if (filterConfig.contains("actorField"))
         {
             actorField = filterConfig["actorField"].get<std::string>();
             util::Logger::Info("Actor field set to: {}", actorField);
         }
-    }
-    else
-    {
-        util::Logger::Info("No 'filters' config found, using default type filter field: type");
     }
 }
 
@@ -707,9 +697,21 @@ void Config::GetPrintConfig() const {
     std::ifstream configFile(m_configFilePath);
     if (configFile.is_open())
     {
-        json j;
-        configFile >> j;
-        util::Logger::Info("Loaded config from: {}", j.dump());
+        try
+        {
+            json j;
+            configFile >> j;
+            util::Logger::Info("Loaded config from: {}", j.dump());
+        }
+        catch (const std::exception& e)
+        {
+            util::Logger::Error("GetPrintConfig: failed to parse config file '{}': {}",
+                m_configFilePath, e.what());
+        }
+    }
+    else
+    {
+        util::Logger::Error("GetPrintConfig: could not open config file: {}", m_configFilePath);
     }
 }
 
@@ -731,15 +733,17 @@ const std::string& Config::GetDictionaryFilePath() const
 void Config::SetDictionaryFilePath(const std::string& path)
 {
     m_dictionaryFilePath = path;
-    
+
     // Reload dictionary from new file
-    if (m_fieldTranslator.LoadFromFile(path))
+    auto loadResult = m_fieldTranslator.LoadFromFile(path);
+    if (loadResult.isOk())
     {
         util::Logger::Info("Reloaded field dictionary from: {}", path);
     }
     else
     {
-        util::Logger::Warn("Failed to load field dictionary from: {}", path);
+        util::Logger::Warn("Failed to load field dictionary from '{}': {}",
+            path, loadResult.error().what());
     }
 }
 

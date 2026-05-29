@@ -905,10 +905,10 @@ void AIAnalysisPanel::OnAnalyze() {
 
 ### Filter-Aware Analysis
 
-AI analysis respects the configurable `typeFilterField`:
+AI analysis respects `typeFilterField`, which is auto-detected on file load (or pinned by the user in Settings > General):
 
 ```cpp
-// Get filter field from config (e.g., "level", "type", "severity")
+// typeFilterField is auto-detected on load; may also be set explicitly in config
 const auto& config = config::GetConfig();
 std::string filterField = config.typeFilterField;
 
