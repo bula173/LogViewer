@@ -93,18 +93,18 @@ $(document).ready(function(){initNavTree('d8/d7b/md_docs_2DEVELOPMENT.html','../
   <div class="headertitle"><div class="title">LogViewer Development Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md351"></a> </p>
-<h1><a class="anchor" id="autotoc_md352"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md352"></a> </p>
+<h1><a class="anchor" id="autotoc_md353"></a>
 Getting Started</h1>
-<h2><a class="anchor" id="autotoc_md353"></a>
+<h2><a class="anchor" id="autotoc_md354"></a>
 Prerequisites</h2>
-<h3><a class="anchor" id="autotoc_md354"></a>
+<h3><a class="anchor" id="autotoc_md355"></a>
 Required</h3>
 <ul>
 <li><b>CMake</b> 3.25+</li>
 <li><b>C++20 Compiler</b>: Clang 15+, GCC 11+, or MSVC 2019+</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md355"></a>
+<h3><a class="anchor" id="autotoc_md356"></a>
 GUI Framework (Choose One)</h3>
 <p><b>Qt 6</b> (Default - includes AI features):</p><ul>
 <li><b>Qt 6</b>: 6.5 or higher<ul>
@@ -129,7 +129,7 @@ GUI Framework (Choose One)</h3>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md356"></a>
+<h3><a class="anchor" id="autotoc_md357"></a>
 Optional but Recommended</h3>
 <ul>
 <li><b>Ninja</b> build system (recommended for faster builds)<ul>
@@ -143,7 +143,7 @@ Optional but Recommended</h3>
 <li><b>clang-tidy</b>: For static analysis</li>
 <li><b>Doxygen</b>: For documentation generation</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md357"></a>
+<h2><a class="anchor" id="autotoc_md358"></a>
 Quick Start</h2>
 <div class="fragment"><div class="line"># Clone repository</div>
 <div class="line">git clone https://github.com/bula173/LogViewer.git</div>
@@ -183,9 +183,9 @@ Quick Start</h2>
 <li><b>Package Release</b> - Create distributable package</li>
 </ul>
 <p><b>Note:</b> VS Code tasks use Qt by default. For wxWidgets builds, use command line with <code>-DGUI_FRAMEWORK=WX</code>.</p>
-<h1><a class="anchor" id="autotoc_md358"></a>
+<h1><a class="anchor" id="autotoc_md359"></a>
 Build System Architecture</h1>
-<h2><a class="anchor" id="autotoc_md359"></a>
+<h2><a class="anchor" id="autotoc_md360"></a>
 Directory Structure</h2>
 <p>The build system separates build artifacts from distribution files:</p>
 <div class="fragment"><div class="line">LogViewer/</div>
@@ -208,7 +208,7 @@ Directory Structure</h2>
 <div class="line">│       ├── etc/</div>
 <div class="line">│       └── plugins/</div>
 <div class="line">└── src/                            # Source code</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md360"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md361"></a>
 CMake Output Directories</h2>
 <p>The build system uses standard CMake output directories:</p>
 <ul>
@@ -227,7 +227,7 @@ CMake Output Directories</h2>
 <li>Package: <code>cpack --config build/&lt;preset&gt;/CPackConfig.cmake</code></li>
 <li>Installers go to <code>dist/packages/</code></li>
 </ol>
-<h2><a class="anchor" id="autotoc_md361"></a>
+<h2><a class="anchor" id="autotoc_md362"></a>
 Scripts</h2>
 <p>Convenience scripts in <code>scripts/</code> directory:</p>
 <ul>
@@ -237,9 +237,9 @@ Scripts</h2>
 <li>Windows equivalents: <code>.bat</code> files</li>
 </ul>
 <p>All scripts updated to use new directory structure.</p>
-<h1><a class="anchor" id="autotoc_md362"></a>
+<h1><a class="anchor" id="autotoc_md363"></a>
 Code Style Guide</h1>
-<h2><a class="anchor" id="autotoc_md363"></a>
+<h2><a class="anchor" id="autotoc_md364"></a>
 Naming Conventions</h2>
 <div class="fragment"><div class="line"><span class="comment">// Classes: PascalCase</span></div>
 <div class="line"><span class="keyword">class </span>EventsContainer { };</div>
@@ -263,9 +263,9 @@ Naming Conventions</h2>
 <div class="line"><span class="comment">// Template parameters: PascalCase</span></div>
 <div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> ErrorType&gt;</div>
 <div class="line"><span class="keyword">class </span>Result { };</div>
-<div class="ttc" id="anamespacefilters_html"><div class="ttname"><a href="../../d8/d6b/namespacefilters.html">filters</a></div><div class="ttdef"><b>Definition</b> Filter.cpp:6</div></div>
+<div class="ttc" id="anamespacefilters_html"><div class="ttname"><a href="../../d8/d6b/namespacefilters.html">filters</a></div><div class="ttdef"><b>Definition</b> Filter.cpp:9</div></div>
 <div class="ttc" id="anamespaceparser_html"><div class="ttname"><a href="../../d0/dd5/namespaceparser.html">parser</a></div><div class="ttdoc">Data parsing components and interfaces.</div><div class="ttdef"><b>Definition</b> IControler.hpp:22</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md364"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md365"></a>
 File Organization</h2>
 <div class="fragment"><div class="line"><span class="comment">// Header file: EventsContainer.hpp</span></div>
 <div class="line"><span class="preprocessor">#pragma once</span></div>
@@ -329,15 +329,15 @@ File Organization</h2>
 <div class="ttc" id="aclassdb_1_1EventsContainer_html_ab65d87924a1501344a9c6b5cf13e34e0"><div class="ttname"><a href="../../dd/dc2/classdb_1_1EventsContainer.html#ab65d87924a1501344a9c6b5cf13e34e0">db::EventsContainer::m_mutex</a></div><div class="ttdeci">std::shared_mutex m_mutex</div><div class="ttdef"><b>Definition</b> EventsContainer.hpp:279</div></div>
 <div class="ttc" id="aclassdb_1_1EventsContainer_html_ad0c0ae27055a4b711fad53e95e592166"><div class="ttname"><a href="../../dd/dc2/classdb_1_1EventsContainer.html#ad0c0ae27055a4b711fad53e95e592166">db::EventsContainer::EventsContainer</a></div><div class="ttdeci">EventsContainer()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition</b> EventsContainer.cpp:17</div></div>
 <div class="ttc" id="anamespacedb_html"><div class="ttname"><a href="../../d0/d45/namespacedb.html">db</a></div><div class="ttdoc">Database and data model components for the LogViewer application.</div><div class="ttdef"><b>Definition</b> EventsContainer.cpp:16</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md365"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md366"></a>
 Documentation Standards</h2>
-<h3><a class="anchor" id="autotoc_md366"></a>
+<h3><a class="anchor" id="autotoc_md367"></a>
 Doxygen Comments</h3>
 <div class="fragment"><div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> AddEvent(LogEvent&amp;&amp; event);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md367"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md368"></a>
 Code Quality Checklist</h2>
-<h3><a class="anchor" id="autotoc_md368"></a>
+<h3><a class="anchor" id="autotoc_md369"></a>
 Before Committing</h3>
 <ul>
 <li>[ ] All tests pass</li>
@@ -349,11 +349,11 @@ Before Committing</h3>
 <li>[ ] Error handling implemented</li>
 <li>[ ] Resource cleanup (RAII)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md369"></a>
+<h1><a class="anchor" id="autotoc_md370"></a>
 Design Patterns Usage</h1>
-<h2><a class="anchor" id="autotoc_md370"></a>
+<h2><a class="anchor" id="autotoc_md371"></a>
 When to Use Each Pattern</h2>
-<h3><a class="anchor" id="autotoc_md371"></a>
+<h3><a class="anchor" id="autotoc_md372"></a>
 Observer Pattern ✅</h3>
 <p><b>Use when</b>: Components need loose coupling for event notification</p>
 <div class="fragment"><div class="line"><span class="comment">// Good: Parser doesn&#39;t know about UI</span></div>
@@ -363,19 +363,19 @@ Observer Pattern ✅</h3>
 <div class="line">        NotifyNewEvent(std::move(event));  <span class="comment">// Observers updated</span></div>
 <div class="line">    }</div>
 <div class="line">};</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md372"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md373"></a>
 Factory Pattern ✅</h3>
 <p><b>Use when</b>: Object creation logic is complex or varies</p>
 <div class="fragment"><div class="line"><span class="comment">// Good: Centralized parser creation</span></div>
 <div class="line"><span class="keyword">auto</span> <a class="code hl_namespace" href="../../d0/dd5/namespaceparser.html">parser</a> = ParserFactory::CreateParser(<span class="stringliteral">&quot;.xml&quot;</span>);  <span class="comment">// Returns XmlParser</span></div>
 <div class="line"><span class="keyword">auto</span> <a class="code hl_namespace" href="../../d0/dd5/namespaceparser.html">parser</a> = ParserFactory::CreateParser(<span class="stringliteral">&quot;.json&quot;</span>); <span class="comment">// Returns JsonParser</span></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md373"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md374"></a>
 Strategy Pattern ✅</h3>
 <p><b>Use when</b>: Algorithm needs to be swappable at runtime</p>
 <div class="fragment"><div class="line"><span class="comment">// Good: Different filter strategies</span></div>
 <div class="line">filter.SetStrategy(std::make_unique&lt;RegexStrategy&gt;());</div>
 <div class="line">filter.SetStrategy(std::make_unique&lt;ExactMatchStrategy&gt;());</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md374"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md375"></a>
 Singleton Pattern ⚠️</h3>
 <p><b>Use sparingly</b>: Only for truly global resources</p>
 <div class="fragment"><div class="line"><span class="comment">// Good use: Application configuration</span></div>
@@ -384,9 +384,9 @@ Singleton Pattern ⚠️</h3>
 <div class="line"><span class="comment">// Bad use: Don&#39;t make everything a singleton!</span></div>
 <div class="line"><span class="comment">// Use dependency injection instead</span></div>
 <div class="ttc" id="anamespaceconfig_html"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html">config</a></div><div class="ttdef"><b>Definition</b> BuiltinConversionPlugins.cpp:5</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md375"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md376"></a>
 Qt-Specific Patterns</h2>
-<h3><a class="anchor" id="autotoc_md376"></a>
+<h3><a class="anchor" id="autotoc_md377"></a>
 Signals and Slots</h3>
 <p><b>Use when</b>: Components need Qt's signal/slot mechanism for event notification</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsTableModel : <span class="keyword">public</span> <a class="code hl_class" href="../../d7/d33/classQAbstractTableModel.html">QAbstractTableModel</a> {</div>
@@ -410,7 +410,7 @@ Signals and Slots</h3>
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassQAbstractTableModel_html"><div class="ttname"><a href="../../d7/d33/classQAbstractTableModel.html">QAbstractTableModel</a></div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md377"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md378"></a>
 Model/View Architecture</h3>
 <p><b>Use when</b>: Displaying data in Qt views (tables, lists, trees)</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsTableModel : <span class="keyword">public</span> <a class="code hl_class" href="../../d7/d33/classQAbstractTableModel.html">QAbstractTableModel</a> {</div>
@@ -438,7 +438,7 @@ Model/View Architecture</h3>
 <div class="line">    <span class="keyword">const</span> EventsContainer* m_container = <span class="keyword">nullptr</span>;</div>
 <div class="line">    <span class="keyword">const</span> Config&amp; m_config;</div>
 <div class="line">};</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md378"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md379"></a>
 Dock Widget System</h3>
 <p><b>Use when</b>: Creating flexible, dockable UI panels</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>MainWindow : <span class="keyword">public</span> <a class="code hl_class" href="../../df/d90/classQMainWindow.html">QMainWindow</a> {</div>
@@ -463,9 +463,9 @@ Dock Widget System</h3>
 <div class="line">    QDockWidget* m_detailsDock = <span class="keyword">nullptr</span>;</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassQMainWindow_html"><div class="ttname"><a href="../../df/d90/classQMainWindow.html">QMainWindow</a></div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md379"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md380"></a>
 wxWidgets-Specific Patterns</h2>
-<h3><a class="anchor" id="autotoc_md380"></a>
+<h3><a class="anchor" id="autotoc_md381"></a>
 Virtual List Controls</h3>
 <p><b>Use when</b>: Displaying large datasets efficiently with wxWidgets</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsVirtualListControl : <span class="keyword">public</span> wxDataViewVirtualListCtrl {</div>
@@ -499,7 +499,7 @@ Virtual List Controls</h3>
 <div class="line"><span class="keyword">private</span>:</div>
 <div class="line">    <span class="keyword">const</span> EventsContainer* m_container = <span class="keyword">nullptr</span>;</div>
 <div class="line">};</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md381"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md382"></a>
 Event Handling</h3>
 <p><b>Use when</b>: Responding to user interactions in wxWidgets</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>MainWindow : <span class="keyword">public</span> wxFrame {</div>
@@ -535,7 +535,7 @@ Event Handling</h3>
 <div class="line">    </div>
 <div class="line">    wxDataViewVirtualListCtrl* m_eventsListCtrl = <span class="keyword">nullptr</span>;</div>
 <div class="line">};</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md382"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md383"></a>
 wxWidgets Type Conversions</h3>
 <p><b>Use when</b>: Converting between std::string and wxString</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d3/de9/WxWidgetsUtils_8hpp.html">util/WxWidgetsUtils.hpp</a>&quot;</span></div>
@@ -550,9 +550,9 @@ wxWidgets Type Conversions</h3>
 <div class="line"><span class="keywordtype">long</span> wxCount = util::ToLong(count);  <span class="comment">// Safe conversion with overflow check</span></div>
 <div class="line"><span class="keywordtype">int</span> colIndex = util::ToInt(count);   <span class="comment">// Safe conversion with bounds check</span></div>
 <div class="ttc" id="aWxWidgetsUtils_8hpp_html"><div class="ttname"><a href="../../d3/de9/WxWidgetsUtils_8hpp.html">WxWidgetsUtils.hpp</a></div><div class="ttdoc">Type-safe conversion utilities for wxWidgets API interactions.</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md383"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md384"></a>
 Error Handling</h1>
-<h2><a class="anchor" id="autotoc_md384"></a>
+<h2><a class="anchor" id="autotoc_md385"></a>
 Error Categories</h2>
 <div class="fragment"><div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="../../da/d7e/namespaceerror.html">error</a> {</div>
 <div class="line"> </div>
@@ -584,7 +584,7 @@ Error Categories</h2>
 <div class="ttc" id="anamespaceerror_html"><div class="ttname"><a href="../../da/d7e/namespaceerror.html">error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:17</div></div>
 <div class="ttc" id="anamespaceerror_html_ac1e56f1d20af4ead715f13a35f4f73f2ae41199faa7290c167f70f314c5e6c165"><div class="ttname"><a href="../../da/d7e/namespaceerror.html#ac1e56f1d20af4ead715f13a35f4f73f2ae41199faa7290c167f70f314c5e6c165">error::ErrorCode::ParseError</a></div><div class="ttdeci">@ ParseError</div><div class="ttdoc">Parsing error.</div></div>
 <div class="ttc" id="anamespaceplugin_html_a3e2a18d6b06f75dea3229ce1949167afa902b0d55fddef6f8d651fe1035b7d4bd"><div class="ttname"><a href="../../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa902b0d55fddef6f8d651fe1035b7d4bd">plugin::PluginStatus::Error</a></div><div class="ttdeci">@ Error</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md385"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md386"></a>
 Error Handling Guidelines</h2>
 <div class="fragment"><div class="line"><span class="comment">// ❌ Bad: Catching everything</span></div>
 <div class="line"><span class="keywordflow">try</span> {</div>
@@ -625,9 +625,9 @@ Error Handling Guidelines</h2>
 <div class="line">    <a class="code hl_function" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a>(<span class="stringliteral">&quot;Failed to load config: {}&quot;</span>, result.error().what());</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassutil_1_1Logger_html_ae7bdc34da771cb8878c176743e68ed17"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a></div><div class="ttdeci">static void Error(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:296</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md386"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md387"></a>
 Thread Safety</h1>
-<h2><a class="anchor" id="autotoc_md387"></a>
+<h2><a class="anchor" id="autotoc_md388"></a>
 Guidelines</h2>
 <ol type="1">
 <li><b>Document thread safety</b> of every class</li>
@@ -656,9 +656,9 @@ Guidelines</h2>
 <div class="line">    <span class="keyword">mutable</span> std::shared_mutex m_mutex;</div>
 <div class="line">    std::vector&lt;LogEvent&gt; m_data;</div>
 <div class="line">};</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md388"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md389"></a>
 Performance Best Practices</h1>
-<h2><a class="anchor" id="autotoc_md389"></a>
+<h2><a class="anchor" id="autotoc_md390"></a>
 Memory Management</h2>
 <div class="fragment"><div class="line"><span class="comment">// ❌ Bad: Unnecessary copies</span></div>
 <div class="line"><span class="keywordtype">void</span> ProcessEvents(EventsContainer container) {</div>
@@ -674,7 +674,7 @@ Memory Management</h2>
 <div class="line"><span class="keywordtype">void</span> TakeOwnership(EventsContainer&amp;&amp; container) {</div>
 <div class="line">    m_container = std::move(container);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md390"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md391"></a>
 String Handling</h2>
 <div class="fragment"><div class="line"><span class="comment">// ❌ Bad: String concatenation in loop</span></div>
 <div class="line">std::string result;</div>
@@ -695,7 +695,7 @@ String Handling</h2>
 <div class="line">    oss &lt;&lt; item &lt;&lt; <span class="stringliteral">&quot;, &quot;</span>;</div>
 <div class="line">}</div>
 <div class="line">std::string result = oss.str();</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md391"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md392"></a>
 Container Operations</h2>
 <div class="fragment"><div class="line"><span class="comment">// ❌ Bad: Reallocations during growth</span></div>
 <div class="line">std::vector&lt;LogEvent&gt; events;</div>
@@ -715,12 +715,12 @@ Container Operations</h2>
 <div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 1000000; ++i) {</div>
 <div class="line">    events.emplace_back(i, CreateItems(i));</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md392"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md393"></a>
 AI Integration Development</h1>
-<h2><a class="anchor" id="autotoc_md393"></a>
+<h2><a class="anchor" id="autotoc_md394"></a>
 Adding a New AI Provider</h2>
 <p>The application uses a factory pattern for AI providers. To add a new provider:</p>
-<h3><a class="anchor" id="autotoc_md394"></a>
+<h3><a class="anchor" id="autotoc_md395"></a>
 1. Implement IAIService Interface</h3>
 <div class="fragment"><div class="line"><span class="comment">// src/plugins/ai/MyNewAIClient.hpp</span></div>
 <div class="line"><span class="preprocessor">#pragma once</span></div>
@@ -745,7 +745,7 @@ Adding a New AI Provider</h2>
 <div class="line"> </div>
 <div class="line">} <span class="comment">// namespace ai</span></div>
 <div class="ttc" id="anamespaceai_html"><div class="ttname"><a href="../../de/d58/namespaceai.html">ai</a></div><div class="ttdef"><b>Definition</b> IPlugin.hpp:15</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md395"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md396"></a>
 2. Implement Chat Method with CURL</h3>
 <div class="fragment"><div class="line"><span class="comment">// src/plugins/ai/MyNewAIClient.cpp</span></div>
 <div class="line"><span class="preprocessor">#include &quot;MyNewAIClient.hpp&quot;</span></div>
@@ -823,7 +823,7 @@ Adding a New AI Provider</h2>
 <div class="line">} <span class="comment">// namespace ai</span></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="../../df/db4/Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="anamespaceconfig_html_ab663d5ad12e8df0dd19bf1c6b8857fab"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab">config::GetConfig</a></div><div class="ttdeci">Config &amp; GetConfig()</div><div class="ttdef"><b>Definition</b> Config.cpp:110</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md396"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md397"></a>
 3. Register in AIServiceFactory</h3>
 <div class="fragment"><div class="line"><span class="comment">// src/plugins/ai/AIServiceFactory.cpp</span></div>
 <div class="line"><span class="preprocessor">#include &quot;MyNewAIClient.hpp&quot;</span></div>
@@ -841,7 +841,7 @@ Adding a New AI Provider</h2>
 <div class="line">    </div>
 <div class="line">    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Unknown AI provider: &quot;</span> + provider);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md397"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md398"></a>
 4. Add to Configuration</h3>
 <div class="fragment"><div class="line">// etc/default_config.json</div>
 <div class="line">{</div>
@@ -852,9 +852,9 @@ Adding a New AI Provider</h2>
 <div class="line">    &quot;timeoutSeconds&quot;: 300</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md398"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md399"></a>
 AI Provider Guidelines</h2>
-<h3><a class="anchor" id="autotoc_md399"></a>
+<h3><a class="anchor" id="autotoc_md400"></a>
 Timeout Configuration</h3>
 <ul>
 <li><b>Always use</b> <code>config.aiTimeoutSeconds</code> from Config</li>
@@ -869,7 +869,7 @@ Timeout Configuration</h3>
 <div class="line"> </div>
 <div class="line"><span class="comment">// ❌ Bad: Hardcoded timeout</span></div>
 <div class="line">curl_easy_setopt(curl, CURLOPT_TIMEOUT, 300L);</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md400"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md401"></a>
 Error Handling</h3>
 <ul>
 <li>Throw descriptive exceptions for CURL errors</li>
@@ -877,7 +877,7 @@ Error Handling</h3>
 <li>Throw exceptions for malformed JSON responses</li>
 <li>All exceptions caught and displayed in UI</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md401"></a>
+<h3><a class="anchor" id="autotoc_md402"></a>
 Thread Safety</h3>
 <ul>
 <li>AI requests run in background threads via <code>QtConcurrent::run()</code></li>
@@ -908,7 +908,7 @@ Thread Safety</h3>
 <div class="line">    });</div>
 <div class="line">    watcher-&gt;setFuture(future);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md402"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md403"></a>
 Filter-Aware Analysis</h2>
 <p>AI analysis respects <code>typeFilterField</code>, which is auto-detected on file load (or pinned by the user in Settings &gt; General):</p>
 <div class="fragment"><div class="line"><span class="comment">// typeFilterField is auto-detected on load; may also be set explicitly in config</span></div>
@@ -926,9 +926,9 @@ Filter-Aware Analysis</h2>
 <li><code>"severity"</code> - Severity levels (CRITICAL, HIGH, MEDIUM, LOW)</li>
 <li><code>"priority"</code> - Priority levels (P0, P1, P2, P3)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md403"></a>
+<h1><a class="anchor" id="autotoc_md404"></a>
 Testing</h1>
-<h2><a class="anchor" id="autotoc_md404"></a>
+<h2><a class="anchor" id="autotoc_md405"></a>
 Unit Test Structure</h2>
 <p>Unit tests are framework-agnostic and test the core business logic, not UI code.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;gtest/gtest.h&gt;</span></div>
@@ -986,7 +986,7 @@ Unit Test Structure</h2>
 <div class="line"> </div>
 <div class="line">} <span class="comment">// namespace db::test</span></div>
 <div class="ttc" id="aEventsContainer_8hpp_html"><div class="ttname"><a href="../../df/d0f/EventsContainer_8hpp.html">EventsContainer.hpp</a></div><div class="ttdoc">Container class for managing collections of LogEvent objects.</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md405"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md406"></a>
 Mock Objects</h2>
 <div class="fragment"><div class="line"><span class="comment">// Mock observer for testing parsers</span></div>
 <div class="line"><span class="keyword">class </span>MockObserver : <span class="keyword">public</span> IDataParserObserver {</div>
@@ -1008,9 +1008,9 @@ Mock Objects</h2>
 <div class="line">    </div>
 <div class="line">    <a class="code hl_namespace" href="../../d0/dd5/namespaceparser.html">parser</a>.ParseData(<span class="stringliteral">&quot;test.xml&quot;</span>);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md406"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md407"></a>
 Debugging Tips</h1>
-<h2><a class="anchor" id="autotoc_md407"></a>
+<h2><a class="anchor" id="autotoc_md408"></a>
 Logging Levels</h2>
 <div class="fragment"><div class="line"><span class="comment">// Use appropriate log levels</span></div>
 <div class="line"><a class="code hl_function" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993">util::Logger::Trace</a>(<span class="stringliteral">&quot;Entering function with param={}&quot;</span>, param);  <span class="comment">// Very verbose</span></div>
@@ -1024,7 +1024,7 @@ Logging Levels</h2>
 <div class="ttc" id="aclassutil_1_1Logger_html_ab219048f3c627c62fa41e3b0f0745993"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993">util::Logger::Trace</a></div><div class="ttdeci">static void Trace(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:272</div></div>
 <div class="ttc" id="aclassutil_1_1Logger_html_adc5d0d890aa7e2891002cae35e5b2e8f"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f">util::Logger::Debug</a></div><div class="ttdeci">static void Debug(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:278</div></div>
 <div class="ttc" id="aclassutil_1_1Logger_html_af0bb6dc60a9e76313f300067bc555f30"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30">util::Logger::Info</a></div><div class="ttdeci">static void Info(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:284</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md408"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md409"></a>
 Common Issues</h2>
 <p><b>Issue</b>: Crash on vector access </p><div class="fragment"><div class="line"><span class="comment">// Debug build: Check assertions</span></div>
 <div class="line">assert(index &lt; m_data.size() &amp;&amp; <span class="stringliteral">&quot;Index out of range&quot;</span>);</div>
@@ -1049,9 +1049,9 @@ Common Issues</h2>
 <div class="line"><span class="keywordtype">void</span> DoWork() {</div>
 <div class="line">    std::scoped_lock lock(m_mutex, other.m_mutex);  <span class="comment">// ✅ Deadlock-free</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md409"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md410"></a>
 Git Workflow</h1>
-<h2><a class="anchor" id="autotoc_md410"></a>
+<h2><a class="anchor" id="autotoc_md411"></a>
 Branch Naming</h2>
 <ul>
 <li><code>feature/add-json-parser</code> - New features</li>
@@ -1059,7 +1059,7 @@ Branch Naming</h2>
 <li><code>refactor/improve-filter-performance</code> - Code improvements</li>
 <li><code>docs/update-architecture</code> - Documentation</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md411"></a>
+<h2><a class="anchor" id="autotoc_md412"></a>
 Commit Messages</h2>
 <div class="fragment"><div class="line">feat: Add JSON parser support</div>
 <div class="line"> </div>
@@ -1068,7 +1068,7 @@ Commit Messages</h2>
 <div class="line">- Update ParserFactory to handle .json files</div>
 <div class="line"> </div>
 <div class="line">Closes #123</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md412"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md413"></a>
 Pull Request Template</h2>
 <div class="fragment"><div class="line">## Description</div>
 <div class="line">Brief description of changes</div>
@@ -1089,7 +1089,7 @@ Pull Request Template</h2>
 <div class="line">- [ ] Documentation updated</div>
 <div class="line">- [ ] No new warnings</div>
 <div class="line">- [ ] Tests pass locally</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md413"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md414"></a>
 Useful Commands</h1>
 <div class="fragment"><div class="line"># Build with specific framework</div>
 <div class="line">cmake --preset macos-debug -DGUI_FRAMEWORK=QT   # Qt build</div>
@@ -1115,9 +1115,9 @@ Useful Commands</h1>
 <div class="line"> </div>
 <div class="line"># Memory profiling</div>
 <div class="line">valgrind --tool=massif ./dist/Debug/LogViewer</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md414"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md415"></a>
 Resources</h1>
-<h2><a class="anchor" id="autotoc_md415"></a>
+<h2><a class="anchor" id="autotoc_md416"></a>
 C++ and General</h2>
 <ul>
 <li><a href="https://isocpp.github.io/CppCoreGuidelines/">C++ Core Guidelines</a></li>
@@ -1125,7 +1125,7 @@ C++ and General</h2>
 <li><a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a></li>
 <li><a href="https://cmake.org/documentation/">CMake Documentation</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md416"></a>
+<h2><a class="anchor" id="autotoc_md417"></a>
 Qt Framework</h2>
 <ul>
 <li><a href="https://doc.qt.io/qt-6/">Qt 6 Documentation</a></li>
@@ -1133,7 +1133,7 @@ Qt Framework</h2>
 <li><a href="https://doc.qt.io/qt-6/signalsandslots.html">Qt Signals and Slots</a></li>
 <li><a href="https://doc.qt.io/qt-6/qmainwindow.html">QMainWindow and Dock Widgets</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md417"></a>
+<h2><a class="anchor" id="autotoc_md418"></a>
 wxWidgets Framework</h2>
 <ul>
 <li><a href="https://docs.wxwidgets.org/">wxWidgets Documentation</a></li>
@@ -1141,7 +1141,7 @@ wxWidgets Framework</h2>
 <li><a href="https://docs.wxwidgets.org/3.2/overview_events.html">Event Handling</a></li>
 <li><a href="https://docs.wxwidgets.org/3.2/overview_dataview.html">Virtual List Controls</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md418"></a>
+<h2><a class="anchor" id="autotoc_md419"></a>
 AI Provider APIs</h2>
 <ul>
 <li><a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama API Documentation</a></li>

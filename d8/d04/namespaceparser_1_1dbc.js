@@ -6,7 +6,8 @@ var namespaceparser_1_1dbc =
       [ "FormatPhysical", "da/def/namespaceparser_1_1dbc_1_1anonymous__namespace_02CanDecoder_8cpp_03.html#a7dc9cf14cf4cbd2f2fb83aeda2719131", null ]
     ] ],
     [ "anonymous_namespace{DbcParser.cpp}", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html", [
-      [ "ParseSignalLine", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#ad58b9229b38db0ee1a4aab2befb6e21e", null ],
+      [ "ParseSignalResult", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#acbaa4fb1cb5bc0dc9a3d85ec6709a210", null ],
+      [ "ParseSignalLine", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#a681fe6f52c020a28aa120b7f6bf161b0", null ],
       [ "ToDouble", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#a97fb004deb98ee69e640068ebe2696b2", null ],
       [ "ToU32", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#a12e0c6bc9f796743b35ee30e7e99792d", null ],
       [ "Trim", "df/dd7/namespaceparser_1_1dbc_1_1anonymous__namespace_02DbcParser_8cpp_03.html#a992c226808846eba33cb9d8efb0ea321", null ],

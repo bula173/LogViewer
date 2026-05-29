@@ -112,12 +112,10 @@ Collaboration diagram for parser::EvlogTemplateRegistry:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a894067b6639d6c8e9f976bee1eb28fa1" id="r_a894067b6639d6c8e9f976bee1eb28fa1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#a894067b6639d6c8e9f976bee1eb28fa1">LoadFromDirectory</a> (const std::filesystem::path &amp;dir)</td></tr>
-<tr class="memdesc:a894067b6639d6c8e9f976bee1eb28fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load every *.t file found directly inside <code>dir</code> (non-recursive).  <br /></td></tr>
-<tr class="separator:a894067b6639d6c8e9f976bee1eb28fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93e31c5e37c0cc310b75ad750788d220" id="r_a93e31c5e37c0cc310b75ad750788d220"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#a93e31c5e37c0cc310b75ad750788d220">LoadFromFile</a> (const std::filesystem::path &amp;path)</td></tr>
-<tr class="memdesc:a93e31c5e37c0cc310b75ad750788d220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a single template file (may contain multiple templates).  <br /></td></tr>
-<tr class="separator:a93e31c5e37c0cc310b75ad750788d220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff226473ebe69b7b72ad85e4ee527f86" id="r_aff226473ebe69b7b72ad85e4ee527f86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; void, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#aff226473ebe69b7b72ad85e4ee527f86">LoadFromDirectory</a> (const std::filesystem::path &amp;dir)</td></tr>
+<tr class="separator:aff226473ebe69b7b72ad85e4ee527f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21942f9d183834868b14440dc544caa" id="r_ae21942f9d183834868b14440dc544caa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; void, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#ae21942f9d183834868b14440dc544caa">LoadFromFile</a> (const std::filesystem::path &amp;path)</td></tr>
+<tr class="separator:ae21942f9d183834868b14440dc544caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5d1d15e1522e0d7793341c23ce2d4e7" id="r_aa5d1d15e1522e0d7793341c23ce2d4e7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../dc/d0f/structparser_1_1EvlogTemplate.html">EvlogTemplate</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#aa5d1d15e1522e0d7793341c23ce2d4e7">Find</a> (int32_t facility, uint32_t eventType) const</td></tr>
 <tr class="memdesc:aa5d1d15e1522e0d7793341c23ce2d4e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look up template by (facility, event_type); nullptr if not found.  <br /></td></tr>
 <tr class="separator:aa5d1d15e1522e0d7793341c23ce2d4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,17 +199,31 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Look up template by (facility, event_type); nullptr if not found. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_aa5d1d15e1522e0d7793341c23ce2d4e7_cgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_aa5d1d15e1522e0d7793341c23ce2d4e7_cgraph" alt=""/></div>
+<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_aa5d1d15e1522e0d7793341c23ce2d4e7_cgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_aa5d1d15e1522e0d7793341c23ce2d4e7_cgraph">
+<area shape="rect" title="Look up template by (facility, event_type); nullptr if not found." alt="" coords="5,5,227,45"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="275,13,412,38"/>
+<area shape="poly" title=" " alt="" coords="227,23,261,23,261,28,227,28"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="460,13,641,38"/>
+<area shape="poly" title=" " alt="" coords="412,23,446,23,446,28,412,28"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="689,13,848,38"/>
+<area shape="poly" title=" " alt="" coords="641,23,676,23,676,28,641,28"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a894067b6639d6c8e9f976bee1eb28fa1" name="a894067b6639d6c8e9f976bee1eb28fa1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a894067b6639d6c8e9f976bee1eb28fa1">&#9670;&#160;</a></span>LoadFromDirectory()</h2>
+<a id="aff226473ebe69b7b72ad85e4ee527f86" name="aff226473ebe69b7b72ad85e4ee527f86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff226473ebe69b7b72ad85e4ee527f86">&#9670;&#160;</a></span>LoadFromDirectory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void parser::EvlogTemplateRegistry::LoadFromDirectory </td>
+          <td class="memname"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; void, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt; parser::EvlogTemplateRegistry::LoadFromDirectory </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>dir</em></td><td>)</td>
@@ -219,53 +231,59 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Load every *.t file found directly inside <code>dir</code> (non-recursive). </p>
+<p>Load every *.t file found directly inside <code>dir</code> (non-recursive). Returns Ok on success (even if no templates were found), or Err if the directory cannot be iterated. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_cgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_cgraph" alt=""/></div>
-<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_cgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_cgraph">
-<area shape="rect" title="Load every *.t file found directly inside dir (non&#45;recursive)." alt="" coords="5,49,227,89"/>
+<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_cgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_cgraph" alt=""/></div>
+<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_cgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_cgraph">
+<area shape="rect" title=" " alt="" coords="5,74,227,114"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="569,56,714,81"/>
+<area shape="poly" title=" " alt="" coords="227,86,555,70,555,75,227,91"/>
 <area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="321,5,449,31"/>
-<area shape="poly" title=" " alt="" coords="222,46,308,30,309,35,223,51"/>
-<area shape="rect" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#a93e31c5e37c0cc310b75ad750788d220" title="Load a single template file (may contain multiple templates)." alt="" coords="275,221,496,261"/>
-<area shape="poly" title=" " alt="" coords="150,86,343,211,340,215,147,91"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="573,56,709,81"/>
-<area shape="poly" title=" " alt="" coords="227,66,559,66,559,71,227,71"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="787,31,968,56"/>
-<area shape="poly" title=" " alt="" coords="450,19,773,35,773,41,449,24"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1016,31,1175,56"/>
-<area shape="poly" title=" " alt="" coords="968,41,1002,41,1002,46,968,46"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#af1d68597be6fd557a0bcfaf42d066c8b" title=" " alt="" coords="550,105,733,131"/>
-<area shape="poly" title=" " alt="" coords="412,218,470,178,543,140,563,132,565,137,545,144,473,183,415,223"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="544,155,739,180"/>
-<area shape="poly" title=" " alt="" coords="447,218,543,189,573,181,574,186,545,194,448,223"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="565,204,717,229"/>
-<area shape="poly" title=" " alt="" coords="496,228,552,222,552,228,497,233"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="558,253,725,279"/>
-<area shape="poly" title=" " alt="" coords="497,249,544,254,544,259,496,254"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="828,303,927,328"/>
-<area shape="poly" title=" " alt="" coords="439,258,490,275,545,289,616,300,689,307,814,313,814,318,689,312,616,305,543,294,488,280,437,263"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="567,355,716,380"/>
-<area shape="poly" title=" " alt="" coords="417,259,475,295,545,333,583,348,581,353,543,338,472,300,414,263"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="559,404,724,429"/>
-<area shape="poly" title=" " alt="" coords="404,259,461,324,501,360,545,390,559,397,557,402,543,395,498,364,457,328,400,263"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="578,453,705,479"/>
-<area shape="poly" title=" " alt="" coords="399,260,420,298,453,347,495,398,545,440,566,450,563,455,543,444,491,401,449,351,416,301,394,262"/>
-<area shape="poly" title=" " alt="" coords="400,219,458,155,498,120,543,90,559,83,562,87,545,95,501,124,462,159,404,222"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="813,253,942,279"/>
-<area shape="poly" title=" " alt="" coords="725,263,799,263,799,269,725,269"/>
-<area shape="poly" title=" " alt="" coords="703,276,815,300,814,305,702,281"/>
-<area shape="poly" title=" " alt="" coords="709,59,773,52,773,57,710,64"/>
+<area shape="poly" title=" " alt="" coords="187,71,325,32,327,37,188,76"/>
+<area shape="rect" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#ae21942f9d183834868b14440dc544caa" title=" " alt="" coords="275,270,496,310"/>
+<area shape="poly" title=" " alt="" coords="146,112,347,260,344,264,143,116"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="573,105,709,131"/>
+<area shape="poly" title=" " alt="" coords="227,96,559,112,559,117,227,102"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="787,81,968,107"/>
+<area shape="poly" title=" " alt="" coords="715,74,773,80,773,85,714,79"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1016,81,1175,107"/>
+<area shape="poly" title=" " alt="" coords="968,91,1002,91,1002,97,968,97"/>
+<area shape="poly" title=" " alt="" coords="450,15,584,21,662,29,739,42,790,56,836,74,834,79,789,61,738,47,661,34,583,26,450,20"/>
+<area shape="poly" title=" " alt="" coords="395,268,417,231,450,183,492,134,543,92,556,84,559,89,545,96,496,137,454,186,421,233,399,271"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#af1d68597be6fd557a0bcfaf42d066c8b" title=" " alt="" coords="550,204,733,229"/>
+<area shape="poly" title=" " alt="" coords="450,267,543,239,576,230,578,236,545,245,451,273"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="574,155,709,180"/>
+<area shape="poly" title=" " alt="" coords="412,268,471,229,543,190,567,181,569,186,545,195,473,233,415,272"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="544,253,739,279"/>
+<area shape="poly" title=" " alt="" coords="496,277,530,274,530,279,497,282"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="565,303,717,328"/>
+<area shape="poly" title=" " alt="" coords="497,298,552,304,552,309,496,304"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="558,404,725,429"/>
+<area shape="poly" title=" " alt="" coords="417,308,475,345,545,382,583,397,581,402,543,387,472,349,414,312"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="828,353,927,379"/>
+<area shape="poly" title=" " alt="" coords="439,307,490,324,545,338,616,349,689,357,814,363,814,368,688,362,616,355,543,343,488,329,437,313"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="567,453,716,479"/>
+<area shape="poly" title=" " alt="" coords="404,308,461,374,501,409,545,440,559,446,557,451,543,444,498,414,457,377,400,312"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="559,503,724,528"/>
+<area shape="poly" title=" " alt="" coords="399,309,420,348,453,397,495,447,546,489,556,495,553,500,542,494,491,451,449,400,416,350,394,311"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="578,552,705,577"/>
+<area shape="poly" title=" " alt="" coords="396,309,415,357,446,419,489,484,516,513,546,538,566,550,564,554,542,543,512,517,485,487,441,422,410,359,391,311"/>
+<area shape="poly" title=" " alt="" coords="401,268,459,205,499,170,543,141,560,133,563,138,545,146,502,175,462,209,405,271"/>
+<area shape="poly" title=" " alt="" coords="697,152,738,141,830,109,832,114,739,146,698,157"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="813,404,942,429"/>
+<area shape="poly" title=" " alt="" coords="725,414,799,414,799,419,725,419"/>
+<area shape="poly" title=" " alt="" coords="701,401,814,377,815,382,702,406"/>
+<area shape="poly" title=" " alt="" coords="709,108,773,102,773,107,710,114"/>
 </map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_icgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_icgraph" alt=""/></div>
-<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_icgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_a894067b6639d6c8e9f976bee1eb28fa1_icgraph">
-<area shape="rect" title="Load every *.t file found directly inside dir (non&#45;recursive)." alt="" coords="693,5,915,45"/>
+<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_icgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_icgraph" alt=""/></div>
+<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_icgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_aff226473ebe69b7b72ad85e4ee527f86_icgraph">
+<area shape="rect" title=" " alt="" coords="693,5,915,45"/>
 <area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad54bfc8001e9c107869200ee1a4a18db" title=" " alt="" coords="395,5,645,45"/>
 <area shape="poly" title=" " alt="" coords="679,28,646,28,646,23,679,23"/>
 <area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#a2f0569ea3845a4ecfcad18cad1e7ed0d" title=" " alt="" coords="200,5,347,45"/>
@@ -277,14 +295,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a93e31c5e37c0cc310b75ad750788d220" name="a93e31c5e37c0cc310b75ad750788d220"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93e31c5e37c0cc310b75ad750788d220">&#9670;&#160;</a></span>LoadFromFile()</h2>
+<a id="ae21942f9d183834868b14440dc544caa" name="ae21942f9d183834868b14440dc544caa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae21942f9d183834868b14440dc544caa">&#9670;&#160;</a></span>LoadFromFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void parser::EvlogTemplateRegistry::LoadFromFile </td>
+          <td class="memname"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; void, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt; parser::EvlogTemplateRegistry::LoadFromFile </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -292,48 +310,53 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Load a single template file (may contain multiple templates). </p>
+<p>Load a single template file (may contain multiple templates). Returns Ok on success, or Err if the file cannot be opened. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_cgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_cgraph" alt=""/></div>
-<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_cgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_cgraph">
-<area shape="rect" title="Load a single template file (may contain multiple templates)." alt="" coords="5,197,227,237"/>
+<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_cgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_cgraph" alt=""/></div>
+<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_cgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_cgraph">
+<area shape="rect" title=" " alt="" coords="5,245,227,285"/>
 <area shape="rect" href="../../d0/dd5/namespaceparser.html#af1d68597be6fd557a0bcfaf42d066c8b" title=" " alt="" coords="281,5,463,31"/>
-<area shape="poly" title=" " alt="" coords="127,195,151,161,184,119,225,76,273,40,285,33,288,38,276,44,229,80,188,122,155,164,132,198"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="275,55,469,80"/>
-<area shape="poly" title=" " alt="" coords="135,195,194,142,232,113,273,89,290,82,292,87,276,94,235,118,197,146,139,199"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="296,104,448,129"/>
-<area shape="poly" title=" " alt="" coords="153,194,209,166,274,138,298,130,300,135,276,143,211,170,155,199"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="289,153,455,179"/>
-<area shape="poly" title=" " alt="" coords="217,194,294,179,295,184,218,199"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="559,204,657,229"/>
-<area shape="poly" title=" " alt="" coords="227,214,544,214,544,219,227,219"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="297,255,447,280"/>
-<area shape="poly" title=" " alt="" coords="218,234,295,249,294,255,217,239"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="289,304,455,329"/>
-<area shape="poly" title=" " alt="" coords="156,234,212,262,276,289,303,298,301,303,274,294,209,267,153,239"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="309,353,435,379"/>
-<area shape="poly" title=" " alt="" coords="139,235,198,287,235,315,276,338,296,347,294,352,273,343,232,319,194,291,136,239"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="304,403,440,428"/>
-<area shape="poly" title=" " alt="" coords="132,235,155,269,188,311,229,353,276,389,292,397,290,402,273,394,225,357,184,315,151,273,127,238"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="543,153,673,179"/>
-<area shape="poly" title=" " alt="" coords="456,163,529,163,529,169,456,169"/>
-<area shape="poly" title=" " alt="" coords="433,176,546,201,544,206,432,181"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="517,403,699,428"/>
-<area shape="poly" title=" " alt="" coords="440,413,503,413,503,418,440,418"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="747,403,905,428"/>
-<area shape="poly" title=" " alt="" coords="699,413,733,413,733,418,699,418"/>
+<area shape="poly" title=" " alt="" coords="123,243,144,200,176,145,219,88,245,62,273,40,283,34,286,39,276,44,249,66,223,92,180,148,149,203,128,246"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="299,252,445,277"/>
+<area shape="poly" title=" " alt="" coords="227,262,286,262,286,267,227,267"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="305,55,439,80"/>
+<area shape="poly" title=" " alt="" coords="128,243,151,209,184,167,225,125,273,89,291,80,293,85,276,94,229,129,188,171,155,212,132,246"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1eda99762beaf7a99afd6fc881e5663f" title=" " alt="" coords="275,153,469,179"/>
+<area shape="poly" title=" " alt="" coords="153,242,209,214,274,187,298,180,300,185,276,193,212,219,156,247"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a65efafdfc8f71fe6b4ce79fa96c4d37c" title=" " alt="" coords="296,203,448,228"/>
+<area shape="poly" title=" " alt="" coords="220,242,292,228,293,233,221,247"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a90c9c304e5aa93a3bb6c0be316166cc9" title=" " alt="" coords="289,301,455,327"/>
+<area shape="poly" title=" " alt="" coords="221,282,293,296,292,301,220,287"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="559,425,657,451"/>
+<area shape="poly" title=" " alt="" coords="127,284,145,328,176,385,220,442,246,466,276,485,314,499,354,506,395,505,435,500,511,479,570,454,572,459,513,484,436,505,395,511,353,511,312,504,273,490,243,470,216,445,172,388,141,331,122,286"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a60f58f23cbe45d0208c6b19cc89fe467" title=" " alt="" coords="297,351,447,376"/>
+<area shape="poly" title=" " alt="" coords="156,282,212,309,276,335,304,345,302,350,274,341,210,314,154,287"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a49eb32c46d0cbabe1c3f6d55dd5f3443" title=" " alt="" coords="289,400,455,425"/>
+<area shape="poly" title=" " alt="" coords="139,283,198,334,235,361,276,385,295,393,293,398,273,390,233,366,194,338,136,287"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a1d591b0dba56b91290ad6a1f9c3e7f49" title=" " alt="" coords="309,449,435,475"/>
+<area shape="poly" title=" " alt="" coords="132,284,156,317,189,358,229,399,276,434,297,444,295,449,273,439,226,403,185,361,151,320,128,287"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="304,104,440,129"/>
+<area shape="poly" title=" " alt="" coords="135,242,194,190,232,162,273,138,290,131,293,136,276,143,235,167,197,194,139,246"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="517,104,699,129"/>
+<area shape="poly" title=" " alt="" coords="437,249,468,237,503,215,535,188,585,138,589,142,539,192,506,219,471,242,439,254"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="747,104,905,129"/>
+<area shape="poly" title=" " alt="" coords="699,114,733,114,733,119,699,119"/>
+<area shape="poly" title=" " alt="" coords="434,77,534,98,532,104,433,83"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a6365daf9a760d9fc5d5339c4f490e610" title=" " alt="" coords="543,301,673,327"/>
+<area shape="poly" title=" " alt="" coords="456,311,529,311,529,317,456,317"/>
+<area shape="poly" title=" " alt="" coords="439,324,470,336,534,374,585,414,581,418,531,378,468,340,438,329"/>
+<area shape="poly" title=" " alt="" coords="440,114,503,114,503,119,440,119"/>
 </map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_icgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_icgraph" alt=""/></div>
-<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_icgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_a93e31c5e37c0cc310b75ad750788d220_icgraph">
-<area shape="rect" title="Load a single template file (may contain multiple templates)." alt="" coords="963,5,1184,45"/>
-<area shape="rect" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#a894067b6639d6c8e9f976bee1eb28fa1" title="Load every *.t file found directly inside dir (non&#45;recursive)." alt="" coords="693,5,915,45"/>
+<div class="center"><img src="../../d7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_icgraph.png" border="0" usemap="#ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_icgraph" alt=""/></div>
+<map name="ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_icgraph" id="ad7/d64/classparser_1_1EvlogTemplateRegistry_ae21942f9d183834868b14440dc544caa_icgraph">
+<area shape="rect" title=" " alt="" coords="963,5,1184,45"/>
+<area shape="rect" href="../../d7/d64/classparser_1_1EvlogTemplateRegistry.html#aff226473ebe69b7b72ad85e4ee527f86" title=" " alt="" coords="693,5,915,45"/>
 <area shape="poly" title=" " alt="" coords="949,28,915,28,915,23,949,23"/>
 <area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad54bfc8001e9c107869200ee1a4a18db" title=" " alt="" coords="395,5,645,45"/>
 <area shape="poly" title=" " alt="" coords="679,28,646,28,646,23,679,23"/>

@@ -93,10 +93,10 @@ $(document).ready(function(){initNavTree('de/d35/md_docs_2SDK__GETTING__STARTED.
   <div class="headertitle"><div class="title">LogViewer Plugin SDK - Getting Started Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md624"></a> This guide walks plugin developers through building plugins for LogViewer using the official SDK.</p>
-<h1><a class="anchor" id="autotoc_md625"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md626"></a> This guide walks plugin developers through building plugins for LogViewer using the official SDK.</p>
+<h1><a class="anchor" id="autotoc_md627"></a>
 Quick Start (5 Minutes)</h1>
-<h2><a class="anchor" id="autotoc_md626"></a>
+<h2><a class="anchor" id="autotoc_md628"></a>
 1. Install LogViewer SDK</h2>
 <div class="fragment"><div class="line"># Download or clone LogViewer</div>
 <div class="line">git clone https://github.com/yourname/LogViewer.git</div>
@@ -105,7 +105,7 @@ Quick Start (5 Minutes)</h1>
 <div class="line"># Build and install SDK</div>
 <div class="line">cmake -S . -B build -DBUILD_SDK=ON</div>
 <div class="line">cmake --install build --prefix ~/LogViewer_install</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md627"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md629"></a>
 2. Build the Example Plugin</h2>
 <div class="fragment"><div class="line"># Clone or navigate to the BasicPlugin example</div>
 <div class="line">cd examples/BasicPlugin</div>
@@ -114,7 +114,7 @@ Quick Start (5 Minutes)</h1>
 <div class="line">cmake -S . -B build \</div>
 <div class="line">  -DCMAKE_PREFIX_PATH=~/LogViewer_install/sdk/lib/cmake</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md628"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md630"></a>
 3. Run Your Plugin</h2>
 <p>Copy to LogViewer's plugin directory and restart LogViewer:</p>
 <div class="fragment"><div class="line"># Linux</div>
@@ -128,9 +128,9 @@ Quick Start (5 Minutes)</h1>
 <div class="line">copy build\config.json %APPDATA%\LogViewer\plugins\</div>
 </div><!-- fragment --><p>Restart LogViewer, and you should see the Basic Example plugin loaded.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md630"></a>
+<h1><a class="anchor" id="autotoc_md632"></a>
 Detailed Guide</h1>
-<h2><a class="anchor" id="autotoc_md631"></a>
+<h2><a class="anchor" id="autotoc_md633"></a>
 What is the LogViewer Plugin SDK?</h2>
 <p>The SDK provides:</p><ul>
 <li><b>C-ABI Plugin Interface</b> (<code>PluginC.h</code>)<ul>
@@ -155,9 +155,9 @@ What is the LogViewer Plugin SDK?</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md632"></a>
+<h2><a class="anchor" id="autotoc_md634"></a>
 SDK Installation</h2>
-<h3><a class="anchor" id="autotoc_md633"></a>
+<h3><a class="anchor" id="autotoc_md635"></a>
 Build from Source</h3>
 <div class="fragment"><div class="line">git clone &lt;logviewer-repo&gt;</div>
 <div class="line">cd LogViewer</div>
@@ -173,7 +173,7 @@ Build from Source</h3>
 <div class="line"># Install to custom location</div>
 <div class="line">cmake --install build --prefix ~/LogViewer_install</div>
 </div><!-- fragment --><p>The SDK is installed to: <code>~/LogViewer_install/sdk/</code></p>
-<h3><a class="anchor" id="autotoc_md634"></a>
+<h3><a class="anchor" id="autotoc_md636"></a>
 SDK Contents</h3>
 <div class="fragment"><div class="line">sdk/</div>
 <div class="line">├── include/                    # Plugin API headers</div>
@@ -190,9 +190,9 @@ SDK Contents</h3>
 <div class="line">    ├── LogViewerPluginTargets.cmake    # Target definitions</div>
 <div class="line">    ├── LogViewerPluginPackaging.cmake  # ZIP packaging helpers</div>
 <div class="line">    └── LogViewerConfigVersion.cmake    # Version info</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md635"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md637"></a>
 Creating Your First Plugin</h2>
-<h3><a class="anchor" id="autotoc_md636"></a>
+<h3><a class="anchor" id="autotoc_md638"></a>
 Step 1: Minimal Plugin Structure</h3>
 <div class="fragment"><div class="line">MyPlugin/</div>
 <div class="line">├── CMakeLists.txt</div>
@@ -200,7 +200,7 @@ Step 1: Minimal Plugin Structure</h3>
 <div class="line">│   └── MyPlugin.cpp</div>
 <div class="line">├── config.json.in</div>
 <div class="line">└── README.md</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md637"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md639"></a>
 Step 2: Implement BasicPlugin.cpp</h3>
 <p>Minimum required exports:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;PluginC.h&gt;</span></div>
@@ -252,7 +252,7 @@ Step 2: Implement BasicPlugin.cpp</h3>
 <div class="line">}</div>
 <div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
 <div class="ttc" id="anamespaceconfig_html_a5f7e2c5cc76af7d5515d1d3024aaec37"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config::json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> Config.hpp:16</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md638"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md640"></a>
 Step 3: CMakeLists.txt</h3>
 <div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.22)</div>
 <div class="line">project(MyPlugin)</div>
@@ -271,7 +271,7 @@ Step 3: CMakeLists.txt</h3>
 <div class="line"> </div>
 <div class="line"># Generate config.json</div>
 <div class="line">configure_file(config.json.in config.json @ONLY)</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md639"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md641"></a>
 Step 4: config.json.in</h3>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;id&quot;: &quot;my_plugin&quot;,</div>
@@ -282,12 +282,12 @@ Step 4: config.json.in</h3>
 <div class="line">  &quot;description&quot;: &quot;My awesome plugin&quot;,</div>
 <div class="line">  &quot;capabilities&quot;: []</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md640"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md642"></a>
 Step 5: Build</h3>
 <div class="fragment"><div class="line">cmake -S . -B build \</div>
 <div class="line">  -DCMAKE_PREFIX_PATH=/path/to/LogViewer_install/sdk/lib/cmake</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md641"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md643"></a>
 Understanding the Plugin Lifecycle</h2>
 <div class="fragment"><div class="line">┌─────────────────────────────────────────┐</div>
 <div class="line">│  Host Application (LogViewer)           │</div>
@@ -305,7 +305,7 @@ Understanding the Plugin Lifecycle</h2>
 <div class="line">             ↓</div>
 <div class="line">    Plugin_Destroy()         [deallocate state]</div>
 </div><!-- fragment --><p><b>Important</b>: Always use <code>malloc()</code> for any data returned to the host—the host will call <code>free()</code>.</p>
-<h2><a class="anchor" id="autotoc_md642"></a>
+<h2><a class="anchor" id="autotoc_md644"></a>
 Using the Logger</h2>
 <p>In your plugin:</p>
 <div class="fragment"><div class="line"><span class="keyword">static</span> PluginLogFn g_logger = <span class="keyword">nullptr</span>;</div>
@@ -323,7 +323,7 @@ Using the Logger</h2>
 <div class="line">        g_logger(3, <span class="stringliteral">&quot;Error message&quot;</span>);      <span class="comment">// level 3</span></div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md643"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md645"></a>
 Creating UI Panels</h2>
 <p>Implement any of these optional exports:</p>
 <div class="fragment"><div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
@@ -347,7 +347,7 @@ Creating UI Panels</h2>
 <div class="line">}</div>
 <div class="ttc" id="aclassQWidget_html"><div class="ttname"><a href="../../d8/ded/classQWidget.html">QWidget</a></div></div>
 </div><!-- fragment --><p>The host manages widget lifetimes but may call the Destroy function if provided.</p>
-<h2><a class="anchor" id="autotoc_md644"></a>
+<h2><a class="anchor" id="autotoc_md646"></a>
 Accessing Events</h2>
 <p>Use the Events Container API:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;PluginEventsC.h&gt;</span></div>
@@ -366,7 +366,7 @@ Accessing Events</h2>
 <div class="line">        PluginApi_FreeString(json);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md645"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md647"></a>
 Dependencies</h2>
 <p>Automatically available after <code>find_package(LogViewer CONFIG REQUIRED)</code>:</p>
 <p><b>Always included:</b></p><ul>
@@ -391,30 +391,30 @@ Dependencies</h2>
 <div class="line">        nlohmann_json::nlohmann_json</div>
 <div class="line">        fmt::fmt</div>
 <div class="line">)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md646"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md648"></a>
 Platform Considerations</h2>
-<h3><a class="anchor" id="autotoc_md647"></a>
+<h3><a class="anchor" id="autotoc_md649"></a>
 Windows (MinGW)</h3>
 <ul>
 <li>Use forward slashes in paths: <code>C:/msys64/mingw64/</code></li>
 <li>Plugin extension: <code>.dll</code></li>
 <li>Set <code>CMAKE_PREFIX_PATH</code> with forward slashes</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md648"></a>
+<h3><a class="anchor" id="autotoc_md650"></a>
 Linux</h3>
 <ul>
 <li>Plugin extension: <code>.so</code></li>
 <li>May need to link Qt plugins for GUI plugins</li>
 <li>Use standard CMake conventions</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md649"></a>
+<h3><a class="anchor" id="autotoc_md651"></a>
 macOS</h3>
 <ul>
 <li>Plugin extension: <code>.dylib</code></li>
 <li>Qt6 typically installed via Homebrew</li>
 <li>Code signing may be required for distribution</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md650"></a>
+<h2><a class="anchor" id="autotoc_md652"></a>
 Distribution</h2>
 <p>Package plugins as ZIP archives:</p>
 <div class="fragment"><div class="line">my_plugin.zip</div>
@@ -428,9 +428,9 @@ Distribution</h2>
 <div class="fragment"><div class="line">include(LogViewerPluginPackaging)</div>
 <div class="line"> </div>
 <div class="line"># Bundles your plugin with dependencies into a ZIP</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md651"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md653"></a>
 Debugging</h2>
-<h3><a class="anchor" id="autotoc_md652"></a>
+<h3><a class="anchor" id="autotoc_md654"></a>
 View Plugin Loads</h3>
 <p>LogViewer logs plugin loads to:</p><ul>
 <li><b>Windows</b>: <code>APPDATA%/LogViewer/logs/</code></li>
@@ -438,14 +438,14 @@ View Plugin Loads</h3>
 <li><b>macOS</b>: <code>~/Library/Logs/LogViewer/</code></li>
 </ul>
 <p>Check logs if your plugin fails to load.</p>
-<h3><a class="anchor" id="autotoc_md653"></a>
+<h3><a class="anchor" id="autotoc_md655"></a>
 Missing config.json</h3>
 <p>Ensure <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> is in the same directory as your plugin binary with:</p><ul>
 <li>Correct <code>entry</code> field matching the binary name</li>
 <li>Valid JSON syntax</li>
 <li>Required fields: <code>id</code>, <code>name</code>, <code>version</code>, <code>entry</code>, <code>api_version</code></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md654"></a>
+<h3><a class="anchor" id="autotoc_md656"></a>
 Symbol Visibility</h3>
 <p>Use <code>EXPORT_PLUGIN_SYMBOL</code> for all exported functions:</p>
 <div class="fragment"><div class="line"><span class="comment">// WRONG - won&#39;t be visible</span></div>
@@ -454,7 +454,7 @@ Symbol Visibility</h3>
 <div class="line"><span class="comment">// CORRECT</span></div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
 <div class="line">PluginHandle Plugin_Create() { ... }</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md655"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md657"></a>
 Best Practices</h2>
 <ol type="1">
 <li><b>Always use <code>malloc()</code> for returned strings</b> <div class="fragment"><div class="line"><span class="keywordtype">char</span>* get_string() {</div>
@@ -488,12 +488,12 @@ Best Practices</h2>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md656"></a>
+<h1><a class="anchor" id="autotoc_md658"></a>
 Examples</h1>
 <p>See <code>examples/BasicPlugin/</code> for a complete working example with detailed comments.</p>
-<h1><a class="anchor" id="autotoc_md657"></a>
+<h1><a class="anchor" id="autotoc_md659"></a>
 API Reference</h1>
-<h2><a class="anchor" id="autotoc_md658"></a>
+<h2><a class="anchor" id="autotoc_md660"></a>
 Core Functions</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -515,7 +515,7 @@ Core Functions</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Plugin_SetLoggerCallback(h, fn)</code>   </td><td class="markdownTableBodyNone">Receive logger function   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md659"></a>
+<h2><a class="anchor" id="autotoc_md661"></a>
 Optional UI Functions</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -530,7 +530,7 @@ Optional UI Functions</h2>
 <td class="markdownTableBodyNone"><code>Plugin_CreateMainPanel(h, parent, json)</code>   </td><td class="markdownTableBodyNone">Create main panel widget   </td></tr>
 </table>
 <p>See <a href="../../../src/plugin_api/PluginC.h">PluginC.h</a> for complete documentation.</p>
-<h1><a class="anchor" id="autotoc_md660"></a>
+<h1><a class="anchor" id="autotoc_md662"></a>
 Next Steps</h1>
 <ol type="1">
 <li>Build the <a href="../../examples/BasicPlugin/">BasicPlugin example</a></li>
@@ -539,7 +539,7 @@ Next Steps</h1>
 <li>Access log events via the Events API</li>
 <li>Package and distribute your plugin</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md661"></a>
+<h1><a class="anchor" id="autotoc_md663"></a>
 Support</h1>
 <ul>
 <li><b>Documentation</b>: See <code>docs/</code> directory</li>
@@ -547,7 +547,7 @@ Support</h1>
 <li><b>Headers</b>: <code>src/plugin_api/</code></li>
 <li><b>Issues</b>: File issues on the repository</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md662"></a>
+<h1><a class="anchor" id="autotoc_md664"></a>
 License</h1>
 <p>Plugins built with this SDK are governed by the LogViewer license. See LICENSE file. </p>
 </div></div><!-- contents -->

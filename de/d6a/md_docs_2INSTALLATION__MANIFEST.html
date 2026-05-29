@@ -93,18 +93,18 @@ $(document).ready(function(){initNavTree('de/d6a/md_docs_2INSTALLATION__MANIFEST
   <div class="headertitle"><div class="title">LogViewer Installation Manifest System</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md448"></a> </p>
-<h1><a class="anchor" id="autotoc_md449"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md449"></a> </p>
+<h1><a class="anchor" id="autotoc_md450"></a>
 Overview</h1>
 <p>The installation manifest (<code>LogViewer_install_manifest.json</code> / <code>.logviewer_manifest.json</code>) is a metadata file that tracks installed libraries, versions, and build information. This prevents unintended overwriting of up-to-date files when upgrading LogViewer to a new version.</p>
-<h1><a class="anchor" id="autotoc_md450"></a>
+<h1><a class="anchor" id="autotoc_md451"></a>
 File Location</h1>
 <ul>
 <li><b>Windows</b>: <code>&lt;InstallDir&gt;/LogViewer_install_manifest.json</code></li>
 <li><b>macOS</b>: <code>&lt;InstallDir&gt;/.logviewer_manifest.json</code> (hidden file)</li>
 <li><b>Linux</b>: <code>/etc/LogViewer/.logviewer_manifest.json</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md451"></a>
+<h1><a class="anchor" id="autotoc_md452"></a>
 File Format</h1>
 <p>The manifest is a JSON file containing:</p>
 <div class="fragment"><div class="line">{</div>
@@ -143,9 +143,9 @@ File Format</h1>
 <div class="line">    &quot;format_version&quot;: &quot;1.0&quot;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md452"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md453"></a>
 Usage During Installation/Upgrade</h1>
-<h2><a class="anchor" id="autotoc_md453"></a>
+<h2><a class="anchor" id="autotoc_md454"></a>
 Installation Script Flow</h2>
 <ol type="1">
 <li><b>Check for existing manifest</b> <div class="fragment"><div class="line">if [ -f &quot;$INSTALL_DIR/.logviewer_manifest.json&quot; ]; then</div>
@@ -171,7 +171,7 @@ Installation Script Flow</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md454"></a>
+<h2><a class="anchor" id="autotoc_md455"></a>
 Example Installation Script (Bash)</h2>
 <div class="fragment"><div class="line">#!/bin/bash</div>
 <div class="line"> </div>
@@ -209,7 +209,7 @@ Example Installation Script (Bash)</h2>
 <div class="line"># Update manifest</div>
 <div class="line">cp &quot;$NEW_MANIFEST&quot; &quot;$MANIFEST_FILE&quot;</div>
 <div class="line">echo &quot;Installation complete. Manifest updated.&quot;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md455"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md456"></a>
 Example Installation Script (NSIS - Windows)</h2>
 <div class="fragment"><div class="line">; Check for existing manifest</div>
 <div class="line">IfFileExists &quot;$INSTDIR\.logviewer_manifest.json&quot; HaveManifest NoManifest</div>
@@ -239,7 +239,7 @@ Example Installation Script (NSIS - Windows)</h2>
 <div class="line"> </div>
 <div class="line">Done:</div>
 <div class="line">  DetailPrint &quot;Installation complete&quot;</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md456"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md457"></a>
 Extending the Manifest</h1>
 <p>To add more libraries or metadata:</p>
 <ol type="1">
@@ -251,21 +251,21 @@ Extending the Manifest</h1>
 <div class="line">)</div>
 </div><!-- fragment --></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md457"></a>
+<h1><a class="anchor" id="autotoc_md458"></a>
 Version Handling</h1>
 <p>The manifest includes semantic versioning (MAJOR.MINOR.PATCH):</p><ul>
 <li><b>Major version change</b> (1.x → 2.x): Likely breaking changes, consider full reinstall</li>
 <li><b>Minor version change</b> (1.4 → 1.5): New features, safe upgrade</li>
 <li><b>Patch version change</b> (1.4.0 → 1.4.1): Bug fixes, safe upgrade</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md458"></a>
+<h1><a class="anchor" id="autotoc_md459"></a>
 Backward Compatibility</h1>
 <ul>
 <li>Manifest format is versioned (<code>"format_version": "1.0"</code>)</li>
 <li>Future versions can handle older manifest formats</li>
 <li>Scripts should gracefully handle missing manifest file (first installation)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md459"></a>
+<h1><a class="anchor" id="autotoc_md460"></a>
 Benefits</h1>
 <p>✅ <b>Prevents unnecessary file overwrites</b> during upgrades ✅ <b>Tracks installation metadata</b> for diagnostics ✅ <b>Enables intelligent installers</b> that preserve user files ✅ <b>Simplifies version management</b> for maintenance tools ✅ <b>Provides audit trail</b> of installation history </p>
 </div></div><!-- contents -->

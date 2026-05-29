@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['⚠️_0',['Singleton Pattern ⚠️',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md374',1,'']]]
+  ['⚠️_0',['Singleton Pattern ⚠️',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md375',1,'']]]
 ];

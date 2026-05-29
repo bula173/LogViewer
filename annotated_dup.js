@@ -152,6 +152,7 @@ var annotated_dup =
       [ "KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", "dc/d46/classutil_1_1KeyEncryption" ],
       [ "Logger", "d2/d44/classutil_1_1Logger.html", "d2/d44/classutil_1_1Logger" ],
       [ "Result", "dd/d2d/classutil_1_1Result.html", "dd/d2d/classutil_1_1Result" ],
+      [ "Result< void, E >", "d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html", "d2/de6/classutil_1_1Result_3_01void_00_01E_01_4" ],
       [ "SpdLogger", "dd/d6b/classutil_1_1SpdLogger.html", "dd/d6b/classutil_1_1SpdLogger" ]
     ] ],
     [ "Version", "d8/d16/namespaceVersion.html", [

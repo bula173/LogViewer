@@ -1,16 +1,22 @@
 <map id="ui::qt::ScenariosPanel::UpdateScenarioCombo" name="ui::qt::ScenariosPanel::UpdateScenarioCombo">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,26,184,66"/>
-<area shape="rect" id="Node000002" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3cce3c80f6913ba8b0525c94c7c3a0f7" title=" " alt="" coords="232,26,393,66"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,43,218,43,218,48,184,48"/>
-<area shape="rect" id="Node000003" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a434852e2db216c6ea5edb64629f23b25" title="Returns a pointer to the active Scenario, or nullptr if none." alt="" coords="860,18,1021,58"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="380,23,441,11,550,4,659,5,760,12,846,21,846,26,760,17,659,10,550,9,442,16,381,28"/>
-<area shape="rect" id="Node000004" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#afce79f55245394fd9eb888bc4517f804" title=" " alt="" coords="441,26,603,66"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="394,43,428,43,428,48,394,48"/>
-<area shape="rect" id="Node000005" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3604268999377ad97342399b459436e1" title=" " alt="" coords="651,80,812,120"/>
-<area shape="poly" id="edge8_Node000002_Node000005" title=" " alt="" coords="385,63,442,75,543,88,637,94,637,100,542,93,441,80,384,68"/>
-<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="603,42,846,37,846,42,603,47"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="600,63,642,74,640,79,598,68"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="798,78,859,59,861,64,799,83"/>
-<area shape="rect" id="Node000006" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ad8bc5a6686d6420219a67795bd98be82" title="Returns the index of the selected row in m_eventsTable, or &#45;1." alt="" coords="860,82,1021,122"/>
-<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="813,98,846,99,846,104,813,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,78,184,118"/>
+<area shape="rect" id="Node000002" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3cce3c80f6913ba8b0525c94c7c3a0f7" title=" " alt="" coords="232,78,393,118"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,95,218,95,218,101,184,101"/>
+<area shape="rect" id="Node000003" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a434852e2db216c6ea5edb64629f23b25" title="Returns a pointer to the active Scenario, or nullptr if none." alt="" coords="880,99,1041,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,92,441,91,637,90,832,101,867,104,866,109,832,106,637,95,441,97,394,98"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="449,5,595,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="365,75,474,33,476,38,367,80"/>
+<area shape="rect" id="Node000007" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#afce79f55245394fd9eb888bc4517f804" title=" " alt="" coords="441,106,603,146"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="394,106,428,111,428,116,394,111"/>
+<area shape="rect" id="Node000008" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3604268999377ad97342399b459436e1" title=" " alt="" coords="661,161,822,201"/>
+<area shape="poly" id="edge11_Node000002_Node000008" title=" " alt="" coords="349,116,392,137,442,155,494,166,547,174,647,180,646,185,547,179,493,172,441,161,390,142,347,121"/>
+<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="651,5,832,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="595,15,637,15,637,21,595,21"/>
+<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="881,5,1040,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="832,15,868,15,868,21,832,21"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="603,122,866,118,866,123,603,127"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="603,143,648,155,647,160,602,149"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="813,158,875,141,876,146,814,163"/>
+<area shape="rect" id="Node000009" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ad8bc5a6686d6420219a67795bd98be82" title="Returns the index of the selected row in m_eventsTable, or &#45;1." alt="" coords="880,163,1041,203"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="822,179,867,180,866,185,822,184"/>
 </map>

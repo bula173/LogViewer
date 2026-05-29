@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('d1/df7/md_docs_2API__EXAMPLES.html','.
   <div class="headertitle"><div class="title">LogViewer API Usage Examples</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md81"></a> This guide provides practical examples for using the key LogViewer APIs. Perfect for developers integrating LogViewer components into their applications or extending the system.</p>
-<h1><a class="anchor" id="autotoc_md82"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md82"></a> This guide provides practical examples for using the key LogViewer APIs. Perfect for developers integrating LogViewer components into their applications or extending the system.</p>
+<h1><a class="anchor" id="autotoc_md83"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Working with LogEvents</li>
@@ -106,9 +106,9 @@ Table of Contents</h1>
 <li>Configuration Management</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md84"></a>
+<h1><a class="anchor" id="autotoc_md85"></a>
 Working with LogEvents</h1>
-<h2><a class="anchor" id="autotoc_md85"></a>
+<h2><a class="anchor" id="autotoc_md86"></a>
 Creating Basic LogEvents</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d8/d87/LogEvent_8hpp.html">LogEvent.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -130,7 +130,7 @@ Creating Basic LogEvents</h2>
 <div class="line"><a class="code hl_class" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> event3(44, std::move(data));  <span class="comment">// Using move for efficiency</span></div>
 <div class="ttc" id="aLogEvent_8hpp_html"><div class="ttname"><a href="../../d8/d87/LogEvent_8hpp.html">LogEvent.hpp</a></div><div class="ttdoc">Defines the LogEvent class for representing structured log entries.</div></div>
 <div class="ttc" id="aclassdb_1_1LogEvent_html"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a></div><div class="ttdoc">Represents a single, structured log event with key-value data.</div><div class="ttdef"><b>Definition</b> LogEvent.hpp:98</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md86"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md87"></a>
 Accessing Event Data</h2>
 <div class="fragment"><div class="line"><span class="comment">// Look up single value (O(1) via internal hash index)</span></div>
 <div class="line">std::string timestamp = event1.findByKey(<span class="stringliteral">&quot;timestamp&quot;</span>);</div>
@@ -150,7 +150,7 @@ Accessing Event Data</h2>
 <div class="line">event1.SetSource(<span class="stringliteral">&quot;log_file_1.txt&quot;</span>);</div>
 <div class="line">event1.SetOriginalId(42);  <span class="comment">// Original ID before merge</span></div>
 <div class="line">event1.SetId(1000);         <span class="comment">// New merged ID</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md87"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md88"></a>
 Converting Events to/from JSON</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;nlohmann/json.hpp&gt;</span></div>
 <div class="line"> </div>
@@ -170,9 +170,9 @@ Converting Events to/from JSON</h2>
 <div class="line"><span class="stringliteral">})&quot;);</span></div>
 <div class="line"><span class="stringliteral"><a class="code hl_class" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> event_from_json = db::LogEvent::fromJson(j_input);</span></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md89"></a>
+<h1><a class="anchor" id="autotoc_md90"></a>
 Managing Large Log Collections</h1>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md91"></a>
 Using EventsContainer for Thread-Safe Access</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../df/d0f/EventsContainer_8hpp.html">EventsContainer.hpp</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;thread&gt;</span></div>
@@ -206,7 +206,7 @@ Using EventsContainer for Thread-Safe Access</h2>
 <div class="line"> </div>
 <div class="line">reader.join();</div>
 <div class="ttc" id="aEventsContainer_8hpp_html"><div class="ttname"><a href="../../df/d0f/EventsContainer_8hpp.html">EventsContainer.hpp</a></div><div class="ttdoc">Container class for managing collections of LogEvent objects.</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md91"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md92"></a>
 Handling Model Changes (Observer Pattern)</h2>
 <div class="fragment"><div class="line"><span class="comment">// Register for change notifications</span></div>
 <div class="line">std::function&lt;void()&gt; on_data_updated = []{</div>
@@ -220,9 +220,9 @@ Handling Model Changes (Observer Pattern)</h2>
 <div class="line"><span class="comment">// Unregister when done</span></div>
 <div class="line">container-&gt;UnregisterOnDataUpdated(on_data_updated);</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md93"></a>
+<h1><a class="anchor" id="autotoc_md94"></a>
 Creating and Applying Filters</h1>
-<h2><a class="anchor" id="autotoc_md94"></a>
+<h2><a class="anchor" id="autotoc_md95"></a>
 Building Simple Filters</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d9/d77/Filter_8hpp.html">Filter.hpp</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d4/d19/FilterManager_8hpp.html">FilterManager.hpp</a>&quot;</span></div>
@@ -247,7 +247,7 @@ Building Simple Filters</h2>
 <div class="ttc" id="aFilterManager_8hpp_html"><div class="ttname"><a href="../../d4/d19/FilterManager_8hpp.html">FilterManager.hpp</a></div></div>
 <div class="ttc" id="aFilter_8hpp_html"><div class="ttname"><a href="../../d9/d77/Filter_8hpp.html">Filter.hpp</a></div></div>
 <div class="ttc" id="aclassfilters_1_1Filter_html"><div class="ttname"><a href="../../d9/d12/classfilters_1_1Filter.html">filters::Filter</a></div><div class="ttdoc">Composable log event filter with pluggable matching strategies and multi-condition support.</div><div class="ttdef"><b>Definition</b> Filter.hpp:182</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md95"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md96"></a>
 Complex Filters with Multiple Conditions</h2>
 <div class="fragment"><div class="line"><span class="comment">// Create filter with multiple conditions (AND logic)</span></div>
 <div class="line"><a class="code hl_class" href="../../d9/d12/classfilters_1_1Filter.html">filters::Filter</a> complex_filter(<span class="stringliteral">&quot;ErrorWithSource&quot;</span>);</div>
@@ -259,7 +259,7 @@ Complex Filters with Multiple Conditions</h2>
 <div class="line">));</div>
 <div class="line">complex_filter.compile();</div>
 <div class="ttc" id="astructfilters_1_1FilterCondition_html"><div class="ttname"><a href="../../dc/d53/structfilters_1_1FilterCondition.html">filters::FilterCondition</a></div><div class="ttdoc">Represents a single matching condition within a filter structure.</div><div class="ttdef"><b>Definition</b> Filter.hpp:64</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md96"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md97"></a>
 Applying Filters to Data</h2>
 <div class="fragment"><div class="line"><span class="comment">// Apply active filters</span></div>
 <div class="line">std::vector&lt;unsigned long&gt; matching_indices = fm.applyFilters(0, 100, *container);</div>
@@ -277,7 +277,7 @@ Applying Filters to Data</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Get fresh results</span></div>
 <div class="line"><span class="keyword">auto</span> new_results = fm.applyFilters(0, 100, *container);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md97"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md98"></a>
 Persisting Filters</h2>
 <div class="fragment"><div class="line"><span class="comment">// Save filters to JSON configuration</span></div>
 <div class="line">fm.SaveFiltersToJson(<span class="stringliteral">&quot;filters.json&quot;</span>);</div>
@@ -285,9 +285,9 @@ Persisting Filters</h2>
 <div class="line"><span class="comment">// Load filters from file</span></div>
 <div class="line">fm.LoadFiltersFromJson(<span class="stringliteral">&quot;filters.json&quot;</span>);</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md99"></a>
+<h1><a class="anchor" id="autotoc_md100"></a>
 Parsing Different Log Formats</h1>
-<h2><a class="anchor" id="autotoc_md100"></a>
+<h2><a class="anchor" id="autotoc_md101"></a>
 Using ParserFactory for Format Detection</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d3/d3a/ParserFactory_8hpp.html">ParserFactory.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -308,7 +308,7 @@ Using ParserFactory for Format Detection</h2>
 <div class="line">}</div>
 <div class="ttc" id="aParserFactory_8hpp_html"><div class="ttname"><a href="../../d3/d3a/ParserFactory_8hpp.html">ParserFactory.hpp</a></div><div class="ttdoc">Factory for creating parser instances based on file type.</div></div>
 <div class="ttc" id="anamespaceparser_html"><div class="ttname"><a href="../../d0/dd5/namespaceparser.html">parser</a></div><div class="ttdoc">Data parsing components and interfaces.</div><div class="ttdef"><b>Definition</b> IControler.hpp:22</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md101"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md102"></a>
 Custom Parser Registration</h2>
 <div class="fragment"><div class="line"><span class="comment">// Implement custom parser</span></div>
 <div class="line"><span class="keyword">class </span>CustomLogParser : <span class="keyword">public</span> <a class="code hl_class" href="../../d3/d8b/classparser_1_1IDataParser.html">parser::IDataParser</a> {</div>
@@ -328,9 +328,9 @@ Custom Parser Registration</h2>
 <div class="ttc" id="aclassparser_1_1IDataParser_html_a49135d85a8459410ff91c24a892f88d1"><div class="ttname"><a href="../../d3/d8b/classparser_1_1IDataParser.html#a49135d85a8459410ff91c24a892f88d1">parser::IDataParser::GetTotalProgress</a></div><div class="ttdeci">virtual uint32_t GetTotalProgress() const =0</div><div class="ttdoc">Gets the total expected progress value.</div></div>
 <div class="ttc" id="aclassparser_1_1IDataParser_html_a714468ed0e54516b4405a17c604c1dbc"><div class="ttname"><a href="../../d3/d8b/classparser_1_1IDataParser.html#a714468ed0e54516b4405a17c604c1dbc">parser::IDataParser::GetCurrentProgress</a></div><div class="ttdeci">virtual uint32_t GetCurrentProgress() const =0</div><div class="ttdoc">Gets the current parsing progress.</div></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md103"></a>
+<h1><a class="anchor" id="autotoc_md104"></a>
 Loading and Using Plugins</h1>
-<h2><a class="anchor" id="autotoc_md104"></a>
+<h2><a class="anchor" id="autotoc_md105"></a>
 Basic Plugin Loading</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../da/daa/PluginManager_8hpp.html">PluginManager.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -354,8 +354,8 @@ Basic Plugin Loading</h2>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Plugin: &quot;</span> &lt;&lt; metadata.name &lt;&lt; <span class="stringliteral">&quot; v&quot;</span> &lt;&lt; metadata.version &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">}</div>
 <div class="ttc" id="aPluginManager_8hpp_html"><div class="ttname"><a href="../../da/daa/PluginManager_8hpp.html">PluginManager.hpp</a></div><div class="ttdoc">Plugin management and registration system.</div></div>
-<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:349</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md105"></a>
+<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:367</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md106"></a>
 Working with Specific Plugin Types</h2>
 <div class="fragment"><div class="line"><span class="comment">// Get all plugins of specific type</span></div>
 <div class="line"><span class="keyword">auto</span> ai_plugins = pm.GetPluginsOfType(plugin::PluginType::AI_PROVIDER);</div>
@@ -375,7 +375,7 @@ Working with Specific Plugin Types</h2>
 <div class="line">}</div>
 <div class="ttc" id="anamespaceai_html"><div class="ttname"><a href="../../de/d58/namespaceai.html">ai</a></div><div class="ttdef"><b>Definition</b> IPlugin.hpp:15</div></div>
 <div class="ttc" id="anamespaceplugin_html"><div class="ttname"><a href="../../d3/d7e/namespaceplugin.html">plugin</a></div><div class="ttdef"><b>Definition</b> IFieldConversionPlugin.hpp:8</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md106"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md107"></a>
 Observing Plugin Lifecycle</h2>
 <div class="fragment"><div class="line"><span class="keyword">class </span>MyPluginObserver : <span class="keyword">public</span> plugin::PluginObserver {</div>
 <div class="line">    <span class="keywordtype">void</span> OnPluginLoaded(<a class="code hl_class" href="../../d4/d51/classplugin_1_1IPlugin.html">plugin::IPlugin</a>* <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a>)<span class="keyword"> override </span>{</div>
@@ -399,9 +399,9 @@ Observing Plugin Lifecycle</h2>
 <div class="ttc" id="aclassplugin_1_1IPlugin_html"><div class="ttname"><a href="../../d4/d51/classplugin_1_1IPlugin.html">plugin::IPlugin</a></div><div class="ttdef"><b>Definition</b> IPlugin.hpp:36</div></div>
 <div class="ttc" id="anamespaceerror_html"><div class="ttname"><a href="../../da/d7e/namespaceerror.html">error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:17</div></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md108"></a>
+<h1><a class="anchor" id="autotoc_md109"></a>
 AI-Assisted Log Analysis</h1>
-<h2><a class="anchor" id="autotoc_md109"></a>
+<h2><a class="anchor" id="autotoc_md110"></a>
 Analyzing Events with AI Provider</h2>
 <div class="fragment"><div class="line"><span class="comment">// Select events to analyze</span></div>
 <div class="line">std::vector&lt;db::LogEvent&gt; selected_events = {<span class="comment">/*...selected from UI...*/</span>};</div>
@@ -422,7 +422,7 @@ Analyzing Events with AI Provider</h2>
 <div class="line">        std::cerr &lt;&lt; <span class="stringliteral">&quot;Analysis error: &quot;</span> &lt;&lt; analysis_result.error().Message() &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md110"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md111"></a>
 Checking AI Provider Capabilities</h2>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (<span class="keyword">auto</span>* <a class="code hl_namespace" href="../../de/d58/namespaceai.html">ai</a> = <span class="keyword">dynamic_cast&lt;</span>plugin::IAIProvider*<span class="keyword">&gt;</span>(ai_plugin)) {</div>
 <div class="line">    <span class="keyword">auto</span> capabilities = <a class="code hl_namespace" href="../../de/d58/namespaceai.html">ai</a>-&gt;GetCapabilities();</div>
@@ -439,9 +439,9 @@ Checking AI Provider Capabilities</h2>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md112"></a>
+<h1><a class="anchor" id="autotoc_md113"></a>
 Configuration Management</h1>
-<h2><a class="anchor" id="autotoc_md113"></a>
+<h2><a class="anchor" id="autotoc_md114"></a>
 Loading and Saving Configuration</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../df/db4/Config_8hpp.html">Config.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -464,7 +464,7 @@ Loading and Saving Configuration</h2>
 <div class="line"><a class="code hl_namespace" href="../../d6/d7f/namespaceconfig.html">config</a>.Reload();</div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="../../df/db4/Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="anamespaceconfig_html"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html">config</a></div><div class="ttdef"><b>Definition</b> BuiltinConversionPlugins.cpp:5</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md114"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md115"></a>
 Working with Named Colors</h2>
 <div class="fragment"><div class="line"><span class="comment">// Set column colors</span></div>
 <div class="line">std::map&lt;std::string, std::string&gt; color_map = {</div>
@@ -477,7 +477,7 @@ Working with Named Colors</h2>
 <div class="line"><span class="comment">// Retrieve colors</span></div>
 <div class="line"><span class="keyword">auto</span> error_color = <a class="code hl_namespace" href="../../d6/d7f/namespaceconfig.html">config</a>.GetColumnColor(<span class="stringliteral">&quot;level&quot;</span>, <span class="stringliteral">&quot;ERROR&quot;</span>);</div>
 <div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;Error color: &quot;</span> &lt;&lt; error_color &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md115"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md116"></a>
 Persistent Filter Configuration</h2>
 <div class="fragment"><div class="line"><span class="comment">// Filters auto-save when modified</span></div>
 <div class="line"><span class="keyword">auto</span>&amp; fm = filters::FilterManager::GetInstance();</div>
@@ -486,7 +486,7 @@ Persistent Filter Configuration</h2>
 <div class="line"><span class="comment">// Filters are automatically persisted in config.json</span></div>
 <div class="line"><span class="comment">// On next startup, they are automatically restored</span></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md117"></a>
+<h1><a class="anchor" id="autotoc_md118"></a>
 Error Handling with Result Types</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d3/db2/Result_8hpp.html">Result.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -522,15 +522,15 @@ Error Handling with Result Types</h1>
 <div class="line">        }</div>
 <div class="line">    })</div>
 <div class="line">    .map([](<span class="keywordtype">int</span> x) { <span class="keywordflow">return</span> x + 10; });</div>
-<div class="ttc" id="aResult_8hpp_html"><div class="ttname"><a href="../../d3/db2/Result_8hpp.html">Result.hpp</a></div><div class="ttdoc">Modern error handling with Result&lt;T, E&gt; type.</div></div>
+<div class="ttc" id="aResult_8hpp_html"><div class="ttname"><a href="../../d3/db2/Result_8hpp.html">Result.hpp</a></div></div>
 <div class="ttc" id="aclasserror_1_1Error_html"><div class="ttname"><a href="../../d7/d0d/classerror_1_1Error.html">error::Error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:62</div></div>
-<div class="ttc" id="aclassutil_1_1Result_html"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html">util::Result</a></div><div class="ttdoc">A type that represents either success (Ok) or failure (Err)</div><div class="ttdef"><b>Definition</b> Result.hpp:62</div></div>
-<div class="ttc" id="aclassutil_1_1Result_html_a117ccc497f5110b1a28c3921cc8e2448"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448">util::Result::Ok</a></div><div class="ttdeci">static Result Ok(T value)</div><div class="ttdoc">Constructs a successful result.</div><div class="ttdef"><b>Definition</b> Result.hpp:69</div></div>
-<div class="ttc" id="aclassutil_1_1Result_html_a8b6a3b9550ab82f2b4d23d34ff57289a"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a">util::Result::Err</a></div><div class="ttdeci">static Result Err(E error)</div><div class="ttdoc">Constructs an error result.</div><div class="ttdef"><b>Definition</b> Result.hpp:81</div></div>
+<div class="ttc" id="aclassutil_1_1Result_html"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html">util::Result</a></div><div class="ttdef"><b>Definition</b> Result.hpp:15</div></div>
+<div class="ttc" id="aclassutil_1_1Result_html_a117ccc497f5110b1a28c3921cc8e2448"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448">util::Result::Ok</a></div><div class="ttdeci">static Result Ok(T value)</div><div class="ttdef"><b>Definition</b> Result.hpp:17</div></div>
+<div class="ttc" id="aclassutil_1_1Result_html_a8b6a3b9550ab82f2b4d23d34ff57289a"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a">util::Result::Err</a></div><div class="ttdeci">static Result Err(E error)</div><div class="ttdef"><b>Definition</b> Result.hpp:22</div></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md119"></a>
+<h1><a class="anchor" id="autotoc_md120"></a>
 Best Practices</h1>
-<h2><a class="anchor" id="autotoc_md120"></a>
+<h2><a class="anchor" id="autotoc_md121"></a>
 Memory Management</h2>
 <ul>
 <li>Use <code>std::move()</code> for efficiency when passing large collections</li>
@@ -538,21 +538,21 @@ Memory Management</h2>
 <li>Use <code>std::shared_ptr</code> for shared ownership</li>
 <li>EventsContainer is thread-safe; use it for concurrent access</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md121"></a>
+<h2><a class="anchor" id="autotoc_md122"></a>
 Thread Safety</h2>
 <ul>
 <li>Don't access LogEvent from multiple threads without external synchronization</li>
 <li>Use EventsContainer for thread-safe multi-threaded access</li>
 <li>FilterManager uses locks internally; safe for concurrent access</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md122"></a>
+<h2><a class="anchor" id="autotoc_md123"></a>
 Performance</h2>
 <ul>
 <li>Use structured bindings (C++20) for iteration: <code>for (const auto&amp; [key, val] : items)</code></li>
 <li>Batch operations when possible: <code>AddEventBatch()</code> is more efficient than <code>AddEvent()</code> in loops</li>
 <li>Virtual scrolling in UI handles millions of events efficiently</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md123"></a>
+<h2><a class="anchor" id="autotoc_md124"></a>
 Error Handling</h2>
 <ul>
 <li>Use <code>Result&lt;T, E&gt;</code> types for fallible operations</li>
@@ -560,12 +560,12 @@ Error Handling</h2>
 <li>Check error messages for debugging</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md125"></a>
+<h1><a class="anchor" id="autotoc_md126"></a>
 For More Information</h1>
 <ul>
 <li>See <code><a class="el" href="../../da/d01/ARCHITECTURE_8md.html">docs/ARCHITECTURE.md</a></code> for system design</li>
 <li>See <code><a class="el" href="../../df/d71/PLUGIN__SYSTEM_8md.html">docs/PLUGIN_SYSTEM.md</a></code> for plugin development</li>
-<li>See <code><a class="el" href="../../d3/db2/Result_8hpp.html" title="Modern error handling with Result&lt;T, E&gt; type.">src/application/util/Result.hpp</a></code> for Result API documentation</li>
+<li>See <code><a class="el" href="../../d3/db2/Result_8hpp.html">src/application/util/Result.hpp</a></code> for Result API documentation</li>
 <li>See <code>Doxyfile</code> generated HTML documentation in <code>docs/html/</code> </li>
 </ul>
 </div></div><!-- contents -->

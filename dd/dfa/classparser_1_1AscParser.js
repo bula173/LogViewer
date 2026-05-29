@@ -4,7 +4,7 @@ var classparser_1_1AscParser =
     [ "~AscParser", "dd/dfa/classparser_1_1AscParser.html#aac00ba6fc264bbe37d6bb8d9c1565cd5", null ],
     [ "GetCurrentProgress", "dd/dfa/classparser_1_1AscParser.html#aab432a4e558c2ad89fc83679efd710c3", null ],
     [ "GetTotalProgress", "dd/dfa/classparser_1_1AscParser.html#aaff3cbf1f930d4eb115a21e3070809f2", null ],
-    [ "LoadDbc", "dd/dfa/classparser_1_1AscParser.html#aa0f78ea88c7dfd16f5bf7d4ea646c9da", null ],
+    [ "LoadDbc", "dd/dfa/classparser_1_1AscParser.html#ae0790aed0fb4b0da6524cb3254e98fae", null ],
     [ "NotifyNewEvent", "dd/dfa/classparser_1_1AscParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "dd/dfa/classparser_1_1AscParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],
     [ "NotifyProgressUpdated", "dd/dfa/classparser_1_1AscParser.html#a596df39e4d90cad4eb364aa5382ab51c", null ],

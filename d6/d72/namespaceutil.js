@@ -4,6 +4,7 @@ var namespaceutil =
     [ "KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", "dc/d46/classutil_1_1KeyEncryption" ],
     [ "Logger", "d2/d44/classutil_1_1Logger.html", "d2/d44/classutil_1_1Logger" ],
     [ "Result", "dd/d2d/classutil_1_1Result.html", "dd/d2d/classutil_1_1Result" ],
+    [ "Result< void, E >", "d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html", "d2/de6/classutil_1_1Result_3_01void_00_01E_01_4" ],
     [ "SpdLogger", "dd/d6b/classutil_1_1SpdLogger.html", "dd/d6b/classutil_1_1SpdLogger" ],
     [ "Constructible", "de/d12/conceptutil_1_1Constructible.html", null ],
     [ "EventItemsLike", "db/d11/conceptutil_1_1EventItemsLike.html", null ],
@@ -22,8 +23,6 @@ var namespaceutil =
     ] ],
     [ "Base64Decode", "d6/d72/namespaceutil.html#a22f0dda98ec359698c1ceaae46f836e6", null ],
     [ "Base64Encode", "d6/d72/namespaceutil.html#a5850c65ff5aa0bf11868a1aba4b727af", null ],
-    [ "Err", "d6/d72/namespaceutil.html#a721283df15ed8bc045349e77c0105ca2", null ],
-    [ "Ok", "d6/d72/namespaceutil.html#ae8d6b0e720e0df213bab5886d6d25585", null ],
     [ "ENCODED_PREFIX", "d6/d72/namespaceutil.html#ac36ec596197a8e45000f8d892a09900c", null ],
     [ "kBase64Chars", "d6/d72/namespaceutil.html#a3369ad35d3a607dd14dc07919febcace", null ]
 ];

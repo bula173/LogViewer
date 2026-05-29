@@ -1,70 +1,69 @@
 <map id="plugin::PluginManager::RegisterPlugin" name="plugin::PluginManager::RegisterPlugin">
-<area shape="rect" id="Node000001" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="5,377,172,417"/>
-<area shape="rect" id="Node000002" href="$dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title="Constructs an error result." alt="" coords="767,118,886,143"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,375,161,328,238,267,331,205,382,179,434,157,518,136,604,124,685,121,754,122,754,128,685,126,604,130,519,141,436,163,384,184,334,210,241,271,165,332,112,379"/>
-<area shape="rect" id="Node000005" href="$dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title="Constructs a successful result." alt="" coords="1221,94,1339,119"/>
-<area shape="poly" id="edge46_Node000001_Node000005" title=" " alt="" coords="98,375,154,283,198,222,252,159,314,100,384,50,423,30,462,15,504,6,547,3,828,3,917,3,987,8,1056,19,1142,41,1197,62,1245,85,1243,90,1195,67,1141,47,1055,24,986,13,917,9,828,8,547,8,505,11,464,21,425,35,387,54,317,104,255,163,202,225,158,286,103,378"/>
-<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1003,727,1131,753"/>
-<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="95,417,106,477,129,561,145,607,166,652,192,695,222,734,271,780,316,807,368,823,435,839,512,854,577,861,636,862,690,856,745,845,803,829,943,787,1025,756,1027,761,945,792,804,834,746,850,691,861,636,867,577,867,511,859,434,844,367,828,314,812,268,784,218,738,187,698,161,655,140,609,124,563,101,478,90,418"/>
-<area shape="rect" id="Node000009" href="$d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,377,387,417"/>
-<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="173,395,206,395,206,400,173,400"/>
-<area shape="rect" id="Node000018" href="$d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,789,631,829"/>
-<area shape="poly" id="edge45_Node000001_Node000018" title=" " alt="" coords="105,416,153,483,228,577,274,628,324,679,379,727,436,768,461,782,458,786,433,773,376,731,321,683,270,632,224,581,148,486,101,419"/>
-<area shape="rect" id="Node000003" href="$dd/d2d/classutil_1_1Result.html#a66e41af0d2126616617a9dcd1b5bfaf8" title="Maps the success value to a new type." alt="" coords="1002,118,1131,143"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="886,136,988,136,988,142,886,141"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="1002,125,900,125,900,120,1002,120"/>
-<area shape="poly" id="edge5_Node000003_Node000003" title=" " alt="" coords="1032,120,1024,110,1028,100,1043,94,1067,91,1096,95,1108,104,1105,108,1094,100,1067,97,1044,99,1032,104,1029,109,1036,116"/>
-<area shape="rect" id="Node000004" href="$dd/d2d/classutil_1_1Result.html#a8d455d2fdaef142f06b40231094eb086" title="Checks if the result contains a success value." alt="" coords="1215,143,1345,169"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="1132,136,1202,144,1202,149,1131,141"/>
-<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="1131,129,1219,119,1220,124,1132,134"/>
-<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="1221,108,1127,118,1126,113,1220,103"/>
-<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1189,601,1371,626"/>
-<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="1088,725,1244,631,1247,636,1091,729"/>
-<area shape="rect" id="Node000008" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1419,601,1577,626"/>
-<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="1371,611,1405,611,1405,616,1371,616"/>
-<area shape="poly" id="edge14_Node000009_Node000002" title=" " alt="" coords="310,376,326,339,353,292,388,244,410,223,433,204,458,192,492,181,576,161,754,135,754,141,577,166,493,186,460,197,436,209,413,227,392,248,357,295,331,341,315,378"/>
-<area shape="poly" id="edge36_Node000009_Node000005" title=" " alt="" coords="307,376,321,331,346,271,382,210,406,182,433,158,480,127,531,102,583,82,638,67,750,48,862,42,969,47,1068,59,1153,73,1220,88,1218,93,1152,79,1067,64,969,53,862,48,750,53,639,72,585,87,533,107,483,132,436,162,410,185,387,213,350,273,326,333,312,378"/>
-<area shape="poly" id="edge15_Node000009_Node000006" title=" " alt="" coords="314,417,366,563,402,642,419,672,437,693,470,719,501,737,531,749,561,756,627,763,710,771,775,779,827,781,878,779,944,771,1015,754,1016,759,944,776,878,784,827,787,775,784,709,776,627,768,560,761,530,754,499,742,467,724,433,697,415,676,397,645,361,565,309,419"/>
-<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="994,550,1139,575"/>
-<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="387,391,500,392,642,402,718,412,795,426,872,446,945,471,985,498,1040,540,1037,544,981,502,943,476,870,451,794,432,717,417,641,407,500,398,387,397"/>
-<area shape="rect" id="Node000011" href="$d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,702,944,727"/>
-<area shape="poly" id="edge16_Node000009_Node000011" title=" " alt="" coords="315,416,332,454,358,502,393,551,436,593,500,632,569,661,640,682,706,697,704,702,638,688,568,666,497,636,433,597,389,554,353,504,327,456,310,419"/>
-<area shape="rect" id="Node000013" href="$d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,543,631,583"/>
-<area shape="poly" id="edge21_Node000009_Node000013" title=" " alt="" coords="336,415,508,533,505,537,333,420"/>
-<area shape="poly" id="edge35_Node000009_Node000018" title=" " alt="" coords="315,416,389,613,400,659,403,698,412,733,421,750,437,769,454,783,451,787,433,773,417,753,407,735,398,699,394,660,384,614,310,418"/>
-<area shape="rect" id="Node000019" href="$d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,320,649,360"/>
-<area shape="poly" id="edge37_Node000009_Node000019" title=" " alt="" coords="386,375,448,361,449,366,388,380"/>
-<area shape="rect" id="Node000020" href="$d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,219,661,245"/>
-<area shape="poly" id="edge39_Node000009_Node000020" title=" " alt="" coords="333,375,433,306,515,250,518,255,436,310,336,379"/>
-<area shape="poly" id="edge13_Node000010_Node000007" title=" " alt="" coords="1122,573,1213,595,1212,600,1121,578"/>
-<area shape="poly" id="edge18_Node000011_Node000006" title=" " alt="" coords="945,724,989,729,989,734,944,730"/>
-<area shape="poly" id="edge17_Node000011_Node000010" title=" " alt="" coords="848,700,893,672,942,635,965,610,975,598,991,586,1004,578,1007,583,993,590,979,602,969,613,946,639,896,676,851,704"/>
-<area shape="rect" id="Node000012" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="999,650,1135,675"/>
-<area shape="poly" id="edge19_Node000011_Node000012" title=" " alt="" coords="885,699,994,676,995,681,887,705"/>
-<area shape="poly" id="edge20_Node000012_Node000007" title=" " alt="" coords="1122,647,1210,627,1212,632,1123,653"/>
-<area shape="poly" id="edge32_Node000013_Node000006" title=" " alt="" coords="562,582,585,618,617,661,660,704,684,722,710,736,746,749,784,758,861,765,934,761,998,753,998,758,935,767,861,770,783,763,745,754,708,741,681,726,656,708,613,665,580,621,558,584"/>
-<area shape="poly" id="edge30_Node000013_Node000010" title=" " alt="" coords="632,560,980,560,980,565,632,565"/>
-<area shape="poly" id="edge34_Node000013_Node000012" title=" " alt="" coords="584,580,642,610,710,635,782,649,855,658,985,663,985,668,854,663,781,654,709,640,640,615,582,585"/>
-<area shape="rect" id="Node000014" href="$da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,601,882,626"/>
-<area shape="poly" id="edge22_Node000013_Node000014" title=" " alt="" coords="632,575,758,598,757,604,631,580"/>
-<area shape="rect" id="Node000016" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="999,467,1134,493"/>
-<area shape="poly" id="edge31_Node000013_Node000016" title=" " alt="" coords="574,540,633,502,670,484,709,471,781,458,855,455,925,457,986,464,985,469,924,463,855,460,781,463,710,476,672,489,636,507,577,545"/>
-<area shape="rect" id="Node000017" href="$d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,485,910,525"/>
-<area shape="poly" id="edge33_Node000013_Node000017" title=" " alt="" coords="631,543,730,523,731,528,632,548"/>
-<area shape="poly" id="edge28_Node000014_Node000006" title=" " alt="" coords="853,624,1031,718,1028,723,851,629"/>
-<area shape="poly" id="edge25_Node000014_Node000010" title=" " alt="" coords="882,599,992,576,993,581,883,604"/>
-<area shape="poly" id="edge29_Node000014_Node000012" title=" " alt="" coords="883,622,991,645,990,650,882,627"/>
-<area shape="rect" id="Node000015" href="$d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="992,601,1141,626"/>
-<area shape="poly" id="edge23_Node000014_Node000015" title=" " alt="" coords="882,611,978,611,978,616,882,616"/>
-<area shape="poly" id="edge26_Node000014_Node000016" title=" " alt="" coords="849,598,1029,497,1032,502,852,603"/>
-<area shape="poly" id="edge24_Node000015_Node000007" title=" " alt="" coords="1142,611,1176,611,1176,616,1142,616"/>
-<area shape="poly" id="edge27_Node000016_Node000007" title=" " alt="" coords="1090,491,1248,591,1245,595,1087,495"/>
-<area shape="poly" id="edge38_Node000019_Node000010" title=" " alt="" coords="650,335,732,337,818,343,894,355,924,365,946,377,960,391,969,406,975,436,979,469,984,485,994,502,1013,523,1034,540,1031,544,1009,527,990,506,979,487,974,470,970,437,964,408,956,394,942,381,922,370,893,361,818,348,732,342,650,341"/>
-<area shape="poly" id="edge40_Node000020_Node000002" title=" " alt="" coords="609,217,660,198,684,179,708,160,753,143,755,148,711,165,687,183,663,202,611,222"/>
-<area shape="poly" id="edge44_Node000020_Node000005" title=" " alt="" coords="625,217,709,204,831,192,928,189,1022,180,1077,169,1140,152,1164,141,1188,128,1210,121,1212,126,1190,133,1167,146,1142,157,1078,174,1023,185,928,194,832,198,710,209,626,222"/>
-<area shape="rect" id="Node000021" href="$d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,219,893,245"/>
-<area shape="poly" id="edge41_Node000020_Node000021" title=" " alt="" coords="662,229,746,229,746,235,662,235"/>
-<area shape="rect" id="Node000022" href="$d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,269,921,309"/>
-<area shape="poly" id="edge42_Node000020_Node000022" title=" " alt="" coords="611,242,719,265,718,270,610,247"/>
-<area shape="poly" id="edge43_Node000022_Node000016" title=" " alt="" coords="910,307,945,326,981,356,1011,390,1054,454,1049,457,1007,393,977,359,943,330,908,312"/>
+<area shape="rect" id="Node000001" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="5,125,172,165"/>
+<area shape="rect" id="Node000002" href="$dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="767,120,886,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,128,220,123,344,117,441,117,661,123,754,126,754,132,661,129,440,122,344,122,220,129,173,134"/>
+<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1003,512,1131,537"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,122,197,95,284,65,387,35,500,13,559,6,619,3,678,5,736,11,793,24,847,44,898,70,946,105,963,130,973,166,981,257,983,351,987,391,994,421,1018,464,1046,500,1042,503,1014,467,990,423,982,392,978,352,975,258,968,167,958,133,942,109,896,75,845,48,792,29,735,17,678,10,619,8,560,11,501,18,388,40,286,70,199,100,135,127"/>
+<area shape="rect" id="Node000006" href="$d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,479,387,519"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="104,163,285,466,281,469,100,166"/>
+<area shape="rect" id="Node000016" href="$d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,1006,631,1046"/>
+<area shape="poly" id="edge45_Node000001_Node000016" title=" " alt="" coords="95,164,115,303,137,406,170,524,214,648,272,771,307,830,346,886,389,938,436,985,453,998,450,1002,433,989,385,941,341,889,302,832,267,773,209,650,165,526,132,408,110,304,89,165"/>
+<area shape="rect" id="Node000017" href="$dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="767,169,886,195"/>
+<area shape="poly" id="edge46_Node000001_Node000017" title=" " alt="" coords="172,146,754,176,754,181,172,151"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1189,624,1371,649"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1101,535,1143,554,1248,614,1246,619,1140,559,1098,540"/>
+<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1419,624,1577,649"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1371,634,1405,634,1405,639,1371,639"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="306,479,318,427,341,358,358,321,379,286,404,253,433,224,470,198,510,177,552,161,596,149,680,134,753,129,754,134,681,140,597,154,554,166,512,182,473,203,436,228,408,256,383,289,363,324,346,360,323,429,311,480"/>
+<area shape="poly" id="edge11_Node000006_Node000003" title=" " alt="" coords="387,492,636,485,790,488,944,498,1000,506,999,512,944,503,790,493,636,490,387,497"/>
+<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="994,652,1139,677"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="310,519,322,574,345,648,362,688,382,727,407,764,437,796,470,824,501,844,531,858,560,868,626,878,710,890,779,906,835,921,861,923,887,920,913,909,942,891,962,869,971,846,972,821,969,796,966,769,966,742,973,715,990,688,995,683,999,687,994,692,978,717,971,743,971,769,975,795,977,821,976,847,967,872,946,895,916,914,888,925,861,928,834,926,777,912,709,895,626,884,559,873,529,863,498,849,467,828,433,800,403,767,378,730,357,690,340,650,317,575,305,520"/>
+<area shape="rect" id="Node000008" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="999,385,1134,411"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="386,478,434,469,587,446,739,427,986,402,986,407,740,432,587,451,435,474,387,483"/>
+<area shape="rect" id="Node000009" href="$d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,703,944,728"/>
+<area shape="poly" id="edge12_Node000006_Node000009" title=" " alt="" coords="325,517,373,562,403,585,436,605,509,638,586,664,661,683,728,697,727,703,660,689,585,669,507,643,433,610,400,589,370,566,322,521"/>
+<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="999,703,1135,728"/>
+<area shape="poly" id="edge44_Node000006_Node000010" title=" " alt="" coords="313,519,371,723,408,831,424,869,437,888,479,912,538,932,609,947,685,956,763,959,835,955,897,945,943,928,967,910,988,888,1021,837,1044,784,1057,741,1062,742,1049,786,1026,839,992,891,971,914,945,932,898,950,836,961,763,964,685,961,608,952,536,938,476,917,433,892,419,871,403,833,366,725,307,520"/>
+<area shape="rect" id="Node000011" href="$d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,555,631,595"/>
+<area shape="poly" id="edge17_Node000006_Node000011" title=" " alt="" coords="370,517,470,548,469,554,368,522"/>
+<area shape="poly" id="edge33_Node000006_Node000016" title=" " alt="" coords="313,519,389,797,398,854,400,900,408,942,419,963,437,985,454,1000,451,1004,433,989,414,966,403,943,394,900,393,854,384,798,308,520"/>
+<area shape="poly" id="edge34_Node000006_Node000017" title=" " alt="" coords="308,478,322,434,348,378,384,319,407,292,433,269,474,256,558,236,753,194,755,199,559,242,475,261,436,274,411,296,388,322,352,380,327,436,313,480"/>
+<area shape="rect" id="Node000018" href="$d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,746,649,786"/>
+<area shape="poly" id="edge35_Node000006_Node000018" title=" " alt="" coords="316,518,361,603,396,654,437,700,462,720,490,737,487,742,459,725,433,704,391,657,357,606,311,521"/>
+<area shape="rect" id="Node000019" href="$d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,284,661,309"/>
+<area shape="poly" id="edge38_Node000006_Node000019" title=" " alt="" coords="312,478,331,445,357,404,392,362,433,326,462,311,464,316,436,331,396,366,362,407,335,447,317,480"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="1140,652,1175,648,1176,653,1140,658"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="1081,409,1260,612,1256,615,1077,413"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="853,700,897,674,942,637,957,616,965,596,973,576,990,555,1010,541,1013,545,994,559,978,578,970,598,962,619,946,641,900,678,856,705"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="887,700,992,677,993,683,888,705"/>
+<area shape="poly" id="edge15_Node000009_Node000010" title=" " alt="" coords="944,713,985,713,985,718,944,718"/>
+<area shape="poly" id="edge16_Node000010_Node000004" title=" " alt="" coords="1103,700,1140,686,1232,652,1234,657,1142,691,1104,705"/>
+<area shape="poly" id="edge27_Node000011_Node000003" title=" " alt="" coords="598,553,651,535,709,522,783,514,858,511,989,515,989,521,858,517,783,519,710,527,652,540,600,558"/>
+<area shape="poly" id="edge25_Node000011_Node000007" title=" " alt="" coords="591,593,646,617,710,637,780,649,852,657,980,663,980,669,851,663,779,655,709,642,645,622,589,598"/>
+<area shape="poly" id="edge26_Node000011_Node000008" title=" " alt="" coords="587,553,644,525,708,498,863,448,998,411,999,416,865,453,710,503,646,530,589,558"/>
+<area shape="poly" id="edge32_Node000011_Node000010" title=" " alt="" coords="563,594,586,628,619,668,661,707,685,724,710,737,750,750,791,757,833,759,874,757,952,746,1016,729,1017,735,953,751,875,762,833,764,790,762,748,755,708,742,682,728,658,712,616,672,582,631,559,597"/>
+<area shape="rect" id="Node000012" href="$da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,537,882,563"/>
+<area shape="poly" id="edge18_Node000011_Node000012" title=" " alt="" coords="631,565,757,553,758,559,632,570"/>
+<area shape="rect" id="Node000014" href="$d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="758,855,895,880"/>
+<area shape="poly" id="edge28_Node000011_Node000014" title=" " alt="" coords="568,594,613,655,664,733,677,763,683,788,692,811,711,833,746,852,743,857,708,837,687,813,678,789,672,764,659,735,608,658,563,597"/>
+<area shape="rect" id="Node000015" href="$d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,587,910,627"/>
+<area shape="poly" id="edge30_Node000011_Node000015" title=" " alt="" coords="632,582,730,594,729,599,631,587"/>
+<area shape="poly" id="edge23_Node000012_Node000003" title=" " alt="" coords="882,541,989,530,989,535,883,547"/>
+<area shape="poly" id="edge21_Node000012_Node000007" title=" " alt="" coords="883,554,914,562,945,573,990,602,1041,641,1038,645,987,606,943,578,913,567,881,559"/>
+<area shape="poly" id="edge22_Node000012_Node000008" title=" " alt="" coords="846,535,1032,416,1035,421,849,539"/>
+<area shape="poly" id="edge24_Node000012_Node000010" title=" " alt="" coords="883,549,916,557,946,573,959,587,966,602,972,630,976,659,983,673,994,687,1003,694,1000,698,990,690,978,676,971,661,966,631,961,603,954,590,942,577,914,562,882,554"/>
+<area shape="rect" id="Node000013" href="$d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="992,569,1141,595"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="883,555,979,568,978,573,882,560"/>
+<area shape="poly" id="edge20_Node000013_Node000004" title=" " alt="" coords="1118,592,1217,618,1216,623,1116,597"/>
+<area shape="poly" id="edge29_Node000014_Node000004" title=" " alt="" coords="867,852,992,807,1067,774,1140,737,1202,696,1252,656,1256,660,1205,700,1143,742,1069,779,994,812,869,857"/>
+<area shape="poly" id="edge31_Node000015_Node000007" title=" " alt="" coords="911,625,1000,646,999,651,910,630"/>
+<area shape="poly" id="edge36_Node000018_Node000007" title=" " alt="" coords="650,776,717,778,793,774,870,762,907,751,943,737,958,727,967,714,976,701,990,688,1004,680,1007,685,994,692,980,704,971,717,961,730,945,742,909,756,871,767,793,780,717,783,649,781"/>
+<area shape="poly" id="edge37_Node000018_Node000014" title=" " alt="" coords="592,783,710,833,761,848,759,853,708,838,590,788"/>
+<area shape="poly" id="edge39_Node000019_Node000002" title=" " alt="" coords="568,282,611,251,659,212,673,196,681,182,691,168,708,154,730,144,753,137,754,142,732,149,711,159,695,171,686,185,677,199,663,216,615,256,571,286"/>
+<area shape="poly" id="edge43_Node000019_Node000017" title=" " alt="" coords="617,281,660,262,675,249,683,234,692,219,708,205,753,187,755,192,711,210,696,223,687,237,679,252,663,267,620,286"/>
+<area shape="rect" id="Node000020" href="$d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,284,893,309"/>
+<area shape="poly" id="edge40_Node000019_Node000020" title=" " alt="" coords="662,294,746,294,746,299,662,299"/>
+<area shape="rect" id="Node000021" href="$d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,219,921,259"/>
+<area shape="poly" id="edge41_Node000019_Node000021" title=" " alt="" coords="610,281,718,259,719,264,611,286"/>
+<area shape="poly" id="edge42_Node000021_Node000008" title=" " alt="" coords="920,257,945,269,978,292,1007,320,1051,372,1047,376,1003,324,975,297,943,274,918,262"/>
 </map>

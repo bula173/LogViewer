@@ -98,18 +98,24 @@ $(document).ready(function(){initNavTree('d1/dd6/Filter_8cpp.html','../../'); in
 <div class="textblock"><code>#include &quot;<a class="el" href="../../d9/d77/Filter_8hpp_source.html">Filter.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d9/d11/Logger_8hpp_source.html">Logger.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d1/d93/Error_8hpp_source.html">Error.hpp</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;ranges&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Filter.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d1e/Filter_8cpp__incl.png" border="0" usemap="#asrc_2application_2filters_2Filter_8cpp" alt=""/></div>
 <map name="asrc_2application_2filters_2Filter_8cpp" id="asrc_2application_2filters_2Filter_8cpp">
-<area shape="rect" title=" " alt="" coords="627,5,786,45"/>
+<area shape="rect" title=" " alt="" coords="763,5,922,45"/>
 <area shape="rect" href="../../d9/d77/Filter_8hpp.html" title=" " alt="" coords="307,167,389,192"/>
-<area shape="poly" title=" " alt="" coords="663,48,389,164,387,159,661,43"/>
+<area shape="poly" title=" " alt="" coords="782,48,400,165,398,160,781,43"/>
 <area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="896,313,989,339"/>
-<area shape="poly" title=" " alt="" coords="718,45,769,144,809,206,857,263,883,286,910,304,907,309,879,290,853,267,805,209,765,147,713,47"/>
-<area shape="rect" href="../../d1/d93/Error_8hpp.html" title="Error handling utilities." alt="" coords="839,93,919,119"/>
-<area shape="poly" title=" " alt="" coords="749,43,842,85,840,90,747,48"/>
+<area shape="poly" title=" " alt="" coords="824,47,807,69,793,94,791,106,793,118,803,163,814,197,830,228,857,264,881,286,908,304,905,309,878,291,853,267,825,231,809,199,798,164,788,119,786,106,788,92,802,66,820,44"/>
+<area shape="rect" href="../../d1/d93/Error_8hpp.html" title="Error handling utilities." alt="" coords="803,93,883,119"/>
+<area shape="poly" title=" " alt="" coords="845,46,845,79,840,79,840,46"/>
+<area shape="rect" title=" " alt="" coords="907,93,992,119"/>
+<area shape="poly" title=" " alt="" coords="870,43,924,83,921,87,867,48"/>
+<area shape="rect" title=" " alt="" coords="1016,93,1083,119"/>
+<area shape="poly" title=" " alt="" coords="893,43,1007,86,1005,91,891,48"/>
 <area shape="rect" title=" " alt="" coords="557,394,635,419"/>
 <area shape="poly" title=" " alt="" coords="390,184,464,202,504,217,542,238,580,269,592,287,603,313,608,348,605,380,600,380,603,348,597,314,587,290,576,272,539,242,502,222,462,207,389,189"/>
 <area shape="rect" title=" " alt="" coords="63,240,121,265"/>
@@ -157,15 +163,15 @@ Include dependency graph for Filter.cpp:</div>
 <area shape="poly" title=" " alt="" coords="913,341,794,384,793,379,911,336"/>
 <area shape="rect" title=" " alt="" coords="825,387,973,427"/>
 <area shape="poly" title=" " alt="" coords="939,340,918,376,914,373,934,338"/>
-<area shape="poly" title=" " alt="" coords="867,121,759,214,602,341,534,389,531,384,598,337,756,210,864,117"/>
-<area shape="poly" title=" " alt="" coords="919,105,973,108,1040,118,1112,135,1180,164,1229,195,1262,225,1289,262,1318,312,1333,347,1340,380,1335,381,1328,348,1314,315,1285,265,1258,229,1225,199,1177,169,1110,141,1039,123,973,114,919,110"/>
-<area shape="poly" title=" " alt="" coords="867,121,842,152,834,172,836,191,852,225,874,255,920,302,916,306,870,258,848,227,831,193,829,171,837,150,863,117"/>
+<area shape="poly" title=" " alt="" coords="834,121,741,215,674,279,602,341,535,389,532,384,598,337,670,275,737,211,830,117"/>
+<area shape="poly" title=" " alt="" coords="884,114,895,116,976,125,1042,126,1105,134,1140,146,1180,164,1229,194,1263,225,1289,262,1318,312,1333,347,1340,380,1335,381,1328,348,1314,315,1285,265,1259,228,1226,199,1177,169,1138,151,1104,140,1041,132,976,131,894,121,882,119"/>
+<area shape="poly" title=" " alt="" coords="841,120,833,153,832,172,836,191,852,225,874,255,920,302,916,306,870,258,848,227,831,193,827,173,828,152,836,119"/>
 <area shape="rect" href="../../d1/d6e/UiServices_8hpp.html" title=" " alt="" coords="1047,167,1166,192"/>
-<area shape="poly" title=" " alt="" coords="916,116,1057,160,1056,165,915,121"/>
+<area shape="poly" title=" " alt="" coords="884,115,1052,161,1050,166,882,121"/>
 <area shape="rect" title=" " alt="" coords="845,167,912,192"/>
-<area shape="poly" title=" " alt="" coords="881,119,881,153,876,153,876,119"/>
+<area shape="poly" title=" " alt="" coords="851,118,869,153,864,156,846,120"/>
 <area shape="rect" title=" " alt="" coords="937,167,1023,192"/>
-<area shape="poly" title=" " alt="" coords="897,116,954,156,951,161,893,121"/>
+<area shape="poly" title=" " alt="" coords="866,116,947,158,944,163,864,121"/>
 <area shape="poly" title=" " alt="" coords="1082,195,635,391,633,386,1080,190"/>
 <area shape="rect" href="../../d9/d6c/IErrorPresenter_8hpp.html" title=" " alt="" coords="1157,313,1304,339"/>
 <area shape="poly" title=" " alt="" coords="1140,190,1176,209,1209,238,1224,269,1231,299,1226,300,1219,270,1205,242,1173,213,1137,195"/>

@@ -1,46 +1,52 @@
 <map id="ui::qt::MainWindow::createPluginTab" name="ui::qt::MainWindow::createPluginTab">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,371,152,411"/>
-<area shape="rect" id="Node000002" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="683,450,818,475"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,398,200,404,670,453,669,458,200,409,152,403"/>
-<area shape="rect" id="Node000005" href="$d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a" title="Gets singleton instance." alt="" coords="200,187,367,227"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="100,369,248,234,251,238,104,373"/>
-<area shape="rect" id="Node000015" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="687,351,815,377"/>
-<area shape="poly" id="edge25_Node000001_Node000015" title=" " alt="" coords="152,384,200,381,672,364,673,369,200,387,152,389"/>
-<area shape="rect" id="Node000016" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="683,401,819,426"/>
-<area shape="poly" id="edge26_Node000001_Node000016" title=" " alt="" coords="152,390,669,408,669,413,152,396"/>
-<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="873,351,1055,377"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="794,447,824,436,880,409,929,381,932,386,883,414,826,441,796,452"/>
-<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1103,351,1261,377"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1055,361,1089,361,1089,367,1055,367"/>
-<area shape="rect" id="Node000006" href="$da/dc5/PluginManager_8cpp.html#a22ac085c47ab06769707bf57e79ef3df" title=" " alt="" coords="441,17,601,42"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="295,185,342,122,375,87,413,58,441,44,443,49,416,62,379,91,346,126,299,188"/>
-<area shape="rect" id="Node000009" href="$da/dc5/PluginManager_8cpp.html#a617bb5b4ecc03475e674ecb862143043" title=" " alt="" coords="442,73,601,98"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="305,184,352,145,413,108,436,100,438,105,416,113,355,150,308,188"/>
-<area shape="rect" id="Node000012" href="$da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="466,302,577,327"/>
-<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="316,225,362,253,416,280,457,295,455,300,414,285,359,257,313,229"/>
-<area shape="rect" id="Node000014" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="678,251,823,277"/>
-<area shape="poly" id="edge21_Node000005_Node000014" title=" " alt="" coords="357,224,415,236,546,251,664,259,664,264,545,257,414,241,356,229"/>
-<area shape="rect" id="Node000017" href="$d7/d29/classconfig_1_1FieldConversionPluginRegistry.html#a80bb7de3f174a35da6e913133eefa290" title=" " alt="" coords="415,123,628,163"/>
-<area shape="poly" id="edge22_Node000005_Node000017" title=" " alt="" coords="358,184,433,164,434,169,359,189"/>
-<area shape="rect" id="Node000018" href="$d3/d67/classplugin_1_1PluginManager.html#a40abda8da9e26679b52a5a85a4a6cdee" title="Registers an observer for plugin lifecycle events." alt="" coords="438,187,605,227"/>
-<area shape="poly" id="edge23_Node000005_Node000018" title=" " alt="" coords="367,204,424,204,424,209,367,209"/>
-<area shape="rect" id="Node000007" href="$dc/d46/classutil_1_1KeyEncryption.html#ab96199702c841c7c82eb5068829dfc67" title="Decrypt an API key." alt="" coords="679,5,823,45"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="602,25,665,24,665,29,602,31"/>
-<area shape="rect" id="Node000008" href="$d6/d72/namespaceutil.html#a22f0dda98ec359698c1ceaae46f836e6" title=" " alt="" coords="890,13,1038,38"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="823,23,876,23,876,28,823,28"/>
-<area shape="rect" id="Node000010" href="$dc/d46/classutil_1_1KeyEncryption.html#a8df0d55632e80fdaae768371d1addc4f" title="Encrypt an API key." alt="" coords="679,69,823,109"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="601,84,665,85,665,91,601,89"/>
-<area shape="rect" id="Node000011" href="$d6/d72/namespaceutil.html#a5850c65ff5aa0bf11868a1aba4b727af" title=" " alt="" coords="891,77,1037,102"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="823,87,877,87,877,92,823,92"/>
-<area shape="poly" id="edge16_Node000012_Node000002" title=" " alt="" coords="537,325,595,378,634,409,677,436,690,443,688,447,675,441,631,414,591,382,533,329"/>
-<area shape="rect" id="Node000013" href="$d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="676,302,825,327"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="577,312,662,312,662,317,577,317"/>
-<area shape="poly" id="edge14_Node000012_Node000014" title=" " alt="" coords="576,300,678,277,680,282,578,305"/>
-<area shape="poly" id="edge17_Node000012_Node000015" title=" " alt="" coords="578,324,679,346,677,351,576,329"/>
-<area shape="poly" id="edge19_Node000012_Node000016" title=" " alt="" coords="548,325,677,386,698,394,696,399,675,390,546,330"/>
-<area shape="poly" id="edge13_Node000013_Node000003" title=" " alt="" coords="807,325,896,346,894,351,806,330"/>
-<area shape="poly" id="edge15_Node000014_Node000003" title=" " alt="" coords="794,274,826,287,883,315,932,342,929,347,880,319,824,292,792,279"/>
-<area shape="poly" id="edge18_Node000015_Node000003" title=" " alt="" coords="815,361,859,361,859,367,815,367"/>
-<area shape="poly" id="edge20_Node000016_Node000003" title=" " alt="" coords="806,398,894,377,896,382,807,403"/>
-<area shape="poly" id="edge24_Node000018_Node000014" title=" " alt="" coords="603,224,687,245,685,251,601,229"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,137,152,177"/>
+<area shape="rect" id="Node000002" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="897,153,1032,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,138,274,115,414,97,536,90,630,95,724,110,843,134,902,147,900,153,842,139,723,115,630,100,536,96,415,102,275,120,153,143"/>
+<area shape="rect" id="Node000005" href="$d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a" title="Gets singleton instance." alt="" coords="200,219,367,259"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="130,174,221,212,219,217,128,179"/>
+<area shape="rect" id="Node000009" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1093,103,1229,128"/>
+<area shape="poly" id="edge32_Node000001_Node000009" title=" " alt="" coords="116,134,199,97,287,64,356,41,427,26,520,21,761,21,861,29,960,48,1048,72,1116,95,1114,100,1046,77,959,53,861,34,761,26,520,26,428,31,358,46,288,69,201,102,118,139"/>
+<area shape="rect" id="Node000011" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="901,301,1029,327"/>
+<area shape="poly" id="edge31_Node000001_Node000011" title=" " alt="" coords="98,175,146,229,220,299,264,334,311,367,362,396,416,418,534,456,584,468,632,475,679,475,728,468,781,452,841,428,858,417,867,404,875,389,889,372,933,333,937,338,893,376,880,392,871,407,861,421,844,432,783,457,729,473,679,481,631,480,583,474,533,461,414,423,360,401,309,372,260,338,216,303,143,233,94,179"/>
+<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1284,153,1465,179"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1032,163,1270,163,1270,169,1032,169"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1513,153,1672,179"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1465,163,1500,163,1500,169,1465,169"/>
+<area shape="rect" id="Node000006" href="$da/dc5/PluginManager_8cpp.html#a22ac085c47ab06769707bf57e79ef3df" title=" " alt="" coords="441,227,601,252"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="367,237,428,237,428,242,367,242"/>
+<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="892,252,1037,277"/>
+<area shape="poly" id="edge27_Node000005_Node000010" title=" " alt="" coords="335,257,415,282,534,311,629,331,675,334,724,333,778,326,842,313,866,302,889,288,910,280,911,285,892,292,868,306,844,318,779,332,724,339,675,340,629,336,533,317,414,287,333,262"/>
+<area shape="rect" id="Node000012" href="$da/dc5/PluginManager_8cpp.html#a617bb5b4ecc03475e674ecb862143043" title=" " alt="" coords="442,383,601,408"/>
+<area shape="poly" id="edge15_Node000005_Node000012" title=" " alt="" coords="304,258,351,307,382,334,416,357,457,376,455,381,413,362,379,338,348,311,300,261"/>
+<area shape="rect" id="Node000015" href="$da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="704,149,815,175"/>
+<area shape="poly" id="edge20_Node000005_Node000015" title=" " alt="" coords="366,220,414,211,690,169,691,174,415,217,367,225"/>
+<area shape="rect" id="Node000017" href="$d7/d29/classconfig_1_1FieldConversionPluginRegistry.html#a80bb7de3f174a35da6e913133eefa290" title=" " alt="" coords="415,111,628,151"/>
+<area shape="poly" id="edge28_Node000005_Node000017" title=" " alt="" coords="318,217,414,168,447,154,449,159,416,172,321,222"/>
+<area shape="rect" id="Node000018" href="$d3/d67/classplugin_1_1PluginManager.html#a40abda8da9e26679b52a5a85a4a6cdee" title="Registers an observer for plugin lifecycle events." alt="" coords="676,263,843,303"/>
+<area shape="poly" id="edge29_Node000005_Node000018" title=" " alt="" coords="367,255,415,262,544,274,663,279,662,284,544,279,414,267,367,260"/>
+<area shape="rect" id="Node000007" href="$dc/d46/classutil_1_1KeyEncryption.html#ab96199702c841c7c82eb5068829dfc67" title="Decrypt an API key." alt="" coords="687,199,831,239"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="601,230,673,224,674,229,602,235"/>
+<area shape="poly" id="edge12_Node000007_Node000002" title=" " alt="" coords="831,198,901,180,902,185,832,203"/>
+<area shape="rect" id="Node000008" href="$d6/d72/namespaceutil.html#a22f0dda98ec359698c1ceaae46f836e6" title=" " alt="" coords="891,203,1039,228"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="831,215,877,214,877,220,832,221"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="832,233,893,246,892,251,831,238"/>
+<area shape="poly" id="edge13_Node000007_Node000011" title=" " alt="" coords="820,237,844,249,868,269,892,288,905,294,903,299,889,292,865,273,841,254,817,242"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1006,200,1038,188,1086,161,1129,134,1132,138,1089,166,1040,192,1008,205"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="1216,126,1308,148,1307,153,1215,131"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="1018,249,1306,179,1308,185,1019,255"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="1026,299,1125,273,1235,237,1291,211,1340,184,1342,188,1294,215,1237,242,1127,279,1027,304"/>
+<area shape="rect" id="Node000013" href="$dc/d46/classutil_1_1KeyEncryption.html#a8df0d55632e80fdaae768371d1addc4f" title="Encrypt an API key." alt="" coords="687,378,831,418"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="601,394,673,394,673,400,601,399"/>
+<area shape="poly" id="edge18_Node000013_Node000010" title=" " alt="" coords="812,376,841,357,856,340,864,323,872,305,889,288,900,281,903,285,892,292,877,309,869,325,860,343,844,361,815,380"/>
+<area shape="poly" id="edge19_Node000013_Node000011" title=" " alt="" coords="808,375,918,330,921,335,810,380"/>
+<area shape="rect" id="Node000014" href="$d6/d72/namespaceutil.html#a5850c65ff5aa0bf11868a1aba4b727af" title=" " alt="" coords="891,385,1038,411"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="832,395,878,395,878,401,832,401"/>
+<area shape="poly" id="edge24_Node000015_Node000002" title=" " alt="" coords="815,160,884,162,884,167,815,166"/>
+<area shape="poly" id="edge26_Node000015_Node000009" title=" " alt="" coords="815,150,890,138,1079,119,1080,124,891,143,815,155"/>
+<area shape="poly" id="edge23_Node000015_Node000010" title=" " alt="" coords="816,172,844,185,860,199,869,212,878,226,892,238,902,244,900,249,889,243,874,229,865,215,856,202,841,190,814,177"/>
+<area shape="poly" id="edge25_Node000015_Node000011" title=" " alt="" coords="816,169,844,185,856,198,863,212,869,238,875,264,882,276,892,288,898,292,895,297,889,292,877,279,870,265,864,239,858,214,852,201,841,189,813,174"/>
+<area shape="rect" id="Node000016" href="$d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="1087,5,1236,31"/>
+<area shape="poly" id="edge21_Node000015_Node000016" title=" " alt="" coords="795,147,1111,33,1113,38,797,152"/>
+<area shape="poly" id="edge22_Node000016_Node000003" title=" " alt="" coords="1183,29,1345,143,1342,147,1179,33"/>
+<area shape="poly" id="edge30_Node000018_Node000010" title=" " alt="" coords="843,273,878,270,878,275,843,278"/>
 </map>

@@ -66,7 +66,7 @@ var searchData=
   ['resolvesymbol_63',['ResolveSymbol',['../d9/d75/classplugin_1_1FunctionRegistry.html#ab063793172beb4f06e59f9ad98d7d2c9',1,'plugin::FunctionRegistry']]],
   ['resolvetoactualindex_64',['ResolveToActualIndex',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9b84fc718fac9b1221fca90df8647986',1,'ui::qt::EventsTableModel']]],
   ['restoreuncheckedactors_65',['RestoreUncheckedActors',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae0d59a9f0c14bb58533a8da31c378522',1,'ui::qt::ActorsPanel']]],
-  ['result_66',['Result',['../dd/d2d/classutil_1_1Result.html#a1b4727e27aee325112eb1ee818018c29',1,'util::Result']]],
+  ['result_66',['result',['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#aec11bccff4363350c52ece1a6a33cf06',1,'util::Result&lt; void, E &gt;::Result()'],['../dd/d2d/classutil_1_1Result.html#a38b7303f600fffd2335005445641e605',1,'util::Result::Result()']]],
   ['resumenotifications_67',['ResumeNotifications',['../dd/dc2/classdb_1_1EventsContainer.html#a8065e169779734d58ea1c38b7d60f654',1,'db::EventsContainer']]],
   ['rowcount_68',['rowCount',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3f10c466dfb42d0c979815b6708692a0',1,'ui::qt::EventsTableModel']]],
   ['rowfromactualindex_69',['RowFromActualIndex',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6cf011f142833c9766eb2b9266c2eb92',1,'ui::qt::EventsTableModel']]],

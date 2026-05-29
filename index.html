@@ -99,12 +99,14 @@ Features</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Core</h2>
 <ul>
-<li><b>Multiple Log Formats</b>: XML, CSV, and CAN/ASC (Vector CANalyzer) — JSON coming soon</li>
+<li><b>Multiple Log Formats</b>: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (<code>.dlt</code>), and POSIX Evlog (<code>.evl</code>)</li>
 <li><b>DBC Signal Decoding</b>: Load a <code>.dbc</code> file alongside an ASC log to decode raw CAN frames into named signals</li>
+<li><b>Evlog Template Decoding</b>: Load a directory of <code>.t</code>/<code>.tmpl</code>/<code>.template</code> files to decode structured BINARY evlog payloads into named fields</li>
 <li><b>High Performance</b>: Virtual list architecture handles millions of log entries</li>
 <li><b>Advanced Filtering</b>: Text search, regex, time-range, and type-based filters with configurable field selection</li>
 <li><b>Filter Profiles</b>: Save and restore named filter states for quick context switching</li>
 <li><b>Flexible UI</b>: Dock-based layout — move, float, or hide panels as needed</li>
+<li><b>Named Layouts</b>: Save and restore complete dock arrangements under custom names</li>
 <li><b>Persistent Settings</b>: JSON-based configuration with platform-specific storage</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md3"></a>
@@ -120,6 +122,14 @@ Analysis Panels</h2>
 <li><b>Actors</b>: Event attribution tree built from configurable actor definitions</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md4"></a>
+Side-by-Side Comparison</h2>
+<ul>
+<li><b>Split View</b>: Load two log files simultaneously in a vertically-split panel</li>
+<li><b>Timestamp Sync</b>: Selecting a row on one side auto-scrolls the other to the nearest timestamp</li>
+<li><b>Manual Sync</b>: Mark a reference event on each side to compute a constant offset — useful when comparing DLT (epoch) and ASC (elapsed) logs with different time bases</li>
+<li><b>Independent View</b>: Disable sync entirely for free-scrolling on both sides</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md5"></a>
 AI-Assisted Analysis</h2>
 <ul>
 <li><b>Multiple Providers</b>: Ollama (local), LM Studio (local), OpenAI, Anthropic Claude, Google Gemini, xAI Grok</li>
@@ -127,7 +137,7 @@ AI-Assisted Analysis</h2>
 <li><b>Filter-Aware</b>: AI respects your current filters and type field configuration</li>
 <li><b>Custom Prompts</b>: Save and load analysis prompts for different log types</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Plugin System</h2>
 <ul>
 <li><b>C-ABI Interface</b>: Stable binary interface across compiler versions</li>
@@ -136,7 +146,7 @@ Plugin System</h2>
 <li><b>Configuration Panels</b>: Each plugin provides its own configuration tab in the left dock</li>
 <li><b>Integrated Logging</b>: Plugins log to the application via callback mechanism</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Requirements</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,9 +167,9 @@ Requirements</h1>
 <div class="line">sudo apt-get install qt6-base-dev qt6-tools-dev</div>
 <div class="line"> </div>
 <div class="line"># Windows — download from qt.io or use vcpkg</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md8"></a>
 Building</h1>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Quick Start</h2>
 <div class="fragment"><div class="line"># macOS</div>
 <div class="line">cmake --preset macos-debug-qt</div>
@@ -174,7 +184,7 @@ Quick Start</h2>
 <div class="line"># Windows (MSYS2)</div>
 <div class="line">cmake --preset windows-msys-debug-qt</div>
 <div class="line">cmake --build --preset windows-msys-debug-qt-build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
 Release Builds</h2>
 <div class="fragment"><div class="line"># macOS</div>
 <div class="line">cmake --preset macos-release-qt</div>
@@ -187,22 +197,22 @@ Release Builds</h2>
 <div class="line"># Windows</div>
 <div class="line">cmake --preset windows-msys-release-qt</div>
 <div class="line">cmake --build --preset windows-msys-release-qt-build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md11"></a>
 Running Tests</h2>
 <div class="fragment"><div class="line">ctest --preset macos-debug-test-qt      # macOS</div>
 <div class="line">ctest --preset linux-debug-test-qt      # Linux</div>
 <div class="line">ctest --preset windows-msys-debug-qt-test  # Windows</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
 Code Quality Tools</h1>
 <p>The build system includes targets for static analysis, sanitizers, and formatting.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Sanitizers (debug presets)</h2>
 <p>The <code>macos-debug-qt</code> and <code>linux-debug-qt</code> presets enable AddressSanitizer + UBSan automatically. Controlled via:</p>
 <div class="fragment"><div class="line">cmake --preset macos-debug-qt -DLOGVIEWER_SANITIZER=Address      # ASan + UBSan (default)</div>
 <div class="line">cmake --preset macos-debug-qt -DLOGVIEWER_SANITIZER=Thread        # TSan</div>
 <div class="line">cmake --preset macos-debug-qt -DLOGVIEWER_SANITIZER=UndefinedBehavior  # UBSan only</div>
 <div class="line">cmake --preset macos-debug-qt -DLOGVIEWER_SANITIZER=None          # disabled</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md13"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md14"></a>
 Static Analysis</h2>
 <div class="fragment"><div class="line"># cppcheck (requires ENABLE_CPPCHECK=ON, set in debug presets)</div>
 <div class="line">cmake --build --preset macos-cppcheck</div>
@@ -215,7 +225,7 @@ Static Analysis</h2>
 <div class="line"># Run all quality tools (cppcheck + tidy + format check)</div>
 <div class="line">cmake --build --preset macos-quality-tools</div>
 <div class="line">cmake --build --preset linux-quality-tools</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md14"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md15"></a>
 Formatting</h2>
 <div class="fragment"><div class="line"># Check formatting (CI mode — exits non-zero on violations)</div>
 <div class="line">cmake --build build/macos-debug-qt --target format-check</div>
@@ -224,17 +234,17 @@ Formatting</h2>
 <div class="line">cmake --build --preset macos-format</div>
 <div class="line">cmake --build --preset linux-format</div>
 </div><!-- fragment --><p>See <code><a class="el" href="db/dc1/CPPCHECK_8md.html">docs/CPPCHECK.md</a></code> and <code><a class="el" href="dd/d1e/SANITIZERS_8md.html">docs/SANITIZERS.md</a></code> for details.</p>
-<h1><a class="anchor" id="autotoc_md15"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Plugin Development</h1>
 <p>LogViewer provides an official <b>Plugin SDK</b> for extending functionality.</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Getting Started</h2>
 <ol type="1">
 <li><b><a class="el" href="de/d35/md_docs_2SDK__GETTING__STARTED.html">SDK Getting Started Guide</a></b> — Complete walkthrough with examples</li>
 <li><b><a class="el" href="da/d87/md_docs_2SDK__QUICK__REFERENCE.html">SDK Quick Reference</a></b> — Syntax reference and common patterns</li>
 <li><b><a href="examples/BasicPlugin/">Basic Plugin Example</a></b> — Minimal working plugin</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Building the Example Plugin</h2>
 <div class="fragment"><div class="line"># Build and install the SDK</div>
 <div class="line">cmake --preset macos-release-qt</div>
@@ -245,14 +255,14 @@ Building the Example Plugin</h2>
 <div class="line">cd examples/BasicPlugin</div>
 <div class="line">cmake -S . -B build -DCMAKE_PREFIX_PATH=~/LogViewer_install/sdk/lib/cmake</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md18"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md19"></a>
 Plugin Documentation</h2>
 <ul>
 <li><a class="el" href="d1/d53/md_docs_2PLUGIN__SYSTEM.html">Plugin System Architecture</a></li>
 <li><a class="el" href="d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html">Plugin Implementation Guide</a></li>
 <li><a class="el" href="d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html">AI Provider Plugin</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 Configuration</h1>
 <p>Settings are stored per-platform:</p>
 <table class="markdownTable">
@@ -279,15 +289,15 @@ Configuration</h1>
 <div class="line">    }</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md20"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md21"></a>
 AI Setup</h1>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Local AI (Recommended for Privacy)</h2>
 <p><b>Ollama:</b> </p><div class="fragment"><div class="line">brew install ollama   # macOS</div>
 <div class="line">ollama serve</div>
 <div class="line">ollama pull llama3.2</div>
 </div><!-- fragment --><p><b>LM Studio:</b> Download from <a href="https://lmstudio.ai">https://lmstudio.ai</a>, load a model, start the local server, and point LogViewer at <code><a href="http://localhost:1234">http://localhost:1234</a></code>.</p>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Cloud Providers</h2>
 <p>Configure in Settings &gt; AI with an API key:</p>
 <table class="markdownTable">
@@ -302,19 +312,23 @@ Cloud Providers</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">xAI Grok   </td><td class="markdownTableBodyNone"><a href="https://x.ai">https://x.ai</a>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Usage</h1>
 <ol type="1">
-<li><b>Open Log File</b> — File &gt; Open (Cmd/Ctrl+O); supports XML, CSV, and <code>.asc</code> CAN logs</li>
+<li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, and <code>.evl</code> Evlog; drag and drop also works</li>
 <li><b>Load DBC</b> — File &gt; Load DBC… to decode CAN signals from a <code>.dbc</code> database (optional, ASC only)</li>
-<li><b>Filter</b> — Use the Filters panel; filter by type, text, regex, or time range</li>
-<li><b>Inspect</b> — Select an entry to see full details in the Details panel</li>
-<li><b>Plot Signals</b> — Switch to the <em>Signals</em> tab in the content area; check <code>SIG:*</code> fields to plot their values over time (available after loading an ASC + DBC file)</li>
-<li><b>Statistics</b> — The <em>Statistics</em> tab shows format-aware metrics; CAN files additionally show frame counts, Rx/Tx breakdown, unique IDs, frame rate, and signal ranges</li>
-<li><b>AI Analysis</b> — Open the bottom panel, write or load a prompt, click Analyze</li>
-<li><b>Customize</b> — Drag panel title bars to rearrange; configure columns and colors in Settings</li>
+<li><b>Load Evlog Templates</b> — File &gt; Load Evlog Templates… to select a directory of template files for <code>.evl</code> BINARY payload decoding</li>
+<li><b>Filter</b> — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles</li>
+<li><b>Inspect</b> — Select an entry to see full details in the Details panel; press Ctrl+G to jump to a specific timestamp</li>
+<li><b>Copy</b> — Right-click events to copy as JSON or CSV; Ctrl+C copies plain text</li>
+<li><b>Plot Signals</b> — Switch to the <em>Signals</em> tab; check <code>SIG:*</code> fields in the Signal Browser dock to plot values over time (ASC + DBC required)</li>
+<li><b>Statistics</b> — The <em>Statistics</em> tab shows format-aware metrics; CAN files show Rx/Tx/error counts, unique IDs, frame rate, and signal ranges</li>
+<li><b>Side-by-Side</b> — Open the <em>Side by Side</em> tab or press Ctrl+Shift+S; load two files and choose a sync mode</li>
+<li><b>AI Analysis</b> — Open the bottom AI panel, write or load a prompt, click Analyze</li>
+<li><b>Layouts</b> — View &gt; Layouts to save, restore, or delete named dock arrangements</li>
+<li><b>Export</b> — File &gt; Export to save visible events as CSV, JSON, or XML</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Project Structure</h1>
 <div class="fragment"><div class="line">LogViewer/</div>
 <div class="line">├── src/</div>
@@ -351,7 +365,7 @@ Project Structure</h1>
 <div class="line">├── docs/                    # Documentation</div>
 <div class="line">├── etc/                     # Default config files</div>
 <div class="line">└── thirdparty/              # Third-party dependencies</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md25"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md26"></a>
 Packaging</h1>
 <div class="fragment"><div class="line"># macOS — produces dist/packages/LogViewer-1.0.0-Darwin.dmg</div>
 <div class="line">cmake --preset macos-release-qt</div>
@@ -370,7 +384,7 @@ Packaging</h1>
 <div class="line">cmake --build --preset windows-msys-release-qt-build</div>
 <div class="line">cmake --install build/windows-msys-release-qt --prefix dist/staging</div>
 <div class="line">cd build/windows-msys-release-qt &amp;&amp; cpack --config CPackConfig.cmake</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md26"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md27"></a>
 Troubleshooting</h1>
 <p><b>Qt not found:</b> </p><div class="fragment"><div class="line"># macOS — pass the prefix explicitly</div>
 <div class="line">export CMAKE_PREFIX_PATH=&quot;$(brew --prefix qt@6)&quot;</div>
@@ -380,29 +394,31 @@ Troubleshooting</h1>
 </div><!-- fragment --><p><b>AI timeout errors:</b> Increase timeout in Settings &gt; AI &gt; Timeout. Use local providers (Ollama/LM Studio) for better performance.</p>
 <p><b>Plugin config panel not visible:</b> Ensure the plugin is enabled in Settings &gt; Plugins. The panel appears as a separate tab in the left dock alongside "Filters". Check application logs for <code>[plugin]</code> messages.</p>
 <p>**Qt initialization crash (<code>getcwd</code> failed):** Occurs when the working directory is deleted or unmounted after launch. The application falls back gracefully to <code>/etc</code> for config discovery since v1.0.0.</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Documentation</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Document   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="d6/dbf/md_docs_2USER__MANUAL.html">docs/USER_MANUAL.md</a>   </td><td class="markdownTableBodyNone">End-user guide — all features with keyboard shortcuts    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="d4/d34/md_docs_2ARCHITECTURE.html">docs/ARCHITECTURE.md</a>   </td><td class="markdownTableBodyNone">System design and patterns    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="d8/d7b/md_docs_2DEVELOPMENT.html">docs/DEVELOPMENT.md</a>   </td><td class="markdownTableBodyNone">Build system, code style    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="d8/ddc/md_docs_2BUILD__GUIDE.html">docs/BUILD_GUIDE.md</a>   </td><td class="markdownTableBodyNone">Detailed build instructions    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="de/d35/md_docs_2SDK__GETTING__STARTED.html">docs/SDK_GETTING_STARTED.md</a>   </td><td class="markdownTableBodyNone">Plugin SDK quickstart    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a class="el" href="d1/d53/md_docs_2PLUGIN__SYSTEM.html">docs/PLUGIN_SYSTEM.md</a>   </td><td class="markdownTableBodyNone">Plugin architecture    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a class="el" href="d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html">docs/AI_ANALYSIS_GUIDE.md</a>   </td><td class="markdownTableBodyNone">Using AI features    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a class="el" href="d0/dff/md_docs_2SANITIZERS.html">docs/SANITIZERS.md</a>   </td><td class="markdownTableBodyNone">Sanitizer configuration    </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html">docs/AI_ANALYSIS_GUIDE.md</a>   </td><td class="markdownTableBodyNone">Using AI features    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="d0/dff/md_docs_2SANITIZERS.html">docs/SANITIZERS.md</a>   </td><td class="markdownTableBodyNone">Sanitizer configuration    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="d5/d22/md_docs_2CPPCHECK.html">docs/CPPCHECK.md</a>   </td><td class="markdownTableBodyNone">Static analysis setup   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Contributing</h1>
 <ol type="1">
 <li>Fork the repository</li>
@@ -412,14 +428,14 @@ Contributing</h1>
 <li>Ensure all tests pass: <code>ctest --preset macos-debug-test-qt</code></li>
 <li>Open a Pull Request</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 License</h1>
 <p>MIT License — see <code>license.md</code> for details.</p>
 <p><b>Third-party libraries:</b></p><ul>
 <li>Qt 6: LGPL v3 (dynamically linked)</li>
 <li>nlohmann/json, spdlog, fmt, CURL, Google Test: MIT / BSD</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 Support</h1>
 <ul>
 <li><b>Issues</b>: <a href="https://github.com/bula173/LogViewer/issues">https://github.com/bula173/LogViewer/issues</a></li>

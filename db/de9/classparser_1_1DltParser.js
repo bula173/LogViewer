@@ -7,7 +7,7 @@ var classparser_1_1DltParser =
     [ "NotifyProgressUpdated", "db/de9/classparser_1_1DltParser.html#a596df39e4d90cad4eb364aa5382ab51c", null ],
     [ "ParseData", "db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52", null ],
     [ "ParseData", "db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b", null ],
-    [ "ParseStream", "db/de9/classparser_1_1DltParser.html#a34c1c0bb1cf303c93d94ea3b48c82863", null ],
+    [ "ParseStream", "db/de9/classparser_1_1DltParser.html#a783871417b4713a44d11c92478c2b698", null ],
     [ "RegisterObserver", "db/de9/classparser_1_1DltParser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],
     [ "UnregisterObserver", "db/de9/classparser_1_1DltParser.html#ac2b109cb3475dc7dec15198f1a184963", null ],
     [ "m_currentProgress", "db/de9/classparser_1_1DltParser.html#ad3fddd12d483ff2c8c4ce688c43f44e5", null ],

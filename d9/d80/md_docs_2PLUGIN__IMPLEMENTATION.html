@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d9/d80/md_docs_2PLUGIN__IMPLEMENTATION
   <div class="headertitle"><div class="title">Plugin System Implementation Summary</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md500"></a> </p>
-<h1><a class="anchor" id="autotoc_md501"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md501"></a> </p>
+<h1><a class="anchor" id="autotoc_md502"></a>
 Overview</h1>
 <p>LogViewer implements a plugin system using <b>C-ABI exports</b> for maximum compatibility and ABI stability. Plugins are dynamically loaded shared libraries that export standard C functions.</p>
-<h1><a class="anchor" id="autotoc_md502"></a>
+<h1><a class="anchor" id="autotoc_md503"></a>
 Current Architecture (C-ABI)</h1>
-<h2><a class="anchor" id="autotoc_md503"></a>
+<h2><a class="anchor" id="autotoc_md504"></a>
 Plugin C-ABI Exports</h2>
 <p>Plugins export standard C functions for lifecycle management and UI creation:</p>
 <p><b>Lifecycle:</b></p><ul>
@@ -123,7 +123,7 @@ Plugin C-ABI Exports</h2>
 <li><code>Plugin_CreateLeftPanel(handle, parent, settings)</code>: Create configuration panel</li>
 <li><code>Plugin_CreateRightPanel(handle, parent, settings)</code>: Create right panel</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md504"></a>
+<h2><a class="anchor" id="autotoc_md505"></a>
 Plugin Logger</h2>
 <p><b>Problem Solved:</b> Original inline header-only logger with static variables caused ODR violations across DLL boundaries - each DLL had its own copy of the global variable, causing the application's registration to be invisible to the plugin.</p>
 <p><b>Solution:</b> Callback-based logging passed from application to plugin:</p>
@@ -145,7 +145,7 @@ Plugin Logger</h2>
 <li>Simple usage for plugin developers</li>
 <li>Messages appear in application logs with <code>[plugin]</code> prefix</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md505"></a>
+<h2><a class="anchor" id="autotoc_md506"></a>
 Configuration UI</h2>
 <p><b>Left Panel Integration:</b> Plugins provide configuration UI by exporting <code>Plugin_CreateLeftPanel</code>:</p>
 <div class="fragment"><div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a> <span class="keywordtype">void</span>* Plugin_CreateLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
@@ -162,7 +162,7 @@ Configuration UI</h2>
 <li>Adds as new tab alongside "Filters" tab in left dock</li>
 <li>Widget lifecycle managed by host</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md506"></a>
+<h1><a class="anchor" id="autotoc_md507"></a>
 Plugin Manager Implementation</h1>
 <p><b>Location</b>: <code><a class="el" href="../../da/dc5/PluginManager_8cpp.html" title="Implementation of plugin management system.">src/application/plugins/PluginManager.cpp</a></code></p>
 <p><b>Key Features:</b></p><ul>
@@ -187,7 +187,7 @@ Plugin Manager Implementation</h1>
 <li>Windows: <code>LoadLibrary</code>/<code>GetProcAddress</code>/<code>FreeLibrary</code></li>
 <li>Linux/macOS: <code>dlopen</code>/<code>dlsym</code>/<code>dlclose</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md507"></a>
+<h1><a class="anchor" id="autotoc_md508"></a>
 AI Provider Plugin Example</h1>
 <p><b>Location</b>: <code>plugins/ai/AIProviderPlugin.cpp</code></p>
 <p>The AI Provider plugin demonstrates the complete C-ABI architecture:</p>
@@ -210,7 +210,7 @@ AI Provider Plugin Example</h1>
 <li>Uses <code>PluginLogger_Log</code> for all logging</li>
 <li>Proper error handling with try-catch</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md508"></a>
+<h1><a class="anchor" id="autotoc_md509"></a>
 Creating New Plugins</h1>
 <p><b>For comprehensive plugin development guide, see:</b></p><ul>
 <li><a class="el" href="../../de/d35/md_docs_2SDK__GETTING__STARTED.html">SDK Getting Started Guide</a> - Complete walkthrough with examples</li>
@@ -226,7 +226,7 @@ Creating New Plugins</h1>
 <li>Create <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> metadata file alongside the plugin binary</li>
 <li>Copy plugin and <a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a> to LogViewer plugins directory to test</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md509"></a>
+<h1><a class="anchor" id="autotoc_md510"></a>
 Build System</h1>
 <p><b>Plugin CMake Configuration:</b></p>
 <div class="fragment"><div class="line">add_library(my_plugin SHARED</div>
@@ -255,7 +255,7 @@ Build System</h1>
 <li>Link only required dependencies</li>
 <li>Include <code>src/plugin_api</code> for C-ABI headers</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md510"></a>
+<h1><a class="anchor" id="autotoc_md511"></a>
 Directory Structure</h1>
 <div class="fragment"><div class="line">LogViewer/</div>
 <div class="line">├── src/</div>
@@ -274,9 +274,9 @@ Directory Structure</h1>
 <div class="line">        ├── AIProviderPlugin.hpp</div>
 <div class="line">        ├── AIProviderPlugin.cpp</div>
 <div class="line">        └── lib/                    # Dependencies</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md511"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md512"></a>
 Usage Examples</h1>
-<h2><a class="anchor" id="autotoc_md512"></a>
+<h2><a class="anchor" id="autotoc_md513"></a>
 Plugin Manager</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../da/daa/PluginManager_8hpp.html">application/plugins/PluginManager.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -290,8 +290,8 @@ Plugin Manager</h2>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Loaded plugin: &quot;</span> &lt;&lt; <span class="keywordtype">id</span> &lt;&lt; std::endl;</div>
 <div class="line">}</div>
 <div class="ttc" id="aPluginManager_8hpp_html"><div class="ttname"><a href="../../da/daa/PluginManager_8hpp.html">PluginManager.hpp</a></div><div class="ttdoc">Plugin management and registration system.</div></div>
-<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:349</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md513"></a>
+<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:367</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md514"></a>
 Creating UI Panels</h2>
 <div class="fragment"><div class="line"><span class="comment">// Application code (MainWindow.cpp)</span></div>
 <div class="line"><span class="keywordtype">void</span>* parentWidget = m_pluginLeftTabs;  <span class="comment">// QTabWidget*</span></div>
@@ -300,7 +300,7 @@ Creating UI Panels</h2>
 <div class="line">    <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* widget = <span class="keyword">reinterpret_cast&lt;</span><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>*<span class="keyword">&gt;</span>(panel);</div>
 <div class="line">    m_pluginLeftTabs-&gt;addTab(widget, <span class="stringliteral">&quot;AI Provider&quot;</span>);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md514"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md515"></a>
 Key Design Decisions</h1>
 <ol type="1">
 <li><b>C-ABI Only</b>: No C++ interfaces exported - maximum compatibility</li>
@@ -310,7 +310,7 @@ Key Design Decisions</h1>
 <li><b>JSON Metadata</b>: Metadata returned as JSON string - flexible schema</li>
 <li><b>Manual Memory</b>: Plugin allocates, app may free or plugin manages</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md515"></a>
+<h1><a class="anchor" id="autotoc_md516"></a>
 Known Limitations</h1>
 <ol type="1">
 <li><b>No Hot Reloading</b>: Must restart application to reload plugins</li>
@@ -318,7 +318,7 @@ Known Limitations</h1>
 <li><b>ABI Compatibility</b>: Must match compiler and Qt version</li>
 <li><b>Symbol Visibility</b>: Must use <code>EXPORT_PLUGIN_SYMBOL</code> for all exports</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md516"></a>
+<h1><a class="anchor" id="autotoc_md517"></a>
 Testing</h1>
 <p><b>Manual Testing:</b></p><ol type="1">
 <li>Build plugin as shared library</li>
@@ -333,7 +333,7 @@ Testing</h1>
 <li>Verify plugin dependencies are satisfied</li>
 <li>Ensure ABI compatibility (same compiler/Qt)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md517"></a>
+<h1><a class="anchor" id="autotoc_md518"></a>
 Success Criteria</h1>
 <p>✅ <b>Completed</b>:</p><ul>
 <li>C-ABI plugin architecture</li>
@@ -344,7 +344,7 @@ Success Criteria</h1>
 <li>Cross-platform support (Windows, Linux, macOS)</li>
 <li>Comprehensive documentation</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md518"></a>
+<h1><a class="anchor" id="autotoc_md519"></a>
 Future Enhancements</h1>
 <ul>
 <li>Plugin API versioning</li>
@@ -354,7 +354,7 @@ Future Enhancements</h1>
 <li>Sandboxing/isolation</li>
 <li>Performance monitoring</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md519"></a>
+<h1><a class="anchor" id="autotoc_md520"></a>
 Conclusion</h1>
 <p>The C-ABI plugin system provides a stable, maintainable foundation for extending LogViewer. The architecture has been successfully implemented and tested with the AI Provider plugin, demonstrating:</p>
 <ul>

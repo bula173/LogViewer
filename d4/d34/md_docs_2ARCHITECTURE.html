@@ -93,11 +93,11 @@ $(document).ready(function(){initNavTree('d4/d34/md_docs_2ARCHITECTURE.html','..
   <div class="headertitle"><div class="title">LogViewer Architecture</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md126"></a> </p>
-<h1><a class="anchor" id="autotoc_md127"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md127"></a> </p>
+<h1><a class="anchor" id="autotoc_md128"></a>
 Overview</h1>
 <p>LogViewer is a professional log file viewer application built with modern C++20 and Qt 6, following clean architecture principles and industry-standard design patterns. The application provides powerful AI-assisted log analysis, flexible filtering, and a highly customizable dock-based UI.</p>
-<h1><a class="anchor" id="autotoc_md128"></a>
+<h1><a class="anchor" id="autotoc_md129"></a>
 Core Design Principles</h1>
 <ol type="1">
 <li><b>Separation of Concerns</b>: Clear boundaries between GUI, business logic, and data layers</li>
@@ -107,7 +107,7 @@ Core Design Principles</h1>
 <li><b>Strategy Pattern</b>: Pluggable filtering and AI provider algorithms</li>
 <li><b>MVC Pattern</b>: Model-View-Controller separation for data and presentation</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md129"></a>
+<h1><a class="anchor" id="autotoc_md130"></a>
 Architecture Layers</h1>
 <div class="fragment"><div class="line">┌──────────────────────────────────────────────────────────────────────────┐</div>
 <div class="line">│                           Presentation Layer (Qt 6)                       │</div>
@@ -157,9 +157,9 @@ Architecture Layers</h1>
 <div class="line">│  │EventsContainer  │  │    LogEvent     │  │     Filter      │          │</div>
 <div class="line">│  └─────────────────┘  └─────────────────┘  └─────────────────┘          │</div>
 <div class="line">└──────────────────────────────────────────────────────────────────────────┘</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md130"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md131"></a>
 Key Components</h1>
-<h2><a class="anchor" id="autotoc_md131"></a>
+<h2><a class="anchor" id="autotoc_md132"></a>
 1. Presentation Layer (&lt;tt&gt;ui::qt&lt;/tt&gt; namespace)</h2>
 <p>The Qt UI layer is structured into four subdirectories under <code>src/application/ui/qt/</code>:</p>
 <table class="markdownTable">
@@ -203,7 +203,7 @@ Key Components</h1>
 <li><b>StructuredConfigDialog</b>: Tabbed configuration UI (General, Columns, Colors, AI)</li>
 <li><b>ConfigEditorDialog</b>: Raw JSON editor</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md132"></a>
+<h2><a class="anchor" id="autotoc_md133"></a>
 2. Business Logic Layer</h2>
 <p><b>MainWindowPresenter</b>: MVP pattern implementation</p><ul>
 <li>Coordinates between view and model</li>
@@ -304,7 +304,7 @@ Key Components</h1>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md133"></a>
+<h2><a class="anchor" id="autotoc_md134"></a>
 3. Data Layer (&lt;tt&gt;db&lt;/tt&gt; namespace)</h2>
 <p><b>EventsContainer</b>: High-performance event storage</p><ul>
 <li>O(1) random access</li>
@@ -319,9 +319,9 @@ Key Components</h1>
 <li>Efficient memory layout</li>
 <li>Move semantics for performance</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md134"></a>
+<h1><a class="anchor" id="autotoc_md135"></a>
 Design Patterns</h1>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 Factory Pattern</h2>
 <p><b>Purpose</b>: Abstract creation of parsers and AI clients</p>
 <p><b>ParserFactory</b>: Creates appropriate parser based on file extension </p><div class="fragment"><div class="line"><span class="keyword">class </span>ParserFactory {</div>
@@ -348,7 +348,7 @@ Factory Pattern</h2>
 <li>Client code doesn't depend on concrete classes</li>
 <li>Configuration-driven selection</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md136"></a>
+<h2><a class="anchor" id="autotoc_md137"></a>
 Strategy Pattern</h2>
 <p><b>Purpose</b>: Pluggable algorithms for filtering and AI providers</p>
 <p><b>Filter Strategies</b>: </p><div class="fragment"><div class="line"><span class="keyword">class </span>IFilterStrategy {</div>
@@ -379,7 +379,7 @@ Strategy Pattern</h2>
 <li>Testable in isolation</li>
 <li>No code changes needed to switch providers</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md137"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 Observer Pattern</h2>
 <p><b>Purpose</b>: Decouple components and enable reactive UI</p>
 <p><b>ConfigObserver</b>: React to configuration changes </p><div class="fragment"><div class="line"><span class="keyword">class </span>ConfigObserver {</div>
@@ -398,7 +398,7 @@ Observer Pattern</h2>
 <li>Multiple components can observe same config</li>
 <li>Easy to add new observers</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md138"></a>
+<h2><a class="anchor" id="autotoc_md139"></a>
 MVC/MVP Pattern</h2>
 <p><b>Purpose</b>: Separate data, presentation, and control logic</p>
 <ul>
@@ -423,9 +423,9 @@ MVC/MVP Pattern</h2>
 <li>Testable business logic (presenter can be unit tested)</li>
 <li>View can be replaced (Qt, wxWidgets, CLI, web)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md139"></a>
+<h1><a class="anchor" id="autotoc_md140"></a>
 AI Integration Architecture</h1>
-<h2><a class="anchor" id="autotoc_md140"></a>
+<h2><a class="anchor" id="autotoc_md141"></a>
 Component Overview</h2>
 <div class="fragment"><div class="line">┌──────────────────┐</div>
 <div class="line">│  AIAnalysisPanel │ (UI - Qt Widget)</div>
@@ -460,7 +460,7 @@ Component Overview</h2>
 <div class="line">│  │Client   │    │Client   │        │Client   │         │</div>
 <div class="line">│  └─────────┘    └─────────┘        └─────────┘         │</div>
 <div class="line">└──────────────────────────────────────────────────────────┘</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md141"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md142"></a>
 Plugin Architecture</h2>
 <p>AI providers are implemented as C-ABI plugins (see <a class="el" href="../../d1/d53/md_docs_2PLUGIN__SYSTEM.html">PLUGIN_SYSTEM.md</a>):</p>
 <p><b>Plugin Exports:</b></p><ul>
@@ -477,7 +477,7 @@ Plugin Architecture</h2>
 <li>ABI-stable interface across compiler versions</li>
 <li>Isolated plugin failures don't crash application</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md142"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
 AI Request Flow</h2>
 <ol type="1">
 <li>User selects analysis type in AIAnalysisPanel</li>
@@ -487,7 +487,7 @@ AI Request Flow</h2>
 <li>Prompt sent to IAIService implementation</li>
 <li>Response parsed and displayed in UI</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Filter-Aware Analysis</h2>
 <ul>
 <li><b>No filters</b>: Analyzes all events (up to 5,000 with smart sampling)</li>
@@ -495,7 +495,7 @@ Filter-Aware Analysis</h2>
 <li>EventsTableView provides <code>GetFilteredIndices()</code> method</li>
 <li>LogAnalyzer accepts optional <code>filteredIndices</code> parameter</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md144"></a>
+<h2><a class="anchor" id="autotoc_md145"></a>
 Smart Sampling</h2>
 <p>For large datasets:</p><ul>
 <li>Cap at 5,000 events (configurable)</li>
@@ -503,23 +503,23 @@ Smart Sampling</h2>
 <li>Preserves representative sample</li>
 <li>Avoids overwhelming LLM context window</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md145"></a>
+<h1><a class="anchor" id="autotoc_md146"></a>
 Thread Safety</h1>
-<h2><a class="anchor" id="autotoc_md146"></a>
+<h2><a class="anchor" id="autotoc_md147"></a>
 Qt Event Loop</h2>
 <ul>
 <li>All UI operations on main thread</li>
 <li>Qt's signal/slot mechanism for cross-thread communication</li>
 <li><code>QtConcurrent</code> for AI requests in background thread</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md147"></a>
+<h2><a class="anchor" id="autotoc_md148"></a>
 Parsing Thread</h2>
 <ul>
 <li>Background thread for file parsing (future enhancement)</li>
 <li>Currently synchronous on main thread</li>
 <li>Planned: Async parsing with progress callbacks</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md148"></a>
+<h2><a class="anchor" id="autotoc_md149"></a>
 Concurrent AI Requests</h2>
 <div class="fragment"><div class="line"><span class="comment">// AI analysis runs in background thread via QtConcurrent</span></div>
 <div class="line">QFuture&lt;std::string&gt; future = QtConcurrent::run([<span class="keyword">this</span>, prompt]() {</div>
@@ -530,7 +530,7 @@ Concurrent AI Requests</h2>
 <div class="line">connect(watcher, &amp;QFutureWatcher&lt;std::string&gt;::finished,</div>
 <div class="line">    <span class="keyword">this</span>, &amp;AIAnalysisPanel::OnAnalysisComplete);</div>
 <div class="line">watcher-&gt;setFuture(future);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md149"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md150"></a>
 Data Access</h2>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsContainer {</div>
 <div class="line"><span class="keyword">private</span>:</div>
@@ -549,9 +549,9 @@ Data Access</h2>
 <div class="line">        <span class="keywordflow">return</span> m_filteredIndices;</div>
 <div class="line">    }</div>
 <div class="line">};</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md150"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md151"></a>
 Error Handling Strategy</h1>
-<h2><a class="anchor" id="autotoc_md151"></a>
+<h2><a class="anchor" id="autotoc_md152"></a>
 Result&lt;T, Error&gt; Pattern</h2>
 <p>Modern error handling without exceptions in hot paths:</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
@@ -575,7 +575,7 @@ Result&lt;T, Error&gt; Pattern</h2>
 <div class="line">    <span class="keywordflow">return</span> Result::Ok(std::move(event));</div>
 <div class="line">}</div>
 <div class="ttc" id="anamespaceerror_html"><div class="ttname"><a href="../../da/d7e/namespaceerror.html">error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:17</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md152"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md153"></a>
 Exception Hierarchy</h2>
 <div class="fragment"><div class="line">std::exception</div>
 <div class="line">  └─ error::Error (base for all app exceptions)</div>
@@ -583,7 +583,7 @@ Exception Hierarchy</h2>
 <div class="line">       ├─ error::ParseError</div>
 <div class="line">       ├─ error::FileError</div>
 <div class="line">       └─ error::FilterError</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md153"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md154"></a>
 Performance Optimizations</h1>
 <ol type="1">
 <li><b>Qt Model/View Architecture</b>: Only render visible items in table</li>
@@ -597,16 +597,16 @@ Performance Optimizations</h1>
 <li><b>Dynamic Field Access</b>: <code>findByKey()</code> for flexible event schemas</li>
 <li><b>Color Caching</b>: Qt's QBrush caching for color rendering</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md154"></a>
+<h1><a class="anchor" id="autotoc_md155"></a>
 Configuration Management</h1>
-<h2><a class="anchor" id="autotoc_md155"></a>
+<h2><a class="anchor" id="autotoc_md156"></a>
 JSON Configuration</h2>
 <p>All configuration saved to platform-specific location:</p><ul>
 <li><b>macOS</b>: <code>~/Library/Application Support/LogViewer/config.json</code></li>
 <li><b>Linux</b>: <code>~/.config/LogViewer/config.json</code></li>
 <li><b>Windows</b>: <code>APPDATA%\LogViewer\<a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md156"></a>
+<h2><a class="anchor" id="autotoc_md157"></a>
 Configuration Structure</h2>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;version&quot;: &quot;1.0&quot;,</div>
@@ -638,7 +638,7 @@ Configuration Structure</h2>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;<b>Note on XML parsing</b>: The XML parser uses element depth to discover structure automatically — no <code>rootElement</code> or <code>eventElement</code> configuration is needed. The first element at depth 1 is treated as the root; every direct child (depth 2) is an event record; nested children (depth 3+) become key/value fields. </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md157"></a>
+<h2><a class="anchor" id="autotoc_md158"></a>
 Key Configuration Options</h2>
 <ul>
 <li><b>typeFilterField</b>: Auto-detected on each file load by scanning the first 100 events for common field names (<code>level</code>, <code>type</code>, <code>severity</code>, <code>priority</code>, <code>category</code>, …). Set explicitly (in Settings &gt; General) to pin a value and skip auto-detection. Leave empty to always auto-detect; if detection fails the user is prompted.</li>
@@ -647,7 +647,7 @@ Key Configuration Options</h2>
 <li><b>columns</b>: Dynamic column configuration with visibility and width</li>
 <li><b>columnColors</b>: Color mappings per column — any number of columns can have color rules; the first matching column's color is applied to the row</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md158"></a>
+<h2><a class="anchor" id="autotoc_md159"></a>
 Observer Pattern for Config</h2>
 <p>Components register for configuration changes:</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>ConfigObserver {</div>
@@ -662,9 +662,9 @@ Observer Pattern for Config</h2>
 <div class="line">        m_eventsView-&gt;RefreshView();</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md159"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md160"></a>
 Testing Strategy</h1>
-<h2><a class="anchor" id="autotoc_md160"></a>
+<h2><a class="anchor" id="autotoc_md161"></a>
 Unit Tests</h2>
 <ul>
 <li>Google Test framework</li>
@@ -672,21 +672,21 @@ Unit Tests</h2>
 <li>Test fixtures for common scenarios</li>
 <li>80%+ code coverage goal</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md161"></a>
+<h2><a class="anchor" id="autotoc_md162"></a>
 Integration Tests</h2>
 <ul>
 <li>Full parser → filter → display pipeline</li>
 <li>Real log file samples</li>
 <li>Performance benchmarks</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md162"></a>
+<h2><a class="anchor" id="autotoc_md163"></a>
 UI Tests</h2>
 <ul>
 <li>Manual test scenarios</li>
 <li>Screenshot comparison</li>
 <li>Accessibility testing</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md163"></a>
+<h1><a class="anchor" id="autotoc_md164"></a>
 Future Enhancements</h1>
 <ol type="1">
 <li><b>Extended Plugin System</b>: Parser plugins, filter plugins, visualization plugins</li>
@@ -700,7 +700,7 @@ Future Enhancements</h1>
 <li><b>Multi-File Analysis</b>: Correlate events across more than two log files simultaneously</li>
 <li><b>Real-time AI Monitoring</b>: Continuous analysis with alerts</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md164"></a>
+<h1><a class="anchor" id="autotoc_md165"></a>
 References</h1>
 <ul>
 <li><a href="https://doc.qt.io/">Qt Documentation</a></li>

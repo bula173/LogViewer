@@ -168,6 +168,7 @@ var hierarchy =
       [ "ui::qt::TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", null ]
     ] ],
     [ "util::Result< T, E >", "dd/d2d/classutil_1_1Result.html", null ],
+    [ "util::Result< void, E >", "d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html", null ],
     [ "std::runtime_error", null, [
       [ "error::Error", "d7/d0d/classerror_1_1Error.html", null ]
     ] ],
