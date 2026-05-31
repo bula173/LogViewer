@@ -254,7 +254,7 @@ void SideBySidePanel::LoadFile(bool isLeft)
         this,
         isLeft ? tr("Open Left Log File") : tr("Open Right Log File"),
         docs,
-        tr("Log files (*.log *.txt *.xml *.csv *.asc *.dlt *.evl);;"
+        tr("Log files (*.log *.txt *.xml *.csv *.json *.jsonl *.asc *.dlt *.evl);;"
            "All files (*.*)"));
 
     if (path.isEmpty()) return;

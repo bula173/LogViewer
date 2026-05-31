@@ -148,9 +148,16 @@ Registered parsers (extension → class):
 |---|---|---|
 | `.xml` | `XmlParser` | Default for unknown extensions |
 | `.csv` | `CsvParser` | |
+| `.json` / `.jsonl` | `JsonParser` | JSON array or NDJSON; nested objects flattened with dot notation |
 | `.asc` | `AscParser` | CAN/Vector CANalyzer; constructed with optional DBC path via `CreateParserFor()` |
 | `.dlt` | `DltParser` | AUTOSAR Diagnostic Log and Trace binary |
 | `.evl` | `EvlogParser` | POSIX 1003.25 evlog binary; constructed with optional template directory via `CreateParserFor()` |
+
+**JsonParser** (`parsers/json/`): Parses JSON log files in two layouts.
+- **Array format**: the file contains a single top-level JSON array of objects. The whole file is parsed in one `nlohmann::json` call.
+- **NDJSON/JSONL format**: one JSON object per line. Each line is parsed independently; malformed lines are skipped with a `WARN` log entry.
+- Format is auto-detected by the first non-whitespace character (`[` → array, `{` → NDJSON).
+- Nested objects and arrays are flattened with dot notation (`ctx.host`) and index suffixes (`tags.0`, `tags.1`), respectively.
 
 **AscParser** (`parsers/asc/`): Parses Vector CANalyzer `.asc` files line by line.
 - Each CAN frame becomes a `LogEvent` with fields: `timestamp` (float seconds), `type` (Rx/Tx/TxRq/ErrorFrame), `CAN_ID` (hex), `CAN_Channel`, `CAN_DLC`, `CAN_Data` (hex bytes), `CAN_IDE` (Standard/Extended), `info`.

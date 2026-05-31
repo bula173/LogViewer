@@ -1447,7 +1447,7 @@ void MainWindow::OnOpenFileRequested()
     #ifdef __APPLE__
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
     #endif
-    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv *.asc *.dlt *.evl);;CAN ASC logs (*.asc);;AUTOSAR DLT logs (*.dlt);;Evlog binary (*.evl);;All files (*.*)"));
+    dialog.setNameFilter(tr("Log files (*.log *.txt *.xml *.csv *.json *.jsonl *.asc *.dlt *.evl);;JSON logs (*.json *.jsonl);;CAN ASC logs (*.asc);;AUTOSAR DLT logs (*.dlt);;Evlog binary (*.evl);;All files (*.*)"));
     dialog.setDirectory(LastDir("logFile",
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     if (dialog.exec() != QDialog::Accepted) {

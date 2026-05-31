@@ -1,0 +1,8 @@
+[
+  {"timestamp": "2026-01-01T10:00:00Z", "level": "INFO",  "message": "Application started", "pid": 1234},
+  {"timestamp": "2026-01-01T10:00:01Z", "level": "DEBUG", "message": "Loading config", "pid": 1234},
+  {"timestamp": "2026-01-01T10:00:02Z", "level": "WARN",  "message": "Config key missing", "pid": 1234, "key": "timeout"},
+  {"timestamp": "2026-01-01T10:00:03Z", "level": "ERROR", "message": "Connection failed", "pid": 1234,
+   "context": {"host": "db.local", "port": 5432}},
+  {"timestamp": "2026-01-01T10:00:04Z", "level": "INFO",  "message": "Retrying", "pid": 1234, "attempt": 1}
+]

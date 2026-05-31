@@ -58,7 +58,7 @@ LogViewer is a desktop application for inspecting, filtering, and analysing log 
 
 Key capabilities at a glance:
 
-- Open log files in XML, CSV, CAN/ASC, DLT, or Evlog format
+- Open log files in XML, CSV, JSON, CAN/ASC, DLT, or Evlog format
 - Filter events by text, type, time range, or actor
 - Visualise CAN signals, event timelines, and message patterns
 - Compare two log files side-by-side with automatic or manual timestamp synchronisation
@@ -91,9 +91,20 @@ All panels can be resized, floated, or hidden. Drag a panel's title bar to move 
 |-----------|--------|-------|
 | `.xml` | Generic XML | Default when extension is unrecognised |
 | `.csv` | Comma-Separated Values | |
+| `.json` | JSON array or NDJSON | Array `[{…},…]` or one object per line |
+| `.jsonl` | Newline-delimited JSON | Alias for NDJSON; same parser as `.json` |
 | `.asc` | CAN/Vector CANalyzer | Optional DBC for signal decoding |
 | `.dlt` | AUTOSAR DLT binary | Storage header + verbose/non-verbose payloads |
 | `.evl` | POSIX 1003.25 Evlog binary | Optional template directory for BINARY payloads |
+
+#### JSON log format
+
+LogViewer accepts two JSON layouts:
+
+- **Array** — a single JSON array at the top level: `[{"ts":"…","level":"INFO","msg":"…"}, …]`
+- **NDJSON / JSONL** — one JSON object per line (format used by Winston, Bunyan, spdlog JSON sink, Loki, etc.)
+
+Nested objects are flattened with dot notation: `{"ctx":{"host":"db"}}` becomes the key `ctx.host`. Arrays are flattened with index suffixes: `{"tags":["a","b"]}` becomes `tags.0` and `tags.1`.
 
 If you open a file with an unknown or missing extension, LogViewer prompts you to pick the format before parsing begins.
 
@@ -316,7 +327,7 @@ The Side-by-Side panel loads two log files independently and displays them in a 
 
 ### 7.2 Loading Files
 
-Each side has its own **Open** button and a filename label. Click the button to open a file-picker dialog. Both sides support all log formats (XML, CSV, ASC, DLT, Evlog). File parsing runs on a background thread; the split view remains interactive while loading.
+Each side has its own **Open** button and a filename label. Click the button to open a file-picker dialog. Both sides support all log formats (XML, CSV, JSON, ASC, DLT, Evlog). File parsing runs on a background thread; the split view remains interactive while loading.
 
 You can also **drag a file from the file manager** directly onto the Side by Side panel:
 

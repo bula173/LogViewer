@@ -8,6 +8,7 @@
 #include "ParserFactory.hpp"
 #include "xml/xmlParser.hpp"
 #include "csv/CsvParser.hpp"
+#include "json/JsonParser.hpp"
 #include "asc/AscParser.hpp"
 #include "dlt/DltParser.hpp"
 #include "evlog/EvlogParser.hpp"
@@ -33,6 +34,16 @@ void ParserFactory::InitializeDefaults()
     Register(".csv", []() {
         util::Logger::Debug("Creating CsvParser instance");
         return std::make_unique<CsvParser>();
+    });
+
+    // Register JSON parser (array and NDJSON/JSONL formats).
+    Register(".json", []() {
+        util::Logger::Debug("Creating JsonParser instance");
+        return std::make_unique<JsonParser>();
+    });
+    Register(".jsonl", []() {
+        util::Logger::Debug("Creating JsonParser instance (JSONL)");
+        return std::make_unique<JsonParser>();
     });
 
     // Register ASC (Vector CANalyzer) parser — no DBC by default; callers that
@@ -113,9 +124,9 @@ util::Result<std::unique_ptr<IDataParser>, error::Error> ParserFactory::Create(P
             std::make_unique<XmlParser>());
 
     case ParserType::JSON:
-        util::Logger::Error("ParserFactory::Create - JSON parser not yet implemented");
-        return util::Result<std::unique_ptr<IDataParser>, error::Error>::Err(
-            error::Error(error::ErrorCode::NotImplemented, "JSON parser not yet implemented"));
+        util::Logger::Debug("ParserFactory::Create - Creating JSON parser");
+        return util::Result<std::unique_ptr<IDataParser>, error::Error>::Ok(
+            std::make_unique<JsonParser>());
 
     case ParserType::CSV:
         util::Logger::Debug("ParserFactory::Create - Creating CSV parser");
