@@ -105,6 +105,7 @@ Table of Contents</h1>
 <li>Opening Log Files<ul>
 <li>Supported Formats</li>
 <li>Opening a File</li>
+<li>Following a Live File (Tail Mode)</li>
 <li>Drag and Drop</li>
 <li>Recent Files</li>
 <li>Loading a DBC File</li>
@@ -219,13 +220,23 @@ JSON log format</h3>
 <p><b>File &gt; Open</b> (Ctrl+O) opens a file-picker dialog. The dialog filters by all supported extensions. After you select a file, the application parses it in the background and displays a progress indicator in the status bar. The UI remains interactive during loading.</p>
 <p>Merging multiple files into one view is possible by opening them one after another — subsequent opens append events to the current dataset. Use <b>File &gt; Clear</b> to start fresh.</p>
 <h2><a class="anchor" id="autotoc_md703"></a>
-3.3 Drag and Drop</h2>
-<p>Drag a log file from a file manager onto the main window. The application detects the extension and begins parsing immediately. If the extension is unrecognised, the format-picker dialog appears.</p>
+3.3 Following a Live File (Tail Mode)</h2>
+<p><b>File &gt; Follow File (Tail)</b> (Ctrl+T) watches the currently loaded log file and automatically appends new events as they are written to disk. This is useful for monitoring a running service without reopening the file manually.</p>
+<ul>
+<li>The toggle is enabled only after a file has been loaded.</li>
+<li>When active, the status bar shows the live event count.</li>
+<li>On log rotation (file truncated or replaced), the tailer resets to the new beginning automatically.</li>
+</ul>
+<p><b>Supported formats</b>: NDJSON (<code>.json</code> / <code>.jsonl</code>), CAN/ASC (<code>.asc</code>), AUTOSAR DLT (<code>.dlt</code>). <br  />
+ <b>Not supported</b>: XML (<code>.xml</code>), CSV (<code>.csv</code>) — these formats require full-file parsing.</p>
 <h2><a class="anchor" id="autotoc_md704"></a>
-3.4 Recent Files</h2>
-<p><b>File &gt; Recent Files</b> lists the last ten files you opened. Click any entry to re-open it. Paths are stored per session; they are cleared if a file is deleted or moved.</p>
+3.4 Drag and Drop</h2>
+<p>Drag a log file from a file manager onto the main window. The application detects the extension and begins parsing immediately. If the extension is unrecognised, the format-picker dialog appears.</p>
 <h2><a class="anchor" id="autotoc_md705"></a>
-3.5 Loading a DBC File (CAN Signal Decoding)</h2>
+3.5 Recent Files</h2>
+<p><b>File &gt; Recent Files</b> lists the last ten files you opened. Click any entry to re-open it. Paths are stored per session; they are cleared if a file is deleted or moved.</p>
+<h2><a class="anchor" id="autotoc_md706"></a>
+3.6 Loading a DBC File (CAN Signal Decoding)</h2>
 <p>Before or after opening an <code>.asc</code> file, choose <b>File &gt; Load DBC…</b> and select a <code>.dbc</code> CAN database. Once loaded:</p>
 <ul>
 <li>Every CAN frame whose ID matches a message in the DBC is decoded into named signals stored as <code>SIG:&lt;name&gt;</code> fields.</li>
@@ -233,8 +244,8 @@ JSON log format</h3>
 <li>The Signal Plot panel can plot any selected signal's value over time.</li>
 </ul>
 <p>If you load an <code>.asc</code> file when a DBC is already loaded, decoding happens automatically. The active DBC path is saved in the session and reused on next launch.</p>
-<h2><a class="anchor" id="autotoc_md706"></a>
-3.6 Loading Evlog Templates</h2>
+<h2><a class="anchor" id="autotoc_md707"></a>
+3.7 Loading Evlog Templates</h2>
 <p>Evlog BINARY payloads can be decoded into structured fields using template files. Choose <b>File &gt; Load Evlog Templates…</b> and select a directory containing <code>.t</code>, <code>.tmpl</code>, or <code>.template</code> files. Templates are keyed by <code>(facility, event_type)</code> and declare typed field layouts with an optional format string.</p>
 <ul>
 <li>Once a template directory is loaded, all subsequent <code>.evl</code> files are parsed with template decoding enabled.</li>
@@ -251,9 +262,9 @@ JSON log format</h3>
 <div class="line">}</div>
 <div class="line">format &quot;Error %error_code%: %message%&quot;</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md708"></a>
+<h1><a class="anchor" id="autotoc_md709"></a>
 4. The Events Table</h1>
-<h2><a class="anchor" id="autotoc_md709"></a>
+<h2><a class="anchor" id="autotoc_md710"></a>
 4.1 Columns</h2>
 <p>The events table shows one row per log event. Default columns:</p>
 <table class="markdownTable">
@@ -272,7 +283,7 @@ JSON log format</h3>
 </table>
 <p>Column visibility, order, and width are user-configurable in <b>Tools &gt; Settings &gt; Columns</b>. Column widths are persisted across sessions.</p>
 <p>Rows are colour-coded based on the <b>type filter field</b>, which is auto-detected when a file is loaded. Colours are mapped in <b>Tools &gt; Settings &gt; Colors</b> (any column can have colour rules — the first matching column wins).</p>
-<h2><a class="anchor" id="autotoc_md710"></a>
+<h2><a class="anchor" id="autotoc_md711"></a>
 4.2 Selecting and Navigating Events</h2>
 <ul>
 <li>Click a row to select it and display its full field list in the <b>Details panel</b>.</li>
@@ -280,7 +291,7 @@ JSON log format</h3>
 <li>The table uses virtual scrolling — rendering is O(1) regardless of dataset size.</li>
 <li>Click any column header to sort by that field.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md711"></a>
+<h2><a class="anchor" id="autotoc_md712"></a>
 4.3 Copying Events</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -293,14 +304,14 @@ JSON log format</h3>
 <td class="markdownTableBodyNone">Right-click &gt; Copy as CSV   </td><td class="markdownTableBodyNone">Copies selected events as CSV with a header row   </td></tr>
 </table>
 <p>Multiple rows can be selected with Shift+Click or Ctrl+Click before copying.</p>
-<h2><a class="anchor" id="autotoc_md712"></a>
+<h2><a class="anchor" id="autotoc_md713"></a>
 4.4 Jump to Timestamp</h2>
 <p>Press <b>Ctrl+G</b> (or <b>Edit &gt; Jump to Timestamp</b>) to open the Jump to Timestamp dialog. Enter a timestamp value in the format used by the current log file (e.g. <code>1234567.890</code> for ASC float seconds, or <code>2024-03-15 14:22:03.456</code> for XML/CSV ISO format). The table scrolls to and selects the event with the nearest matching timestamp.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md714"></a>
+<h1><a class="anchor" id="autotoc_md715"></a>
 5. Filtering</h1>
 <p>All filter controls are in the <b>Filters</b> panel on the left. Changes take effect immediately (debounced at 150 ms to avoid excessive recomputation on large datasets).</p>
-<h2><a class="anchor" id="autotoc_md715"></a>
+<h2><a class="anchor" id="autotoc_md716"></a>
 5.1 Text Search</h2>
 <p>The search bar at the top of the window (Ctrl+F to focus) supports four match modes selectable from the dropdown next to it:</p>
 <table class="markdownTable">
@@ -316,12 +327,12 @@ JSON log format</h3>
 <td class="markdownTableBodyNone">Wildcard   </td><td class="markdownTableBodyNone">Shell-style <code>*</code> and <code>?</code> patterns   </td></tr>
 </table>
 <p>Press Enter or click <b>Search</b> to run. Matching rows are highlighted; use the up/down arrows next to the bar to navigate between results.</p>
-<h2><a class="anchor" id="autotoc_md716"></a>
+<h2><a class="anchor" id="autotoc_md717"></a>
 5.2 Type Filter</h2>
 <p>The Type Filter panel shows all distinct values of the <b>type filter field</b>. Check or uncheck values to show or hide event categories. <b>Select All</b> / <b>Deselect All</b> buttons are available.</p>
 <p><b>Auto-detection</b>: When a file is loaded, LogViewer automatically detects the type field by scanning the first 100 events for common names: <code>level</code>, <code>type</code>, <code>severity</code>, <code>priority</code>, <code>category</code>, and others. If none are found, a prompt asks for the field name — the answer is saved and used for future loads.</p>
 <p><b>Manual override</b>: Set a fixed field name in <b>Tools &gt; Settings &gt; General</b> ("Type Filter Field"). Leave the field empty to re-enable auto-detection. Setting it explicitly is useful when your logs use a non-standard field name or you have multiple file types with different naming conventions.</p>
-<h2><a class="anchor" id="autotoc_md717"></a>
+<h2><a class="anchor" id="autotoc_md718"></a>
 5.3 Time Range Filter</h2>
 <p>The <b>Time Range</b> panel lets you restrict visible events to a time window:</p>
 <ol type="1">
@@ -329,10 +340,10 @@ JSON log format</h3>
 <li>Click <b>Apply</b>.</li>
 </ol>
 <p>The range is applied as an additional filter on top of any active text/type filters. Clear the fields and click Apply to remove the time constraint.</p>
-<h2><a class="anchor" id="autotoc_md718"></a>
+<h2><a class="anchor" id="autotoc_md719"></a>
 5.4 Actor Filter</h2>
 <p>The <b>Actors</b> panel in the left dock shows a tree of actor definitions. Enable or disable individual actors to include or exclude their events. Actors are defined in the <b>Actor Definitions</b> panel (content tab).</p>
-<h2><a class="anchor" id="autotoc_md719"></a>
+<h2><a class="anchor" id="autotoc_md720"></a>
 5.5 Filter Profiles</h2>
 <p>Filter profiles let you save and quickly switch between named filter states.</p>
 <ul>
@@ -341,10 +352,10 @@ JSON log format</h3>
 <li>Profiles are persisted across sessions.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md721"></a>
+<h1><a class="anchor" id="autotoc_md722"></a>
 6. Analysis Panels</h1>
 <p>Switch between analysis views using the tab bar in the content area. Panels refresh lazily — computation only runs when the tab is visible, keeping the UI fast on large datasets.</p>
-<h2><a class="anchor" id="autotoc_md722"></a>
+<h2><a class="anchor" id="autotoc_md723"></a>
 6.1 Statistics</h2>
 <p>The <b>Statistics</b> tab displays aggregate metrics for the loaded data:</p>
 <ul>
@@ -353,7 +364,7 @@ JSON log format</h3>
 <li>Per-field fill-rate (percentage of events that have each field populated)</li>
 <li><b>CAN-specific</b> (when ASC data is loaded): total frame count, Rx / Tx / TxRq / ErrorFrame breakdown with percentages, unique CAN IDs, channels, recording duration, average frame rate, and min/max/avg for every decoded <code>SIG:*</code> signal</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md723"></a>
+<h2><a class="anchor" id="autotoc_md724"></a>
 6.2 Signal Plot</h2>
 <p>The <b>Signals</b> tab plots numeric <code>SIG:*</code> field values over time as line series.</p>
 <ol type="1">
@@ -362,7 +373,7 @@ JSON log format</h3>
 <li>The Signal Plot updates immediately to show those signals.</li>
 </ol>
 <p>Each series is automatically downsampled to 2 000 points when the dataset is larger, keeping the chart responsive. Zoom by scrolling; pan by clicking and dragging the axis.</p>
-<h2><a class="anchor" id="autotoc_md724"></a>
+<h2><a class="anchor" id="autotoc_md725"></a>
 6.3 Timeline Chart</h2>
 <p>The <b>Timeline</b> tab shows a bar histogram of event volume over time. Use it to identify bursts, quiet periods, and temporal clusters at a glance.</p>
 <ul>
@@ -370,7 +381,7 @@ JSON log format</h3>
 <li><b>Brush</b>: click and drag to select a time range; the main events table filters to that range</li>
 <li>Reset zoom with the Reset button in the toolbar</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md725"></a>
+<h2><a class="anchor" id="autotoc_md726"></a>
 6.4 Pattern Analysis</h2>
 <p>The <b>Patterns</b> tab groups structurally similar log lines using template clustering. Messages that share the same structure but differ only in numeric or variable parts are collapsed into a single template with a match count.</p>
 <ul>
@@ -378,11 +389,11 @@ JSON log format</h3>
 <li>Capped at 5 000 events per type to keep computation fast on large files</li>
 <li>Click a template row to filter the main table to matching events</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md726"></a>
+<h2><a class="anchor" id="autotoc_md727"></a>
 6.5 Trace Viewer</h2>
 <p>The <b>Trace Viewer</b> tab shows a sequence-diagram-style timeline where each actor has a vertical lane and events are drawn as labelled markers. Use it to visualise message flows between system components.</p>
 <p>Actors must be defined in the Actor Definitions panel before the Trace Viewer can render lanes.</p>
-<h2><a class="anchor" id="autotoc_md727"></a>
+<h2><a class="anchor" id="autotoc_md728"></a>
 6.6 Bookmarks</h2>
 <p>The <b>Bookmarks</b> tab lets you annotate important events:</p>
 <ol type="1">
@@ -391,7 +402,7 @@ JSON log format</h3>
 <li>The bookmarks list shows the event text and your note; double-click a bookmark to navigate to that event.</li>
 </ol>
 <p>Bookmarks are saved in the session file.</p>
-<h2><a class="anchor" id="autotoc_md728"></a>
+<h2><a class="anchor" id="autotoc_md729"></a>
 6.7 Scenarios</h2>
 <p>The <b>Scenarios</b> tab lets you define multi-step event patterns and search for them in the loaded log:</p>
 <ol type="1">
@@ -399,7 +410,7 @@ JSON log format</h3>
 <li>Click <b>Find</b> to locate all occurrences where the steps fire in sequence.</li>
 <li>Results can be exported as JSON Lines for further processing.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md729"></a>
+<h2><a class="anchor" id="autotoc_md730"></a>
 6.8 Actors</h2>
 <p>The <b>Actors</b> tab displays an event attribution tree. Events are assigned to actors based on the actor definitions you configure in the <b>Actor Definitions</b> panel:</p>
 <ul>
@@ -407,16 +418,16 @@ JSON log format</h3>
 <li>Review and import the suggestions, then the Actors panel tree updates automatically.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md731"></a>
+<h1><a class="anchor" id="autotoc_md732"></a>
 7. Side-by-Side Comparison</h1>
 <p>The Side-by-Side panel loads two log files independently and displays them in a split view, making it easy to compare what happened in two logs at the same point in time.</p>
-<h2><a class="anchor" id="autotoc_md732"></a>
+<h2><a class="anchor" id="autotoc_md733"></a>
 7.1 Opening the Panel</h2>
 <ul>
 <li>Click the <b>Side by Side</b> tab in the content area, <b>or</b></li>
 <li>Press <b>Ctrl+Shift+S</b></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md733"></a>
+<h2><a class="anchor" id="autotoc_md734"></a>
 7.2 Loading Files</h2>
 <p>Each side has its own <b>Open</b> button and a filename label. Click the button to open a file-picker dialog. Both sides support all log formats (XML, CSV, JSON, ASC, DLT, Evlog). File parsing runs on a background thread; the split view remains interactive while loading.</p>
 <p>You can also <b>drag a file from the file manager</b> directly onto the Side by Side panel:</p>
@@ -425,13 +436,13 @@ JSON log format</h3>
 <li>Drop in the <b>right half</b> of the panel → loads into the right view</li>
 </ul>
 <p>This is the same drag-and-drop gesture as the main window (which merges a file into the main events table), just targeted to one side of the comparison view.</p>
-<h2><a class="anchor" id="autotoc_md734"></a>
+<h2><a class="anchor" id="autotoc_md735"></a>
 7.3 Synchronisation Modes</h2>
 <p>Select a mode from the <b>Sync</b> dropdown in the toolbar:</p>
-<h3><a class="anchor" id="autotoc_md735"></a>
+<h3><a class="anchor" id="autotoc_md736"></a>
 Timestamp Sync (default)</h3>
 <p>When you click a row on either side, the application computes the timestamp of that event and scrolls the opposite side to the event with the nearest timestamp. This works best when both logs share a common time base (e.g. two DLT recordings from the same system clock).</p>
-<h3><a class="anchor" id="autotoc_md736"></a>
+<h3><a class="anchor" id="autotoc_md737"></a>
 Manual Sync</h3>
 <p>Use Manual sync when the two files have different time bases — for example, comparing a DLT log (epoch-based absolute seconds) with an ASC log (elapsed seconds from start of recording).</p>
 <ol type="1">
@@ -442,11 +453,11 @@ Manual Sync</h3>
 <li>Once both reference points are set, the panel computes <code>offset = rightRefTimestamp − leftRefTimestamp</code>. All subsequent sync lookups apply this offset: <code>targetRight = leftTimestamp + offset</code>.</li>
 </ol>
 <p>The sync status label below the toolbar shows whether reference points have been set and the computed offset value.</p>
-<h3><a class="anchor" id="autotoc_md737"></a>
+<h3><a class="anchor" id="autotoc_md738"></a>
 No Sync</h3>
 <p>Both views scroll completely independently. Useful when you only need to see two files simultaneously without needing them to stay aligned.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md739"></a>
+<h1><a class="anchor" id="autotoc_md740"></a>
 8. Signal Browser and DBC Decoding</h1>
 <p>The <b>Signal Browser</b> is a left-dock panel (second tab, alongside Filters). It shows the CAN frame and signal tree from a loaded DBC file.</p>
 <ul>
@@ -457,9 +468,9 @@ No Sync</h3>
 </ul>
 <p>When no DBC is loaded, the panel shows a placeholder message. Load a DBC via <b>File &gt; Load DBC…</b> to populate it.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md741"></a>
+<h1><a class="anchor" id="autotoc_md742"></a>
 9. AI-Assisted Analysis</h1>
-<h2><a class="anchor" id="autotoc_md742"></a>
+<h2><a class="anchor" id="autotoc_md743"></a>
 9.1 Configuring an AI Provider</h2>
 <p>Open <b>Tools &gt; Settings &gt; AI</b> and configure:</p>
 <table class="markdownTable">
@@ -480,7 +491,7 @@ No Sync</h3>
 <li><b>Ollama</b> — install from <a href="https://ollama.com">ollama.com</a>, run <code>ollama serve</code>, pull a model (<code>ollama pull llama3.2</code>), and set the URL to <code><a href="http://localhost:11434">http://localhost:11434</a></code>.</li>
 <li><b>LM Studio</b> — download from <a href="https://lmstudio.ai">lmstudio.ai</a>, load a model, start the local server, and point LogViewer at <code><a href="http://localhost:1234">http://localhost:1234</a></code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md743"></a>
+<h2><a class="anchor" id="autotoc_md744"></a>
 9.2 Running an Analysis</h2>
 <ol type="1">
 <li>Open the AI panel in the <b>bottom dock</b>.</li>
@@ -490,7 +501,7 @@ No Sync</h3>
 <p>The analysis runs on a background thread. Results appear in the response area when complete.</p>
 <p><b>Filter-aware</b>: AI analysis respects the active filters. Only the events currently visible in the table are sent for analysis. On large datasets, a smart sampler caps at 5 000 events with even distribution across the timeline to stay within the model's context window.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md745"></a>
+<h1><a class="anchor" id="autotoc_md746"></a>
 10. Named Layouts</h1>
 <p>A layout captures the current dock geometry — which panels are visible, their sizes, and their positions. Layouts let you switch between different working configurations in one click.</p>
 <p><b>Saving a layout:</b></p><ol type="1">
@@ -515,7 +526,7 @@ No Sync</h3>
 </table>
 <p>Named layouts are persisted in the application settings and survive restarts.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md747"></a>
+<h1><a class="anchor" id="autotoc_md748"></a>
 11. Export</h1>
 <p><b>File &gt; Export</b> sub-menu:</p>
 <table class="markdownTable">
@@ -531,7 +542,7 @@ No Sync</h3>
 <p>All export actions apply the current filter, so only visible rows are written. A Save As dialog lets you choose the output path; the last-used directory is remembered per export type.</p>
 <p>For quick clipboard transfer without saving a file, use <b>right-click &gt; Copy as JSON</b> or <b>Copy as CSV</b> in the events table.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md749"></a>
+<h1><a class="anchor" id="autotoc_md750"></a>
 12. Themes</h1>
 <p>Three colour themes are available under <b>View &gt; Theme</b>:</p>
 <table class="markdownTable">
@@ -546,7 +557,7 @@ No Sync</h3>
 </table>
 <p>The selected theme is applied instantly and persisted across sessions.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md751"></a>
+<h1><a class="anchor" id="autotoc_md752"></a>
 13. Configuration</h1>
 <p>Settings are stored per-platform:</p>
 <table class="markdownTable">
@@ -569,7 +580,7 @@ No Sync</h3>
 </ul>
 <p>You can also edit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> directly; changes take effect on the next application start.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md753"></a>
+<h1><a class="anchor" id="autotoc_md754"></a>
 14. Keyboard Shortcuts</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

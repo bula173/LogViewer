@@ -42,6 +42,7 @@ var hierarchy =
     [ "parser::IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", [
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ],
       [ "ui::MainWindowPresenter", "d5/dc9/classui_1_1MainWindowPresenter.html", null ],
+      [ "ui::qt::FileTailer::TailObserver", "d7/def/structui_1_1qt_1_1FileTailer_1_1TailObserver.html", null ],
       [ "ui::qt::SideBySidePanel::LoadJob::Observer", "d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html", null ]
     ] ],
     [ "ui::IErrorPresenter", "d0/d7f/classui_1_1IErrorPresenter.html", [
@@ -136,6 +137,7 @@ var hierarchy =
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
     [ "QObject", "d9/d5b/classQObject.html", [
+      [ "ui::qt::FileTailer", "d6/d80/classui_1_1qt_1_1FileTailer.html", null ],
       [ "ui::qt::UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", null ]
     ] ],
     [ "QTableView", "d8/d5e/classQTableView.html", [

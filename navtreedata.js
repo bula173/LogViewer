@@ -826,53 +826,54 @@ var NAVTREE =
           [ "JSON log format", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md701", null ]
         ] ],
         [ "3.2 Opening a File", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md702", null ],
-        [ "3.3 Drag and Drop", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md703", null ],
-        [ "3.4 Recent Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704", null ],
-        [ "3.5 Loading a DBC File (CAN Signal Decoding)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md705", null ],
-        [ "3.6 Loading Evlog Templates", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md706", null ]
+        [ "3.3 Following a Live File (Tail Mode)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md703", null ],
+        [ "3.4 Drag and Drop", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704", null ],
+        [ "3.5 Recent Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md705", null ],
+        [ "3.6 Loading a DBC File (CAN Signal Decoding)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md706", null ],
+        [ "3.7 Loading Evlog Templates", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md707", null ]
       ] ],
-      [ "4. The Events Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md708", [
-        [ "4.1 Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md709", null ],
-        [ "4.2 Selecting and Navigating Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md710", null ],
-        [ "4.3 Copying Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md711", null ],
-        [ "4.4 Jump to Timestamp", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md712", null ]
+      [ "4. The Events Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md709", [
+        [ "4.1 Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md710", null ],
+        [ "4.2 Selecting and Navigating Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md711", null ],
+        [ "4.3 Copying Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md712", null ],
+        [ "4.4 Jump to Timestamp", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md713", null ]
       ] ],
-      [ "5. Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md714", [
-        [ "5.1 Text Search", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md715", null ],
-        [ "5.2 Type Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md716", null ],
-        [ "5.3 Time Range Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md717", null ],
-        [ "5.4 Actor Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md718", null ],
-        [ "5.5 Filter Profiles", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md719", null ]
+      [ "5. Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md715", [
+        [ "5.1 Text Search", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md716", null ],
+        [ "5.2 Type Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md717", null ],
+        [ "5.3 Time Range Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md718", null ],
+        [ "5.4 Actor Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md719", null ],
+        [ "5.5 Filter Profiles", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md720", null ]
       ] ],
-      [ "6. Analysis Panels", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md721", [
-        [ "6.1 Statistics", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md722", null ],
-        [ "6.2 Signal Plot", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md723", null ],
-        [ "6.3 Timeline Chart", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md724", null ],
-        [ "6.4 Pattern Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md725", null ],
-        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md726", null ],
-        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md727", null ],
-        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md728", null ],
-        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md729", null ]
+      [ "6. Analysis Panels", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md722", [
+        [ "6.1 Statistics", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md723", null ],
+        [ "6.2 Signal Plot", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md724", null ],
+        [ "6.3 Timeline Chart", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md725", null ],
+        [ "6.4 Pattern Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md726", null ],
+        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md727", null ],
+        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md728", null ],
+        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md729", null ],
+        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md730", null ]
       ] ],
-      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md731", [
-        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md732", null ],
-        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733", null ],
-        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md734", [
-          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735", null ],
-          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md736", null ],
-          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md737", null ]
+      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md732", [
+        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733", null ],
+        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md734", null ],
+        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735", [
+          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md736", null ],
+          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md737", null ],
+          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md738", null ]
         ] ]
       ] ],
-      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md739", null ],
-      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md741", [
-        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742", null ],
-        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743", null ]
+      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md740", null ],
+      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742", [
+        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743", null ],
+        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md744", null ]
       ] ],
-      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md745", null ],
-      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md747", null ],
-      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md749", null ],
-      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md751", null ],
-      [ "14. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md753", null ]
+      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md746", null ],
+      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md748", null ],
+      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md750", null ],
+      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md752", null ],
+      [ "14. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md754", null ]
     ] ],
     [ "Deprecated List", "da/d58/deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -921,21 +922,22 @@ var NAVTREEINDEX =
 "d3/d3a/ParserFactory_8hpp.html#a16916297b67db86e922c36c2c9b1bc29",
 "d3/dc4/classutil_1_1ILogger.html#a9cfda7f181b475dcc395dae5816f046c",
 "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a38626529d9e23dfc3a27215596894750",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a8d8b9bb2a74fabb2df55d3fd55c1e151",
-"d5/d32/classui_1_1qt_1_1UpdateDialog.html#ad6613b2185db7d3aa2473687b77e0637",
-"d6/d26/classui_1_1qt_1_1EventsTableView.html",
-"d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md572",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a6203858e26b91485895e5167965816df",
-"d8/d16/namespaceVersion.html#a2a52fceba26d3d00378c737bb1ec62e2",
-"d8/db0/classui_1_1qt_1_1FiltersPanel.html#a0860c6438b4c6830aa87e500dec99c22",
-"d9/d75/classplugin_1_1FunctionRegistry.html#a2764b9d1577ddcccc65c2529690ceb0b",
-"da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a542c4a4b33bbfdbb49e2d9c794acfc99",
-"db/d6d/structui_1_1qt_1_1FilterProfile.html#aa7944c8c2ce4d3d9be79a8c10ce2b4b0",
-"dc/d73/AscParser_8cpp.html#ac67e0277845911fbac4a220d3ab9463c",
-"dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html#a07a7bfa9761b3fd2137e8fcf57f79232",
-"dd/dd4/StartupSplash_8hpp_source.html",
-"de/d74/structmvc_1_1SearchResultRow.html",
-"df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab04df0fc431098a8645b96656970ba6e"
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#a8c738bd2827ae082980fbb1a44213940",
+"d5/d32/classui_1_1qt_1_1UpdateDialog.html#a8bc8164b9de25c38ed78571ff8dce991",
+"d6/d01/DltParser_8cpp.html#ab92c1d5521bca63732d884cbe495f41f",
+"d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a3d9c8f1a7c7729555f79a04b6ffb7959",
+"d7/dda/classui_1_1qt_1_1StartupSplash.html#a122c6c6e08592555e1aba933d8941578",
+"d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html#aa3dba119baab877512dd9a291de1e231",
+"d9/d12/classfilters_1_1Filter.html#ab892c9971d317364cb232b1854183eda",
+"d9/dfd/classui_1_1qt_1_1SearchResultsView.html#ae8292ced4a82db0c64c7193d6c0b99f1",
+"da/dc9/structconfig_1_1ColumnColor.html",
+"dc/d46/classutil_1_1KeyEncryption.html#a8df0d55632e80fdaae768371d1addc4f",
+"dd/d2d/classutil_1_1Result.html#a0f1bbd6f55e406afb8c4554eba3b7e68",
+"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ab8cf31fb7211ab9d2e8e100aa2467afd",
+"de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0",
+"df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a1095fa0f7e9f178cfbe2d5f5b54f34a7",
+"index.html#autotoc_md10"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

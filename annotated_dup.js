@@ -101,6 +101,7 @@ var annotated_dup =
         [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
         [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
         [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
+        [ "FileTailer", "d6/d80/classui_1_1qt_1_1FileTailer.html", "d6/d80/classui_1_1qt_1_1FileTailer" ],
         [ "FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog" ],
         [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
         [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
