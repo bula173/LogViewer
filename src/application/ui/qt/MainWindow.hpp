@@ -81,6 +81,7 @@ class TimeRangeFilterPanel;
 class FilterProfilesPanel;
 class CanSignalTreePanel;
 class SideBySidePanel;
+class FileTailer;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -150,6 +151,9 @@ class MainWindow : public QMainWindow,
     void OnLoadEvlogTemplatesRequested();
     void OnSaveLayoutRequested();
     void OnDeleteLayoutRequested(const QString& name);
+    void OnToggleTailRequested();
+    void OnTailNewEvents(std::size_t count);
+    void OnTailError(const QString& message);
 
   private:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -282,6 +286,8 @@ class MainWindow : public QMainWindow,
     ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
     SearchBar*              m_searchBar    {nullptr};
     UpdateChecker*          m_updateChecker{nullptr};
+    FileTailer*             m_tailer       {nullptr};
+    QAction*                m_tailAction   {nullptr};
     TimeRangeFilterPanel*   m_timeRangePanel{nullptr};
     FilterProfilesPanel*    m_profilesPanel {nullptr};
     CanSignalTreePanel*     m_canSignalTree    {nullptr};

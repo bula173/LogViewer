@@ -12,10 +12,11 @@
 3. [Opening Log Files](#3-opening-log-files)
    - [Supported Formats](#31-supported-formats)
    - [Opening a File](#32-opening-a-file)
-   - [Drag and Drop](#33-drag-and-drop)
-   - [Recent Files](#34-recent-files)
-   - [Loading a DBC File](#35-loading-a-dbc-file-can-signal-decoding)
-   - [Loading Evlog Templates](#36-loading-evlog-templates)
+   - [Following a Live File (Tail Mode)](#33-following-a-live-file-tail-mode)
+   - [Drag and Drop](#34-drag-and-drop)
+   - [Recent Files](#35-recent-files)
+   - [Loading a DBC File](#36-loading-a-dbc-file-can-signal-decoding)
+   - [Loading Evlog Templates](#37-loading-evlog-templates)
 4. [The Events Table](#4-the-events-table)
    - [Columns](#41-columns)
    - [Selecting and Navigating Events](#42-selecting-and-navigating-events)
@@ -114,15 +115,26 @@ If you open a file with an unknown or missing extension, LogViewer prompts you t
 
 Merging multiple files into one view is possible by opening them one after another — subsequent opens append events to the current dataset. Use **File > Clear** to start fresh.
 
-### 3.3 Drag and Drop
+### 3.3 Following a Live File (Tail Mode)
+
+**File > Follow File (Tail)** (Ctrl+T) watches the currently loaded log file and automatically appends new events as they are written to disk. This is useful for monitoring a running service without reopening the file manually.
+
+- The toggle is enabled only after a file has been loaded.
+- When active, the status bar shows the live event count.
+- On log rotation (file truncated or replaced), the tailer resets to the new beginning automatically.
+
+**Supported formats**: NDJSON (`.json` / `.jsonl`), CAN/ASC (`.asc`), AUTOSAR DLT (`.dlt`).  
+**Not supported**: XML (`.xml`), CSV (`.csv`) — these formats require full-file parsing.
+
+### 3.4 Drag and Drop
 
 Drag a log file from a file manager onto the main window. The application detects the extension and begins parsing immediately. If the extension is unrecognised, the format-picker dialog appears.
 
-### 3.4 Recent Files
+### 3.5 Recent Files
 
 **File > Recent Files** lists the last ten files you opened. Click any entry to re-open it. Paths are stored per session; they are cleared if a file is deleted or moved.
 
-### 3.5 Loading a DBC File (CAN Signal Decoding)
+### 3.6 Loading a DBC File (CAN Signal Decoding)
 
 Before or after opening an `.asc` file, choose **File > Load DBC…** and select a `.dbc` CAN database. Once loaded:
 
@@ -132,7 +144,7 @@ Before or after opening an `.asc` file, choose **File > Load DBC…** and select
 
 If you load an `.asc` file when a DBC is already loaded, decoding happens automatically. The active DBC path is saved in the session and reused on next launch.
 
-### 3.6 Loading Evlog Templates
+### 3.7 Loading Evlog Templates
 
 Evlog BINARY payloads can be decoded into structured fields using template files. Choose **File > Load Evlog Templates…** and select a directory containing `.t`, `.tmpl`, or `.template` files. Templates are keyed by `(facility, event_type)` and declare typed field layouts with an optional format string.
 

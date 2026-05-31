@@ -3,6 +3,7 @@
 
 #include "EventsContainer.hpp"
 #include "utils/ExportManager.hpp"
+#include "utils/FileTailer.hpp"
 #include "FilterManager.hpp"
 #include "panels/LayoutManager.hpp"
 #include "panels/StatsSummaryPanel.hpp"
@@ -760,6 +761,15 @@ void MainWindow::SetupMenus()
     connect(clearAction, &QAction::triggered, this,
         &MainWindow::OnClearDataRequested);
 
+    m_tailAction = fileMenu->addAction(tr("&Follow File (Tail)"));
+    m_tailAction->setShortcut(QKeySequence(tr("Ctrl+T")));
+    m_tailAction->setCheckable(true);
+    m_tailAction->setEnabled(false);
+    m_tailAction->setToolTip(tr("Watch the current log file and automatically load new lines as they are appended.\n"
+                                "Supported formats: NDJSON (.json/.jsonl), CAN/ASC, DLT.\n"
+                                "Not supported: XML, CSV."));
+    connect(m_tailAction, &QAction::triggered, this, &MainWindow::OnToggleTailRequested);
+
     fileMenu->addSeparator();
 
     auto* exitAction = fileMenu->addAction(tr("E&xit"));
@@ -1375,6 +1385,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->LoadLogFile(std::move(parser), filePath);
                     m_presenter->SetItemDetailsVisible(true);
                     m_currentLogFilePath = path;
+                    if (m_tailAction) m_tailAction->setEnabled(true);
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
                     UpdateStatusText(readyMsg.toStdString());
                     AddToRecentFiles(path);
@@ -1412,6 +1423,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             m_presenter->LoadLogFile(std::move(parser), filePath);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = path;
+            if (m_tailAction) m_tailAction->setEnabled(true);
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
             UpdateStatusText(readyMsg.toStdString());
             AddToRecentFiles(path);
@@ -1721,11 +1733,80 @@ void MainWindow::OnOpenSession()
     }
 }
 
+void MainWindow::OnToggleTailRequested()
+{
+    if (!m_tailAction) return;
+
+    if (m_tailAction->isChecked())
+    {
+        if (m_currentLogFilePath.isEmpty())
+        {
+            m_tailAction->setChecked(false);
+            return;
+        }
+        if (!m_tailer)
+        {
+            m_tailer = new FileTailer(this);
+            connect(m_tailer, &FileTailer::NewEventsAvailable,
+                    this, &MainWindow::OnTailNewEvents);
+            connect(m_tailer, &FileTailer::TailingError,
+                    this, &MainWindow::OnTailError);
+        }
+        const std::filesystem::path fp(m_currentLogFilePath.toStdString());
+        auto parser = CreateParserFor(fp);
+        if (!parser)
+        {
+            m_tailAction->setChecked(false);
+            return;
+        }
+        m_tailer->Start(fp, std::move(parser), *m_events);
+        if (!m_tailer->IsActive())
+        {
+            // Start() emitted TailingError for unsupported formats
+            m_tailAction->setChecked(false);
+            return;
+        }
+        UpdateStatusText("Following file…");
+    }
+    else
+    {
+        if (m_tailer) m_tailer->Stop();
+        UpdateStatusText("Tailing stopped");
+    }
+}
+
+void MainWindow::OnTailNewEvents(std::size_t count)
+{
+    if (m_eventsView)
+        m_eventsView->RefreshView();
+    MarkAnalysisPanelsDirty();
+    UpdateStatusText(
+        tr("Following — %1 event(s) total").arg(
+            m_events ? static_cast<qulonglong>(m_events->Size()) : 0).toStdString());
+    util::Logger::Debug("[MainWindow] Tail: {} new event(s), total={}", count,
+        m_events ? m_events->Size() : 0);
+}
+
+void MainWindow::OnTailError(const QString& message)
+{
+    if (m_tailAction)
+    {
+        m_tailAction->setChecked(false);
+        m_tailAction->setEnabled(false);
+    }
+    if (m_tailer) m_tailer->Stop();
+    UpdateStatusText("Tailing error: " + message.toStdString());
+    QMessageBox::warning(this, tr("Follow File"), message);
+}
+
 void MainWindow::OnClearDataRequested()
 {
     try
     {
     util::Logger::Info("[MainWindow] OnClearDataRequested");
+        if (m_tailer) { m_tailer->Stop(); }
+        if (m_tailAction) { m_tailAction->setChecked(false); m_tailAction->setEnabled(false); }
+        m_currentLogFilePath.clear();
         if (m_searchResults)
             m_searchResults->Clear();
         if (m_searchEdit)

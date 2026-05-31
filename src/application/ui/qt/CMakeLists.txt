@@ -36,6 +36,7 @@ target_sources(application_core
         events/EventsTableModel.cpp
         events/EventsTableView.cpp
         utils/ExportManager.cpp
+        utils/FileTailer.cpp
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp
 )
