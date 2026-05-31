@@ -86,7 +86,7 @@ var searchData=
   ['findbykey_83',['findByKey',['../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7',1,'db::LogEvent']]],
   ['findheaderindex_84',['FindHeaderIndex',['../d9/dd2/classparser_1_1CsvParser.html#a682706f16c16eaf60fa1d1c80f6eb0fa',1,'parser::CsvParser']]],
   ['findinevent_85',['findInEvent',['../d1/d00/classdb_1_1LogEvent.html#a3127be5b344071f7b8d1cd0f55f8f8e5',1,'db::LogEvent']]],
-  ['findnearestbytimestamp_86',['FindNearestByTimestamp',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac3026e74427cb2aaf6263e3daec758a7',1,'ui::qt::SideBySidePanel']]],
+  ['findnearestbytimestamp_86',['FindNearestByTimestamp',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#acf443cd9ff6a2f58ccec10c001ab0799',1,'ui::qt::SideBySidePanel']]],
   ['fine_20grained_20events_87',['Enhancement: Fine-Grained Events',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md182',1,'']]],
   ['finish_88',['Finish',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a122c6c6e08592555e1aba933d8941578',1,'ui::qt::StartupSplash']]],
   ['first_20plugin_89',['Creating Your First Plugin',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md637',1,'']]],

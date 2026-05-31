@@ -11,7 +11,7 @@ var classui_1_1qt_1_1SideBySidePanel =
     [ "BuildSide", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ad05cbe0d2e341cde1340f945ecb7f4f0", null ],
     [ "BuildUi", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac62afc340e415801d0635b84d55920de", null ],
     [ "CloseRequested", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#aad18dff105e445200090ec183a4c3ece", null ],
-    [ "FindNearestByTimestamp", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac3026e74427cb2aaf6263e3daec758a7", null ],
+    [ "FindNearestByTimestamp", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#acf443cd9ff6a2f58ccec10c001ab0799", null ],
     [ "GetTimestamp", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ae48bed1c020eebb927dbc7639e6cf65c", null ],
     [ "LoadFile", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a34be0c63980bea91de5871f41189f64c", null ],
     [ "LoadFileDirect", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a425f4a88dcd64251380344eb2836bdbb", null ],
