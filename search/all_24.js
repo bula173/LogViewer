@@ -28,8 +28,9 @@ var searchData=
   ['_7eistatisticsstrategy_25',['~IStatisticsStrategy',['../df/dae/classui_1_1qt_1_1IStatisticsStrategy.html#a804dbd2a9f3e7c3888d1e0faf38f02d2',1,'ui::qt::IStatisticsStrategy']]],
   ['_7eitypefilterview_26',['~ITypeFilterView',['../df/d7e/classui_1_1ITypeFilterView.html#a1c454bd06683bd48b0d0f7a97e892e6c',1,'ui::ITypeFilterView']]],
   ['_7eiview_27',['~IView',['../d3/dba/classmvc_1_1IView.html#aa90b0409cb5cf98e72ab84a355e0ee67',1,'mvc::IView']]],
-  ['_7emainwindow_28',['~MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b',1,'ui::qt::MainWindow']]],
-  ['_7epluginmanager_29',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
-  ['_7esidebysidepanel_30',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
-  ['_7exmlparser_31',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
+  ['_7ejsonparser_28',['~JsonParser',['../d1/d10/classparser_1_1JsonParser.html#a3ebba8be5ead13ecd87ccebb1d36428d',1,'parser::JsonParser']]],
+  ['_7emainwindow_29',['~MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b',1,'ui::qt::MainWindow']]],
+  ['_7epluginmanager_30',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
+  ['_7esidebysidepanel_31',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
+  ['_7exmlparser_32',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
 ];

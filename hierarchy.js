@@ -36,6 +36,7 @@ var hierarchy =
       [ "parser::CsvParser", "d9/dd2/classparser_1_1CsvParser.html", null ],
       [ "parser::DltParser", "db/de9/classparser_1_1DltParser.html", null ],
       [ "parser::EvlogParser", "d1/d55/classparser_1_1EvlogParser.html", null ],
+      [ "parser::JsonParser", "d1/d10/classparser_1_1JsonParser.html", null ],
       [ "parser::XmlParser", "db/d5c/classparser_1_1XmlParser.html", null ]
     ] ],
     [ "parser::IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", [

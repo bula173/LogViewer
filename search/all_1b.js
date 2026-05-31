@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['range_20filter_0',['5.3 Time Range Filter',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md716',1,'']]],
+  ['range_20filter_0',['5.3 Time Range Filter',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md717',1,'']]],
   ['rate_20limit_20exceeded_1',['&quot;Rate limit exceeded&quot;',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md305',1,'']]],
   ['raw_20pointer_20observer_20pattern_2',['Issue 2.1: Raw Pointer Observer Pattern',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md175',1,'']]],
   ['readchunk_3',['ReadChunk',['../d5/dc4/namespaceanonymous__namespace_02xmlParser_8cpp_03.html#a93077e3374707f3805a0c108f521a3cd',1,'anonymous_namespace{xmlParser.cpp}']]],
@@ -17,7 +17,7 @@ var searchData=
   ['rebuildtable_14',['rebuildtable',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a57c1d7e4941ae53cb9edcfab996990ba',1,'ui::qt::ActorDefinitionsPanel::RebuildTable()'],['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#adc66d7a43c65a2067b961d0cc51ea42d',1,'ui::qt::BookmarksPanel::RebuildTable()']]],
   ['rebuildtree_15',['rebuildtree',['../d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html#adacdc484dd987400018523a7741d0f7f',1,'ui::qt::CanSignalTreePanel::RebuildTree()'],['../dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a85f8bc5facf71bc7eff25eaf9b468a8a',1,'ui::qt::TraceViewerPanel::RebuildTree()']]],
   ['rebuildvisiblecolumns_16',['RebuildVisibleColumns',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a11332da47f15d18dca04604b5f4a505e',1,'ui::qt::EventsTableModel']]],
-  ['recent_20files_17',['3.4 Recent Files',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md703',1,'']]],
+  ['recent_20files_17',['3.4 Recent Files',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704',1,'']]],
   ['recognized_18',['C++20 Features Not Recognized',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md232',1,'']]],
   ['recommended_19',['recommended',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md357',1,'Optional but Recommended'],['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md682',1,'Plugin Distribution (Recommended)'],['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md318',1,'Using Build Presets (Recommended)'],['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md286',1,'Via UI (Recommended)']]],
   ['recommended_20for_20privacy_20',['Local AI (Recommended for Privacy)',['../index.html#autotoc_md22',1,'']]],
@@ -128,7 +128,7 @@ var searchData=
   ['run_20your_20plugin_125',['3. Run Your Plugin',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md630',1,'']]],
   ['run_5ftools_20tt_126',['&lt;tt&gt;run_tools&lt;/tt&gt;',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md325',1,'']]],
   ['runfilter_127',['RunFilter',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a6431f1d05368aac23ef439190faedd4b',1,'ui::qt::MainWindow']]],
-  ['running_20an_20analysis_128',['9.2 Running an Analysis',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742',1,'']]],
+  ['running_20an_20analysis_128',['9.2 Running an Analysis',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743',1,'']]],
   ['running_20tests_129',['Running Tests',['../index.html#autotoc_md11',1,'']]],
   ['runparserasync_130',['RunParserAsync',['../d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7',1,'ui::MainWindowPresenter']]],
   ['runtime_20dependencies_131',['2.3 Runtime Dependencies',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md585',1,'']]],

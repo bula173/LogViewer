@@ -1,7 +1,7 @@
 var searchData=
 [
   ['observer_0',['Observer',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a0c1aa33634a5d0188cc3971213b29261',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
-  ['ok_1',['ok',['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok(T value)'],['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok() const'],['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#a94889c5220fd99db72e3cc1037d685b2',1,'util::Result&lt; void, E &gt;::Ok()']]],
+  ['ok_1',['ok',['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok()'],['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#a94889c5220fd99db72e3cc1037d685b2',1,'util::Result&lt; void, E &gt;::Ok()'],['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok()']]],
   ['onaboutrequested_2',['OnAboutRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a4795b9da13a0d7ea2fc2e99b4752fd6b',1,'ui::qt::MainWindow']]],
   ['onactualrowchanged_3',['OnActualRowChanged',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429',1,'ui::qt::ItemDetailsView']]],
   ['onaddbookmark_4',['OnAddBookmark',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#affdc85acfd5a5f77405f84bfa210d8b7',1,'ui::qt::BookmarksPanel']]],

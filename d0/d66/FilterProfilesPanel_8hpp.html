@@ -167,13 +167,13 @@ Namespaces</h2></td></tr>
 <li>Type filter selection (optional; only stored when at least one type exists)</li>
 </ul>
 <p>Profiles are persisted as JSON in the application data directory (<code>&lt;appdata&gt;/filter_profiles.json</code>) and are loaded automatically on start-up.</p>
-<h3><a class="anchor" id="autotoc_md759"></a>
+<h3><a class="anchor" id="autotoc_md760"></a>
 Interaction model</h3>
 <p>The panel does <b>not</b> directly access other filter panels. Instead it delegates through MainWindow via two signals:</p><ul>
 <li><code>SaveRequested(name)</code> → MainWindow gathers state → <code>StoreProfile()</code> </li>
 <li><code>ProfileLoadRequested(profile)</code> → MainWindow applies each field to the appropriate panel</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md760"></a>
+<h3><a class="anchor" id="autotoc_md761"></a>
 Actor key encoding</h3>
 <p>Each entry in <code>FilterProfile::uncheckedActors</code> is a composite string of the form <code>"&lt;defName&gt;\0&lt;actorName&gt;"</code>. The NUL character serves as a delimiter that cannot appear in either component. Use <code>ActorKey::Encode()</code> / <code>ActorKey::Decode()</code> for safe construction and decomposition.</p>
 <dl class="section author"><dt>Author</dt><dd>LogViewer Development Team </dd></dl>

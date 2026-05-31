@@ -107,17 +107,19 @@ Inheritance diagram for parser::IDataParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/daa/classparser_1_1IDataParser__inherit__graph.png" border="0" usemap="#aparser_1_1IDataParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1IDataParser_inherit__map" id="aparser_1_1IDataParser_inherit__map">
-<area shape="rect" title="Abstract base class for all data parsing implementations." alt="" coords="396,5,585,251"/>
+<area shape="rect" title="Abstract base class for all data parsing implementations." alt="" coords="495,5,684,251"/>
 <area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html" title="Parses Vector CANalyzer ASC log files (.asc)." alt="" coords="5,319,171,624"/>
-<area shape="poly" title=" " alt="" coords="384,173,334,197,282,226,231,261,185,301,167,320,163,317,181,297,227,257,279,222,332,192,382,168"/>
+<area shape="poly" title=" " alt="" coords="482,156,410,178,332,209,254,249,218,274,184,301,166,320,162,316,181,297,215,269,251,245,329,204,408,173,480,151"/>
 <area shape="rect" href="../../d9/dd2/classparser_1_1CsvParser.html" title="Parses CSV formatted log files." alt="" coords="195,299,384,644"/>
-<area shape="poly" title=" " alt="" coords="414,264,386,311,382,308,410,261"/>
+<area shape="poly" title=" " alt="" coords="486,213,441,255,398,300,386,315,382,311,394,297,437,251,483,209"/>
 <area shape="rect" href="../../db/de9/classparser_1_1DltParser.html" title=" " alt="" coords="408,379,573,564"/>
-<area shape="poly" title=" " alt="" coords="493,264,493,379,488,379,488,264"/>
+<area shape="poly" title=" " alt="" coords="553,265,520,379,515,378,548,263"/>
 <area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html" title=" " alt="" coords="598,349,778,594"/>
-<area shape="poly" title=" " alt="" coords="570,261,620,347,615,350,565,264"/>
-<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html" title=" " alt="" coords="803,389,968,554"/>
-<area shape="poly" title=" " alt="" coords="599,170,648,194,698,223,748,258,793,297,827,340,854,387,850,390,823,343,789,301,745,262,695,228,645,199,596,174"/>
+<area shape="poly" title=" " alt="" coords="631,263,655,348,650,349,626,265"/>
+<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html" title=" " alt="" coords="803,359,968,584"/>
+<area shape="poly" title=" " alt="" coords="696,204,747,248,793,297,834,357,829,360,789,300,743,252,693,208"/>
+<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html" title=" " alt="" coords="992,389,1157,554"/>
+<area shape="poly" title=" " alt="" coords="698,153,767,175,841,206,915,247,982,297,1018,339,1045,387,1041,390,1014,342,978,301,912,251,839,211,765,180,696,158"/>
 </map>
 </div>
 <div class="dynheader">
@@ -226,7 +228,7 @@ Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>uint32_t Current progress value (meaning depends on implementation) </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Progress values should be used with <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a49135d85a8459410ff91c24a892f88d1" title="Gets the total expected progress value.">GetTotalProgress()</a> for percentage calculations </dd></dl>
 
-<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#aab432a4e558c2ad89fc83679efd710c3">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a5ef5b41b121c679c37fbae6617f39848">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#acc85b3dc6170334460695b31765e0d8f">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#aaa048906b5c63cf4530fb43997ac538b">parser::EvlogParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#af1b09e0fbb00a74d8acfed9225f8fc0f">parser::XmlParser</a>.</p>
+<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#aab432a4e558c2ad89fc83679efd710c3">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a5ef5b41b121c679c37fbae6617f39848">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#acc85b3dc6170334460695b31765e0d8f">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#aaa048906b5c63cf4530fb43997ac538b">parser::EvlogParser</a>, <a class="el" href="../../d1/d10/classparser_1_1JsonParser.html#a9ed2f038d6ac82ea2c38469da5b6c876">parser::JsonParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#af1b09e0fbb00a74d8acfed9225f8fc0f">parser::XmlParser</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -271,7 +273,7 @@ Here is the caller graph for this function:</div>
 <dl class="section return"><dt>Returns</dt><dd>uint32_t Maximum progress value when parsing is complete </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Return 0 if total progress cannot be determined in advance </dd></dl>
 
-<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#aaff3cbf1f930d4eb115a21e3070809f2">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#ae2186e50eccf01e0e3fa28110bb0875a">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#adecf0f90fbc1a2038a4581d39db47830">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a7a9e67e23c711c2017a3919c6c7e32f3">parser::EvlogParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#a9e2430e0f0988465de536d88612e4d3e">parser::XmlParser</a>.</p>
+<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#aaff3cbf1f930d4eb115a21e3070809f2">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#ae2186e50eccf01e0e3fa28110bb0875a">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#adecf0f90fbc1a2038a4581d39db47830">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a7a9e67e23c711c2017a3919c6c7e32f3">parser::EvlogParser</a>, <a class="el" href="../../d1/d10/classparser_1_1JsonParser.html#a4c0da4b7da65b4adf0cf70368dea0672">parser::JsonParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#a9e2430e0f0988465de536d88612e4d3e">parser::XmlParser</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -312,6 +314,18 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/d8b/classparser_1_1IDataParser_a7eb5f01158daf2c64c0e9d7e45ba4d5e_icgraph.png" border="0" usemap="#ad3/d8b/classparser_1_1IDataParser_a7eb5f01158daf2c64c0e9d7e45ba4d5e_icgraph" alt=""/></div>
+<map name="ad3/d8b/classparser_1_1IDataParser_a7eb5f01158daf2c64c0e9d7e45ba4d5e_icgraph" id="ad3/d8b/classparser_1_1IDataParser_a7eb5f01158daf2c64c0e9d7e45ba4d5e_icgraph">
+<area shape="rect" title=" " alt="" coords="379,5,525,45"/>
+<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a8201a1934e548630c7000b7de38f95b2" title=" " alt="" coords="192,5,331,45"/>
+<area shape="poly" title=" " alt="" coords="365,28,331,28,331,23,365,23"/>
+<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9" title="Parses data from an input stream." alt="" coords="5,5,144,45"/>
+<area shape="poly" title=" " alt="" coords="178,28,145,28,145,23,178,23"/>
+</map>
+</div>
 
 </div>
 </div>
@@ -471,7 +485,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>This method should be implemented by derived classes for file-based parsing </dd></dl>
 
-<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a80cb8fb7bf441dade1c628bfd2057d7d">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9">parser::EvlogParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#a8fd2bb3e889f5993db1871e8dae12327">parser::XmlParser</a>.</p>
+<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a80cb8fb7bf441dade1c628bfd2057d7d">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9">parser::EvlogParser</a>, <a class="el" href="../../d1/d10/classparser_1_1JsonParser.html#a5ff662b5408cc8eb5c2b8d614d8a37a7">parser::JsonParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#a8fd2bb3e889f5993db1871e8dae12327">parser::XmlParser</a>.</p>
 
 </div>
 </div>
@@ -514,7 +528,7 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>This method enables parsing from various sources (files, network, memory) </dd></dl>
 
-<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2">parser::EvlogParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e">parser::XmlParser</a>.</p>
+<p>Implemented in <a class="el" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530">parser::AscParser</a>, <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3">parser::CsvParser</a>, <a class="el" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b">parser::DltParser</a>, <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2">parser::EvlogParser</a>, <a class="el" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9">parser::JsonParser</a>, and <a class="el" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e">parser::XmlParser</a>.</p>
 
 </div>
 </div>

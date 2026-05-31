@@ -239,12 +239,20 @@ Key Components</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>.csv</code>   </td><td class="markdownTableBodyNone"><code>CsvParser</code>   </td><td class="markdownTableBodyNone"></td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>.asc</code>   </td><td class="markdownTableBodyNone"><code>AscParser</code>   </td><td class="markdownTableBodyNone">CAN/Vector CANalyzer; constructed with optional DBC path via <code>CreateParserFor()</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>.json</code> / <code>.jsonl</code>   </td><td class="markdownTableBodyNone"><code>JsonParser</code>   </td><td class="markdownTableBodyNone">JSON array or NDJSON; nested objects flattened with dot notation    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>.dlt</code>   </td><td class="markdownTableBodyNone"><code>DltParser</code>   </td><td class="markdownTableBodyNone">AUTOSAR Diagnostic Log and Trace binary    </td></tr>
+<td class="markdownTableBodyNone"><code>.asc</code>   </td><td class="markdownTableBodyNone"><code>AscParser</code>   </td><td class="markdownTableBodyNone">CAN/Vector CANalyzer; constructed with optional DBC path via <code>CreateParserFor()</code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>.dlt</code>   </td><td class="markdownTableBodyNone"><code>DltParser</code>   </td><td class="markdownTableBodyNone">AUTOSAR Diagnostic Log and Trace binary    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>.evl</code>   </td><td class="markdownTableBodyNone"><code>EvlogParser</code>   </td><td class="markdownTableBodyNone">POSIX 1003.25 evlog binary; constructed with optional template directory via <code>CreateParserFor()</code>   </td></tr>
 </table>
+<p><b>JsonParser</b> (<code>parsers/json/</code>): Parses JSON log files in two layouts.</p><ul>
+<li><b>Array format</b>: the file contains a single top-level JSON array of objects. The whole file is parsed in one <code>nlohmann::json</code> call.</li>
+<li><b>NDJSON/JSONL format</b>: one JSON object per line. Each line is parsed independently; malformed lines are skipped with a <code>WARN</code> log entry.</li>
+<li>Format is auto-detected by the first non-whitespace character (<code>[</code> → array, <code>{</code> → NDJSON).</li>
+<li>Nested objects and arrays are flattened with dot notation (<code>ctx.host</code>) and index suffixes (<code>tags.0</code>, <code>tags.1</code>), respectively.</li>
+</ul>
 <p><b>AscParser</b> (<code>parsers/asc/</code>): Parses Vector CANalyzer <code>.asc</code> files line by line.</p><ul>
 <li>Each CAN frame becomes a <code>LogEvent</code> with fields: <code>timestamp</code> (float seconds), <code>type</code> (Rx/Tx/TxRq/ErrorFrame), <code>CAN_ID</code> (hex), <code>CAN_Channel</code>, <code>CAN_DLC</code>, <code>CAN_Data</code> (hex bytes), <code>CAN_IDE</code> (Standard/Extended), <code>info</code>.</li>
 <li>If a DBC path is provided, <code>CanDecoder</code> is invoked per-frame to append <code>SIG:&lt;name&gt;</code> fields for every decoded signal.</li>

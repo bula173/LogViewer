@@ -1,22 +1,6 @@
 var searchData=
 [
-  ['sanitizers_2emd_0',['SANITIZERS.md',['../dd/d1e/SANITIZERS_8md.html',1,'']]],
-  ['scenariospanel_2ecpp_1',['ScenariosPanel.cpp',['../d9/df5/ScenariosPanel_8cpp.html',1,'']]],
-  ['scenariospanel_2ehpp_2',['ScenariosPanel.hpp',['../d1/dbe/ScenariosPanel_8hpp.html',1,'']]],
-  ['sdk_5fgetting_5fstarted_2emd_3',['SDK_GETTING_STARTED.md',['../d8/de1/SDK__GETTING__STARTED_8md.html',1,'']]],
-  ['sdk_5fquick_5freference_2emd_4',['SDK_QUICK_REFERENCE.md',['../df/dae/SDK__QUICK__REFERENCE_8md.html',1,'']]],
-  ['searchbar_2ecpp_5',['SearchBar.cpp',['../df/d71/SearchBar_8cpp.html',1,'']]],
-  ['searchbar_2ehpp_6',['SearchBar.hpp',['../d7/d52/SearchBar_8hpp.html',1,'']]],
-  ['searchresultsview_2ecpp_7',['SearchResultsView.cpp',['../da/d96/SearchResultsView_8cpp.html',1,'']]],
-  ['searchresultsview_2ehpp_8',['SearchResultsView.hpp',['../d1/d12/SearchResultsView_8hpp.html',1,'']]],
-  ['sidebysidepanel_2ecpp_9',['SideBySidePanel.cpp',['../d1/d0b/SideBySidePanel_8cpp.html',1,'']]],
-  ['sidebysidepanel_2ehpp_10',['SideBySidePanel.hpp',['../d5/d0c/SideBySidePanel_8hpp.html',1,'']]],
-  ['signalplotpanel_2ecpp_11',['SignalPlotPanel.cpp',['../d2/d3b/SignalPlotPanel_8cpp.html',1,'']]],
-  ['signalplotpanel_2ehpp_12',['SignalPlotPanel.hpp',['../dc/d4a/SignalPlotPanel_8hpp.html',1,'']]],
-  ['startupsplash_2ecpp_13',['StartupSplash.cpp',['../df/d98/StartupSplash_8cpp.html',1,'']]],
-  ['startupsplash_2ehpp_14',['StartupSplash.hpp',['../dd/dd4/StartupSplash_8hpp.html',1,'']]],
-  ['statssummarypanel_2ecpp_15',['StatsSummaryPanel.cpp',['../df/d30/StatsSummaryPanel_8cpp.html',1,'']]],
-  ['statssummarypanel_2ehpp_16',['StatsSummaryPanel.hpp',['../d0/d13/StatsSummaryPanel_8hpp.html',1,'']]],
-  ['structuredconfigdialog_2ecpp_17',['StructuredConfigDialog.cpp',['../d8/d1a/StructuredConfigDialog_8cpp.html',1,'']]],
-  ['structuredconfigdialog_2ehpp_18',['StructuredConfigDialog.hpp',['../da/dcc/StructuredConfigDialog_8hpp.html',1,'']]]
+  ['readme_2emd_0',['README.md',['../da/ddd/README_8md.html',1,'']]],
+  ['requirements_2emd_1',['REQUIREMENTS.md',['../d2/de4/REQUIREMENTS_8md.html',1,'']]],
+  ['result_2ehpp_2',['Result.hpp',['../d3/db2/Result_8hpp.html',1,'']]]
 ];

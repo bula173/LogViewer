@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['regexfilterstrategy_0',['RegexFilterStrategy',['../d0/dd5/classfilters_1_1RegexFilterStrategy.html',1,'filters']]],
-  ['result_1',['Result',['../dd/d2d/classutil_1_1Result.html',1,'util']]],
-  ['result_3c_20void_2c_20e_20_3e_2',['Result&lt; void, E &gt;',['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html',1,'util']]]
+  ['qabstracttablemodel_0',['QAbstractTableModel',['../d7/d33/classQAbstractTableModel.html',1,'']]],
+  ['qdialog_1',['QDialog',['../d9/d46/classQDialog.html',1,'']]],
+  ['qmainwindow_2',['QMainWindow',['../df/d90/classQMainWindow.html',1,'']]],
+  ['qobject_3',['QObject',['../d9/d5b/classQObject.html',1,'']]],
+  ['qtableview_4',['QTableView',['../d8/d5e/classQTableView.html',1,'']]],
+  ['qtreewidget_5',['QTreeWidget',['../d3/d5f/classQTreeWidget.html',1,'']]],
+  ['qtreewidgetitem_6',['QTreeWidgetItem',['../d1/d15/classQTreeWidgetItem.html',1,'']]],
+  ['qwidget_7',['QWidget',['../d8/ded/classQWidget.html',1,'']]]
 ];

@@ -18,6 +18,7 @@ var namespaceparser =
     [ "EvlogTemplateRegistry", "d7/d64/classparser_1_1EvlogTemplateRegistry.html", "d7/d64/classparser_1_1EvlogTemplateRegistry" ],
     [ "IDataParser", "d3/d8b/classparser_1_1IDataParser.html", "d3/d8b/classparser_1_1IDataParser" ],
     [ "IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", "df/d79/classparser_1_1IDataParserObserver" ],
+    [ "JsonParser", "d1/d10/classparser_1_1JsonParser.html", "d1/d10/classparser_1_1JsonParser" ],
     [ "ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", "dc/d03/classparser_1_1ParserFactory" ],
     [ "ParserState", "de/d53/structparser_1_1ParserState.html", "de/d53/structparser_1_1ParserState" ],
     [ "XmlParser", "db/d5c/classparser_1_1XmlParser.html", "db/d5c/classparser_1_1XmlParser" ],
