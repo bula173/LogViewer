@@ -17,7 +17,6 @@
 #include <QtConcurrent/QtConcurrentRun>
 
 #include <cmath>
-#include <limits>
 
 namespace ui::qt
 {
@@ -410,9 +409,8 @@ void SideBySidePanel::OnRightSelectionChanged(int actualRow)
 void SideBySidePanel::SyncFromLeft(int actualRow)
 {
     if (m_syncMode == SyncMode::Manual && (!m_leftRefSet || !m_rightRefSet)) {
-        // Not ready for timestamp sync yet; fall back to row-offset.
-        const int delta = actualRow - m_leftRefRow;
-        const int target = std::clamp(m_rightRefRow + delta,
+        // Both refs required; fall back to row-mirroring until both are set.
+        const int target = std::clamp(actualRow,
                                       0, static_cast<int>(m_rightEvents.Size()) - 1);
         m_syncInProgress = true;
         m_rightView->ScrollToActualRow(target);
@@ -421,11 +419,19 @@ void SideBySidePanel::SyncFromLeft(int actualRow)
     }
 
     const double ts = GetTimestamp(m_leftEvents, static_cast<size_t>(actualRow));
-    // For Manual mode offset is already computed; Timestamp mode uses offset=0.
-    const double target = ts + m_syncOffset;
-    const int rightRow = FindNearestByTimestamp(m_rightEvents, target,
-        static_cast<double>(actualRow - m_leftRefRow));
+    if (ts < 0.0) {
+        // No parseable timestamp — mirror by row index.
+        const int target = std::clamp(actualRow,
+                                      0, static_cast<int>(m_rightEvents.Size()) - 1);
+        m_syncInProgress = true;
+        m_rightView->ScrollToActualRow(target);
+        m_syncInProgress = false;
+        return;
+    }
 
+    // For Manual mode offset is already computed; Timestamp mode uses offset=0.
+    const int rightRow = FindNearestByTimestamp(m_rightEvents,
+                                                ts + m_syncOffset, actualRow);
     if (rightRow < 0) return;
     m_syncInProgress = true;
     m_rightView->ScrollToActualRow(rightRow);
@@ -435,8 +441,7 @@ void SideBySidePanel::SyncFromLeft(int actualRow)
 void SideBySidePanel::SyncFromRight(int actualRow)
 {
     if (m_syncMode == SyncMode::Manual && (!m_leftRefSet || !m_rightRefSet)) {
-        const int delta = actualRow - m_rightRefRow;
-        const int target = std::clamp(m_leftRefRow + delta,
+        const int target = std::clamp(actualRow,
                                       0, static_cast<int>(m_leftEvents.Size()) - 1);
         m_syncInProgress = true;
         m_leftView->ScrollToActualRow(target);
@@ -445,10 +450,17 @@ void SideBySidePanel::SyncFromRight(int actualRow)
     }
 
     const double ts = GetTimestamp(m_rightEvents, static_cast<size_t>(actualRow));
-    const double target = ts - m_syncOffset;
-    const int leftRow = FindNearestByTimestamp(m_leftEvents, target,
-        static_cast<double>(actualRow - m_rightRefRow));
+    if (ts < 0.0) {
+        const int target = std::clamp(actualRow,
+                                      0, static_cast<int>(m_leftEvents.Size()) - 1);
+        m_syncInProgress = true;
+        m_leftView->ScrollToActualRow(target);
+        m_syncInProgress = false;
+        return;
+    }
 
+    const int leftRow = FindNearestByTimestamp(m_leftEvents,
+                                               ts - m_syncOffset, actualRow);
     if (leftRow < 0) return;
     m_syncInProgress = true;
     m_leftView->ScrollToActualRow(leftRow);
@@ -470,36 +482,46 @@ double SideBySidePanel::GetTimestamp(db::EventsContainer& container, size_t row)
 }
 
 int SideBySidePanel::FindNearestByTimestamp(db::EventsContainer& container,
-    double target, double fallbackRowDelta) const
+    double target, int fallbackRow)
 {
-    const size_t total = container.Size();
+    const int total = static_cast<int>(container.Size());
     if (total == 0) return -1;
 
-    // Try timestamp-based lookup: linear scan (handles non-sorted logs correctly;
-    // typically O(n) but n is usually small relative to display rate).
-    double bestDiff = std::numeric_limits<double>::max();
-    int    bestRow  = -1;
-    bool   anyTs    = false;
-
-    for (size_t i = 0; i < total; ++i) {
-        const std::string ts = container.GetEvent(i).findByKey("timestamp");
-        if (ts.empty()) continue;
+    auto getTs = [&](int i) -> double {
+        const std::string s =
+            container.GetEvent(static_cast<size_t>(i)).findByKey("timestamp");
+        if (s.empty()) return -1.0;
         bool ok = false;
-        const double t = QString::fromStdString(ts).toDouble(&ok);
-        if (!ok) continue;
-        anyTs = true;
-        const double diff = std::fabs(t - target);
-        if (diff < bestDiff) {
-            bestDiff = diff;
-            bestRow  = static_cast<int>(i);
-        }
+        const double v = QString::fromStdString(s).toDouble(&ok);
+        return ok ? v : -1.0;
+    };
+
+    // Quick probe: check first/middle/last to decide if timestamps exist.
+    // Log files are almost always monotonically increasing, so use binary search.
+    if (getTs(0) < 0.0 && getTs(total / 2) < 0.0 && getTs(total - 1) < 0.0)
+        return std::clamp(fallbackRow, 0, total - 1);
+
+    // Binary search for the first row with ts >= target.
+    int lo = 0, hi = total;
+    while (lo < hi) {
+        const int mid = lo + (hi - lo) / 2;
+        const double t = getTs(mid);
+        if (t >= 0.0 && t < target)
+            lo = mid + 1;
+        else
+            hi = mid;
     }
 
-    if (anyTs) return bestRow;
-
-    // No parseable timestamps: fall back to index offset from the reference rows.
-    const int fallback = static_cast<int>(std::llround(fallbackRowDelta));
-    return std::clamp(fallback, 0, static_cast<int>(total) - 1);
+    // lo may be 0…total; pick the nearer of lo and lo-1.
+    const int best = std::clamp(lo, 0, total - 1);
+    if (best > 0) {
+        const double t0 = getTs(best - 1);
+        const double t1 = getTs(best);
+        if (t0 >= 0.0 && t1 >= 0.0 &&
+            std::fabs(t0 - target) < std::fabs(t1 - target))
+            return best - 1;
+    }
+    return best;
 }
 
 } // namespace ui::qt

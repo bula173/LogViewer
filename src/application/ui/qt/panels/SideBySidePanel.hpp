@@ -74,14 +74,18 @@ private:
 
     // ── Sync helpers ────────────────────────────────────────────────────────
     double GetTimestamp(db::EventsContainer& container, size_t actualRow) const;
-
-    /// Returns the row in @p container whose timestamp is closest to @p target.
-    /// Falls back to a row-offset lookup when timestamps are absent.
-    int FindNearestByTimestamp(db::EventsContainer& container,
-                               double target, double fallbackDelta) const;
-
     void SyncFromLeft(int actualRow);
     void SyncFromRight(int actualRow);
+
+public:
+    /// Returns the row in @p container whose timestamp is closest to @p target.
+    /// Uses binary search (assumes timestamps are monotonically increasing, which
+    /// is true for virtually all real log files). Falls back to @p fallbackRow
+    /// when the container has no parseable timestamps.
+    static int FindNearestByTimestamp(db::EventsContainer& container,
+                                      double target, int fallbackRow);
+
+private:
 
     // ── Data ────────────────────────────────────────────────────────────────
     db::EventsContainer m_leftEvents;
