@@ -115,6 +115,7 @@ var annotated_dup =
         [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
         [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
         [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel" ],
+        [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
         [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],

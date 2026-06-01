@@ -32,7 +32,7 @@ var searchData=
   ['hastranslation_29',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
   ['hastypefilter_30',['hasTypeFilter',['../db/d6d/structui_1_1qt_1_1FilterProfile.html#a320cba5ccfd557a72be7ab6e5366454f',1,'ui::qt::FilterProfile']]],
   ['header_31',['Anthropic (x-api-key Header)',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md290',1,'']]],
-  ['header_20layout_20all_20little_20endian_32',['Fixed header layout (all little-endian)',['../d1/d55/classparser_1_1EvlogParser.html#autotoc_md762',1,'']]],
+  ['header_20layout_20all_20little_20endian_32',['Fixed header layout (all little-endian)',['../d1/d55/classparser_1_1EvlogParser.html#autotoc_md766',1,'']]],
   ['header_20pch_20issues_33',['Pre-compiled Header (PCH) Issues',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md233',1,'']]],
   ['headerdata_34',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
   ['headers_20reference_35',['Headers Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md685',1,'']]],

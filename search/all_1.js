@@ -39,11 +39,12 @@ var searchData=
   ['11_20export_36',['11. Export',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md753',1,'']]],
   ['12_20themes_37',['12. Themes',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md755',1,'']]],
   ['13_20configuration_38',['13. Configuration',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md757',1,'']]],
-  ['14_20keyboard_20shortcuts_39',['14. Keyboard Shortcuts',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759',1,'']]],
-  ['1_3a_20core_20safety_20v1_201_200_40',['Phase 1: Core Safety (v1.1.0)',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md185',1,'']]],
-  ['1_3a_20minimal_20plugin_20structure_41',['Step 1: Minimal Plugin Structure',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638',1,'']]],
-  ['1_3a_20no_20dependency_20resolution_42',['Issue 3.1: No Dependency Resolution',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md179',1,'']]],
-  ['1_3a_20plugin_20system_20issues_43',['Part 1: Plugin System Issues',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md169',1,'']]],
-  ['1_3a_20raw_20pointer_20observer_20pattern_44',['Issue 2.1: Raw Pointer Observer Pattern',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md175',1,'']]],
-  ['1_3a_20type_20unsafe_20function_20pointer_20management_45',['Issue 1.1: Type-Unsafe Function Pointer Management',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md170',1,'']]]
+  ['14_20plugin_20manager_39',['14. Plugin Manager',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759',1,'']]],
+  ['15_20keyboard_20shortcuts_40',['15. Keyboard Shortcuts',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md763',1,'']]],
+  ['1_3a_20core_20safety_20v1_201_200_41',['Phase 1: Core Safety (v1.1.0)',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md185',1,'']]],
+  ['1_3a_20minimal_20plugin_20structure_42',['Step 1: Minimal Plugin Structure',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638',1,'']]],
+  ['1_3a_20no_20dependency_20resolution_43',['Issue 3.1: No Dependency Resolution',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md179',1,'']]],
+  ['1_3a_20plugin_20system_20issues_44',['Part 1: Plugin System Issues',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md169',1,'']]],
+  ['1_3a_20raw_20pointer_20observer_20pattern_45',['Issue 2.1: Raw Pointer Observer Pattern',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md175',1,'']]],
+  ['1_3a_20type_20unsafe_20function_20pointer_20management_46',['Issue 1.1: Type-Unsafe Function Pointer Management',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md170',1,'']]]
 ];

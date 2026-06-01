@@ -13,5 +13,7 @@ var searchData=
   ['plugineventbus_2ehpp_10',['PluginEventBus.hpp',['../d2/da4/PluginEventBus_8hpp.html',1,'']]],
   ['pluginfunctionregistry_2ehpp_11',['PluginFunctionRegistry.hpp',['../d3/d9a/PluginFunctionRegistry_8hpp.html',1,'']]],
   ['pluginmanager_2ecpp_12',['PluginManager.cpp',['../da/dc5/PluginManager_8cpp.html',1,'']]],
-  ['pluginmanager_2ehpp_13',['PluginManager.hpp',['../da/daa/PluginManager_8hpp.html',1,'']]]
+  ['pluginmanager_2ehpp_13',['PluginManager.hpp',['../da/daa/PluginManager_8hpp.html',1,'']]],
+  ['pluginmanagerdialog_2ecpp_14',['PluginManagerDialog.cpp',['../d0/d6e/PluginManagerDialog_8cpp.html',1,'']]],
+  ['pluginmanagerdialog_2ehpp_15',['PluginManagerDialog.hpp',['../dd/d2a/PluginManagerDialog_8hpp.html',1,'']]]
 ];

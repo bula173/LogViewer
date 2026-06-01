@@ -9,6 +9,7 @@ var searchData=
   ['plugineventbus_6',['PluginEventBus',['../da/d30/classplugin_1_1PluginEventBus.html',1,'plugin']]],
   ['pluginloadinfo_7',['PluginLoadInfo',['../d4/dfa/structplugin_1_1PluginLoadInfo.html',1,'plugin']]],
   ['pluginmanager_8',['PluginManager',['../d3/d67/classplugin_1_1PluginManager.html',1,'plugin']]],
-  ['pluginmetadata_9',['PluginMetadata',['../de/d25/structplugin_1_1PluginMetadata.html',1,'plugin']]],
-  ['pluginupdateinfo_10',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]]
+  ['pluginmanagerdialog_9',['PluginManagerDialog',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html',1,'ui::qt']]],
+  ['pluginmetadata_10',['PluginMetadata',['../de/d25/structplugin_1_1PluginMetadata.html',1,'plugin']]],
+  ['pluginupdateinfo_11',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]]
 ];

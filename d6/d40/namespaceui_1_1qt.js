@@ -21,6 +21,16 @@ var namespaceui_1_1qt =
     [ "anonymous_namespace{PatternAnalysisPanel.cpp}", "d5/dfe/namespaceui_1_1qt_1_1anonymous__namespace_02PatternAnalysisPanel_8cpp_03.html", [
       [ "toEpochSecs", "d5/dfe/namespaceui_1_1qt_1_1anonymous__namespace_02PatternAnalysisPanel_8cpp_03.html#a27cf3d0370508a34fe83c4ad3af751d0", null ]
     ] ],
+    [ "anonymous_namespace{PluginManagerDialog.cpp}", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html", [
+      [ "kColAutoLoad", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a6962f48a825dff08d632e2bbdc5df44e", null ],
+      [ "kColId", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#ae3c111412efc0b44293efca942af32b3", null ],
+      [ "kColName", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#af21eed6c31073fff77bc750743cf7dc6", null ],
+      [ "kColPath", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a9e8e2a3cbdb3aee7264cfd632a861ea5", null ],
+      [ "kColStatus", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a758060b55a66150dd8ab2d964941de57", null ],
+      [ "kColType", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a2ed12d45c8d603e0b78f63c928c7c7db", null ],
+      [ "kColVersion", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a03c0d88e614dd1407ba89ce84b785b15", null ],
+      [ "kNumCols", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#aa33c5bc7fd30dee57a8fe2a0771f2c62", null ]
+    ] ],
     [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" ],
     [ "ExportManager", "dd/d0e/namespaceui_1_1qt_1_1ExportManager.html", "dd/d0e/namespaceui_1_1qt_1_1ExportManager" ],
     [ "panel_utils", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html", [
@@ -53,6 +63,7 @@ var namespaceui_1_1qt =
     [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
     [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
     [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel" ],
+    [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
     [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
     [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
     [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],

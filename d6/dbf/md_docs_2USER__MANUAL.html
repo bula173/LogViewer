@@ -617,7 +617,49 @@ No Sync</h3>
 <p>You can also edit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> directly; changes take effect on the next application start.</p>
 <hr  />
 <h1><a class="anchor" id="autotoc_md759"></a>
-14. Keyboard Shortcuts</h1>
+14. Plugin Manager</h1>
+<p>Open <b>Tools &gt; Manage Plugins…</b> to browse, install, enable, disable, and uninstall plugins without restarting the application.</p>
+<h2><a class="anchor" id="autotoc_md760"></a>
+Plugin Table</h2>
+<p>Each row shows:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Column   </th><th class="markdownTableHeadNone">Meaning    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Name   </td><td class="markdownTableBodyNone">Display name from the plugin's metadata    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">ID   </td><td class="markdownTableBodyNone">Unique plugin identifier    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a>   </td><td class="markdownTableBodyNone">Plugin version string    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Type   </td><td class="markdownTableBodyNone">Functional category (Parser, Analyzer, AI Provider, …)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Status   </td><td class="markdownTableBodyNone"><b>Loaded</b> (green) or <b>Not loaded</b> (grey)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Auto-load   </td><td class="markdownTableBodyNone">Whether the plugin loads automatically on startup    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Path   </td><td class="markdownTableBodyNone">Full path to the plugin file or directory   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md761"></a>
+Actions</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Button   </th><th class="markdownTableHeadNone">What it does    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Install…</b>   </td><td class="markdownTableBodyNone">File picker → accepts <code>.zip</code> plugin archives. The archive is extracted to the plugins directory and loaded immediately.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Uninstall</b>   </td><td class="markdownTableBodyNone">Removes the selected plugin's files from the plugins directory.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Enable</b>   </td><td class="markdownTableBodyNone">Loads a registered-but-not-running plugin into the current session.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Disable</b>   </td><td class="markdownTableBodyNone">Unloads a running plugin without removing its files.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Refresh</b>   </td><td class="markdownTableBodyNone">Rescans the plugins directory and updates the table.   </td></tr>
+</table>
+<p>The plugins directory is shown at the top of the dialog. Use <b>Tools &gt; Reload Plugins</b> (Ctrl+Shift+P) to reload all plugins at once without opening the dialog.</p>
+<hr  />
+<h1><a class="anchor" id="autotoc_md763"></a>
+15. Keyboard Shortcuts</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Shortcut   </th><th class="markdownTableHeadNone">Action    </th></tr>

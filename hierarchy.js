@@ -130,6 +130,7 @@ var hierarchy =
       [ "ui::qt::ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", null ],
       [ "ui::qt::FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", null ],
       [ "ui::qt::LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", null ],
+      [ "ui::qt::PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", null ],
       [ "ui::qt::StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", null ],
       [ "ui::qt::UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", null ]
     ] ],
