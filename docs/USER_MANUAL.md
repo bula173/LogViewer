@@ -297,9 +297,40 @@ The **Patterns** tab groups structurally similar log lines using template cluste
 
 ### 6.5 Trace Viewer
 
-The **Trace Viewer** tab shows a sequence-diagram-style timeline where each actor has a vertical lane and events are drawn as labelled markers. Use it to visualise message flows between system components.
+The **Trace Viewer** tab groups visible events by a user-selected correlation field (e.g. `requestId`, `sessionId`, `traceId`) and displays them in a tree. Each top-level row represents one unique value and shows aggregate statistics.
 
-Actors must be defined in the Actor Definitions panel before the Trace Viewer can render lanes.
+#### Correlation Field
+
+Select the field to group by from the **Correlation field** dropdown. Click **Rescan Fields** if you change the loaded data and need to update the available field names.
+
+#### Tree Columns
+
+| Column | Meaning |
+|--------|---------|
+| Trace / Span | Unique value of the correlation field |
+| Events | Total number of matching events |
+| Errors | Events whose `level`/`severity` is ERROR, CRITICAL, or FATAL |
+| Duration | Time between first and last event in the group |
+| First Seen | Timestamp of the earliest event |
+| Last Seen | Timestamp of the most recent event |
+
+Rows with at least one error are shown in red.
+
+#### Child Rows
+
+Expand a top-level row to see sub-breakdowns:
+
+- **Actors** — which actors/services/components contributed events and how many errors each produced.
+- **Message Types** — distribution of event types (`type`, `action`, `level`) within the group.
+- **Span children** — when events carry `spanId` / `parentSpanId` fields (OpenTelemetry-style distributed tracing), child spans are nested under their parent, forming a call tree.
+
+#### Filtering
+
+Type in the **Filter traces** box to instantly show only rows whose Trace ID contains the search text (case-insensitive).
+
+#### Navigating to Events
+
+Double-click any top-level row to filter the Events table to the events in that trace group. Use the **Clear Filter** button to restore the full view.
 
 ### 6.6 Bookmarks
 
@@ -354,7 +385,9 @@ Select a mode from the **Sync** dropdown in the toolbar:
 
 #### Timestamp Sync (default)
 
-When you click a row on either side, the application computes the timestamp of that event and scrolls the opposite side to the event with the nearest timestamp. This works best when both logs share a common time base (e.g. two DLT recordings from the same system clock).
+When you click a row on either side, the application computes the timestamp of that event and scrolls the opposite side to the event with the nearest timestamp (binary search, O(log n)). This works best when both logs share a common time base (e.g. two DLT recordings from the same system clock).
+
+If the selected event has no parseable timestamp the panel falls back to row-mirroring (same row index on the other side).
 
 #### Manual Sync
 

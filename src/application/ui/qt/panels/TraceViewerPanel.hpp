@@ -2,12 +2,14 @@
 
 #include <QComboBox>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QWidget>
 
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace db {
@@ -24,12 +26,16 @@ namespace ui::qt {
  * @brief Correlation / trace viewer panel.
  *
  * Groups visible events by the value of a user-selected field (e.g.
- * @c requestId, @c sessionId, @c traceId).  Each unique value becomes a row
- * showing aggregate statistics: event count, error count, duration, and
- * first/last seen timestamps.  Double-clicking a row filters the events view
- * to that correlation group.
+ * @c requestId, @c sessionId, @c traceId).  Each unique value becomes a
+ * top-level row showing aggregate statistics: event count, error count,
+ * duration, and first/last timestamps.
  *
- * Refreshes automatically via a modelReset connection wired up in MainWindow.
+ * Child rows show per-actor and per-message-type breakdowns.  When span
+ * fields (@c spanId / @c parentSpanId or @c parentId) are present the
+ * top-level rows are further nested into a call-tree hierarchy.
+ *
+ * A search bar at the top filters the tree to matching trace IDs.
+ * Double-clicking any row filters the events view to the associated events.
  */
 class TraceViewerPanel : public QWidget
 {
@@ -53,15 +59,19 @@ class TraceViewerPanel : public QWidget
     /// Rebuild the tree for the given correlation @p field.
     void RebuildTree(const QString& field);
 
+    /// Show/hide tree items that do (not) contain @p text.
+    void FilterTree(const QString& text);
+
     db::EventsContainer& m_events;
     EventsTableView*     m_eventsView;
 
+    QLineEdit*   m_searchEdit  {nullptr};
     QComboBox*   m_fieldCombo  {nullptr};
     QTreeWidget* m_tree        {nullptr};
     QPushButton* m_clearBtn    {nullptr};
     QLabel*      m_statusLabel {nullptr};
 
-    /// Per-trace event indices populated during RebuildTree; consumed by double-click.
+    /// Maps trace-ID key → event indices (top-level items).
     std::map<std::string, std::vector<unsigned long>> m_traceEvents;
 };
 
