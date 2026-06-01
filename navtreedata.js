@@ -850,30 +850,36 @@ var NAVTREE =
         [ "6.2 Signal Plot", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md724", null ],
         [ "6.3 Timeline Chart", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md725", null ],
         [ "6.4 Pattern Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md726", null ],
-        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md727", null ],
-        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md728", null ],
-        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md729", null ],
-        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md730", null ]
+        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md727", [
+          [ "Correlation Field", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md728", null ],
+          [ "Tree Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md729", null ],
+          [ "Child Rows", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md730", null ],
+          [ "Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md731", null ],
+          [ "Navigating to Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md732", null ]
+        ] ],
+        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733", null ],
+        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md734", null ],
+        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735", null ]
       ] ],
-      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md732", [
-        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733", null ],
-        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md734", null ],
-        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735", [
-          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md736", null ],
-          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md737", null ],
-          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md738", null ]
+      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md737", [
+        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md738", null ],
+        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md739", null ],
+        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md740", [
+          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md741", null ],
+          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742", null ],
+          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743", null ]
         ] ]
       ] ],
-      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md740", null ],
-      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742", [
-        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743", null ],
-        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md744", null ]
+      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md745", null ],
+      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md747", [
+        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md748", null ],
+        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md749", null ]
       ] ],
-      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md746", null ],
-      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md748", null ],
-      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md750", null ],
-      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md752", null ],
-      [ "14. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md754", null ]
+      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md751", null ],
+      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md753", null ],
+      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md755", null ],
+      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md757", null ],
+      [ "14. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759", null ]
     ] ],
     [ "Deprecated List", "da/d58/deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -919,25 +925,25 @@ var NAVTREEINDEX =
 "d0/ded/EvlogParser_8hpp.html",
 "d1/d55/classparser_1_1EvlogParser.html#abda83b8d68f9be83f416f7ae685cea6f",
 "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae96d1d5f544d51377c0d5f6ec11a2c37",
-"d3/d3a/ParserFactory_8hpp.html#a16916297b67db86e922c36c2c9b1bc29",
-"d3/dc4/classutil_1_1ILogger.html#a9cfda7f181b475dcc395dae5816f046c",
-"d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a38626529d9e23dfc3a27215596894750",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a8c738bd2827ae082980fbb1a44213940",
-"d5/d32/classui_1_1qt_1_1UpdateDialog.html#a8bc8164b9de25c38ed78571ff8dce991",
-"d6/d01/DltParser_8cpp.html#ab92c1d5521bca63732d884cbe495f41f",
-"d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a3d9c8f1a7c7729555f79a04b6ffb7959",
-"d7/dda/classui_1_1qt_1_1StartupSplash.html#a122c6c6e08592555e1aba933d8941578",
-"d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html#aa3dba119baab877512dd9a291de1e231",
-"d9/d12/classfilters_1_1Filter.html#ab892c9971d317364cb232b1854183eda",
-"d9/dfd/classui_1_1qt_1_1SearchResultsView.html#ae8292ced4a82db0c64c7193d6c0b99f1",
-"da/dc9/structconfig_1_1ColumnColor.html",
-"dc/d46/classutil_1_1KeyEncryption.html#a8df0d55632e80fdaae768371d1addc4f",
-"dd/d2d/classutil_1_1Result.html#a0f1bbd6f55e406afb8c4554eba3b7e68",
-"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ab8cf31fb7211ab9d2e8e100aa2467afd",
-"de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0",
-"df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a1095fa0f7e9f178cfbe2d5f5b54f34a7",
-"index.html#autotoc_md10"
+"d3/d1f/classui_1_1IMainWindowView.html#acb3c29611e1154568d17c0b677cadc8e",
+"d3/dc4/classutil_1_1ILogger.html#a901ddec794355bebc97d2b467dc4999a",
+"d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496",
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ab116e7d43395ccdfb11e6f37b9a3a0",
+"d5/d32/classui_1_1qt_1_1UpdateDialog.html#a2d43d7cb32b8d2cbac2f7e1fc4855433",
+"d6/d01/DltParser_8cpp.html#a9d2944ff978360bff17dbd32fca00e5c",
+"d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md699",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a389ae4b03ae7cd4519b849090c51e17a",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#af88310c2d1e264fda9f1c9815588f096",
+"d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html#a02690c7f8644afba8a17fcf2d2593255",
+"d9/d12/classfilters_1_1Filter.html#a972bd03a16e6d787ee5f35f7dc9ec64b",
+"d9/dfd/classui_1_1qt_1_1SearchResultsView.html#aab7bb0eff910af0237e3cdc7c997fc20",
+"da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md299",
+"dc/d38/classui_1_1ISearchResultsView.html#a8da17a76af2958e1b1bd303b34bb5d86",
+"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ac4a894b0e82ee276073367f3600e402b",
+"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a57821f9efa52299a75fddfb90ecb1a06",
+"de/d53/structparser_1_1ParserState.html#a18b3dab6126d72d5ffaa67f5de3932ad",
+"df/dae/classui_1_1qt_1_1IStatisticsStrategy.html#a8ebf09e86f7f4a7c6b20aa3a574e90e5",
+"functions_vars_o.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

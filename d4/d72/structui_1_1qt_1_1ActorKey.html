@@ -133,7 +133,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Type-safe composite key identifying a single actor row in <a class="el" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html" title="Panel showing aggregate statistics per &quot;actor&quot; in the visible event set.">ActorsPanel</a>. </p>
 <p>An actor row is uniquely identified by the pair *(definition name, actor name)*. The keys are stored in <code><a class="el" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a51c970a50f1c36617faeddcac54c7558">ActorsPanel::m_uncheckedActors</a></code> and <code><a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#ae7a184d867ecf707101b8889e345c878">FilterProfile::uncheckedActors</a></code> as plain strings so that they can be serialised to JSON without extra ceremony.</p>
-<h3><a class="anchor" id="autotoc_md760"></a>
+<h3><a class="anchor" id="autotoc_md765"></a>
 Encoding format</h3>
 <p>The two components are joined with a NUL character (<code>\\0</code>) which cannot appear in either name (names come from QRegularExpression capture groups and user-entered strings, neither of which allows NUL).</p>
 <dl class="section user"><dt>Usage</dt><dd><div class="fragment"><div class="line"><span class="comment">// Build a key from two strings:</span></div>

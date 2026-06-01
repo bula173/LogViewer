@@ -192,19 +192,19 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Parser for Linux Enterprise Event Logging (evlog) binary files.</p>
 <p>Implements a self-contained reader for the POSIX 1003.25 evlog binary format as produced by the evlogd daemon (evlog.sourceforge.net).</p>
-<h2><a class="anchor" id="autotoc_md756"></a>
+<h2><a class="anchor" id="autotoc_md761"></a>
 File format</h2>
 <p>A flat stream of variable-length records with no file-level header. Each record consists of:</p><ul>
 <li>A 60-byte fixed header (posix_log_entry, 32-bit little-endian layout)</li>
 <li>log_size bytes of variable payload (may be 0)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md757"></a>
+<h2><a class="anchor" id="autotoc_md762"></a>
 Fixed header layout (all little-endian)</h2>
 <p>Offset Size Field 0 4 log_recid — record serial number 4 4 log_size — bytes of payload following this header 8 4 log_format — payload encoding (see Format enum) 12 4 log_event_type — application-defined event type 16 4 log_facility — syslog facility code (LOG_USER=8, …) 20 4 log_severity — syslog severity (0=EMERG … 7=DEBUG) 24 4 log_uid — real UID of logging process 28 4 log_gid — real GID of logging process 32 4 log_pid — PID 36 4 log_pgrp — process group ID 40 4 log_time.tv_sec — UNIX timestamp (seconds) 44 4 log_time.tv_nsec— sub-second nanoseconds 48 4 log_flags — EVL_* flag bits 52 4 log_thread — pthread_t (32-bit value) 56 4 log_processor — CPU number</p>
-<h2><a class="anchor" id="autotoc_md758"></a>
+<h2><a class="anchor" id="autotoc_md763"></a>
 Payload encoding (log_format values)</h2>
 <p>0 NODATA — no payload (log_size should be 0) 1 BINARY — raw binary blob; emitted as hex dump 2 STRING — null-terminated UTF-8/ASCII string; emitted as info 3 PRINTF — null-terminated format string + binary varargs; format string is extracted as info, varargs as hex</p>
-<h2><a class="anchor" id="autotoc_md759"></a>
+<h2><a class="anchor" id="autotoc_md764"></a>
 Emitted event fields</h2>
 <p>timestamp — float seconds (tv_sec.tv_nsec) level — Emergency|Alert|Critical|Error|Warning|Notice|Info|Debug facility — kern|user|mail|daemon|auth|syslog|lpr|news|uucp| cron|authpriv|ftp|local0…local7|unknown event_type — hex string (e.g. "0x00000001") pid — decimal PID uid — decimal UID flags — comma-separated EVL flag names (omitted if none set) recid — decimal record ID cpu — decimal CPU number (omitted if 0) info — decoded payload text </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>

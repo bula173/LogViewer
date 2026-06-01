@@ -92,7 +92,9 @@ $(document).ready(function(){initNavTree('d2/db4/TraceViewerPanel_8cpp.html','..
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">TraceViewerPanel.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -102,109 +104,116 @@ $(document).ready(function(){initNavTree('d2/db4/TraceViewerPanel_8cpp.html','..
 <code>#include &lt;QHBoxLayout&gt;</code><br />
 <code>#include &lt;QHeaderView&gt;</code><br />
 <code>#include &lt;QLabel&gt;</code><br />
+<code>#include &lt;QLineEdit&gt;</code><br />
 <code>#include &lt;QPushButton&gt;</code><br />
 <code>#include &lt;QVBoxLayout&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for TraceViewerPanel.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/db4/TraceViewerPanel_8cpp__incl.png" border="0" usemap="#asrc_2application_2ui_2qt_2panels_2TraceViewerPanel_8cpp" alt=""/></div>
 <map name="asrc_2application_2ui_2qt_2panels_2TraceViewerPanel_8cpp" id="asrc_2application_2ui_2qt_2panels_2TraceViewerPanel_8cpp">
-<area shape="rect" title=" " alt="" coords="945,5,1175,45"/>
-<area shape="rect" href="../../d7/d4a/TraceViewerPanel_8hpp.html" title=" " alt="" coords="546,93,710,119"/>
-<area shape="poly" title=" " alt="" coords="957,48,705,93,704,88,956,43"/>
-<area shape="rect" title=" " alt="" coords="229,167,296,192"/>
-<area shape="poly" title=" " alt="" coords="945,33,842,39,723,51,595,69,470,96,376,128,298,163,296,158,374,123,469,91,594,64,722,46,842,34,944,28"/>
-<area shape="rect" title=" " alt="" coords="320,167,427,192"/>
-<area shape="poly" title=" " alt="" coords="945,32,854,38,750,50,641,68,534,96,462,127,403,161,400,157,460,122,532,91,640,63,749,44,854,33,944,27"/>
-<area shape="rect" title=" " alt="" coords="864,394,923,419"/>
-<area shape="poly" title=" " alt="" coords="1028,48,1001,68,977,95,956,131,939,170,916,251,903,325,897,380,892,380,897,324,910,250,934,169,951,129,972,92,997,64,1025,43"/>
-<area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="387,313,480,339"/>
-<area shape="poly" title=" " alt="" coords="944,29,752,35,642,43,531,55,427,73,335,97,297,112,264,129,238,147,220,168,210,192,214,214,228,234,251,253,312,285,376,307,374,312,310,289,248,258,224,238,209,216,205,192,215,165,234,144,261,124,294,107,333,92,425,68,530,50,642,38,752,30,944,24"/>
-<area shape="rect" href="../../d4/d63/PanelUtils_8hpp.html" title=" " alt="" coords="987,93,1133,119"/>
-<area shape="poly" title=" " alt="" coords="1063,46,1063,79,1057,79,1057,46"/>
-<area shape="rect" title=" " alt="" coords="1158,93,1269,119"/>
-<area shape="poly" title=" " alt="" coords="1098,43,1180,85,1178,89,1096,48"/>
-<area shape="rect" title=" " alt="" coords="1293,93,1403,119"/>
-<area shape="poly" title=" " alt="" coords="1130,43,1293,87,1292,92,1128,48"/>
-<area shape="rect" title=" " alt="" coords="1427,93,1538,119"/>
-<area shape="poly" title=" " alt="" coords="1162,43,1414,89,1413,95,1161,48"/>
-<area shape="rect" title=" " alt="" coords="1563,93,1648,119"/>
-<area shape="poly" title=" " alt="" coords="1176,37,1348,60,1549,91,1548,96,1347,65,1175,43"/>
-<area shape="rect" title=" " alt="" coords="1672,93,1715,119"/>
-<area shape="poly" title=" " alt="" coords="1176,29,1397,49,1527,66,1659,91,1658,96,1526,72,1396,54,1175,35"/>
-<area shape="rect" title=" " alt="" coords="577,167,679,192"/>
-<area shape="poly" title=" " alt="" coords="631,119,631,153,625,153,625,119"/>
-<area shape="poly" title=" " alt="" coords="560,121,310,169,309,164,559,116"/>
-<area shape="poly" title=" " alt="" coords="588,121,428,166,427,160,586,116"/>
-<area shape="rect" title=" " alt="" coords="703,167,809,192"/>
-<area shape="poly" title=" " alt="" coords="650,116,724,157,722,162,647,121"/>
-<area shape="rect" title=" " alt="" coords="833,167,911,192"/>
-<area shape="poly" title=" " alt="" coords="668,116,820,160,819,165,666,121"/>
-<area shape="rect" title=" " alt="" coords="451,167,501,192"/>
-<area shape="poly" title=" " alt="" coords="605,121,514,163,512,158,602,116"/>
-<area shape="poly" title=" " alt="" coords="610,121,591,135,573,152,564,172,563,181,566,191,585,214,614,240,695,295,785,347,859,386,857,390,782,352,693,300,611,245,581,218,562,193,558,182,558,170,569,149,587,131,607,117"/>
-<area shape="rect" title=" " alt="" coords="1335,394,1398,419"/>
-<area shape="poly" title=" " alt="" coords="710,105,817,108,950,117,1096,135,1241,164,1295,174,1339,183,1359,189,1378,200,1396,216,1413,239,1416,252,1413,266,1405,291,1395,314,1375,381,1370,380,1389,312,1400,289,1408,265,1411,252,1408,241,1392,220,1375,205,1357,194,1338,188,1294,180,1239,169,1095,140,950,122,817,113,710,110"/>
-<area shape="poly" title=" " alt="" coords="480,331,851,384,858,386,857,391,850,389,480,336"/>
+<area shape="rect" title=" " alt="" coords="939,5,1170,45"/>
+<area shape="rect" href="../../d7/d4a/TraceViewerPanel_8hpp.html" title=" " alt="" coords="591,93,755,119"/>
+<area shape="poly" title=" " alt="" coords="964,48,743,93,742,88,963,43"/>
+<area shape="rect" title=" " alt="" coords="123,167,189,192"/>
+<area shape="poly" title=" " alt="" coords="939,33,827,40,693,52,549,70,407,96,292,129,197,164,195,159,290,124,406,91,549,65,693,47,827,35,939,28"/>
+<area shape="rect" title=" " alt="" coords="214,167,298,192"/>
+<area shape="poly" title=" " alt="" coords="939,36,734,56,616,73,501,96,389,129,296,164,294,159,387,124,499,91,615,68,733,51,939,31"/>
+<area shape="rect" title=" " alt="" coords="323,167,429,192"/>
+<area shape="poly" title=" " alt="" coords="939,37,768,57,673,74,579,96,488,128,412,163,410,158,486,123,578,91,672,69,767,52,939,32"/>
+<area shape="rect" title=" " alt="" coords="911,394,969,419"/>
+<area shape="poly" title=" " alt="" coords="1033,47,1008,71,983,102,964,139,958,158,956,178,956,254,953,323,946,381,941,380,947,323,951,254,951,178,953,157,959,136,979,99,1004,68,1029,44"/>
+<area shape="rect" title=" " alt="" coords="994,394,1118,419"/>
+<area shape="poly" title=" " alt="" coords="1057,46,1057,178,1057,254,1058,380,1053,380,1052,254,1052,178,1052,46"/>
+<area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="336,313,429,339"/>
+<area shape="poly" title=" " alt="" coords="939,30,810,35,652,46,481,66,311,96,248,105,197,111,174,117,153,128,133,144,113,168,105,183,102,197,103,209,108,221,128,244,159,263,198,279,241,293,323,312,322,317,239,298,196,284,157,268,125,248,103,224,98,211,96,196,100,181,108,165,129,140,150,123,172,112,196,106,248,100,310,91,480,60,651,41,809,30,939,25"/>
+<area shape="rect" href="../../d4/d63/PanelUtils_8hpp.html" title=" " alt="" coords="1092,93,1239,119"/>
+<area shape="poly" title=" " alt="" coords="1083,43,1139,83,1136,87,1080,48"/>
+<area shape="rect" title=" " alt="" coords="1263,93,1374,119"/>
+<area shape="poly" title=" " alt="" coords="1119,43,1268,87,1266,92,1117,48"/>
+<area shape="rect" title=" " alt="" coords="1398,93,1509,119"/>
+<area shape="poly" title=" " alt="" coords="1151,43,1385,89,1384,94,1150,48"/>
+<area shape="rect" title=" " alt="" coords="1533,93,1643,119"/>
+<area shape="poly" title=" " alt="" coords="1171,40,1519,90,1519,96,1170,45"/>
+<area shape="rect" title=" " alt="" coords="1668,93,1753,119"/>
+<area shape="poly" title=" " alt="" coords="1171,34,1391,56,1655,91,1654,96,1391,61,1170,39"/>
+<area shape="rect" title=" " alt="" coords="1777,93,1820,119"/>
+<area shape="poly" title=" " alt="" coords="1171,27,1292,32,1439,44,1600,63,1764,91,1763,96,1599,68,1438,49,1291,38,1170,32"/>
+<area shape="rect" title=" " alt="" coords="813,167,915,192"/>
+<area shape="poly" title=" " alt="" coords="705,116,821,159,819,164,703,121"/>
+<area shape="poly" title=" " alt="" coords="591,117,417,137,203,169,203,164,416,131,591,112"/>
+<area shape="poly" title=" " alt="" coords="599,121,313,169,312,164,598,116"/>
+<area shape="poly" title=" " alt="" coords="626,121,438,166,437,161,625,116"/>
+<area shape="rect" title=" " alt="" coords="505,167,610,192"/>
+<area shape="poly" title=" " alt="" coords="656,121,589,162,587,157,653,116"/>
+<area shape="rect" title=" " alt="" coords="634,167,713,192"/>
+<area shape="poly" title=" " alt="" coords="676,119,676,153,671,153,671,119"/>
+<area shape="rect" title=" " alt="" coords="737,167,788,192"/>
+<area shape="poly" title=" " alt="" coords="689,117,739,156,736,160,686,121"/>
+<area shape="poly" title=" " alt="" coords="591,119,547,129,510,144,497,153,490,164,488,176,494,191,520,218,562,247,615,276,675,304,799,354,899,389,897,394,797,359,673,309,613,281,559,252,517,223,490,193,483,177,485,162,493,150,507,139,545,124,590,114"/>
+<area shape="poly" title=" " alt="" coords="756,107,798,113,843,124,888,140,928,165,944,180,960,203,994,263,1048,380,1044,382,989,266,956,206,940,184,925,169,886,145,842,129,797,118,755,112"/>
+<area shape="rect" title=" " alt="" coords="1362,394,1425,419"/>
+<area shape="poly" title=" " alt="" coords="753,116,852,135,958,164,1049,197,1118,227,1185,262,1268,311,1324,348,1371,383,1367,388,1321,353,1265,316,1182,267,1116,231,1047,202,957,169,851,140,752,121"/>
+<area shape="poly" title=" " alt="" coords="430,333,448,336,568,350,661,356,755,365,874,384,898,390,897,395,873,389,754,370,661,362,567,355,448,341,429,338"/>
 <area shape="rect" title=" " alt="" coords="344,394,421,419"/>
-<area shape="poly" title=" " alt="" coords="428,340,400,384,395,381,424,337"/>
+<area shape="poly" title=" " alt="" coords="385,339,385,380,380,380,380,339"/>
 <area shape="rect" title=" " alt="" coords="446,394,570,419"/>
-<area shape="poly" title=" " alt="" coords="446,337,490,382,486,386,442,341"/>
+<area shape="poly" title=" " alt="" coords="403,337,479,384,476,389,400,341"/>
 <area shape="rect" title=" " alt="" coords="594,394,718,419"/>
-<area shape="poly" title=" " alt="" coords="467,336,612,387,610,392,465,341"/>
+<area shape="poly" title=" " alt="" coords="423,336,604,388,602,393,422,341"/>
 <area shape="rect" title=" " alt="" coords="5,387,147,427"/>
-<area shape="poly" title=" " alt="" coords="387,340,161,389,160,384,386,335"/>
+<area shape="poly" title=" " alt="" coords="339,341,161,387,159,381,337,336"/>
 <area shape="rect" title=" " alt="" coords="171,387,319,427"/>
-<area shape="poly" title=" " alt="" coords="407,341,304,384,302,379,405,336"/>
-<area shape="rect" title=" " alt="" coords="742,394,839,419"/>
-<area shape="poly" title=" " alt="" coords="481,333,595,354,730,384,743,388,742,393,729,389,594,359,480,338"/>
-<area shape="poly" title=" " alt="" coords="1056,120,909,383,904,380,1051,118"/>
-<area shape="poly" title=" " alt="" coords="1134,115,1147,116,1226,123,1293,125,1408,125,1463,127,1521,132,1587,144,1663,164,1749,187,1818,208,1848,224,1876,245,1902,274,1928,312,1932,330,1926,345,1911,358,1888,369,1824,386,1741,397,1559,408,1412,409,1412,403,1559,402,1741,392,1823,381,1886,364,1908,354,1922,342,1927,329,1923,314,1898,277,1873,249,1845,228,1816,213,1748,192,1662,169,1586,149,1521,138,1463,132,1408,130,1293,130,1225,128,1146,121,1133,120"/>
-<area shape="rect" href="../../df/d0f/EventsContainer_8hpp.html" title="Container class for managing collections of LogEvent objects." alt="" coords="1071,167,1227,192"/>
-<area shape="poly" title=" " alt="" coords="1076,117,1126,156,1122,160,1073,121"/>
-<area shape="rect" href="../../da/dc1/EventsTableView_8hpp.html" title=" " alt="" coords="1541,240,1747,265"/>
-<area shape="poly" title=" " alt="" coords="1134,114,1147,116,1244,122,1369,126,1492,138,1543,149,1583,164,1600,177,1614,193,1635,226,1631,229,1610,196,1596,181,1580,169,1542,154,1491,143,1368,132,1243,127,1146,121,1133,120"/>
-<area shape="rect" title=" " alt="" coords="1842,313,1913,339"/>
-<area shape="poly" title=" " alt="" coords="1134,114,1147,116,1279,126,1383,127,1485,135,1545,146,1614,164,1687,193,1755,230,1812,269,1855,302,1852,306,1809,274,1752,235,1685,197,1613,169,1544,151,1485,141,1382,133,1279,131,1146,121,1133,120"/>
-<area shape="rect" title=" " alt="" coords="1473,167,1569,192"/>
-<area shape="poly" title=" " alt="" coords="1134,115,1455,164,1460,165,1459,170,1454,169,1133,121"/>
-<area shape="poly" title=" " alt="" coords="1172,190,1206,210,1242,238,1277,275,1308,314,1355,381,1351,384,1304,317,1273,278,1238,242,1203,215,1170,194"/>
-<area shape="rect" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="973,313,1083,339"/>
-<area shape="poly" title=" " alt="" coords="1085,195,1045,212,1027,225,1013,241,1008,255,1007,270,1017,300,1012,302,1002,271,1002,254,1008,239,1023,221,1042,207,1083,190"/>
-<area shape="rect" href="../../d1/d03/IModel_8hpp.html" title=" " alt="" coords="1303,240,1398,265"/>
-<area shape="poly" title=" " alt="" coords="1183,190,1306,233,1304,238,1181,195"/>
-<area shape="rect" title=" " alt="" coords="1023,240,1089,265"/>
-<area shape="poly" title=" " alt="" coords="1136,194,1084,234,1080,229,1133,190"/>
-<area shape="rect" title=" " alt="" coords="1113,240,1228,265"/>
-<area shape="poly" title=" " alt="" coords="1155,192,1166,226,1161,228,1150,193"/>
-<area shape="poly" title=" " alt="" coords="1009,341,926,389,924,385,1007,337"/>
-<area shape="poly" title=" " alt="" coords="1078,336,1323,392,1321,398,1077,341"/>
-<area shape="poly" title=" " alt="" coords="994,341,839,392,837,387,993,336"/>
-<area shape="rect" title=" " alt="" coords="1099,394,1223,419"/>
-<area shape="poly" title=" " alt="" coords="1049,337,1131,385,1129,389,1046,341"/>
-<area shape="rect" href="../../d3/d84/Concepts_8hpp.html" title="C++20 concept definitions for LogViewer." alt="" coords="965,394,1075,419"/>
-<area shape="poly" title=" " alt="" coords="1029,339,1025,380,1020,380,1024,339"/>
-<area shape="rect" title=" " alt="" coords="885,475,965,500"/>
-<area shape="poly" title=" " alt="" coords="1008,422,952,468,948,464,1004,417"/>
-<area shape="rect" title=" " alt="" coords="990,475,1050,500"/>
-<area shape="poly" title=" " alt="" coords="1023,420,1023,461,1017,461,1017,420"/>
-<area shape="rect" title=" " alt="" coords="1075,475,1221,500"/>
-<area shape="poly" title=" " alt="" coords="1040,417,1119,465,1116,470,1037,422"/>
-<area shape="poly" title=" " alt="" coords="1353,265,1351,313,1351,338,1361,380,1355,381,1345,339,1345,313,1347,265"/>
-<area shape="poly" title=" " alt="" coords="1304,267,1094,313,1093,308,1302,262"/>
-<area shape="rect" href="../../d2/d7e/IView_8hpp.html" title="Interface for view components in the MVC architecture." alt="" coords="1404,313,1489,339"/>
-<area shape="poly" title=" " alt="" coords="1368,263,1421,303,1418,307,1365,268"/>
-<area shape="poly" title=" " alt="" coords="1653,265,1666,301,1666,321,1658,340,1641,354,1616,366,1551,384,1477,397,1412,404,1411,399,1476,392,1549,379,1614,361,1638,350,1654,337,1661,320,1660,301,1648,267"/>
-<area shape="poly" title=" " alt="" coords="1613,268,1493,311,1491,306,1611,263"/>
-<area shape="rect" href="../../dc/dd2/IEventsView_8hpp.html" title=" " alt="" coords="1514,313,1643,339"/>
-<area shape="poly" title=" " alt="" coords="1635,267,1600,305,1597,301,1631,264"/>
-<area shape="rect" title=" " alt="" coords="1719,313,1817,339"/>
-<area shape="poly" title=" " alt="" coords="1665,263,1737,304,1735,309,1663,268"/>
-<area shape="poly" title=" " alt="" coords="1682,263,1830,307,1828,313,1681,268"/>
-<area shape="poly" title=" " alt="" coords="1549,341,1411,392,1409,387,1547,336"/>
+<area shape="poly" title=" " alt="" coords="364,341,292,382,289,377,361,337"/>
+<area shape="rect" title=" " alt="" coords="765,394,862,419"/>
+<area shape="poly" title=" " alt="" coords="430,333,448,336,589,359,730,384,752,389,751,394,729,389,588,364,448,341,429,338"/>
+<area shape="poly" title=" " alt="" coords="1159,121,959,384,955,381,1154,117"/>
+<area shape="poly" title=" " alt="" coords="1176,117,1286,264,1378,381,1374,385,1282,267,1172,120"/>
+<area shape="rect" href="../../df/d0f/EventsContainer_8hpp.html" title="Container class for managing collections of LogEvent objects." alt="" coords="1379,167,1535,192"/>
+<area shape="poly" title=" " alt="" coords="1213,116,1398,161,1396,166,1212,121"/>
+<area shape="rect" href="../../da/dc1/EventsTableView_8hpp.html" title=" " alt="" coords="1695,240,1902,265"/>
+<area shape="poly" title=" " alt="" coords="1239,115,1408,139,1549,164,1663,198,1758,232,1756,237,1662,203,1547,169,1407,144,1238,120"/>
+<area shape="rect" title=" " alt="" coords="1934,313,2005,339"/>
+<area shape="poly" title=" " alt="" coords="1239,114,1608,164,1698,175,1770,180,1804,185,1839,195,1876,212,1916,238,1944,267,1962,299,1957,301,1940,270,1913,242,1873,217,1837,200,1803,191,1770,185,1698,180,1608,169,1239,120"/>
+<area shape="rect" title=" " alt="" coords="1244,167,1340,192"/>
+<area shape="poly" title=" " alt="" coords="1187,116,1261,157,1258,162,1184,121"/>
+<area shape="poly" title=" " alt="" coords="1513,190,1585,210,1615,223,1634,238,1639,252,1634,266,1616,295,1594,312,1539,341,1486,369,1437,391,1435,386,1484,364,1536,336,1591,307,1612,291,1630,264,1634,252,1630,242,1612,228,1583,215,1512,195"/>
+<area shape="rect" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="1143,313,1254,339"/>
+<area shape="poly" title=" " alt="" coords="1406,195,1346,213,1285,242,1248,272,1218,304,1214,301,1244,268,1283,238,1344,208,1404,189"/>
+<area shape="rect" href="../../d1/d03/IModel_8hpp.html" title=" " alt="" coords="1295,240,1390,265"/>
+<area shape="poly" title=" " alt="" coords="1440,194,1374,235,1372,230,1438,190"/>
+<area shape="rect" title=" " alt="" coords="1553,240,1620,265"/>
+<area shape="poly" title=" " alt="" coords="1479,190,1554,231,1552,235,1477,194"/>
+<area shape="rect" title=" " alt="" coords="1415,240,1529,265"/>
+<area shape="poly" title=" " alt="" coords="1462,192,1469,226,1464,227,1457,193"/>
+<area shape="poly" title=" " alt="" coords="1149,341,1070,362,982,389,977,391,975,386,980,384,1068,357,1148,336"/>
+<area shape="poly" title=" " alt="" coords="1179,341,1090,390,1088,385,1176,337"/>
+<area shape="poly" title=" " alt="" coords="1228,336,1353,386,1351,391,1226,341"/>
+<area shape="poly" title=" " alt="" coords="1144,341,899,389,876,394,875,389,898,384,1143,335"/>
+<area shape="rect" href="../../d3/d84/Concepts_8hpp.html" title="C++20 concept definitions for LogViewer." alt="" coords="1143,394,1254,419"/>
+<area shape="poly" title=" " alt="" coords="1201,339,1201,380,1196,380,1196,339"/>
+<area shape="rect" title=" " alt="" coords="1064,475,1144,500"/>
+<area shape="poly" title=" " alt="" coords="1186,422,1130,468,1127,464,1183,417"/>
+<area shape="rect" title=" " alt="" coords="1169,475,1229,500"/>
+<area shape="poly" title=" " alt="" coords="1201,420,1201,461,1196,461,1196,420"/>
+<area shape="rect" title=" " alt="" coords="1253,475,1400,500"/>
+<area shape="poly" title=" " alt="" coords="1219,417,1298,465,1295,470,1216,422"/>
+<area shape="poly" title=" " alt="" coords="1349,265,1388,380,1383,382,1344,266"/>
+<area shape="poly" title=" " alt="" coords="1321,268,1236,309,1233,305,1318,263"/>
+<area shape="rect" href="../../d2/d7e/IView_8hpp.html" title="Interface for view components in the MVC architecture." alt="" coords="1440,313,1525,339"/>
+<area shape="poly" title=" " alt="" coords="1366,263,1449,305,1447,309,1364,268"/>
+<area shape="poly" title=" " alt="" coords="1822,263,1846,278,1867,297,1879,318,1879,329,1873,340,1842,362,1795,379,1738,391,1674,400,1544,408,1439,409,1438,404,1544,402,1674,394,1737,386,1794,374,1839,358,1869,337,1874,328,1874,319,1863,300,1842,282,1819,268"/>
+<area shape="poly" title=" " alt="" coords="1748,268,1539,315,1538,309,1747,263"/>
+<area shape="rect" href="../../dc/dd2/IEventsView_8hpp.html" title=" " alt="" coords="1729,313,1858,339"/>
+<area shape="poly" title=" " alt="" coords="1800,266,1798,300,1793,300,1795,265"/>
+<area shape="rect" title=" " alt="" coords="1605,313,1704,339"/>
+<area shape="poly" title=" " alt="" coords="1777,268,1692,309,1689,305,1774,263"/>
+<area shape="poly" title=" " alt="" coords="1827,263,1930,306,1928,310,1825,268"/>
+<area shape="poly" title=" " alt="" coords="1736,341,1438,399,1437,394,1735,336"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -222,6 +231,22 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" id="r_da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a4ea9358d8573b7b4c6109b2b0d27e504" id="r_a4ea9358d8573b7b4c6109b2b0d27e504"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a4ea9358d8573b7b4c6109b2b0d27e504">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::FirstFieldValue</a> (const <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> &amp;ev, const std::vector&lt; std::string &gt; &amp;candidates)</td></tr>
+<tr class="separator:a4ea9358d8573b7b4c6109b2b0d27e504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a6d939c831b633aa1e4239e15eabfb4d4" id="r_a6d939c831b633aa1e4239e15eabfb4d4"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a6d939c831b633aa1e4239e15eabfb4d4">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::kActorFields</a></td></tr>
+<tr class="separator:a6d939c831b633aa1e4239e15eabfb4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c510eccb2f5a2c7f1b4a262cc366df6" id="r_a5c510eccb2f5a2c7f1b4a262cc366df6"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a5c510eccb2f5a2c7f1b4a262cc366df6">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::kTypeFields</a></td></tr>
+<tr class="separator:a5c510eccb2f5a2c7f1b4a262cc366df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3727257e006695b5e2319075966fae0e" id="r_a3727257e006695b5e2319075966fae0e"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a3727257e006695b5e2319075966fae0e">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::kParentFields</a></td></tr>
+<tr class="separator:a3727257e006695b5e2319075966fae0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29aeca2c314c325e21004ed02faf9340" id="r_a29aeca2c314c325e21004ed02faf9340"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a29aeca2c314c325e21004ed02faf9340">ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::kSpanFields</a></td></tr>
+<tr class="separator:a29aeca2c314c325e21004ed02faf9340"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

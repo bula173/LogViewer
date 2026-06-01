@@ -147,7 +147,7 @@ var searchData=
   ['openaiclient_20tt_144',['Class: &lt;tt&gt;OpenAIClient&lt;/tt&gt;',['../d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md477',1,'']]],
   ['opening_20a_20file_145',['3.2 Opening a File',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md702',1,'']]],
   ['opening_20log_20files_146',['3. Opening Log Files',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md699',1,'']]],
-  ['opening_20the_20panel_147',['7.1 Opening the Panel',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733',1,'']]],
+  ['opening_20the_20panel_147',['7.1 Opening the Panel',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md738',1,'']]],
   ['openleft_148',['OpenLeft',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a097195db9b781772938cc37403355727',1,'ui::qt::SideBySidePanel']]],
   ['openright_149',['OpenRight',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a3b6c15b73cb65b19266b9bcdf0540536',1,'ui::qt::SideBySidePanel']]],
   ['operating_20systems_150',['2.1 Supported Operating Systems',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md583',1,'']]],

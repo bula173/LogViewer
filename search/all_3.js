@@ -37,7 +37,7 @@ var searchData=
   ['3_20runtime_20dependencies_34',['2.3 Runtime Dependencies',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md585',1,'']]],
   ['3_20software_20requirements_20sw_35',['3. Software Requirements (SW)',['../d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md587',1,'']]],
   ['3_20strong_20event_20merge_20flow_20strong_36',['3. &lt;strong&gt;Event Merge Flow&lt;/strong&gt;',['../d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md466',1,'']]],
-  ['3_20synchronisation_20modes_37',['7.3 Synchronisation Modes',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735',1,'']]],
+  ['3_20synchronisation_20modes_37',['7.3 Synchronisation Modes',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md740',1,'']]],
   ['3_20test_20with_20simple_20prompt_38',['3. Test with Simple Prompt',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md298',1,'']]],
   ['3_20time_20range_20filter_39',['5.3 Time Range Filter',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md718',1,'']]],
   ['3_20timeline_20chart_40',['6.3 Timeline Chart',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md725',1,'']]],

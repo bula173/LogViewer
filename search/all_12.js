@@ -93,7 +93,7 @@ var searchData=
   ['integration_20tests_90',['Integration Tests',['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md162',1,'']]],
   ['integration_20with_20doxygen_91',['Integration with Doxygen',['../d0/d52/md_docs_2DIAGRAMS.html#autotoc_md444',1,'']]],
   ['integration_20with_20factory_20pattern_92',['Integration with Factory Pattern',['../d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md498',1,'']]],
-  ['interaction_20model_93',['Interaction model',['../d0/d66/FilterProfilesPanel_8hpp.html#autotoc_md761',1,'']]],
+  ['interaction_20model_93',['Interaction model',['../d0/d66/FilterProfilesPanel_8hpp.html#autotoc_md766',1,'']]],
   ['interface_94',['interface',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md395',1,'1. Implement IAIService Interface'],['../d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md524',1,'IPluginObserver Interface'],['../d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md573',1,'Old IPlugin Interface']]],
   ['interfaces_95',['Plugin System: Type-Specific Interfaces',['../d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html',1,'']]],
   ['interfaces_20deprecated_96',['Legacy: Type-Specific Interfaces (Deprecated)',['../d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md572',1,'']]],
