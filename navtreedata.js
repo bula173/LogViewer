@@ -939,11 +939,11 @@ var NAVTREEINDEX =
 "d9/dfd/classui_1_1qt_1_1SearchResultsView.html#aab7bb0eff910af0237e3cdc7c997fc20",
 "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md299",
 "dc/d38/classui_1_1ISearchResultsView.html#a8da17a76af2958e1b1bd303b34bb5d86",
-"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ac4a894b0e82ee276073367f3600e402b",
-"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a57821f9efa52299a75fddfb90ecb1a06",
-"de/d53/structparser_1_1ParserState.html#a18b3dab6126d72d5ffaa67f5de3932ad",
-"df/dae/classui_1_1qt_1_1IStatisticsStrategy.html#a8ebf09e86f7f4a7c6b20aa3a574e90e5",
-"functions_vars_o.html"
+"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ac3af7058c467afa769fbee0c9a2ea089",
+"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a435b11b95be4c69f8abc5e1672265166",
+"de/d53/structparser_1_1ParserState.html#a0407be63081b9f0b6a210024cbb6b1fb",
+"df/dae/classui_1_1qt_1_1IStatisticsStrategy.html#a2656850d09ef035764409f6f0070941b",
+"functions_vars_k.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
