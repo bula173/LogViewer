@@ -11,9 +11,9 @@ namespace ui::qt::test
 // Helpers
 // ---------------------------------------------------------------------------
 
-static db::EventsContainer MakeContainer(const std::vector<std::string>& timestamps)
+static void FillContainer(db::EventsContainer& c,
+                           const std::vector<std::string>& timestamps)
 {
-    db::EventsContainer c;
     for (int i = 0; i < static_cast<int>(timestamps.size()); ++i)
     {
         db::LogEvent::EventItems items;
@@ -22,7 +22,6 @@ static db::EventsContainer MakeContainer(const std::vector<std::string>& timesta
         items.emplace_back("id", std::to_string(i));
         c.AddEvent(db::LogEvent(i, std::move(items)));
     }
-    return c;
 }
 
 // ---------------------------------------------------------------------------
@@ -37,7 +36,8 @@ TEST(SideBySideSyncTest, EmptyContainerReturnsMinusOne)
 
 TEST(SideBySideSyncTest, SingleEventIsAlwaysNearest)
 {
-    auto c = MakeContainer({"5.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"5.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 0.0,   0), 0);
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 5.0,   0), 0);
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 100.0, 0), 0);
@@ -45,45 +45,52 @@ TEST(SideBySideSyncTest, SingleEventIsAlwaysNearest)
 
 TEST(SideBySideSyncTest, ExactMatch)
 {
-    auto c = MakeContainer({"1.0", "2.0", "3.0", "4.0", "5.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"1.0", "2.0", "3.0", "4.0", "5.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 3.0, 0), 2);
 }
 
 TEST(SideBySideSyncTest, NearestBelow)
 {
     // 2.4 is closer to 2.0 (row 1) than to 3.0 (row 2)
-    auto c = MakeContainer({"1.0", "2.0", "3.0", "4.0", "5.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"1.0", "2.0", "3.0", "4.0", "5.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 2.4, 0), 1);
 }
 
 TEST(SideBySideSyncTest, NearestAbove)
 {
     // 2.6 is closer to 3.0 (row 2)
-    auto c = MakeContainer({"1.0", "2.0", "3.0", "4.0", "5.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"1.0", "2.0", "3.0", "4.0", "5.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 2.6, 0), 2);
 }
 
 TEST(SideBySideSyncTest, BelowFirstClampedToZero)
 {
-    auto c = MakeContainer({"1.0", "2.0", "3.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"1.0", "2.0", "3.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 0.0, 0), 0);
 }
 
 TEST(SideBySideSyncTest, AboveLastClampedToEnd)
 {
-    auto c = MakeContainer({"1.0", "2.0", "3.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"1.0", "2.0", "3.0"});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 99.0, 0), 2);
 }
 
 TEST(SideBySideSyncTest, NoTimestampsFallsBackToFallbackRow)
 {
-    auto c = MakeContainer({"", "", "", ""});
+    db::EventsContainer c;
+    FillContainer(c, {"", "", "", ""});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 5.0, 2), 2);
 }
 
 TEST(SideBySideSyncTest, FallbackRowClampedToRange)
 {
-    auto c = MakeContainer({"", ""});
+    db::EventsContainer c;
+    FillContainer(c, {"", ""});
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 5.0,  99), 1);
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 5.0,  -3), 0);
 }
@@ -91,11 +98,12 @@ TEST(SideBySideSyncTest, FallbackRowClampedToRange)
 TEST(SideBySideSyncTest, LargeContainerBinarySearchPerformance)
 {
     // 100 000 sorted entries — verifies O(log n) path is fast enough.
+    db::EventsContainer c;
     std::vector<std::string> tss;
     tss.reserve(100000);
     for (int i = 0; i < 100000; ++i)
         tss.push_back(std::to_string(static_cast<double>(i) * 0.01));
-    auto c = MakeContainer(tss);
+    FillContainer(c, tss);
 
     // target ≈ 500.00 s → should land around row 50000
     const int row = SideBySidePanel::FindNearestByTimestamp(c, 500.0, 0);
@@ -107,7 +115,8 @@ TEST(SideBySideSyncTest, ManualOffsetApplied)
 {
     // Right log timestamps are left + 10.0 — verify FindNearestByTimestamp
     // returns the correct row when an offset is pre-applied by the caller.
-    auto c = MakeContainer({"10.0", "11.0", "12.0", "13.0", "14.0"});
+    db::EventsContainer c;
+    FillContainer(c, {"10.0", "11.0", "12.0", "13.0", "14.0"});
     const double offset = 10.0;
     // Left row 2 has ts=2.0; with offset, target on right = 2.0 + 10.0 = 12.0 → row 2
     EXPECT_EQ(SideBySidePanel::FindNearestByTimestamp(c, 2.0 + offset, 0), 2);
