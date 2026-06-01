@@ -90,6 +90,11 @@ class ScenariosPanel : public QWidget
     /// Build event-item summary strings for @p actualRow (cached on add).
     void FillEventStrings(ScenarioEvent& se) const;
 
+    /// Persist m_scenarios to QSettings so they survive without a session file.
+    void SaveToSettings() const;
+    /// Restore m_scenarios from QSettings (called once at construction).
+    void LoadFromSettings();
+
     db::EventsContainer& m_events;
     EventsTableView*     m_eventsView;
 

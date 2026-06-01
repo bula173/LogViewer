@@ -17,6 +17,7 @@
 #include <QPlainTextEdit>
 #include <QRadioButton>
 #include <QScrollArea>
+#include <QSettings>
 #include <QSplitter>
 #include <QTableWidgetItem>
 #include <QVBoxLayout>
@@ -39,7 +40,9 @@ ScenariosPanel::ScenariosPanel(db::EventsContainer& events,
     : QWidget(parent), m_events(events), m_eventsView(eventsView)
 {
     BuildLayout();
-    UpdateScenarioCombo(-1);
+    LoadFromSettings();
+    if (m_scenarios.empty())
+        UpdateScenarioCombo(-1);
 }
 
 void ScenariosPanel::BuildLayout()
@@ -171,6 +174,7 @@ void ScenariosPanel::AddEventFromRow(int actualRow)
     util::Logger::Info("[ScenariosPanel] Added event row {} to scenario '{}' ({} event(s) total)",
                        actualRow, sc->name, sc->events.size());
     RebuildEventsTable();
+    SaveToSettings();
     m_statusLabel->setText(
         tr("Added event #%1 to \"%2\"")
             .arg(actualRow)
@@ -198,6 +202,7 @@ void ScenariosPanel::OnNewScenario()
     util::Logger::Debug("[ScenariosPanel] OnNewScenario: user entered name '{}'", name.trimmed().toStdString());
     m_scenarios.push_back({name.trimmed().toStdString(), {}});
     UpdateScenarioCombo(static_cast<int>(m_scenarios.size()) - 1);
+    SaveToSettings();
     util::Logger::Info("[ScenariosPanel] Scenario '{}' created", name.trimmed().toStdString());
 }
 
@@ -229,6 +234,7 @@ void ScenariosPanel::OnRenameScenario()
         tr("\"%1\" — %2 event(s)")
             .arg(QString::fromStdString(sc->name))
             .arg(sc->events.size()));
+    SaveToSettings();
     util::Logger::Info("[ScenariosPanel] Scenario renamed '{}' -> '{}'", oldName, sc->name);
 }
 
@@ -254,6 +260,7 @@ void ScenariosPanel::OnDeleteScenario()
         std::min(m_activeScenario, static_cast<int>(m_scenarios.size()) - 1);
     m_activeScenario = -1; // prevent OnScenarioChanged from using stale index
     UpdateScenarioCombo(newIdx);
+    SaveToSettings();
     util::Logger::Info("[ScenariosPanel] Scenario '{}' deleted ({} events)", deletedName, deletedCount);
 }
 
@@ -291,6 +298,7 @@ void ScenariosPanel::OnRemoveEvent()
                         row, removedActualRow, sc->name);
     sc->events.erase(sc->events.begin() + row);
     RebuildEventsTable();
+    SaveToSettings();
     m_statusLabel->setText(
         tr("\"%1\" — %2 event(s)")
             .arg(QString::fromStdString(sc->name))
@@ -308,6 +316,7 @@ void ScenariosPanel::OnMoveUp()
     std::swap(sc->events[static_cast<size_t>(row)],
               sc->events[static_cast<size_t>(row) - 1]);
     RebuildEventsTable();
+    SaveToSettings();
     m_eventsTable->selectRow(row - 1);
 }
 
@@ -322,6 +331,7 @@ void ScenariosPanel::OnMoveDown()
     std::swap(sc->events[static_cast<size_t>(row)],
               sc->events[static_cast<size_t>(row) + 1]);
     RebuildEventsTable();
+    SaveToSettings();
     m_eventsTable->selectRow(row + 1);
 }
 
@@ -693,6 +703,25 @@ void ScenariosPanel::LoadSessionData(const nlohmann::json& data)
             m_scenarios.push_back(std::move(sc));
     }
     UpdateScenarioCombo(m_scenarios.empty() ? -1 : 0);
+}
+
+void ScenariosPanel::SaveToSettings() const
+{
+    QSettings s("LogViewer", "LogViewer");
+    s.setValue("scenarios/data",
+               QString::fromStdString(GetSessionData().dump()));
+}
+
+void ScenariosPanel::LoadFromSettings()
+{
+    QSettings s("LogViewer", "LogViewer");
+    const QString raw = s.value("scenarios/data").toString();
+    if (raw.isEmpty()) return;
+    try {
+        LoadSessionData(nlohmann::json::parse(raw.toStdString()));
+    } catch (const std::exception& ex) {
+        util::Logger::Warn("[ScenariosPanel] Failed to load scenarios from settings: {}", ex.what());
+    }
 }
 
 int ScenariosPanel::SelectedEventRow() const
