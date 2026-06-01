@@ -528,7 +528,39 @@ You can also edit `config.json` directly; changes take effect on the next applic
 
 ---
 
-## 14. Keyboard Shortcuts
+## 14. Plugin Manager
+
+Open **Tools > Manage Plugins…** to browse, install, enable, disable, and uninstall plugins without restarting the application.
+
+### Plugin Table
+
+Each row shows:
+
+| Column | Meaning |
+|--------|---------|
+| Name | Display name from the plugin's metadata |
+| ID | Unique plugin identifier |
+| Version | Plugin version string |
+| Type | Functional category (Parser, Analyzer, AI Provider, …) |
+| Status | **Loaded** (green) or **Not loaded** (grey) |
+| Auto-load | Whether the plugin loads automatically on startup |
+| Path | Full path to the plugin file or directory |
+
+### Actions
+
+| Button | What it does |
+|--------|-------------|
+| **Install…** | File picker → accepts `.zip` plugin archives. The archive is extracted to the plugins directory and loaded immediately. |
+| **Uninstall** | Removes the selected plugin's files from the plugins directory. |
+| **Enable** | Loads a registered-but-not-running plugin into the current session. |
+| **Disable** | Unloads a running plugin without removing its files. |
+| **Refresh** | Rescans the plugins directory and updates the table. |
+
+The plugins directory is shown at the top of the dialog. Use **Tools > Reload Plugins** (Ctrl+Shift+P) to reload all plugins at once without opening the dialog.
+
+---
+
+## 15. Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|

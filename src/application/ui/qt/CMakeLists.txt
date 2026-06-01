@@ -31,6 +31,7 @@ target_sources(application_core
         dialogs/ConfigEditorDialog.cpp
         dialogs/FilterEditorDialog.cpp
         dialogs/LogFileLoadDialog.cpp
+        dialogs/PluginManagerDialog.cpp
         dialogs/StructuredConfigDialog.cpp
         dialogs/UpdateDialog.cpp
         events/EventsTableModel.cpp

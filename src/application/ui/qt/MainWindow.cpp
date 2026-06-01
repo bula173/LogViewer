@@ -33,6 +33,7 @@
 #include "Logger.hpp"
 #include "Config.hpp"
 #include "dialogs/ConfigEditorDialog.hpp"
+#include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
@@ -807,6 +808,14 @@ void MainWindow::SetupMenus()
         reloadPlugins();
         UpdateStatusText("Plugins reloaded");
         QMessageBox::information(this, tr("Plugins"), tr("Plugins reloaded successfully"));
+    });
+
+    auto* managePluginsAction = toolsMenu->addAction(tr("&Manage Plugins…"));
+    managePluginsAction->setToolTip(
+        tr("Browse, install, enable, disable, and uninstall plugins"));
+    connect(managePluginsAction, &QAction::triggered, this, [this]() {
+        PluginManagerDialog dlg(this);
+        dlg.exec();
     });
 
     // View menu for dock widgets
