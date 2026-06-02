@@ -39,7 +39,7 @@ public slots:
 
 private slots:
     void OnLimitChanged(int value);
-    void OnSceneClicked(unsigned long eventIndex);
+    void OnSceneClicked(qulonglong eventIndex);
 
 private:
     void BuildLayout();
@@ -54,6 +54,7 @@ private:
     QLabel*          m_statusLabel {nullptr};
 
     std::optional<analyzer::ExchangePattern> m_pattern;
+    bool m_refreshing {false};
 };
 
 } // namespace ui::qt

@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <stdexcept>
 
 namespace analyzer
 {
@@ -66,17 +67,20 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events,
     const size_t total = events.Size();
     if (total == 0) return {};
 
-    const size_t step = total > sampleLimit ? total / sampleLimit : 1;
+    // Ceiling division so step >= 2 whenever total > sampleLimit.
+    const size_t step = (total + sampleLimit - 1) / sampleLimit;
 
     // field → set of distinct values (capped at 201 to detect overflow)
     std::map<std::string, std::set<std::string>> fieldVals;
     for (size_t i = 0; i < total; i += step)
     {
-        for (const auto& [k, v] : events.GetEvent(i).getEventItems())
-        {
-            auto& s = fieldVals[k];
-            if (s.size() <= 201) s.insert(v);
-        }
+        try {
+            for (const auto& [k, v] : events.GetEvent(i).getEventItems())
+            {
+                auto& s = fieldVals[k];
+                if (s.size() < 201) s.insert(v);
+            }
+        } catch (const std::out_of_range&) { break; }
     }
 
     struct FieldScore
@@ -137,10 +141,12 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events,
         const size_t probeStep = total > probe ? total / probe : 1;
         for (size_t i = 0; i < total && coExist < 10; i += probeStep)
         {
-            const auto& ev = events.GetEvent(i);
-            if (!ev.findByKey(senderFs->field).empty() &&
-                !ev.findByKey(receiverFs->field).empty())
-                ++coExist;
+            try {
+                const auto& ev = events.GetEvent(i);
+                if (!ev.findByKey(senderFs->field).empty() &&
+                    !ev.findByKey(receiverFs->field).empty())
+                    ++coExist;
+            } catch (const std::out_of_range&) { break; }
         }
 
         if (coExist >= 3)
@@ -150,17 +156,26 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events,
             pat.receiverField = receiverFs->field;
             pat.labelField    = labelFs ? labelFs->field : "";
 
-            // Collect all actor names from both sides
-            pat.actors = *senderFs->values;
-            for (const auto& v : *receiverFs->values)
-                if (!v.empty()) pat.actors.insert(v);
+            // Full scan of ALL events to collect every actor name — the
+            // sampled fieldVals set may have missed actors that only appear
+            // outside the sample window (important for sparse actor values).
+            for (size_t i = 0; i < total; ++i)
+            {
+                try {
+                    const auto& ev = events.GetEvent(i);
+                    const auto s = ev.findByKey(pat.senderField);
+                    const auto r = ev.findByKey(pat.receiverField);
+                    if (!s.empty()) pat.actors.insert(s);
+                    if (!r.empty()) pat.actors.insert(r);
+                } catch (const std::out_of_range&) { break; }
+            }
             pat.actors.erase(""); // remove blanks
 
             result.exchange = std::move(pat);
 
             util::Logger::Info("[ActorDiscoverer] Exchange pattern: {}→{}, label={}, {} actor(s)",
                 senderFs->field, receiverFs->field,
-                pat.labelField.empty() ? "(none)" : pat.labelField,
+                result.exchange->labelField.empty() ? "(none)" : result.exchange->labelField,
                 result.exchange->actors.size());
         }
     }

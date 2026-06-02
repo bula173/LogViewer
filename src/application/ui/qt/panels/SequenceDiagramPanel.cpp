@@ -4,7 +4,6 @@
 #include "events/EventsTableView.hpp"
 #include "Logger.hpp"
 
-#include <QApplication>
 #include <QGraphicsLineItem>
 #include <QGraphicsPolygonItem>
 #include <QGraphicsRectItem>
@@ -18,6 +17,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <climits>
 #include <map>
 #include <vector>
 
@@ -34,7 +34,7 @@ public:
     using QGraphicsScene::QGraphicsScene;
 
 signals:
-    void arrowClicked(unsigned long eventIndex);
+    void arrowClicked(qulonglong eventIndex);
 
 protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e) override;
@@ -48,7 +48,7 @@ class ArrowItem : public QGraphicsLineItem
 {
 public:
     ArrowItem(qreal x1, qreal y1, qreal x2, qreal y2,
-              unsigned long eventIdx, QGraphicsItem* parent = nullptr)
+              qulonglong eventIdx, QGraphicsItem* parent = nullptr)
         : QGraphicsLineItem(x1, y1, x2, y2, parent)
         , m_eventIdx(eventIdx)
     {
@@ -59,10 +59,10 @@ public:
                        .arg(static_cast<qulonglong>(eventIdx)));
     }
 
-    unsigned long eventIndex() const { return m_eventIdx; }
+    qulonglong eventIndex() const { return m_eventIdx; }
 
 private:
-    unsigned long m_eventIdx;
+    qulonglong m_eventIdx;
 };
 
 void ClickScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
@@ -164,6 +164,9 @@ void SequenceDiagramPanel::BuildLayout()
 
 void SequenceDiagramPanel::Refresh()
 {
+    if (m_refreshing) return;
+    m_refreshing = true;
+
     m_scene->clear();
     m_pattern.reset();
 
@@ -171,12 +174,12 @@ void SequenceDiagramPanel::Refresh()
     {
         m_statusLabel->setText(tr("No events loaded"));
         m_statusLabel->setStyleSheet("color: gray;");
+        m_refreshing = false;
         return;
     }
 
     m_statusLabel->setText(tr("Discovering actors…"));
     m_statusLabel->setStyleSheet("color: orange;");
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
     const auto result = analyzer::ActorDiscoverer::Discover(m_events);
 
@@ -186,11 +189,13 @@ void SequenceDiagramPanel::Refresh()
             tr("No from→to pattern detected. "
                "Try a log with sender/receiver/source/dest fields."));
         m_statusLabel->setStyleSheet("color: gray;");
+        m_refreshing = false;
         return;
     }
 
     m_pattern = result.exchange;
     RenderDiagram(*m_pattern);
+    m_refreshing = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -214,11 +219,11 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
     const qreal actorCX   = kActorBoxW / 2.0;
 
     // ── Collect message rows ──────────────────────────────────────────────
-    struct MsgRow { int fromCol, toCol; std::string label; unsigned long idx; };
+    struct MsgRow { int fromCol, toCol; QString label; qulonglong idx; };
     std::vector<MsgRow> rows;
     rows.reserve(static_cast<size_t>(limit));
 
-    for (unsigned long i = 0; i < m_events.Size() && static_cast<int>(rows.size()) < limit; ++i)
+    for (size_t i = 0; i < m_events.Size() && static_cast<int>(rows.size()) < limit; ++i)
     {
         const auto& ev  = m_events.GetEvent(i);
         const auto  frm = ev.findByKey(pat.senderField);
@@ -227,9 +232,12 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
         auto fIt = col.find(frm), tIt = col.find(too);
         if (fIt == col.end() || tIt == col.end()) continue;
 
-        std::string lbl = pat.labelField.empty() ? "" : ev.findByKey(pat.labelField);
-        if (lbl.size() > 32) lbl = lbl.substr(0, 30) + "…";
-        rows.push_back({fIt->second, tIt->second, std::move(lbl), i});
+        QString lbl = pat.labelField.empty()
+                      ? QString{}
+                      : QString::fromStdString(ev.findByKey(pat.labelField));
+        if (lbl.size() > 32) lbl = lbl.left(30) + u"…"_qs;
+        rows.push_back({fIt->second, tIt->second, std::move(lbl),
+                        static_cast<qulonglong>(i)});
     }
 
     // ── Draw lifelines + actor boxes ──────────────────────────────────────
@@ -304,9 +312,9 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
             m_scene->addPolygon(h, pen, QBrush(clr));
         }
 
-        if (!mr.label.empty())
+        if (!mr.label.isEmpty())
         {
-            auto* lbl = m_scene->addText(QString::fromStdString(mr.label));
+            auto* lbl = m_scene->addText(mr.label);
             QFont lf = lbl->font(); lf.setPointSize(7); lbl->setFont(lf);
             lbl->setDefaultTextColor(clr);
             const qreal mx = (x1 + x2) / 2.0 - lbl->boundingRect().width() / 2.0;
@@ -339,9 +347,9 @@ void SequenceDiagramPanel::OnLimitChanged(int)
     if (m_pattern) RenderDiagram(*m_pattern);
 }
 
-void SequenceDiagramPanel::OnSceneClicked(unsigned long eventIndex)
+void SequenceDiagramPanel::OnSceneClicked(qulonglong eventIndex)
 {
-    if (m_eventsView)
+    if (m_eventsView && eventIndex <= static_cast<qulonglong>(INT_MAX))
         m_eventsView->ScrollToActualRow(static_cast<int>(eventIndex));
 }
 
