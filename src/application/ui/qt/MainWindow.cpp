@@ -449,12 +449,12 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     // Wire Signal Browser → Signal Plot + Events filter.
     connect(m_canSignalTree, &CanSignalTreePanel::SignalSelectionChanged,
             this, [this]() {
-                const auto signals = m_canSignalTree->GetSelectedSignals();
-                m_signalPlotPanel->SetSelectedSignals(signals);
+                const auto selectedSigs = m_canSignalTree->GetSelectedSignals();
+                m_signalPlotPanel->SetSelectedSignals(selectedSigs);
 
                 // Filter the events table to rows that carry at least one
                 // selected signal key (stored as "SIG:<name>" in each event).
-                if (signals.empty())
+                if (selectedSigs.empty())
                 {
                     m_eventsView->ClearFilter();
                 }
@@ -466,9 +466,9 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                     for (unsigned long i = 0; i < total; ++i)
                     {
                         const auto& ev = m_events->GetEvent(i);
-                        for (const auto& sig : signals)
+                        for (const auto& sigKey : selectedSigs)
                         {
-                            if (!ev.findByKey(sig).empty())
+                            if (!ev.findByKey(sigKey).empty())
                             {
                                 matching.push_back(i);
                                 break;
