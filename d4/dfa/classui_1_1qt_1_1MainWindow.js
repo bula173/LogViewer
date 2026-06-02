@@ -142,6 +142,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "m_searchDebounceTimer", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a5a09dd2a70e193351737ab9a67789b27", null ],
     [ "m_searchEdit", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af74c23249feb8641ed02da9172e6e56f", null ],
     [ "m_searchResults", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a225309f239330dc130453411f4913094", null ],
+    [ "m_sequencePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af2c9813979cd52576a5c6397b47e2c59", null ],
     [ "m_sideBySidePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ac7395e68142c32999765a40c848285bd", null ],
     [ "m_signalBrowserDock", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ba78833a098e578dcd9418f16f49924", null ],
     [ "m_signalPlotPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aa1ae70e024f7b8827a91a86128c34ab1", null ],

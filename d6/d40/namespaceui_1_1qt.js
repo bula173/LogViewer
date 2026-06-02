@@ -30,6 +30,16 @@ var namespaceui_1_1qt =
       [ "kColVersion", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a03c0d88e614dd1407ba89ce84b785b15", null ],
       [ "kNumCols", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#aa33c5bc7fd30dee57a8fe2a0771f2c62", null ]
     ] ],
+    [ "anonymous_namespace{SequenceDiagramPanel.cpp}", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html", [
+      [ "kActorBoxH", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a90f8c8d194c3663ae6c6af8a8d45ac2a", null ],
+      [ "kActorBoxW", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a0daafc93c7e58208d1148021204dbf49", null ],
+      [ "kArrowHead", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a43ec2737aca073e252cbc6494349579f", null ],
+      [ "kColSpacing", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#adc9e5e5d9a001ae4b3f7a564c3a0a86a", null ],
+      [ "kFirstMsgY", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a441235345319bd838c9b5e149cdd00f9", null ],
+      [ "kHeaderY", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a2f13988c30fc1555733ba5353587e44a", null ],
+      [ "kLabelOffY", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a2aecb5c10c4d638336a470b129d8bffb", null ],
+      [ "kRowH", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a1f84f09f51607df68427a3b417661486", null ]
+    ] ],
     [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" ],
     [ "ExportManager", "dd/d0e/namespaceui_1_1qt_1_1ExportManager.html", "dd/d0e/namespaceui_1_1qt_1_1ExportManager" ],
     [ "panel_utils", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html", [
@@ -66,6 +76,7 @@ var namespaceui_1_1qt =
     [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
     [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
     [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
+    [ "SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel" ],
     [ "SideBySidePanel", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html", "df/dbf/classui_1_1qt_1_1SideBySidePanel" ],
     [ "SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel" ],
     [ "StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", "d7/dda/classui_1_1qt_1_1StartupSplash" ],

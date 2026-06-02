@@ -9,5 +9,6 @@ var searchData=
   ['events_6',['events',['../d6/d35/structui_1_1qt_1_1ScenariosPanel_1_1Scenario.html#abd70c6901425518da4e1a3385a6ab4a4',1,'ui::qt::ScenariosPanel::Scenario']]],
   ['eventssincelastnotify_7',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
   ['eventtype_8',['eventType',['../dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929',1,'parser::EvlogTemplate']]],
-  ['exception_9',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]]
+  ['exception_9',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
+  ['exchange_10',['exchange',['../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html#a7eaf7a7943983eb7e6572560871b3e11',1,'analyzer::ActorDiscoveryResult']]]
 ];

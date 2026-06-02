@@ -8,5 +8,6 @@ var searchData=
   ['evlogtemplate_5',['EvlogTemplate',['../dc/d0f/structparser_1_1EvlogTemplate.html',1,'parser']]],
   ['evlogtemplatefield_6',['EvlogTemplateField',['../d5/dcd/structparser_1_1EvlogTemplateField.html',1,'parser']]],
   ['evlogtemplateregistry_7',['EvlogTemplateRegistry',['../d7/d64/classparser_1_1EvlogTemplateRegistry.html',1,'parser']]],
-  ['exactmatchstrategy_8',['ExactMatchStrategy',['../de/d0e/classfilters_1_1ExactMatchStrategy.html',1,'filters']]]
+  ['exactmatchstrategy_8',['ExactMatchStrategy',['../de/d0e/classfilters_1_1ExactMatchStrategy.html',1,'filters']]],
+  ['exchangepattern_9',['ExchangePattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html',1,'analyzer']]]
 ];

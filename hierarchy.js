@@ -3,6 +3,8 @@ var hierarchy =
     [ "ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html", null ],
     [ "ui::qt::ActorsPanel::ActorData", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html", null ],
     [ "ui::qt::ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", null ],
+    [ "analyzer::ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", null ],
+    [ "analyzer::ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", null ],
     [ "ui::qt::ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", null ],
     [ "updates::AppUpdateInfo", "d5/d29/structupdates_1_1AppUpdateInfo.html", null ],
     [ "ui::qt::BookmarksPanel::Bookmark", "da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html", null ],
@@ -19,6 +21,7 @@ var hierarchy =
     [ "parser::EvlogTemplate", "dc/d0f/structparser_1_1EvlogTemplate.html", null ],
     [ "parser::EvlogTemplateField", "d5/dcd/structparser_1_1EvlogTemplateField.html", null ],
     [ "parser::EvlogTemplateRegistry", "d7/d64/classparser_1_1EvlogTemplateRegistry.html", null ],
+    [ "analyzer::ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", null ],
     [ "config::FieldDictionary", "d1/de4/structconfig_1_1FieldDictionary.html", null ],
     [ "config::FieldTranslator", "d9/da7/classconfig_1_1FieldTranslator.html", null ],
     [ "filters::Filter", "d9/d12/classfilters_1_1Filter.html", null ],
@@ -134,6 +137,12 @@ var hierarchy =
       [ "ui::qt::StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", null ],
       [ "ui::qt::UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", null ]
     ] ],
+    [ "QGraphicsLineItem", "d6/d1f/classQGraphicsLineItem.html", [
+      [ "ArrowItem", "df/d2a/classArrowItem.html", null ]
+    ] ],
+    [ "QGraphicsScene", "d9/d74/classQGraphicsScene.html", [
+      [ "ClickScene", "d5/ddf/classClickScene.html", null ]
+    ] ],
     [ "QMainWindow", "df/d90/classQMainWindow.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
@@ -162,6 +171,7 @@ var hierarchy =
       [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],
       [ "ui::qt::ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", null ],
       [ "ui::qt::SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", null ],
+      [ "ui::qt::SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html", null ],
       [ "ui::qt::SideBySidePanel", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html", null ],
       [ "ui::qt::SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", null ],
       [ "ui::qt::StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", null ],

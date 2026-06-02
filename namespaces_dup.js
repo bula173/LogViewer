@@ -1,6 +1,7 @@
 var namespaces_dup =
 [
     [ "ai", "de/d58/namespaceai.html", null ],
+    [ "analyzer", "dd/d3e/namespaceanalyzer.html", "dd/d3e/namespaceanalyzer" ],
     [ "anonymous_namespace{MyAppQt.cpp}", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html", [
       [ "ApplyModernStyle", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#afb42b685164ecbec2720d91b1cdeb053", null ],
       [ "kQtAppName", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#a2ffd91e89808a06ae22db64e0737d21c", null ]

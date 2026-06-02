@@ -13,7 +13,7 @@ var searchData=
   ['addeventbatch_10',['AddEventBatch',['../dd/dc2/classdb_1_1EventsContainer.html#aa2ad44074f50410d379fa0d620235857',1,'db::EventsContainer']]],
   ['addeventfromrow_11',['AddEventFromRow',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a148e71654cbe17e9a61dd5fec83a1fad',1,'ui::qt::ScenariosPanel']]],
   ['addfilter_12',['addFilter',['../d5/db4/classfilters_1_1FilterManager.html#a9794118549d09e87f1bc49e8f85709a2',1,'filters::FilterManager']]],
-  ['additem_13',['additem',['../dc/d2d/classmvc_1_1IModel.html#ab5c7c61c608ac93e0c61b268aeccfd65',1,'mvc::IModel::AddItem()'],['../dd/dc2/classdb_1_1EventsContainer.html#a69fc7f556f697e95b390a025e17229ca',1,'db::EventsContainer::AddItem()']]],
+  ['additem_13',['additem',['../dd/dc2/classdb_1_1EventsContainer.html#a69fc7f556f697e95b390a025e17229ca',1,'db::EventsContainer::AddItem()'],['../dc/d2d/classmvc_1_1IModel.html#ab5c7c61c608ac93e0c61b268aeccfd65',1,'mvc::IModel::AddItem()']]],
   ['addnode_14',['AddNode',['../df/d48/classplugin_1_1PluginDependencyGraph.html#a9f52b9efd11645def50c63b08c1ea83d',1,'plugin::PluginDependencyGraph']]],
   ['addobserver_15',['AddObserver',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a8d356c1f58584481d90ecbce4a6bcbd4',1,'ui::qt::StructuredConfigDialog']]],
   ['addrow_16',['AddRow',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a53788917fc9a9d07a260583df44f873e',1,'ui::qt::StartupSplash']]],
@@ -36,10 +36,12 @@ var searchData=
   ['apppluginkeydecode_33',['AppPluginKeyDecode',['../da/dc5/PluginManager_8cpp.html#a22ac085c47ab06769707bf57e79ef3df',1,'PluginManager.cpp']]],
   ['apppluginkeyencode_34',['AppPluginKeyEncode',['../da/dc5/PluginManager_8cpp.html#a617bb5b4ecc03475e674ecb862143043',1,'PluginManager.cpp']]],
   ['apppluginlog_35',['AppPluginLog',['../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7',1,'PluginManager.cpp']]],
-  ['ascparser_36',['AscParser',['../dd/dfa/classparser_1_1AscParser.html#a2e07855a549c1518a08527d815706aa5',1,'parser::AscParser']]],
-  ['askstring_37',['askstring',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9adc6b663ba377ddfba1963fb47a70e5',1,'ui::qt::MainWindow::AskString()'],['../d3/d1f/classui_1_1IMainWindowView.html#abd20b4fc1e195cb387addc69653b9b0a',1,'ui::IMainWindowView::AskString()']]],
-  ['aslongstr_38',['asLongStr',['../d1/d14/structVersion_1_1Version.html#a3fe81ba3bc2ada2ccf234df65883770e',1,'Version::Version']]],
-  ['asnumber_39',['asNumber',['../d1/d14/structVersion_1_1Version.html#a294c6dde761e937a5e783979069ebc28',1,'Version::Version']]],
-  ['asshortstr_40',['asShortStr',['../d1/d14/structVersion_1_1Version.html#a2373b99b4a3de295a2d0c386a982c835',1,'Version::Version']]],
-  ['avg_41',['avg',['../d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html#ae5bd39a53e0c74b1d4a266483734822f',1,'ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum']]]
+  ['arrowclicked_36',['arrowClicked',['../d5/ddf/classClickScene.html#adb45fd126146910f5105657710abdad3',1,'ClickScene']]],
+  ['arrowitem_37',['ArrowItem',['../df/d2a/classArrowItem.html#a2d83432d099e1f026e795abcee2f6e75',1,'ArrowItem']]],
+  ['ascparser_38',['AscParser',['../dd/dfa/classparser_1_1AscParser.html#a2e07855a549c1518a08527d815706aa5',1,'parser::AscParser']]],
+  ['askstring_39',['askstring',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a9adc6b663ba377ddfba1963fb47a70e5',1,'ui::qt::MainWindow::AskString()'],['../d3/d1f/classui_1_1IMainWindowView.html#abd20b4fc1e195cb387addc69653b9b0a',1,'ui::IMainWindowView::AskString()']]],
+  ['aslongstr_40',['asLongStr',['../d1/d14/structVersion_1_1Version.html#a3fe81ba3bc2ada2ccf234df65883770e',1,'Version::Version']]],
+  ['asnumber_41',['asNumber',['../d1/d14/structVersion_1_1Version.html#a294c6dde761e937a5e783979069ebc28',1,'Version::Version']]],
+  ['asshortstr_42',['asShortStr',['../d1/d14/structVersion_1_1Version.html#a2373b99b4a3de295a2d0c386a982c835',1,'Version::Version']]],
+  ['avg_43',['avg',['../d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html#ae5bd39a53e0c74b1d4a266483734822f',1,'ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum']]]
 ];

@@ -1,5 +1,10 @@
 var annotated_dup =
 [
+    [ "analyzer", "dd/d3e/namespaceanalyzer.html", [
+      [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
+      [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
+      [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ]
+    ] ],
     [ "config", "d6/d7f/namespaceconfig.html", [
       [ "ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", "da/dc9/structconfig_1_1ColumnColor" ],
       [ "ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", "db/deb/structconfig_1_1ColumnConfig" ],
@@ -119,6 +124,7 @@ var annotated_dup =
         [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
+        [ "SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel" ],
         [ "SideBySidePanel", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html", "df/dbf/classui_1_1qt_1_1SideBySidePanel" ],
         [ "SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel" ],
         [ "StartupSplash", "d7/dda/classui_1_1qt_1_1StartupSplash.html", "d7/dda/classui_1_1qt_1_1StartupSplash" ],
@@ -161,8 +167,12 @@ var annotated_dup =
     [ "Version", "d8/d16/namespaceVersion.html", [
       [ "Version", "d1/d14/structVersion_1_1Version.html", "d1/d14/structVersion_1_1Version" ]
     ] ],
+    [ "ArrowItem", "df/d2a/classArrowItem.html", "df/d2a/classArrowItem" ],
+    [ "ClickScene", "d5/ddf/classClickScene.html", "d5/ddf/classClickScene" ],
     [ "QAbstractTableModel", "d7/d33/classQAbstractTableModel.html", null ],
     [ "QDialog", "d9/d46/classQDialog.html", null ],
+    [ "QGraphicsLineItem", "d6/d1f/classQGraphicsLineItem.html", null ],
+    [ "QGraphicsScene", "d9/d74/classQGraphicsScene.html", null ],
     [ "QMainWindow", "df/d90/classQMainWindow.html", null ],
     [ "QObject", "d9/d5b/classQObject.html", null ],
     [ "QTableView", "d8/d5e/classQTableView.html", null ],

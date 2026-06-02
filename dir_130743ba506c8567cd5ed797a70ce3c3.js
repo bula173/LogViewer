@@ -30,6 +30,8 @@ var dir_130743ba506c8567cd5ed797a70ce3c3 =
     [ "SearchBar.hpp", "d7/d52/SearchBar_8hpp.html", "d7/d52/SearchBar_8hpp" ],
     [ "SearchResultsView.cpp", "da/d96/SearchResultsView_8cpp.html", null ],
     [ "SearchResultsView.hpp", "d1/d12/SearchResultsView_8hpp.html", "d1/d12/SearchResultsView_8hpp" ],
+    [ "SequenceDiagramPanel.cpp", "d2/d28/SequenceDiagramPanel_8cpp.html", "d2/d28/SequenceDiagramPanel_8cpp" ],
+    [ "SequenceDiagramPanel.hpp", "d3/dfb/SequenceDiagramPanel_8hpp.html", "d3/dfb/SequenceDiagramPanel_8hpp" ],
     [ "SideBySidePanel.cpp", "d1/d0b/SideBySidePanel_8cpp.html", null ],
     [ "SideBySidePanel.hpp", "d5/d0c/SideBySidePanel_8hpp.html", "d5/d0c/SideBySidePanel_8hpp" ],
     [ "SignalPlotPanel.cpp", "d2/d3b/SignalPlotPanel_8cpp.html", "d2/d3b/SignalPlotPanel_8cpp" ],
