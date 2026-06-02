@@ -102,7 +102,7 @@ var searchData=
   ['onsavelayoutrequested_99',['OnSaveLayoutRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a82692c28dcfacde872fbd6dc6b769f30',1,'ui::qt::MainWindow']]],
   ['onsavesession_100',['OnSaveSession',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a80386d9078b0842ee6fdf1f28f65f406',1,'ui::qt::MainWindow']]],
   ['onscenariochanged_101',['OnScenarioChanged',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3cce3c80f6913ba8b0525c94c7c3a0f7',1,'ui::qt::ScenariosPanel']]],
-  ['onsceneclicked_102',['OnSceneClicked',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#abfce764a64899540e223f3fe13c07f0f',1,'ui::qt::SequenceDiagramPanel']]],
+  ['onsceneclicked_102',['OnSceneClicked',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a954c9e838cb86b3c1d7ceb9f633662aa',1,'ui::qt::SequenceDiagramPanel']]],
   ['onsearchrequested_103',['OnSearchRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ae984d79655a709f7f341b9888afef376',1,'ui::qt::MainWindow']]],
   ['onsearchresultactivated_104',['onsearchresultactivated',['../d3/df7/classui_1_1ISearchResultsViewObserver.html#a4154171545f362148af4cea153304393',1,'ui::ISearchResultsViewObserver::OnSearchResultActivated()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aa028ec8e1573f7c6f827bcfa115aab6a',1,'ui::qt::MainWindow::OnSearchResultActivated()']]],
   ['onselectionchanged_105',['OnSelectionChanged',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#ae0ed793288ffb6d9bf1d7de96e40893e',1,'ui::qt::PluginManagerDialog']]],

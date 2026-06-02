@@ -1,7 +1,7 @@
 var searchData=
 [
   ['objects_0',['Mock Objects',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md406',1,'']]],
-  ['observer_1',['observer',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html',1,'ui::qt::SideBySidePanel::LoadJob::Observer'],['../dd/d74/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob.html#ad989b18af943c33279f3113f1fb02b0a',1,'ui::qt::SideBySidePanel::LoadJob::observer'],['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a0c1aa33634a5d0188cc3971213b29261',1,'ui::qt::SideBySidePanel::LoadJob::Observer::Observer()'],['../d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md531',1,'Register as Observer']]],
+  ['observer_1',['observer',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html',1,'ui::qt::SideBySidePanel::LoadJob::Observer'],['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a0c1aa33634a5d0188cc3971213b29261',1,'ui::qt::SideBySidePanel::LoadJob::Observer::Observer()'],['../dd/d74/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob.html#ad989b18af943c33279f3113f1fb02b0a',1,'ui::qt::SideBySidePanel::LoadJob::observer'],['../d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md531',1,'Register as Observer']]],
   ['observer_20lifecycle_20events_2',['Issue 2.2: No Observer Lifecycle Events',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md176',1,'']]],
   ['observer_20pattern_3',['observer pattern',['../d1/df7/md_docs_2API__EXAMPLES.html#autotoc_md92',1,'Handling Model Changes (Observer Pattern)'],['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md175',1,'Issue 2.1: Raw Pointer Observer Pattern'],['../d4/d34/md_docs_2ARCHITECTURE.html#autotoc_md138',1,'Observer Pattern'],['../d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html',1,'Plugin Observer Pattern']]],
   ['observer_20pattern_20✅_4',['Observer Pattern ✅',['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md372',1,'']]],
@@ -123,7 +123,7 @@ var searchData=
   ['onsavelayoutrequested_120',['OnSaveLayoutRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a82692c28dcfacde872fbd6dc6b769f30',1,'ui::qt::MainWindow']]],
   ['onsavesession_121',['OnSaveSession',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a80386d9078b0842ee6fdf1f28f65f406',1,'ui::qt::MainWindow']]],
   ['onscenariochanged_122',['OnScenarioChanged',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a3cce3c80f6913ba8b0525c94c7c3a0f7',1,'ui::qt::ScenariosPanel']]],
-  ['onsceneclicked_123',['OnSceneClicked',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#abfce764a64899540e223f3fe13c07f0f',1,'ui::qt::SequenceDiagramPanel']]],
+  ['onsceneclicked_123',['OnSceneClicked',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a954c9e838cb86b3c1d7ceb9f633662aa',1,'ui::qt::SequenceDiagramPanel']]],
   ['onsearchrequested_124',['OnSearchRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ae984d79655a709f7f341b9888afef376',1,'ui::qt::MainWindow']]],
   ['onsearchresultactivated_125',['onsearchresultactivated',['../d3/df7/classui_1_1ISearchResultsViewObserver.html#a4154171545f362148af4cea153304393',1,'ui::ISearchResultsViewObserver::OnSearchResultActivated()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aa028ec8e1573f7c6f827bcfa115aab6a',1,'ui::qt::MainWindow::OnSearchResultActivated()']]],
   ['onselectionchanged_126',['OnSelectionChanged',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#ae0ed793288ffb6d9bf1d7de96e40893e',1,'ui::qt::PluginManagerDialog']]],
