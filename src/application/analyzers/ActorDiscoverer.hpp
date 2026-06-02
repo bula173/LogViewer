@@ -37,7 +37,7 @@ public:
     /// Scan up to @p sampleLimit events and return discovery results.
     /// The sample is spread evenly across the container so the result
     /// represents the whole log, not just the beginning.
-    static ActorDiscoveryResult Discover(const db::EventsContainer& events,
+    static ActorDiscoveryResult Discover(db::EventsContainer& events,
                                           size_t sampleLimit = 10'000);
 
     // Exposed for unit tests.

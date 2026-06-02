@@ -60,7 +60,7 @@ int ActorDiscoverer::ScoreLabel   (const std::string& f) { return ScoreAgainst(T
 // Main discovery
 // ---------------------------------------------------------------------------
 
-ActorDiscoveryResult ActorDiscoverer::Discover(const db::EventsContainer& events,
+ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events,
                                                 size_t sampleLimit)
 {
     const size_t total = events.Size();
