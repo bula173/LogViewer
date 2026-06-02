@@ -1113,17 +1113,41 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
     // most AV sandbox run limits while still checking promptly for the user.
     if (m_updateChecker && ShouldCheckForUpdates())
     {
-        // Show UpdateDialog non-modally when startup check finds an update.
+        // Notify the user via message box when the startup check finds updates.
         // Single-shot so only fires once per startup (the permanent
         // OnUpdateCheckComplete still runs to update the badge).
         connect(m_updateChecker, &UpdateChecker::UpdateCheckComplete,
                 this, [this](updates::UpdateCheckResult result) {
                     if (!result.HasAnyUpdate()) return;
-                    auto* dlg = new UpdateDialog(result, m_updateChecker, this);
-                    connect(dlg, &UpdateDialog::ApplyPluginUpdate,
-                            this, &MainWindow::OnApplyPluginUpdate);
-                    dlg->setAttribute(Qt::WA_DeleteOnClose);
-                    dlg->show();
+
+                    // Build a concise summary for the message box.
+                    QStringList lines;
+                    if (result.app.isNewer)
+                        lines << tr("• App update: v%1 available")
+                                     .arg(QString::fromStdString(result.app.version));
+                    int compatPlugins = 0;
+                    for (const auto& p : result.plugins)
+                        if (p.isCompatible) ++compatPlugins;
+                    if (compatPlugins > 0)
+                        lines << tr("• %1 plugin update(s) available").arg(compatPlugins);
+
+                    QMessageBox mb(this);
+                    mb.setWindowTitle(tr("Update Available"));
+                    mb.setIcon(QMessageBox::Information);
+                    mb.setText(tr("<b>A LogViewer update is available.</b>"));
+                    mb.setInformativeText(lines.join('\n'));
+                    mb.setStandardButtons(QMessageBox::Ok | QMessageBox::Open);
+                    mb.setButtonText(QMessageBox::Open, tr("View Details…"));
+                    mb.setDefaultButton(QMessageBox::Open);
+
+                    if (mb.exec() == QMessageBox::Open)
+                    {
+                        auto* dlg = new UpdateDialog(result, m_updateChecker, this);
+                        connect(dlg, &UpdateDialog::ApplyPluginUpdate,
+                                this, &MainWindow::OnApplyPluginUpdate);
+                        dlg->setAttribute(Qt::WA_DeleteOnClose);
+                        dlg->exec();
+                    }
                 }, static_cast<Qt::ConnectionType>(Qt::SingleShotConnection));
         QTimer::singleShot(30000, m_updateChecker, &UpdateChecker::CheckAsync);
         util::Logger::Info("[MainWindow] Update check scheduled (startup)");
