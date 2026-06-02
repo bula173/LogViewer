@@ -77,15 +77,6 @@ private slots:
     void OnUpdateItemHighlight();
     void OnDeleteItemHighlight();
 
-    // Plugins tab
-    void OnPluginSelectionChanged();
-    void OnBrowsePluginClicked();
-    void OnLoadPluginClicked();
-    void OnUnloadPluginClicked();
-    void OnEnablePluginClicked();
-    void OnAutoLoadPluginToggled(bool checked);
-    void OnSetLicenseClicked();
-    void OnRefreshPluginsClicked();
 
 private:
     void BuildUi();
@@ -95,7 +86,6 @@ private:
     void InitDictionaryTab();
     void InitColorsTab();
     void InitItemHighlightsTab();
-    void InitPluginsTab();
 
     void LoadConfigToUi();
 
@@ -113,9 +103,6 @@ private:
     void UpdateItemHighlightEditorsFromSelection(int row);
     void UpdateItemHighlightSwatches();
     void UpdateItemHighlightPreview();
-
-    void RefreshPluginsList();
-    void UpdatePluginDetails();
 
     QString ColorToHex(const QColor& color) const;
     QColor HexToColor(const QString& hex) const;
@@ -202,28 +189,6 @@ private:
     QColor m_itemBgColor;
     QColor m_itemFgColor;
     int m_selectedItemHighlightRow {-1};
-
-    // Plugins tab widgets
-    QWidget* m_pluginsTab {nullptr};
-    QTableWidget* m_pluginsTable {nullptr};
-    QLabel* m_pluginIdLabel {nullptr};
-    QLabel* m_pluginNameLabel {nullptr};
-    QLabel* m_pluginVersionLabel {nullptr};
-    QLabel* m_pluginAuthorLabel {nullptr};
-    QLabel* m_pluginTypeLabel {nullptr};
-    QLabel* m_pluginStatusLabel {nullptr};
-    QLabel* m_pluginLicenseLabel {nullptr};
-    QLabel* m_pluginPathLabel {nullptr};
-    QLineEdit* m_pluginPathEdit {nullptr};
-    QLineEdit* m_pluginLicenseEdit {nullptr};
-    QPushButton* m_browsePluginButton {nullptr};
-    QPushButton* m_loadPluginButton {nullptr};
-    QPushButton* m_unloadPluginButton {nullptr};
-    QPushButton* m_enablePluginButton {nullptr};
-    QPushButton* m_setLicenseButton {nullptr};
-    QPushButton* m_refreshPluginsButton {nullptr};
-    QCheckBox* m_autoLoadPluginCheck {nullptr};
-    int m_selectedPluginRow {-1};
 
     std::vector<config::ConfigObserver*> m_observers;
 };

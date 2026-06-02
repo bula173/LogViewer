@@ -522,7 +522,6 @@ Open the settings editor at **Tools > Settings**. The dialog has tabs:
 - **Columns** — add, remove, reorder, and rename columns; set visibility and default width
 - **Colors** — map field values to foreground/background colours (e.g. `level=ERROR` → red background)
 - **AI** — provider, model, API key, timeout
-- **Plugins** — enable/disable installed plugins
 
 You can also edit `config.json` directly; changes take effect on the next application start.
 
@@ -530,7 +529,7 @@ You can also edit `config.json` directly; changes take effect on the next applic
 
 ## 14. Plugin Manager
 
-Open **Tools > Manage Plugins…** to browse, install, enable, disable, and uninstall plugins without restarting the application.
+Open **Tools > Manage Plugins…** to browse, install, configure, and uninstall plugins without restarting the application. This is the single place for all plugin management — the Settings dialog no longer has a separate Plugins tab.
 
 ### Plugin Table
 
@@ -542,9 +541,8 @@ Each row shows:
 | ID | Unique plugin identifier |
 | Version | Plugin version string |
 | Type | Functional category (Parser, Analyzer, AI Provider, …) |
-| Status | **Loaded** (green) or **Not loaded** (grey) |
+| Status | **Active** / **Initialized** (green), **Loaded** (black), **Disabled** / **Not loaded** (grey), **Error** (red) |
 | Auto-load | Whether the plugin loads automatically on startup |
-| Path | Full path to the plugin file or directory |
 
 ### Actions
 
@@ -555,6 +553,20 @@ Each row shows:
 | **Enable** | Loads a registered-but-not-running plugin into the current session. |
 | **Disable** | Unloads a running plugin without removing its files. |
 | **Refresh** | Rescans the plugins directory and updates the table. |
+
+### Plugin Details
+
+Selecting a row in the table populates the **Plugin Details** pane below with:
+
+- **Name, ID, Version, Author, Type** — plugin metadata
+- **Status** — runtime status; if the plugin is in an error state the error message is shown inline
+- **License** — whether the plugin requires a license and whether one is active
+- **Location** — full path to the plugin file (selectable for copying)
+- **Description** — plugin description from its metadata
+
+**Auto-load on startup** — tick the checkbox to have the plugin load automatically on every application start. The preference is saved immediately.
+
+**License key** — if the selected plugin requires a license, enter the key in the field and click **Set License**. The key is validated by the plugin; a success or rejection message is shown.
 
 The plugins directory is shown at the top of the dialog. Use **Tools > Reload Plugins** (Ctrl+Shift+P) to reload all plugins at once without opening the dialog.
 
