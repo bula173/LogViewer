@@ -612,13 +612,12 @@ No Sync</h3>
 <li><b>Columns</b> — add, remove, reorder, and rename columns; set visibility and default width</li>
 <li><b>Colors</b> — map field values to foreground/background colours (e.g. <code>level=ERROR</code> → red background)</li>
 <li><b>AI</b> — provider, model, API key, timeout</li>
-<li><b>Plugins</b> — enable/disable installed plugins</li>
 </ul>
 <p>You can also edit <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code> directly; changes take effect on the next application start.</p>
 <hr  />
 <h1><a class="anchor" id="autotoc_md759"></a>
 14. Plugin Manager</h1>
-<p>Open <b>Tools &gt; Manage Plugins…</b> to browse, install, enable, disable, and uninstall plugins without restarting the application.</p>
+<p>Open <b>Tools &gt; Manage Plugins…</b> to browse, install, configure, and uninstall plugins without restarting the application. This is the single place for all plugin management — the Settings dialog no longer has a separate Plugins tab.</p>
 <h2><a class="anchor" id="autotoc_md760"></a>
 Plugin Table</h2>
 <p>Each row shows:</p>
@@ -634,11 +633,9 @@ Plugin Table</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Type   </td><td class="markdownTableBodyNone">Functional category (Parser, Analyzer, AI Provider, …)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Status   </td><td class="markdownTableBodyNone"><b>Loaded</b> (green) or <b>Not loaded</b> (grey)    </td></tr>
+<td class="markdownTableBodyNone">Status   </td><td class="markdownTableBodyNone"><b>Active</b> / <b>Initialized</b> (green), <b>Loaded</b> (black), <b>Disabled</b> / <b>Not loaded</b> (grey), <b>Error</b> (red)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Auto-load   </td><td class="markdownTableBodyNone">Whether the plugin loads automatically on startup    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Path   </td><td class="markdownTableBodyNone">Full path to the plugin file or directory   </td></tr>
+<td class="markdownTableBodyNone">Auto-load   </td><td class="markdownTableBodyNone">Whether the plugin loads automatically on startup   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md761"></a>
 Actions</h2>
@@ -656,9 +653,21 @@ Actions</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Refresh</b>   </td><td class="markdownTableBodyNone">Rescans the plugins directory and updates the table.   </td></tr>
 </table>
+<h2><a class="anchor" id="autotoc_md762"></a>
+Plugin Details</h2>
+<p>Selecting a row in the table populates the <b>Plugin Details</b> pane below with:</p>
+<ul>
+<li><b>Name, ID, <a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a>, Author, Type</b> — plugin metadata</li>
+<li><b>Status</b> — runtime status; if the plugin is in an error state the error message is shown inline</li>
+<li><b>License</b> — whether the plugin requires a license and whether one is active</li>
+<li><b>Location</b> — full path to the plugin file (selectable for copying)</li>
+<li><b>Description</b> — plugin description from its metadata</li>
+</ul>
+<p><b>Auto-load on startup</b> — tick the checkbox to have the plugin load automatically on every application start. The preference is saved immediately.</p>
+<p><b>License key</b> — if the selected plugin requires a license, enter the key in the field and click <b>Set License</b>. The key is validated by the plugin; a success or rejection message is shown.</p>
 <p>The plugins directory is shown at the top of the dialog. Use <b>Tools &gt; Reload Plugins</b> (Ctrl+Shift+P) to reload all plugins at once without opening the dialog.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md763"></a>
+<h1><a class="anchor" id="autotoc_md764"></a>
 15. Keyboard Shortcuts</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

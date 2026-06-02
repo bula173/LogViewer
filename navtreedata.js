@@ -881,9 +881,10 @@ var NAVTREE =
       [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md757", null ],
       [ "14. Plugin Manager", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759", [
         [ "Plugin Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md760", null ],
-        [ "Actions", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md761", null ]
+        [ "Actions", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md761", null ],
+        [ "Plugin Details", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md762", null ]
       ] ],
-      [ "15. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md763", null ]
+      [ "15. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md764", null ]
     ] ],
     [ "Deprecated List", "da/d58/deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -926,28 +927,28 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html",
-"d1/d55/classparser_1_1EvlogParser.html#a85fc1a7ee1778b5c8cbaf144886b362f",
-"d2/d40/classui_1_1qt_1_1ActorsPanel.html#aa15dc68217b5631f8a03c72e9edc96e5",
-"d3/d1f/classui_1_1IMainWindowView.html#a7acbd0e2fb6d5fbb03b39814f461ee6d",
-"d3/dc4/classutil_1_1ILogger.html#a1315ba9159219be77b501d9880ede56e",
+"d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md309",
+"d1/d55/classparser_1_1EvlogParser.html#a8f740e6bc5af2d1b873a6e3407c3b202",
+"d2/d40/classui_1_1qt_1_1ActorsPanel.html#abc5b834aa0b0abb883137663405510fb",
+"d3/d1f/classui_1_1IMainWindowView.html#a86756d2d4301612609e13aae200270c6",
+"d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8",
 "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a0f0222e7436f9c94bc58df368523c75c",
 "d4/dfa/classui_1_1qt_1_1MainWindow.html#a853da6645290eb91a5375200e20c0977",
 "d5/d29/structupdates_1_1AppUpdateInfo.html#ad233a88f460cef7e08a2d5c09f221459",
-"d6/d01/DltParser_8cpp.html#a5d3786d34e1f702dcef63899faad820c",
-"d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#ac8b97cc87b38517983b1370a62dd9ee3",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a2a499a07de63bdbdda6da885beaeaeb7",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#aefe54afeacecc6f8e6c3864c93f741c2",
-"d8/d98/EvlogTemplateRegistry_8cpp.html",
-"d9/d12/classfilters_1_1Filter.html#a85a17e19c525593b8577854a403cf877",
-"d9/df7/classui_1_1IEventDetailsView.html#aa095b9de3763a58bfc8ad93a97c68e3f",
-"da/dab/classui_1_1UiServices.html#a089371debd5684b5ad0cd97b4261a46c",
-"dc/d20/EvlogParser_8cpp.html#a6a8121a9ab4e60720ad4267228f29b69",
-"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a12ad3099adbd16433f8908e1f04d492f",
-"dd/d74/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob.html#ad989b18af943c33279f3113f1fb02b0a",
-"de/d35/classui_1_1qt_1_1UpdateChecker.html#ab6094b1176b6b70412964f3907ee3ef0",
-"df/d79/classparser_1_1IDataParserObserver.html#a40b820edaea082e424b50bb7d8e1c7f4",
-"functions.html"
+"d6/d01/DltParser_8cpp.html#a6146ccf26fae0688ce5a5fdb3dd3dcde",
+"d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#ad08042277e1fe2e879229529c17aac45",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a3925211adc9569d644ca2019039aabe4",
+"d8/d08/namespaceplugin_1_1anonymous__namespace_02PluginManager_8cpp_03.html#a7c5d8cd3c8825346642b1b81bd42bd32",
+"d8/da3/IPlugin_8hpp.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6",
+"d9/d4f/structparser_1_1dbc_1_1DbcMessage.html",
+"da/d30/classplugin_1_1PluginEventBus.html#a76dec9cd6ec75b5644e1ade5983d0020",
+"da/dc5/PluginManager_8cpp.html#ab722d34fdb12488086fd6dbc427d582a",
+"dc/d2d/classmvc_1_1IModel.html#a130db4ec5dbe8deeb41647606fa2a3b0",
+"dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a48baf1a044efd76f2f9c176c516d3cb5",
+"dd/d79/classui_1_1qt_1_1SearchBar.html#aa00afaab127f9b7f14d00a9f34d40266",
+"de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md640",
+"df/d7e/classui_1_1ITypeFilterView.html#a850290d23544a8038f45b28b10f2cd0b",
+"functions_func_u.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -40,7 +40,7 @@ var searchData=
   ['12_20themes_37',['12. Themes',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md755',1,'']]],
   ['13_20configuration_38',['13. Configuration',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md757',1,'']]],
   ['14_20plugin_20manager_39',['14. Plugin Manager',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759',1,'']]],
-  ['15_20keyboard_20shortcuts_40',['15. Keyboard Shortcuts',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md763',1,'']]],
+  ['15_20keyboard_20shortcuts_40',['15. Keyboard Shortcuts',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md764',1,'']]],
   ['1_3a_20core_20safety_20v1_201_200_41',['Phase 1: Core Safety (v1.1.0)',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md185',1,'']]],
   ['1_3a_20minimal_20plugin_20structure_42',['Step 1: Minimal Plugin Structure',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638',1,'']]],
   ['1_3a_20no_20dependency_20resolution_43',['Issue 3.1: No Dependency Resolution',['../df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md179',1,'']]],
