@@ -17,7 +17,7 @@ var searchData=
   ['detecttimestampfield_14',['detecttimestampfield',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a7d1a6447d788dd74aeaa55c57ac424b4',1,'ui::qt::StatsSummaryPanel::DetectTimestampField()'],['../d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf',1,'ui::qt::TimelineChartPanel::DetectTimestampField()']]],
   ['dialogsenabledflag_15',['DialogsEnabledFlag',['../da/d7e/namespaceerror.html#a6d3b63a59df2d9bff0d9c40d525a7eaa',1,'error']]],
   ['disableplugin_16',['DisablePlugin',['../d3/d67/classplugin_1_1PluginManager.html#a8d94e355f12e935e9001ddb7e99cfdfd',1,'plugin::PluginManager']]],
-  ['discover_17',['Discover',['../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a3b7926d64a128f227acea13b284f46f1',1,'analyzer::ActorDiscoverer']]],
+  ['discover_17',['Discover',['../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe',1,'analyzer::ActorDiscoverer']]],
   ['discoverplugins_18',['DiscoverPlugins',['../d3/d67/classplugin_1_1PluginManager.html#ad853beb73f830a621ad9ef425e9e3a7d',1,'plugin::PluginManager']]],
   ['displayevent_19',['DisplayEvent',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0',1,'ui::qt::ItemDetailsView']]],
   ['doaddbookmark_20',['DoAddBookmark',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7b5d1e9205c26605b4c27f6810588aa2',1,'ui::qt::BookmarksPanel']]],
