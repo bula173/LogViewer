@@ -242,8 +242,13 @@ void PluginManagerDialog::PopulateTable()
             meta.id   = meta.name;
         }
 
+        // isEnabled: loaded AND the enabled flag is set (i.e. not just registered)
+        const bool isEnabled = isLoaded && info->enabled;
+
         auto* nameItem = new QTableWidgetItem(QString::fromStdString(meta.name));
-        nameItem->setData(Qt::UserRole, QString::fromStdString(meta.id));
+        nameItem->setData(Qt::UserRole,     QString::fromStdString(meta.id));
+        nameItem->setData(Qt::UserRole + 1, QString::fromStdString(path.string())); // file path
+        nameItem->setData(Qt::UserRole + 2, isEnabled);                              // enabled flag
         m_table->setItem(i, kColName,    nameItem);
         m_table->setItem(i, kColId,      new QTableWidgetItem(QString::fromStdString(meta.id)));
         m_table->setItem(i, kColVersion, new QTableWidgetItem(QString::fromStdString(meta.version)));
@@ -421,16 +426,39 @@ void PluginManagerDialog::OnEnable()
 {
     const int row = m_table->currentRow();
     if (row < 0) return;
-    const QString id = m_table->item(row, kColName)->data(Qt::UserRole).toString();
 
-    const auto result = plugin::PluginManager::GetInstance().EnablePlugin(id.toStdString());
-    if (!result.isOk())
+    auto* nameItem = m_table->item(row, kColName);
+    const QString id   = nameItem->data(Qt::UserRole).toString();
+    const QString path = nameItem->data(Qt::UserRole + 1).toString();
+
+    auto& mgr = plugin::PluginManager::GetInstance();
+
+    if (mgr.GetLoadedPlugins().count(id.toStdString()))
     {
-        QMessageBox::critical(this, tr("Enable Plugin"),
-            tr("Failed to enable \"%1\":\n%2")
-                .arg(id)
-                .arg(QString::fromStdString(result.error().what())));
-        return;
+        // Plugin is in the loaded map (possibly disabled) — re-enable it.
+        const auto result = mgr.EnablePlugin(id.toStdString());
+        if (!result.isOk())
+        {
+            QMessageBox::critical(this, tr("Enable Plugin"),
+                tr("Failed to enable \"%1\":\n%2")
+                    .arg(id)
+                    .arg(QString::fromStdString(result.error().what())));
+            return;
+        }
+    }
+    else
+    {
+        // Plugin is on disk but not in the loaded map — load it directly from path.
+        const auto result = mgr.LoadPlugin(
+            std::filesystem::path(path.toStdString()));
+        if (!result.isOk())
+        {
+            QMessageBox::critical(this, tr("Enable Plugin"),
+                tr("Failed to load \"%1\":\n%2")
+                    .arg(id)
+                    .arg(QString::fromStdString(result.error().what())));
+            return;
+        }
     }
 
     util::Logger::Info("[PluginManager] Enabled plugin '{}'", id.toStdString());
@@ -514,16 +542,16 @@ void PluginManagerDialog::OnSelectionChanged()
     const int row = m_table->currentRow();
     const bool sel = (row >= 0);
 
-    bool isLoaded = false;
-    if (sel && m_table->item(row, kColStatus))
-    {
-        const auto stat = m_table->item(row, kColStatus)->text();
-        isLoaded = (stat != tr("Not loaded") && stat != tr("Unloaded"));
-    }
+    // isEnabled: loaded AND the plugin's enabled flag is true.
+    // Enable button is active when NOT enabled (not loaded, or loaded but disabled).
+    // Disable button is active only when currently enabled.
+    bool isEnabled = false;
+    if (sel && m_table->item(row, kColName))
+        isEnabled = m_table->item(row, kColName)->data(Qt::UserRole + 2).toBool();
 
     m_uninstallBtn->setEnabled(sel);
-    m_enableBtn->setEnabled(sel && !isLoaded);
-    m_disableBtn->setEnabled(sel && isLoaded);
+    m_enableBtn->setEnabled(sel && !isEnabled);
+    m_disableBtn->setEnabled(sel && isEnabled);
 
     UpdateDetails();
 }
