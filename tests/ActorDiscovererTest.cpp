@@ -106,7 +106,12 @@ TEST(ActorDiscoverer, DetectsSourceDestPattern)
 {
     db::EventsContainer c;
     for (int i = 0; i < 10; ++i)
-        AddEvent(c, Make({{"source","NodeX"},{"dest","NodeY"},{"cmd","ping"}}));
+    {
+        // Alternate sender/receiver so each field has 2 unique values (cardinality ≥ 2).
+        const std::string src = (i % 2 == 0) ? "NodeX" : "NodeY";
+        const std::string dst = (i % 2 == 0) ? "NodeY" : "NodeX";
+        AddEvent(c, Make({{"source", src}, {"dest", dst}, {"cmd", "ping"}}));
+    }
     const auto r = ActorDiscoverer::Discover(c);
     ASSERT_TRUE(r.exchange.has_value());
     EXPECT_EQ(r.exchange->senderField,   "source");
@@ -117,8 +122,14 @@ TEST(ActorDiscoverer, PicksBestLabelField)
 {
     db::EventsContainer c;
     for (int i = 0; i < 10; ++i)
-        AddEvent(c, Make({{"from","A"},{"to","B"},
-                          {"action","Login"},{"timestamp","1.0"}}));
+    {
+        // Vary from/to and action so all fields have cardinality ≥ 2.
+        const std::string frm = (i % 2 == 0) ? "A" : "B";
+        const std::string too = (i % 2 == 0) ? "B" : "A";
+        const std::string act = (i % 2 == 0) ? "Login" : "Logout";
+        AddEvent(c, Make({{"from", frm}, {"to", too},
+                          {"action", act}, {"timestamp", "1.0"}}));
+    }
     const auto r = ActorDiscoverer::Discover(c);
     ASSERT_TRUE(r.exchange.has_value());
     EXPECT_EQ(r.exchange->labelField, "action");
