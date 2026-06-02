@@ -446,10 +446,37 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
         tr("Plot decoded signal values (SIG:*) over time — select signals in the Signal Browser"));
 
-    // Wire Signal Browser → Signal Plot: selection changes drive chart updates.
+    // Wire Signal Browser → Signal Plot + Events filter.
     connect(m_canSignalTree, &CanSignalTreePanel::SignalSelectionChanged,
             this, [this]() {
-                m_signalPlotPanel->SetSelectedSignals(m_canSignalTree->GetSelectedSignals());
+                const auto signals = m_canSignalTree->GetSelectedSignals();
+                m_signalPlotPanel->SetSelectedSignals(signals);
+
+                // Filter the events table to rows that carry at least one
+                // selected signal key (stored as "SIG:<name>" in each event).
+                if (signals.empty())
+                {
+                    m_eventsView->ClearFilter();
+                }
+                else
+                {
+                    std::vector<unsigned long> matching;
+                    const size_t total = m_events->Size();
+                    matching.reserve(total / 4);
+                    for (unsigned long i = 0; i < total; ++i)
+                    {
+                        const auto& ev = m_events->GetEvent(i);
+                        for (const auto& sig : signals)
+                        {
+                            if (!ev.findByKey(sig).empty())
+                            {
+                                matching.push_back(i);
+                                break;
+                            }
+                        }
+                    }
+                    m_eventsView->SetFilteredEvents(std::move(matching));
+                }
             });
 
     // ===== MAIN TAB: Trace Viewer (group by correlation field) =====
@@ -1596,10 +1623,24 @@ void MainWindow::OnLoadDbcRequested()
     if (m_canSignalTree)
         m_canSignalTree->SetDatabase(db);
 
-    UpdateStatusText(tr("DBC loaded: %1 (%2 messages) — reload ASC file to apply")
+    util::Logger::Info("[MainWindow] DBC file set: {}", filePath.toStdString());
+
+    // If an ASC file is currently loaded, reload it so DBC signal names appear.
+    if (!m_currentLogFilePath.isEmpty() &&
+        m_currentLogFilePath.toLower().endsWith(".asc"))
+    {
+        const std::filesystem::path ascPath(m_currentLogFilePath.toStdString());
+        auto parser = CreateParserFor(ascPath);
+        if (parser)
+        {
+            UpdateStatusText(tr("Reloading ASC with DBC signal names…").toStdString());
+            m_presenter->LoadLogFile(std::move(parser), ascPath);
+        }
+    }
+
+    UpdateStatusText(tr("DBC loaded: %1 (%2 messages)")
         .arg(QFileInfo(filePath).fileName())
         .arg(db.messages.size()).toStdString());
-    util::Logger::Info("[MainWindow] DBC file set: {}", filePath.toStdString());
 }
 
 void MainWindow::OnLoadEvlogTemplatesRequested()
