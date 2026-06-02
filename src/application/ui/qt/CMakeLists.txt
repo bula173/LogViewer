@@ -28,6 +28,7 @@ target_sources(application_core
         panels/SignalPlotPanel.cpp
         panels/TimelineChartPanel.cpp
         panels/TraceViewerPanel.cpp
+        panels/SequenceDiagramPanel.cpp
         dialogs/ConfigEditorDialog.cpp
         dialogs/FilterEditorDialog.cpp
         dialogs/LogFileLoadDialog.cpp

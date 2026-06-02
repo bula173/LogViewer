@@ -37,6 +37,7 @@ set_target_properties(application_core PROPERTIES
 logviewer_target_warnings(application_core)
 
 # Submodules extend application_core via target_sources()
+add_subdirectory(analyzers)
 add_subdirectory(config)
 add_subdirectory(db)
 add_subdirectory(error)
@@ -53,6 +54,7 @@ add_subdirectory(version)
 target_include_directories(application_core
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/analyzers>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/config>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/db>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/error>

@@ -11,6 +11,7 @@
 #include "panels/SignalPlotPanel.hpp"
 #include "panels/TimelineChartPanel.hpp"
 #include "panels/TraceViewerPanel.hpp"
+#include "panels/SequenceDiagramPanel.hpp"
 #include "panels/BookmarksPanel.hpp"
 #include "panels/ScenariosPanel.hpp"
 #include "panels/SideBySidePanel.hpp"
@@ -484,6 +485,13 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_contentTabs->addTab(m_tracePanel, tr("Traces"));
     m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
         tr("Group events by a correlation field (trace ID, session, request…) — double-click a group to filter"));
+
+    // ===== MAIN TAB: Sequence Diagram (auto-discovered from→to actors) =====
+    m_sequencePanel = new SequenceDiagramPanel(events, m_eventsView, this);
+    m_contentTabs->addTab(m_sequencePanel, tr("Sequence"));
+    m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+        tr("Auto-discovers from/to actor fields and renders a sequence diagram — "
+           "double-click an arrow to navigate to that event"));
 
     // ===== MAIN TAB: Bookmarks (annotate and navigate events) =====
     m_bookmarksPanel = new BookmarksPanel(events, m_eventsView, this);
@@ -3134,7 +3142,8 @@ void MainWindow::MarkAnalysisPanelsDirty()
     if (m_actorsPanel)  m_dirtyPanels.insert(m_actorsPanel);
     if (m_signalPlotPanel) m_dirtyPanels.insert(m_signalPlotPanel);
     if (m_timelinePanel) m_dirtyPanels.insert(m_timelinePanel);
-    if (m_tracePanel)   m_dirtyPanels.insert(m_tracePanel);
+    if (m_tracePanel)    m_dirtyPanels.insert(m_tracePanel);
+    if (m_sequencePanel) m_dirtyPanels.insert(m_sequencePanel);
 
     // Restart the timer — rapid filter changes collapse into one refresh.
     if (m_panelRefreshTimer)
@@ -3161,6 +3170,8 @@ void MainWindow::RefreshCurrentAnalysisPanel()
         m_timelinePanel->Refresh();
     else if (current == m_tracePanel)
         m_tracePanel->Refresh();
+    else if (current == m_sequencePanel)
+        m_sequencePanel->Refresh();
 }
 
 } // namespace ui::qt
