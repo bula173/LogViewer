@@ -4,7 +4,9 @@
 #include "events/EventsTableView.hpp"
 #include "Logger.hpp"
 
+#include <QFutureWatcher>
 #include <QGraphicsLineItem>
+#include <QtConcurrent/QtConcurrentRun>
 #include <QGraphicsPolygonItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
@@ -235,7 +237,7 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
         QString lbl = pat.labelField.empty()
                       ? QString{}
                       : QString::fromStdString(ev.findByKey(pat.labelField));
-        if (lbl.size() > 32) lbl = lbl.left(30) + u"…"_qs;
+        if (lbl.size() > 32) { using namespace Qt::StringLiterals; lbl = lbl.left(30) + u"…"_s; }
         rows.push_back({fIt->second, tIt->second, std::move(lbl),
                         static_cast<qulonglong>(i)});
     }

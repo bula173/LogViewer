@@ -1144,11 +1144,12 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                     mb.setIcon(QMessageBox::Information);
                     mb.setText(tr("<b>A LogViewer update is available.</b>"));
                     mb.setInformativeText(lines.join('\n'));
-                    mb.setStandardButtons(QMessageBox::Ok | QMessageBox::Open);
-                    mb.setButtonText(QMessageBox::Open, tr("View Details…"));
-                    mb.setDefaultButton(QMessageBox::Open);
+                    mb.addButton(tr("View Details…"), QMessageBox::AcceptRole);
+                    auto* okBtn = mb.addButton(QMessageBox::Ok);
+                    mb.setDefaultButton(okBtn);
 
-                    if (mb.exec() == QMessageBox::Open)
+                    mb.exec();
+                    if (mb.clickedButton() != okBtn)
                     {
                         auto* dlg = new UpdateDialog(result, m_updateChecker, this);
                         connect(dlg, &UpdateDialog::ApplyPluginUpdate,
