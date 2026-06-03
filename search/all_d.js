@@ -16,7 +16,7 @@ var searchData=
   ['dbcparser_2ecpp_13',['DbcParser.cpp',['../d8/d61/DbcParser_8cpp.html',1,'']]],
   ['dbcparser_2ehpp_14',['DbcParser.hpp',['../d6/dcc/DbcParser_8hpp.html',1,'']]],
   ['dbcsignal_15',['DbcSignal',['../d3/dc2/structparser_1_1dbc_1_1DbcSignal.html',1,'parser::dbc']]],
-  ['debug_16',['debug',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md327',1,'Compile-Time Checks (Default for Debug)'],['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7aa603905470e2a5b8c13e96b579ef0dba',1,'util::Debug'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()']]],
+  ['debug_16',['debug',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md327',1,'Compile-Time Checks (Default for Debug)'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7aa603905470e2a5b8c13e96b579ef0dba',1,'util::Debug'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()'],['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()']]],
   ['debug_20build_20with_20full_20symbols_17',['Debug Build with Full Symbols',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md220',1,'']]],
   ['debug_20presets_18',['Sanitizers (debug presets)',['../index.html#autotoc_md13',1,'']]],
   ['debugging_19',['Debugging',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md653',1,'']]],

@@ -108,13 +108,13 @@ Collaboration diagram for ui::qt::ActorDefinition:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d25/structui_1_1qt_1_1ActorDefinition__coll__graph.png" border="0" usemap="#aui_1_1qt_1_1ActorDefinition_coll__map" alt="Collaboration graph"/></div>
 <map name="aui_1_1qt_1_1ActorDefinition_coll__map" id="aui_1_1qt_1_1ActorDefinition_coll__map">
-<area shape="rect" title="Describes a named actor matched by a regular expression." alt="" coords="68,192,220,317"/>
+<area shape="rect" title="Describes a named actor matched by a regular expression." alt="" coords="64,207,216,332"/>
 <area shape="rect" title=" " alt="" coords="5,13,56,78"/>
-<area shape="poly" title=" " alt="" coords="35,78,42,122,58,167,65,177,60,180,54,169,37,123,30,79"/>
-<area shape="rect" title=" " alt="" coords="123,13,165,78"/>
-<area shape="poly" title=" " alt="" coords="147,78,147,175,141,175,141,78"/>
-<area shape="rect" title=" " alt="" coords="193,5,343,85"/>
-<area shape="poly" title=" " alt="" coords="267,86,258,127,241,169,233,182,228,179,236,167,253,126,262,85"/>
+<area shape="poly" title=" " alt="" coords="34,78,41,128,48,156,58,181,65,192,60,195,54,184,43,157,35,129,29,78"/>
+<area shape="rect" title=" " alt="" coords="119,13,161,78"/>
+<area shape="poly" title=" " alt="" coords="143,78,143,191,137,191,137,78"/>
+<area shape="rect" title=" " alt="" coords="189,5,339,85"/>
+<area shape="poly" title=" " alt="" coords="265,86,256,135,237,184,229,197,224,194,232,181,251,133,259,85"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -148,10 +148,16 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad4cfa95ce11a054d1ee39fb14ec9b3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a651e58b29fe8d7782b0a408117dd077c" id="r_a651e58b29fe8d7782b0a408117dd077c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a651e58b29fe8d7782b0a408117dd077c">enabled</a> {true}</td></tr>
 <tr class="separator:a651e58b29fe8d7782b0a408117dd077c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a352162a005b6f4eebecb06447d08ad62" id="r_a352162a005b6f4eebecb06447d08ad62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a352162a005b6f4eebecb06447d08ad62">isSelf</a> {false}</td></tr>
+<tr class="separator:a352162a005b6f4eebecb06447d08ad62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fc2693decb70cc97b88a2e0204e2f50" id="r_a9fc2693decb70cc97b88a2e0204e2f50"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a9fc2693decb70cc97b88a2e0204e2f50">alias</a></td></tr>
+<tr class="separator:a9fc2693decb70cc97b88a2e0204e2f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36624f623cbc3a1c3bab6dae46b1a0fe" id="r_a36624f623cbc3a1c3bab6dae46b1a0fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36624f623cbc3a1c3bab6dae46b1a0fe">useCaptures</a> {false}</td></tr>
 <tr class="separator:a36624f623cbc3a1c3bab6dae46b1a0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36ca5056f756929d32e93f8370c26197" id="r_a36ca5056f756929d32e93f8370c26197"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197">subActorDirectedTo</a></td></tr>
 <tr class="separator:a36ca5056f756929d32e93f8370c26197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8903e9d83c5c2e3471eb3f091648895b" id="r_a8903e9d83c5c2e3471eb3f091648895b"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db8/structui_1_1qt_1_1ActorDefinition.html#a8903e9d83c5c2e3471eb3f091648895b">captureAliases</a></td></tr>
+<tr class="separator:a8903e9d83c5c2e3471eb3f091648895b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Describes a named actor matched by a regular expression. </p>
@@ -343,6 +349,36 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9fc2693decb70cc97b88a2e0204e2f50" name="a9fc2693decb70cc97b88a2e0204e2f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fc2693decb70cc97b88a2e0204e2f50">&#9670;&#160;</a></span>alias</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string ui::qt::ActorDefinition::alias</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Display alias shown instead of the raw actor name in the sequence diagram. For useCaptures=false: replaces <code>name</code>; for useCaptures=true: used as prefix when no entry exists in captureAliases. </p>
+
+</div>
+</div>
+<a id="a8903e9d83c5c2e3471eb3f091648895b" name="a8903e9d83c5c2e3471eb3f091648895b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8903e9d83c5c2e3471eb3f091648895b">&#9670;&#160;</a></span>captureAliases</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, std::string&gt; ui::qt::ActorDefinition::captureAliases</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Aliases for individual captured values (useCaptures=true only). Maps raw log value → friendly display name shown in sequence diagram. </p>
+
+</div>
+</div>
 <a id="ad4cfa95ce11a054d1ee39fb14ec9b3c4" name="ad4cfa95ce11a054d1ee39fb14ec9b3c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad4cfa95ce11a054d1ee39fb14ec9b3c4">&#9670;&#160;</a></span>directedTo</h2>
 
@@ -386,6 +422,21 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Log field to match against (empty = any field) </p>
+
+</div>
+</div>
+<a id="a352162a005b6f4eebecb06447d08ad62" name="a352162a005b6f4eebecb06447d08ad62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352162a005b6f4eebecb06447d08ad62">&#9670;&#160;</a></span>isSelf</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ui::qt::ActorDefinition::isSelf {false}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Marks this as the "main/self" actor (log generator). Only one definition should have isSelf=true. Used by <a class="el" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html">SequenceDiagramPanel</a> to colour outgoing (from self → green) vs incoming (to self → blue) arrows. </p>
 
 </div>
 </div>
