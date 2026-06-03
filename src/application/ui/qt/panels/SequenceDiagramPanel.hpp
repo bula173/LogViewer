@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QPushButton>
 #include <QSpinBox>
 #include <QWidget>
 
