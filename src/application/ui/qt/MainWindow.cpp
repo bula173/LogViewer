@@ -1036,6 +1036,28 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 m_actorDefPanel, &ActorDefinitionsPanel::UpdateActorDirection);
     }
 
+    // Auto-switch left panel when a content tab is selected.
+    // Actors / Sequence → Actor Definitions tab
+    // Signals           → Signal Browser dock (raised + shown)
+    if (m_contentTabs && m_filterTabs)
+    {
+        connect(m_contentTabs, &QTabWidget::currentChanged,
+                this, [this](int /*index*/) {
+                    QWidget* cur = m_contentTabs->currentWidget();
+                    if ((cur == m_actorsPanel || cur == m_sequencePanel) && m_actorDefPanel)
+                    {
+                        m_filtersDock->show();
+                        m_filtersDock->raise();
+                        m_filterTabs->setCurrentWidget(m_actorDefPanel);
+                    }
+                    else if (cur == m_signalPlotPanel && m_signalBrowserDock)
+                    {
+                        m_signalBrowserDock->show();
+                        m_signalBrowserDock->raise();
+                    }
+                });
+    }
+
     // Time range filter → mark all analysis panels dirty (same debounce path)
     if (m_timeRangePanel) {
         connect(m_timeRangePanel, &TimeRangeFilterPanel::FilterApplied,
