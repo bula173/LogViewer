@@ -2,6 +2,7 @@
 
 #include "analyzers/ActorDiscoverer.hpp"
 
+#include <QFutureWatcher>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QLabel>
@@ -18,13 +19,10 @@ namespace ui::qt
 
 /// Sequence diagram panel.
 ///
-/// On Refresh(), scans the loaded events with ActorDiscoverer to find
-/// from/to fields automatically, then renders a swimlane sequence diagram
-/// in a QGraphicsView.  Each arrow represents one message exchange event;
-/// clicking an arrow navigates to that event in the events table.
-///
-/// The panel works on any log format — it never looks for hard-coded field
-/// names; everything is inferred from the data.
+/// On Refresh(), runs ActorDiscoverer::Discover on a background thread
+/// (QtConcurrent) so the UI stays responsive.  Once discovery completes
+/// the exchange pattern is stored and RenderDiagram() draws the swimlane.
+/// Each arrow is clickable (double-click) to navigate to the source event.
 class SequenceDiagramPanel : public QWidget
 {
     Q_OBJECT
@@ -38,6 +36,7 @@ public slots:
     void Refresh();
 
 private slots:
+    void OnDiscoveryFinished();
     void OnLimitChanged(int value);
     void OnSceneClicked(qulonglong eventIndex);
 
@@ -52,9 +51,10 @@ private:
     QGraphicsView*   m_view        {nullptr};
     QSpinBox*        m_limitSpin   {nullptr};
     QLabel*          m_statusLabel {nullptr};
+    QPushButton*     m_refreshBtn  {nullptr};
 
-    std::optional<analyzer::ExchangePattern> m_pattern;
-    bool m_refreshing {false};
+    std::optional<analyzer::ExchangePattern>        m_pattern;
+    QFutureWatcher<analyzer::ActorDiscoveryResult>* m_watcher {nullptr};
 };
 
 } // namespace ui::qt

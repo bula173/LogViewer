@@ -118,17 +118,19 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events,
 
     if (scored.empty()) return {};
 
-    // Best sender and receiver candidates
-    auto bestBy = [&](auto proj) -> FieldScore* {
-        FieldScore* best = nullptr;
-        for (auto& fs : scored)
-            if (!best || proj(fs) > proj(*best)) best = &fs;
-        return (best && proj(*best) > 0) ? best : nullptr;
-    };
-
-    FieldScore* senderFs   = bestBy([](const FieldScore& f){ return f.senderScore;   });
-    FieldScore* receiverFs = bestBy([](const FieldScore& f){ return f.receiverScore; });
-    FieldScore* labelFs    = bestBy([](const FieldScore& f){ return f.labelScore;    });
+    // Single pass to find the best sender, receiver, and label fields.
+    FieldScore* senderFs   = nullptr;
+    FieldScore* receiverFs = nullptr;
+    FieldScore* labelFs    = nullptr;
+    for (auto& fs : scored)
+    {
+        if (!senderFs   || fs.senderScore   > senderFs->senderScore)     senderFs   = &fs;
+        if (!receiverFs || fs.receiverScore > receiverFs->receiverScore)  receiverFs = &fs;
+        if (!labelFs    || fs.labelScore    > labelFs->labelScore)        labelFs    = &fs;
+    }
+    if (senderFs   && senderFs->senderScore   == 0) senderFs   = nullptr;
+    if (receiverFs && receiverFs->receiverScore == 0) receiverFs = nullptr;
+    if (labelFs    && labelFs->labelScore     == 0) labelFs    = nullptr;
 
     ActorDiscoveryResult result;
 

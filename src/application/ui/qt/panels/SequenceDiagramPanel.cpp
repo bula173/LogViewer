@@ -6,6 +6,8 @@
 
 #include <QFutureWatcher>
 #include <QGraphicsLineItem>
+#include <QPainterPath>
+#include <QPainterPathStroker>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QGraphicsPolygonItem>
 #include <QGraphicsRectItem>
@@ -63,6 +65,18 @@ public:
 
     qulonglong eventIndex() const { return m_eventIdx; }
 
+    // Expand the clickable shape to a 10 px band around the line so thin
+    // arrows are easy to double-click even at small zoom levels.
+    QPainterPath shape() const override
+    {
+        QPainterPath p;
+        p.moveTo(line().p1());
+        p.lineTo(line().p2());
+        QPainterPathStroker stroker;
+        stroker.setWidth(10.0);
+        return stroker.createStroke(p);
+    }
+
 private:
     qulonglong m_eventIdx;
 };
@@ -118,10 +132,10 @@ void SequenceDiagramPanel::BuildLayout()
     // ── Toolbar ───────────────────────────────────────────────────────────
     auto* toolbar = new QHBoxLayout();
 
-    auto* refreshBtn = new QPushButton(tr("Re-discover"), this);
-    refreshBtn->setToolTip(
+    m_refreshBtn = new QPushButton(tr("Re-discover"), this);
+    m_refreshBtn->setToolTip(
         tr("Re-scan loaded events to detect from/to actor fields automatically"));
-    toolbar->addWidget(refreshBtn);
+    toolbar->addWidget(m_refreshBtn);
 
     toolbar->addWidget(new QLabel(tr("Show first"), this));
     m_limitSpin = new QSpinBox(this);
@@ -152,7 +166,7 @@ void SequenceDiagramPanel::BuildLayout()
     root->addWidget(m_view, 1);
 
     // ── Connections ───────────────────────────────────────────────────────
-    connect(refreshBtn,  &QPushButton::clicked,
+    connect(m_refreshBtn, &QPushButton::clicked,
             this, &SequenceDiagramPanel::Refresh);
     connect(m_limitSpin, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &SequenceDiagramPanel::OnLimitChanged);
@@ -166,8 +180,8 @@ void SequenceDiagramPanel::BuildLayout()
 
 void SequenceDiagramPanel::Refresh()
 {
-    if (m_refreshing) return;
-    m_refreshing = true;
+    // Prevent re-entrant calls while discovery or rendering is in progress.
+    if (m_watcher && m_watcher->isRunning()) return;
 
     m_scene->clear();
     m_pattern.reset();
@@ -176,28 +190,42 @@ void SequenceDiagramPanel::Refresh()
     {
         m_statusLabel->setText(tr("No events loaded"));
         m_statusLabel->setStyleSheet("color: gray;");
-        m_refreshing = false;
         return;
     }
 
     m_statusLabel->setText(tr("Discovering actors…"));
     m_statusLabel->setStyleSheet("color: orange;");
+    if (m_refreshBtn) m_refreshBtn->setEnabled(false);
 
-    const auto result = analyzer::ActorDiscoverer::Discover(m_events);
+    // Run discovery on a background thread so the UI stays responsive.
+    if (!m_watcher)
+    {
+        m_watcher = new QFutureWatcher<analyzer::ActorDiscoveryResult>(this);
+        connect(m_watcher, &QFutureWatcher<analyzer::ActorDiscoveryResult>::finished,
+                this, &SequenceDiagramPanel::OnDiscoveryFinished);
+    }
+    m_watcher->setFuture(
+        QtConcurrent::run([this]() {
+            return analyzer::ActorDiscoverer::Discover(m_events);
+        }));
+}
 
+void SequenceDiagramPanel::OnDiscoveryFinished()
+{
+    if (m_refreshBtn) m_refreshBtn->setEnabled(true);
+
+    const auto result = m_watcher->result();
     if (!result.exchange)
     {
         m_statusLabel->setText(
             tr("No from→to pattern detected. "
                "Try a log with sender/receiver/source/dest fields."));
         m_statusLabel->setStyleSheet("color: gray;");
-        m_refreshing = false;
         return;
     }
 
     m_pattern = result.exchange;
     RenderDiagram(*m_pattern);
-    m_refreshing = false;
 }
 
 // ---------------------------------------------------------------------------

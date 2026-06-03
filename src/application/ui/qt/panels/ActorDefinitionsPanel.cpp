@@ -1,5 +1,6 @@
 #include "ActorDefinitionsPanel.hpp"
 
+#include "analyzers/ActorDiscoverer.hpp"
 #include "Config.hpp"
 #include "EventsContainer.hpp"
 #include "Logger.hpp"
@@ -9,6 +10,7 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#include <stdexcept>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -470,74 +472,66 @@ void ActorDefinitionsPanel::HandleDiscover()
     util::Logger::Debug("[ActorDefinitionsPanel] HandleDiscover: scanning {} event(s)",
                         m_events->Size());
 
-    // ── Scan up to 10K events, collect per-field unique values ───────────
-    constexpr size_t kScanLimit = 10'000;
-    const size_t total = static_cast<size_t>(m_events->Size());
-    const size_t step = total > kScanLimit ? total / kScanLimit : 1;
+    // ── Delegate field detection to ActorDiscoverer ───────────────────────
+    const auto discovered = analyzer::ActorDiscoverer::Discover(*m_events);
 
-    // field → set of distinct values seen (capped at 201 to detect overflow)
-    std::map<std::string, std::set<std::string>> fieldValues;
-    for (size_t i = 0; i < total; i += step)
+    // Collect all candidate field names: actor fields + exchange fields
+    std::vector<std::string> candidateFields = discovered.actorFields;
+    if (discovered.exchange)
     {
-        const auto& ev = m_events->GetEvent(i);
-        for (const auto& [k, v] : ev.getEventItems())
+        for (const auto& f : {discovered.exchange->senderField,
+                               discovered.exchange->receiverField,
+                               discovered.exchange->labelField})
         {
-            auto& vals = fieldValues[k];
-            if (vals.size() <= 201) vals.insert(v);
+            if (!f.empty() &&
+                std::find(candidateFields.begin(), candidateFields.end(), f) == candidateFields.end())
+                candidateFields.push_back(f);
         }
     }
 
-    // ── Score each field ─────────────────────────────────────────────────
-    // Actor-hint keywords raise score; skip fields with too few or too many unique values.
-    static const std::vector<std::string> kActorHints = {
-        "actor", "user", "username", "userid", "source", "src",
-        "host", "hostname", "service", "component", "module",
-        "process", "proc", "sender", "client", "server", "peer",
-        "origin", "agent", "role", "owner"
-    };
+    // Skip fields already covered by existing definitions
+    candidateFields.erase(
+        std::remove_if(candidateFields.begin(), candidateFields.end(),
+            [this](const std::string& f) {
+                for (const auto& def : m_definitions)
+                    if (def.field == f) return true;
+                return false;
+            }),
+        candidateFields.end());
 
+    // Build scored candidates with sample values (small probe for display)
     struct Candidate {
         std::string field;
-        int         uniqueCount;
-        int         score;
-        std::vector<std::string> samples; // up to 5 sample values
+        int         uniqueCount {0};
+        int         score       {0};
+        std::vector<std::string> samples;
     };
     std::vector<Candidate> candidates;
+    candidates.reserve(candidateFields.size());
 
-    for (auto& [field, vals] : fieldValues)
+    for (const auto& field : candidateFields)
     {
-        const int unique = static_cast<int>(vals.size());
-        if (unique < 2 || unique > 200) continue;
+        Candidate c;
+        c.field = field;
+        c.score = analyzer::ActorDiscoverer::ScoreActor(field) +
+                  analyzer::ActorDiscoverer::ScoreSender(field) +
+                  analyzer::ActorDiscoverer::ScoreReceiver(field);
 
-        // Check if this field is already covered by an existing definition
-        bool alreadyCovered = false;
-        for (const auto& def : m_definitions)
-            if (def.field == field) { alreadyCovered = true; break; }
-        if (alreadyCovered) continue;
-
-        int score = 0;
-        const std::string lower = [&]() {
-            std::string s = field;
-            std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-            return s;
-        }();
-        for (const auto& hint : kActorHints)
-            if (lower.find(hint) != std::string::npos) { score += 10; break; }
-
-        // Prefer moderate cardinality (2–30) over large (31–200)
-        if (unique <= 30) score += 5;
-
-        std::vector<std::string> samples;
-        for (const auto& v : vals)
+        // Collect up to 5 sample values from the first 500 events
+        std::set<std::string> seen;
+        const size_t probe = std::min(m_events->Size(), size_t(500));
+        for (size_t i = 0; i < probe && static_cast<int>(c.samples.size()) < 5; ++i)
         {
-            if (static_cast<int>(samples.size()) >= 5) break;
-            if (!v.empty()) samples.push_back(v);
+            try {
+                const std::string v = m_events->GetEvent(i).findByKey(field);
+                if (!v.empty() && seen.insert(v).second)
+                    c.samples.push_back(v);
+            } catch (const std::out_of_range&) { break; }
         }
-
-        candidates.push_back({field, unique, score, std::move(samples)});
+        c.uniqueCount = static_cast<int>(seen.size());
+        candidates.push_back(std::move(c));
     }
 
-    // Sort: score desc, then unique count asc
     std::sort(candidates.begin(), candidates.end(),
         [](const Candidate& a, const Candidate& b) {
             if (a.score != b.score) return a.score > b.score;
