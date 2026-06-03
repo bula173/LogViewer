@@ -3,6 +3,7 @@
 #include "EventsContainer.hpp"
 #include "events/EventsTableView.hpp"
 #include "Logger.hpp"
+#include "panels/ActorDefinition.hpp"
 
 #include <QFutureWatcher>
 #include <QGraphicsLineItem>
@@ -210,6 +211,41 @@ void SequenceDiagramPanel::Refresh()
         }));
 }
 
+void SequenceDiagramPanel::SetDefinitions(const std::vector<ActorDefinition>& defs)
+{
+    m_selfActor.clear();
+    m_aliasMap.clear();
+
+    for (const auto& def : defs)
+    {
+        if (def.isSelf)
+        {
+            // Self is identified by the actor's name (for fixed-name defs)
+            // or by the captured values (for capture defs). We store the
+            // definition name; RenderDiagram matches it against the actor set.
+            m_selfActor = def.name;
+        }
+
+        if (!def.useCaptures)
+        {
+            // Fixed-name definition: alias applies to the whole actor name.
+            if (!def.alias.empty())
+                m_aliasMap[def.name] = def.alias;
+        }
+        else
+        {
+            // Capture-group definition: per-value aliases from captureAliases.
+            for (const auto& [raw, alias] : def.captureAliases)
+                if (!alias.empty())
+                    m_aliasMap[raw] = alias;
+        }
+    }
+
+    // Re-render with updated aliases/self if a pattern is already known.
+    if (m_pattern)
+        RenderDiagram(*m_pattern);
+}
+
 void SequenceDiagramPanel::OnDiscoveryFinished()
 {
     if (m_refreshBtn) m_refreshBtn->setEnabled(true);
@@ -238,9 +274,22 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
 
     const int limit = m_limitSpin->value();
 
-    // Ordered actor list
+    // Build alias helper: returns display name for a raw actor value.
+    auto displayName = [this](const std::string& raw) -> QString {
+        const auto it = m_aliasMap.find(raw);
+        return QString::fromStdString(it != m_aliasMap.end() ? it->second : raw);
+    };
+
+    // Ordered actor list — self actor placed first if present.
     std::vector<std::string> actors(pat.actors.begin(), pat.actors.end());
     std::sort(actors.begin(), actors.end());
+    // Move self to front for visual prominence.
+    if (!m_selfActor.empty())
+    {
+        auto selfIt = std::find(actors.begin(), actors.end(), m_selfActor);
+        if (selfIt != actors.end())
+            std::rotate(actors.begin(), selfIt, selfIt + 1);
+    }
     std::map<std::string, int> col;
     for (int i = 0; i < static_cast<int>(actors.size()); ++i)
         col[actors[static_cast<size_t>(i)]] = i;
@@ -280,18 +329,23 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
     {
         const qreal cx = i * kColSpacing + actorCX;
 
-        m_scene->addRect(cx - kActorBoxW / 2.0, kHeaderY, kActorBoxW, kActorBoxH,
-                         QPen(QColor(80, 100, 180)), QBrush(QColor(220, 225, 255)));
+        const bool isSelf = (!m_selfActor.empty() && actors[static_cast<size_t>(i)] == m_selfActor);
+        const QColor boxBorder = isSelf ? QColor(0, 120, 0)   : QColor(80, 100, 180);
+        const QColor boxFill   = isSelf ? QColor(200, 240, 200): QColor(220, 225, 255);
+        const QColor txtColor  = isSelf ? QColor(0, 80, 0)    : QColor(30, 30, 80);
 
-        auto* txt = m_scene->addText(
-            QString::fromStdString(actors[static_cast<size_t>(i)]));
+        m_scene->addRect(cx - kActorBoxW / 2.0, kHeaderY, kActorBoxW, kActorBoxH,
+                         QPen(boxBorder, isSelf ? 2 : 1), QBrush(boxFill));
+
+        const QString label = displayName(actors[static_cast<size_t>(i)]);
+        auto* txt = m_scene->addText(label);
         {
             QFont f = txt->font();
             f.setBold(true);
             f.setPointSize(8);
             txt->setFont(f);
         }
-        txt->setDefaultTextColor(QColor(30, 30, 80));
+        txt->setDefaultTextColor(txtColor);
         txt->setPos(cx - txt->boundingRect().width() / 2.0,
                     kHeaderY + (kActorBoxH - txt->boundingRect().height()) / 2.0);
 
@@ -299,8 +353,18 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
     }
 
     // ── Draw arrows ───────────────────────────────────────────────────────
-    const QColor kArrowClr(60, 80, 160);
-    const QColor kSelfClr (120, 80, 160);
+    // Arrow colours depending on self-actor involvement.
+    // Outgoing (from self) = green, incoming (to self) = blue,
+    // self-loop = purple, peer-to-peer = gray.
+    const bool hasSelf = !m_selfActor.empty() && col.count(m_selfActor);
+    const int  selfCol = hasSelf ? col.at(m_selfActor) : -1;
+
+    auto arrowColor = [&](int fromCol, int toCol) -> QColor {
+        if (fromCol == toCol)               return QColor(120, 60, 160); // self-loop
+        if (hasSelf && fromCol == selfCol)  return QColor(0, 140, 0);   // outgoing
+        if (hasSelf && toCol   == selfCol)  return QColor(30, 80, 200); // incoming
+        return QColor(100, 100, 100);                                    // peer-to-peer
+    };
 
     for (int r = 0; r < static_cast<int>(rows.size()); ++r)
     {
@@ -308,7 +372,7 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
         const qreal   y  = kFirstMsgY + r * kRowH;
         const qreal   x1 = mr.fromCol * kColSpacing + actorCX;
         const qreal   x2 = mr.toCol   * kColSpacing + actorCX;
-        const QColor& clr = (mr.fromCol == mr.toCol) ? kSelfClr : kArrowClr;
+        const QColor  clr = arrowColor(mr.fromCol, mr.toCol);
         QPen pen(clr);
 
         if (mr.fromCol == mr.toCol)

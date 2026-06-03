@@ -20,13 +20,24 @@ struct ActorDefinition
     std::string pattern;    ///< ECMAScript/QRegularExpression pattern
     std::string field;      ///< Log field to match against (empty = any field)
     std::string directedTo; ///< Name of the actor this actor's events are directed to (optional)
-    bool        enabled {true};
+    bool        enabled    {true};
+    bool        isSelf     {false}; ///< Marks this as the "main/self" actor (log generator).
+                                    ///  Only one definition should have isSelf=true.
+                                    ///  Used by SequenceDiagramPanel to colour outgoing
+                                    ///  (from self → green) vs incoming (to self → blue) arrows.
+    /// Display alias shown instead of the raw actor name in the sequence diagram.
+    /// For useCaptures=false: replaces @p name; for useCaptures=true: used as prefix
+    /// when no entry exists in captureAliases.
+    std::string alias;
     /// When true, each named or numbered capture group in @p pattern is treated
     /// as a separate actor instead of using @p name as the actor name.
     bool        useCaptures {false};
     /// Per-subactor overrides: subactor name → target actor name (capture-group mode).
     /// Falls back to directedTo for subactors not listed here.
     std::map<std::string, std::string> subActorDirectedTo;
+    /// Aliases for individual captured values (useCaptures=true only).
+    /// Maps raw log value → friendly display name shown in sequence diagram.
+    std::map<std::string, std::string> captureAliases;
 
     // ── JSON round-trip ──────────────────────────────────────────────────
     [[nodiscard]] nlohmann::json ToJson() const
@@ -34,11 +45,16 @@ struct ActorDefinition
         nlohmann::json subDirs = nlohmann::json::object();
         for (const auto& [k, v] : subActorDirectedTo)
             subDirs[k] = v;
+        nlohmann::json capAliases = nlohmann::json::object();
+        for (const auto& [k, v] : captureAliases)
+            capAliases[k] = v;
         return {{"name", name}, {"pattern", pattern},
                 {"field", field}, {"enabled", enabled},
+                {"isSelf", isSelf}, {"alias", alias},
                 {"useCaptures", useCaptures},
                 {"directedTo", directedTo},
-                {"subActorDirectedTo", subDirs}};
+                {"subActorDirectedTo", subDirs},
+                {"captureAliases", capAliases}};
     }
 
     static ActorDefinition FromJson(const nlohmann::json& j)
@@ -48,15 +64,17 @@ struct ActorDefinition
         d.pattern     = j.value("pattern",     "");
         d.field       = j.value("field",       "");
         d.enabled     = j.value("enabled",     true);
+        d.isSelf      = j.value("isSelf",      false);
+        d.alias       = j.value("alias",       "");
         d.useCaptures = j.value("useCaptures", false);
         d.directedTo  = j.value("directedTo",  "");
-        if (j.contains("subActorDirectedTo") &&
-            j.at("subActorDirectedTo").is_object())
-        {
-            for (const auto& [k, v] : j.at("subActorDirectedTo").items())
-                if (v.is_string())
-                    d.subActorDirectedTo[k] = v.get<std::string>();
-        }
+        auto loadMap = [&](const char* key, std::map<std::string,std::string>& out) {
+            if (j.contains(key) && j.at(key).is_object())
+                for (const auto& [k, v] : j.at(key).items())
+                    if (v.is_string()) out[k] = v.get<std::string>();
+        };
+        loadMap("subActorDirectedTo", d.subActorDirectedTo);
+        loadMap("captureAliases",     d.captureAliases);
         return d;
     }
 

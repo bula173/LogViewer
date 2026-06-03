@@ -111,20 +111,25 @@ void ActorDefinitionsPanel::BuildLayout()
     layout->addWidget(infoLabel);
 
     // ── Table ─────────────────────────────────────────────────────────────
-    m_table = new QTableWidget(0, 6, this);
+    m_table = new QTableWidget(0, 8, this);
     m_table->setHorizontalHeaderLabels(
-        {tr("On"), tr("Name"), tr("Field"), tr("Pattern (regexp)"), tr("Captures"), tr("Directed To")});
+        {tr("On"), tr("Self"), tr("Name"), tr("Alias"),
+         tr("Field"), tr("Pattern (regexp)"), tr("Captures"), tr("Directed To")});
     m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+    m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     m_table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
-    m_table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-    m_table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
-    m_table->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Interactive);
+    m_table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Interactive);
+    m_table->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Interactive);
+    m_table->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+    m_table->horizontalHeader()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
+    m_table->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Interactive);
     m_table->horizontalHeader()->setToolTip(tr(
+        "Self: marks this as the main actor (log generator).\n"
         "Captures: when ✓, each () group in the pattern produces a separate actor"));
-    m_table->setColumnWidth(1, 110);
-    m_table->setColumnWidth(2, 90);
-    m_table->setColumnWidth(5, 110);
+    m_table->setColumnWidth(2, 100);
+    m_table->setColumnWidth(3, 100);
+    m_table->setColumnWidth(4, 80);
+    m_table->setColumnWidth(7, 100);
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_table->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -211,34 +216,59 @@ void ActorDefinitionsPanel::RebuildTable()
         const int row = m_table->rowCount();
         m_table->insertRow(row);
 
+        // Col 0 \u2014 Enabled checkbox
         auto* onItem = new QTableWidgetItem();
         onItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
         onItem->setCheckState(def.enabled ? Qt::Checked : Qt::Unchecked);
         m_table->setItem(row, 0, onItem);
 
-        m_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(def.name)));
-        m_table->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(def.field)));
-        m_table->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(def.pattern)));
+        // Col 1 \u2014 Self (main actor) indicator, read-only (edit via Edit dialog)
+        auto* selfItem = new QTableWidgetItem(def.isSelf ? tr("\u2605") : QString());
+        selfItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        selfItem->setTextAlignment(Qt::AlignCenter);
+        selfItem->setToolTip(def.isSelf
+            ? tr("This is the main/self actor (log generator).\n"
+                 "Sequence diagram: outgoing arrows are green, incoming are blue.")
+            : tr("Not the main actor. Use Edit to mark as self."));
+        if (def.isSelf)
+            selfItem->setForeground(QColor(0, 120, 0));
+        m_table->setItem(row, 1, selfItem);
 
+        // Col 2 \u2014 Name
+        m_table->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(def.name)));
+        // Col 3 \u2014 Alias
+        auto* aliasItem = new QTableWidgetItem(QString::fromStdString(def.alias));
+        aliasItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        aliasItem->setToolTip(def.alias.empty()
+            ? tr("No alias \u2014 actor name used as-is in diagram")
+            : tr("Sequence diagram shows this alias instead of the raw actor name"));
+        m_table->setItem(row, 3, aliasItem);
+        // Col 4 \u2014 Field
+        m_table->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(def.field)));
+        // Col 5 \u2014 Pattern
+        m_table->setItem(row, 5, new QTableWidgetItem(QString::fromStdString(def.pattern)));
+
+        // Col 6 \u2014 Captures
         auto* capItem = new QTableWidgetItem(def.useCaptures ? tr("\u2713") : QString());
         capItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         capItem->setTextAlignment(Qt::AlignCenter);
         capItem->setToolTip(def.useCaptures
             ? tr("Each capture group () produces a separate actor")
             : tr("Actor name is fixed (no capture groups used)"));
-        m_table->setItem(row, 4, capItem);
+        m_table->setItem(row, 6, capItem);
 
+        // Col 7 \u2014 Directed To
         auto* directedToItem = new QTableWidgetItem(QString::fromStdString(def.directedTo));
         directedToItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         directedToItem->setToolTip(def.directedTo.empty()
             ? tr("No target actor specified")
             : tr("Events from this actor are directed to: %1")
                   .arg(QString::fromStdString(def.directedTo)));
-        m_table->setItem(row, 5, directedToItem);
+        m_table->setItem(row, 7, directedToItem);
 
         if (!def.enabled)
         {
-            for (int c = 1; c < 6; ++c)
+            for (int c = 2; c < 8; ++c)
                 if (auto* it = m_table->item(row, c))
                     it->setForeground(QColor(150, 150, 150));
         }
@@ -664,10 +694,10 @@ void ActorDefinitionsPanel::HandleItemChanged(QTableWidgetItem* item)
                         on ? "enabled" : "disabled");
     m_definitions[static_cast<size_t>(row)].enabled = on;
 
-    // Update row text colour to reflect enabled state
+    // Update row text colour to reflect enabled state (skip col 0 = checkbox, col 1 = self)
     {
         m_rebuilding = true;
-        for (int c = 1; c < 6; ++c)
+        for (int c = 2; c < 8; ++c)
             if (auto* it = m_table->item(row, c))
                 it->setForeground(on ? QColor() : QColor(150, 150, 150));
         m_rebuilding = false;
@@ -724,8 +754,20 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     auto* form = new QFormLayout();
 
     auto* nameEdit    = new QLineEdit(QString::fromStdString(def.name),    &dlg);
+    auto* aliasEdit   = new QLineEdit(QString::fromStdString(def.alias),   &dlg);
+    aliasEdit->setPlaceholderText(tr("(optional — shown in sequence diagram instead of raw name)"));
+    aliasEdit->setToolTip(tr(
+        "Friendly display name used in the sequence diagram.\n"
+        "Leave empty to use the raw actor name / field value.\n"
+        "For capture-group definitions, set per-value aliases via the Capture Aliases button."));
     auto* fieldEdit   = new QLineEdit(QString::fromStdString(def.field),   &dlg);
     auto* patternEdit = new QLineEdit(QString::fromStdString(def.pattern), &dlg);
+    auto* selfBox     = new QCheckBox(tr("Mark as self / main actor (log generator)"), &dlg);
+    selfBox->setChecked(def.isSelf);
+    selfBox->setToolTip(tr(
+        "Marks this actor as the perspective from which the log was recorded.\n"
+        "Sequence diagram: outgoing arrows (from self) are shown in green;\n"
+        "incoming arrows (to self) are shown in blue."));
     auto* enabledBox  = new QCheckBox(tr("Enabled"), &dlg);
     enabledBox->setChecked(def.enabled);
     auto* captureBox  = new QCheckBox(tr("Use capture groups as actors"), &dlg);
@@ -773,10 +815,12 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
     statusLabel->setWordWrap(true);
 
     form->addRow(tr("Name:"),        nameEdit);
+    form->addRow(tr("Alias:"),       aliasEdit);
     form->addRow(tr("Field:"),       fieldEdit);
     form->addRow(tr("Pattern:"),     patternEdit);
     form->addRow(QString(),          captureBox);
     form->addRow(tr("Directed to:"), directedToCombo);
+    form->addRow(QString(),          selfBox);
     form->addRow(QString(),          enabledBox);
     form->addRow(QString(),          statusLabel);
 
@@ -906,43 +950,107 @@ bool ActorDefinitionsPanel::EditDefinition(ActorDefinition& def, bool isNew)
         if (r >= 0) subActorTable->removeRow(r);
     });
 
-    // Show / hide group when capture-group mode is toggled
+    // ── Capture aliases table (visible only in capture-group mode) ───────
+    auto* aliasGroup = new QGroupBox(tr("Capture Value Aliases"), &dlg);
+    aliasGroup->setToolTip(tr(
+        "Map raw captured log values to friendly display names.\n"
+        "Used in the sequence diagram instead of the raw field value.\n"
+        "Example: svc_auth_v2_prod → Auth Service"));
+    aliasGroup->setVisible(captureBox->isChecked());
+    auto* aliasLayout = new QVBoxLayout(aliasGroup);
+
+    auto* aliasTable = new QTableWidget(0, 2, aliasGroup);
+    aliasTable->setHorizontalHeaderLabels({tr("Raw Value (from log)"), tr("Display Alias")});
+    aliasTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    aliasTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    aliasTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    aliasTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    aliasTable->verticalHeader()->hide();
+    aliasTable->setAlternatingRowColors(true);
+
+    for (const auto& [k, v] : def.captureAliases)
+    {
+        const int r = aliasTable->rowCount();
+        aliasTable->insertRow(r);
+        aliasTable->setItem(r, 0, new QTableWidgetItem(QString::fromStdString(k)));
+        aliasTable->setItem(r, 1, new QTableWidgetItem(QString::fromStdString(v)));
+    }
+    aliasLayout->addWidget(aliasTable);
+
+    auto* aliasBtnRow    = new QHBoxLayout();
+    auto* addAliasBtn    = new QPushButton(tr("Add"),    aliasGroup);
+    auto* removeAliasBtn = new QPushButton(tr("Remove"), aliasGroup);
+    aliasBtnRow->addWidget(addAliasBtn);
+    aliasBtnRow->addWidget(removeAliasBtn);
+    aliasBtnRow->addStretch();
+    aliasLayout->addLayout(aliasBtnRow);
+
+    connect(addAliasBtn, &QPushButton::clicked, &dlg, [aliasTable]() {
+        const int r = aliasTable->rowCount();
+        aliasTable->insertRow(r);
+        aliasTable->setItem(r, 0, new QTableWidgetItem(QString()));
+        aliasTable->setItem(r, 1, new QTableWidgetItem(QString()));
+        aliasTable->editItem(aliasTable->item(r, 0));
+    });
+    connect(removeAliasBtn, &QPushButton::clicked, &dlg, [aliasTable]() {
+        const int r = aliasTable->currentRow();
+        if (r >= 0) aliasTable->removeRow(r);
+    });
+
+    // Show / hide groups when capture-group mode is toggled
     connect(captureBox, &QCheckBox::toggled, &dlg,
-            [subActorGroup](bool checked) {
+            [subActorGroup, aliasGroup](bool checked) {
                 subActorGroup->setVisible(checked);
+                aliasGroup->setVisible(checked);
             });
 
     mainLayout->addWidget(subActorGroup);
+    mainLayout->addWidget(aliasGroup);
     mainLayout->addWidget(buttons);
 
     if (dlg.exec() != QDialog::Accepted) return false;
 
     def.name        = nameEdit->text().trimmed().toStdString();
+    def.alias       = aliasEdit->text().trimmed().toStdString();
     def.field       = fieldEdit->text().trimmed().toStdString();
     def.pattern     = patternEdit->text().trimmed().toStdString();
     def.enabled     = enabledBox->isChecked();
+    def.isSelf      = selfBox->isChecked();
     def.useCaptures = captureBox->isChecked();
     // Read directedTo: prefer the editable text; treat "(none)" as empty
     {
         const QString dt = directedToCombo->currentText().trimmed();
         def.directedTo = (dt == tr("(none)")) ? std::string{} : dt.toStdString();
     }
-    // Read subactor directed-to table.
-    // Only clear existing overrides when captures mode is still active;
-    // if the user toggled captures off, preserve the map so it's not
-    // lost if they re-enable captures later.
+    // When marking as self, clear isSelf on all other definitions
+    if (def.isSelf)
+        for (auto& d : m_definitions)
+            if (d.name != def.name) d.isSelf = false;
+
+    // Read subactor directed-to and capture aliases tables
     if (def.useCaptures)
     {
         def.subActorDirectedTo.clear();
         for (int r = 0; r < subActorTable->rowCount(); ++r)
         {
-            const QTableWidgetItem* nameIt   = subActorTable->item(r, 0);
-            const QTableWidgetItem* targetIt = subActorTable->item(r, 1);
-            if (!nameIt || !targetIt) continue;
-            const std::string k = nameIt->text().trimmed().toStdString();
-            const std::string v = targetIt->text().trimmed().toStdString();
+            const QTableWidgetItem* ni = subActorTable->item(r, 0);
+            const QTableWidgetItem* ti = subActorTable->item(r, 1);
+            if (!ni || !ti) continue;
+            const std::string k = ni->text().trimmed().toStdString();
+            const std::string v = ti->text().trimmed().toStdString();
             if (!k.empty() && !v.empty())
                 def.subActorDirectedTo[k] = v;
+        }
+        def.captureAliases.clear();
+        for (int r = 0; r < aliasTable->rowCount(); ++r)
+        {
+            const QTableWidgetItem* ki = aliasTable->item(r, 0);
+            const QTableWidgetItem* vi = aliasTable->item(r, 1);
+            if (!ki || !vi) continue;
+            const std::string k = ki->text().trimmed().toStdString();
+            const std::string v = vi->text().trimmed().toStdString();
+            if (!k.empty() && !v.empty())
+                def.captureAliases[k] = v;
         }
     }
     return true;

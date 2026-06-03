@@ -1016,12 +1016,17 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
                 this, [this](int) { RefreshCurrentAnalysisPanel(); });
     }
 
-    // Connect actor definitions → actors panel
+    // Connect actor definitions → actors panel + sequence diagram
     if (m_actorDefPanel && m_actorsPanel) {
         connect(m_actorDefPanel, &ActorDefinitionsPanel::DefinitionsChanged,
                 m_actorsPanel,   &ActorsPanel::SetDefinitions);
         // Push any already-loaded definitions immediately
         m_actorsPanel->SetDefinitions(m_actorDefPanel->Definitions());
+    }
+    if (m_actorDefPanel && m_sequencePanel) {
+        connect(m_actorDefPanel, &ActorDefinitionsPanel::DefinitionsChanged,
+                m_sequencePanel, &SequenceDiagramPanel::SetDefinitions);
+        m_sequencePanel->SetDefinitions(m_actorDefPanel->Definitions());
     }
 
     // Back-channel: actor direction changes made via context menu in Actors panel

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "analyzers/ActorDiscoverer.hpp"
+#include "panels/ActorDefinition.hpp"
 
 #include <QFutureWatcher>
 #include <QGraphicsScene>
@@ -10,7 +11,9 @@
 #include <QSpinBox>
 #include <QWidget>
 
+#include <map>
 #include <optional>
+#include <string>
 
 namespace db   { class EventsContainer; }
 namespace ui::qt { class EventsTableView; }
@@ -35,6 +38,9 @@ public:
 
 public slots:
     void Refresh();
+    /// Called whenever actor definitions change.  Updates alias and self
+    /// information used during rendering without re-running discovery.
+    void SetDefinitions(const std::vector<ActorDefinition>& defs);
 
 private slots:
     void OnDiscoveryFinished();
@@ -56,6 +62,10 @@ private:
 
     std::optional<analyzer::ExchangePattern>        m_pattern;
     QFutureWatcher<analyzer::ActorDiscoveryResult>* m_watcher {nullptr};
+
+    // Derived from actor definitions; rebuilt on SetDefinitions().
+    std::string                        m_selfActor;   ///< Raw value of the "self" actor (empty = none)
+    std::map<std::string, std::string> m_aliasMap;    ///< raw value → display alias
 };
 
 } // namespace ui::qt
