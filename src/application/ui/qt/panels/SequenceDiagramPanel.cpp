@@ -251,16 +251,16 @@ void SequenceDiagramPanel::OnDiscoveryFinished()
     if (m_refreshBtn) m_refreshBtn->setEnabled(true);
 
     const auto result = m_watcher->result();
-    if (!result.exchange)
+    if (result.patterns.empty())
     {
         m_statusLabel->setText(
-            tr("No from→to pattern detected. "
-               "Try a log with sender/receiver/source/dest fields."));
+            tr("No exchange pattern detected. "
+               "Try a log with sender/receiver/source/dest or actor/direction fields."));
         m_statusLabel->setStyleSheet("color: gray;");
         return;
     }
 
-    m_pattern = result.exchange;
+    m_pattern = result.patterns[0];
     RenderDiagram(*m_pattern);
 }
 

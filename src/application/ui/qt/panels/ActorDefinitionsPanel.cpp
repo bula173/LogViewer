@@ -505,13 +505,14 @@ void ActorDefinitionsPanel::HandleDiscover()
     // ── Delegate field detection to ActorDiscoverer ───────────────────────
     const auto discovered = analyzer::ActorDiscoverer::Discover(*m_events);
 
-    // Collect all candidate field names: actor fields + exchange fields
+    // Collect all candidate field names: actor fields + exchange pattern fields
     std::vector<std::string> candidateFields = discovered.actorFields;
-    if (discovered.exchange)
+    for (const auto& pat : discovered.patterns)
     {
-        for (const auto& f : {discovered.exchange->senderField,
-                               discovered.exchange->receiverField,
-                               discovered.exchange->labelField})
+        for (const auto& f : {pat.senderField,
+                               pat.receiverField,
+                               pat.actorField,
+                               pat.labelField})
         {
             if (!f.empty() &&
                 std::find(candidateFields.begin(), candidateFields.end(), f) == candidateFields.end())
