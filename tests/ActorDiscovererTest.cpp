@@ -355,3 +355,66 @@ TEST(ActorDiscoverer, ActorFieldsCollectedFromRemaining)
     EXPECT_TRUE(std::count(r.actorFields.begin(), r.actorFields.end(), "other_field") > 0 ||
                 r.actorFields.empty()); // May be empty if other_field doesn't score as actor field
 }
+
+// ---------------------------------------------------------------------------
+// Mode 5: PatternField (embedded actors with separator)
+// ---------------------------------------------------------------------------
+
+TEST(ActorDiscoverer, DetectsEmbeddedActorsWithColon)
+{
+    db::EventsContainer c;
+    // Simulate ERTMS logs: "RBC: message", "Train T001: message", etc.
+    for (int i = 0; i < 20; ++i)
+    {
+        const std::string actor = (i % 2 == 0) ? "RBC" : "Train T001";
+        const std::string msg = actor + ": " + (i % 2 == 0 ? "System message" : "Position report");
+        AddEvent(c, Make({{"info", msg}, {"timestamp", "1.0"}}));
+    }
+    const auto r = ActorDiscoverer::Discover(c);
+    ASSERT_FALSE(r.patterns.empty());
+    const auto it = std::find_if(r.patterns.begin(), r.patterns.end(),
+        [](const auto& p) { return p.mode == analyzer::ExchangeMode::PatternField; });
+    if (it != r.patterns.end())
+    {
+        EXPECT_EQ(it->patternField, "info");
+        EXPECT_EQ(it->separator, ":");
+        EXPECT_GE(it->actors.size(), 2u);
+        EXPECT_TRUE(it->actors.count("RBC") > 0);
+        EXPECT_TRUE(it->actors.count("Train T001") > 0);
+    }
+}
+
+TEST(ActorDiscoverer, DetectsEmbeddedActorsWithPipe)
+{
+    db::EventsContainer c;
+    for (int i = 0; i < 15; ++i)
+    {
+        const std::string actor = (i % 3 == 0) ? "ServiceA" : (i % 3 == 1) ? "ServiceB" : "ServiceC";
+        const std::string msg = actor + " | event data";
+        AddEvent(c, Make({{"message", msg}}));
+    }
+    const auto r = ActorDiscoverer::Discover(c);
+    const auto it = std::find_if(r.patterns.begin(), r.patterns.end(),
+        [](const auto& p) { return p.mode == analyzer::ExchangeMode::PatternField; });
+    if (it != r.patterns.end())
+    {
+        EXPECT_EQ(it->separator, "|");
+        EXPECT_GE(it->actors.size(), 2u);
+    }
+}
+
+TEST(ActorDiscoverer, PatternFieldLowerPriorityThanPair)
+{
+    db::EventsContainer c;
+    for (int i = 0; i < 10; ++i)
+    {
+        const std::string a = (i % 2 == 0) ? "A" : "B";
+        const std::string b = (i % 2 == 0) ? "B" : "A";
+        const std::string info = a + ": message to " + b;
+        AddEvent(c, Make({{"from", a}, {"to", b}, {"info", info}}));
+    }
+    const auto r = ActorDiscoverer::Discover(c);
+    ASSERT_FALSE(r.patterns.empty());
+    // Pair mode should rank higher than PatternField
+    EXPECT_EQ(r.patterns[0].mode, analyzer::ExchangeMode::Pair);
+}

@@ -34,6 +34,10 @@ enum class ExchangeMode
     /// Only a sender field is present; the receiver is always the self actor.
     /// Example: from=A  — the log generator is always the one receiving
     SenderOnly,
+
+    /// Actor names are embedded in a single field using a separator pattern.
+    /// Example: "RBC: message", "Train T001: info" — extract prefix before ":"
+    PatternField,
 };
 
 // ---------------------------------------------------------------------------
@@ -58,6 +62,11 @@ struct ExchangePattern
     std::string directionField;   ///< Field whose VALUE indicates direction
     std::set<std::string> outgoingValues; ///< Values that mean "sending"
     std::set<std::string> incomingValues; ///< Values that mean "receiving"
+
+    // ── PatternField ──────────────────────────────────────────────────────
+    std::string patternField;     ///< Field containing embedded actor names
+    std::string separator;        ///< Separator character/string (e.g., ":")
+    std::string extractionPattern; ///< Regex pattern to extract actor (e.g., "([^:]+):")
 
     // ── Metadata ──────────────────────────────────────────────────────────
     int         confidence {0}; ///< Score used to rank candidates (higher = better)
@@ -107,6 +116,7 @@ public:
                                           size_t sampleLimit = 10'000);
 
     // ── Exposed for unit tests ─────────────────────────────────────────────
+    static std::string ToLower(const std::string& s);
     static int  ScoreSender   (const std::string& fieldName);
     static int  ScoreReceiver (const std::string& fieldName);
     static int  ScoreActor    (const std::string& fieldName);
@@ -118,8 +128,11 @@ public:
                                std::set<std::string>& outValues,
                                std::set<std::string>& inValues);
 
-private:
-    static std::string ToLower(const std::string& s);
+    /// Detects if a field contains embedded actor names with a separator.
+    /// Returns (separator, extractedActors, confidence) or empty if not detected.
+    /// Example: "RBC: message" → separator=":", actors={"RBC"}
+    static std::tuple<std::string, std::set<std::string>, int>
+    DetectSeparatorPattern(const std::set<std::string>& fieldValues);
 };
 
 } // namespace analyzer

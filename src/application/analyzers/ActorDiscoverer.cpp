@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cctype>
 #include <stdexcept>
+#include <tuple>
 
 namespace analyzer
 {
@@ -277,6 +278,39 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
         }
     }
 
+    // Mode 5: PatternField (embedded actors with separator)
+    {
+        for (auto& [field, vals] : fieldVals)
+        {
+            // Skip fields already used in detected patterns
+            bool used = false;
+            for (const auto& p : result.patterns)
+            {
+                if (field == p.senderField || field == p.receiverField ||
+                    field == p.actorField || field == p.directionField)
+                {
+                    used = true;
+                    break;
+                }
+            }
+            if (used) continue;
+
+            auto [sep, actors, conf] = DetectSeparatorPattern(vals);
+            if (conf > 0 && actors.size() >= 2)
+            {
+                ExchangePattern pat;
+                pat.mode = ExchangeMode::PatternField;
+                pat.patternField = field;
+                pat.separator = sep;
+                pat.actors = actors;
+                pat.confidence = conf;
+                pat.extractionPattern = "([^" + sep + "]+)" + sep;
+                pat.description = "Embedded actors in '" + field + "' using separator '" + sep + "'";
+                result.patterns.push_back(std::move(pat));
+            }
+        }
+    }
+
     // Sort by confidence
     std::sort(result.patterns.begin(), result.patterns.end(),
               [](const ExchangePattern& a, const ExchangePattern& b) {
@@ -299,6 +333,62 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
     }
 
     return result;
+}
+
+// ---------------------------------------------------------------------------
+// Pattern detection for embedded actors
+// ---------------------------------------------------------------------------
+
+std::tuple<std::string, std::set<std::string>, int>
+ActorDiscoverer::DetectSeparatorPattern(const std::set<std::string>& fieldValues)
+{
+    // Common separators to try in order of likelihood
+    static const std::vector<std::pair<std::string, std::string>> separators = {
+        {":", "([^:]+):"},      // "RBC: message"
+        {"|", "([^|]+)\\|"},    // "RBC | message"
+        {"-", "([^-]+)-"},      // "RBC-message"
+        {"->", "([^-]+)->"},    // "RBC->message"
+        {" ", "^(\\w+)\\s"},    // "RBC message" (word at start)
+    };
+
+    for (const auto& [sep, pattern] : separators)
+    {
+        std::set<std::string> extracted;
+        int matches = 0;
+
+        for (const auto& val : fieldValues)
+        {
+            const size_t pos = val.find(sep);
+            if (pos == std::string::npos) continue;
+
+            // Extract prefix before separator
+            std::string prefix = val.substr(0, pos);
+
+            // Trim whitespace
+            while (!prefix.empty() && std::isspace(prefix.back()))
+                prefix.pop_back();
+            while (!prefix.empty() && std::isspace(prefix.front()))
+                prefix = prefix.substr(1);
+
+            if (!prefix.empty() && prefix.length() < 50)
+            {
+                extracted.insert(prefix);
+                ++matches;
+            }
+        }
+
+        // If we found a good number of matches and extracted 2-30 unique actors
+        if (matches >= static_cast<int>(fieldValues.size()) * 0.6 &&
+            extracted.size() >= 2 && extracted.size() <= 30)
+        {
+            // Score based on consistency: higher % means more confidence
+            // Keep score lower than explicit field matches (20-40) to prioritize Pair/DirectionField
+            const int confidence = 15 + (matches * 15) / static_cast<int>(fieldValues.size());
+            return {sep, extracted, confidence};
+        }
+    }
+
+    return {"", {}, 0};  // No pattern found
 }
 
 } // namespace analyzer
