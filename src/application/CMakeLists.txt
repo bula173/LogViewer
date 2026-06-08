@@ -14,6 +14,7 @@ target_link_libraries(application_core
         EXPAT::EXPAT
         LibArchive::LibArchive  # Assuming this is the correct target
         plugin_api
+        # llama  # llama.cpp library (optional, enable via ENABLE_GEMMA_INFERENCE)
     PUBLIC   # Keep Qt public for plugins
         Qt6::Core
         Qt6::Widgets
