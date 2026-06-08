@@ -34,6 +34,7 @@
 #include "Logger.hpp"
 #include "Config.hpp"
 #include "dialogs/ConfigEditorDialog.hpp"
+#include "dialogs/GemmaDownloadDialog.hpp"
 #include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
@@ -949,6 +950,11 @@ void MainWindow::SetupMenus()
     auto* checkUpdatesAction = helpMenu->addAction(tr("Check for &Updates..."));
     connect(checkUpdatesAction, &QAction::triggered, this,
             &MainWindow::OnCheckForUpdates);
+    auto* downloadGemmaAction = helpMenu->addAction(tr("Download &Gemma AI Model..."));
+    connect(downloadGemmaAction, &QAction::triggered, this, [this]() {
+        GemmaDownloadDialog dlg(this);
+        dlg.exec();
+    });
     auto* reportIssueAction = helpMenu->addAction(tr("&Report an Issue..."));
     connect(reportIssueAction, &QAction::triggered, this, []() {
         QDesktopServices::openUrl(

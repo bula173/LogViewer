@@ -31,6 +31,7 @@ target_sources(application_core
         panels/SequenceDiagramPanel.cpp
         dialogs/ConfigEditorDialog.cpp
         dialogs/FilterEditorDialog.cpp
+        dialogs/GemmaDownloadDialog.cpp
         dialogs/LogFileLoadDialog.cpp
         dialogs/PluginManagerDialog.cpp
         dialogs/StructuredConfigDialog.cpp

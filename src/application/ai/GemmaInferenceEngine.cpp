@@ -294,4 +294,95 @@ void GemmaInferenceEngine::Shutdown()
     util::Logger::Info("[Gemma] Engine shutdown");
 }
 
+bool GemmaInferenceEngine::HasModel()
+{
+    if (s_modelPath.empty())
+    {
+        const auto& configPath = config::GetConfig().GetConfigFilePath();
+        const auto appDir = std::filesystem::path(configPath).parent_path();
+        const auto defaultPath = (appDir / "models" / "gemma-2b.gguf").string();
+        return std::filesystem::exists(defaultPath);
+    }
+    return std::filesystem::exists(s_modelPath);
+}
+
+std::string GemmaInferenceEngine::GetModelDownloadUrl()
+{
+    return "https://huggingface.co/google/gemma-2b-it-gguf";
+}
+
+std::string GemmaInferenceEngine::DownloadModel()
+{
+    if (s_modelPath.empty())
+    {
+        const auto& configPath = config::GetConfig().GetConfigFilePath();
+        const auto appDir = std::filesystem::path(configPath).parent_path();
+        const auto modelsDir = appDir / "models";
+
+        // Create models directory if it doesn't exist
+        try
+        {
+            std::filesystem::create_directories(modelsDir);
+        }
+        catch (const std::exception& e)
+        {
+            return std::string("Failed to create models directory: ") + e.what();
+        }
+
+        s_modelPath = (modelsDir / "gemma-2b.gguf").string();
+    }
+
+    if (HasModel())
+        return "";  // Already downloaded
+
+    const std::string url = "https://huggingface.co/google/gemma-2b-it-gguf/resolve/main/gemma-2b-it.gguf";
+    const std::string modelDir = std::filesystem::path(s_modelPath).parent_path().string();
+
+    util::Logger::Info("[Gemma] Starting download from HuggingFace...");
+    util::Logger::Info("[Gemma] URL: {}", url);
+    util::Logger::Info("[Gemma] Destination: {}", s_modelPath);
+    util::Logger::Info("[Gemma] Size: ~1.5 GB (may take several minutes)");
+
+    // Try to download using curl command
+    std::string curlCmd = "curl -L -o \"" + s_modelPath + "\" --progress-bar \"" + url + "\"";
+
+    util::Logger::Info("[Gemma] Running: {}", curlCmd);
+
+    int result = system(curlCmd.c_str());
+
+    if (result != 0)
+    {
+        // curl failed, try wget as fallback
+        util::Logger::Warn("[Gemma] curl failed, trying wget...");
+        std::string wgetCmd = "wget -O \"" + s_modelPath + "\" \"" + url + "\"";
+        result = system(wgetCmd.c_str());
+    }
+
+    if (result != 0)
+    {
+        // Manual download instructions
+        std::string error = "Download failed. Please download manually:\n\n";
+        error += "Option 1: Using HuggingFace CLI (recommended):\n";
+        error += "  pip install huggingface-hub\n";
+        error += "  huggingface-cli download google/gemma-2b-it-gguf gemma-2b-it.gguf --local-dir " + modelDir + "\n\n";
+        error += "Option 2: Using curl:\n";
+        error += "  mkdir -p " + modelDir + "\n";
+        error += "  curl -L -o " + s_modelPath + " " + url + "\n\n";
+        error += "Option 3: Visit " + GetModelDownloadUrl() + " and download manually";
+
+        util::Logger::Error("[Gemma] {}", error);
+        return error;
+    }
+
+    if (std::filesystem::exists(s_modelPath))
+    {
+        util::Logger::Info("[Gemma] Download complete!");
+        util::Logger::Info("[Gemma] Model size: {} MB",
+                          std::filesystem::file_size(s_modelPath) / (1024 * 1024));
+        return "";  // Success
+    }
+
+    return "Download completed but model file not found";
+}
+
 } // namespace ai

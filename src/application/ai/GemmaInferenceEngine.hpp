@@ -38,6 +38,17 @@ public:
     /// Shutdown the engine (frees resources)
     static void Shutdown();
 
+    /// Download Gemma 2B model from HuggingFace
+    /// Returns error string (empty if success)
+    /// Shows progress via logger
+    static std::string DownloadModel();
+
+    /// Check if model is already downloaded
+    static bool HasModel();
+
+    /// Get model download URL
+    static std::string GetModelDownloadUrl();
+
 private:
     struct Impl;
     static std::unique_ptr<Impl> s_impl;
