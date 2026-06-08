@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cctype>
 #include <stdexcept>
+#include <sstream>
 #include <tuple>
 
 namespace analyzer
@@ -342,13 +343,14 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
 std::tuple<std::string, std::set<std::string>, int>
 ActorDiscoverer::DetectSeparatorPattern(const std::set<std::string>& fieldValues)
 {
-    // Common separators to try in order of likelihood
+    // Strategy: Try common separators, then fall back to word-frequency analysis
+
+    // Step 1: Try explicit separators first
     static const std::vector<std::pair<std::string, std::string>> separators = {
         {":", "([^:]+):"},      // "RBC: message"
         {"|", "([^|]+)\\|"},    // "RBC | message"
         {"-", "([^-]+)-"},      // "RBC-message"
         {"->", "([^-]+)->"},    // "RBC->message"
-        {" ", "^(\\w+)\\s"},    // "RBC message" (word at start)
     };
 
     for (const auto& [sep, pattern] : separators)
@@ -386,6 +388,52 @@ ActorDiscoverer::DetectSeparatorPattern(const std::set<std::string>& fieldValues
             const int confidence = 15 + (matches * 15) / static_cast<int>(fieldValues.size());
             return {sep, extracted, confidence};
         }
+    }
+
+    // Step 2: Fall back to word-frequency analysis (separator-agnostic)
+    // Extract first N words from each line and score by frequency
+    std::map<std::string, int> wordFreq;
+    const int maxWordLen = 40;
+    const int minWordLen = 2;
+
+    for (const auto& val : fieldValues)
+    {
+        // Extract words at start of line (likely candidates for actor names)
+        std::istringstream iss(val);
+        std::string word;
+        int wordCount = 0;
+
+        while (iss >> word && wordCount < 3)  // Check first 3 words
+        {
+            // Clean punctuation from word
+            while (!word.empty() && (word.back() == ':' || word.back() == '|' ||
+                                      word.back() == '-' || word.back() == ','))
+                word.pop_back();
+
+            if (word.length() >= minWordLen && word.length() <= maxWordLen &&
+                !std::all_of(word.begin(), word.end(), ::isdigit))
+            {
+                wordFreq[word]++;
+            }
+            ++wordCount;
+        }
+    }
+
+    // Find words that appear frequently (likely actors)
+    std::set<std::string> candidates;
+    const int freqThreshold = static_cast<int>(fieldValues.size()) * 0.4;  // 40% of values
+
+    for (const auto& [word, freq] : wordFreq)
+    {
+        if (freq >= freqThreshold)
+            candidates.insert(word);
+    }
+
+    // If we found 2-30 candidate actors, propose this pattern
+    if (candidates.size() >= 2 && candidates.size() <= 30)
+    {
+        const int confidence = 10 + (candidates.size() * 5);  // Low score: fallback method
+        return {"(word-frequency)", candidates, confidence};
     }
 
     return {"", {}, 0};  // No pattern found

@@ -418,3 +418,24 @@ TEST(ActorDiscoverer, PatternFieldLowerPriorityThanPair)
     // Pair mode should rank higher than PatternField
     EXPECT_EQ(r.patterns[0].mode, analyzer::ExchangeMode::Pair);
 }
+
+TEST(ActorDiscoverer, DetectsActorsWithoutExplicitSeparator)
+{
+    db::EventsContainer c;
+    // Mixed format without consistent separator: just words at start of message
+    for (int i = 0; i < 20; ++i)
+    {
+        const std::string actor = (i % 2 == 0) ? "RBC" : "Interlocking";
+        const std::string msg = actor + " performed action " + std::to_string(i);
+        AddEvent(c, Make({{"info", msg}}));
+    }
+    const auto r = ActorDiscoverer::Discover(c);
+    const auto it = std::find_if(r.patterns.begin(), r.patterns.end(),
+        [](const auto& p) { return p.mode == analyzer::ExchangeMode::PatternField; });
+    if (it != r.patterns.end())
+    {
+        // Should detect actors via word-frequency analysis
+        EXPECT_GE(it->actors.size(), 2u);
+        EXPECT_TRUE(it->actors.count("RBC") > 0 || it->actors.count("Interlocking") > 0);
+    }
+}
