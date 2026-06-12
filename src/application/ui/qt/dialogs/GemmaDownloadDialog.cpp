@@ -2,6 +2,7 @@
 
 #include "GemmaInferenceEngine.hpp"
 #include "Logger.hpp"
+#include "Config.hpp"
 
 #include <filesystem>
 #include <QVBoxLayout>
@@ -143,11 +144,30 @@ void GemmaDownloadDialog::OnOpenUrlClicked()
 
 void GemmaDownloadDialog::OnOpenFolderClicked()
 {
-    const auto& configPath = ai::GemmaInferenceEngine::GetModelPath();
-    const auto folderPath = std::filesystem::path(configPath).parent_path();
+    auto modelPath = ai::GemmaInferenceEngine::GetModelPath();
+
+    // If model path is empty, compute default
+    if (modelPath.empty())
+    {
+        const auto& configPath = config::GetConfig().GetConfigFilePath();
+        const auto appDir = std::filesystem::path(configPath).parent_path();
+        modelPath = (appDir / "models").string();
+    }
+
+    const auto folderPath = std::filesystem::path(modelPath).parent_path();
 
     // Create folder if it doesn't exist
-    std::filesystem::create_directories(folderPath);
+    if (!folderPath.empty())
+    {
+        try
+        {
+            std::filesystem::create_directories(folderPath);
+        }
+        catch (const std::exception& e)
+        {
+            util::Logger::Warn("[UI] Failed to create folder: {}", e.what());
+        }
+    }
 
     QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(folderPath.string())));
 }
