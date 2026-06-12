@@ -12,22 +12,20 @@ add_subdirectory(expat)
 add_subdirectory(fmt)
 add_subdirectory(nlohmann)
 
-# llama.cpp for local Gemma 2B inference (OPTIONAL)
-# The master branch has compilation issues; full integration pending
-# For now, architecture is in place for future llama.cpp integration
-# Users can manually enable by:
-#   1. Building llama.cpp separately
-#   2. Setting ENABLE_GEMMA_INFERENCE=ON
-#   3. Pointing CMAKE_PREFIX_PATH to llama.cpp install directory
+# llama.cpp for embedded Gemma 2B inference
+# Using stable release (b2590) with known working API
+FetchContent_Declare(llama_cpp
+    GIT_REPOSITORY https://github.com/ggerganov/llama.cpp.git
+    GIT_TAG b2590  # Stable release - avoids master branch issues
+    EXCLUDE_FROM_ALL
+)
 
-option(ENABLE_GEMMA_INFERENCE "Enable local Gemma 2B inference via llama.cpp" OFF)
+# Configure llama.cpp build options
+set(LLAMA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(LLAMA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(LLAMA_BUILD_SERVER OFF CACHE BOOL "" FORCE)
 
-if(ENABLE_GEMMA_INFERENCE)
-    message(STATUS "Gemma inference enabled - requires llama.cpp")
-    # When ready, uncomment:
-    # FetchContent_Declare(llama_cpp ...)
-    # FetchContent_MakeAvailable(llama_cpp)
-endif()
+FetchContent_MakeAvailable(llama_cpp)
 
 if(NOT LOGVIEWER_SUBPROJECT)
     add_subdirectory(gtest)
