@@ -4,12 +4,14 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QProgressBar>
+#include <QLineEdit>
+#include <QComboBox>
 #include <QThread>
 
 namespace ui::qt
 {
 
-/// Dialog for downloading Gemma 2B model
+/// Dialog for downloading AI models (Gemma, Llama, Mistral, etc.)
 class GemmaDownloadDialog : public QDialog
 {
     Q_OBJECT
@@ -25,15 +27,21 @@ private slots:
     void OnDownloadClicked();
     void OnOpenUrlClicked();
     void OnOpenFolderClicked();
+    void OnModelTypeChanged(int index);
     void OnDownloadFinished(const QString& error);
     void OnDownloadProgress(int current, int total);
 
 private:
     void UpdateUI();
     void SetDownloading(bool downloading);
+    void LoadModelPresets();
+    void SaveModelPreferences();
 
     QLabel* m_statusLabel {nullptr};
     QLabel* m_sizeLabel {nullptr};
+    QComboBox* m_modelTypeCombo {nullptr};
+    QLineEdit* m_modelUrlEdit {nullptr};
+    QLineEdit* m_modelNameEdit {nullptr};
     QPushButton* m_downloadBtn {nullptr};
     QPushButton* m_openUrlBtn {nullptr};
     QPushButton* m_openFolderBtn {nullptr};

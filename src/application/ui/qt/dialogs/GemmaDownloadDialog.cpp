@@ -11,6 +11,8 @@
 #include <QUrl>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QLineEdit>
+#include <QComboBox>
 
 namespace ui::qt
 {
@@ -18,16 +20,42 @@ namespace ui::qt
 GemmaDownloadDialog::GemmaDownloadDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setWindowTitle(tr("Download Gemma 2B Model"));
+    setWindowTitle(tr("Download AI Model"));
     setModal(true);
-    setMinimumWidth(500);
-    setMinimumHeight(300);
+    setMinimumWidth(550);
+    setMinimumHeight(350);
 
     auto layout = new QVBoxLayout(this);
 
     // Title
-    auto titleLabel = new QLabel(tr("<b>Gemma 2B Inference Model</b>"));
+    auto titleLabel = new QLabel(tr("<b>Download Local AI Model for Analysis</b>"));
     layout->addWidget(titleLabel);
+
+    // Model type selection
+    auto typeLayout = new QHBoxLayout();
+    typeLayout->addWidget(new QLabel(tr("Model Type:")));
+    m_modelTypeCombo = new QComboBox();
+    LoadModelPresets();
+    connect(m_modelTypeCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+            this, &GemmaDownloadDialog::OnModelTypeChanged);
+    typeLayout->addWidget(m_modelTypeCombo);
+    layout->addLayout(typeLayout);
+
+    // Model URL
+    auto urlLayout = new QHBoxLayout();
+    urlLayout->addWidget(new QLabel(tr("Model URL:")));
+    m_modelUrlEdit = new QLineEdit();
+    m_modelUrlEdit->setPlaceholderText(tr("https://huggingface.co/..."));
+    urlLayout->addWidget(m_modelUrlEdit);
+    layout->addLayout(urlLayout);
+
+    // Model filename
+    auto nameLayout = new QHBoxLayout();
+    nameLayout->addWidget(new QLabel(tr("Save As:")));
+    m_modelNameEdit = new QLineEdit();
+    m_modelNameEdit->setPlaceholderText(tr("model-name.gguf"));
+    nameLayout->addWidget(m_modelNameEdit);
+    layout->addLayout(nameLayout);
 
     // Status
     m_statusLabel = new QLabel();
@@ -35,7 +63,7 @@ GemmaDownloadDialog::GemmaDownloadDialog(QWidget* parent)
     layout->addWidget(m_statusLabel);
 
     // Size info
-    m_sizeLabel = new QLabel(tr("Model size: ~1.5 GB"));
+    m_sizeLabel = new QLabel();
     layout->addWidget(m_sizeLabel);
 
     // Progress bar
@@ -67,6 +95,7 @@ GemmaDownloadDialog::GemmaDownloadDialog(QWidget* parent)
     layout->addLayout(buttonLayout);
     layout->addStretch();
 
+    OnModelTypeChanged(0);  // Initialize with first preset
     UpdateUI();
 }
 
@@ -204,6 +233,42 @@ void GemmaDownloadDialog::OnDownloadProgress(int current, int total)
         m_progressBar->setMaximum(total);
         m_progressBar->setValue(current);
     }
+}
+
+void GemmaDownloadDialog::OnModelTypeChanged(int index)
+{
+    // Preset models
+    const QStringList models = {
+        "Gemma 2B (2B parameters, recommended)\thttps://huggingface.co/google/gemma-2b-it-gguf\tgemma-2b-it.gguf\t1.5",
+        "Llama 2 7B\thttps://huggingface.co/TheBloke/Llama-2-7B-GGUF\tllama-2-7b.gguf\t4.0",
+        "Mistral 7B\thttps://huggingface.co/TheBloke/Mistral-7B-GGUF\tmistral-7b.gguf\t4.4",
+        "Custom Model\thttps://huggingface.co/...\tcustom.gguf\t0.0"
+    };
+
+    if (index >= 0 && index < models.size())
+    {
+        const QStringList parts = models[index].split('\t');
+        if (parts.size() >= 4)
+        {
+            m_modelUrlEdit->setText(parts[1]);
+            m_modelNameEdit->setText(parts[2]);
+            m_sizeLabel->setText(tr("Model size: ~%1 GB").arg(parts[3]));
+        }
+    }
+}
+
+void GemmaDownloadDialog::LoadModelPresets()
+{
+    m_modelTypeCombo->addItem(tr("Gemma 2B (Recommended)"));
+    m_modelTypeCombo->addItem(tr("Llama 2 7B"));
+    m_modelTypeCombo->addItem(tr("Mistral 7B"));
+    m_modelTypeCombo->addItem(tr("Custom Model"));
+}
+
+void GemmaDownloadDialog::SaveModelPreferences()
+{
+    util::Logger::Info("[UI] Model '{}' downloaded and ready to use",
+                      m_modelNameEdit->text().toStdString());
 }
 
 } // namespace ui::qt
