@@ -626,3 +626,151 @@ TEST(EventsContainerTest, MergeEventsSameTimestampReverseIds)
         EXPECT_TRUE(foundOriginalIds.count(id)) << "Original ID " << id << " should be present";
     }
 }
+
+// =============================================================================
+// REGRESSION TESTS: Merge + Sort Crash Bug
+// =============================================================================
+// Issue: When events are sorted, then merged, the cached sort indices become
+// invalid because merge reassigns all event IDs. This caused crashes when
+// accessing events through stale indices.
+// See: merge_sort_crash_bug.md for details
+
+/**
+ * @test Verify that after merge, all event indices are still valid
+ *
+ * This test ensures that EventsContainer properly reassigns IDs after merge
+ * so that all indices 0..n-1 are valid and contiguous.
+ */
+TEST(EventsContainerTest, MergeReassignsIdsSequentially)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+
+    // Create container1 with 5 events
+    for (int i = 0; i < 5; ++i)
+    {
+        container1.AddEvent({i, {
+            {"timestamp", "2025-01-01T10:" + std::to_string(i).substr(0, 2) + ":00"},
+            {"id", std::to_string(i)}
+        }});
+    }
+
+    // Create container2 with 3 events
+    for (int i = 5; i < 8; ++i)
+    {
+        container2.AddEvent({i, {
+            {"timestamp", "2025-01-01T10:" + std::to_string(i).substr(0, 2) + ":00"},
+            {"id", std::to_string(i)}
+        }});
+    }
+
+    // Merge
+    container1.MergeEvents(container2, "src1", "src2", "timestamp");
+
+    // After merge, should have 8 events
+    ASSERT_EQ(container1.Size(), 8);
+
+    // Verify IDs are reassigned sequentially from 0 to 7
+    for (int i = 0; i < 8; ++i)
+    {
+        const auto& event = container1.GetEvent(i);
+        EXPECT_EQ(event.getId(), i) << "Event at index " << i << " should have ID " << i;
+    }
+
+    // Verify original IDs are preserved in original_id field
+    std::set<std::string> foundOriginalIds;
+    for (int i = 0; i < 8; ++i)
+    {
+        const auto& event = container1.GetEvent(i);
+        std::string originalId = event.findByKey("original_id");
+        if (!originalId.empty())
+        {
+            foundOriginalIds.insert(originalId);
+        }
+    }
+    // At least some events should have original_id preserved
+    EXPECT_GT(foundOriginalIds.size(), 0) << "Original IDs should be preserved";
+}
+
+/**
+ * @test Verify no crash when accessing all events after merge
+ *
+ * Ensures that after merge, all indices 0..n-1 can be safely accessed
+ * without out-of-range exceptions.
+ */
+TEST(EventsContainerTest, MergeAllIndicesValid)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+
+    // Create two containers with events
+    for (int i = 0; i < 10; ++i)
+    {
+        container1.AddEvent({i, {
+            {"timestamp", "2025-01-01T10:00:" + std::to_string(i).substr(0, 2)},
+            {"message", "Event from container1 - " + std::to_string(i)}
+        }});
+    }
+
+    for (int i = 10; i < 25; ++i)
+    {
+        container2.AddEvent({i, {
+            {"timestamp", "2025-01-02T10:00:" + std::to_string(i).substr(0, 2)},
+            {"message", "Event from container2 - " + std::to_string(i)}
+        }});
+    }
+
+    // Merge
+    container1.MergeEvents(container2, "log1", "log2", "timestamp");
+
+    // Verify total size
+    ASSERT_EQ(container1.Size(), 25);
+
+    // Try to access all events - should not crash
+    for (size_t i = 0; i < container1.Size(); ++i)
+    {
+        EXPECT_NO_THROW({
+            const auto& event = container1.GetEvent(i);
+            // Verify event has valid data
+            EXPECT_GE(event.getId(), 0);
+            EXPECT_LT(event.getId(), 25);
+        }) << "Accessing event at index " << i << " should not throw";
+    }
+}
+
+/**
+ * @test Verify merge preserves container ordering when already sorted
+ *
+ * This tests that merge assumes containers are already sorted and performs
+ * a stable merge. Events must be pre-sorted before calling MergeEvents.
+ */
+TEST(EventsContainerTest, MergePreservesSortedOrder)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+
+    // Add events in timestamp order to container1
+    container1.AddEvent({1, {{"timestamp", "2025-01-01T10:01:00"}, {"msg", "E1"}}});
+    container1.AddEvent({5, {{"timestamp", "2025-01-01T10:05:00"}, {"msg", "E5"}}});
+    container1.AddEvent({9, {{"timestamp", "2025-01-01T10:09:00"}, {"msg", "E9"}}});
+
+    // Add events in timestamp order to container2
+    container2.AddEvent({2, {{"timestamp", "2025-01-01T10:02:00"}, {"msg", "E2"}}});
+    container2.AddEvent({6, {{"timestamp", "2025-01-01T10:06:00"}, {"msg", "E6"}}});
+    container2.AddEvent({8, {{"timestamp", "2025-01-01T10:08:00"}, {"msg", "E8"}}});
+
+    // Merge: both containers are already sorted by timestamp
+    container1.MergeEvents(container2, "c1", "c2", "timestamp");
+
+    ASSERT_EQ(container1.Size(), 6);
+
+    // Verify events are in timestamp order: 1, 2, 5, 6, 8, 9
+    // (merge of two sorted sequences yields sorted result)
+    std::vector<std::string> expectedOrder = {"E1", "E2", "E5", "E6", "E8", "E9"};
+    for (size_t i = 0; i < expectedOrder.size(); ++i)
+    {
+        const auto& event = container1.GetEvent(i);
+        EXPECT_EQ(event.findByKey("msg"), expectedOrder[i])
+            << "Event at index " << i << " should be " << expectedOrder[i];
+    }
+}

@@ -170,6 +170,35 @@ void EventsTableModel::SyncWithContainer()
 
 void EventsTableModel::RefreshAll()
 {
+    // CRITICAL FIX: After a merge operation, cached sorted/filtered indices
+    // become invalid because EventsContainer reassigns all event IDs.
+    // Validate that all cached indices are still in range. If any are out of range,
+    // clear filtering to prevent crashes when accessing events.
+    //
+    // See: merge_sort_crash_bug.md for detailed explanation
+    if (m_filteringActive && !m_filteredIndices.empty())
+    {
+        const size_t containerSize = m_events.Size();
+        bool hasInvalidIndices = false;
+
+        for (const auto& idx : m_filteredIndices)
+        {
+            if (idx >= containerSize)
+            {
+                hasInvalidIndices = true;
+                break;
+            }
+        }
+
+        if (hasInvalidIndices)
+        {
+            util::Logger::Warn(
+                "[EventsTableModel] RefreshAll: Detected stale filtered indices after merge "
+                "(size mismatch); clearing filter to prevent crashes");
+            ClearFilter();
+        }
+    }
+
     util::Logger::Debug("[EventsTableModel] RefreshAll: {} rows (filtering={})",
         m_filteringActive ? m_filteredIndices.size() : m_events.Size(),
         m_filteringActive);
