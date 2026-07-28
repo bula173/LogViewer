@@ -82,6 +82,10 @@ private:
     static std::unique_ptr<Impl> s_impl;
     static std::string s_modelPath;
 
+    /// Helper: Run inference on a prompt using the Gemma model
+    /// Returns pair<output_text, error_message> - if error is empty, output is valid
+    static std::pair<std::string, std::string> RunInference(const std::string& prompt, int maxTokens = 200);
+
     GemmaInferenceEngine() = delete;  // Static only
 };
 

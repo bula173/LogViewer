@@ -152,6 +152,42 @@ bool GemmaInferenceEngine::IsAvailable()
     return s_impl->available;
 }
 
+/// Static helper: Run inference on a prompt using the Gemma model
+/// Returns pair<output_text, error_message> - if error is empty, output is valid
+///
+/// NOTE: This is a stub implementation. The actual inference loop requires:
+/// - llama_tokenize(model, prompt, add_bos, special)
+/// - llama_decode(ctx, batch) for context evaluation
+/// - llama_sample_* functions for token selection
+/// - llama_token_to_piece(model, token, buf, buf_size) for decoding
+/// The exact API depends on the llama.cpp version used.
+std::pair<std::string, std::string> GemmaInferenceEngine::RunInference(const std::string& prompt, int maxTokens)
+{
+    if (!s_impl || !s_impl->model || !s_impl->ctx)
+        return {"", "Model not initialized"};
+
+    try
+    {
+        // TODO: Implement actual llama.cpp inference
+        // For now, return error indicating inference not yet implemented
+        util::Logger::Warn("[Gemma] Inference not yet implemented - llama.cpp integration pending");
+
+        // This is where token generation should happen:
+        // 1. Tokenize prompt
+        // 2. Run inference loop to generate tokens
+        // 3. Decode tokens back to text
+        // 4. Return the generated response
+
+        return {"", "Inference implementation pending - check with development team"};
+    }
+    catch (const std::exception& e)
+    {
+        std::string error_msg = std::string("[Gemma] Inference exception: ") + e.what();
+        util::Logger::Error("{}", error_msg);
+        return {"", error_msg};
+    }
+}
+
 GemmaActorResult GemmaInferenceEngine::ExtractActors(const std::set<std::string>& sampleMessages)
 {
     GemmaActorResult result;
@@ -164,93 +200,96 @@ GemmaActorResult GemmaInferenceEngine::ExtractActors(const std::set<std::string>
 
     try
     {
-        util::Logger::Info("[Gemma] Using heuristic analysis with LLM model ready for full inference");
+        // Build prompt for actor extraction
+        std::string prompt = R"(Analyze these log messages and extract the unique actors/services mentioned.
+Return ONLY a JSON object with "actors" array (list of service/actor names) and "confidence" (0-100).
+
+Log samples:
+)";
+
+        int count = 0;
+        for (const auto& msg : sampleMessages)
+        {
+            if (count >= 5) break;  // Limit to 5 samples for context
+            prompt += std::to_string(count + 1) + ". " + msg + "\n";
+            count++;
+        }
+
+        prompt += R"(
+Return ONLY valid JSON with this exact structure:
+{
+  "actors": ["service1", "service2"],
+  "confidence": 85
+}
+)";
+
+        util::Logger::Info("[Gemma] Running actor extraction inference...");
         util::Logger::Debug("[Gemma] Model: {}, Context: {} tokens", s_modelPath,
                           llama_n_ctx(s_impl->ctx));
 
-        // Heuristic-based analysis with LLM model loaded and available
-        // Full token generation will be implemented when llama.cpp API stabilizes further
-        std::string response = "{\n  \"actors\": [";
-        bool first = true;
-        std::set<std::string> foundActors;
+        // Run actual LLM inference
+        auto [response, error] = RunInference(prompt, 200);
 
-        // Strategy 1: Extract first words (common actor pattern)
-        for (const auto& msg : sampleMessages)
+        if (!error.empty())
         {
-            size_t pos = 0;
-            while (pos < msg.length() && std::isspace(static_cast<unsigned char>(msg[pos])))
-                ++pos;
-
-            size_t end = pos;
-            while (end < msg.length() && !std::isspace(static_cast<unsigned char>(msg[end])) &&
-                   msg[end] != ':' && msg[end] != '|' && msg[end] != '-')
-                ++end;
-
-            if (end > pos)
-            {
-                std::string actor = msg.substr(pos, end - pos);
-                if (actor.length() > 2 && actor.length() < 50 && foundActors.count(actor) == 0)
-                {
-                    foundActors.insert(actor);
-                    if (!first) response += ", ";
-                    response += "\"" + actor + "\"";
-                    first = false;
-                }
-            }
+            result.error = error;
+            return result;
         }
 
-        response += "],\n  \"confidence\": 75\n}";
-
-        // Parse JSON response
+        // Parse JSON response from LLM
         try
         {
             size_t jsonStart = response.find('{');
             size_t jsonEnd = response.rfind('}');
 
-            if (jsonStart != std::string::npos && jsonEnd != std::string::npos)
+            if (jsonStart == std::string::npos || jsonEnd == std::string::npos)
             {
-                std::string jsonStr = response.substr(jsonStart, jsonEnd - jsonStart + 1);
-                auto json = nlohmann::json::parse(jsonStr);
+                util::Logger::Warn("[Gemma] No JSON found in response: {}", response.substr(0, 100));
+                result.error = "No JSON found in LLM response";
+                return result;
+            }
 
-                if (json.contains("actors") && json["actors"].is_array())
+            std::string jsonStr = response.substr(jsonStart, jsonEnd - jsonStart + 1);
+            auto json = nlohmann::json::parse(jsonStr);
+
+            if (json.contains("actors") && json["actors"].is_array())
+            {
+                for (const auto& actor : json["actors"])
                 {
-                    for (const auto& actor : json["actors"])
+                    if (actor.is_string())
                     {
-                        if (actor.is_string())
-                        {
-                            std::string name = actor.get<std::string>();
-                            if (!name.empty())
-                                result.actors.insert(name);
-                        }
+                        std::string name = actor.get<std::string>();
+                        if (!name.empty() && name.length() < 100)  // Sanity check
+                            result.actors.insert(name);
                     }
                 }
-
-                if (json.contains("confidence") && json["confidence"].is_number())
-                {
-                    result.confidence = json["confidence"].get<int>();
-                    result.confidence = std::min(100, std::max(0, result.confidence));
-                }
-
-                if (result.actors.empty())
-                    result.error = "No actors found";
             }
-            else
+
+            if (json.contains("confidence") && json["confidence"].is_number())
             {
-                result.error = "Invalid JSON in response";
+                result.confidence = json["confidence"].get<int>();
+                result.confidence = std::min(100, std::max(0, result.confidence));
             }
+
+            if (result.actors.empty())
+                result.error = "No actors extracted by LLM";
+            else
+                util::Logger::Info("[Gemma] Extracted {} actors", result.actors.size());
+
+            return result;
         }
         catch (const nlohmann::json::exception& e)
         {
             result.error = std::string("JSON parse error: ") + e.what();
-            util::Logger::Warn("[Gemma] {}", result.error);
+            util::Logger::Warn("[Gemma] Failed to parse LLM response: {}", result.error);
+            util::Logger::Debug("[Gemma] Response was: {}", response.substr(0, 200));
+            return result;
         }
-
-        return result;
     }
     catch (const std::exception& e)
     {
-        util::Logger::Error("[Gemma] Analysis failed: {}", e.what());
-        result.error = std::string("Gemma analysis error: ") + e.what();
+        util::Logger::Error("[Gemma] Actor extraction failed: {}", e.what());
+        result.error = std::string("Gemma error: ") + e.what();
         return result;
     }
 }
@@ -410,144 +449,17 @@ GemmaDirectionResult GemmaInferenceEngine::DetectDirections(const std::set<std::
 
         util::Logger::Debug("[Gemma] Direction analysis prompt ({} chars)", prompt.length());
 
-        // Perform heuristic analysis (AI-ready for full inference)
-        // Strategy: Scan for common direction keywords and field patterns
-        std::map<std::string, int> keywordFreq;
-        std::map<std::string, int> fieldFreq;
+        // Run actual LLM inference for direction analysis
+        util::Logger::Info("[Gemma] Running direction detection inference...");
+        auto [response, error] = RunInference(prompt, 250);
 
-        for (const auto& msg : sampleMessages)
+        if (!error.empty())
         {
-            std::string lower = msg;
-            std::transform(lower.begin(), lower.end(), lower.begin(),
-                         [](unsigned char c){ return std::tolower(c); });
-
-            // Track direction keywords
-            const std::vector<std::pair<std::string, std::string>> directionIndicators = {
-                // Sending keywords
-                {"send", "outgoing"}, {"sent", "outgoing"}, {"tx", "outgoing"},
-                {"request", "outgoing"}, {"publish", "outgoing"}, {"posting", "outgoing"},
-                {"from", "sender"}, {"source", "sender"}, {"sender", "sender"},
-                // Receiving keywords
-                {"recv", "incoming"}, {"received", "incoming"}, {"rx", "incoming"},
-                {"response", "incoming"}, {"subscribe", "incoming"}, {"reply", "incoming"},
-                {"to", "receiver"}, {"dest", "receiver"}, {"receiver", "receiver"},
-                {"target", "receiver"}
-            };
-
-            for (const auto& [keyword, category] : directionIndicators)
-            {
-                if (lower.find(keyword) != std::string::npos)
-                {
-                    keywordFreq[keyword]++;
-                }
-            }
+            result.error = error;
+            return result;
         }
 
-        // Build response with discovered patterns
-        std::string response = "{\n";
-
-        // Find top sender/receiver field names
-        std::string senderField = "from";
-        std::string receiverField = "to";
-        int senderConfidence = 0, receiverConfidence = 0;
-
-        // Check for common field name patterns
-        for (const auto& msg : sampleMessages)
-        {
-            size_t fromPos = msg.find("from");
-            size_t toPos = msg.find("to");
-            size_t senderPos = msg.find("sender");
-            size_t receiverPos = msg.find("receiver");
-
-            if (fromPos != std::string::npos) senderConfidence++;
-            if (toPos != std::string::npos) receiverConfidence++;
-            if (senderPos != std::string::npos) senderConfidence += 2;
-            if (receiverPos != std::string::npos) receiverConfidence += 2;
-        }
-
-        // Update field names if other patterns dominate
-        if (senderConfidence == 0 || receiverConfidence == 0)
-        {
-            for (const auto& msg : sampleMessages)
-            {
-                if (msg.find("source") != std::string::npos)
-                    senderField = "source";
-                if (msg.find("dest") != std::string::npos)
-                    receiverField = "dest";
-                if (msg.find("client") != std::string::npos)
-                    senderField = "client";
-                if (msg.find("server") != std::string::npos)
-                    receiverField = "server";
-            }
-        }
-
-        response += "  \"sender_field\": \"" + senderField + "\",\n";
-        response += "  \"receiver_field\": \"" + receiverField + "\",\n";
-
-        // Extract sender keywords
-        response += "  \"sender_keywords\": [";
-        bool first = true;
-        for (const auto& [kw, freq] : keywordFreq)
-        {
-            if (freq >= static_cast<int>(sampleMessages.size()) * 0.2)
-            {
-                if (kw.find("from") != std::string::npos ||
-                    kw.find("send") != std::string::npos ||
-                    kw.find("source") != std::string::npos)
-                {
-                    if (!first) response += ", ";
-                    response += "\"" + kw + "\"";
-                    first = false;
-                }
-            }
-        }
-        response += "],\n";
-
-        // Extract receiver keywords
-        response += "  \"receiver_keywords\": [";
-        first = true;
-        for (const auto& [kw, freq] : keywordFreq)
-        {
-            if (freq >= static_cast<int>(sampleMessages.size()) * 0.2)
-            {
-                if (kw.find("to") != std::string::npos ||
-                    kw.find("recv") != std::string::npos ||
-                    kw.find("receiver") != std::string::npos)
-                {
-                    if (!first) response += ", ";
-                    response += "\"" + kw + "\"";
-                    first = false;
-                }
-            }
-        }
-        response += "],\n";
-
-        // Extract direction keywords
-        response += "  \"direction_keywords\": [";
-        first = true;
-        for (const auto& [kw, freq] : keywordFreq)
-        {
-            if (freq >= static_cast<int>(sampleMessages.size()) * 0.3)
-            {
-                if (!first) response += ", ";
-                response += "\"" + kw + "\"";
-                first = false;
-                if (!first && freq > 5) break;  // Limit to top keywords
-            }
-        }
-        response += "],\n";
-
-        // Calculate confidence
-        int confidence = 50;  // Base confidence
-        if (senderConfidence > 0) confidence += 15;
-        if (receiverConfidence > 0) confidence += 15;
-        if (keywordFreq.size() >= 3) confidence += 10;
-        confidence = std::min(100, confidence);
-
-        response += "  \"confidence\": " + std::to_string(confidence) + "\n";
-        response += "}\n";
-
-        util::Logger::Debug("[Gemma] Direction analysis response:\n{}", response);
+        util::Logger::Debug("[Gemma] Direction analysis response:\n{}", response.substr(0, 300));
 
         // Parse JSON response
         try
