@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ActorDefinition.hpp"
+#include "analyzers/ActorDiscoverer.hpp"
 
 #include <QLabel>
 #include <QPushButton>
@@ -14,6 +15,10 @@
 
 namespace db {
 class EventsContainer;
+}
+
+namespace analyzer {
+struct ActorDiscoveryResult;
 }
 
 namespace ui::qt {
@@ -89,6 +94,8 @@ class ActorsPanel : public QWidget
 
     void BuildLayout();
     void RefreshWithDefinitions(const std::vector<unsigned long>& vis);
+    void RefreshFromDiscoveredActors(const analyzer::ActorDiscoveryResult& discovered,
+                                     const std::vector<unsigned long>& vis);
     void PopulateActorTree(size_t totalVisible);
     void ApplyCheckedFilter();
     void ShowActorContextMenu(const QPoint& pos);

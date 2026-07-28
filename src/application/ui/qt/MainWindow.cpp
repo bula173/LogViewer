@@ -288,8 +288,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                 tr("Browse, search, and filter log events"));
         }
 
-        // AI UI provided by plugins; initialize service holder only
-        m_pluginService = nullptr;
+        // Generic service holder for plugins (AI, analyzer, etc.)
+        m_currentService = nullptr;
 
         setCentralWidget(m_contentTabs);
 

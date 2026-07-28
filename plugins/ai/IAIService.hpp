@@ -2,6 +2,7 @@
 
 #include <string>
 #include <functional>
+#include "IService.hpp"
 
 namespace ai
 {
@@ -9,10 +10,13 @@ namespace ai
 /**
  * @brief Interface for AI service communication
  */
-class IAIService
+class IAIService : public services::IService
 {
 public:
     virtual ~IAIService() = default;
+
+    // IService implementation
+    std::string GetServiceType() const override { return "ai"; }
 
     /**
      * @brief Send a prompt to the AI and get a response

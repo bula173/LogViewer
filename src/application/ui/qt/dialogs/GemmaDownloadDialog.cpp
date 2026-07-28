@@ -115,7 +115,7 @@ void GemmaDownloadDialog::UpdateUI()
     if (m_modelAvailable)
     {
         m_statusLabel->setText(
-            tr("✓ Gemma 2B model is downloaded and ready!\n\n"
+            tr("✓ AI model is downloaded and ready!\n\n"
                "You can now use AI-powered actor discovery in your logs."));
         m_statusLabel->setStyleSheet("color: green; font-weight: bold;");
         m_downloadBtn->setEnabled(false);
@@ -124,9 +124,9 @@ void GemmaDownloadDialog::UpdateUI()
     else
     {
         m_statusLabel->setText(
-            tr("Gemma 2B model is not yet downloaded.\n\n"
-               "Download it to enable AI-powered actor discovery in logs.\n"
-               "Requires curl or wget, and ~1.5 GB of disk space."));
+            tr("No AI model is downloaded yet.\n\n"
+               "Download a model to enable AI-powered actor discovery in logs.\n"
+               "Requires curl or wget."));
         m_statusLabel->setStyleSheet("");
         m_downloadBtn->setEnabled(!m_downloading);
         if (!m_downloading)
@@ -136,24 +136,49 @@ void GemmaDownloadDialog::UpdateUI()
 
 void GemmaDownloadDialog::OnDownloadClicked()
 {
+    const QString url = m_modelUrlEdit->text();
+    const QString filename = m_modelNameEdit->text();
+
+    // Validate inputs
+    if (url.isEmpty())
+    {
+        QMessageBox::warning(this, tr("Invalid Input"),
+            tr("Please enter a model URL."));
+        return;
+    }
+
+    if (filename.isEmpty())
+    {
+        QMessageBox::warning(this, tr("Invalid Input"),
+            tr("Please enter a filename."));
+        return;
+    }
+
+    if (!filename.endsWith(".gguf"))
+    {
+        QMessageBox::warning(this, tr("Invalid Filename"),
+            tr("Filename must end with .gguf"));
+        return;
+    }
+
     SetDownloading(true);
     m_progressBar->setVisible(true);
     m_progressBar->setValue(0);
 
-    util::Logger::Info("[UI] Starting Gemma model download...");
+    util::Logger::Info("[UI] Starting model download: {}", filename.toStdString());
+    util::Logger::Info("[UI] URL: {}", url.toStdString());
 
-    // Download in a thread to avoid blocking UI
-    if (!m_downloadThread)
-        m_downloadThread = new QThread(this);
-
-    // Run download
-    std::string error = ai::GemmaInferenceEngine::DownloadModel();
+    // Run download with selected URL and filename
+    std::string error = ai::GemmaInferenceEngine::DownloadModel(
+        url.toStdString(),
+        filename.toStdString()
+    );
 
     if (error.empty())
     {
         QMessageBox::information(this, tr("Download Complete"),
-            tr("Gemma 2B model downloaded successfully!\n\n"
-               "You can now use AI-powered actor discovery."));
+            tr("Model downloaded successfully!\n\n") +
+            filename + tr("\n\nYou can now use AI-powered actor discovery."));
     }
     else
     {
@@ -237,12 +262,13 @@ void GemmaDownloadDialog::OnDownloadProgress(int current, int total)
 
 void GemmaDownloadDialog::OnModelTypeChanged(int index)
 {
-    // Preset models
+    // Preset models - direct download URLs from HuggingFace (freely available)
+    // Format: Model Name\tURL\tFilename\tSize(GB)
     const QStringList models = {
-        "Gemma 2B (2B parameters, recommended)\thttps://huggingface.co/google/gemma-2b-it-gguf\tgemma-2b-it.gguf\t1.5",
-        "Llama 2 7B\thttps://huggingface.co/TheBloke/Llama-2-7B-GGUF\tllama-2-7b.gguf\t4.0",
-        "Mistral 7B\thttps://huggingface.co/TheBloke/Mistral-7B-GGUF\tmistral-7b.gguf\t4.4",
-        "Custom Model\thttps://huggingface.co/...\tcustom.gguf\t0.0"
+        "TinyLlama 1.1B (Recommended)\thttps://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf\ttinyllama-1.1b.gguf\t0.7",
+        "Phi 2 2.7B\thttps://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf\tphi-2-q4.gguf\t1.6",
+        "Neural Chat 7B\thttps://huggingface.co/TheBloke/neural-chat-7B-v3-2-GGUF/resolve/main/neural-chat-7b-v3-2.Q4_K_M.gguf\tneural-chat-7b.gguf\t4.2",
+        "Custom Model\thttps://huggingface.co/TheBloke/MODEL-NAME-GGUF/resolve/main/MODEL.gguf\tcustom.gguf\t0.0"
     };
 
     if (index >= 0 && index < models.size())
@@ -259,9 +285,9 @@ void GemmaDownloadDialog::OnModelTypeChanged(int index)
 
 void GemmaDownloadDialog::LoadModelPresets()
 {
-    m_modelTypeCombo->addItem(tr("Gemma 2B (Recommended)"));
-    m_modelTypeCombo->addItem(tr("Llama 2 7B"));
-    m_modelTypeCombo->addItem(tr("Mistral 7B"));
+    m_modelTypeCombo->addItem(tr("TinyLlama 1.1B (Recommended)"));
+    m_modelTypeCombo->addItem(tr("Phi 2 2.7B"));
+    m_modelTypeCombo->addItem(tr("Neural Chat 7B"));
     m_modelTypeCombo->addItem(tr("Custom Model"));
 }
 

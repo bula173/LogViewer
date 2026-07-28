@@ -46,6 +46,7 @@ void EventsTableView::InitializeView()
     horizontalHeader()->setStretchLastSection(true);
     horizontalHeader()->setSectionsMovable(true);
     horizontalHeader()->setSectionsClickable(true);
+    horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);  // Allow manual resizing
     verticalHeader()->setVisible(false);
     setSortingEnabled(true);
     ResizeColumnsToConfiguration();

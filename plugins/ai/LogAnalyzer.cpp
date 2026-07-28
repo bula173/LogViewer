@@ -20,21 +20,55 @@ LogAnalyzer::LogAnalyzer(std::shared_ptr<AIServiceWrapper> aiService)
 std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
                                 const std::vector<unsigned long>* filteredIndices)
 {
-    if (!m_aiService || !m_aiService->service->IsAvailable())
+    // Validate AI service
+    if (!m_aiService)
+    {
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "AI service wrapper is null");
+        return "Error: AI service not initialized.";
+    }
+
+    if (!m_aiService->service || !m_aiService->service->IsAvailable())
     {
         return "Error: AI service not available. Please setup the AI provider.";
     }
 
+    // Validate event data
     const int totalEvents = PluginEvents_GetSize();
     if (totalEvents == 0)
     {
         return "No log data available to analyze.";
     }
 
+    // Validate filtered indices if provided
+    if (filteredIndices && filteredIndices->empty())
+    {
+        PLUGIN_LOG(PLUGIN_LOG_WARN, "Empty filtered indices provided to Analyze()");
+        return "Error: No events selected for analysis.";
+    }
+
     const size_t eventCount = filteredIndices ? filteredIndices->size() : static_cast<size_t>(totalEvents);
+    if (eventCount == 0)
+    {
+        return "Error: No events available to analyze.";
+    }
+
+    // Validate filtered indices are within bounds
+    if (filteredIndices)
+    {
+        for (const auto& idx : *filteredIndices)
+        {
+            if (idx >= static_cast<size_t>(totalEvents))
+            {
+                PLUGIN_LOG(PLUGIN_LOG_ERROR, "Invalid filtered index {} (total events: {})", idx, totalEvents);
+                return "Error: Invalid event index in filter. Please refresh the filter.";
+            }
+        }
+    }
+
+    const size_t actualEventCount = maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount;
     PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting {} analysis on {} {} events",
         GetAnalysisTypeName(type),
-        maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
+        actualEventCount,
         filteredIndices ? "filtered" : "total");
 
     const std::string logData = FormatEventsForAI(maxEvents, filteredIndices);
@@ -57,20 +91,61 @@ std::string LogAnalyzer::Analyze(AnalysisType type, size_t maxEvents,
 std::string LogAnalyzer::AnalyzeWithCustomPrompt(const std::string& customPrompt, size_t maxEvents,
                                                 const std::vector<unsigned long>* filteredIndices)
 {
-    if (!m_aiService || !m_aiService->service->IsAvailable())
+    // Validate custom prompt
+    if (customPrompt.empty())
+    {
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "Empty custom prompt provided");
+        return "Error: Custom prompt cannot be empty.";
+    }
+
+    // Validate AI service
+    if (!m_aiService)
+    {
+        PLUGIN_LOG(PLUGIN_LOG_ERROR, "AI service wrapper is null");
+        return "Error: AI service not initialized.";
+    }
+
+    if (!m_aiService->service || !m_aiService->service->IsAvailable())
     {
         return "Error: AI service not available. Please setup the AI provider.";
     }
 
+    // Validate event data
     const int totalEvents = PluginEvents_GetSize();
     if (totalEvents == 0)
     {
         return "No log data available to analyze.";
     }
 
+    // Validate filtered indices if provided
+    if (filteredIndices && filteredIndices->empty())
+    {
+        PLUGIN_LOG(PLUGIN_LOG_WARN, "Empty filtered indices provided to AnalyzeWithCustomPrompt()");
+        return "Error: No events selected for analysis.";
+    }
+
     const size_t eventCount = filteredIndices ? filteredIndices->size() : static_cast<size_t>(totalEvents);
+    if (eventCount == 0)
+    {
+        return "Error: No events available to analyze.";
+    }
+
+    // Validate filtered indices are within bounds
+    if (filteredIndices)
+    {
+        for (const auto& idx : *filteredIndices)
+        {
+            if (idx >= static_cast<size_t>(totalEvents))
+            {
+                PLUGIN_LOG(PLUGIN_LOG_ERROR, "Invalid filtered index {} (total events: {})", idx, totalEvents);
+                return "Error: Invalid event index in filter. Please refresh the filter.";
+            }
+        }
+    }
+
+    const size_t actualEventCount = maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount;
     PLUGIN_LOG(PLUGIN_LOG_INFO, "Starting custom prompt analysis on {} {} events",
-        maxEvents > 0 ? std::min(maxEvents, eventCount) : eventCount,
+        actualEventCount,
         filteredIndices ? "filtered" : "total");
 
     const std::string logData = FormatEventsForAI(maxEvents, filteredIndices);

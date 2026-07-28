@@ -39,6 +39,13 @@ add_library(${PLUGIN_NAME} MODULE
 # If building in-tree with the main LogViewer target available, enable internal interface support
 message(STATUS "ai_provider: Building SDK-first (no application internals)")
 
+# Add include directories for application core services
+target_include_directories(${PLUGIN_NAME}
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/src/application
+    ${PROJECT_SOURCE_DIR}/src/application/services
+)
+
 # Ensure JSON include is available for `IAIPlugin.hpp` and other headers
 target_link_libraries(${PLUGIN_NAME}
     PRIVATE

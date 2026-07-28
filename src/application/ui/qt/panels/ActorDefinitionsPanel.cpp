@@ -26,6 +26,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QRegularExpression>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -502,10 +503,49 @@ void ActorDefinitionsPanel::HandleDiscover()
     util::Logger::Debug("[ActorDefinitionsPanel] HandleDiscover: scanning {} event(s)",
                         m_events->Size());
 
-    // ── Delegate field detection to ActorDiscoverer ───────────────────────
-    const auto discovered = analyzer::ActorDiscoverer::Discover(*m_events);
+    // ── Ask user which discovery method to use ─────────────────────────────
+    QDialog methodDlg(this);
+    methodDlg.setWindowTitle(tr("Discovery Method"));
+    methodDlg.setMinimumWidth(400);
+    auto* methodLayout = new QVBoxLayout(&methodDlg);
 
-    // Collect all candidate field names: actor fields + exchange pattern fields
+    auto* label = new QLabel(
+        tr("Choose how to discover actor fields:"), &methodDlg);
+    methodLayout->addWidget(label);
+
+    auto* heuristicRadio = new QRadioButton(
+        tr("Heuristic: Fast, keyword-based analysis"), &methodDlg);
+    auto* aiRadio = new QRadioButton(
+        tr("AI: Uses LLM for pattern analysis (if model available)"), &methodDlg);
+    heuristicRadio->setChecked(true);
+
+    methodLayout->addWidget(heuristicRadio);
+    methodLayout->addWidget(aiRadio);
+    methodLayout->addStretch();
+
+    auto* methodButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &methodDlg);
+    connect(methodButtons, &QDialogButtonBox::accepted, &methodDlg, &QDialog::accept);
+    connect(methodButtons, &QDialogButtonBox::rejected, &methodDlg, &QDialog::reject);
+    methodLayout->addWidget(methodButtons);
+
+    if (methodDlg.exec() != QDialog::Accepted) return;
+
+    bool useAIDiscovery = aiRadio->isChecked();
+
+    // ── Run appropriate discovery method ────────────────────────────────────
+    analyzer::ActorDiscoveryResult discovered;
+    if (useAIDiscovery)
+    {
+        util::Logger::Debug("[ActorDefinitionsPanel] Using AI discovery method");
+        discovered = analyzer::ActorDiscoverer::DiscoverWithAI(*m_events);
+    }
+    else
+    {
+        util::Logger::Debug("[ActorDefinitionsPanel] Using heuristic discovery method");
+        discovered = analyzer::ActorDiscoverer::Discover(*m_events);
+    }
+
+    // ── Collect all candidate field names: actor fields + exchange pattern fields
     std::vector<std::string> candidateFields = discovered.actorFields;
     for (const auto& pat : discovered.patterns)
     {
@@ -581,13 +621,19 @@ void ActorDefinitionsPanel::HandleDiscover()
     util::Logger::Debug("[ActorDefinitionsPanel] Discover: {} candidate field(s) found",
                         candidates.size());
 
-    // ── Review dialog ─────────────────────────────────────────────────────
+    // ── Field selection dialog ────────────────────────────────────────────
     QDialog dlg(this);
     dlg.setWindowTitle(tr("Discovered Actor Fields"));
     dlg.setMinimumWidth(560);
     dlg.setMinimumHeight(400);
 
     auto* mainLayout = new QVBoxLayout(&dlg);
+
+    auto* methodInfo = new QLabel(
+        QString(tr("Using %1 discovery method"))
+            .arg(useAIDiscovery ? tr("AI") : tr("heuristic")), &dlg);
+    methodInfo->setStyleSheet("font-weight: bold; color: #0066cc;");
+    mainLayout->addWidget(methodInfo);
 
     auto* info = new QLabel(
         tr("The following fields were found in the log data with a moderate number of "

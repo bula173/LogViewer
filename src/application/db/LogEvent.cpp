@@ -14,27 +14,21 @@ namespace db
 
 int LogEvent::getId() const
 {
-    util::Logger::Trace("LogEvent::getId called, returning {}", m_id);
     return m_id;
 }
 
 const LogEvent::EventItems& LogEvent::getEventItems() const
 {
-    util::Logger::Trace("LogEvent::getEventItems called, returning {} items",
-        m_eventItems.size());
     return m_eventItems;
 }
 
 const std::string LogEvent::findByKey(std::string_view key) const
 {
-    util::Logger::Trace("LogEvent::findByKey called with key: {}", std::string(key));
-
     // Use fast lookup index first
     auto it = m_lookupIndex.find(std::string(key));
     if (it != m_lookupIndex.end())
     {
         const auto& result = m_eventItems[it->second].second;
-        util::Logger::Trace("LogEvent::findByKey found value: {}", result);
         return result;
     }
 
@@ -44,31 +38,19 @@ const std::string LogEvent::findByKey(std::string_view key) const
 
     if (pair != m_eventItems.end())
     {
-        util::Logger::Trace("LogEvent::findByKey found value (fallback): {}", pair->second);
         return pair->second;
-    }
-    else
-    {
-        util::Logger::Trace("LogEvent::findByKey did not find key: {}", std::string(key));
     }
 
     return "";
 }
 
 const std::vector<std::string> LogEvent::findAllByKey(std::string_view key) const {
-    util::Logger::Trace("LogEvent::findAllByKey called with key: {}", std::string(key));
-
     std::vector<std::string> results;
 
     for (const auto& [item_key, item_value] : m_eventItems) {
         if (item_key == key) {
             results.push_back(item_value);
-            util::Logger::Trace("LogEvent::findAllByKey found value: {}", item_value);
         }
-    }
-
-    if (results.empty()) {
-        util::Logger::Trace("LogEvent::findAllByKey did not find key: {}", key);
     }
 
     return results;

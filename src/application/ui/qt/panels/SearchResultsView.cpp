@@ -18,6 +18,7 @@ SearchResultsView::SearchResultsView(QWidget* parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
     header()->setStretchLastSection(true);
+    header()->setSectionResizeMode(QHeaderView::Interactive);  // Allow manual resizing
     connect(this, &QTreeWidget::itemActivated, this,
         &SearchResultsView::HandleActivation);
 }

@@ -79,6 +79,7 @@ void ScenariosPanel::BuildLayout()
     m_eventsTable->horizontalHeader()->setStretchLastSection(true);
     m_eventsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     m_eventsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+    m_eventsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     m_eventsTable->setColumnWidth(1, 160);
     m_eventsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_eventsTable->setSelectionBehavior(QAbstractItemView::SelectRows);

@@ -5,6 +5,7 @@
 #include "ConfigObserver.hpp"
 #include "UpdateInfo.hpp"
 #include "panels/LayoutManager.hpp"
+#include "../services/IService.hpp"
 #include <memory>
 #include "IPluginObserver.hpp"
 
@@ -25,6 +26,11 @@ class QWidget;
 class QDragEnterEvent;
 class QDropEvent;
 class QDockWidget;
+
+namespace services
+{
+class IService;
+}
 
 namespace mvc
 {
@@ -273,7 +279,7 @@ class MainWindow : public QMainWindow,
     
     // Active plugin tracking
     std::string m_activePluginId;
-    std::shared_ptr<ai::IAIService> m_pluginService;  // TODO: Generalize beyond AI-specific interface
+    std::shared_ptr<services::IService> m_currentService;
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
     StatsSummaryPanel*      m_statsPanel    {nullptr};

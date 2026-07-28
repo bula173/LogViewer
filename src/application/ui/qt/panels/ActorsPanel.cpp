@@ -164,9 +164,31 @@ void ActorsPanel::Refresh()
         if (!m_uncheckedActors.empty())
             QTimer::singleShot(0, this, &ActorsPanel::ApplyCheckedFilter);
     }
+    else if (vis.size() > 0)
+    {
+        // Auto-discover actors if no definitions are set
+        util::Logger::Debug("[ActorsPanel] No definitions, attempting auto-discovery");
+        try {
+            const auto discovered = analyzer::ActorDiscoverer::Discover(m_events, vis.size());
+            if (!discovered.patterns.empty())
+            {
+                RefreshFromDiscoveredActors(discovered, vis);
+                m_statusLabel->setText(tr("Auto-discovered actors (click \"Discover\" to configure)"));
+                return;
+            }
+        } catch (const std::exception& e) {
+            util::Logger::Debug("[ActorsPanel] Auto-discovery exception: {}", e.what());
+        }
+
+        // If discovery failed, show message
+        util::Logger::Debug("[ActorsPanel] No enabled definitions and discovery failed");
+        QSignalBlocker blocker(m_tree);
+        m_tree->clear();
+        m_statusLabel->setText(tr("Define actors in the \"Actor Definitions\" panel"));
+    }
     else
     {
-        util::Logger::Debug("[ActorsPanel] No enabled definitions — clearing actor tree");
+        util::Logger::Debug("[ActorsPanel] No enabled definitions and no visible events");
         QSignalBlocker blocker(m_tree);
         m_tree->clear();
         m_statusLabel->setText(tr("Define actors in the \"Actor Definitions\" panel"));
@@ -356,6 +378,67 @@ void ActorsPanel::RefreshWithDefinitions(const std::vector<unsigned long>& vis)
             if (matched)
                 break; // first matching definition wins
         }
+    }
+
+    PopulateActorTree(vis.size());
+}
+
+void ActorsPanel::RefreshFromDiscoveredActors(const analyzer::ActorDiscoveryResult& discovered,
+                                             const std::vector<unsigned long>& vis)
+{
+    util::Logger::Debug("[ActorsPanel] RefreshFromDiscoveredActors: {} visible events",
+                       vis.size());
+
+    // Clear cached groups
+    m_groupedCache.clear();
+
+    // Use the best pattern to find actors in events
+    if (!discovered.patterns.empty())
+    {
+        const auto& pattern = discovered.patterns.front();
+        const size_t totalEvents = m_events.Size();
+
+        for (unsigned long idx : vis)
+        {
+            // Bounds check before accessing
+            if (idx >= totalEvents)
+            {
+                util::Logger::Warn("[ActorsPanel] Event index {} out of range (total: {})", idx, totalEvents);
+                continue;
+            }
+
+            try {
+                const db::LogEvent& ev = m_events.GetEvent(idx);
+
+                // Extract actor based on pattern type
+                std::string actorName;
+                if (!pattern.senderField.empty() || !pattern.receiverField.empty())
+                {
+                    // Pair or SenderOnly/ReceiverOnly mode
+                    if (!pattern.senderField.empty())
+                        actorName = ev.findByKey(pattern.senderField);
+                    if (actorName.empty() && !pattern.receiverField.empty())
+                        actorName = ev.findByKey(pattern.receiverField);
+                }
+                else if (!pattern.actorField.empty())
+                {
+                    // DirectionField mode
+                    actorName = ev.findByKey(pattern.actorField);
+                }
+
+                if (!actorName.empty())
+                {
+                    AccumulateEventStats(m_groupedCache["Auto-Discovered"].actors[actorName],
+                                       ev, idx);
+                }
+            } catch (const std::exception& e) {
+                util::Logger::Warn("[ActorsPanel] Error processing event {}: {}", idx, e.what());
+                continue;
+            }
+        }
+
+        util::Logger::Debug("[ActorsPanel] Found {} actor(s) from pattern",
+                           m_groupedCache["Auto-Discovered"].actors.size());
     }
 
     PopulateActorTree(vis.size());

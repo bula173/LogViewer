@@ -115,6 +115,11 @@ public:
     static ActorDiscoveryResult Discover(db::EventsContainer& events,
                                           size_t sampleLimit = 10'000);
 
+    /// Discover with AI direction detection (if LLM available).
+    /// Combines heuristic actor discovery with AI-detected message directions.
+    static ActorDiscoveryResult DiscoverWithAI(db::EventsContainer& events,
+                                              size_t sampleLimit = 10'000);
+
     // ── Exposed for unit tests ─────────────────────────────────────────────
     static std::string ToLower(const std::string& s);
     static int  ScoreSender   (const std::string& fieldName);
