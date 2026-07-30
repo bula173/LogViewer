@@ -12,10 +12,14 @@ var searchData=
   ['filtereditordialog_2ehpp_9',['FilterEditorDialog.hpp',['../d3/d69/FilterEditorDialog_8hpp.html',1,'']]],
   ['filtermanager_2ecpp_10',['FilterManager.cpp',['../df/da7/FilterManager_8cpp.html',1,'']]],
   ['filtermanager_2ehpp_11',['FilterManager.hpp',['../d4/d19/FilterManager_8hpp.html',1,'']]],
-  ['filterprofilespanel_2ecpp_12',['FilterProfilesPanel.cpp',['../d2/db8/FilterProfilesPanel_8cpp.html',1,'']]],
-  ['filterprofilespanel_2ehpp_13',['FilterProfilesPanel.hpp',['../d0/d66/FilterProfilesPanel_8hpp.html',1,'']]],
-  ['filterspanel_2ecpp_14',['FiltersPanel.cpp',['../d0/d34/FiltersPanel_8cpp.html',1,'']]],
-  ['filterspanel_2ehpp_15',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]],
-  ['filterstatusbar_2ecpp_16',['FilterStatusBar.cpp',['../d2/d21/FilterStatusBar_8cpp.html',1,'']]],
-  ['filterstatusbar_2ehpp_17',['FilterStatusBar.hpp',['../d8/dc9/FilterStatusBar_8hpp.html',1,'']]]
+  ['filteroptimizer_2ecpp_12',['FilterOptimizer.cpp',['../d2/d78/FilterOptimizer_8cpp.html',1,'']]],
+  ['filteroptimizer_2ehpp_13',['FilterOptimizer.hpp',['../d5/d5d/FilterOptimizer_8hpp.html',1,'']]],
+  ['filterprofilespanel_2ecpp_14',['FilterProfilesPanel.cpp',['../d2/db8/FilterProfilesPanel_8cpp.html',1,'']]],
+  ['filterprofilespanel_2ehpp_15',['FilterProfilesPanel.hpp',['../d0/d66/FilterProfilesPanel_8hpp.html',1,'']]],
+  ['filterserializer_2ecpp_16',['FilterSerializer.cpp',['../d2/d73/FilterSerializer_8cpp.html',1,'']]],
+  ['filterserializer_2ehpp_17',['FilterSerializer.hpp',['../dc/dba/FilterSerializer_8hpp.html',1,'']]],
+  ['filterspanel_2ecpp_18',['FiltersPanel.cpp',['../d0/d34/FiltersPanel_8cpp.html',1,'']]],
+  ['filterspanel_2ehpp_19',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]],
+  ['filterstatusbar_2ecpp_20',['FilterStatusBar.cpp',['../d2/d21/FilterStatusBar_8cpp.html',1,'']]],
+  ['filterstatusbar_2ehpp_21',['FilterStatusBar.hpp',['../d8/dc9/FilterStatusBar_8hpp.html',1,'']]]
 ];

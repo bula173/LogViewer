@@ -4,6 +4,10 @@ var dir_af57c064366bf6151e74a3e5c459bc17 =
     [ "Filter.hpp", "d9/d77/Filter_8hpp.html", "d9/d77/Filter_8hpp" ],
     [ "FilterManager.cpp", "df/da7/FilterManager_8cpp.html", null ],
     [ "FilterManager.hpp", "d4/d19/FilterManager_8hpp.html", "d4/d19/FilterManager_8hpp" ],
+    [ "FilterOptimizer.cpp", "d2/d78/FilterOptimizer_8cpp.html", null ],
+    [ "FilterOptimizer.hpp", "d5/d5d/FilterOptimizer_8hpp.html", "d5/d5d/FilterOptimizer_8hpp" ],
+    [ "FilterSerializer.cpp", "d2/d73/FilterSerializer_8cpp.html", "d2/d73/FilterSerializer_8cpp" ],
+    [ "FilterSerializer.hpp", "dc/dba/FilterSerializer_8hpp.html", "dc/dba/FilterSerializer_8hpp" ],
     [ "IFilterStrategy.cpp", "d8/dac/IFilterStrategy_8cpp.html", "d8/dac/IFilterStrategy_8cpp" ],
     [ "IFilterStrategy.hpp", "da/d4d/IFilterStrategy_8hpp.html", "da/d4d/IFilterStrategy_8hpp" ]
 ];

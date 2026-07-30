@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['uint16_0',['UInt16',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ea8bd950a9d7779b83f5c30046c9aaf1cf',1,'parser::EvlogTemplateField']]],
-  ['uint32_1',['UInt32',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01eae7956ed7be1c5025a27ed3cb42a396bd',1,'parser::EvlogTemplateField']]],
-  ['uint64_2',['UInt64',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01eaaf71234725f0470ccf993e263a8b820a',1,'parser::EvlogTemplateField']]],
-  ['uint8_3',['UInt8',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01eab31df9c476d20e85ff898121efe11b5a',1,'parser::EvlogTemplateField']]],
-  ['unknown_4',['Unknown',['../da/d7e/namespaceerror.html#ac1e56f1d20af4ead715f13a35f4f73f2a88183b946cc5f0e8c96b2e66e1c74a7e',1,'error']]],
-  ['unloaded_5',['unloaded',['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afaa5ae20aa7fda5bd38bf0dce98e65bd2d',1,'plugin::Unloaded'],['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61aa5ae20aa7fda5bd38bf0dce98e65bd2d',1,'plugin::Unloaded'],['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474baa5ae20aa7fda5bd38bf0dce98e65bd2d',1,'plugin::Unloaded']]],
-  ['unregistered_6',['Unregistered',['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a84b8026b3f5e6dcfb29e82e0b0b0f386',1,'plugin']]]
+  ['senderonly_0',['SenderOnly',['../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5',1,'analyzer']]],
+  ['showdetails_1',['ShowDetails',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a7402a395cd8cfd2043693aa092afca8ea73b074b75b3fb8ea5a0e34dd88583cb7',1,'ui::qt::utils::NotificationManager']]],
+  ['sidebyside_2',['SideBySide',['../d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html#a3c4fa71adcc6cac004045a698376e2f3a8dfcf12ab6d65f9aa66ae16a33d000cd',1,'ui::qt::LogFileLoadDialog']]],
+  ['string_3',['string',['../d5/dcd/structparser_1_1EvlogTemplateField.html#acae1f9c5173c36fc37ced225ee18f01ea27118326006d3829667a400ad23d5d98',1,'parser::EvlogTemplateField::String'],['../d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdfa24fab97fc6276f6c555e22ff6bcac851',1,'parser::EvlogParser::STRING']]],
+  ['substring_4',['Substring',['../dd/d73/namespaceui_1_1qt_1_1utils.html#ae384296ecf488dc3d5f196f33ce8875ca7ba559a2b304b4c6d34d67ed77f80345',1,'ui::qt::utils']]],
+  ['success_5',['Success',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a561e0f9b1ba38dd23aaff0c4ab124e34a505a83f220c02df2f85c3810cd9ceb38',1,'ui::qt::utils::NotificationManager']]],
+  ['system_6',['System',['../d8/d5b/ThemeSwitcher_8hpp.html#ac04feb2012983293f293a8151c69a074aa45da96d0bf6575970f2d27af22be28a',1,'ThemeSwitcher.hpp']]]
 ];

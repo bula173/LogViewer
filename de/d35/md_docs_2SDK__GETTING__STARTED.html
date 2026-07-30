@@ -226,10 +226,10 @@ Step 2: Implement BasicPlugin.cpp</h3>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* Plugin_GetMetadataJson(PluginHandle h) {</div>
 <div class="line">    <span class="comment">// Return malloc&#39;d JSON</span></div>
-<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">json</a> = R<span class="stringliteral">&quot;({&quot;name&quot;:&quot;MyPlugin&quot;,&quot;version&quot;:&quot;1.0&quot;})&quot;;</span></div>
-<div class="line"><span class="stringliteral">    </span><span class="keywordtype">size_t</span> len = strlen(json);</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a> = R<span class="stringliteral">&quot;({&quot;name&quot;:&quot;MyPlugin&quot;,&quot;version&quot;:&quot;1.0&quot;})&quot;;</span></div>
+<div class="line"><span class="stringliteral">    </span><span class="keywordtype">size_t</span> len = strlen(<a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>);</div>
 <div class="line">    <span class="keywordtype">char</span>* copy = (<span class="keywordtype">char</span>*)malloc(len + 1);</div>
-<div class="line">    strcpy(copy, json);</div>
+<div class="line">    strcpy(copy, <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>);</div>
 <div class="line">    <span class="keywordflow">return</span> copy;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -250,8 +250,8 @@ Step 2: Implement BasicPlugin.cpp</h3>
 <div class="line"><span class="keywordtype">void</span> Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn log) {}</div>
 <div class="line"> </div>
 <div class="line">}</div>
+<div class="ttc" id="aFilterSerializer_8cpp_html_ab701e3ac61a85b337ec5c1abaad6742d"><div class="ttname"><a href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> FilterSerializer.cpp:9</div></div>
 <div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
-<div class="ttc" id="anamespaceconfig_html_a5f7e2c5cc76af7d5515d1d3024aaec37"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config::json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> Config.hpp:16</div></div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md640"></a>
 Step 3: CMakeLists.txt</h3>
 <div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.22)</div>
@@ -361,9 +361,9 @@ Accessing Events</h2>
 <div class="line"><span class="keywordtype">void</span> analyze_events() {</div>
 <div class="line">    <span class="keywordtype">int</span> count = PluginEvents_GetSize();</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; count; ++i) {</div>
-<div class="line">        <span class="keywordtype">char</span>* json = PluginEvents_GetEventJson(i);</div>
+<div class="line">        <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a> = PluginEvents_GetEventJson(i);</div>
 <div class="line">        <span class="comment">// Parse JSON and process event</span></div>
-<div class="line">        PluginApi_FreeString(json);</div>
+<div class="line">        PluginApi_FreeString(<a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md647"></a>

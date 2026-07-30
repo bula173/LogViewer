@@ -23,10 +23,11 @@ var searchData=
   ['discoverplugins_20',['DiscoverPlugins',['../d3/d67/classplugin_1_1PluginManager.html#ad853beb73f830a621ad9ef425e9e3a7d',1,'plugin::PluginManager']]],
   ['discoverwithai_21',['DiscoverWithAI',['../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88',1,'analyzer::ActorDiscoverer']]],
   ['displayevent_22',['DisplayEvent',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0',1,'ui::qt::ItemDetailsView']]],
-  ['doaddbookmark_23',['DoAddBookmark',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7b5d1e9205c26605b4c27f6810588aa2',1,'ui::qt::BookmarksPanel']]],
-  ['doplugindownload_24',['DoPluginDownload',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#a7feace3d0a279854731e6adea5dab18e',1,'ui::qt::UpdateChecker']]],
-  ['downloadmodel_25',['DownloadModel',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a2280416bf0765c53f219ddbd0b4ba2a0',1,'ai::GemmaInferenceEngine']]],
-  ['downloadplugin_26',['DownloadPlugin',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#ab6094b1176b6b70412964f3907ee3ef0',1,'ui::qt::UpdateChecker']]],
-  ['dragenterevent_27',['dragEnterEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a802d975b13ea0e462b29a1fd4153aa75',1,'ui::qt::MainWindow']]],
-  ['dropevent_28',['dropEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad372ea3ca18de3862e388f2c150e0096',1,'ui::qt::MainWindow']]]
+  ['displaypreferencespanel_23',['DisplayPreferencesPanel',['../dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html#a438985819a49a21715456233736863bc',1,'ui::qt::DisplayPreferencesPanel']]],
+  ['doaddbookmark_24',['DoAddBookmark',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a32c692b7ed5c60db36ca84205f7cd0ff',1,'ui::qt::BookmarksPanel']]],
+  ['doplugindownload_25',['DoPluginDownload',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#a7feace3d0a279854731e6adea5dab18e',1,'ui::qt::UpdateChecker']]],
+  ['downloadmodel_26',['DownloadModel',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a2280416bf0765c53f219ddbd0b4ba2a0',1,'ai::GemmaInferenceEngine']]],
+  ['downloadplugin_27',['DownloadPlugin',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#ab6094b1176b6b70412964f3907ee3ef0',1,'ui::qt::UpdateChecker']]],
+  ['dragenterevent_28',['dragEnterEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a802d975b13ea0e462b29a1fd4153aa75',1,'ui::qt::MainWindow']]],
+  ['dropevent_29',['dropEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad372ea3ca18de3862e388f2c150e0096',1,'ui::qt::MainWindow']]]
 ];

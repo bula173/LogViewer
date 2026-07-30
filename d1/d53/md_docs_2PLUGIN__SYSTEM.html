@@ -223,7 +223,7 @@ Plugin Loading Process</h2>
 <div class="line">Plugin_SetLoggerCallback(handle, &amp;<a class="code hl_function" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7">AppPluginLog</a>);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// 3. Get plugin metadata</span></div>
-<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* json = Plugin_GetMetadataJson(handle);</div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a> = Plugin_GetMetadataJson(handle);</div>
 <div class="line"><span class="comment">// Parse JSON to get plugin info</span></div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// 4. Initialize plugin</span></div>
@@ -236,6 +236,7 @@ Plugin Loading Process</h2>
 <div class="line"><span class="comment">// 6. Cleanup on exit</span></div>
 <div class="line">Plugin_Shutdown(handle);</div>
 <div class="line">Plugin_Destroy(handle);</div>
+<div class="ttc" id="aFilterSerializer_8cpp_html_ab701e3ac61a85b337ec5c1abaad6742d"><div class="ttname"><a href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> FilterSerializer.cpp:9</div></div>
 <div class="ttc" id="aPluginManager_8cpp_html_a60ba386eb4a3edc7cbb72a02fee6dce7"><div class="ttname"><a href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7">AppPluginLog</a></div><div class="ttdeci">void AppPluginLog(int level, const char *message)</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:33</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md551"></a>
 Creating a Plugin</h1>

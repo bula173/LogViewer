@@ -4,6 +4,7 @@ var classfilters_1_1FilterManager =
     [ "~FilterManager", "d5/db4/classfilters_1_1FilterManager.html#a09c4df7a036183cdb92f00d855c9c8ad", null ],
     [ "addFilter", "d5/db4/classfilters_1_1FilterManager.html#a9794118549d09e87f1bc49e8f85709a2", null ],
     [ "applyFilters", "d5/db4/classfilters_1_1FilterManager.html#a1d10af3f93e617cd90035beb7b66a7ab", null ],
+    [ "applyFiltersToIndices", "d5/db4/classfilters_1_1FilterManager.html#a44798eb913c97944c835390a0f8b632e", null ],
     [ "createFilter", "d5/db4/classfilters_1_1FilterManager.html#abae6e35f843f69f2f5573b73adda3398", null ],
     [ "enableAllFilters", "d5/db4/classfilters_1_1FilterManager.html#ae151f0528a45f6a2e86e560c8b80da7d", null ],
     [ "enableFilter", "d5/db4/classfilters_1_1FilterManager.html#ac4c305d1b829432cf7530ee76ae6dc68", null ],

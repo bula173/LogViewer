@@ -23,5 +23,6 @@ var searchData=
   ['pluginservicehandle_20',['pluginServiceHandle',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#af709b10f58e2ac2ee2d1b077b7d51ede',1,'plugin::PluginLoadInfo']]],
   ['pluginsetaieventscontainer_21',['pluginSetAIEventsContainer',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#adeecda83e8660cbe56da283d90dee7d4',1,'plugin::PluginLoadInfo']]],
   ['pluginseteventscallbacks_22',['pluginSetEventsCallbacks',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#af4eef596ffc2a62f5b6df23f3a7a8cab',1,'plugin::PluginLoadInfo']]],
-  ['pluginsethostuicallbacks_23',['pluginSetHostUiCallbacks',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#a1a92aace44085af351ea01fbfadec20d',1,'plugin::PluginLoadInfo']]]
+  ['pluginsethostuicallbacks_23',['pluginSetHostUiCallbacks',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#a1a92aace44085af351ea01fbfadec20d',1,'plugin::PluginLoadInfo']]],
+  ['pointsize_24',['pointSize',['../d4/dbe/structui_1_1qt_1_1utils_1_1ThemeManager_1_1FontConfig.html#ab3329a382b85c234592309a66bd60661',1,'ui::qt::utils::ThemeManager::FontConfig']]]
 ];

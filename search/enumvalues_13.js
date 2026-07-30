@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xml_0',['XML',['../d0/dd5/namespaceparser.html#a16916297b67db86e922c36c2c9b1bc29a3501bb093d363810b671059b9cfed3f8',1,'parser']]]
+  ['visualizer_0',['Visualizer',['../d3/d7e/namespaceplugin.html#a3cb64108b93d0491104872a6a15fa3bda246eb6da3962c4c606501926a42d0b71',1,'plugin']]]
 ];

@@ -7,6 +7,8 @@ var namespacefilters =
     [ "Filter", "d9/d12/classfilters_1_1Filter.html", "d9/d12/classfilters_1_1Filter" ],
     [ "FilterCondition", "dc/d53/structfilters_1_1FilterCondition.html", "dc/d53/structfilters_1_1FilterCondition" ],
     [ "FilterManager", "d5/db4/classfilters_1_1FilterManager.html", "d5/db4/classfilters_1_1FilterManager" ],
+    [ "FilterOptimizer", "d9/dd7/classfilters_1_1FilterOptimizer.html", "d9/dd7/classfilters_1_1FilterOptimizer" ],
+    [ "FilterSerializer", "d5/d8f/classfilters_1_1FilterSerializer.html", "d5/d8f/classfilters_1_1FilterSerializer" ],
     [ "FuzzyMatchStrategy", "d7/db2/classfilters_1_1FuzzyMatchStrategy.html", "d7/db2/classfilters_1_1FuzzyMatchStrategy" ],
     [ "IFilterStrategy", "df/d7b/classfilters_1_1IFilterStrategy.html", "df/d7b/classfilters_1_1IFilterStrategy" ],
     [ "RegexFilterStrategy", "d0/dd5/classfilters_1_1RegexFilterStrategy.html", "d0/dd5/classfilters_1_1RegexFilterStrategy" ],

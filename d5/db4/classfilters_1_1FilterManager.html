@@ -109,9 +109,9 @@ Collaboration diagram for filters::FilterManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/dbe/classfilters_1_1FilterManager__coll__graph.png" border="0" usemap="#afilters_1_1FilterManager_coll__map" alt="Collaboration graph"/></div>
 <map name="afilters_1_1FilterManager_coll__map" id="afilters_1_1FilterManager_coll__map">
-<area shape="rect" title="Owns all user&#45;defined filters, handles persistence, and provides helpers to apply filters against the..." alt="" coords="5,133,173,519"/>
-<area shape="rect" title=" " alt="" coords="21,5,157,71"/>
-<area shape="poly" title=" " alt="" coords="92,71,92,117,87,117,87,71"/>
+<area shape="rect" title="Owns all user&#45;defined filters, handles persistence, and provides helpers to apply filters against the..." alt="" coords="5,133,180,539"/>
+<area shape="rect" title=" " alt="" coords="25,5,161,71"/>
+<area shape="poly" title=" " alt="" coords="95,71,95,117,90,117,90,71"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -138,6 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1d10af3f93e617cd90035beb7b66a7ab" id="r_a1d10af3f93e617cd90035beb7b66a7ab"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/db4/classfilters_1_1FilterManager.html#a1d10af3f93e617cd90035beb7b66a7ab">applyFilters</a> (const <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">mvc::IModel</a> &amp;model) const</td></tr>
 <tr class="memdesc:a1d10af3f93e617cd90035beb7b66a7ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply all enabled filters and return the matching indices.  <br /></td></tr>
 <tr class="separator:a1d10af3f93e617cd90035beb7b66a7ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44798eb913c97944c835390a0f8b632e" id="r_a44798eb913c97944c835390a0f8b632e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/db4/classfilters_1_1FilterManager.html#a44798eb913c97944c835390a0f8b632e">applyFiltersToIndices</a> (const std::vector&lt; unsigned long &gt; &amp;indices, const <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">mvc::IModel</a> &amp;model) const</td></tr>
+<tr class="memdesc:a44798eb913c97944c835390a0f8b632e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply all enabled filters to a subset of indices (AND logic). Filters are applied only to events in the provided indices vector.  <br /></td></tr>
+<tr class="separator:a44798eb913c97944c835390a0f8b632e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6ed54e7ff7d60cb119c09fafd065623" id="r_ac6ed54e7ff7d60cb119c09fafd065623"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d6b/namespacefilters.html#a6990ac7802c7540fbf36f4c8164da881">FilterResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/db4/classfilters_1_1FilterManager.html#ac6ed54e7ff7d60cb119c09fafd065623">loadFilters</a> ()</td></tr>
 <tr class="memdesc:ac6ed54e7ff7d60cb119c09fafd065623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load filters from the default filters.json path.  <br /></td></tr>
 <tr class="separator:ac6ed54e7ff7d60cb119c09fafd065623"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -353,12 +356,50 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="163,23,197,23,197,28,163,28"/>
 </map>
 </div>
+
+</div>
+</div>
+<a id="a44798eb913c97944c835390a0f8b632e" name="a44798eb913c97944c835390a0f8b632e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44798eb913c97944c835390a0f8b632e">&#9670;&#160;</a></span>applyFiltersToIndices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; unsigned long &gt; filters::FilterManager::applyFiltersToIndices </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned long &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indices</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../dc/d2d/classmvc_1_1IModel.html">mvc::IModel</a> &amp;&#160;</td>
+          <td class="paramname"><em>model</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply all enabled filters to a subset of indices (AND logic). Filters are applied only to events in the provided indices vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">indices</td><td>Subset of event indices to filter </td></tr>
+    <tr><td class="paramname">model</td><td>The events model </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Indices that match both the input filter and all enabled filters </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d5/db4/classfilters_1_1FilterManager_a1d10af3f93e617cd90035beb7b66a7ab_icgraph.png" border="0" usemap="#ad5/db4/classfilters_1_1FilterManager_a1d10af3f93e617cd90035beb7b66a7ab_icgraph" alt=""/></div>
-<map name="ad5/db4/classfilters_1_1FilterManager_a1d10af3f93e617cd90035beb7b66a7ab_icgraph" id="ad5/db4/classfilters_1_1FilterManager_a1d10af3f93e617cd90035beb7b66a7ab_icgraph">
-<area shape="rect" title="Apply all enabled filters and return the matching indices." alt="" coords="221,5,379,45"/>
+<div class="center"><img src="../../d5/db4/classfilters_1_1FilterManager_a44798eb913c97944c835390a0f8b632e_icgraph.png" border="0" usemap="#ad5/db4/classfilters_1_1FilterManager_a44798eb913c97944c835390a0f8b632e_icgraph" alt=""/></div>
+<map name="ad5/db4/classfilters_1_1FilterManager_a44798eb913c97944c835390a0f8b632e_icgraph" id="ad5/db4/classfilters_1_1FilterManager_a44798eb913c97944c835390a0f8b632e_icgraph">
+<area shape="rect" title="Apply all enabled filters to a subset of indices (AND logic). Filters are applied only to events in t..." alt="" coords="221,5,388,45"/>
 <area shape="rect" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html#a7c2e347b687a76c79f89aaadf619c163" title=" " alt="" coords="5,5,173,45"/>
 <area shape="poly" title=" " alt="" coords="208,28,173,28,173,23,208,23"/>
 </map>

@@ -202,20 +202,21 @@ Optional Plugin Exports</h1>
 <p>Plugins can optionally export UI creation functions:</p>
 <div class="fragment"><div class="line"><span class="comment">// These return QWidget* cast to void*</span></div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* json) { ... }</div>
+<div class="line"><span class="keywordtype">void</span>* Plugin_CreateLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateRightPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* json) { ... }</div>
+<div class="line"><span class="keywordtype">void</span>* Plugin_CreateRightPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateBottomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* json) { ... }</div>
+<div class="line"><span class="keywordtype">void</span>* Plugin_CreateBottomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateMainPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* json) { ... }</div>
+<div class="line"><span class="keywordtype">void</span>* Plugin_CreateMainPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Optional cleanup</span></div>
 <div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
 <div class="line"><span class="keywordtype">void</span> Plugin_DestroyLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* widget) { ... }</div>
+<div class="ttc" id="aFilterSerializer_8cpp_html_ab701e3ac61a85b337ec5c1abaad6742d"><div class="ttname"><a href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> FilterSerializer.cpp:9</div></div>
 <div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md674"></a>
 Common Patterns</h1>

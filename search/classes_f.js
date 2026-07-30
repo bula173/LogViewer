@@ -1,15 +1,20 @@
 var searchData=
 [
-  ['parserfactory_0',['ParserFactory',['../dc/d03/classparser_1_1ParserFactory.html',1,'parser']]],
-  ['parserstate_1',['ParserState',['../de/d53/structparser_1_1ParserState.html',1,'parser']]],
-  ['patternanalysispanel_2',['PatternAnalysisPanel',['../dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html',1,'ui::qt']]],
-  ['pluginconfigcache_3',['PluginConfigCache',['../de/d59/structplugin_1_1PluginManager_1_1PluginConfigCache.html',1,'plugin::PluginManager']]],
-  ['plugindependencygraph_4',['PluginDependencyGraph',['../df/d48/classplugin_1_1PluginDependencyGraph.html',1,'plugin']]],
-  ['pluginevent_5',['PluginEvent',['../de/d7a/structplugin_1_1PluginEvent.html',1,'plugin']]],
-  ['plugineventbus_6',['PluginEventBus',['../da/d30/classplugin_1_1PluginEventBus.html',1,'plugin']]],
-  ['pluginloadinfo_7',['PluginLoadInfo',['../d4/dfa/structplugin_1_1PluginLoadInfo.html',1,'plugin']]],
-  ['pluginmanager_8',['PluginManager',['../d3/d67/classplugin_1_1PluginManager.html',1,'plugin']]],
-  ['pluginmanagerdialog_9',['PluginManagerDialog',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html',1,'ui::qt']]],
-  ['pluginmetadata_10',['PluginMetadata',['../de/d25/structplugin_1_1PluginMetadata.html',1,'plugin']]],
-  ['pluginupdateinfo_11',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]]
+  ['panelinfo_0',['PanelInfo',['../d2/ddb/structui_1_1qt_1_1widgets_1_1PanelInfo.html',1,'ui::qt::widgets']]],
+  ['panelnavigator_1',['PanelNavigator',['../d9/da2/classui_1_1qt_1_1widgets_1_1PanelNavigator.html',1,'ui::qt::widgets']]],
+  ['parserfactory_2',['ParserFactory',['../dc/d03/classparser_1_1ParserFactory.html',1,'parser']]],
+  ['parserstate_3',['ParserState',['../de/d53/structparser_1_1ParserState.html',1,'parser']]],
+  ['patternanalysispanel_4',['PatternAnalysisPanel',['../dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html',1,'ui::qt']]],
+  ['performancepreferencespanel_5',['PerformancePreferencesPanel',['../dd/d69/classui_1_1qt_1_1PerformancePreferencesPanel.html',1,'ui::qt']]],
+  ['pluginconfigcache_6',['PluginConfigCache',['../de/d59/structplugin_1_1PluginManager_1_1PluginConfigCache.html',1,'plugin::PluginManager']]],
+  ['plugindependencygraph_7',['PluginDependencyGraph',['../df/d48/classplugin_1_1PluginDependencyGraph.html',1,'plugin']]],
+  ['pluginevent_8',['PluginEvent',['../de/d7a/structplugin_1_1PluginEvent.html',1,'plugin']]],
+  ['plugineventbus_9',['PluginEventBus',['../da/d30/classplugin_1_1PluginEventBus.html',1,'plugin']]],
+  ['pluginloadinfo_10',['PluginLoadInfo',['../d4/dfa/structplugin_1_1PluginLoadInfo.html',1,'plugin']]],
+  ['pluginmanager_11',['PluginManager',['../d3/d67/classplugin_1_1PluginManager.html',1,'plugin']]],
+  ['pluginmanagerdialog_12',['PluginManagerDialog',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html',1,'ui::qt']]],
+  ['pluginmetadata_13',['PluginMetadata',['../de/d25/structplugin_1_1PluginMetadata.html',1,'plugin']]],
+  ['pluginspreferencespanel_14',['PluginsPreferencesPanel',['../d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel.html',1,'ui::qt']]],
+  ['pluginupdateinfo_15',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]],
+  ['preferencesdialog_16',['PreferencesDialog',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html',1,'ui::qt']]]
 ];

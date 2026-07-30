@@ -15,6 +15,8 @@ var searchData=
   ['ui_3a_3aqt_3a_3aexportmanager_12',['ExportManager',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aexportmanager_3a_3aanonymous_5fnamespace_7bexportmanager_2ecpp_7d_13',['anonymous_namespace{ExportManager.cpp}',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html',1,'ui::qt::ExportManager']]],
   ['ui_3a_3aqt_3a_3apanel_5futils_14',['panel_utils',['../da/d7a/namespaceui_1_1qt_1_1panel__utils.html',1,'ui::qt']]],
-  ['updates_15',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
-  ['util_16',['util',['../d6/d72/namespaceutil.html',1,'']]]
+  ['ui_3a_3aqt_3a_3autils_15',['utils',['../dd/d73/namespaceui_1_1qt_1_1utils.html',1,'ui::qt']]],
+  ['ui_3a_3aqt_3a_3awidgets_16',['widgets',['../d0/d00/namespaceui_1_1qt_1_1widgets.html',1,'ui::qt']]],
+  ['updates_17',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
+  ['util_18',['util',['../d6/d72/namespaceutil.html',1,'']]]
 ];

@@ -39,6 +39,7 @@ var classconfig_1_1Config =
     [ "columnColors", "d2/d5e/classconfig_1_1Config.html#adeda13c22a0021816d43f26a2ab49551", null ],
     [ "columnOrder", "d2/d5e/classconfig_1_1Config.html#a3fa6706bf8c854693d1e621f4890afd5", null ],
     [ "columns", "d2/d5e/classconfig_1_1Config.html#a2c710b0484690ab6c3e032ff31ba125e", null ],
+    [ "columnWidths", "d2/d5e/classconfig_1_1Config.html#a943e0bdc6aa3968fefdfbb6bb83622e6", null ],
     [ "itemHighlights", "d2/d5e/classconfig_1_1Config.html#ac580d55aabcdf74b75fddedb4fb8404a", null ],
     [ "logLevel", "d2/d5e/classconfig_1_1Config.html#ac55f71159fe016525e5a277903b3c526", null ],
     [ "m_configFilePath", "d2/d5e/classconfig_1_1Config.html#a940a5c10da66c1a4b23b5768910dd626", null ],

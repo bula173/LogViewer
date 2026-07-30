@@ -1,54 +1,60 @@
 <map id="config::Config::GetConfigFilePath" name="config::Config::GetConfigFilePath">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1100,279,1283,319"/>
-<area shape="rect" id="Node000002" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a2280416bf0765c53f219ddbd0b4ba2a0" title=" " alt="" coords="559,312,757,352"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1086,308,758,328,757,323,1086,303"/>
-<area shape="rect" id="Node000005" href="$d5/db4/classfilters_1_1FilterManager.html#a6b70b7ceeb875205be134d7acb8668da" title=" " alt="" coords="856,69,1013,109"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1169,268,1121,198,1088,162,1051,130,1013,111,1015,106,1053,126,1092,158,1125,195,1174,265"/>
-<area shape="rect" id="Node000009" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a073ef1a1fe73e4f7dcb9ffd9c84f2603" title="Check if model is already downloaded." alt="" coords="835,251,1034,291"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1086,290,1034,284,1034,279,1086,285"/>
-<area shape="rect" id="Node000011" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a924ab672d9956940407fd74a13988815" title="Initialize the engine. Tries to find/load model, returns false if unavailable." alt="" coords="835,185,1034,225"/>
-<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1134,275,1051,241,1011,228,1012,223,1053,236,1136,271"/>
-<area shape="rect" id="Node000015" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#ae30749b82d3e097aa32183c8be0ca050" title=" " alt="" coords="843,369,1027,409"/>
-<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="1124,326,1053,352,996,372,994,367,1051,347,1122,321"/>
-<area shape="rect" id="Node000018" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a3a2335f7f793bfee6ef0de1bfa64569b" title=" " alt="" coords="817,540,1052,580"/>
-<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="1179,332,1160,373,1132,422,1096,472,1054,515,1031,531,1007,542,1005,537,1029,526,1050,511,1092,468,1127,419,1155,371,1174,330"/>
-<area shape="rect" id="Node000022" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a5c6f2f8d9b556147972307d4d4e0df9a" title=" " alt="" coords="276,69,499,109"/>
-<area shape="poly" id="edge24_Node000001_Node000022" title=" " alt="" coords="1164,270,1116,219,1085,195,1051,176,979,149,917,134,860,128,806,128,691,134,624,132,546,124,479,112,480,107,547,119,624,127,691,128,806,123,860,123,918,129,981,144,1053,171,1088,191,1119,215,1168,266"/>
-<area shape="rect" id="Node000023" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a15bc4ce0b729223feaf7a633702f4798" title=" " alt="" coords="843,461,1027,501"/>
-<area shape="poly" id="edge26_Node000001_Node000023" title=" " alt="" coords="1163,331,1113,376,1053,424,982,464,980,459,1051,419,1110,372,1159,327"/>
-<area shape="rect" id="Node000003" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#af9eefc0a97f4c24ec7e352b4c708016a" title=" " alt="" coords="276,312,499,352"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="545,335,499,335,499,329,545,329"/>
-<area shape="rect" id="Node000004" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a605c0b57123912158a9d0151879a4758" title=" " alt="" coords="5,255,228,295"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="278,312,211,297,212,292,279,306"/>
-<area shape="rect" id="Node000006" href="$d5/db4/classfilters_1_1FilterManager.html#ac6ed54e7ff7d60cb119c09fafd065623" title="Load filters from the default filters.json path." alt="" coords="579,5,737,45"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="842,71,736,46,738,41,843,66"/>
-<area shape="rect" id="Node000008" href="$d5/db4/classfilters_1_1FilterManager.html#a07f8b2a9babc60fec54768639192f2f2" title="Persist filters to the default filters.json path." alt="" coords="579,69,737,109"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="843,92,737,92,737,87,843,87"/>
-<area shape="rect" id="Node000007" href="$d5/db4/classfilters_1_1FilterManager.html#a24177957250a75765322630b5c4f76de" title=" " alt="" coords="309,5,466,45"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="566,28,466,28,466,23,566,23"/>
-<area shape="rect" id="Node000010" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f" title=" " alt="" coords="547,248,769,288"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="821,272,769,272,769,266,822,267"/>
-<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="560,294,473,315,472,309,559,289"/>
-<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="533,272,228,276,228,271,532,267"/>
-<area shape="rect" id="Node000012" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#ad4fd3e224eb409e860ec151151487aa5" title="Check if Gemma is available (model found or downloadable)" alt="" coords="559,184,757,224"/>
-<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="821,207,758,207,758,202,821,202"/>
-<area shape="rect" id="Node000013" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a85b5f49f053c402d802076615f3c5197" title=" " alt="" coords="288,133,487,173"/>
-<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="545,186,486,175,487,169,546,180"/>
-<area shape="rect" id="Node000014" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a9e8ab812485c9cbbfe78def0fe501f6e" title=" " alt="" coords="288,197,487,237"/>
-<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="545,212,487,215,487,210,544,207"/>
-<area shape="rect" id="Node000016" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a46d4068c78b8e027cd69843934b532b3" title=" " alt="" coords="295,427,479,467"/>
-<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="829,395,694,403,547,417,477,429,476,424,546,412,694,397,829,390"/>
-<area shape="rect" id="Node000017" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a8f7d2e5223b34cf84f3723e838bf2a13" title=" " alt="" coords="566,427,750,467"/>
-<area shape="poly" id="edge18_Node000015_Node000017" title=" " alt="" coords="830,414,751,430,750,425,829,409"/>
-<area shape="poly" id="edge19_Node000017_Node000016" title=" " alt="" coords="552,449,480,449,480,444,552,444"/>
-<area shape="rect" id="Node000019" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a7f061cd87a72332f6668f2f19d1c9527" title=" " alt="" coords="573,555,743,595"/>
-<area shape="poly" id="edge21_Node000018_Node000019" title=" " alt="" coords="804,570,744,573,744,567,804,564"/>
-<area shape="rect" id="Node000020" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a7ccb969bfd20c69ea0c4ab67bdf5adf3" title=" " alt="" coords="302,555,473,595"/>
-<area shape="poly" id="edge22_Node000019_Node000020" title=" " alt="" coords="559,577,473,577,473,572,559,572"/>
-<area shape="rect" id="Node000021" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a92c4eba8df59a7ed5b7310c7c447e92a" title=" " alt="" coords="5,555,228,595"/>
-<area shape="poly" id="edge23_Node000020_Node000021" title=" " alt="" coords="289,577,228,577,228,572,289,572"/>
-<area shape="poly" id="edge25_Node000022_Node000004" title=" " alt="" coords="290,117,277,124,233,155,193,191,135,256,131,253,189,187,230,151,275,119,287,112"/>
-<area shape="rect" id="Node000024" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#ad7f447bf70d953efca40ae16cfe32e7b" title=" " alt="" coords="566,491,750,531"/>
-<area shape="poly" id="edge27_Node000023_Node000024" title=" " alt="" coords="829,495,751,504,750,498,829,490"/>
-<area shape="poly" id="edge28_Node000024_Node000016" title=" " alt="" coords="559,490,472,469,473,464,560,485"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1100,371,1283,411"/>
+<area shape="rect" id="Node000002" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a2280416bf0765c53f219ddbd0b4ba2a0" title=" " alt="" coords="559,343,757,383"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1086,389,757,371,758,366,1086,383"/>
+<area shape="rect" id="Node000005" href="$d5/db4/classfilters_1_1FilterManager.html#a6b70b7ceeb875205be134d7acb8668da" title=" " alt="" coords="856,122,1013,162"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1175,359,1157,317,1130,268,1094,218,1050,176,1013,157,1015,153,1054,172,1098,215,1134,265,1162,315,1180,357"/>
+<area shape="rect" id="Node000009" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a073ef1a1fe73e4f7dcb9ffd9c84f2603" title="Check if model is already downloaded." alt="" coords="835,250,1034,290"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1152,366,1105,334,1051,305,1020,293,1022,288,1053,300,1108,329,1155,361"/>
+<area shape="rect" id="Node000011" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a924ab672d9956940407fd74a13988815" title="Initialize the engine. Tries to find/load model, returns false if unavailable." alt="" coords="835,186,1034,226"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1168,361,1119,299,1087,267,1051,240,1027,229,1029,224,1053,236,1090,263,1123,296,1172,358"/>
+<area shape="rect" id="Node000015" href="$d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a22d294ae08f316da71fe1eb89aa4e17f" title="Initialize session manager." alt="" coords="831,314,1038,354"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="1087,371,1024,357,1025,352,1088,366"/>
+<area shape="rect" id="Node000016" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#ae30749b82d3e097aa32183c8be0ca050" title=" " alt="" coords="843,493,1027,533"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="1155,422,1108,454,1053,483,1022,495,1020,490,1051,478,1105,449,1152,417"/>
+<area shape="rect" id="Node000019" href="$da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html#a934a4ba27baaf29f7453715c812376f5" title="Load tags from file." alt="" coords="827,429,1042,469"/>
+<area shape="poly" id="edge21_Node000001_Node000019" title=" " alt="" coords="1088,417,1025,431,1024,426,1087,412"/>
+<area shape="rect" id="Node000020" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a3a2335f7f793bfee6ef0de1bfa64569b" title=" " alt="" coords="817,621,1052,661"/>
+<area shape="poly" id="edge22_Node000001_Node000020" title=" " alt="" coords="1180,426,1162,468,1134,518,1098,568,1054,611,1033,623,1030,618,1050,607,1094,565,1130,515,1157,466,1175,424"/>
+<area shape="rect" id="Node000024" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a5c6f2f8d9b556147972307d4d4e0df9a" title=" " alt="" coords="276,15,499,55"/>
+<area shape="poly" id="edge26_Node000001_Node000024" title=" " alt="" coords="1181,359,1167,304,1142,236,1124,201,1104,168,1079,138,1050,112,987,73,917,44,843,25,768,14,694,9,623,9,499,19,499,14,623,4,694,3,769,8,844,20,918,39,989,68,1054,108,1083,134,1108,165,1129,199,1147,234,1172,302,1186,357"/>
+<area shape="rect" id="Node000025" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a15bc4ce0b729223feaf7a633702f4798" title=" " alt="" coords="843,557,1027,597"/>
+<area shape="poly" id="edge28_Node000001_Node000025" title=" " alt="" coords="1172,425,1123,487,1090,519,1053,547,1028,560,1026,555,1051,543,1087,515,1119,484,1168,421"/>
+<area shape="rect" id="Node000027" href="$da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html#a6d3f9d434bd4fe686a1ae628d8f3a3d8" title="Save tags to file." alt="" coords="827,685,1042,725"/>
+<area shape="poly" id="edge31_Node000001_Node000027" title=" " alt="" coords="1186,426,1170,480,1144,547,1106,616,1082,647,1054,675,1036,687,1033,682,1050,671,1078,644,1102,613,1140,545,1165,478,1180,424"/>
+<area shape="rect" id="Node000003" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#af9eefc0a97f4c24ec7e352b4c708016a" title=" " alt="" coords="276,322,499,362"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="545,357,498,354,499,348,545,352"/>
+<area shape="rect" id="Node000004" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a605c0b57123912158a9d0151879a4758" title=" " alt="" coords="5,265,228,305"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="278,322,211,307,212,302,279,317"/>
+<area shape="rect" id="Node000006" href="$d5/db4/classfilters_1_1FilterManager.html#ac6ed54e7ff7d60cb119c09fafd065623" title="Load filters from the default filters.json path." alt="" coords="579,73,737,113"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="842,128,737,109,738,104,843,123"/>
+<area shape="rect" id="Node000008" href="$d5/db4/classfilters_1_1FilterManager.html#a07f8b2a9babc60fec54768639192f2f2" title="Persist filters to the default filters.json path." alt="" coords="579,137,737,177"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="843,150,737,155,737,150,842,144"/>
+<area shape="rect" id="Node000007" href="$d5/db4/classfilters_1_1FilterManager.html#a24177957250a75765322630b5c4f76de" title=" " alt="" coords="309,79,466,119"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="566,98,466,100,466,95,565,92"/>
+<area shape="rect" id="Node000010" href="$df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f" title=" " alt="" coords="547,265,769,305"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="822,279,769,282,769,276,821,273"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="550,310,483,325,482,319,549,305"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="532,287,228,287,228,282,532,282"/>
+<area shape="rect" id="Node000012" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#ad4fd3e224eb409e860ec151151487aa5" title="Check if Gemma is available (model found or downloadable)" alt="" coords="559,201,757,241"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="822,215,758,218,758,213,821,209"/>
+<area shape="rect" id="Node000013" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a85b5f49f053c402d802076615f3c5197" title=" " alt="" coords="288,143,487,183"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="549,200,482,186,483,181,550,195"/>
+<area shape="rect" id="Node000014" href="$d2/d47/classai_1_1GemmaInferenceEngine.html#a9e8ab812485c9cbbfe78def0fe501f6e" title=" " alt="" coords="288,207,487,247"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="545,226,487,228,487,222,545,221"/>
+<area shape="rect" id="Node000017" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a46d4068c78b8e027cd69843934b532b3" title=" " alt="" coords="295,493,479,533"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="833,493,769,483,658,476,547,483,472,495,471,490,546,478,658,471,770,478,834,487"/>
+<area shape="rect" id="Node000018" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#a8f7d2e5223b34cf84f3723e838bf2a13" title=" " alt="" coords="566,493,750,533"/>
+<area shape="poly" id="edge19_Node000016_Node000018" title=" " alt="" coords="829,515,750,515,750,510,829,510"/>
+<area shape="poly" id="edge20_Node000018_Node000017" title=" " alt="" coords="552,515,480,515,480,510,552,510"/>
+<area shape="rect" id="Node000021" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a7f061cd87a72332f6668f2f19d1c9527" title=" " alt="" coords="573,621,743,661"/>
+<area shape="poly" id="edge23_Node000020_Node000021" title=" " alt="" coords="804,643,744,643,744,638,804,638"/>
+<area shape="rect" id="Node000022" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a7ccb969bfd20c69ea0c4ab67bdf5adf3" title=" " alt="" coords="302,621,473,661"/>
+<area shape="poly" id="edge24_Node000021_Node000022" title=" " alt="" coords="559,643,473,643,473,638,559,638"/>
+<area shape="rect" id="Node000023" href="$d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a92c4eba8df59a7ed5b7310c7c447e92a" title=" " alt="" coords="5,621,228,661"/>
+<area shape="poly" id="edge25_Node000022_Node000023" title=" " alt="" coords="289,643,228,643,228,638,289,638"/>
+<area shape="poly" id="edge27_Node000024_Node000004" title=" " alt="" coords="286,64,278,70,251,91,226,116,183,171,151,224,129,266,125,263,146,222,179,168,222,113,247,87,274,65,283,60"/>
+<area shape="rect" id="Node000026" href="$d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#ad7f447bf70d953efca40ae16cfe32e7b" title=" " alt="" coords="566,557,750,597"/>
+<area shape="poly" id="edge29_Node000025_Node000026" title=" " alt="" coords="829,579,750,579,750,574,829,574"/>
+<area shape="poly" id="edge30_Node000026_Node000017" title=" " alt="" coords="559,556,472,535,473,530,560,551"/>
 </map>

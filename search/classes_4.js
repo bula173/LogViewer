@@ -1,13 +1,19 @@
 var searchData=
 [
   ['error_0',['Error',['../d7/d0d/classerror_1_1Error.html',1,'error']]],
-  ['eventscontainer_1',['EventsContainer',['../dd/dc2/classdb_1_1EventsContainer.html',1,'db']]],
-  ['eventstablemodel_2',['EventsTableModel',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html',1,'ui::qt']]],
-  ['eventstableview_3',['EventsTableView',['../d6/d26/classui_1_1qt_1_1EventsTableView.html',1,'ui::qt']]],
-  ['evlogparser_4',['EvlogParser',['../d1/d55/classparser_1_1EvlogParser.html',1,'parser']]],
-  ['evlogtemplate_5',['EvlogTemplate',['../dc/d0f/structparser_1_1EvlogTemplate.html',1,'parser']]],
-  ['evlogtemplatefield_6',['EvlogTemplateField',['../d5/dcd/structparser_1_1EvlogTemplateField.html',1,'parser']]],
-  ['evlogtemplateregistry_7',['EvlogTemplateRegistry',['../d7/d64/classparser_1_1EvlogTemplateRegistry.html',1,'parser']]],
-  ['exactmatchstrategy_8',['ExactMatchStrategy',['../de/d0e/classfilters_1_1ExactMatchStrategy.html',1,'filters']]],
-  ['exchangepattern_9',['ExchangePattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html',1,'analyzer']]]
+  ['eventannotation_1',['EventAnnotation',['../d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html',1,'ui::qt::utils::EventTagManager']]],
+  ['eventgroup_2',['EventGroup',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html',1,'ui::qt::utils::EventGroupManager']]],
+  ['eventgroupmanager_3',['EventGroupManager',['../dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html',1,'ui::qt::utils']]],
+  ['eventscontainer_4',['EventsContainer',['../dd/dc2/classdb_1_1EventsContainer.html',1,'db']]],
+  ['eventstablemodel_5',['EventsTableModel',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html',1,'ui::qt']]],
+  ['eventstableview_6',['EventsTableView',['../d6/d26/classui_1_1qt_1_1EventsTableView.html',1,'ui::qt']]],
+  ['eventtagmanager_7',['EventTagManager',['../da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html',1,'ui::qt::utils']]],
+  ['evlogparser_8',['EvlogParser',['../d1/d55/classparser_1_1EvlogParser.html',1,'parser']]],
+  ['evlogtemplate_9',['EvlogTemplate',['../dc/d0f/structparser_1_1EvlogTemplate.html',1,'parser']]],
+  ['evlogtemplatefield_10',['EvlogTemplateField',['../d5/dcd/structparser_1_1EvlogTemplateField.html',1,'parser']]],
+  ['evlogtemplateregistry_11',['EvlogTemplateRegistry',['../d7/d64/classparser_1_1EvlogTemplateRegistry.html',1,'parser']]],
+  ['exactmatchstrategy_12',['ExactMatchStrategy',['../de/d0e/classfilters_1_1ExactMatchStrategy.html',1,'filters']]],
+  ['exchangepattern_13',['ExchangePattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html',1,'analyzer']]],
+  ['exportdialog_14',['ExportDialog',['../d3/de3/classui_1_1qt_1_1ExportDialog.html',1,'ui::qt']]],
+  ['exportoptions_15',['ExportOptions',['../d1/dab/structui_1_1qt_1_1ExportDialog_1_1ExportOptions.html',1,'ui::qt::ExportDialog']]]
 ];
