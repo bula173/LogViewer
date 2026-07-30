@@ -1,5 +1,9 @@
 var NAVTREEINDEX21 =
 {
+"de/d35/classui_1_1qt_1_1UpdateChecker.html#a6d7eb6c0cc0ed45824f188557ea70f1c":[42,0,10,0,45,13],
+"de/d35/classui_1_1qt_1_1UpdateChecker.html#a6d7eb6c0cc0ed45824f188557ea70f1c":[40,0,12,1,53,13],
+"de/d35/classui_1_1qt_1_1UpdateChecker.html#a7feace3d0a279854731e6adea5dab18e":[42,0,10,0,45,2],
+"de/d35/classui_1_1qt_1_1UpdateChecker.html#a7feace3d0a279854731e6adea5dab18e":[40,0,12,1,53,2],
 "de/d35/classui_1_1qt_1_1UpdateChecker.html#a81d33366b2048071ca4adc6a39f946cf":[40,0,12,1,53,8],
 "de/d35/classui_1_1qt_1_1UpdateChecker.html#a81d33366b2048071ca4adc6a39f946cf":[42,0,10,0,45,8],
 "de/d35/classui_1_1qt_1_1UpdateChecker.html#aa1130dc0de9c552f3b68bc72a7651664":[42,0,10,0,45,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX21 =
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a09ae2f51c37ce35860ff640e7792f843":[42,0,8,6,3],
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a0acbf002bd6506247961b1b7d23ec893":[42,0,8,6,10],
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a0acbf002bd6506247961b1b7d23ec893":[40,0,10,6,10],
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a36206e78216ff1eaac590d41fe0e1f8c":[42,0,8,6,5],
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a36206e78216ff1eaac590d41fe0e1f8c":[40,0,10,6,5],
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a45a9f1fb9a55d0727c8dce339742d4f5":[42,0,8,6,2],
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a45a9f1fb9a55d0727c8dce339742d4f5":[40,0,10,6,2],
-"df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3":[42,0,8,6,7]
+"df/d48/classplugin_1_1PluginDependencyGraph.html#a36206e78216ff1eaac590d41fe0e1f8c":[42,0,8,6,5]
 };

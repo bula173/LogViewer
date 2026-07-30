@@ -1,5 +1,9 @@
 var NAVTREEINDEX22 =
 {
+"df/d48/classplugin_1_1PluginDependencyGraph.html#a36206e78216ff1eaac590d41fe0e1f8c":[40,0,10,6,5],
+"df/d48/classplugin_1_1PluginDependencyGraph.html#a45a9f1fb9a55d0727c8dce339742d4f5":[42,0,8,6,2],
+"df/d48/classplugin_1_1PluginDependencyGraph.html#a45a9f1fb9a55d0727c8dce339742d4f5":[40,0,10,6,2],
+"df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3":[42,0,8,6,7],
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3":[40,0,10,6,7],
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a9f52b9efd11645def50c63b08c1ea83d":[40,0,10,6,1],
 "df/d48/classplugin_1_1PluginDependencyGraph.html#a9f52b9efd11645def50c63b08c1ea83d":[42,0,8,6,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX22 =
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f":[40,0,12,1,28,12],
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f":[42,0,10,0,20,12],
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a0b1c0af0d415ff1a488a6f8634a324a4":[40,0,12,1,28,7],
-"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a0b1c0af0d415ff1a488a6f8634a324a4":[42,0,10,0,20,7],
-"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3885bd26f8e4fa23cdcff6d4c9cd3496":[40,0,12,1,28,1],
-"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3885bd26f8e4fa23cdcff6d4c9cd3496":[42,0,10,0,20,1],
-"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a399d5df90dec7c8c3193e911f72ca715":[42,0,10,0,20,17],
-"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a399d5df90dec7c8c3193e911f72ca715":[40,0,12,1,28,17]
+"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a0b1c0af0d415ff1a488a6f8634a324a4":[42,0,10,0,20,7]
 };

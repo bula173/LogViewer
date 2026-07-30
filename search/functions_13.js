@@ -26,7 +26,7 @@ var searchData=
   ['updatedetails_23',['UpdateDetails',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#a61e3eb01ef25a47b1d546cbcef6c6ef5',1,'ui::qt::PluginManagerDialog']]],
   ['updatedialog_24',['UpdateDialog',['../d5/d32/classui_1_1qt_1_1UpdateDialog.html#ab33d0b5526b4498596c639f9e1cb453d',1,'ui::qt::UpdateDialog']]],
   ['updatefilter_25',['updateFilter',['../d5/db4/classfilters_1_1FilterManager.html#ad709cdc41daec9443e8d540a24a55164',1,'filters::FilterManager']]],
-  ['updatefilterstatus_26',['UpdateFilterStatus',['../d7/ddd/classui_1_1qt_1_1FilterStatusBar.html#a1d647efd85626a168f1bcbf940b82e7e',1,'ui::qt::FilterStatusBar']]],
+  ['updatefilterstatus_26',['updatefilterstatus',['../d7/ddd/classui_1_1qt_1_1FilterStatusBar.html#a1d647efd85626a168f1bcbf940b82e7e',1,'ui::qt::FilterStatusBar::UpdateFilterStatus()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a1a07053fd9bd7971f011fee534e469b9',1,'ui::qt::MainWindow::UpdateFilterStatus()'],['../d3/d1f/classui_1_1IMainWindowView.html#a816fff92f0a7d1f06482c0de19bdd0d9',1,'ui::IMainWindowView::UpdateFilterStatus()']]],
   ['updateitemhighlighteditorsfromselection_27',['UpdateItemHighlightEditorsFromSelection',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a622c1c97b5f54739db6d7dca26c7fac9',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightpreview_28',['UpdateItemHighlightPreview',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a5dd1c7acee115a5a46502b61bfe70b0c',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightswatches_29',['UpdateItemHighlightSwatches',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a6eeb5d53673e15605e0620284077c458',1,'ui::qt::StructuredConfigDialog']]],

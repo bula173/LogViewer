@@ -9,6 +9,7 @@ var classui_1_1IMainWindowView =
     [ "RefreshLayout", "d3/d1f/classui_1_1IMainWindowView.html#ae6a74fa2cae101d1603f59df6b8e33df", null ],
     [ "SetSearchControlsEnabled", "d3/d1f/classui_1_1IMainWindowView.html#a43d088a58413178267a5ea258114a91b", null ],
     [ "ToggleProgressVisibility", "d3/d1f/classui_1_1IMainWindowView.html#aa3eb789780586310c3de35dfe7f1d940", null ],
+    [ "UpdateFilterStatus", "d3/d1f/classui_1_1IMainWindowView.html#a816fff92f0a7d1f06482c0de19bdd0d9", null ],
     [ "UpdateProgressValue", "d3/d1f/classui_1_1IMainWindowView.html#a505eef107718d0e4130be9e8dacfe921", null ],
     [ "UpdateStatusText", "d3/d1f/classui_1_1IMainWindowView.html#a4e97c4d13b5381a7a5bb626282deb366", null ]
 ];

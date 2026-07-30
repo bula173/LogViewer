@@ -85,6 +85,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "TryAddPluginBottomPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a2cf7811c0ddaeb4a22b835b7adc456cb", null ],
     [ "TryAddPluginMainPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a7d6b361e1c5384b58355cb3e90f7eb9a", null ],
     [ "TryAddPluginRightPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a7469356ee0db2a89a3ec01033d89efdf", null ],
+    [ "UpdateFilterStatus", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a1a07053fd9bd7971f011fee534e469b9", null ],
     [ "UpdateProgressValue", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a9fc925d7415081537e15a6dac536531a", null ],
     [ "UpdateStatusText", "d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5", null ],
     [ "m_activePluginId", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a91637737c477514d7a8e4b7e8e07062c", null ],

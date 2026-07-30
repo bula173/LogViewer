@@ -1,5 +1,9 @@
 var NAVTREEINDEX23 =
 {
+"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3885bd26f8e4fa23cdcff6d4c9cd3496":[40,0,12,1,28,1],
+"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3885bd26f8e4fa23cdcff6d4c9cd3496":[42,0,10,0,20,1],
+"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a399d5df90dec7c8c3193e911f72ca715":[42,0,10,0,20,17],
+"df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a399d5df90dec7c8c3193e911f72ca715":[40,0,12,1,28,17],
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3dde1bda0ea7138f922729a9451688bf":[40,0,12,1,28,11],
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3dde1bda0ea7138f922729a9451688bf":[42,0,10,0,20,11],
 "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a3e44b6bec300d26f1f6d6e5353916acb":[42,0,10,0,20,20],
