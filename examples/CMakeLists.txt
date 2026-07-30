@@ -5,12 +5,18 @@
 if(BUILD_SDK)
     # When building as part of the main project, provide SDK paths directly
     # so examples can find the SDK before it's installed
-    set(CMAKE_PREFIX_PATH 
+    set(CMAKE_PREFIX_PATH
         "${CMAKE_BINARY_DIR}/src/plugin_api"
         "${CMAKE_CURRENT_LIST_DIR}/../src/plugin_api"
         "${CMAKE_PREFIX_PATH}"
     )
-    
-    add_subdirectory(BasicPlugin)
-    message(STATUS "LogViewer Examples: BasicPlugin included")
+
+    # Try to build examples; skip gracefully if dependencies are missing
+    # (e.g., on some CI environments where fmt targets are incomplete)
+    if(NOT DEFINED SKIP_EXAMPLES)
+        add_subdirectory(BasicPlugin)
+        message(STATUS "LogViewer Examples: BasicPlugin included")
+    else()
+        message(STATUS "LogViewer Examples: Skipped (SKIP_EXAMPLES enabled)")
+    endif()
 endif()
