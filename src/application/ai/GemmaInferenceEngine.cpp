@@ -168,17 +168,120 @@ std::pair<std::string, std::string> GemmaInferenceEngine::RunInference(const std
 
     try
     {
-        // TODO: Implement actual llama.cpp inference
-        // For now, return error indicating inference not yet implemented
-        util::Logger::Warn("[Gemma] Inference not yet implemented - llama.cpp integration pending");
+        // Step 1: Tokenize the prompt using raw C API
+        std::vector<llama_token> tokens(prompt.size() + 10);  // Reserve space
+        int32_t n_tokens = llama_tokenize(
+            s_impl->model,
+            prompt.c_str(),
+            static_cast<int32_t>(prompt.length()),
+            tokens.data(),
+            static_cast<int32_t>(tokens.capacity()),
+            true,  // add_bos
+            false  // special
+        );
 
-        // This is where token generation should happen:
-        // 1. Tokenize prompt
-        // 2. Run inference loop to generate tokens
-        // 3. Decode tokens back to text
-        // 4. Return the generated response
+        if (n_tokens <= 0)
+            return {"", "Failed to tokenize prompt"};
 
-        return {"", "Inference implementation pending - check with development team"};
+        tokens.resize(n_tokens);
+
+        util::Logger::Debug("[Gemma] Tokenized {} characters into {} tokens",
+            prompt.length(), tokens.size());
+
+        // Step 2: Ensure context has enough capacity for tokens + generation
+        const int n_ctx = llama_n_ctx(s_impl->ctx);
+        if (static_cast<int>(tokens.size()) >= n_ctx - 10)  // Leave headroom for generation
+            return {"", "Prompt too long for context window"};
+
+        // Step 3: Process prompt tokens through the model
+        llama_batch batch = llama_batch_get_one(tokens.data(), static_cast<int32_t>(tokens.size()), 0, 0);
+        if (llama_decode(s_impl->ctx, batch) != 0)
+            return {"", "Error decoding prompt tokens"};
+
+        // Step 4: Generate response tokens
+        std::string result;
+        std::vector<llama_token> generatedTokens;
+        generatedTokens.reserve(maxTokens);
+
+        llama_token endToken = llama_token_eos(s_impl->model);
+        int tokensGenerated = 0;
+        int n_vocab = llama_n_vocab(s_impl->model);
+
+        for (int i = 0; i < maxTokens; ++i)
+        {
+            // Sample next token using greedy decoding (argmax of logits)
+            float* logits = llama_get_logits(s_impl->ctx);
+            if (!logits)
+                break;
+
+            // Find token with highest logit
+            int32_t nextToken = 0;
+            float maxLogit = logits[0];
+            for (int32_t j = 1; j < n_vocab; ++j)
+            {
+                if (logits[j] > maxLogit)
+                {
+                    maxLogit = logits[j];
+                    nextToken = j;
+                }
+            }
+
+            // Check for end of sequence
+            if (nextToken == endToken)
+                break;
+
+            generatedTokens.push_back(nextToken);
+            tokensGenerated++;
+
+            // Prepare for next iteration: decode the generated token
+            batch = llama_batch_get_one(
+                &generatedTokens.back(),
+                1,
+                static_cast<llama_pos>(tokens.size() + tokensGenerated),
+                0);
+
+            if (llama_decode(s_impl->ctx, batch) != 0)
+                return {"", "Error during token generation"};
+        }
+
+        util::Logger::Debug("[Gemma] Generated {} tokens", generatedTokens.size());
+
+        // Step 5: Decode generated tokens back to text using raw C API
+        if (generatedTokens.empty())
+            return {"", "No tokens generated from model"};
+
+        for (llama_token token : generatedTokens)
+        {
+            // Use buffer-based API for token_to_piece
+            char buffer[128];
+            int32_t piece_len = llama_token_to_piece(
+                s_impl->model,
+                token,
+                buffer,
+                static_cast<int32_t>(sizeof(buffer))
+            );
+
+            if (piece_len > 0 && piece_len <= static_cast<int32_t>(sizeof(buffer)))
+            {
+                result.append(buffer, piece_len);
+            }
+        }
+
+        // Clean up result: trim whitespace and control characters
+        size_t start = result.find_first_not_of(" \t\n\r");
+        size_t end = result.find_last_not_of(" \t\n\r");
+        if (start != std::string::npos && end != std::string::npos)
+        {
+            result = result.substr(start, end - start + 1);
+        }
+
+        if (result.empty())
+            return {"", "Generated text is empty after cleanup"};
+
+        util::Logger::Info("[Gemma] Inference successful - {} tokens, {} chars",
+            generatedTokens.size(), result.length());
+
+        return {result, ""};  // Empty error string indicates success
     }
     catch (const std::exception& e)
     {
