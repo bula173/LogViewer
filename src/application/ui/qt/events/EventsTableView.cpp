@@ -151,6 +151,29 @@ void EventsTableView::RefreshView()
     if (!m_model)
         return;
 
+    // CRITICAL: Before syncing with container, validate that any active
+    // filtering doesn't reference stale indices (e.g., after merge).
+    // This prevents segfaults when merge invalidates cached indices.
+    const auto& filteredIndices = m_model->GetFilteredIndices();
+    if (!filteredIndices.empty())
+    {
+        const size_t containerSize = m_events.Size();
+        bool hasStaleIndices = false;
+        for (const auto idx : filteredIndices)
+        {
+            if (idx >= containerSize)
+            {
+                hasStaleIndices = true;
+                break;
+            }
+        }
+        if (hasStaleIndices)
+        {
+            util::Logger::Warn("[EventsTableView] RefreshView: Detected stale indices after merge; clearing filter");
+            m_model->ClearFilter();
+        }
+    }
+
     m_model->SyncWithContainer();
     viewport()->update();
 }

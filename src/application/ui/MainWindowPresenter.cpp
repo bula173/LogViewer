@@ -567,12 +567,20 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     // of storing and indexing an n-element identity vector.
     if (filteredIndices.size() == m_events.Size())
     {
+        util::Logger::Debug("ApplySelectedTypeFilters: All {} events match; clearing filter", m_events.Size());
         m_eventsListView->ClearFilter();
+    }
+    else if (!filteredIndices.empty())
+    {
+        util::Logger::Debug("ApplySelectedTypeFilters: Applying filter with {} matching events", filteredIndices.size());
+        m_eventsListView->SetFilteredEvents(filteredIndices);
     }
     else
     {
-        m_eventsListView->SetFilteredEvents(filteredIndices);
+        util::Logger::Debug("ApplySelectedTypeFilters: No events match; clearing filter");
+        m_eventsListView->ClearFilter();
     }
+
     m_eventsListView->RefreshView();
 
     m_view.UpdateStatusText(previousStatus);
