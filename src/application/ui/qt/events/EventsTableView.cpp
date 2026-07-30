@@ -51,11 +51,17 @@ void EventsTableView::InitializeView()
     setSortingEnabled(true);
     ResizeColumnsToConfiguration();
 
-    // Restore previously saved column order
+    // Restore previously saved column order and widths
     RestoreColumnOrder();
+    RestoreColumnWidths();
 
     // Connect to column reorder signal to save column order when user moves columns
     connect(horizontalHeader(), &QHeaderView::sectionMoved, this, &EventsTableView::OnColumnMoved);
+
+    // Connect to column resize signal to save widths when user resizes columns
+    connect(horizontalHeader(), &QHeaderView::sectionResized, this, [this](int, int, int) {
+        SaveColumnWidths();
+    });
 
     auto* copyAction = new QAction(tr("Copy"), this);
     copyAction->setShortcut(QKeySequence::Copy);
@@ -668,6 +674,54 @@ void EventsTableView::SaveColumnOrder() const
 
     auto& config = config::GetConfig();
     config.columnOrder = order;
+
+    // Also save widths at the same time
+    SaveColumnWidths();
+}
+
+void EventsTableView::RestoreColumnWidths()
+{
+    if (!m_model || !horizontalHeader())
+        return;
+
+    const auto& config = config::GetConfig();
+    const auto& columns = config.GetColumns();
+    const auto& widths = config.columnWidths;
+
+    for (size_t i = 0; i < columns.size(); ++i)
+    {
+        auto it = widths.find(columns[i].name);
+        if (it != widths.end() && it->second > 0)
+        {
+            horizontalHeader()->resizeSection(static_cast<int>(i), it->second);
+            util::Logger::Debug("[EventsTableView] Restored width for column '{}': {} px",
+                columns[i].name, it->second);
+        }
+    }
+}
+
+void EventsTableView::SaveColumnWidths() const
+{
+    if (!m_model || !horizontalHeader())
+        return;
+
+    const auto& columns = config::GetConfig().GetColumns();
+    std::map<std::string, int> widths;
+
+    // Save width of each column
+    for (size_t i = 0; i < columns.size(); ++i)
+    {
+        int width = horizontalHeader()->sectionSize(static_cast<int>(i));
+        if (width > 0)
+        {
+            widths[columns[i].name] = width;
+        }
+    }
+
+    util::Logger::Debug("[EventsTableView] SaveColumnWidths: saving {} columns", widths.size());
+
+    auto& config = config::GetConfig();
+    config.columnWidths = widths;
     config.SaveConfig();
 }
 

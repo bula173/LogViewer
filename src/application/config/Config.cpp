@@ -284,7 +284,25 @@ void Config::LoadConfig()
             updates.checkIntervalDays = u.value("checkIntervalDays", 7);
             updates.lastCheckTime     = u.value("lastCheckTime",     std::string{});
         }
-        
+
+        // Load UI settings (column order and widths)
+        if (j.contains("ui") && j["ui"].is_object())
+        {
+            const auto& ui = j["ui"];
+
+            // Load column order
+            if (ui.contains("columnOrder") && ui["columnOrder"].is_array())
+            {
+                columnOrder = ui["columnOrder"].get<std::vector<std::string>>();
+            }
+
+            // Load column widths
+            if (ui.contains("columnWidths") && ui["columnWidths"].is_object())
+            {
+                columnWidths = ui["columnWidths"].get<std::map<std::string, int>>();
+            }
+        }
+
         // Load config version if present
         if (j.contains("version") && j["version"].is_object())
         {
@@ -438,9 +456,21 @@ void Config::SaveConfig()
                 highlightJson["bold"] = highlight.bold;
             if (highlight.italic)
                 highlightJson["italic"] = highlight.italic;
-            
+
             if (!highlightJson.empty())
                 j["itemHighlights"][itemKey] = highlightJson;
+        }
+
+        // Save column order
+        if (!columnOrder.empty())
+        {
+            j["ui"]["columnOrder"] = columnOrder;
+        }
+
+        // Save column widths
+        if (!columnWidths.empty())
+        {
+            j["ui"]["columnWidths"] = columnWidths;
         }
 
         configFile << j.dump(4); // Pretty print with 4 spaces

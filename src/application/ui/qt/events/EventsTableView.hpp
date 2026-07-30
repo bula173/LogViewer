@@ -77,6 +77,8 @@ class EventsTableView : public QTableView,
     void ScrollToMatchIndex(int matchIndex);
     void RestoreColumnOrder();
     void SaveColumnOrder() const;
+    void RestoreColumnWidths();
+    void SaveColumnWidths() const;
 
     /// Returns actual event indices for all currently selected table rows.
     std::vector<int> SelectedActualIndices() const;

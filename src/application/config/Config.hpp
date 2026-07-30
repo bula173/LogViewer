@@ -144,6 +144,7 @@ class Config
     std::string appName {"LogViewer"};
     std::vector<ColumnConfig> columns;
     std::vector<std::string> columnOrder;  // Persisted column order (names in display order)
+    std::map<std::string, int> columnWidths;  // Persisted column widths (name -> width in pixels)
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
     ItemHighlightMap itemHighlights;  // Item details view highlighting by key name
