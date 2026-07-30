@@ -21,6 +21,7 @@
 #include "utils/UpdateChecker.hpp"
 #include "dialogs/UpdateDialog.hpp"
 #include "widgets/FilterStatusBar.hpp"
+#include "widgets/TabBadgeManager.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
 #include "events/EventsTableView.hpp"
@@ -256,6 +257,9 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             // Ensure we always have a central widget before returning
             setCentralWidget(m_contentTabs);
         m_contentTabs->tabBar()->installEventFilter(this);
+
+        // Create tab badge manager for showing activity indicators
+        m_tabBadgeManager = new TabBadgeManager(m_contentTabs);
 
         // Events view tab — QStackedWidget with page 0 = normal view, page 1 = side-by-side
         m_eventsView = new EventsTableView(events, m_contentTabs);

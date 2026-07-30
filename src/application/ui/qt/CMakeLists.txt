@@ -43,6 +43,7 @@ target_sources(application_core
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp
         widgets/FilterStatusBar.cpp
+        widgets/TabBadgeManager.cpp
 )
 
 # Expose this directory so that files in subdirectories can use

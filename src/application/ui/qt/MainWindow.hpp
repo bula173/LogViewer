@@ -90,6 +90,7 @@ class CanSignalTreePanel;
 class SideBySidePanel;
 class FileTailer;
 class FilterStatusBar;
+class TabBadgeManager;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -304,6 +305,7 @@ class MainWindow : public QMainWindow,
     CanSignalTreePanel*     m_canSignalTree    {nullptr};
     SideBySidePanel*        m_sideBySidePanel  {nullptr};
     FilterStatusBar*        m_filterStatusBar  {nullptr};
+    TabBadgeManager*        m_tabBadgeManager  {nullptr};
     QLabel*            m_updateBadge   {nullptr};
     updates::UpdateCheckResult m_lastUpdateResult;
     
