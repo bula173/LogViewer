@@ -590,8 +590,35 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     if (column < 0 || column >= static_cast<int>(m_visibleColumnIndices.size()))
         return;
 
+    // CRITICAL FIX: Validate cached indices before sorting
+    // After merge, stale indices can cause segfault when accessing events
+    if (m_filteringActive && !m_filteredIndices.empty())
+    {
+        const size_t containerSize = m_events.Size();
+        bool hasInvalidIndices = false;
+
+        for (const auto& idx : m_filteredIndices)
+        {
+            if (idx >= containerSize)
+            {
+                hasInvalidIndices = true;
+                break;
+            }
+        }
+
+        if (hasInvalidIndices)
+        {
+            util::Logger::Warn(
+                "[EventsTableModel] sort: Detected stale filtered indices before sort "
+                "(size mismatch after merge); clearing filter to prevent crashes");
+            ClearFilter();
+            // Don't proceed with sort - return to avoid using invalid indices
+            return;
+        }
+    }
+
     const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(column)];
-    
+
     // Determine column name
     std::string columnName;
     if (columnConfigIndex == -1)
