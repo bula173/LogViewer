@@ -38,6 +38,7 @@ target_sources(application_core
         dialogs/PreferencesDialog.cpp
         dialogs/ShortcutsDialog.cpp
         dialogs/StructuredConfigDialog.cpp
+        dialogs/ThemeCustomizationDialog.cpp
         dialogs/UpdateDialog.cpp
         events/EventsTableModel.cpp
         events/EventsTableView.cpp
@@ -47,6 +48,7 @@ target_sources(application_core
         utils/KeyboardNavigationManager.cpp
         utils/SearchEngine.cpp
         utils/SessionManager.cpp
+        utils/ThemeManager.cpp
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp
         widgets/FilterStatusBar.cpp
