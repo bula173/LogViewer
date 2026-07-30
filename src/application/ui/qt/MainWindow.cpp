@@ -38,6 +38,7 @@
 #include "dialogs/ConfigEditorDialog.hpp"
 #include "dialogs/GemmaDownloadDialog.hpp"
 #include "dialogs/PluginManagerDialog.hpp"
+#include "dialogs/PreferencesDialog.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
@@ -825,6 +826,15 @@ void MainWindow::SetupMenus()
         &MainWindow::OnExitRequested);
 
     auto* toolsMenu = bar->addMenu(tr("&Tools"));
+
+    auto* preferencesAction = toolsMenu->addAction(tr("&Preferences..."));
+    preferencesAction->setShortcut(QKeySequence::Preferences);
+    connect(preferencesAction, &QAction::triggered, this, [this]() {
+        ui::qt::PreferencesDialog dlg(config::GetConfig(), this);
+        dlg.exec();
+    });
+
+    toolsMenu->addSeparator();
 
     auto* structuredConfigAction =
         toolsMenu->addAction(tr("Edit &Config..."));

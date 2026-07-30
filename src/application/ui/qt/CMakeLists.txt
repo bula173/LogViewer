@@ -34,6 +34,7 @@ target_sources(application_core
         dialogs/GemmaDownloadDialog.cpp
         dialogs/LogFileLoadDialog.cpp
         dialogs/PluginManagerDialog.cpp
+        dialogs/PreferencesDialog.cpp
         dialogs/StructuredConfigDialog.cpp
         dialogs/UpdateDialog.cpp
         events/EventsTableModel.cpp

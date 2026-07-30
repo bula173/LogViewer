@@ -91,6 +91,7 @@ class SideBySidePanel;
 class FileTailer;
 class FilterStatusBar;
 class TabBadgeManager;
+class PreferencesDialog;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
