@@ -40,8 +40,10 @@ target_sources(application_core
         dialogs/UpdateDialog.cpp
         events/EventsTableModel.cpp
         events/EventsTableView.cpp
+        utils/EventTagManager.cpp
         utils/ExportManager.cpp
         utils/FileTailer.cpp
+        utils/KeyboardNavigationManager.cpp
         utils/SearchEngine.cpp
         utils/SessionManager.cpp
         utils/TypeFilterView.cpp
