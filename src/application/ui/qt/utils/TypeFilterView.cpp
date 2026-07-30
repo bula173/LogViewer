@@ -50,8 +50,11 @@ TypeFilterView::TypeFilterView(QWidget* parent)
                 InvertSelection();
         });
 
-    // Intentionally no itemChanged connection: checkboxes are purely visual
-    // state. The Apply button is the only trigger for filter application.
+    // When a checkbox state changes, notify the filter changed callback
+    // This triggers immediate filter reapplication as user toggles types
+    connect(m_listWidget, &QListWidget::itemChanged, this, [this](QListWidgetItem*) {
+        NotifyChanged();
+    });
 }
 
 void TypeFilterView::SetOnFilterChanged(std::function<void()> handler)
@@ -105,6 +108,8 @@ void TypeFilterView::InvertSelection()
             item->setCheckState(state);
         }
     }
+    // Notify after toggling all items (block prevents itemChanged from firing)
+    NotifyChanged();
 }
 
 std::vector<std::string> TypeFilterView::CheckedTypes() const
@@ -139,6 +144,8 @@ void TypeFilterView::SetAll(Qt::CheckState state)
         if (auto* item = m_listWidget->item(i))
             item->setCheckState(state);
     }
+    // Notify after updating all items (block prevents itemChanged from firing)
+    NotifyChanged();
 }
 
 void TypeFilterView::SetCheckedTypes(const std::vector<std::string>& types)
