@@ -122,16 +122,25 @@ bool SearchEngine::matchesSimple(const std::string& text) const
 {
     if (m_caseSensitive) {
         return text.find(m_pattern) != std::string::npos;
-    } else {
-        // Case-insensitive search
-        std::string lower_text = text;
-        std::string lower_pattern = m_pattern;
-        std::transform(lower_text.begin(), lower_text.end(), lower_text.begin(),
-                      [](unsigned char c) { return std::tolower(c); });
-        std::transform(lower_pattern.begin(), lower_pattern.end(), lower_pattern.begin(),
-                      [](unsigned char c) { return std::tolower(c); });
-        return lower_text.find(lower_pattern) != std::string::npos;
     }
+
+    // Case-insensitive search - avoid repeated allocations by caching normalized pattern
+    if (!m_normalizedPatternValid) {
+        m_normalizedPattern = m_pattern;
+        std::transform(m_normalizedPattern.begin(), m_normalizedPattern.end(),
+                      m_normalizedPattern.begin(),
+                      [](unsigned char c) { return std::tolower(c); });
+        m_normalizedPatternValid = true;
+    }
+
+    // Fast path: if pattern is ASCII, we can use inline lowercasing
+    std::string lower_text;
+    lower_text.reserve(text.length());
+    for (unsigned char c : text) {
+        lower_text += static_cast<char>(std::tolower(static_cast<int>(c)));
+    }
+
+    return lower_text.find(m_normalizedPattern) != std::string::npos;
 }
 
 bool SearchEngine::matchesRegex(const std::string& text) const
@@ -223,20 +232,35 @@ std::vector<SearchMatch> SearchEngine::FindMatches(const std::string& text) cons
 std::vector<SearchMatch> SearchEngine::findSimpleMatches(const std::string& text) const
 {
     std::vector<SearchMatch> matches;
-    std::string search_text = text;
-    std::string search_pattern = m_pattern;
+    matches.reserve(4);  // Most texts have few matches
 
-    if (!m_caseSensitive) {
-        std::transform(search_text.begin(), search_text.end(), search_text.begin(),
-                      [](unsigned char c) { return std::tolower(c); });
-        std::transform(search_pattern.begin(), search_pattern.end(), search_pattern.begin(),
-                      [](unsigned char c) { return std::tolower(c); });
-    }
+    if (m_caseSensitive) {
+        size_t pos = 0;
+        while ((pos = text.find(m_pattern, pos)) != std::string::npos) {
+            matches.push_back({static_cast<int>(pos), static_cast<int>(pos + m_pattern.length())});
+            pos += m_pattern.length();
+        }
+    } else {
+        // Ensure normalized pattern is ready
+        if (!m_normalizedPatternValid) {
+            m_normalizedPattern = m_pattern;
+            std::transform(m_normalizedPattern.begin(), m_normalizedPattern.end(),
+                          m_normalizedPattern.begin(),
+                          [](unsigned char c) { return std::tolower(c); });
+            m_normalizedPatternValid = true;
+        }
 
-    size_t pos = 0;
-    while ((pos = search_text.find(search_pattern, pos)) != std::string::npos) {
-        matches.push_back({static_cast<int>(pos), static_cast<int>(pos + search_pattern.length())});
-        pos += search_pattern.length();
+        std::string lower_text;
+        lower_text.reserve(text.length());
+        for (unsigned char c : text) {
+            lower_text += static_cast<char>(std::tolower(static_cast<int>(c)));
+        }
+
+        size_t pos = 0;
+        while ((pos = lower_text.find(m_normalizedPattern, pos)) != std::string::npos) {
+            matches.push_back({static_cast<int>(pos), static_cast<int>(pos + m_normalizedPattern.length())});
+            pos += m_normalizedPattern.length();
+        }
     }
 
     return matches;

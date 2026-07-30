@@ -46,6 +46,9 @@ class EventsTableModel : public QAbstractTableModel
     const std::vector<int>& MatchedRows() const { return m_matchedRows; }
     const utils::SearchEngine& GetSearchEngine() const { return *m_searchEngine; }
 
+    /// Asynchronous search rebuild (doesn't block UI)
+    void RebuildSearchMatchesAsync();
+
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;
     std::vector<int> ColumnWidths() const;

@@ -95,6 +95,11 @@ class SearchEngine
     std::optional<std::regex> m_compiledRegex;
     std::optional<AdvancedQuery> m_advancedQuery;
     std::vector<std::string> m_history;
+
+    // Performance optimization: cache normalized pattern for case-insensitive searches
+    mutable std::string m_normalizedPattern;
+    mutable bool m_normalizedPatternValid {false};
+
     static constexpr size_t kMaxHistorySize = 50;
 };
 

@@ -337,32 +337,39 @@ bool Filter::searchParameterRecursive(
 
 std::vector<unsigned long> Filter::applyToIndices(const std::vector<unsigned long>& inputIndices, const mvc::IModel& model) const
 {
-    util::Logger::Debug("Filter '{}': applyToIndices on {} input indices, {} condition(s)",
-        name, inputIndices.size(), conditions.size());
+    if (inputIndices.empty())
+        return inputIndices;
 
     if (conditions.empty()) {
-        // Fallback to legacy logic
+        // Fallback to legacy logic - use efficient copy_if
         std::vector<unsigned long> result;
         result.reserve(inputIndices.size());
         std::ranges::copy_if(inputIndices, std::back_inserter(result),
             [&](unsigned long index) { return matches(model.GetItem(index)); });
-        util::Logger::Debug("Filter '{}': applyToIndices (legacy) matched {} / {} events",
-            name, result.size(), inputIndices.size());
         return result;
     }
 
-    // Sequential AND filtering: remove non-matching entries in-place per condition.
-    auto temp = inputIndices;
+    // Optimized sequential AND filtering: use move semantics and reserve space
+    std::vector<unsigned long> result = inputIndices;
+
     for (const auto& condition : conditions) {
-        const auto before = temp.size();
-        std::erase_if(temp, [&](unsigned long index) {
-            return !condition.matches(model.GetItem(index));
-        });
-        util::Logger::Debug("Filter '{}': condition col='{}' pattern='{}' kept {} / {} events",
-            name, condition.columnName, condition.pattern, temp.size(), before);
+        if (result.empty())
+            break;  // Early exit if no matches
+
+        std::vector<unsigned long> nextResult;
+        nextResult.reserve(result.size());
+
+        // Batch filter with single pass - no need for erase_if
+        for (unsigned long index : result) {
+            if (condition.matches(model.GetItem(index))) {
+                nextResult.push_back(index);
+            }
+        }
+
+        result = std::move(nextResult);
     }
-    util::Logger::Debug("Filter '{}': applyToIndices final result: {} events", name, temp.size());
-    return temp;
+
+    return result;
 }
 
 void Filter::addCondition(const FilterCondition& condition)
