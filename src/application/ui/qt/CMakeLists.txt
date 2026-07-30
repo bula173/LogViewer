@@ -44,6 +44,7 @@ target_sources(application_core
         utils/UpdateChecker.cpp
         widgets/FilterStatusBar.cpp
         widgets/TabBadgeManager.cpp
+        widgets/PanelNavigator.cpp
 )
 
 # Expose this directory so that files in subdirectories can use

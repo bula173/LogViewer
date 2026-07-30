@@ -85,6 +85,7 @@
 
 #include <climits>
 #include <set>
+#include <numeric>
 
 #include <nlohmann/json.hpp>
 
@@ -2079,11 +2080,43 @@ void MainWindow::ApplyExtendedFilters()
     if (!m_eventsView || !m_events || m_events->Size() == 0)
         return;
 
-    // Read-only access from the worker thread is safe: no writes during a filter pass.
-    const db::EventsContainer* events = m_events;
+    // Apply type filters first, then extended filters on top (AND logic)
+    db::EventsContainer* events = m_events;
     RunFilter(
-        [events]() -> std::vector<unsigned long> {
-            return filters::FilterManager::getInstance().applyFilters(*events);
+        [this, events]() -> std::vector<unsigned long> {
+            // Step 1: Apply type filters
+            std::vector<unsigned long> typeFiltered;
+            if (m_typeFilterView)
+            {
+                auto& config = config::GetConfig();
+                const auto checkedTypes = m_typeFilterView->CheckedTypes();
+                const std::set<std::string> selectedTypeStrings(
+                    checkedTypes.begin(), checkedTypes.end());
+
+                typeFiltered.reserve(events->Size());
+                for (std::size_t i = 0; i < events->Size(); ++i)
+                {
+                    const auto& event = events->GetEvent(i);
+                    const std::string eventType = event.findByKey(config.typeFilterField);
+                    const bool typeMatch = selectedTypeStrings.empty() ||
+                        selectedTypeStrings.count(eventType) > 0;
+
+                    if (typeMatch)
+                        typeFiltered.push_back(i);
+                }
+            }
+            else
+            {
+                // No type filter, start with all events
+                typeFiltered.resize(events->Size());
+                std::iota(typeFiltered.begin(), typeFiltered.end(), 0UL);
+            }
+
+            // Step 2: Apply extended filters on top of type-filtered results (AND logic)
+            if (typeFiltered.empty())
+                return typeFiltered;
+
+            return filters::FilterManager::getInstance().applyFiltersToIndices(typeFiltered, *events);
         },
         tr("Applying filters..."));
 }

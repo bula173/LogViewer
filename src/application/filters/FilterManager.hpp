@@ -60,6 +60,17 @@ class FilterManager
     [[nodiscard]] std::vector<unsigned long> applyFilters(
       const mvc::IModel& model) const;
 
+    /**
+     * @brief Apply all enabled filters to a subset of indices (AND logic).
+     * Filters are applied only to events in the provided indices vector.
+     * @param indices Subset of event indices to filter
+     * @param model The events model
+     * @return Indices that match both the input filter and all enabled filters
+     */
+    [[nodiscard]] std::vector<unsigned long> applyFiltersToIndices(
+        const std::vector<unsigned long>& indices,
+        const mvc::IModel& model) const;
+
     // Filter storage
     /**
      * @brief Load filters from the default filters.json path.

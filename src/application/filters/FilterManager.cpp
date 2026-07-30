@@ -163,6 +163,39 @@ std::vector<unsigned long> FilterManager::applyFilters(
     return result;
 }
 
+std::vector<unsigned long> FilterManager::applyFiltersToIndices(
+    const std::vector<unsigned long>& indices,
+    const mvc::IModel& model) const
+{
+    // If no filters enabled, return the input indices unchanged
+    const auto enabledFilters = std::ranges::count_if(m_filters,
+        [](const FilterPtr& f) { return f && f->isEnabled; });
+
+    if (enabledFilters == 0)
+    {
+        return indices;
+    }
+
+    // Apply filters sequentially with AND logic
+    std::vector<unsigned long> result = indices;
+
+    for (const auto& filter : m_filters)
+    {
+        if (!filter || !filter->isEnabled)
+            continue;
+
+        if (result.empty())
+            return result;  // Short-circuit if no events match so far
+
+        // Apply this filter only to current result indices
+        auto filteredIndices = filter->applyToIndices(result, model);
+        result = std::move(filteredIndices);
+    }
+
+    // Result is already sorted from the filter application
+    return result;
+}
+
 FilterResult FilterManager::loadFilters()
 {
     return loadFiltersFromPath(getFiltersFilePath());
