@@ -120,6 +120,7 @@ var annotated_dup =
         [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
         [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
         [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
+        [ "FilterStatusBar", "d7/ddd/classui_1_1qt_1_1FilterStatusBar.html", "d7/ddd/classui_1_1qt_1_1FilterStatusBar" ],
         [ "FrameSignals", "da/d91/structui_1_1qt_1_1FrameSignals.html", "da/d91/structui_1_1qt_1_1FrameSignals" ],
         [ "GemmaDownloadDialog", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog" ],
         [ "GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy" ],

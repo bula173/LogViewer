@@ -11,7 +11,8 @@ var searchData=
   ['filterprofile_8',['FilterProfile',['../db/d6d/structui_1_1qt_1_1FilterProfile.html',1,'ui::qt']]],
   ['filterprofilespanel_9',['FilterProfilesPanel',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html',1,'ui::qt']]],
   ['filterspanel_10',['FiltersPanel',['../d8/db0/classui_1_1qt_1_1FiltersPanel.html',1,'ui::qt']]],
-  ['framesignals_11',['FrameSignals',['../da/d91/structui_1_1qt_1_1FrameSignals.html',1,'ui::qt']]],
-  ['functionregistry_12',['FunctionRegistry',['../d9/d75/classplugin_1_1FunctionRegistry.html',1,'plugin']]],
-  ['fuzzymatchstrategy_13',['FuzzyMatchStrategy',['../d7/db2/classfilters_1_1FuzzyMatchStrategy.html',1,'filters']]]
+  ['filterstatusbar_11',['FilterStatusBar',['../d7/ddd/classui_1_1qt_1_1FilterStatusBar.html',1,'ui::qt']]],
+  ['framesignals_12',['FrameSignals',['../da/d91/structui_1_1qt_1_1FrameSignals.html',1,'ui::qt']]],
+  ['functionregistry_13',['FunctionRegistry',['../d9/d75/classplugin_1_1FunctionRegistry.html',1,'plugin']]],
+  ['fuzzymatchstrategy_14',['FuzzyMatchStrategy',['../d7/db2/classfilters_1_1FuzzyMatchStrategy.html',1,'filters']]]
 ];

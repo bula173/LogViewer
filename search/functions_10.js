@@ -66,12 +66,13 @@ var searchData=
   ['resolvepluginextractdir_63',['ResolvePluginExtractDir',['../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62',1,'plugin']]],
   ['resolvesymbol_64',['ResolveSymbol',['../d9/d75/classplugin_1_1FunctionRegistry.html#ab063793172beb4f06e59f9ad98d7d2c9',1,'plugin::FunctionRegistry']]],
   ['resolvetoactualindex_65',['ResolveToActualIndex',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9b84fc718fac9b1221fca90df8647986',1,'ui::qt::EventsTableModel']]],
-  ['restoreuncheckedactors_66',['RestoreUncheckedActors',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae0d59a9f0c14bb58533a8da31c378522',1,'ui::qt::ActorsPanel']]],
-  ['result_67',['result',['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#aec11bccff4363350c52ece1a6a33cf06',1,'util::Result&lt; void, E &gt;::Result()'],['../dd/d2d/classutil_1_1Result.html#a38b7303f600fffd2335005445641e605',1,'util::Result::Result()']]],
-  ['resumenotifications_68',['ResumeNotifications',['../dd/dc2/classdb_1_1EventsContainer.html#a8065e169779734d58ea1c38b7d60f654',1,'db::EventsContainer']]],
-  ['rowcount_69',['rowCount',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3f10c466dfb42d0c979815b6708692a0',1,'ui::qt::EventsTableModel']]],
-  ['rowfromactualindex_70',['RowFromActualIndex',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6cf011f142833c9766eb2b9266c2eb92',1,'ui::qt::EventsTableModel']]],
-  ['runfilter_71',['RunFilter',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a6431f1d05368aac23ef439190faedd4b',1,'ui::qt::MainWindow']]],
-  ['runinference_72',['RunInference',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a791226c05874057ef5114b5a0d7da0e5',1,'ai::GemmaInferenceEngine']]],
-  ['runparserasync_73',['RunParserAsync',['../d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7',1,'ui::MainWindowPresenter']]]
+  ['restorecolumnorder_66',['RestoreColumnOrder',['../d6/d26/classui_1_1qt_1_1EventsTableView.html#a47e4bdfd3a58e1b60d4c383fecaef490',1,'ui::qt::EventsTableView']]],
+  ['restoreuncheckedactors_67',['RestoreUncheckedActors',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae0d59a9f0c14bb58533a8da31c378522',1,'ui::qt::ActorsPanel']]],
+  ['result_68',['result',['../dd/d2d/classutil_1_1Result.html#a38b7303f600fffd2335005445641e605',1,'util::Result::Result()'],['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#aec11bccff4363350c52ece1a6a33cf06',1,'util::Result&lt; void, E &gt;::Result()']]],
+  ['resumenotifications_69',['ResumeNotifications',['../dd/dc2/classdb_1_1EventsContainer.html#a8065e169779734d58ea1c38b7d60f654',1,'db::EventsContainer']]],
+  ['rowcount_70',['rowCount',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3f10c466dfb42d0c979815b6708692a0',1,'ui::qt::EventsTableModel']]],
+  ['rowfromactualindex_71',['RowFromActualIndex',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6cf011f142833c9766eb2b9266c2eb92',1,'ui::qt::EventsTableModel']]],
+  ['runfilter_72',['RunFilter',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a6431f1d05368aac23ef439190faedd4b',1,'ui::qt::MainWindow']]],
+  ['runinference_73',['RunInference',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a791226c05874057ef5114b5a0d7da0e5',1,'ai::GemmaInferenceEngine']]],
+  ['runparserasync_74',['RunParserAsync',['../d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7',1,'ui::MainWindowPresenter']]]
 ];

@@ -173,6 +173,7 @@ var hierarchy =
       [ "ui::qt::BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", null ],
       [ "ui::qt::CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", null ],
       [ "ui::qt::FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", null ],
+      [ "ui::qt::FilterStatusBar", "d7/ddd/classui_1_1qt_1_1FilterStatusBar.html", null ],
       [ "ui::qt::FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", null ],
       [ "ui::qt::ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", null ],
       [ "ui::qt::PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", null ],

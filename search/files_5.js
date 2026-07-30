@@ -15,5 +15,7 @@ var searchData=
   ['filterprofilespanel_2ecpp_12',['FilterProfilesPanel.cpp',['../d2/db8/FilterProfilesPanel_8cpp.html',1,'']]],
   ['filterprofilespanel_2ehpp_13',['FilterProfilesPanel.hpp',['../d0/d66/FilterProfilesPanel_8hpp.html',1,'']]],
   ['filterspanel_2ecpp_14',['FiltersPanel.cpp',['../d0/d34/FiltersPanel_8cpp.html',1,'']]],
-  ['filterspanel_2ehpp_15',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]]
+  ['filterspanel_2ehpp_15',['FiltersPanel.hpp',['../dc/d55/FiltersPanel_8hpp.html',1,'']]],
+  ['filterstatusbar_2ecpp_16',['FilterStatusBar.cpp',['../d2/d21/FilterStatusBar_8cpp.html',1,'']]],
+  ['filterstatusbar_2ehpp_17',['FilterStatusBar.hpp',['../d8/dc9/FilterStatusBar_8hpp.html',1,'']]]
 ];

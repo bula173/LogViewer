@@ -111,6 +111,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "m_filteringInProgress", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a2f2856a5561f190c6a8c864268a6e100", null ],
     [ "m_filtersDock", "d4/dfa/classui_1_1qt_1_1MainWindow.html#affeb90fc17e93145a4d7bddbd9cc2c94", null ],
     [ "m_filtersPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ad882528ace9ce73ec108e8bac5957a06", null ],
+    [ "m_filterStatusBar", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ebea5a3bfd99448b66e568d55639d92", null ],
     [ "m_filterTabs", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a44b2138636bed3865339069fa8e69230", null ],
     [ "m_itemDetailsView", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a6a868210893cac643c3c63bc1add56fe", null ],
     [ "m_lastUpdateResult", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a386c1018ffc3a03d14e60f61e8648263", null ],
