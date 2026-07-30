@@ -583,6 +583,31 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
 
     m_eventsListView->RefreshView();
 
+    // Update filter status bar to show active filters
+    const int numActiveFilters = static_cast<int>(checkedTypes.size());
+    if (numActiveFilters <= 0 || filteredIndices.size() == m_events.Size())
+    {
+        // No filters active or all events match - show clear status
+        m_view.UpdateFilterStatus(static_cast<int>(m_events.Size()),
+            static_cast<int>(m_events.Size()), 0, "");
+    }
+    else
+    {
+        // Build filter details string showing which types are selected
+        std::string filterDetails = config.typeFilterField + ": ";
+        for (size_t i = 0; i < checkedTypes.size(); ++i)
+        {
+            if (i > 0) filterDetails += ", ";
+            filterDetails += checkedTypes[i];
+        }
+
+        m_view.UpdateFilterStatus(
+            static_cast<int>(m_events.Size()),
+            static_cast<int>(filteredIndices.size()),
+            numActiveFilters,
+            filterDetails);
+    }
+
     m_view.UpdateStatusText(previousStatus);
 }
 

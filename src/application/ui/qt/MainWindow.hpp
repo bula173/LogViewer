@@ -117,6 +117,8 @@ class MainWindow : public QMainWindow,
     void RefreshLayout() override;
     std::string AskString(const std::string& title, const std::string& prompt,
         const std::string& defaultValue, bool& ok) override;
+    void UpdateFilterStatus(int totalEvents, int filteredCount,
+        int activeFilterCount, const std::string& filterDetails) override;
 
     // ISearchResultsViewObserver
     void OnSearchResultActivated(long eventId) override;

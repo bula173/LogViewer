@@ -1393,6 +1393,23 @@ std::string MainWindow::AskString(const std::string& title,
     return ok ? result.toStdString() : std::string{};
 }
 
+void MainWindow::UpdateFilterStatus(int totalEvents, int filteredCount,
+    int activeFilterCount, const std::string& filterDetails)
+{
+    if (!m_filterStatusBar)
+        return;
+
+    if (activeFilterCount <= 0)
+    {
+        m_filterStatusBar->ClearStatus();
+    }
+    else
+    {
+        m_filterStatusBar->UpdateFilterStatus(totalEvents, filteredCount,
+            activeFilterCount, QString::fromStdString(filterDetails));
+    }
+}
+
 void MainWindow::OnSearchResultActivated(long eventId)
 {
         util::Logger::Debug("[MainWindow] OnSearchResultActivated eventId={}",

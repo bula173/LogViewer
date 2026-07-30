@@ -47,6 +47,14 @@ class IMainWindowView
     virtual std::string AskString(const std::string& title,
         const std::string& prompt, const std::string& defaultValue,
         bool& ok) = 0;
+
+    /** @brief Updates the filter status bar with filter information.
+     *  @param totalEvents Total number of events
+     *  @param filteredCount Number of events matching filters
+     *  @param activeFilterCount Number of active filters
+     *  @param filterDetails Description of active filters */
+    virtual void UpdateFilterStatus(int totalEvents, int filteredCount,
+        int activeFilterCount, const std::string& filterDetails) = 0;
 };
 
 } // namespace ui
