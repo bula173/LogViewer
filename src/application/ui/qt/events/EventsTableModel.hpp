@@ -6,10 +6,12 @@
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
+#include "utils/SearchEngine.hpp"
 
 #include <unordered_set>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 namespace ui::qt
 {
@@ -39,8 +41,10 @@ class EventsTableModel : public QAbstractTableModel
 
     // ── Search / highlight ────────────────────────────────────────────────
     void SetSearchTerm(const QString& term, bool caseSensitive);
+    void SetSearchMode(utils::SearchMode mode);
     int  MatchCount() const { return static_cast<int>(m_matchedRows.size()); }
     const std::vector<int>& MatchedRows() const { return m_matchedRows; }
+    const utils::SearchEngine& GetSearchEngine() const { return *m_searchEngine; }
 
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;
@@ -64,6 +68,7 @@ class EventsTableModel : public QAbstractTableModel
     bool m_filteringActive {false}; // Track if filtering is active (distinguish empty from no filter)
 
     // Search
+    std::unique_ptr<utils::SearchEngine> m_searchEngine;
     QString                    m_searchTerm;
     bool                       m_searchCaseSensitive {false};
     std::vector<int>           m_matchedRows;    ///< model row indices with at least one matching cell

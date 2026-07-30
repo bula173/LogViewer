@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <limits>
 #include <numeric>
+#include <memory>
 
 namespace ui::qt
 {
@@ -20,6 +21,7 @@ EventsTableModel::EventsTableModel(db::EventsContainer& events,
     : QAbstractTableModel(parent)
     , m_events(events)
     , m_config(config::GetConfig())
+    , m_searchEngine(std::make_unique<utils::SearchEngine>())
 {
     RebuildVisibleColumns();
 }
@@ -340,15 +342,42 @@ std::vector<int> EventsTableModel::ColumnWidths() const
 
 void EventsTableModel::SetSearchTerm(const QString& term, bool caseSensitive)
 {
-    m_searchTerm           = term;
-    m_searchCaseSensitive  = caseSensitive;
+    m_searchTerm = term;
+    m_searchCaseSensitive = caseSensitive;
+
+    // Compile pattern in search engine
+    if (m_searchEngine) {
+        m_searchEngine->SetCaseSensitive(caseSensitive);
+        std::string error;
+        m_searchEngine->CompilePattern(term.toStdString(), error);
+
+        // Add successful search to history
+        if (!term.isEmpty() && error.empty()) {
+            m_searchEngine->AddToHistory(term.toStdString());
+        }
+    }
+
     RebuildSearchMatches();
 
     // Repaint background of all visible cells
     const int rows = rowCount(QModelIndex());
     const int cols = columnCount(QModelIndex());
     if (rows > 0 && cols > 0)
-        emit dataChanged(index(0, 0), index(rows - 1, cols - 1), {Qt::BackgroundRole});
+        emit dataChanged(index(0, 0), index(rows - 1, cols - 1), {Qt::BackgroundRole, Qt::ForegroundRole});
+}
+
+void EventsTableModel::SetSearchMode(utils::SearchMode mode)
+{
+    if (m_searchEngine) {
+        m_searchEngine->SetMode(mode);
+        RebuildSearchMatches();
+
+        // Repaint all cells
+        const int rows = rowCount(QModelIndex());
+        const int cols = columnCount(QModelIndex());
+        if (rows > 0 && cols > 0)
+            emit dataChanged(index(0, 0), index(rows - 1, cols - 1), {Qt::BackgroundRole});
+    }
 }
 
 void EventsTableModel::RebuildSearchMatches()
@@ -356,11 +385,9 @@ void EventsTableModel::RebuildSearchMatches()
     m_matchedRows.clear();
     m_matchedRowSet.clear();
 
-    if (m_searchTerm.isEmpty())
+    if (m_searchTerm.isEmpty() || !m_searchEngine)
         return;
 
-    const Qt::CaseSensitivity cs =
-        m_searchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
     const int rows = rowCount(QModelIndex());
 
     for (int row = 0; row < rows; ++row)
@@ -370,13 +397,14 @@ void EventsTableModel::RebuildSearchMatches()
             continue;
 
         const auto& event = m_events.GetEvent(static_cast<size_t>(actualIdx));
+
         for (const auto& [key, value] : event.getEventItems())
         {
-            if (QString::fromStdString(value).contains(m_searchTerm, cs))
+            if (m_searchEngine->Matches(value))
             {
                 m_matchedRows.push_back(row);
                 m_matchedRowSet.insert(row);
-                break; // one match per row is enough
+                break;  // one match per row is enough
             }
         }
     }

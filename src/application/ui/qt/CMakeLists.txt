@@ -40,6 +40,7 @@ target_sources(application_core
         events/EventsTableView.cpp
         utils/ExportManager.cpp
         utils/FileTailer.cpp
+        utils/SearchEngine.cpp
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp
         widgets/FilterStatusBar.cpp
