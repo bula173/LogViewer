@@ -90,7 +90,13 @@ jobs:
           else
             clang++ --version
           fi
-          ccache --version
+          if command -v ccache &> /dev/null; then
+            ccache --version
+          else
+            echo "Warning: ccache not found, installing..."
+            sudo apt-get update && sudo apt-get install -y ccache
+            ccache --version
+          fi
           cmake --version
           ninja --version
 
@@ -104,13 +110,23 @@ jobs:
             CXX_COMPILER=clang++
           fi
 
+          # Use ccache if available, otherwise skip
+          if command -v ccache &> /dev/null; then
+            CCACHE_LAUNCHER_C="-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+            CCACHE_LAUNCHER_CXX="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+          else
+            echo "Warning: ccache not available, disabling compiler cache"
+            CCACHE_LAUNCHER_C=""
+            CCACHE_LAUNCHER_CXX=""
+          fi
+
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_C_COMPILER=$CC_COMPILER \
             -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            $CCACHE_LAUNCHER_C \
+            $CCACHE_LAUNCHER_CXX \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
@@ -121,7 +137,13 @@ jobs:
           cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Print ccache stats
-        run: ccache --show-stats
+        if: always()
+        run: |
+          if command -v ccache &> /dev/null; then
+            ccache --show-stats
+          else
+            echo "ccache not available"
+          fi
 
       - name: Run Code Quality Tools
         if: matrix.build_type == 'Debug' && github.event_name == 'push'
@@ -225,7 +247,9 @@ jobs:
           echo "| Build | ${{ steps.run-tests.outcome != 'failure' && '✅' || '⚠️' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Tests | ${{ steps.run-tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**ccache stats:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          ccache --show-stats >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          if command -v ccache &> /dev/null; then
+            echo "**ccache stats:**" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            ccache --show-stats >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
