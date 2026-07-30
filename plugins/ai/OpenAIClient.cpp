@@ -146,6 +146,11 @@ void OpenAIClient::SetModelName(const std::string& model)
     PLUGIN_LOG(PLUGIN_LOG_INFO, "OpenAI model changed to: {}", m_model);
 }
 
+std::string OpenAIClient::GetServiceId() const
+{
+    return m_providerName + ":" + m_model;
+}
+
 std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
                                        const std::string& jsonBody,
                                        const std::string& authHeader) const

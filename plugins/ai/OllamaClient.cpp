@@ -184,6 +184,11 @@ bool OllamaClient::IsAvailable() const
     }
 }
 
+std::string OllamaClient::GetServiceId() const
+{
+    return "Ollama:" + m_model;
+}
+
 std::string OllamaClient::GetModelName() const
 {
     return m_model;

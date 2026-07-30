@@ -22,6 +22,7 @@ add_library(${PLUGIN_NAME} MODULE
     AIServiceFactory.hpp
     LogAnalyzer.cpp
     LogAnalyzer.hpp
+    LLMClient.cpp
     LLMClient.hpp
     IAIService.hpp
     OllamaClient.cpp

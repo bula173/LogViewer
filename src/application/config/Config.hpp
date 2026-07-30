@@ -143,10 +143,11 @@ class Config
   public: // xml config
     std::string appName {"LogViewer"};
     std::vector<ColumnConfig> columns;
+    std::vector<std::string> columnOrder;  // Persisted column order (names in display order)
     std::string logLevel {"debug"}; // Default log level
     ColumnColorMap columnColors;
     ItemHighlightMap itemHighlights;  // Item details view highlighting by key name
-    
+
     // Filter configuration
     std::string typeFilterField {};  // Empty = auto-detect; set by user to override
     std::string actorField {"actor"};      // Field to use for actor identification in Actors panel

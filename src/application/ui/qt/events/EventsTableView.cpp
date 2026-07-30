@@ -51,6 +51,12 @@ void EventsTableView::InitializeView()
     setSortingEnabled(true);
     ResizeColumnsToConfiguration();
 
+    // Restore previously saved column order
+    RestoreColumnOrder();
+
+    // Connect to column reorder signal to save column order when user moves columns
+    connect(horizontalHeader(), &QHeaderView::sectionMoved, this, &EventsTableView::OnColumnMoved);
+
     auto* copyAction = new QAction(tr("Copy"), this);
     copyAction->setShortcut(QKeySequence::Copy);
     addAction(copyAction);
@@ -590,6 +596,79 @@ void EventsTableView::JumpToTimestamp()
 
     const int actual = m_model->ResolveToActualIndex(bestRow);
     ScrollToActualRow(actual);
+}
+
+void EventsTableView::OnColumnMoved()
+{
+    // User moved a column - save the new order
+    SaveColumnOrder();
+}
+
+void EventsTableView::RestoreColumnOrder()
+{
+    if (!m_model)
+        return;
+
+    const auto& savedOrder = config::GetConfig().columnOrder;
+    if (savedOrder.empty())
+        return;  // No saved order, use default
+
+    util::Logger::Debug("[EventsTableView] RestoreColumnOrder: restoring {} columns", savedOrder.size());
+
+    const auto& columns = config::GetConfig().GetColumns();
+    std::vector<int> logicalIndices;
+    logicalIndices.reserve(savedOrder.size());
+
+    // Map saved column names to their current logical indices
+    for (const auto& savedName : savedOrder)
+    {
+        for (int i = 0; i < static_cast<int>(columns.size()); ++i)
+        {
+            if (columns[static_cast<size_t>(i)].name == savedName)
+            {
+                logicalIndices.push_back(i);
+                break;
+            }
+        }
+    }
+
+    // Reorder columns by moving each one to its saved position
+    QHeaderView* header = horizontalHeader();
+    for (int visualIndex = 0; visualIndex < static_cast<int>(logicalIndices.size()); ++visualIndex)
+    {
+        const int logicalIndex = logicalIndices[static_cast<size_t>(visualIndex)];
+        const int currentVisualIndex = header->visualIndex(logicalIndex);
+        if (currentVisualIndex != visualIndex && currentVisualIndex >= 0)
+        {
+            header->moveSection(currentVisualIndex, visualIndex);
+        }
+    }
+}
+
+void EventsTableView::SaveColumnOrder() const
+{
+    if (!m_model || !horizontalHeader())
+        return;
+
+    const auto& columns = config::GetConfig().GetColumns();
+    std::vector<std::string> order;
+    order.reserve(columns.size());
+
+    // Read current column order from header
+    for (int visualIndex = 0; visualIndex < horizontalHeader()->count(); ++visualIndex)
+    {
+        const int logicalIndex = horizontalHeader()->logicalIndex(visualIndex);
+        if (logicalIndex >= 0 && logicalIndex < static_cast<int>(columns.size()))
+        {
+            order.push_back(columns[static_cast<size_t>(logicalIndex)].name);
+        }
+    }
+
+    util::Logger::Debug("[EventsTableView] SaveColumnOrder: saving {} columns", order.size());
+
+    auto& config = config::GetConfig();
+    config.columnOrder = order;
+    config.SaveConfig();
 }
 
 } // namespace ui::qt

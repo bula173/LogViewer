@@ -51,6 +51,10 @@ public:
      */
     virtual std::string GetProviderName() const override { return "Ollama"; }
 
+    /// Unique identifier for this service instance
+    std::string GetServiceId() const override;
+
+
 private:
     std::string m_model;
     std::string m_baseUrl;

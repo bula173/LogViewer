@@ -140,6 +140,11 @@ void GeminiClient::SetModelName(const std::string& model)
     PLUGIN_LOG(PLUGIN_LOG_INFO, "Gemini model changed to: {}", m_model);
 }
 
+std::string GeminiClient::GetServiceId() const
+{
+    return "Gemini:" + m_model;
+}
+
 std::string GeminiClient::SendHttpPost(const std::string& endpoint,
                                       const std::string& jsonBody) const
 {

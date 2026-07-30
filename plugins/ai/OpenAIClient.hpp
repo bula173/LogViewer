@@ -31,6 +31,9 @@ public:
 
     virtual std::string GetProviderName() const override { return m_providerName; }
 
+    /// Unique identifier for this service instance
+    std::string GetServiceId() const override;
+
 private:
     std::string m_apiKey;
     std::string m_model;

@@ -51,8 +51,11 @@ public:
 
     bool IsAvailable() const override;
     std::string GetModelName() const override;
+    void SetModelName(const std::string& model) override;
 
-    void SetModelName(const std::string& model);
+    std::string GetProviderName() const override;
+    std::string GetServiceId() const override;
+
     void SetBaseUrl(const std::string& url);
     void SetProvider(LLMProvider provider);
     void SetApiKey(const std::string& apiKey); // For OpenAI

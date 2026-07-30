@@ -65,12 +65,18 @@ class EventsTableView : public QTableView,
     /// Opens an input dialog and scrolls to the event with the nearest timestamp.
     void JumpToTimestamp();
 
+  private Q_SLOTS:
+    /// Called when user drags column header to reorder
+    void OnColumnMoved();
+
   private:
     void InitializeView();
     void ConnectSelectionSignals();
     void ShowContextMenu(const QPoint& pos);
     void ResizeColumnsToConfiguration();
     void ScrollToMatchIndex(int matchIndex);
+    void RestoreColumnOrder();
+    void SaveColumnOrder() const;
 
     /// Returns actual event indices for all currently selected table rows.
     std::vector<int> SelectedActualIndices() const;

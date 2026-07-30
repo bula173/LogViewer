@@ -94,6 +94,11 @@ void AnthropicClient::SetModelName(const std::string& model)
     PLUGIN_LOG(PLUGIN_LOG_INFO, "Anthropic model changed to: {}", m_model);
 }
 
+std::string AnthropicClient::GetServiceId() const
+{
+    return "Anthropic:" + m_model;
+}
+
 std::string AnthropicClient::SendHttpPost(const std::string& endpoint,
                                           const std::string& jsonBody,
                                           const std::string& apiKeyHeader) const
