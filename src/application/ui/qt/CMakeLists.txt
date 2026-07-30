@@ -30,6 +30,7 @@ target_sources(application_core
         panels/TraceViewerPanel.cpp
         panels/SequenceDiagramPanel.cpp
         dialogs/ConfigEditorDialog.cpp
+        dialogs/ExportDialog.cpp
         dialogs/FilterEditorDialog.cpp
         dialogs/GemmaDownloadDialog.cpp
         dialogs/LogFileLoadDialog.cpp
