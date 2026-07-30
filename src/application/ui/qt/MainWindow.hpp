@@ -92,6 +92,7 @@ class FileTailer;
 class FilterStatusBar;
 class TabBadgeManager;
 class PreferencesDialog;
+class ShortcutsDialog;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,

@@ -39,6 +39,7 @@
 #include "dialogs/GemmaDownloadDialog.hpp"
 #include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/PreferencesDialog.hpp"
+#include "dialogs/ShortcutsDialog.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
@@ -996,6 +997,16 @@ void MainWindow::SetupMenus()
 
     // Help menu
     auto* helpMenu = bar->addMenu(tr("&Help"));
+
+    auto* shortcutsAction = helpMenu->addAction(tr("Keyboard &Shortcuts"));
+    shortcutsAction->setShortcut(QKeySequence::HelpContents);
+    connect(shortcutsAction, &QAction::triggered, this, [this]() {
+        ui::qt::ShortcutsDialog dlg(this);
+        dlg.exec();
+    });
+
+    helpMenu->addSeparator();
+
     auto* checkUpdatesAction = helpMenu->addAction(tr("Check for &Updates..."));
     connect(checkUpdatesAction, &QAction::triggered, this,
             &MainWindow::OnCheckForUpdates);

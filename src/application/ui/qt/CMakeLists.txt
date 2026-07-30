@@ -35,6 +35,7 @@ target_sources(application_core
         dialogs/LogFileLoadDialog.cpp
         dialogs/PluginManagerDialog.cpp
         dialogs/PreferencesDialog.cpp
+        dialogs/ShortcutsDialog.cpp
         dialogs/StructuredConfigDialog.cpp
         dialogs/UpdateDialog.cpp
         events/EventsTableModel.cpp
@@ -42,6 +43,7 @@ target_sources(application_core
         utils/ExportManager.cpp
         utils/FileTailer.cpp
         utils/SearchEngine.cpp
+        utils/SessionManager.cpp
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp
         widgets/FilterStatusBar.cpp
