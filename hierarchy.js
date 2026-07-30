@@ -155,6 +155,7 @@ var hierarchy =
     ] ],
     [ "QObject", "d9/d5b/classQObject.html", [
       [ "ui::qt::FileTailer", "d6/d80/classui_1_1qt_1_1FileTailer.html", null ],
+      [ "ui::qt::TabBadgeManager", "d8/dab/classui_1_1qt_1_1TabBadgeManager.html", null ],
       [ "ui::qt::UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", null ]
     ] ],
     [ "QTableView", "d8/d5e/classQTableView.html", [

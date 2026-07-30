@@ -20,13 +20,14 @@ var searchData=
   ['handleselectionchanged_17',['handleselectionchanged',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#affe4b683084b7c5c49f60727743664bb',1,'ui::qt::ActorDefinitionsPanel::HandleSelectionChanged()'],['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4',1,'ui::qt::FilterProfilesPanel::HandleSelectionChanged()'],['../d8/db0/classui_1_1qt_1_1FiltersPanel.html#aad4d9b1b3d553ca387f080323819748b',1,'ui::qt::FiltersPanel::HandleSelectionChanged()']]],
   ['handletextchanged_18',['HandleTextChanged',['../dd/d79/classui_1_1qt_1_1SearchBar.html#a360a172b402538f9ae68ef0f515a4389',1,'ui::qt::SearchBar']]],
   ['hasanyupdate_19',['HasAnyUpdate',['../dd/d5c/structupdates_1_1UpdateCheckResult.html#ab72a7e3866ab277b301ae9de5b168dc3',1,'updates::UpdateCheckResult']]],
-  ['hascycle_20',['HasCycle',['../df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3',1,'plugin::PluginDependencyGraph']]],
-  ['haserrors_21',['HasErrors',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a932f00f709eb8403f63b6db4e8fb3317',1,'ui::qt::StartupSplash']]],
-  ['hasmodel_22',['HasModel',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a073ef1a1fe73e4f7dcb9ffd9c84f2603',1,'ai::GemmaInferenceEngine']]],
-  ['hasmultipleconditions_23',['hasMultipleConditions',['../d9/d12/classfilters_1_1Filter.html#a54da5ec20c57d3887b6121ac862ccc74',1,'filters::Filter']]],
-  ['hastranslation_24',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
-  ['headerdata_25',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
-  ['hexbyte_26',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
-  ['hexdump_27',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
-  ['hextocolor_28',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
+  ['hasbadge_20',['HasBadge',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#ad5524fe8767e5ed8c345c8b9f3706f39',1,'ui::qt::TabBadgeManager']]],
+  ['hascycle_21',['HasCycle',['../df/d48/classplugin_1_1PluginDependencyGraph.html#a8dc9d60461df667d539414721e0748a3',1,'plugin::PluginDependencyGraph']]],
+  ['haserrors_22',['HasErrors',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a932f00f709eb8403f63b6db4e8fb3317',1,'ui::qt::StartupSplash']]],
+  ['hasmodel_23',['HasModel',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a073ef1a1fe73e4f7dcb9ffd9c84f2603',1,'ai::GemmaInferenceEngine']]],
+  ['hasmultipleconditions_24',['hasMultipleConditions',['../d9/d12/classfilters_1_1Filter.html#a54da5ec20c57d3887b6121ac862ccc74',1,'filters::Filter']]],
+  ['hastranslation_25',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
+  ['headerdata_26',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
+  ['hexbyte_27',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
+  ['hexdump_28',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
+  ['hextocolor_29',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
 ];

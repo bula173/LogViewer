@@ -26,7 +26,7 @@ var searchData=
   ['updatedetails_23',['UpdateDetails',['../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#a61e3eb01ef25a47b1d546cbcef6c6ef5',1,'ui::qt::PluginManagerDialog']]],
   ['updatedialog_24',['UpdateDialog',['../d5/d32/classui_1_1qt_1_1UpdateDialog.html#ab33d0b5526b4498596c639f9e1cb453d',1,'ui::qt::UpdateDialog']]],
   ['updatefilter_25',['updateFilter',['../d5/db4/classfilters_1_1FilterManager.html#ad709cdc41daec9443e8d540a24a55164',1,'filters::FilterManager']]],
-  ['updatefilterstatus_26',['updatefilterstatus',['../d7/ddd/classui_1_1qt_1_1FilterStatusBar.html#a1d647efd85626a168f1bcbf940b82e7e',1,'ui::qt::FilterStatusBar::UpdateFilterStatus()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a1a07053fd9bd7971f011fee534e469b9',1,'ui::qt::MainWindow::UpdateFilterStatus()'],['../d3/d1f/classui_1_1IMainWindowView.html#a816fff92f0a7d1f06482c0de19bdd0d9',1,'ui::IMainWindowView::UpdateFilterStatus()']]],
+  ['updatefilterstatus_26',['updatefilterstatus',['../d7/ddd/classui_1_1qt_1_1FilterStatusBar.html#a1d647efd85626a168f1bcbf940b82e7e',1,'ui::qt::FilterStatusBar::UpdateFilterStatus()'],['../d3/d1f/classui_1_1IMainWindowView.html#a816fff92f0a7d1f06482c0de19bdd0d9',1,'ui::IMainWindowView::UpdateFilterStatus()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a1a07053fd9bd7971f011fee534e469b9',1,'ui::qt::MainWindow::UpdateFilterStatus()']]],
   ['updateitemhighlighteditorsfromselection_27',['UpdateItemHighlightEditorsFromSelection',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a622c1c97b5f54739db6d7dca26c7fac9',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightpreview_28',['UpdateItemHighlightPreview',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a5dd1c7acee115a5a46502b61bfe70b0c',1,'ui::qt::StructuredConfigDialog']]],
   ['updateitemhighlightswatches_29',['UpdateItemHighlightSwatches',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a6eeb5d53673e15605e0620284077c458',1,'ui::qt::StructuredConfigDialog']]],
@@ -35,7 +35,8 @@ var searchData=
   ['updatescenariocombo_32',['UpdateScenarioCombo',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a541f7f8bbe3d8be642cce2a620853a4c',1,'ui::qt::ScenariosPanel']]],
   ['updatestatustext_33',['updatestatustext',['../d3/d1f/classui_1_1IMainWindowView.html#a4e97c4d13b5381a7a5bb626282deb366',1,'ui::IMainWindowView::UpdateStatusText()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5',1,'ui::qt::MainWindow::UpdateStatusText()']]],
   ['updatesyncstatus_34',['UpdateSyncStatus',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab8df81b25378f325737c6c8ba89877fe',1,'ui::qt::SideBySidePanel']]],
-  ['updatetypefilters_35',['UpdateTypeFilters',['../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6',1,'ui::MainWindowPresenter']]],
-  ['updateui_36',['UpdateUI',['../df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f',1,'ui::qt::GemmaDownloadDialog']]],
-  ['userlayouts_37',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
+  ['updatetabtext_35',['UpdateTabText',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#a24fafd123e204d0949d38c11431d2462',1,'ui::qt::TabBadgeManager']]],
+  ['updatetypefilters_36',['UpdateTypeFilters',['../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6',1,'ui::MainWindowPresenter']]],
+  ['updateui_37',['UpdateUI',['../df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f',1,'ui::qt::GemmaDownloadDialog']]],
+  ['userlayouts_38',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
 ];

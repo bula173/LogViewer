@@ -143,6 +143,7 @@ var annotated_dup =
         [ "StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", "d2/d71/structui_1_1qt_1_1StatsSection" ],
         [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
         [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
+        [ "TabBadgeManager", "d8/dab/classui_1_1qt_1_1TabBadgeManager.html", "d8/dab/classui_1_1qt_1_1TabBadgeManager" ],
         [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
         [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],
         [ "TraceViewerPanel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel" ],

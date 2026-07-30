@@ -36,5 +36,6 @@ var searchData=
   ['_7emainwindow_33',['~MainWindow',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b',1,'ui::qt::MainWindow']]],
   ['_7epluginmanager_34',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
   ['_7esidebysidepanel_35',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
-  ['_7exmlparser_36',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
+  ['_7etabbadgemanager_36',['~TabBadgeManager',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#adbeb681af60720add6674345696bada4',1,'ui::qt::TabBadgeManager']]],
+  ['_7exmlparser_37',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
 ];
