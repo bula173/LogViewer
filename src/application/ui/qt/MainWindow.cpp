@@ -20,6 +20,7 @@
 #include "panels/SearchBar.hpp"
 #include "utils/UpdateChecker.hpp"
 #include "dialogs/UpdateDialog.hpp"
+#include "widgets/FilterStatusBar.hpp"
 #include "IControler.hpp"
 #include "MainWindowPresenter.hpp"
 #include "events/EventsTableView.hpp"
@@ -516,6 +517,10 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_updateBadge->setStyleSheet(
         "color: white; background-color: #007AFF; border-radius: 3px;"
         " padding: 1px 4px; font-weight: bold;");
+    // Add filter status bar to show active filters
+    m_filterStatusBar = new FilterStatusBar(this);
+    statusBar()->addWidget(m_filterStatusBar);
+
     m_updateBadge->setCursor(Qt::PointingHandCursor);
     m_updateBadge->setToolTip(tr("Click to view available updates"));
     m_updateBadge->hide();
