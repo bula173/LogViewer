@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <string>
 #include <fstream>
+#include <filesystem>
 
 namespace ui::qt {
 
@@ -291,7 +292,7 @@ void BookmarksPanel::OnExport()
                 });
             }
 
-            std::ofstream file(fileName.toStdString());
+            std::ofstream file(std::filesystem::path(fileName.toStdString()));
             file << j.dump(2);
             file.close();
             m_statusLabel->setText(tr("Exported %1 bookmark(s) to JSON").arg(m_bookmarks.size()));
@@ -320,7 +321,7 @@ void BookmarksPanel::OnExport()
                           .arg(escape(bm.summary));
             }
 
-            std::ofstream file(fileName.toStdString());
+            std::ofstream file(std::filesystem::path(fileName.toStdString()));
             file << md.toStdString();
             file.close();
             m_statusLabel->setText(tr("Exported %1 bookmark(s) to Markdown").arg(m_bookmarks.size()));
@@ -341,7 +342,7 @@ void BookmarksPanel::OnImport()
 
     try
     {
-        std::ifstream file(fileName.toStdString());
+        std::ifstream file(std::filesystem::path(fileName.toStdString()));
         nlohmann::json j = nlohmann::json::parse(file);
 
         if (j.contains("categories"))

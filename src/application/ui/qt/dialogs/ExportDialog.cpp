@@ -21,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <filesystem>
 
 namespace ui::qt {
 
@@ -357,7 +358,7 @@ void ExportDialog::OnExport()
 
     try
     {
-        std::ofstream file(m_pathEdit->text().toStdString());
+        std::ofstream file(std::filesystem::path(m_pathEdit->text().toStdString()));
         if (!file.is_open())
         {
             QMessageBox::critical(this, tr("Export Failed"), tr("Could not open file for writing"));
