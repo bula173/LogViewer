@@ -120,11 +120,26 @@ jobs:
             CCACHE_LAUNCHER_CXX=""
           fi
 
+          # Find Qt6 installation
+          QT6_PATH=$(find /usr/lib -name "Qt6Config.cmake" -o -name "qt6-config.cmake" 2>/dev/null | head -1 | xargs dirname)
+          if [ -z "$QT6_PATH" ]; then
+            QT6_PATH=$(pkg-config --variable libdir Qt6Core)
+            if [ -n "$QT6_PATH" ]; then
+              QT6_PATH="${QT6_PATH%/*}/cmake/Qt6"
+            fi
+          fi
+
+          if [ -n "$QT6_PATH" ]; then
+            echo "Found Qt6 at: $QT6_PATH"
+            CMAKE_PREFIX_PATH="$QT6_PATH:$CMAKE_PREFIX_PATH"
+          fi
+
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_C_COMPILER=$CC_COMPILER \
             -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
             $CCACHE_LAUNCHER_C \
             $CCACHE_LAUNCHER_CXX \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
