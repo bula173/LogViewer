@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('d8/d76/structanalyzer_1_1ExchangePatte
 </div><!--header-->
 <div class="contents">
 
-<p>A detected from→to message-exchange pattern.  
+<p>Describes how actor-to-actor message flow can be read from the log events.  
  <a href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../de/d02/ActorDiscoverer_8hpp_source.html">ActorDiscoverer.hpp</a>&gt;</code></p>
@@ -106,32 +106,81 @@ Collaboration diagram for analyzer::ExchangePattern:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d4/de1/structanalyzer_1_1ExchangePattern__coll__graph.png" border="0" usemap="#aanalyzer_1_1ExchangePattern_coll__map" alt="Collaboration graph"/></div>
 <map name="aanalyzer_1_1ExchangePattern_coll__map" id="aanalyzer_1_1ExchangePattern_coll__map">
-<area shape="rect" title="A detected from→to message&#45;exchange pattern." alt="" coords="5,163,192,228"/>
-<area shape="rect" title=" " alt="" coords="11,5,61,71"/>
-<area shape="poly" title=" " alt="" coords="33,71,32,104,40,138,46,148,41,151,35,140,27,105,28,71"/>
-<area shape="rect" title=" " alt="" coords="98,5,227,71"/>
-<area shape="poly" title=" " alt="" coords="158,72,136,140,131,150,126,147,131,138,153,70"/>
+<area shape="rect" title="Describes how actor&#45;to&#45;actor message flow can be read from the log events." alt="" coords="153,251,339,316"/>
+<area shape="rect" title=" " alt="" coords="5,5,119,71"/>
+<area shape="poly" title=" " alt="" coords="61,71,60,106,64,147,75,188,96,225,116,243,139,257,136,261,112,247,92,228,70,190,59,148,55,106,56,71"/>
+<area shape="rect" title=" " alt="" coords="143,5,194,71"/>
+<area shape="poly" title=" " alt="" coords="163,71,158,105,155,145,159,186,172,226,180,237,176,240,168,228,154,187,150,145,152,104,158,70"/>
+<area shape="rect" title=" " alt="" coords="259,5,388,71"/>
+<area shape="poly" title=" " alt="" coords="326,71,320,144,311,187,296,228,291,238,286,236,292,226,306,185,315,144,321,70"/>
+<area shape="rect" title=" " alt="" coords="453,5,484,71"/>
+<area shape="poly" title=" " alt="" coords="476,71,478,106,475,148,464,191,441,228,423,245,402,258,356,275,354,270,400,253,420,241,437,225,459,189,469,147,472,106,471,71"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a39f7893dbd58b4f9d60c97b050a2fe0d" id="r_a39f7893dbd58b4f9d60c97b050a2fe0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff">ExchangeMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a39f7893dbd58b4f9d60c97b050a2fe0d">mode</a> {<a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff">ExchangeMode::Pair</a>}</td></tr>
+<tr class="separator:a39f7893dbd58b4f9d60c97b050a2fe0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0f28a0a49f768d7e0b40b2a280a5cd0" id="r_ab0f28a0a49f768d7e0b40b2a280a5cd0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#ab0f28a0a49f768d7e0b40b2a280a5cd0">senderField</a></td></tr>
-<tr class="memdesc:ab0f28a0a49f768d7e0b40b2a280a5cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field that identifies the message sender.  <br /></td></tr>
+<tr class="memdesc:ab0f28a0a49f768d7e0b40b2a280a5cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field carrying the sender name (empty in ReceiverOnly)  <br /></td></tr>
 <tr class="separator:ab0f28a0a49f768d7e0b40b2a280a5cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee08918d607579dff24cbc086eda3157" id="r_aee08918d607579dff24cbc086eda3157"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#aee08918d607579dff24cbc086eda3157">receiverField</a></td></tr>
-<tr class="memdesc:aee08918d607579dff24cbc086eda3157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field that identifies the message receiver.  <br /></td></tr>
+<tr class="memdesc:aee08918d607579dff24cbc086eda3157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field carrying the receiver name (empty in SenderOnly)  <br /></td></tr>
 <tr class="separator:aee08918d607579dff24cbc086eda3157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ca8168e3efb7f12e9f1b8d839171fa9" id="r_a9ca8168e3efb7f12e9f1b8d839171fa9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a9ca8168e3efb7f12e9f1b8d839171fa9">labelField</a></td></tr>
-<tr class="memdesc:a9ca8168e3efb7f12e9f1b8d839171fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Best field for message labels (type/action/message…)  <br /></td></tr>
+<tr class="memdesc:a9ca8168e3efb7f12e9f1b8d839171fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Best field for message labels.  <br /></td></tr>
 <tr class="separator:a9ca8168e3efb7f12e9f1b8d839171fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11e799e7c0be663ec9942a56994fd7f3" id="r_a11e799e7c0be663ec9942a56994fd7f3"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a11e799e7c0be663ec9942a56994fd7f3">actors</a></td></tr>
-<tr class="memdesc:a11e799e7c0be663ec9942a56994fd7f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">All unique actor names (union of sender+receiver values)  <br /></td></tr>
+<tr class="memdesc:a11e799e7c0be663ec9942a56994fd7f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">All unique actor names seen (union of sender + receiver values).  <br /></td></tr>
 <tr class="separator:a11e799e7c0be663ec9942a56994fd7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ead0f15644212867d1df278d05866f8" id="r_a9ead0f15644212867d1df278d05866f8"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a9ead0f15644212867d1df278d05866f8">actorField</a></td></tr>
+<tr class="memdesc:a9ead0f15644212867d1df278d05866f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field carrying the actor name.  <br /></td></tr>
+<tr class="separator:a9ead0f15644212867d1df278d05866f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac25a30da549ff3ffcefcf465b51d5f4f" id="r_ac25a30da549ff3ffcefcf465b51d5f4f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#ac25a30da549ff3ffcefcf465b51d5f4f">directionField</a></td></tr>
+<tr class="memdesc:ac25a30da549ff3ffcefcf465b51d5f4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field whose VALUE indicates direction.  <br /></td></tr>
+<tr class="separator:ac25a30da549ff3ffcefcf465b51d5f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dccef66d5762439587f6fd3f9e75cb7" id="r_a2dccef66d5762439587f6fd3f9e75cb7"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a2dccef66d5762439587f6fd3f9e75cb7">outgoingValues</a></td></tr>
+<tr class="memdesc:a2dccef66d5762439587f6fd3f9e75cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Values that mean "sending".  <br /></td></tr>
+<tr class="separator:a2dccef66d5762439587f6fd3f9e75cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa87c6127dea58540b41648e32e773111" id="r_aa87c6127dea58540b41648e32e773111"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#aa87c6127dea58540b41648e32e773111">incomingValues</a></td></tr>
+<tr class="memdesc:aa87c6127dea58540b41648e32e773111"><td class="mdescLeft">&#160;</td><td class="mdescRight">Values that mean "receiving".  <br /></td></tr>
+<tr class="separator:aa87c6127dea58540b41648e32e773111"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2827681d0509d6599bfe46591ce6b2aa" id="r_a2827681d0509d6599bfe46591ce6b2aa"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a2827681d0509d6599bfe46591ce6b2aa">patternField</a></td></tr>
+<tr class="memdesc:a2827681d0509d6599bfe46591ce6b2aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field containing embedded actor names.  <br /></td></tr>
+<tr class="separator:a2827681d0509d6599bfe46591ce6b2aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bdff1a5829be6fdbcbc3fe0df0131c5" id="r_a1bdff1a5829be6fdbcbc3fe0df0131c5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a1bdff1a5829be6fdbcbc3fe0df0131c5">separator</a></td></tr>
+<tr class="memdesc:a1bdff1a5829be6fdbcbc3fe0df0131c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Separator character/string (e.g., ":")  <br /></td></tr>
+<tr class="separator:a1bdff1a5829be6fdbcbc3fe0df0131c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c576a599be3e075d703c2bb8748119a" id="r_a6c576a599be3e075d703c2bb8748119a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a">extractionPattern</a></td></tr>
+<tr class="memdesc:a6c576a599be3e075d703c2bb8748119a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regex pattern to extract actor (e.g., "([^:]+):")  <br /></td></tr>
+<tr class="separator:a6c576a599be3e075d703c2bb8748119a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfc35da3e671710149f1883925a3806b" id="r_adfc35da3e671710149f1883925a3806b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#adfc35da3e671710149f1883925a3806b">confidence</a> {0}</td></tr>
+<tr class="memdesc:adfc35da3e671710149f1883925a3806b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Score used to rank candidates (higher = better)  <br /></td></tr>
+<tr class="separator:adfc35da3e671710149f1883925a3806b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef4d164a48b72ae8905e320bb1be0783" id="r_aef4d164a48b72ae8905e320bb1be0783"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#aef4d164a48b72ae8905e320bb1be0783">description</a></td></tr>
+<tr class="memdesc:aef4d164a48b72ae8905e320bb1be0783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Human-readable summary shown in the Discover dialog.  <br /></td></tr>
+<tr class="separator:aef4d164a48b72ae8905e320bb1be0783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A detected from→to message-exchange pattern. </p>
+<div class="textblock"><p>Describes how actor-to-actor message flow can be read from the log events. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9ead0f15644212867d1df278d05866f8" name="a9ead0f15644212867d1df278d05866f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ead0f15644212867d1df278d05866f8">&#9670;&#160;</a></span>actorField</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::actorField</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Field carrying the actor name. </p>
+
+</div>
+</div>
 <a id="a11e799e7c0be663ec9942a56994fd7f3" name="a11e799e7c0be663ec9942a56994fd7f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a11e799e7c0be663ec9942a56994fd7f3">&#9670;&#160;</a></span>actors</h2>
 
@@ -144,7 +193,87 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>All unique actor names (union of sender+receiver values) </p>
+<p>All unique actor names seen (union of sender + receiver values). </p>
+
+</div>
+</div>
+<a id="adfc35da3e671710149f1883925a3806b" name="adfc35da3e671710149f1883925a3806b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfc35da3e671710149f1883925a3806b">&#9670;&#160;</a></span>confidence</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int analyzer::ExchangePattern::confidence {0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Score used to rank candidates (higher = better) </p>
+
+</div>
+</div>
+<a id="aef4d164a48b72ae8905e320bb1be0783" name="aef4d164a48b72ae8905e320bb1be0783"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef4d164a48b72ae8905e320bb1be0783">&#9670;&#160;</a></span>description</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::description</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Human-readable summary shown in the Discover dialog. </p>
+
+</div>
+</div>
+<a id="ac25a30da549ff3ffcefcf465b51d5f4f" name="ac25a30da549ff3ffcefcf465b51d5f4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac25a30da549ff3ffcefcf465b51d5f4f">&#9670;&#160;</a></span>directionField</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::directionField</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Field whose VALUE indicates direction. </p>
+
+</div>
+</div>
+<a id="a6c576a599be3e075d703c2bb8748119a" name="a6c576a599be3e075d703c2bb8748119a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c576a599be3e075d703c2bb8748119a">&#9670;&#160;</a></span>extractionPattern</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::extractionPattern</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Regex pattern to extract actor (e.g., "([^:]+):") </p>
+
+</div>
+</div>
+<a id="aa87c6127dea58540b41648e32e773111" name="aa87c6127dea58540b41648e32e773111"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa87c6127dea58540b41648e32e773111">&#9670;&#160;</a></span>incomingValues</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;std::string&gt; analyzer::ExchangePattern::incomingValues</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Values that mean "receiving". </p>
 
 </div>
 </div>
@@ -160,7 +289,53 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Best field for message labels (type/action/message…) </p>
+<p>Best field for message labels. </p>
+
+</div>
+</div>
+<a id="a39f7893dbd58b4f9d60c97b050a2fe0d" name="a39f7893dbd58b4f9d60c97b050a2fe0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f7893dbd58b4f9d60c97b050a2fe0d">&#9670;&#160;</a></span>mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff">ExchangeMode</a> analyzer::ExchangePattern::mode {<a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff">ExchangeMode::Pair</a>}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2dccef66d5762439587f6fd3f9e75cb7" name="a2dccef66d5762439587f6fd3f9e75cb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dccef66d5762439587f6fd3f9e75cb7">&#9670;&#160;</a></span>outgoingValues</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;std::string&gt; analyzer::ExchangePattern::outgoingValues</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Values that mean "sending". </p>
+
+</div>
+</div>
+<a id="a2827681d0509d6599bfe46591ce6b2aa" name="a2827681d0509d6599bfe46591ce6b2aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2827681d0509d6599bfe46591ce6b2aa">&#9670;&#160;</a></span>patternField</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::patternField</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Field containing embedded actor names. </p>
 
 </div>
 </div>
@@ -176,7 +351,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Field that identifies the message receiver. </p>
+<p>Field carrying the receiver name (empty in SenderOnly) </p>
 
 </div>
 </div>
@@ -192,7 +367,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Field that identifies the message sender. </p>
+<p>Field carrying the sender name (empty in ReceiverOnly) </p>
+
+</div>
+</div>
+<a id="a1bdff1a5829be6fdbcbc3fe0df0131c5" name="a1bdff1a5829be6fdbcbc3fe0df0131c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bdff1a5829be6fdbcbc3fe0df0131c5">&#9670;&#160;</a></span>separator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::ExchangePattern::separator</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Separator character/string (e.g., ":") </p>
 
 </div>
 </div>

@@ -1,5 +1,11 @@
 var annotated_dup =
 [
+    [ "ai", "de/d58/namespaceai.html", [
+      [ "DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", "d5/d23/structai_1_1DirectionPattern" ],
+      [ "GemmaActorResult", "d4/d8f/structai_1_1GemmaActorResult.html", "d4/d8f/structai_1_1GemmaActorResult" ],
+      [ "GemmaDirectionResult", "d6/d78/structai_1_1GemmaDirectionResult.html", "d6/d78/structai_1_1GemmaDirectionResult" ],
+      [ "GemmaInferenceEngine", "d2/d47/classai_1_1GemmaInferenceEngine.html", "d2/d47/classai_1_1GemmaInferenceEngine" ]
+    ] ],
     [ "analyzer", "dd/d3e/namespaceanalyzer.html", [
       [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
       [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
@@ -85,6 +91,9 @@ var annotated_dup =
       [ "PluginManager", "d3/d67/classplugin_1_1PluginManager.html", "d3/d67/classplugin_1_1PluginManager" ],
       [ "PluginMetadata", "de/d25/structplugin_1_1PluginMetadata.html", "de/d25/structplugin_1_1PluginMetadata" ]
     ] ],
+    [ "services", "db/d91/namespaceservices.html", [
+      [ "IService", "d2/d99/classservices_1_1IService.html", "d2/d99/classservices_1_1IService" ]
+    ] ],
     [ "ui", "d3/df6/namespaceui.html", [
       [ "qt", "d6/d40/namespaceui_1_1qt.html", [
         [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
@@ -112,6 +121,7 @@ var annotated_dup =
         [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
         [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
         [ "FrameSignals", "da/d91/structui_1_1qt_1_1FrameSignals.html", "da/d91/structui_1_1qt_1_1FrameSignals" ],
+        [ "GemmaDownloadDialog", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog" ],
         [ "GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy" ],
         [ "IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", "df/dae/classui_1_1qt_1_1IStatisticsStrategy" ],
         [ "ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", "d0/d5c/classui_1_1qt_1_1ItemDetailsView" ],

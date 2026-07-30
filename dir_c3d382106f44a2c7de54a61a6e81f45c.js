@@ -4,6 +4,8 @@ var dir_c3d382106f44a2c7de54a61a6e81f45c =
     [ "ConfigEditorDialog.hpp", "df/d56/ConfigEditorDialog_8hpp.html", "df/d56/ConfigEditorDialog_8hpp" ],
     [ "FilterEditorDialog.cpp", "d7/daa/FilterEditorDialog_8cpp.html", "d7/daa/FilterEditorDialog_8cpp" ],
     [ "FilterEditorDialog.hpp", "d3/d69/FilterEditorDialog_8hpp.html", "d3/d69/FilterEditorDialog_8hpp" ],
+    [ "GemmaDownloadDialog.cpp", "d8/db6/GemmaDownloadDialog_8cpp.html", null ],
+    [ "GemmaDownloadDialog.hpp", "d8/dd2/GemmaDownloadDialog_8hpp.html", "d8/dd2/GemmaDownloadDialog_8hpp" ],
     [ "LogFileLoadDialog.cpp", "dc/d57/LogFileLoadDialog_8cpp.html", null ],
     [ "LogFileLoadDialog.hpp", "d2/de5/LogFileLoadDialog_8hpp.html", "d2/de5/LogFileLoadDialog_8hpp" ],
     [ "PluginManagerDialog.cpp", "d0/d6e/PluginManagerDialog_8cpp.html", "d0/d6e/PluginManagerDialog_8cpp" ],

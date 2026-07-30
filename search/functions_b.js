@@ -20,5 +20,6 @@ var searchData=
   ['mergeevents_17',['MergeEvents',['../dd/dc2/classdb_1_1EventsContainer.html#a1c3a6e4eca84c6a25e070235973a99c3',1,'db::EventsContainer']]],
   ['mergelogfile_18',['MergeLogFile',['../d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68',1,'ui::MainWindowPresenter']]],
   ['mergetokens_19',['MergeTokens',['../dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a6e9c484ed5ca13ef4e9aea2dd6fcda3a',1,'ui::qt::PatternAnalysisPanel']]],
-  ['mousedoubleclickevent_20',['mouseDoubleClickEvent',['../d5/ddf/classClickScene.html#a6897aac58db9208393be66f37fb8da92',1,'ClickScene']]]
+  ['modelavailable_20',['ModelAvailable',['../df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a6c925ac21f9c889540c68e1f80d84598',1,'ui::qt::GemmaDownloadDialog']]],
+  ['mousedoubleclickevent_21',['mouseDoubleClickEvent',['../d5/ddf/classClickScene.html#a6897aac58db9208393be66f37fb8da92',1,'ClickScene']]]
 ];

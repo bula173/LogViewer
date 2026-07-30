@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('d8/d24/structanalyzer_1_1ActorDiscover
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d4/df3/structanalyzer_1_1ActorDiscoveryResult-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">analyzer::ActorDiscoveryResult Struct Reference</div></div>
@@ -103,23 +104,56 @@ Collaboration diagram for analyzer::ActorDiscoveryResult:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d04/structanalyzer_1_1ActorDiscoveryResult__coll__graph.png" border="0" usemap="#aanalyzer_1_1ActorDiscoveryResult_coll__map" alt="Collaboration graph"/></div>
 <map name="aanalyzer_1_1ActorDiscoveryResult_coll__map" id="aanalyzer_1_1ActorDiscoveryResult_coll__map">
-<area shape="rect" title=" " alt="" coords="77,148,254,228"/>
-<area shape="rect" title=" " alt="" coords="5,5,152,85"/>
-<area shape="poly" title=" " alt="" coords="105,84,135,133,131,136,101,87"/>
-<area shape="rect" title=" " alt="" coords="177,13,327,78"/>
-<area shape="poly" title=" " alt="" coords="238,80,212,125,205,136,200,133,207,123,233,77"/>
+<area shape="rect" title=" " alt="" coords="114,148,291,228"/>
+<area shape="rect" title=" " alt="" coords="5,5,203,85"/>
+<area shape="poly" title=" " alt="" coords="134,84,168,133,164,136,129,87"/>
+<area shape="rect" title=" " alt="" coords="227,13,378,78"/>
+<area shape="poly" title=" " alt="" coords="282,80,242,136,238,133,278,77"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2f0c0fbdb5874a62acc6981c66f26dba" id="r_a2f0c0fbdb5874a62acc6981c66f26dba"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html#a2f0c0fbdb5874a62acc6981c66f26dba">bestPattern</a> () const</td></tr>
+<tr class="memdesc:a2f0c0fbdb5874a62acc6981c66f26dba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience: returns the best pattern or nullptr.  <br /></td></tr>
+<tr class="separator:a2f0c0fbdb5874a62acc6981c66f26dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7eaf7a7943983eb7e6572560871b3e11" id="r_a7eaf7a7943983eb7e6572560871b3e11"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html#a7eaf7a7943983eb7e6572560871b3e11">exchange</a></td></tr>
-<tr class="memdesc:a7eaf7a7943983eb7e6572560871b3e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set when a from+to pair was found.  <br /></td></tr>
-<tr class="separator:a7eaf7a7943983eb7e6572560871b3e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6b9fb7ee9494a8a5129bc210339cbd0" id="r_af6b9fb7ee9494a8a5129bc210339cbd0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html#af6b9fb7ee9494a8a5129bc210339cbd0">patterns</a></td></tr>
+<tr class="separator:af6b9fb7ee9494a8a5129bc210339cbd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1c775b178cbb7d17c74d4b032f7a149" id="r_ab1c775b178cbb7d17c74d4b032f7a149"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html#ab1c775b178cbb7d17c74d4b032f7a149">actorFields</a></td></tr>
-<tr class="memdesc:ab1c775b178cbb7d17c74d4b032f7a149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Other actor-like fields (no clear pairing)  <br /></td></tr>
+<tr class="memdesc:ab1c775b178cbb7d17c74d4b032f7a149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actor-like fields that don't belong to any detected exchange pattern.  <br /></td></tr>
 <tr class="separator:ab1c775b178cbb7d17c74d4b032f7a149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2f0c0fbdb5874a62acc6981c66f26dba" name="a2f0c0fbdb5874a62acc6981c66f26dba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f0c0fbdb5874a62acc6981c66f26dba">&#9670;&#160;</a></span>bestPattern()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a> * analyzer::ActorDiscoveryResult::bestPattern </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convenience: returns the best pattern or nullptr. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ab1c775b178cbb7d17c74d4b032f7a149" name="ab1c775b178cbb7d17c74d4b032f7a149"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab1c775b178cbb7d17c74d4b032f7a149">&#9670;&#160;</a></span>actorFields</h2>
@@ -133,23 +167,22 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Other actor-like fields (no clear pairing) </p>
+<p>Actor-like fields that don't belong to any detected exchange pattern. </p>
 
 </div>
 </div>
-<a id="a7eaf7a7943983eb7e6572560871b3e11" name="a7eaf7a7943983eb7e6572560871b3e11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7eaf7a7943983eb7e6572560871b3e11">&#9670;&#160;</a></span>exchange</h2>
+<a id="af6b9fb7ee9494a8a5129bc210339cbd0" name="af6b9fb7ee9494a8a5129bc210339cbd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6b9fb7ee9494a8a5129bc210339cbd0">&#9670;&#160;</a></span>patterns</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt;<a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a>&gt; analyzer::ActorDiscoveryResult::exchange</td>
+          <td class="memname">std::vector&lt;<a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a>&gt; analyzer::ActorDiscoveryResult::patterns</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Set when a from+to pair was found. </p>
+<p>All detected exchange patterns, ranked by confidence (best first). Most logs yield one; some yield two or three from different field combos. </p>
 
 </div>
 </div>

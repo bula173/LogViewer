@@ -18,6 +18,7 @@ var hierarchy =
     [ "parser::dbc::DbcMessage", "d9/d4f/structparser_1_1dbc_1_1DbcMessage.html", null ],
     [ "parser::dbc::DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", null ],
     [ "plugin::PluginDependencyGraph::DependencyNode", "d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html", null ],
+    [ "ai::DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", null ],
     [ "parser::EvlogTemplate", "dc/d0f/structparser_1_1EvlogTemplate.html", null ],
     [ "parser::EvlogTemplateField", "d5/dcd/structparser_1_1EvlogTemplateField.html", null ],
     [ "parser::EvlogTemplateRegistry", "d7/d64/classparser_1_1EvlogTemplateRegistry.html", null ],
@@ -30,6 +31,9 @@ var hierarchy =
     [ "ui::qt::FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", null ],
     [ "ui::qt::FrameSignals", "da/d91/structui_1_1qt_1_1FrameSignals.html", null ],
     [ "plugin::FunctionRegistry< FnType >", "d9/d75/classplugin_1_1FunctionRegistry.html", null ],
+    [ "ai::GemmaActorResult", "d4/d8f/structai_1_1GemmaActorResult.html", null ],
+    [ "ai::GemmaDirectionResult", "d6/d78/structai_1_1GemmaDirectionResult.html", null ],
+    [ "ai::GemmaInferenceEngine", "d2/d47/classai_1_1GemmaInferenceEngine.html", null ],
     [ "ui::qt::ActorsPanel::GroupedActorData", "de/dff/structui_1_1qt_1_1ActorsPanel_1_1GroupedActorData.html", null ],
     [ "mvc::IController", "d1/d06/classmvc_1_1IController.html", [
       [ "mvc::MainController", "d5/d44/classmvc_1_1MainController.html", null ]
@@ -85,6 +89,7 @@ var hierarchy =
       [ "db::EventsContainer", "dd/dc2/classdb_1_1EventsContainer.html", null ]
     ] ],
     [ "mvc::IModelObservable", "da/d80/classmvc_1_1IModelObservable.html", null ],
+    [ "ai::GemmaInferenceEngine::Impl", "d2/d36/structai_1_1GemmaInferenceEngine_1_1Impl.html", null ],
     [ "plugin::IPlugin", "d4/d51/classplugin_1_1IPlugin.html", null ],
     [ "plugin::IPluginEventObserver", "d1/d7b/classplugin_1_1IPluginEventObserver.html", null ],
     [ "plugin::IPluginObserver", "da/d7b/classplugin_1_1IPluginObserver.html", [
@@ -97,6 +102,7 @@ var hierarchy =
     [ "ui::ISearchResultsViewObserver", "d3/df7/classui_1_1ISearchResultsViewObserver.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
+    [ "services::IService", "d2/d99/classservices_1_1IService.html", null ],
     [ "ui::qt::IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", [
       [ "ui::qt::CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", null ],
       [ "ui::qt::GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", null ]
@@ -132,6 +138,7 @@ var hierarchy =
     [ "QDialog", "d9/d46/classQDialog.html", [
       [ "ui::qt::ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", null ],
       [ "ui::qt::FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", null ],
+      [ "ui::qt::GemmaDownloadDialog", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html", null ],
       [ "ui::qt::LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", null ],
       [ "ui::qt::PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", null ],
       [ "ui::qt::StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", null ],

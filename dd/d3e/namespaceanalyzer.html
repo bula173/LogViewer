@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('dd/d3e/namespaceanalyzer.html','../../
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">analyzer Namespace Reference</div></div>
@@ -105,8 +106,22 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html">ActorDiscoveryResult</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A detected from→to message-exchange pattern.  <a href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how actor-to-actor message flow can be read from the log events.  <a href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a67f641cb69dc9893d4b5aaeb9dfb8eff" id="r_a67f641cb69dc9893d4b5aaeb9dfb8eff"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff">ExchangeMode</a> { <br />
+&#160;&#160;<a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff">Pair</a>
+, <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effa142b1bc2eb9d2d7614c776aa12e5a733">DirectionField</a>
+, <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effaf0e5f76eeb6ddcfac157103036866b60">ReceiverOnly</a>
+, <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5">SenderOnly</a>
+, <br />
+&#160;&#160;<a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02">PatternField</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a67f641cb69dc9893d4b5aaeb9dfb8eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">How actor send/receive relationships are encoded in the log.  <a href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff">More...</a><br /></td></tr>
+<tr class="separator:a67f641cb69dc9893d4b5aaeb9dfb8eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -123,7 +138,50 @@ Variables</h2></td></tr>
 <tr class="separator:ad6f772cb0546635a3c47b9f3766033bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af500209b91f794190efb0f9ede84f890" id="r_af500209b91f794190efb0f9ede84f890"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#af500209b91f794190efb0f9ede84f890">kLabelWords</a></td></tr>
 <tr class="separator:af500209b91f794190efb0f9ede84f890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b58b197bae393b8ece5e9352a70fa53" id="r_a8b58b197bae393b8ece5e9352a70fa53"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a8b58b197bae393b8ece5e9352a70fa53">kOutgoingWords</a></td></tr>
+<tr class="separator:a8b58b197bae393b8ece5e9352a70fa53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bf7738acf6fb60b136f888d3e732060" id="r_a7bf7738acf6fb60b136f888d3e732060"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a7bf7738acf6fb60b136f888d3e732060">kIncomingWords</a></td></tr>
+<tr class="separator:a7bf7738acf6fb60b136f888d3e732060"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7064057c8cefc4255594ecdd2f7ebed6" id="r_a7064057c8cefc4255594ecdd2f7ebed6"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a7064057c8cefc4255594ecdd2f7ebed6">kProtocolPatterns</a></td></tr>
+<tr class="separator:a7064057c8cefc4255594ecdd2f7ebed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a67f641cb69dc9893d4b5aaeb9dfb8eff" name="a67f641cb69dc9893d4b5aaeb9dfb8eff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67f641cb69dc9893d4b5aaeb9dfb8eff">&#9670;&#160;</a></span>ExchangeMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff">analyzer::ExchangeMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How actor send/receive relationships are encoded in the log. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff" name="a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff"></a>Pair&#160;</td><td class="fielddoc"><p>Two distinct fields hold the sender and receiver names. Covers: from+to, source+dest, sender+receiver, client+server, … </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effa142b1bc2eb9d2d7614c776aa12e5a733" name="a67f641cb69dc9893d4b5aaeb9dfb8effa142b1bc2eb9d2d7614c776aa12e5a733"></a>DirectionField&#160;</td><td class="fielddoc"><p>A single actor field plus a direction-value field that distinguishes send from receive. The partner is implied (typically the self actor). Example: component=X, direction=out|in </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effaf0e5f76eeb6ddcfac157103036866b60" name="a67f641cb69dc9893d4b5aaeb9dfb8effaf0e5f76eeb6ddcfac157103036866b60"></a>ReceiverOnly&#160;</td><td class="fielddoc"><p>Only a receiver field is present; the sender is always the self actor (or unspecified when no self actor is configured). Example: to=B — the log generator is always the one sending </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5" name="a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5"></a>SenderOnly&#160;</td><td class="fielddoc"><p>Only a sender field is present; the receiver is always the self actor. Example: from=A — the log generator is always the one receiving </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02" name="a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02"></a>PatternField&#160;</td><td class="fielddoc"><p>Actor names are embedded in a single field using a separator pattern. Example: "RBC: message", "Train T001: info" — extract prefix before ":" </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a7f5247563fd3f8ccceccc72addf60468" name="a7f5247563fd3f8ccceccc72addf60468"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7f5247563fd3f8ccceccc72addf60468">&#9670;&#160;</a></span>ScoreAgainst()</h2>
@@ -163,35 +221,45 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d3e/namespaceanalyzer_a7f5247563fd3f8ccceccc72addf60468_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a7f5247563fd3f8ccceccc72addf60468_icgraph" alt=""/></div>
 <map name="add/d3e/namespaceanalyzer_a7f5247563fd3f8ccceccc72addf60468_icgraph" id="add/d3e/namespaceanalyzer_a7f5247563fd3f8ccceccc72addf60468_icgraph">
-<area shape="rect" title=" " alt="" coords="1279,109,1449,134"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="1040,5,1231,45"/>
-<area shape="poly" title=" " alt="" coords="1326,105,1230,60,1198,48,1200,43,1232,55,1328,100"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="1040,69,1231,109"/>
-<area shape="poly" title=" " alt="" coords="1265,110,1230,105,1231,100,1266,105"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="1040,197,1231,237"/>
-<area shape="poly" title=" " alt="" coords="1328,143,1232,188,1200,200,1198,195,1230,183,1326,138"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="1040,133,1231,173"/>
-<area shape="poly" title=" " alt="" coords="1266,138,1231,143,1230,137,1265,132"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,72,992,112"/>
-<area shape="poly" title=" " alt="" coords="1051,52,970,74,968,69,1049,46"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,133,729,173"/>
-<area shape="poly" title=" " alt="" coords="1027,18,972,20,914,26,857,39,803,62,787,76,779,91,771,107,755,123,730,137,727,132,752,119,766,104,774,88,783,72,800,58,855,34,913,21,972,14,1027,13"/>
-<area shape="poly" title=" " alt="" coords="801,118,728,136,727,131,800,113"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="787,94,753,93,753,88,787,88"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,133,463,173"/>
-<area shape="poly" title=" " alt="" coords="547,156,463,156,463,151,547,151"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,133,216,173"/>
-<area shape="poly" title=" " alt="" coords="282,156,216,156,216,151,282,151"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
-<area shape="poly" title=" " alt="" coords="1026,93,992,94,992,88,1026,88"/>
-<area shape="poly" title=" " alt="" coords="1054,195,1039,188,975,151,922,114,926,110,978,146,1041,183,1057,190"/>
-<area shape="poly" title=" " alt="" coords="1026,206,728,167,729,162,1027,201"/>
-<area shape="poly" title=" " alt="" coords="1043,132,974,115,976,109,1044,127"/>
-<area shape="poly" title=" " alt="" coords="1026,156,729,156,729,151,1026,151"/>
+<area shape="rect" title=" " alt="" coords="1531,141,1701,166"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="1292,69,1483,109"/>
+<area shape="poly" title=" " alt="" coords="1556,139,1459,112,1460,107,1557,134"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#afb40d381331bc5a41198a67759f6a8ac" title=" " alt="" coords="1292,197,1483,237"/>
+<area shape="poly" title=" " alt="" coords="1557,172,1460,200,1459,195,1556,167"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="1292,133,1483,173"/>
+<area shape="poly" title=" " alt="" coords="1517,156,1483,156,1483,151,1517,151"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="1292,5,1483,45"/>
+<area shape="poly" title=" " alt="" coords="1588,134,1540,97,1481,60,1455,48,1457,43,1484,55,1543,92,1592,130"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="1292,261,1483,301"/>
+<area shape="poly" title=" " alt="" coords="1592,177,1543,214,1484,252,1457,264,1455,259,1481,247,1540,210,1588,173"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,152,1244,192"/>
+<area shape="poly" title=" " alt="" coords="1315,116,1293,124,1206,154,1205,149,1291,119,1313,111"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,95,715,135"/>
+<area shape="poly" title=" " alt="" coords="1278,96,716,115,715,109,1278,90"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,152,992,192"/>
+<area shape="poly" title=" " alt="" coords="1039,175,992,175,992,169,1039,169"/>
+<area shape="poly" title=" " alt="" coords="1055,152,1005,143,852,127,715,119,716,114,852,121,1006,137,1056,146"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,331,966,371"/>
+<area shape="poly" title=" " alt="" coords="1109,203,928,333,924,328,1106,198"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,216,1005,256"/>
+<area shape="poly" title=" " alt="" coords="1057,198,977,219,975,213,1055,193"/>
+<area shape="poly" title=" " alt="" coords="790,152,715,135,716,130,791,146"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,95,449,135"/>
+<area shape="poly" title=" " alt="" coords="534,117,450,117,450,112,534,112"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,95,209,135"/>
+<area shape="poly" title=" " alt="" coords="269,117,210,117,210,112,269,112"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,331,701,371"/>
+<area shape="poly" title=" " alt="" coords="813,353,701,353,701,348,813,348"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,216,740,256"/>
+<area shape="poly" title=" " alt="" coords="774,239,740,239,740,233,774,233"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,216,475,256"/>
+<area shape="poly" title=" " alt="" coords="509,239,475,239,475,233,509,233"/>
+<area shape="poly" title=" " alt="" coords="1278,199,1244,193,1245,187,1279,194"/>
+<area shape="poly" title=" " alt="" coords="1279,165,1244,167,1244,162,1278,159"/>
+<area shape="poly" title=" " alt="" coords="1306,53,1293,60,1258,82,1224,107,1172,154,1168,150,1221,103,1255,78,1291,55,1304,48"/>
+<area shape="poly" title=" " alt="" coords="1278,37,1052,59,788,91,716,102,715,97,788,85,1052,54,1278,32"/>
+<area shape="poly" title=" " alt="" coords="1308,259,1291,252,1232,223,1182,194,1184,190,1235,218,1293,247,1310,254"/>
+<area shape="poly" title=" " alt="" coords="1278,293,1150,299,1008,301,878,293,826,284,787,270,769,257,759,241,751,224,738,206,698,168,659,137,662,133,701,164,742,202,756,221,764,238,773,253,789,266,827,279,879,288,1008,296,1150,294,1278,287"/>
 </map>
 </div>
 
@@ -220,7 +288,33 @@ Here is the caller graph for this function:</div>
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <span class="stringliteral">&quot;actor&quot;</span>, <span class="stringliteral">&quot;component&quot;</span>, <span class="stringliteral">&quot;service&quot;</span>, <span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;node&quot;</span>, <span class="stringliteral">&quot;host&quot;</span>,</div>
 <div class="line">    <span class="stringliteral">&quot;process&quot;</span>, <span class="stringliteral">&quot;proc&quot;</span>, <span class="stringliteral">&quot;peer&quot;</span>, <span class="stringliteral">&quot;agent&quot;</span>, <span class="stringliteral">&quot;role&quot;</span>, <span class="stringliteral">&quot;channel&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;endpoint&quot;</span>, <span class="stringliteral">&quot;worker&quot;</span>, <span class="stringliteral">&quot;thread&quot;</span></div>
+<div class="line">    <span class="stringliteral">&quot;endpoint&quot;</span>, <span class="stringliteral">&quot;worker&quot;</span>, <span class="stringliteral">&quot;thread&quot;</span>, <span class="stringliteral">&quot;pod&quot;</span>, <span class="stringliteral">&quot;container&quot;</span>, <span class="stringliteral">&quot;instance&quot;</span></div>
+<div class="line">}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a7bf7738acf6fb60b136f888d3e732060" name="a7bf7738acf6fb60b136f888d3e732060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bf7738acf6fb60b136f888d3e732060">&#9670;&#160;</a></span>kIncomingWords</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;std::string&gt; analyzer::kIncomingWords</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    <span class="stringliteral">&quot;in&quot;</span>, <span class="stringliteral">&quot;incoming&quot;</span>, <span class="stringliteral">&quot;recv&quot;</span>, <span class="stringliteral">&quot;received&quot;</span>, <span class="stringliteral">&quot;rx&quot;</span>, <span class="stringliteral">&quot;receive&quot;</span>, <span class="stringliteral">&quot;response&quot;</span>, <span class="stringliteral">&quot;subscribe&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;accept&quot;</span>, <span class="stringliteral">&quot;processing&quot;</span>, <span class="stringliteral">&quot;from_request&quot;</span>, <span class="stringliteral">&quot;inbound&quot;</span>, <span class="stringliteral">&quot;receiving&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>
@@ -246,7 +340,65 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <span class="stringliteral">&quot;type&quot;</span>, <span class="stringliteral">&quot;action&quot;</span>, <span class="stringliteral">&quot;message&quot;</span>, <span class="stringliteral">&quot;msg&quot;</span>, <span class="stringliteral">&quot;command&quot;</span>, <span class="stringliteral">&quot;cmd&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;request&quot;</span>, <span class="stringliteral">&quot;response&quot;</span>, <span class="stringliteral">&quot;event&quot;</span>, <span class="stringliteral">&quot;method&quot;</span>, <span class="stringliteral">&quot;operation&quot;</span>, <span class="stringliteral">&quot;kind&quot;</span></div>
+<div class="line">    <span class="stringliteral">&quot;request&quot;</span>, <span class="stringliteral">&quot;response&quot;</span>, <span class="stringliteral">&quot;event&quot;</span>, <span class="stringliteral">&quot;method&quot;</span>, <span class="stringliteral">&quot;operation&quot;</span>, <span class="stringliteral">&quot;kind&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;function&quot;</span>, <span class="stringliteral">&quot;procedure&quot;</span>, <span class="stringliteral">&quot;routine&quot;</span>, <span class="stringliteral">&quot;handler&quot;</span></div>
+<div class="line">}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a8b58b197bae393b8ece5e9352a70fa53" name="a8b58b197bae393b8ece5e9352a70fa53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b58b197bae393b8ece5e9352a70fa53">&#9670;&#160;</a></span>kOutgoingWords</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;std::string&gt; analyzer::kOutgoingWords</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    <span class="stringliteral">&quot;out&quot;</span>, <span class="stringliteral">&quot;outgoing&quot;</span>, <span class="stringliteral">&quot;send&quot;</span>, <span class="stringliteral">&quot;sent&quot;</span>, <span class="stringliteral">&quot;tx&quot;</span>, <span class="stringliteral">&quot;transmit&quot;</span>, <span class="stringliteral">&quot;request&quot;</span>, <span class="stringliteral">&quot;publish&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;initiate&quot;</span>, <span class="stringliteral">&quot;calling&quot;</span>, <span class="stringliteral">&quot;request_to&quot;</span>, <span class="stringliteral">&quot;outbound&quot;</span></div>
+<div class="line">}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a7064057c8cefc4255594ecdd2f7ebed6" name="a7064057c8cefc4255594ecdd2f7ebed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7064057c8cefc4255594ecdd2f7ebed6">&#9670;&#160;</a></span>kProtocolPatterns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; analyzer::kProtocolPatterns</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    {<span class="stringliteral">&quot;HTTP&quot;</span>, <span class="stringliteral">&quot;(?:GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\\s+&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;gRPC&quot;</span>, <span class="stringliteral">&quot;\\..*\\.&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;REST&quot;</span>, <span class="stringliteral">&quot;/api/&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;AMQP&quot;</span>, <span class="stringliteral">&quot;amqp://&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;MQTT&quot;</span>, <span class="stringliteral">&quot;mqtt://&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;TCP&quot;</span>, <span class="stringliteral">&quot;:\\d+&quot;</span>},</div>
+<div class="line">    {<span class="stringliteral">&quot;Kafka&quot;</span>, <span class="stringliteral">&quot;topic=|partition=&quot;</span>}</div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>
@@ -272,7 +424,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <span class="stringliteral">&quot;to&quot;</span>, <span class="stringliteral">&quot;dest&quot;</span>, <span class="stringliteral">&quot;destination&quot;</span>, <span class="stringliteral">&quot;target&quot;</span>, <span class="stringliteral">&quot;receiver&quot;</span>, <span class="stringliteral">&quot;recipient&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;callee&quot;</span>, <span class="stringliteral">&quot;consumer&quot;</span>, <span class="stringliteral">&quot;subscriber&quot;</span>, <span class="stringliteral">&quot;server&quot;</span>, <span class="stringliteral">&quot;appid&quot;</span></div>
+<div class="line">    <span class="stringliteral">&quot;callee&quot;</span>, <span class="stringliteral">&quot;consumer&quot;</span>, <span class="stringliteral">&quot;subscriber&quot;</span>, <span class="stringliteral">&quot;server&quot;</span>, <span class="stringliteral">&quot;appid&quot;</span>, <span class="stringliteral">&quot;called_id&quot;</span>, <span class="stringliteral">&quot;recipient_id&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>
@@ -298,7 +450,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <span class="stringliteral">&quot;from&quot;</span>, <span class="stringliteral">&quot;sender&quot;</span>, <span class="stringliteral">&quot;source&quot;</span>, <span class="stringliteral">&quot;src&quot;</span>, <span class="stringliteral">&quot;origin&quot;</span>, <span class="stringliteral">&quot;initiator&quot;</span>, <span class="stringliteral">&quot;caller&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;producer&quot;</span>, <span class="stringliteral">&quot;publisher&quot;</span>, <span class="stringliteral">&quot;client&quot;</span>, <span class="stringliteral">&quot;ecuid&quot;</span></div>
+<div class="line">    <span class="stringliteral">&quot;producer&quot;</span>, <span class="stringliteral">&quot;publisher&quot;</span>, <span class="stringliteral">&quot;client&quot;</span>, <span class="stringliteral">&quot;ecuid&quot;</span>, <span class="stringliteral">&quot;caller_id&quot;</span>, <span class="stringliteral">&quot;originator&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>

@@ -35,5 +35,6 @@ var searchData=
   ['updatestatustext_32',['updatestatustext',['../d3/d1f/classui_1_1IMainWindowView.html#a4e97c4d13b5381a7a5bb626282deb366',1,'ui::IMainWindowView::UpdateStatusText()'],['../d4/dfa/classui_1_1qt_1_1MainWindow.html#acbabe99d815a1ced4459af8ce3a4e3c5',1,'ui::qt::MainWindow::UpdateStatusText()']]],
   ['updatesyncstatus_33',['UpdateSyncStatus',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab8df81b25378f325737c6c8ba89877fe',1,'ui::qt::SideBySidePanel']]],
   ['updatetypefilters_34',['UpdateTypeFilters',['../d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6',1,'ui::MainWindowPresenter']]],
-  ['userlayouts_35',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
+  ['updateui_35',['UpdateUI',['../df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a05e9a9df7da4347215c2e56ab1a14f5f',1,'ui::qt::GemmaDownloadDialog']]],
+  ['userlayouts_36',['UserLayouts',['../d8/d9f/classui_1_1qt_1_1LayoutManager.html#ac862905bda648740420f1f4504aaca03',1,'ui::qt::LayoutManager']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wx_5futils_0',['wx_utils',['../dd/d4f/namespacewx__utils.html',1,'']]]
+  ['version_0',['Version',['../d8/d16/namespaceVersion.html',1,'']]]
 ];

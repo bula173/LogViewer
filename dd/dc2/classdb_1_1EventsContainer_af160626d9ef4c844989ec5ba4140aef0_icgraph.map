@@ -1,226 +1,231 @@
 <map id="db::EventsContainer::GetItem" name="db::EventsContainer::GetItem">
-<area shape="rect" id="Node000001" title="Gets an event by index." alt="" coords="1533,1203,1687,1243"/>
-<area shape="rect" id="Node000002" href="$d6/d40/namespaceui_1_1qt.html#ad28e1eb2bcce3d40559a6be650d01433" title=" " alt="" coords="1281,910,1485,935"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1601,1190,1588,1137,1566,1072,1532,1006,1510,976,1484,950,1464,938,1466,933,1487,946,1514,972,1536,1003,1571,1069,1593,1135,1606,1188"/>
-<area shape="rect" id="Node000003" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0" title=" " alt="" coords="1298,2148,1469,2188"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1603,1257,1392,2148,1387,2147,1598,1255"/>
-<area shape="rect" id="Node000010" href="$dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="1307,1235,1460,1275"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1520,1238,1460,1247,1460,1241,1519,1233"/>
-<area shape="rect" id="Node000118" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ab2f603c282da9fa91b42eea9f98b5c3b" title=" " alt="" coords="1302,960,1465,1000"/>
-<area shape="poly" id="edge121_Node000001_Node000118" title=" " alt="" coords="1579,1194,1401,1002,1405,998,1583,1191"/>
-<area shape="rect" id="Node000004" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429" title=" " alt="" coords="1035,1816,1209,1856"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1372,2135,1356,2078,1328,2006,1287,1933,1261,1899,1232,1870,1208,1856,1211,1851,1235,1866,1265,1896,1292,1930,1333,2004,1361,2076,1377,2134"/>
-<area shape="rect" id="Node000007" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a187ae88b0f3eca4d215c9c1ad889202e" title="Called when the current item index in the model is updated." alt="" coords="1029,2480,1215,2520"/>
-<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="1377,2202,1361,2260,1333,2332,1292,2406,1265,2440,1235,2470,1217,2482,1214,2478,1232,2466,1261,2437,1287,2403,1328,2330,1356,2258,1372,2201"/>
-<area shape="rect" id="Node000008" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a9eff40ad09d7634302990ee70e24542f" title="Refreshes the details view content." alt="" coords="1037,2565,1207,2605"/>
-<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="1379,2202,1364,2269,1337,2357,1318,2404,1295,2450,1268,2494,1235,2534,1212,2553,1186,2568,1183,2563,1209,2549,1231,2530,1263,2491,1290,2447,1313,2402,1332,2355,1359,2268,1374,2201"/>
-<area shape="rect" id="Node000005" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ab116e7d43395ccdfb11e6f37b9a3a0" title=" " alt="" coords="781,1513,927,1553"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1076,1810,1042,1785,1009,1755,867,1555,872,1552,1013,1752,1045,1781,1079,1806"/>
-<area shape="rect" id="Node000006" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db" title=" " alt="" coords="515,1496,662,1536"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="767,1530,662,1523,663,1518,767,1525"/>
-<area shape="rect" id="Node000009" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a4450012c6a01556d263957578047d67b" title="Called when the model&#39;s data is updated." alt="" coords="769,2588,939,2628"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1023,2596,940,2603,939,2598,1022,2591"/>
-<area shape="rect" id="Node000011" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17" title=" " alt="" coords="1049,1509,1195,1549"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1373,1289,1354,1336,1324,1393,1285,1450,1261,1476,1235,1500,1197,1519,1194,1514,1232,1495,1257,1473,1281,1447,1320,1390,1349,1333,1368,1287"/>
-<area shape="rect" id="Node000012" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a33d622391250170f0d45bde63a77a6de" title="Applies the selected type filters to the event list." alt="" coords="1025,960,1219,1000"/>
-<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1368,1223,1349,1176,1320,1119,1281,1062,1257,1037,1232,1014,1212,1002,1215,998,1235,1010,1261,1033,1285,1059,1324,1117,1354,1174,1373,1221"/>
-<area shape="rect" id="Node000013" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6" title="Rebuilds the available type filters from current events." alt="" coords="760,931,948,971"/>
-<area shape="poly" id="edge120_Node000010_Node000013" title=" " alt="" coords="1366,1223,1296,1064,1258,988,1243,963,1232,950,1195,932,1155,920,1113,913,1071,912,990,919,920,933,919,928,989,914,1071,906,1113,908,1156,914,1197,927,1235,946,1247,960,1263,986,1301,1061,1371,1221"/>
-<area shape="rect" id="Node000018" href="$dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html#af61462dbee9b19d276db1c3071f80413" title="Compute format&#45;specific statistics for the given visible event indices." alt="" coords="1021,1573,1223,1613"/>
-<area shape="poly" id="edge15_Node000010_Node000018" title=" " alt="" coords="1378,1289,1362,1348,1334,1422,1315,1461,1292,1498,1266,1533,1235,1563,1217,1576,1214,1571,1232,1559,1262,1529,1288,1495,1310,1458,1329,1420,1357,1346,1373,1288"/>
-<area shape="rect" id="Node000019" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a311d0470c4710462cc8e19a9d764f39a" title="Scans all events and returns indices whose timestamp falls in [from, to]." alt="" coords="1019,1024,1225,1064"/>
-<area shape="poly" id="edge16_Node000010_Node000019" title=" " alt="" coords="1360,1224,1307,1154,1272,1117,1232,1085,1196,1066,1199,1062,1235,1080,1275,1113,1311,1151,1364,1221"/>
-<area shape="rect" id="Node000024" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#ad935b090ba82bc045a13ed5e8b07d5ca" title=" " alt="" coords="1025,1139,1219,1179"/>
-<area shape="poly" id="edge21_Node000010_Node000024" title=" " alt="" coords="1326,1231,1232,1193,1196,1181,1198,1176,1234,1188,1328,1226"/>
-<area shape="rect" id="Node000028" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a4501b1ef99ca38cd83102c5503f86374" title=" " alt="" coords="1023,1203,1221,1243"/>
-<area shape="poly" id="edge24_Node000010_Node000028" title=" " alt="" coords="1293,1246,1221,1237,1221,1232,1293,1241"/>
-<area shape="rect" id="Node000029" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496" title=" " alt="" coords="1031,1637,1213,1677"/>
-<area shape="poly" id="edge26_Node000010_Node000029" title=" " alt="" coords="1381,1289,1368,1359,1343,1450,1324,1498,1300,1545,1271,1589,1235,1627,1214,1641,1211,1637,1232,1623,1266,1586,1295,1543,1319,1496,1338,1449,1363,1358,1376,1288"/>
-<area shape="rect" id="Node000030" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a7d1a6447d788dd74aeaa55c57ac424b4" title=" " alt="" coords="1025,1267,1219,1307"/>
-<area shape="poly" id="edge27_Node000010_Node000030" title=" " alt="" coords="1293,1268,1220,1277,1219,1272,1293,1263"/>
-<area shape="rect" id="Node000031" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a0385b59c7d70a172a295278592720277" title=" " alt="" coords="757,1385,951,1425"/>
-<area shape="poly" id="edge99_Node000010_Node000031" title=" " alt="" coords="1360,1287,1306,1340,1272,1365,1234,1385,1163,1407,1088,1418,1016,1421,951,1419,952,1413,1016,1415,1088,1412,1162,1401,1232,1380,1269,1361,1303,1336,1356,1283"/>
-<area shape="rect" id="Node000033" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf" title=" " alt="" coords="1027,2123,1217,2163"/>
-<area shape="poly" id="edge30_Node000010_Node000033" title=" " alt="" coords="1383,1289,1374,1460,1349,1707,1330,1834,1305,1950,1274,2046,1256,2084,1235,2112,1219,2126,1216,2122,1231,2109,1251,2081,1269,2044,1300,1949,1325,1833,1344,1706,1368,1460,1378,1288"/>
-<area shape="rect" id="Node000034" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#aca4e61585211277593b76019c7e50db2" title="Rebuild the chart from the current visible row set." alt="" coords="759,2152,949,2192"/>
-<area shape="poly" id="edge94_Node000010_Node000034" title=" " alt="" coords="1385,1289,1381,1475,1374,1605,1362,1745,1344,1883,1317,2009,1301,2063,1282,2110,1260,2149,1235,2177,1198,2201,1156,2216,1112,2224,1067,2225,1023,2221,981,2214,909,2195,910,2189,982,2209,1024,2216,1068,2219,1112,2218,1155,2211,1195,2196,1232,2173,1256,2145,1277,2108,1296,2061,1312,2007,1338,1882,1357,1744,1369,1605,1375,1475,1379,1289"/>
-<area shape="rect" id="Node000037" href="$d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="1027,2352,1217,2392"/>
-<area shape="poly" id="edge34_Node000010_Node000037" title=" " alt="" coords="1381,1289,1314,1862,1270,2178,1251,2284,1236,2335,1213,2354,1209,2350,1231,2332,1246,2283,1265,2177,1309,1862,1376,1288"/>
-<area shape="rect" id="Node000038" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="770,2295,938,2335"/>
-<area shape="poly" id="edge65_Node000010_Node000038" title=" " alt="" coords="1381,1289,1316,1842,1272,2143,1252,2244,1243,2275,1235,2291,1214,2304,1184,2314,1107,2324,1020,2326,938,2323,938,2318,1020,2321,1107,2319,1183,2309,1212,2299,1231,2288,1239,2273,1247,2243,1267,2142,1310,1841,1376,1288"/>
-<area shape="rect" id="Node000044" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7b5d1e9205c26605b4c27f6810588aa2" title=" " alt="" coords="1036,69,1208,109"/>
-<area shape="poly" id="edge40_Node000010_Node000044" title=" " alt="" coords="1362,1223,1318,1130,1296,1072,1279,1012,1273,950,1270,845,1269,564,1266,417,1260,286,1249,185,1241,151,1231,130,1207,109,1210,105,1235,126,1246,149,1254,184,1265,286,1271,417,1274,564,1276,844,1278,950,1284,1012,1301,1071,1323,1128,1367,1221"/>
-<area shape="rect" id="Node000049" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a134606d7bec6802a22cef3ba7e98d944" title="Build event&#45;item summary strings for actualRow (cached on add)." alt="" coords="1041,199,1203,239"/>
-<area shape="poly" id="edge44_Node000010_Node000049" title=" " alt="" coords="1362,1224,1319,1131,1296,1073,1279,1013,1273,958,1271,868,1267,625,1264,499,1258,386,1247,299,1240,270,1231,252,1218,240,1201,231,1204,227,1221,236,1235,249,1245,268,1252,299,1263,386,1269,499,1273,625,1276,867,1279,958,1284,1011,1301,1071,1323,1129,1367,1221"/>
-<area shape="rect" id="Node000054" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#acf443cd9ff6a2f58ccec10c001ab0799" title=" " alt="" coords="1023,653,1221,693"/>
-<area shape="poly" id="edge49_Node000010_Node000054" title=" " alt="" coords="1363,1223,1321,1130,1298,1072,1279,1013,1270,965,1268,923,1275,848,1276,813,1271,779,1258,744,1231,707,1218,696,1222,692,1235,704,1262,742,1277,778,1281,813,1280,848,1274,923,1275,965,1284,1011,1303,1070,1326,1128,1368,1221"/>
-<area shape="rect" id="Node000061" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ae48bed1c020eebb927dbc7639e6cf65c" title=" " alt="" coords="1037,589,1207,629"/>
-<area shape="poly" id="edge56_Node000010_Node000061" title=" " alt="" coords="1363,1223,1320,1130,1298,1072,1279,1013,1273,976,1270,929,1267,820,1264,765,1258,715,1248,673,1231,643,1206,625,1209,620,1235,640,1253,671,1263,714,1269,765,1272,820,1275,929,1278,975,1284,1011,1303,1071,1325,1128,1368,1221"/>
-<area shape="rect" id="Node000064" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a5b9eab24b85fa63e536c8669b1ce1c8d" title=" " alt="" coords="751,1085,957,1125"/>
-<area shape="poly" id="edge63_Node000010_Node000064" title=" " alt="" coords="1356,1226,1303,1174,1269,1149,1232,1129,1163,1108,1091,1098,1021,1095,957,1096,957,1091,1021,1089,1092,1092,1164,1103,1234,1124,1272,1144,1306,1170,1360,1222"/>
-<area shape="rect" id="Node000065" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a5f3eb6a67d149d861d4a95ebdfc5686e" title="Opens an input dialog and scrolls to the event with the nearest timestamp." alt="" coords="1035,2237,1209,2277"/>
-<area shape="poly" id="edge66_Node000010_Node000065" title=" " alt="" coords="1384,1289,1376,1478,1367,1612,1354,1757,1335,1901,1310,2034,1294,2093,1277,2144,1257,2187,1235,2220,1210,2240,1207,2236,1231,2217,1253,2185,1272,2142,1289,2091,1304,2033,1330,1900,1349,1756,1362,1612,1371,1478,1379,1289"/>
-<area shape="rect" id="Node000066" href="$dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html#a9cc6df403e4cbc267979a8737aab6a43" title="Returns true if this strategy is applicable to the current event data." alt="" coords="1021,1701,1223,1741"/>
-<area shape="poly" id="edge67_Node000010_Node000066" title=" " alt="" coords="1383,1289,1374,1370,1351,1478,1332,1536,1307,1592,1275,1645,1235,1691,1219,1703,1216,1699,1232,1687,1271,1642,1303,1590,1327,1534,1346,1477,1369,1369,1378,1288"/>
-<area shape="rect" id="Node000069" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ab031044451e3828b96c6ef0076f8c772" title=" " alt="" coords="508,92,669,132"/>
-<area shape="poly" id="edge71_Node000010_Node000069" title=" " alt="" coords="1362,1224,1318,1131,1296,1073,1279,1012,1273,954,1271,855,1271,591,1268,454,1262,331,1250,238,1242,207,1232,189,1210,181,1160,172,1007,153,670,121,670,116,1008,148,1161,167,1211,176,1235,185,1247,205,1255,237,1267,331,1273,453,1276,591,1277,855,1279,953,1284,1012,1301,1071,1323,1129,1367,1221"/>
-<area shape="rect" id="Node000070" href="$d6/d40/namespaceui_1_1qt.html#a4f0b63cfd892ef57974198d29d2f175a" title=" " alt="" coords="1043,1445,1201,1485"/>
-<area shape="poly" id="edge73_Node000010_Node000070" title=" " alt="" coords="1364,1288,1311,1359,1275,1396,1235,1429,1199,1448,1196,1443,1232,1424,1272,1392,1307,1355,1360,1285"/>
-<area shape="rect" id="Node000072" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#abcba4d73e223ac5a883218b8b3b63929" title="Populate the field combo from the first N events&#39; field names." alt="" coords="1033,327,1211,367"/>
-<area shape="poly" id="edge76_Node000010_Node000072" title=" " alt="" coords="1362,1224,1319,1131,1296,1073,1279,1013,1271,951,1269,872,1274,689,1275,597,1269,511,1256,439,1245,410,1231,387,1209,368,1213,364,1235,384,1250,408,1261,438,1275,511,1280,596,1280,689,1275,872,1276,950,1284,1011,1302,1071,1324,1129,1367,1221"/>
-<area shape="rect" id="Node000076" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9ef6bb565019fccdac5103ada3ad0902" title=" " alt="" coords="1031,397,1213,437"/>
-<area shape="poly" id="edge80_Node000010_Node000076" title=" " alt="" coords="1362,1224,1319,1131,1297,1073,1279,1013,1271,957,1270,886,1273,721,1273,638,1268,561,1254,497,1244,472,1231,451,1211,435,1214,431,1235,448,1249,469,1260,496,1273,561,1278,638,1279,721,1275,886,1277,957,1284,1011,1302,1071,1324,1129,1367,1221"/>
-<area shape="rect" id="Node000099" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a85f8bc5facf71bc7eff25eaf9b468a8a" title="Rebuild the tree for the given correlation field." alt="" coords="1033,263,1211,303"/>
-<area shape="poly" id="edge88_Node000010_Node000099" title=" " alt="" coords="1362,1224,1319,1131,1296,1073,1279,1013,1274,963,1271,880,1266,658,1256,439,1246,359,1239,333,1231,316,1209,299,1212,295,1235,313,1244,331,1251,358,1262,438,1272,658,1276,880,1279,963,1284,1011,1301,1071,1324,1129,1367,1221"/>
-<area shape="rect" id="Node000100" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ae59d12c8c240f6f621f1517a039334b3" title="Recompute all analyses from the current visible event set." alt="" coords="755,1967,953,2007"/>
-<area shape="poly" id="edge91_Node000010_Node000100" title=" " alt="" coords="1382,1289,1369,1429,1342,1624,1322,1722,1298,1812,1269,1885,1253,1913,1235,1934,1215,1947,1188,1958,1116,1973,1033,1983,954,1987,953,1982,1033,1977,1115,1968,1186,1953,1213,1942,1232,1930,1249,1910,1264,1883,1293,1810,1317,1721,1336,1623,1363,1429,1377,1288"/>
-<area shape="rect" id="Node000103" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a9a349b6b911e7601b8be0c7c338310ce" title=" " alt="" coords="1023,1995,1221,2035"/>
-<area shape="poly" id="edge95_Node000010_Node000103" title=" " alt="" coords="1382,1289,1368,1435,1340,1641,1320,1746,1296,1843,1268,1922,1252,1954,1235,1978,1211,1997,1208,1993,1231,1974,1248,1951,1263,1920,1291,1841,1315,1745,1334,1640,1362,1435,1377,1288"/>
-<area shape="rect" id="Node000104" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a2c7df8db4d244c489926e6ab27c1524c" title=" " alt="" coords="1023,2059,1221,2099"/>
-<area shape="poly" id="edge97_Node000010_Node000104" title=" " alt="" coords="1383,1288,1371,1448,1346,1676,1326,1793,1302,1900,1272,1988,1254,2022,1235,2048,1221,2061,1218,2057,1231,2045,1250,2019,1267,1986,1296,1898,1321,1792,1340,1675,1366,1448,1378,1288"/>
-<area shape="rect" id="Node000105" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a071e700e1f24a185d484407985989caa" title=" " alt="" coords="1023,1880,1221,1920"/>
-<area shape="poly" id="edge100_Node000010_Node000105" title=" " alt="" coords="1381,1289,1364,1416,1334,1590,1314,1678,1291,1758,1265,1824,1251,1850,1235,1870,1220,1882,1217,1878,1231,1866,1246,1847,1260,1822,1286,1757,1309,1677,1329,1589,1359,1415,1376,1288"/>
-<area shape="rect" id="Node000106" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#afac974081425a8ab42166ec38ae030dd" title=" " alt="" coords="491,1759,686,1799"/>
-<area shape="poly" id="edge102_Node000010_Node000106" title=" " alt="" coords="1380,1289,1361,1397,1330,1538,1310,1608,1288,1671,1263,1722,1235,1755,1194,1776,1136,1790,1066,1799,988,1802,827,1800,686,1791,687,1785,827,1795,988,1797,1065,1793,1135,1785,1192,1771,1232,1751,1258,1719,1283,1669,1305,1607,1325,1537,1356,1396,1374,1288"/>
-<area shape="rect" id="Node000107" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a4238fdfadd98e5ae5ec517423a3682c4" title=" " alt="" coords="1032,717,1212,757"/>
-<area shape="poly" id="edge104_Node000010_Node000107" title=" " alt="" coords="1364,1223,1322,1130,1279,1013,1271,975,1268,941,1271,882,1270,854,1265,827,1253,800,1231,771,1210,755,1214,751,1235,767,1258,797,1270,826,1275,854,1276,882,1273,941,1276,974,1284,1011,1327,1128,1368,1221"/>
-<area shape="rect" id="Node000108" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a624b8e0f3a6425836ca7b2633509b51b" title=" " alt="" coords="1013,2416,1231,2456"/>
-<area shape="poly" id="edge106_Node000010_Node000108" title=" " alt="" coords="1381,1289,1307,1908,1264,2247,1247,2358,1236,2405,1222,2418,1218,2414,1231,2403,1241,2357,1258,2246,1302,1908,1376,1288"/>
-<area shape="rect" id="Node000112" href="$d5/d44/classmvc_1_1MainController.html#aae1fa5c4a81666f1ed8a8565e9f88be6" title=" " alt="" coords="1045,1331,1199,1371"/>
-<area shape="poly" id="edge112_Node000010_Node000112" title=" " alt="" coords="1328,1283,1234,1321,1198,1333,1196,1328,1232,1316,1326,1278"/>
-<area shape="rect" id="Node000113" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab6eab7b06ebf9411b1ba015786b2883b" title=" " alt="" coords="1011,525,1233,565"/>
-<area shape="poly" id="edge113_Node000010_Node000113" title=" " alt="" coords="1363,1223,1320,1131,1297,1072,1279,1013,1272,970,1270,915,1269,787,1267,723,1261,664,1250,614,1231,579,1218,567,1222,563,1235,576,1255,613,1266,663,1272,723,1274,787,1275,915,1278,969,1284,1011,1302,1071,1325,1128,1368,1221"/>
-<area shape="rect" id="Node000116" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac45a40b6de581a04ecca19b80c690f66" title=" " alt="" coords="1021,461,1223,501"/>
-<area shape="poly" id="edge116_Node000010_Node000116" title=" " alt="" coords="1363,1223,1319,1131,1297,1072,1279,1013,1272,963,1270,901,1271,754,1270,680,1264,613,1252,556,1243,533,1231,515,1218,503,1222,499,1235,512,1248,531,1257,554,1270,612,1275,680,1277,754,1275,901,1277,963,1284,1011,1302,1071,1324,1129,1367,1221"/>
-<area shape="rect" id="Node000117" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#af8d493a4011f1002e5b686d93a5af156" title=" " alt="" coords="1030,845,1214,885"/>
-<area shape="poly" id="edge118_Node000010_Node000117" title=" " alt="" coords="1366,1223,1287,1034,1231,906,1204,888,1207,883,1235,902,1292,1032,1371,1221"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1011,971,948,964,948,958,1012,965"/>
-<area shape="rect" id="Node000014" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68" title="Parses and merges a log file with existing data, sorted by timestamp." alt="" coords="495,884,683,924"/>
-<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="746,934,682,923,683,918,747,929"/>
-<area shape="rect" id="Node000015" href="$d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7" title=" " alt="" coords="495,948,683,988"/>
-<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="746,960,683,965,683,959,746,955"/>
-<area shape="rect" id="Node000020" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#aa45683f5199a526e0aa707e4be6c898f" title=" " alt="" coords="751,1021,957,1061"/>
-<area shape="poly" id="edge17_Node000019_Node000020" title=" " alt="" coords="1006,1046,957,1045,957,1040,1006,1040"/>
-<area shape="rect" id="Node000021" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#af5f0b77b2217a8d6db9ef82cf38af9b5" title="Applies the filter to the events view immediately." alt="" coords="486,1021,691,1061"/>
-<area shape="poly" id="edge18_Node000020_Node000021" title=" " alt="" coords="738,1044,692,1044,692,1039,738,1039"/>
-<area shape="rect" id="Node000022" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a4c6aa6fa77b74f55a5345eb26b03612b" title=" " alt="" coords="486,1085,691,1125"/>
-<area shape="poly" id="edge19_Node000020_Node000022" title=" " alt="" coords="758,1067,673,1088,671,1083,757,1062"/>
-<area shape="rect" id="Node000023" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a83e28b20bc54cd1bf98e33de0f48c701" title=" " alt="" coords="221,1085,426,1125"/>
-<area shape="poly" id="edge20_Node000022_Node000023" title=" " alt="" coords="472,1108,426,1108,426,1103,472,1103"/>
-<area shape="rect" id="Node000025" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a9431d9fa28cc1148dccdbd8e1741f28b" title=" " alt="" coords="767,1175,941,1215"/>
-<area shape="poly" id="edge22_Node000024_Node000025" title=" " alt="" coords="1011,1176,941,1186,941,1180,1011,1171"/>
-<area shape="rect" id="Node000026" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a13b0d98e213448d3f4a2fe4e5572f890" title=" " alt="" coords="502,1175,675,1215"/>
-<area shape="poly" id="edge23_Node000025_Node000026" title=" " alt="" coords="753,1197,676,1197,676,1192,753,1192"/>
-<area shape="poly" id="edge25_Node000028_Node000025" title=" " alt="" coords="1009,1214,941,1206,941,1201,1010,1208"/>
-<area shape="poly" id="edge28_Node000030_Node000031" title=" " alt="" coords="1031,1314,1012,1321,944,1354,888,1388,885,1383,942,1349,1010,1316,1030,1309"/>
-<area shape="rect" id="Node000032" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a928c3dd6f4942e68aa922602db165b77" title="Recompute all statistics from the current visible row set." alt="" coords="226,1695,421,1735"/>
-<area shape="poly" id="edge29_Node000031_Node000032" title=" " alt="" coords="743,1410,680,1417,612,1431,544,1453,481,1486,453,1509,428,1535,385,1594,354,1651,335,1696,330,1693,349,1649,380,1591,423,1532,450,1505,479,1482,542,1448,610,1426,679,1412,743,1404"/>
-<area shape="poly" id="edge31_Node000033_Node000034" title=" " alt="" coords="1013,2157,950,2164,949,2159,1013,2152"/>
-<area shape="rect" id="Node000035" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a5f50e779be534bdec166f0a393e3379b" title=" " alt="" coords="493,2152,684,2192"/>
-<area shape="poly" id="edge32_Node000034_Node000035" title=" " alt="" coords="745,2175,684,2175,684,2169,745,2169"/>
-<area shape="rect" id="Node000036" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a9756f301ec0006ecc423ea16e359bd02" title=" " alt="" coords="228,2152,419,2192"/>
-<area shape="poly" id="edge33_Node000035_Node000036" title=" " alt="" coords="479,2175,419,2175,419,2169,479,2169"/>
-<area shape="poly" id="edge35_Node000037_Node000038" title=" " alt="" coords="1014,2352,938,2335,939,2330,1015,2347"/>
-<area shape="rect" id="Node000041" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="480,2403,697,2443"/>
-<area shape="poly" id="edge38_Node000037_Node000041" title=" " alt="" coords="1013,2379,885,2387,746,2400,698,2406,697,2401,745,2395,884,2382,1012,2374"/>
-<area shape="rect" id="Node000039" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="505,2295,672,2335"/>
-<area shape="poly" id="edge36_Node000038_Node000039" title=" " alt="" coords="757,2317,672,2317,672,2312,757,2312"/>
-<area shape="rect" id="Node000040" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="221,2295,425,2335"/>
-<area shape="poly" id="edge37_Node000039_Node000040" title=" " alt="" coords="491,2317,425,2317,425,2312,491,2312"/>
-<area shape="rect" id="Node000042" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="215,2435,432,2475"/>
-<area shape="poly" id="edge39_Node000041_Node000042" title=" " alt="" coords="467,2440,432,2444,432,2439,466,2435"/>
-<area shape="rect" id="Node000045" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7ffbb30138b0837c43d1ec5dc91e5b51" title="Bookmark the given event row (called from the events&#45;table context menu)." alt="" coords="768,5,940,45"/>
-<area shape="poly" id="edge41_Node000044_Node000045" title=" " alt="" coords="1024,69,938,48,939,43,1025,63"/>
-<area shape="rect" id="Node000046" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#affdc85acfd5a5f77405f84bfa210d8b7" title=" " alt="" coords="768,69,940,109"/>
-<area shape="poly" id="edge42_Node000044_Node000046" title=" " alt="" coords="1022,92,940,92,940,87,1022,87"/>
-<area shape="rect" id="Node000047" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#aafddfd503a909c54218bd24202fd9c69" title=" " alt="" coords="503,28,675,68"/>
-<area shape="poly" id="edge43_Node000046_Node000047" title=" " alt="" coords="754,76,675,64,675,59,755,71"/>
-<area shape="rect" id="Node000050" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a148e71654cbe17e9a61dd5fec83a1fad" title=" " alt="" coords="773,184,935,224"/>
-<area shape="poly" id="edge45_Node000049_Node000050" title=" " alt="" coords="1027,216,935,211,935,206,1028,211"/>
-<area shape="rect" id="Node000051" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a2a10563db8b673863f7cf7eb76165203" title=" " alt="" coords="505,156,672,196"/>
-<area shape="poly" id="edge46_Node000050_Node000051" title=" " alt="" coords="760,197,672,187,673,182,760,191"/>
-<area shape="rect" id="Node000052" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a91fb8623fa72e48a870cee67e99fd038" title=" " alt="" coords="243,124,404,164"/>
-<area shape="poly" id="edge47_Node000051_Node000052" title=" " alt="" coords="492,167,404,156,405,151,492,162"/>
-<area shape="rect" id="Node000053" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a4a82651a79a737382acc6a5d2054d0bc" title=" " alt="" coords="5,124,167,164"/>
-<area shape="poly" id="edge48_Node000052_Node000053" title=" " alt="" coords="229,147,167,147,167,141,229,141"/>
-<area shape="rect" id="Node000055" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a645d9004c3181b43114ba2c95c0ddda4" title=" " alt="" coords="769,669,939,709"/>
-<area shape="poly" id="edge50_Node000054_Node000055" title=" " alt="" coords="1009,683,940,687,939,682,1009,677"/>
-<area shape="rect" id="Node000059" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a0f59cdf8512483741902775e4fee07dc" title=" " alt="" coords="769,733,939,773"/>
-<area shape="poly" id="edge53_Node000054_Node000059" title=" " alt="" coords="1038,700,1011,708,963,724,925,736,923,731,962,719,1010,703,1036,695"/>
-<area shape="rect" id="Node000056" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a4c6393af685d0ad284db4640ac6090b8" title=" " alt="" coords="494,732,683,772"/>
-<area shape="poly" id="edge51_Node000055_Node000056" title=" " alt="" coords="756,715,675,735,673,729,755,710"/>
-<area shape="rect" id="Node000057" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac62afc340e415801d0635b84d55920de" title=" " alt="" coords="238,700,409,740"/>
-<area shape="poly" id="edge52_Node000056_Node000057" title=" " alt="" coords="480,742,409,733,409,728,480,736"/>
-<area shape="rect" id="Node000060" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a642621dd90fd267325d221906fbc4588" title=" " alt="" coords="489,796,688,836"/>
-<area shape="poly" id="edge54_Node000059_Node000060" title=" " alt="" coords="756,779,675,799,673,793,755,774"/>
-<area shape="poly" id="edge55_Node000060_Node000057" title=" " alt="" coords="502,794,479,787,369,743,371,738,481,781,504,789"/>
-<area shape="poly" id="edge61_Node000061_Node000055" title=" " alt="" coords="1038,636,1011,644,920,672,919,667,1010,639,1037,631"/>
-<area shape="poly" id="edge62_Node000061_Node000059" title=" " alt="" coords="1026,635,1012,643,996,662,989,682,982,703,964,723,941,737,938,733,961,719,977,700,984,680,992,660,1009,639,1023,630"/>
-<area shape="rect" id="Node000062" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a52604ca8c152a1b40b3445200a032563" title=" " alt="" coords="503,668,674,708"/>
-<area shape="poly" id="edge57_Node000061_Node000062" title=" " alt="" coords="1024,623,746,660,675,673,674,668,745,655,1023,617"/>
-<area shape="rect" id="Node000063" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a2967c8acf4e9495b0d45fb4cafa6b446" title=" " alt="" coords="503,604,674,644"/>
-<area shape="poly" id="edge59_Node000061_Node000063" title=" " alt="" coords="1023,611,745,616,674,620,674,615,745,611,1023,606"/>
-<area shape="poly" id="edge58_Node000062_Node000057" title=" " alt="" coords="490,703,409,712,409,707,490,697"/>
-<area shape="poly" id="edge60_Node000063_Node000057" title=" " alt="" coords="504,651,481,659,371,702,369,697,479,653,502,646"/>
-<area shape="poly" id="edge64_Node000064_Node000022" title=" " alt="" coords="738,1108,692,1108,692,1103,738,1103"/>
-<area shape="rect" id="Node000067" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#ac8b97cc87b38517983b1370a62dd9ee3" title="Select the appropriate statistics strategy based on current event data." alt="" coords="757,1697,951,1737"/>
-<area shape="poly" id="edge68_Node000066_Node000067" title=" " alt="" coords="1007,1722,951,1721,951,1716,1007,1717"/>
-<area shape="rect" id="Node000068" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a358f89902e3d98a8d35ef0ae14e46241" title=" " alt="" coords="491,1695,686,1735"/>
-<area shape="poly" id="edge69_Node000067_Node000068" title=" " alt="" coords="743,1719,686,1718,686,1713,743,1714"/>
-<area shape="poly" id="edge70_Node000068_Node000032" title=" " alt="" coords="477,1717,421,1717,421,1712,477,1712"/>
-<area shape="poly" id="edge72_Node000069_Node000052" title=" " alt="" coords="495,126,405,137,404,132,494,121"/>
-<area shape="rect" id="Node000071" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a3d4078f9f144fc591e61f252f0990ac4" title=" " alt="" coords="773,1449,935,1489"/>
-<area shape="poly" id="edge74_Node000070_Node000071" title=" " alt="" coords="1029,1469,936,1471,936,1465,1029,1464"/>
-<area shape="poly" id="edge75_Node000071_Node000006" title=" " alt="" coords="759,1489,663,1506,662,1501,759,1483"/>
-<area shape="rect" id="Node000073" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a04c6cfb18ded9f2ff18a6586bf5efea6" title=" " alt="" coords="765,248,943,288"/>
-<area shape="poly" id="edge77_Node000072_Node000073" title=" " alt="" coords="1037,325,1010,317,962,303,922,291,924,286,963,297,1011,312,1039,320"/>
-<area shape="rect" id="Node000075" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a3364983dca8105470a900460d658e87f" title="Rebuild the correlation table from the current visible row set." alt="" coords="765,312,943,352"/>
-<area shape="poly" id="edge79_Node000072_Node000075" title=" " alt="" coords="1019,344,943,340,943,334,1020,338"/>
-<area shape="rect" id="Node000074" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a0f1fb2655baa7c21004c5aad49992c91" title=" " alt="" coords="500,220,677,260"/>
-<area shape="poly" id="edge78_Node000073_Node000074" title=" " alt="" coords="751,260,677,252,678,247,752,255"/>
-<area shape="rect" id="Node000077" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a86aac1f016232fae5d1e323b5d4c8ad7" title=" " alt="" coords="763,440,945,480"/>
-<area shape="poly" id="edge81_Node000076_Node000077" title=" " alt="" coords="1018,436,945,448,944,443,1018,431"/>
-<area shape="rect" id="Node000097" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a959e3b6c0c83e183b0156fe687662c6b" title=" " alt="" coords="763,376,945,416"/>
-<area shape="poly" id="edge86_Node000076_Node000097" title=" " alt="" coords="1017,412,945,406,945,401,1018,406"/>
-<area shape="rect" id="Node000078" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab3bf1b9f39191ca7d0b2ba41de5bffda" title=" " alt="" coords="498,476,679,516"/>
-<area shape="poly" id="edge82_Node000077_Node000078" title=" " alt="" coords="750,477,680,486,679,481,749,471"/>
-<area shape="rect" id="Node000088" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a40a6154c2885bd90035433bf7d0a814d" title=" " alt="" coords="498,540,679,580"/>
-<area shape="poly" id="edge83_Node000077_Node000088" title=" " alt="" coords="762,487,747,494,723,512,699,530,670,542,668,537,696,526,720,508,744,490,760,483"/>
-<area shape="rect" id="Node000090" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ad7c9cbbb605943a33250416e61f5dbdb" title=" " alt="" coords="498,348,679,388"/>
-<area shape="poly" id="edge84_Node000077_Node000090" title=" " alt="" coords="763,438,744,430,720,416,696,402,665,391,667,386,698,398,723,412,747,426,765,433"/>
-<area shape="rect" id="Node000092" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a18fa92b450a80bd058e6ec52c18f10c4" title=" " alt="" coords="498,412,679,452"/>
-<area shape="poly" id="edge85_Node000077_Node000092" title=" " alt="" coords="749,452,679,444,680,439,750,446"/>
-<area shape="rect" id="Node000098" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a14ed4ff1d49eeec7709cad19154f4f75" title=" " alt="" coords="502,284,675,324"/>
-<area shape="poly" id="edge87_Node000097_Node000098" title=" " alt="" coords="763,374,744,366,720,352,696,338,665,327,667,322,698,334,723,348,747,362,765,369"/>
-<area shape="poly" id="edge89_Node000099_Node000073" title=" " alt="" coords="1019,280,943,276,943,270,1020,274"/>
-<area shape="poly" id="edge90_Node000099_Node000075" title=" " alt="" coords="1020,304,943,318,942,313,1019,299"/>
-<area shape="rect" id="Node000101" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a591b295e6c77d043df8b7ab4e0dfb17e" title=" " alt="" coords="489,1967,688,2007"/>
-<area shape="poly" id="edge92_Node000100_Node000101" title=" " alt="" coords="741,1989,688,1989,688,1984,741,1984"/>
-<area shape="rect" id="Node000102" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ad0445fedb97b6bbad1e7cdd1ebe983e1" title=" " alt="" coords="224,1967,423,2007"/>
-<area shape="poly" id="edge93_Node000101_Node000102" title=" " alt="" coords="476,1989,423,1989,423,1984,476,1984"/>
-<area shape="poly" id="edge96_Node000103_Node000100" title=" " alt="" coords="1009,2006,953,2000,954,1994,1010,2000"/>
-<area shape="poly" id="edge98_Node000104_Node000100" title=" " alt="" coords="1034,2057,1010,2049,903,2009,905,2004,1012,2044,1036,2052"/>
-<area shape="poly" id="edge101_Node000105_Node000100" title=" " alt="" coords="1047,1927,918,1969,916,1964,1045,1922"/>
-<area shape="poly" id="edge103_Node000106_Node000032" title=" " alt="" coords="491,1758,406,1737,407,1732,493,1753"/>
-<area shape="rect" id="Node000083" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="785,797,923,837"/>
-<area shape="poly" id="edge105_Node000107_Node000083" title=" " alt="" coords="1038,764,1011,772,963,788,924,800,923,795,962,783,1010,767,1036,759"/>
-<area shape="rect" id="Node000109" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9e93f2214309a662012e08a50690ac84" title=" " alt="" coords="745,2409,963,2449"/>
-<area shape="poly" id="edge107_Node000108_Node000109" title=" " alt="" coords="999,2436,963,2435,963,2429,1000,2430"/>
-<area shape="rect" id="Node000110" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9dcc87a89a1ef7724ad3b99a44dc2f93" title=" " alt="" coords="480,2467,697,2507"/>
-<area shape="poly" id="edge109_Node000108_Node000110" title=" " alt="" coords="1000,2459,963,2464,825,2477,698,2485,697,2479,824,2471,962,2459,999,2454"/>
-<area shape="rect" id="Node000111" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a2fb9566b76b68d7c6ae356ebf1e935a7" title=" " alt="" coords="745,2524,963,2564"/>
-<area shape="poly" id="edge111_Node000108_Node000111" title=" " alt="" coords="1027,2463,1012,2470,988,2488,964,2508,923,2526,920,2521,961,2503,985,2484,1009,2466,1025,2458"/>
-<area shape="poly" id="edge108_Node000109_Node000041" title=" " alt="" coords="732,2429,697,2428,697,2423,732,2424"/>
-<area shape="poly" id="edge110_Node000110_Node000042" title=" " alt="" coords="466,2475,432,2470,432,2465,467,2469"/>
-<area shape="rect" id="Node000114" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a11332da47f15d18dca04604b5f4a505e" title=" " alt="" coords="763,504,945,544"/>
-<area shape="poly" id="edge114_Node000113_Node000114" title=" " alt="" coords="997,538,945,534,945,529,997,533"/>
-<area shape="poly" id="edge115_Node000114_Node000088" title=" " alt="" coords="750,541,680,550,679,545,749,535"/>
-<area shape="poly" id="edge117_Node000116_Node000114" title=" " alt="" coords="1007,502,945,512,944,507,1006,497"/>
-<area shape="rect" id="Node000081" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae779423b8e04bb7fd673e452e6f39be2" title=" " alt="" coords="785,861,923,901"/>
-<area shape="poly" id="edge119_Node000117_Node000081" title=" " alt="" coords="1016,874,924,880,923,875,1016,869"/>
-<area shape="rect" id="Node000119" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#a8db35620d4c1dd066063b2fcf2c12c5b" title="Called by MainWindow when the Signals tab becomes active." alt="" coords="1041,5,1203,45"/>
-<area shape="poly" id="edge122_Node000118_Node000119" title=" " alt="" coords="1289,958,1279,948,1260,913,1247,870,1240,820,1238,763,1243,637,1256,501,1268,365,1273,240,1270,184,1263,134,1250,92,1231,59,1218,47,1202,38,1205,33,1221,43,1235,56,1255,90,1268,133,1276,183,1279,240,1274,366,1261,501,1248,637,1243,763,1245,819,1252,869,1265,911,1283,945,1293,954"/>
-<area shape="rect" id="Node000120" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#abe0cb3bc021ed12fb8a4fa02ded777f2" title="Update the set of signals to plot and redraw the chart immediately." alt="" coords="1041,781,1203,821"/>
-<area shape="poly" id="edge123_Node000118_Node000120" title=" " alt="" coords="1289,956,1279,949,1267,934,1260,919,1255,890,1250,862,1243,849,1232,835,1202,818,1205,813,1235,831,1248,846,1255,860,1260,889,1265,918,1272,931,1283,945,1292,952"/>
-<area shape="poly" id="edge124_Node000120_Node000005" title=" " alt="" coords="1030,820,1013,835,998,860,988,891,982,928,979,970,982,1065,989,1167,997,1269,999,1364,996,1407,990,1445,980,1477,965,1503,948,1518,929,1527,927,1522,945,1513,961,1500,975,1475,985,1443,991,1406,994,1364,991,1270,984,1167,976,1065,974,970,977,928,983,890,993,858,1009,832,1026,816"/>
+<area shape="rect" id="Node000001" title="Gets an event by index." alt="" coords="1580,1245,1733,1285"/>
+<area shape="rect" id="Node000002" href="$d6/d40/namespaceui_1_1qt.html#ad28e1eb2bcce3d40559a6be650d01433" title=" " alt="" coords="1328,703,1532,729"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1649,1232,1636,1121,1611,974,1595,900,1576,834,1554,780,1530,743,1513,731,1516,727,1534,739,1559,777,1581,832,1600,899,1616,973,1641,1120,1655,1231"/>
+<area shape="rect" id="Node000003" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#aff062af634a61029ec8a971fb08d13d0" title=" " alt="" coords="1345,2031,1515,2071"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1648,1299,1440,2031,1434,2030,1643,1298"/>
+<area shape="rect" id="Node000010" href="$dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="1353,1277,1507,1317"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1566,1281,1507,1289,1506,1284,1566,1275"/>
+<area shape="rect" id="Node000121" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#ab2f603c282da9fa91b42eea9f98b5c3b" title=" " alt="" coords="1349,753,1511,793"/>
+<area shape="poly" id="edge126_Node000001_Node000121" title=" " alt="" coords="1638,1233,1438,794,1443,792,1643,1231"/>
+<area shape="rect" id="Node000004" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a2aba4bbb1e65aabfc87aa8563c746429" title=" " alt="" coords="1079,1437,1254,1477"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1422,2018,1403,1900,1372,1742,1352,1662,1330,1590,1305,1531,1278,1491,1253,1474,1256,1470,1282,1487,1310,1528,1335,1588,1357,1661,1377,1741,1408,1899,1427,2017"/>
+<area shape="rect" id="Node000007" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a187ae88b0f3eca4d215c9c1ad889202e" title="Called when the current item index in the model is updated." alt="" coords="1073,2688,1260,2728"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="1428,2085,1411,2215,1382,2392,1362,2482,1339,2564,1312,2632,1297,2658,1282,2678,1262,2693,1259,2689,1278,2674,1293,2655,1307,2629,1333,2563,1357,2481,1376,2391,1406,2214,1422,2085"/>
+<area shape="rect" id="Node000008" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a9eff40ad09d7634302990ee70e24542f" title="Refreshes the details view content." alt="" coords="1081,2624,1252,2664"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="1427,2085,1408,2202,1377,2361,1357,2441,1335,2513,1310,2573,1282,2614,1254,2633,1251,2628,1278,2610,1305,2570,1330,2511,1352,2439,1372,2360,1403,2201,1422,2084"/>
+<area shape="rect" id="Node000005" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a8ab116e7d43395ccdfb11e6f37b9a3a0" title=" " alt="" coords="823,1181,970,1221"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1065,1437,1052,1427,1032,1404,1023,1382,1016,1358,1003,1331,958,1271,915,1223,919,1220,962,1267,1008,1328,1021,1356,1028,1380,1036,1402,1055,1423,1068,1432"/>
+<area shape="rect" id="Node000006" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db" title=" " alt="" coords="558,1149,705,1189"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="809,1194,705,1181,705,1176,810,1188"/>
+<area shape="rect" id="Node000009" href="$d0/d5c/classui_1_1qt_1_1ItemDetailsView.html#a4450012c6a01556d263957578047d67b" title="Called when the model&#39;s data is updated." alt="" coords="811,2725,982,2765"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1072,2671,1055,2678,1031,2693,1007,2709,962,2728,960,2723,1004,2704,1028,2689,1052,2674,1070,2666"/>
+<area shape="rect" id="Node000011" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a52999fbf4b32290f24d200b59f074d17" title=" " alt="" coords="1093,1053,1240,1093"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1410,1266,1388,1229,1358,1186,1321,1144,1279,1108,1239,1089,1241,1084,1281,1103,1325,1140,1362,1183,1392,1226,1414,1263"/>
+<area shape="rect" id="Node000012" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a33d622391250170f0d45bde63a77a6de" title="Applies the selected type filters to the event list." alt="" coords="1070,760,1263,800"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1425,1264,1418,1176,1410,1120,1397,1058,1378,994,1353,932,1320,873,1278,821,1253,802,1256,798,1282,817,1324,870,1358,929,1383,992,1402,1057,1415,1119,1424,1176,1431,1264"/>
+<area shape="rect" id="Node000013" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a659518cb37813ff19db05f61e1b962d6" title="Rebuilds the available type filters from current events." alt="" coords="803,788,991,828"/>
+<area shape="poly" id="edge125_Node000010_Node000013" title=" " alt="" coords="1426,1264,1419,1181,1410,1128,1397,1071,1379,1014,1353,959,1320,908,1278,865,1258,853,1230,843,1156,828,1072,818,991,813,991,808,1072,813,1157,822,1231,838,1260,848,1282,861,1324,905,1358,956,1384,1012,1403,1070,1416,1127,1424,1180,1431,1263"/>
+<area shape="rect" id="Node000018" href="$dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html#af61462dbee9b19d276db1c3071f80413" title="Compute format&#45;specific statistics for the given visible event indices." alt="" coords="1065,1181,1268,1221"/>
+<area shape="poly" id="edge15_Node000010_Node000018" title=" " alt="" coords="1372,1274,1279,1236,1242,1224,1244,1219,1281,1231,1374,1269"/>
+<area shape="rect" id="Node000019" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a311d0470c4710462cc8e19a9d764f39a" title="Scans all events and returns indices whose timestamp falls in [from, to]." alt="" coords="1064,939,1269,979"/>
+<area shape="poly" id="edge16_Node000010_Node000019" title=" " alt="" coords="1419,1265,1402,1208,1374,1137,1333,1063,1307,1029,1278,999,1250,981,1252,977,1282,995,1312,1026,1337,1060,1379,1134,1407,1206,1424,1264"/>
+<area shape="rect" id="Node000024" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#ad935b090ba82bc045a13ed5e8b07d5ca" title=" " alt="" coords="1069,1373,1264,1413"/>
+<area shape="poly" id="edge21_Node000010_Node000024" title=" " alt="" coords="1374,1326,1281,1364,1244,1376,1242,1371,1279,1359,1372,1321"/>
+<area shape="rect" id="Node000028" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a4501b1ef99ca38cd83102c5503f86374" title=" " alt="" coords="1068,1309,1265,1349"/>
+<area shape="poly" id="edge24_Node000010_Node000028" title=" " alt="" coords="1340,1311,1266,1320,1265,1315,1340,1306"/>
+<area shape="rect" id="Node000029" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496" title=" " alt="" coords="1076,1245,1257,1285"/>
+<area shape="poly" id="edge26_Node000010_Node000029" title=" " alt="" coords="1340,1289,1257,1279,1258,1274,1340,1284"/>
+<area shape="rect" id="Node000030" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a7d1a6447d788dd74aeaa55c57ac424b4" title=" " alt="" coords="1069,1501,1264,1541"/>
+<area shape="poly" id="edge27_Node000010_Node000030" title=" " alt="" coords="1414,1331,1392,1368,1362,1412,1325,1455,1282,1492,1260,1503,1257,1499,1278,1487,1321,1451,1358,1408,1388,1366,1410,1328"/>
+<area shape="rect" id="Node000031" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a0385b59c7d70a172a295278592720277" title=" " alt="" coords="799,1552,994,1592"/>
+<area shape="poly" id="edge104_Node000010_Node000031" title=" " alt="" coords="1423,1332,1406,1384,1378,1446,1359,1477,1337,1507,1311,1534,1281,1556,1247,1573,1211,1585,1136,1599,1061,1600,994,1594,994,1589,1061,1595,1135,1594,1210,1580,1245,1568,1279,1551,1307,1530,1333,1504,1354,1474,1373,1443,1401,1382,1418,1330"/>
+<area shape="rect" id="Node000033" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf" title=" " alt="" coords="1071,1731,1262,1771"/>
+<area shape="poly" id="edge30_Node000010_Node000033" title=" " alt="" coords="1429,1331,1418,1409,1394,1511,1375,1565,1350,1619,1320,1669,1282,1714,1255,1733,1252,1728,1278,1710,1315,1666,1346,1616,1370,1563,1389,1509,1413,1408,1424,1331"/>
+<area shape="rect" id="Node000034" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#aca4e61585211277593b76019c7e50db2" title="Rebuild the chart from the current visible row set." alt="" coords="801,1731,992,1771"/>
+<area shape="poly" id="edge97_Node000010_Node000034" title=" " alt="" coords="1426,1332,1408,1437,1376,1575,1357,1643,1334,1704,1309,1753,1282,1785,1259,1795,1229,1800,1152,1800,1065,1789,984,1773,985,1768,1066,1783,1152,1794,1228,1795,1258,1790,1278,1781,1305,1750,1329,1702,1352,1641,1371,1573,1402,1436,1421,1331"/>
+<area shape="rect" id="Node000037" href="$d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1071,1947,1262,1987"/>
+<area shape="poly" id="edge33_Node000010_Node000037" title=" " alt="" coords="1428,1331,1411,1461,1381,1640,1361,1731,1338,1814,1312,1882,1297,1909,1282,1930,1258,1948,1254,1944,1278,1926,1293,1906,1307,1880,1333,1812,1356,1730,1376,1639,1406,1461,1422,1331"/>
+<area shape="rect" id="Node000038" href="$d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,1845,992,1885"/>
+<area shape="poly" id="edge43_Node000010_Node000038" title=" " alt="" coords="1428,1331,1413,1455,1384,1621,1364,1705,1341,1780,1313,1840,1298,1863,1282,1879,1260,1890,1231,1897,1157,1900,1072,1894,992,1884,992,1879,1073,1889,1157,1895,1230,1892,1258,1885,1278,1875,1294,1859,1309,1837,1336,1778,1359,1703,1379,1620,1407,1454,1423,1331"/>
+<area shape="rect" id="Node000039" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,1845,715,1885"/>
+<area shape="poly" id="edge69_Node000010_Node000039" title=" " alt="" coords="1427,1332,1408,1441,1377,1585,1358,1657,1335,1721,1310,1773,1282,1808,1249,1819,1193,1826,1038,1832,882,1833,788,1836,716,1849,715,1843,788,1831,882,1828,1038,1827,1192,1820,1248,1813,1278,1803,1305,1770,1330,1719,1352,1655,1372,1584,1403,1440,1421,1331"/>
+<area shape="rect" id="Node000047" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7b5d1e9205c26605b4c27f6810588aa2" title=" " alt="" coords="1081,2267,1253,2307"/>
+<area shape="poly" id="edge44_Node000010_Node000047" title=" " alt="" coords="1427,1331,1352,1849,1308,2127,1292,2217,1282,2256,1255,2276,1252,2272,1278,2253,1287,2216,1303,2126,1346,1849,1421,1331"/>
+<area shape="rect" id="Node000052" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a134606d7bec6802a22cef3ba7e98d944" title="Build event&#45;item summary strings for actualRow (cached on add)." alt="" coords="1086,2356,1247,2396"/>
+<area shape="poly" id="edge48_Node000010_Node000052" title=" " alt="" coords="1427,1331,1348,1887,1305,2185,1282,2320,1260,2342,1233,2358,1231,2354,1257,2338,1278,2317,1300,2184,1343,1886,1421,1330"/>
+<area shape="rect" id="Node000057" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#acf443cd9ff6a2f58ccec10c001ab0799" title=" " alt="" coords="1067,2496,1266,2536"/>
+<area shape="poly" id="edge53_Node000010_Node000057" title=" " alt="" coords="1426,1331,1385,1614,1331,2019,1327,2122,1326,2256,1323,2324,1315,2387,1302,2440,1282,2479,1260,2498,1256,2494,1278,2476,1297,2438,1310,2386,1317,2324,1321,2256,1322,2122,1325,2018,1379,1613,1421,1331"/>
+<area shape="rect" id="Node000064" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ae48bed1c020eebb927dbc7639e6cf65c" title=" " alt="" coords="1081,2560,1252,2600"/>
+<area shape="poly" id="edge60_Node000010_Node000064" title=" " alt="" coords="1426,1331,1384,1614,1331,2019,1328,2071,1328,2138,1330,2293,1327,2372,1320,2444,1306,2505,1295,2530,1282,2550,1269,2562,1254,2570,1251,2566,1266,2557,1278,2546,1290,2527,1301,2503,1315,2443,1322,2371,1325,2293,1323,2138,1322,2071,1325,2018,1379,1613,1421,1331"/>
+<area shape="rect" id="Node000067" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a5b9eab24b85fa63e536c8669b1ce1c8d" title=" " alt="" coords="794,1000,999,1040"/>
+<area shape="poly" id="edge67_Node000010_Node000067" title=" " alt="" coords="1418,1265,1401,1213,1373,1151,1354,1120,1332,1091,1307,1065,1279,1044,1246,1027,1212,1014,1139,1001,1066,998,1000,1003,999,998,1066,993,1139,995,1213,1009,1248,1022,1281,1039,1311,1061,1337,1088,1359,1118,1377,1149,1406,1211,1423,1263"/>
+<area shape="rect" id="Node000068" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a5f3eb6a67d149d861d4a95ebdfc5686e" title="Opens an input dialog and scrolls to the event with the nearest timestamp." alt="" coords="1080,2203,1253,2243"/>
+<area shape="poly" id="edge70_Node000010_Node000068" title=" " alt="" coords="1427,1331,1358,1808,1315,2065,1296,2151,1282,2192,1255,2212,1252,2207,1278,2189,1291,2150,1309,2064,1352,1808,1421,1331"/>
+<area shape="rect" id="Node000069" href="$dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html#a9cc6df403e4cbc267979a8737aab6a43" title="Returns true if this strategy is applicable to the current event data." alt="" coords="1065,1616,1268,1656"/>
+<area shape="poly" id="edge71_Node000010_Node000069" title=" " alt="" coords="1424,1331,1407,1388,1379,1460,1337,1535,1312,1569,1282,1599,1252,1618,1250,1613,1278,1595,1307,1565,1333,1532,1374,1458,1402,1387,1419,1330"/>
+<area shape="rect" id="Node000072" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ab031044451e3828b96c6ef0076f8c772" title=" " alt="" coords="551,2432,712,2472"/>
+<area shape="poly" id="edge75_Node000010_Node000072" title=" " alt="" coords="1426,1331,1331,2019,1327,2107,1326,2223,1322,2281,1315,2334,1302,2378,1282,2410,1264,2424,1240,2435,1181,2452,1107,2463,1025,2469,856,2469,712,2461,713,2456,856,2464,1025,2464,1106,2458,1179,2447,1238,2430,1261,2419,1278,2406,1297,2376,1310,2333,1317,2281,1321,2223,1322,2107,1325,2018,1421,1331"/>
+<area shape="rect" id="Node000073" href="$d6/d40/namespaceui_1_1qt.html#a4f0b63cfd892ef57974198d29d2f175a" title=" " alt="" coords="1087,1117,1246,1157"/>
+<area shape="poly" id="edge77_Node000010_Node000073" title=" " alt="" coords="1399,1269,1346,1219,1314,1194,1279,1172,1245,1157,1247,1153,1281,1167,1317,1189,1350,1215,1403,1265"/>
+<area shape="rect" id="Node000075" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#abcba4d73e223ac5a883218b8b3b63929" title="Populate the field combo from the first N events&#39; field names." alt="" coords="1078,133,1255,173"/>
+<area shape="poly" id="edge80_Node000010_Node000075" title=" " alt="" coords="1418,1264,1373,1070,1347,940,1325,806,1320,687,1314,490,1302,295,1292,225,1285,201,1278,187,1254,169,1257,164,1282,184,1290,199,1297,224,1307,295,1319,490,1325,687,1331,805,1353,939,1379,1069,1423,1263"/>
+<area shape="rect" id="Node000079" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9ef6bb565019fccdac5103ada3ad0902" title=" " alt="" coords="1076,197,1257,237"/>
+<area shape="poly" id="edge84_Node000010_Node000079" title=" " alt="" coords="1418,1265,1374,1071,1348,940,1325,806,1321,750,1321,680,1324,517,1322,435,1316,360,1301,296,1291,271,1278,251,1256,234,1259,229,1282,248,1296,269,1307,295,1321,359,1328,435,1330,517,1327,680,1327,750,1331,805,1353,939,1379,1070,1423,1263"/>
+<area shape="rect" id="Node000101" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a85f8bc5facf71bc7eff25eaf9b468a8a" title="Rebuild the tree for the given correlation field." alt="" coords="1078,69,1255,109"/>
+<area shape="poly" id="edge92_Node000010_Node000101" title=" " alt="" coords="1418,1264,1373,1070,1347,940,1325,806,1320,675,1315,457,1304,243,1293,165,1286,139,1278,123,1254,104,1257,100,1282,120,1291,137,1298,164,1309,242,1321,457,1326,675,1331,805,1352,939,1378,1069,1423,1263"/>
+<area shape="rect" id="Node000102" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ae59d12c8c240f6f621f1517a039334b3" title="Recompute all analyses from the current visible event set." alt="" coords="797,549,996,589"/>
+<area shape="poly" id="edge95_Node000010_Node000102" title=" " alt="" coords="1420,1264,1394,1128,1356,944,1315,776,1295,717,1278,686,1252,665,1226,652,1202,647,1176,646,1120,647,1088,644,1053,636,993,615,940,592,942,587,995,610,1054,631,1089,639,1120,642,1176,641,1202,642,1228,647,1255,660,1282,682,1300,715,1320,774,1362,943,1400,1127,1425,1263"/>
+<area shape="rect" id="Node000105" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a9a349b6b911e7601b8be0c7c338310ce" title=" " alt="" coords="1067,453,1266,493"/>
+<area shape="poly" id="edge98_Node000010_Node000105" title=" " alt="" coords="1419,1264,1377,1070,1325,806,1319,738,1314,650,1302,565,1292,531,1278,507,1265,496,1268,491,1282,504,1297,529,1307,564,1319,649,1324,737,1331,805,1383,1069,1424,1263"/>
+<area shape="rect" id="Node000106" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a760811d21639210704bf92caf47ee780" title=" " alt="" coords="1053,2075,1280,2115"/>
+<area shape="poly" id="edge100_Node000010_Node000106" title=" " alt="" coords="1429,1331,1417,1486,1391,1706,1371,1819,1347,1921,1317,2006,1300,2039,1282,2064,1268,2076,1264,2072,1278,2061,1296,2036,1312,2004,1342,1920,1366,1817,1385,1705,1412,1486,1424,1331"/>
+<area shape="rect" id="Node000107" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a2c7df8db4d244c489926e6ab27c1524c" title=" " alt="" coords="1067,517,1266,557"/>
+<area shape="poly" id="edge102_Node000010_Node000107" title=" " alt="" coords="1419,1264,1325,806,1320,769,1319,735,1321,678,1319,651,1313,626,1300,599,1278,571,1264,559,1267,555,1282,567,1304,596,1318,624,1324,650,1326,677,1324,735,1325,768,1331,805,1424,1263"/>
+<area shape="rect" id="Node000108" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a071e700e1f24a185d484407985989caa" title=" " alt="" coords="1067,581,1266,621"/>
+<area shape="poly" id="edge105_Node000010_Node000108" title=" " alt="" coords="1419,1264,1347,913,1305,730,1289,669,1278,642,1254,624,1258,619,1282,638,1294,667,1310,729,1352,911,1425,1263"/>
+<area shape="rect" id="Node000109" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#afac974081425a8ab42166ec38ae030dd" title=" " alt="" coords="534,1673,729,1713"/>
+<area shape="poly" id="edge107_Node000010_Node000109" title=" " alt="" coords="1429,1331,1420,1405,1396,1499,1377,1547,1352,1594,1321,1635,1281,1670,1239,1690,1180,1703,1110,1711,1032,1715,870,1713,729,1705,729,1699,870,1708,1032,1710,1109,1706,1179,1698,1237,1685,1279,1666,1317,1632,1348,1591,1372,1545,1391,1497,1414,1404,1424,1331"/>
+<area shape="rect" id="Node000110" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a4238fdfadd98e5ae5ec517423a3682c4" title=" " alt="" coords="1077,2011,1257,2051"/>
+<area shape="poly" id="edge109_Node000010_Node000110" title=" " alt="" coords="1429,1331,1415,1475,1387,1675,1367,1778,1343,1871,1315,1948,1299,1978,1282,2001,1259,2018,1256,2013,1278,1997,1295,1975,1310,1945,1338,1869,1362,1776,1381,1674,1409,1474,1423,1331"/>
+<area shape="rect" id="Node000111" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a624b8e0f3a6425836ca7b2633509b51b" title=" " alt="" coords="1058,2139,1275,2179"/>
+<area shape="poly" id="edge111_Node000010_Node000111" title=" " alt="" coords="1427,1331,1405,1510,1369,1762,1348,1888,1326,1998,1304,2082,1293,2111,1282,2128,1268,2140,1265,2136,1278,2125,1288,2108,1299,2080,1321,1997,1343,1887,1364,1761,1400,1509,1422,1331"/>
+<area shape="rect" id="Node000115" href="$d5/d44/classmvc_1_1MainController.html#aae1fa5c4a81666f1ed8a8565e9f88be6" title=" " alt="" coords="1089,875,1244,915"/>
+<area shape="poly" id="edge117_Node000010_Node000115" title=" " alt="" coords="1422,1264,1410,1194,1385,1103,1366,1056,1342,1009,1313,966,1278,929,1262,917,1243,909,1246,904,1265,913,1282,925,1317,963,1347,1007,1371,1053,1390,1101,1415,1192,1428,1263"/>
+<area shape="rect" id="Node000116" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab6eab7b06ebf9411b1ba015786b2883b" title=" " alt="" coords="1055,389,1278,429"/>
+<area shape="poly" id="edge118_Node000010_Node000116" title=" " alt="" coords="1418,1265,1376,1071,1325,806,1320,723,1316,616,1312,563,1305,513,1294,472,1278,443,1265,431,1268,427,1282,440,1299,470,1311,512,1318,562,1322,616,1325,723,1331,805,1381,1070,1424,1263"/>
+<area shape="rect" id="Node000119" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac45a40b6de581a04ecca19b80c690f66" title=" " alt="" coords="1065,261,1268,301"/>
+<area shape="poly" id="edge121_Node000010_Node000119" title=" " alt="" coords="1418,1265,1374,1071,1348,940,1325,806,1321,757,1321,695,1322,550,1319,478,1312,411,1299,355,1290,333,1278,315,1265,304,1269,300,1282,312,1294,330,1304,353,1318,410,1324,477,1327,550,1326,694,1327,756,1331,805,1354,939,1380,1070,1423,1263"/>
+<area shape="rect" id="Node000120" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#af8d493a4011f1002e5b686d93a5af156" title=" " alt="" coords="1075,696,1259,736"/>
+<area shape="poly" id="edge123_Node000010_Node000120" title=" " alt="" coords="1421,1264,1402,1148,1371,994,1351,916,1329,846,1304,789,1278,750,1257,735,1260,731,1282,746,1309,786,1334,844,1356,915,1376,993,1408,1147,1426,1263"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1057,794,991,801,991,796,1056,789"/>
+<area shape="rect" id="Node000014" href="$d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68" title="Parses and merges a log file with existing data, sorted by timestamp." alt="" coords="537,756,725,796"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="788,798,725,790,726,785,789,792"/>
+<area shape="rect" id="Node000015" href="$d5/dc9/classui_1_1MainWindowPresenter.html#adbce4c07cfdbd1ff5dd831155abab2d7" title=" " alt="" coords="537,820,725,860"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="789,824,726,831,725,826,788,818"/>
+<area shape="rect" id="Node000020" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#aa45683f5199a526e0aa707e4be6c898f" title=" " alt="" coords="794,936,999,976"/>
+<area shape="poly" id="edge17_Node000019_Node000020" title=" " alt="" coords="1050,960,999,960,999,954,1050,955"/>
+<area shape="rect" id="Node000021" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#af5f0b77b2217a8d6db9ef82cf38af9b5" title="Applies the filter to the events view immediately." alt="" coords="529,936,734,976"/>
+<area shape="poly" id="edge18_Node000020_Node000021" title=" " alt="" coords="780,959,734,959,734,953,780,953"/>
+<area shape="rect" id="Node000022" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a4c6aa6fa77b74f55a5345eb26b03612b" title=" " alt="" coords="529,1000,734,1040"/>
+<area shape="poly" id="edge19_Node000020_Node000022" title=" " alt="" coords="801,982,715,1003,714,997,799,977"/>
+<area shape="rect" id="Node000023" href="$d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html#a83e28b20bc54cd1bf98e33de0f48c701" title=" " alt="" coords="263,1000,469,1040"/>
+<area shape="poly" id="edge20_Node000022_Node000023" title=" " alt="" coords="515,1023,469,1023,469,1017,515,1017"/>
+<area shape="rect" id="Node000025" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a9431d9fa28cc1148dccdbd8e1741f28b" title=" " alt="" coords="810,1341,983,1381"/>
+<area shape="poly" id="edge22_Node000024_Node000025" title=" " alt="" coords="1056,1383,983,1374,984,1369,1056,1378"/>
+<area shape="rect" id="Node000026" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a13b0d98e213448d3f4a2fe4e5572f890" title=" " alt="" coords="545,1341,718,1381"/>
+<area shape="poly" id="edge23_Node000025_Node000026" title=" " alt="" coords="796,1364,718,1364,718,1359,796,1359"/>
+<area shape="poly" id="edge25_Node000028_Node000025" title=" " alt="" coords="1054,1345,984,1354,983,1348,1054,1340"/>
+<area shape="poly" id="edge28_Node000030_Node000031" title=" " alt="" coords="1056,1545,995,1556,994,1551,1055,1539"/>
+<area shape="rect" id="Node000032" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a928c3dd6f4942e68aa922602db165b77" title="Recompute all statistics from the current visible row set." alt="" coords="269,1609,463,1649"/>
+<area shape="poly" id="edge29_Node000031_Node000032" title=" " alt="" coords="786,1578,659,1586,523,1600,455,1612,454,1607,522,1595,659,1581,785,1573"/>
+<area shape="poly" id="edge31_Node000033_Node000034" title=" " alt="" coords="1058,1753,992,1753,992,1748,1058,1748"/>
+<area shape="rect" id="Node000035" href="$d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a5f50e779be534bdec166f0a393e3379b" title=" " alt="" coords="536,1737,727,1777"/>
+<area shape="poly" id="edge32_Node000034_Node000035" title=" " alt="" coords="788,1756,727,1758,727,1752,787,1751"/>
+<area shape="poly" id="edge34_Node000037_Node000038" title=" " alt="" coords="1089,1945,1052,1930,1004,1906,957,1888,959,1883,1006,1902,1054,1926,1091,1940"/>
+<area shape="poly" id="edge38_Node000037_Node000039" title=" " alt="" coords="1057,1950,787,1900,715,1885,716,1880,789,1895,1058,1945"/>
+<area shape="rect" id="Node000042" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,2011,966,2051"/>
+<area shape="poly" id="edge39_Node000037_Node000042" title=" " alt="" coords="1069,1993,967,2017,966,2012,1068,1987"/>
+<area shape="rect" id="Node000044" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="523,1980,740,2020"/>
+<area shape="poly" id="edge41_Node000037_Node000044" title=" " alt="" coords="1058,1976,741,1996,740,1991,1058,1971"/>
+<area shape="poly" id="edge35_Node000038_Node000039" title=" " alt="" coords="788,1868,716,1868,716,1863,788,1863"/>
+<area shape="rect" id="Node000040" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,1845,449,1885"/>
+<area shape="poly" id="edge36_Node000039_Node000040" title=" " alt="" coords="534,1868,450,1868,450,1863,534,1863"/>
+<area shape="rect" id="Node000041" href="$dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,1845,209,1885"/>
+<area shape="poly" id="edge37_Node000040_Node000041" title=" " alt="" coords="269,1868,210,1868,210,1863,269,1863"/>
+<area shape="rect" id="Node000043" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,2044,701,2084"/>
+<area shape="poly" id="edge40_Node000042_Node000043" title=" " alt="" coords="814,2044,701,2058,701,2053,813,2038"/>
+<area shape="rect" id="Node000045" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="257,2059,475,2099"/>
+<area shape="poly" id="edge42_Node000044_Node000045" title=" " alt="" coords="550,2027,523,2035,435,2061,433,2056,522,2029,549,2021"/>
+<area shape="rect" id="Node000048" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#a7ffbb30138b0837c43d1ec5dc91e5b51" title="Bookmark the given event row (called from the events&#45;table context menu)." alt="" coords="811,2317,983,2357"/>
+<area shape="poly" id="edge45_Node000047_Node000048" title=" " alt="" coords="1067,2308,983,2324,982,2319,1067,2303"/>
+<area shape="rect" id="Node000049" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#affdc85acfd5a5f77405f84bfa210d8b7" title=" " alt="" coords="811,2253,983,2293"/>
+<area shape="poly" id="edge46_Node000047_Node000049" title=" " alt="" coords="1067,2284,983,2280,983,2275,1067,2279"/>
+<area shape="rect" id="Node000050" href="$d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#aafddfd503a909c54218bd24202fd9c69" title=" " alt="" coords="545,2253,717,2293"/>
+<area shape="poly" id="edge47_Node000049_Node000050" title=" " alt="" coords="797,2276,718,2276,718,2271,797,2271"/>
+<area shape="rect" id="Node000053" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a148e71654cbe17e9a61dd5fec83a1fad" title=" " alt="" coords="816,2381,977,2421"/>
+<area shape="poly" id="edge49_Node000052_Node000053" title=" " alt="" coords="1073,2387,978,2396,977,2391,1072,2382"/>
+<area shape="rect" id="Node000054" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a2a10563db8b673863f7cf7eb76165203" title=" " alt="" coords="548,2368,715,2408"/>
+<area shape="poly" id="edge50_Node000053_Node000054" title=" " alt="" coords="802,2399,715,2395,715,2390,802,2394"/>
+<area shape="rect" id="Node000055" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a91fb8623fa72e48a870cee67e99fd038" title=" " alt="" coords="285,2400,447,2440"/>
+<area shape="poly" id="edge51_Node000054_Node000055" title=" " alt="" coords="535,2402,447,2413,447,2408,534,2397"/>
+<area shape="rect" id="Node000056" href="$dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a4a82651a79a737382acc6a5d2054d0bc" title=" " alt="" coords="27,2400,188,2440"/>
+<area shape="poly" id="edge52_Node000055_Node000056" title=" " alt="" coords="271,2423,188,2423,188,2417,271,2417"/>
+<area shape="rect" id="Node000058" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a645d9004c3181b43114ba2c95c0ddda4" title=" " alt="" coords="811,2560,982,2600"/>
+<area shape="poly" id="edge54_Node000057_Node000058" title=" " alt="" coords="1069,2542,982,2563,981,2557,1068,2537"/>
+<area shape="rect" id="Node000062" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a0f59cdf8512483741902775e4fee07dc" title=" " alt="" coords="811,2496,982,2536"/>
+<area shape="poly" id="edge57_Node000057_Node000062" title=" " alt="" coords="1054,2519,982,2519,982,2513,1054,2513"/>
+<area shape="rect" id="Node000059" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a4c6393af685d0ad284db4640ac6090b8" title=" " alt="" coords="537,2560,726,2600"/>
+<area shape="poly" id="edge55_Node000058_Node000059" title=" " alt="" coords="798,2583,726,2583,726,2577,798,2577"/>
+<area shape="rect" id="Node000060" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ac62afc340e415801d0635b84d55920de" title=" " alt="" coords="281,2592,451,2632"/>
+<area shape="poly" id="edge56_Node000059_Node000060" title=" " alt="" coords="523,2596,452,2604,451,2599,523,2590"/>
+<area shape="rect" id="Node000063" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a642621dd90fd267325d221906fbc4588" title=" " alt="" coords="532,2496,731,2536"/>
+<area shape="poly" id="edge58_Node000062_Node000063" title=" " alt="" coords="798,2519,731,2519,731,2513,798,2513"/>
+<area shape="poly" id="edge59_Node000063_Node000060" title=" " alt="" coords="546,2543,524,2551,414,2594,412,2589,522,2545,545,2538"/>
+<area shape="poly" id="edge65_Node000064_Node000058" title=" " alt="" coords="1068,2583,982,2583,982,2577,1068,2577"/>
+<area shape="poly" id="edge66_Node000064_Node000062" title=" " alt="" coords="1068,2559,981,2539,982,2533,1069,2554"/>
+<area shape="rect" id="Node000065" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a52604ca8c152a1b40b3445200a032563" title=" " alt="" coords="546,2688,717,2728"/>
+<area shape="poly" id="edge61_Node000064_Node000065" title=" " alt="" coords="1074,2607,1055,2614,1031,2629,1006,2642,932,2666,855,2683,717,2704,717,2698,854,2678,930,2661,1004,2638,1028,2624,1052,2610,1072,2602"/>
+<area shape="rect" id="Node000066" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a2967c8acf4e9495b0d45fb4cafa6b446" title=" " alt="" coords="546,2624,717,2664"/>
+<area shape="poly" id="edge63_Node000064_Node000066" title=" " alt="" coords="1068,2604,1006,2615,853,2632,717,2642,717,2637,852,2627,1005,2609,1067,2599"/>
+<area shape="poly" id="edge62_Node000065_Node000060" title=" " alt="" coords="545,2686,522,2679,412,2635,414,2630,524,2673,546,2681"/>
+<area shape="poly" id="edge64_Node000066_Node000060" title=" " alt="" coords="532,2635,451,2625,452,2620,533,2629"/>
+<area shape="poly" id="edge68_Node000067_Node000022" title=" " alt="" coords="780,1023,734,1023,734,1017,780,1017"/>
+<area shape="rect" id="Node000070" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#ac8b97cc87b38517983b1370a62dd9ee3" title="Select the appropriate statistics strategy based on current event data." alt="" coords="799,1616,994,1656"/>
+<area shape="poly" id="edge72_Node000069_Node000070" title=" " alt="" coords="1051,1639,994,1639,994,1633,1051,1633"/>
+<area shape="rect" id="Node000071" href="$d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a358f89902e3d98a8d35ef0ae14e46241" title=" " alt="" coords="534,1609,729,1649"/>
+<area shape="poly" id="edge73_Node000070_Node000071" title=" " alt="" coords="785,1636,729,1634,729,1629,786,1631"/>
+<area shape="poly" id="edge74_Node000071_Node000032" title=" " alt="" coords="520,1632,464,1632,464,1627,520,1627"/>
+<area shape="poly" id="edge76_Node000072_Node000055" title=" " alt="" coords="537,2443,447,2432,447,2427,537,2438"/>
+<area shape="rect" id="Node000074" href="$d4/dfa/classui_1_1qt_1_1MainWindow.html#a3d4078f9f144fc591e61f252f0990ac4" title=" " alt="" coords="815,1117,978,1157"/>
+<area shape="poly" id="edge78_Node000073_Node000074" title=" " alt="" coords="1074,1140,978,1140,978,1135,1074,1135"/>
+<area shape="poly" id="edge79_Node000074_Node000006" title=" " alt="" coords="802,1151,705,1163,705,1158,801,1146"/>
+<area shape="rect" id="Node000076" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a04c6cfb18ded9f2ff18a6586bf5efea6" title=" " alt="" coords="808,133,985,173"/>
+<area shape="poly" id="edge81_Node000075_Node000076" title=" " alt="" coords="1064,156,986,156,986,151,1064,151"/>
+<area shape="rect" id="Node000078" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a3364983dca8105470a900460d658e87f" title="Rebuild the correlation table from the current visible row set." alt="" coords="808,69,985,109"/>
+<area shape="poly" id="edge83_Node000075_Node000078" title=" " alt="" coords="1068,133,981,112,982,107,1069,127"/>
+<area shape="rect" id="Node000077" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a0f1fb2655baa7c21004c5aad49992c91" title=" " alt="" coords="543,69,720,109"/>
+<area shape="poly" id="edge82_Node000076_Node000077" title=" " alt="" coords="799,133,714,112,715,107,801,127"/>
+<area shape="rect" id="Node000080" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a86aac1f016232fae5d1e323b5d4c8ad7" title=" " alt="" coords="806,197,987,237"/>
+<area shape="poly" id="edge85_Node000079_Node000080" title=" " alt="" coords="1062,220,988,220,988,215,1062,215"/>
+<area shape="rect" id="Node000099" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a959e3b6c0c83e183b0156fe687662c6b" title=" " alt="" coords="806,261,987,301"/>
+<area shape="poly" id="edge91_Node000079_Node000099" title=" " alt="" coords="1069,243,982,264,981,259,1068,238"/>
+<area shape="rect" id="Node000081" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab3bf1b9f39191ca7d0b2ba41de5bffda" title=" " alt="" coords="541,261,722,301"/>
+<area shape="poly" id="edge86_Node000080_Node000081" title=" " alt="" coords="830,244,723,271,722,265,829,239"/>
+<area shape="rect" id="Node000094" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a40a6154c2885bd90035433bf7d0a814d" title=" " alt="" coords="541,325,722,365"/>
+<area shape="poly" id="edge88_Node000080_Node000094" title=" " alt="" coords="798,246,790,251,774,267,766,283,758,299,742,315,720,328,717,323,738,311,754,296,762,280,770,263,786,247,796,241"/>
+<area shape="rect" id="Node000096" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ad7c9cbbb605943a33250416e61f5dbdb" title=" " alt="" coords="541,133,722,173"/>
+<area shape="poly" id="edge89_Node000080_Node000096" title=" " alt="" coords="799,197,714,176,715,171,801,191"/>
+<area shape="rect" id="Node000098" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a18fa92b450a80bd058e6ec52c18f10c4" title=" " alt="" coords="541,197,722,237"/>
+<area shape="poly" id="edge90_Node000080_Node000098" title=" " alt="" coords="792,220,722,220,722,215,792,215"/>
+<area shape="poly" id="edge87_Node000081_Node000080" title=" " alt="" coords="697,255,805,228,806,233,698,260"/>
+<area shape="poly" id="edge93_Node000101_Node000076" title=" " alt="" coords="1069,115,982,136,981,131,1068,110"/>
+<area shape="poly" id="edge94_Node000101_Node000078" title=" " alt="" coords="1064,92,986,92,986,87,1064,87"/>
+<area shape="rect" id="Node000103" href="$dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a591b295e6c77d043df8b7ab4e0dfb17e" title=" " alt="" coords="532,549,731,589"/>
+<area shape="poly" id="edge96_Node000102_Node000103" title=" " alt="" coords="784,572,731,572,731,567,784,567"/>
+<area shape="poly" id="edge99_Node000105_Node000102" title=" " alt="" coords="1079,500,1054,508,944,552,942,547,1052,503,1077,495"/>
+<area shape="poly" id="edge101_Node000106_Node000042" title=" " alt="" coords="1068,2074,966,2050,967,2044,1069,2069"/>
+<area shape="poly" id="edge103_Node000107_Node000102" title=" " alt="" coords="1054,553,996,560,996,555,1053,548"/>
+<area shape="poly" id="edge106_Node000108_Node000102" title=" " alt="" coords="1053,591,996,584,996,578,1054,585"/>
+<area shape="poly" id="edge108_Node000109_Node000032" title=" " alt="" coords="534,1673,449,1652,450,1647,535,1667"/>
+<area shape="poly" id="edge110_Node000110_Node000042" title=" " alt="" coords="1063,2033,966,2033,966,2028,1063,2028"/>
+<area shape="rect" id="Node000112" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9e93f2214309a662012e08a50690ac84" title=" " alt="" coords="788,2075,1005,2115"/>
+<area shape="poly" id="edge112_Node000111_Node000112" title=" " alt="" coords="1068,2138,981,2117,982,2112,1069,2133"/>
+<area shape="rect" id="Node000113" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9dcc87a89a1ef7724ad3b99a44dc2f93" title=" " alt="" coords="523,2136,740,2176"/>
+<area shape="poly" id="edge114_Node000111_Node000113" title=" " alt="" coords="1068,2184,1006,2193,897,2201,788,2193,706,2179,707,2173,788,2188,897,2196,1005,2188,1067,2179"/>
+<area shape="rect" id="Node000114" href="$d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a2fb9566b76b68d7c6ae356ebf1e935a7" title=" " alt="" coords="788,2139,1005,2179"/>
+<area shape="poly" id="edge116_Node000111_Node000114" title=" " alt="" coords="1044,2161,1005,2161,1005,2156,1044,2156"/>
+<area shape="poly" id="edge113_Node000112_Node000044" title=" " alt="" coords="804,2072,787,2065,763,2050,739,2034,709,2023,711,2018,741,2030,765,2045,789,2060,806,2067"/>
+<area shape="poly" id="edge115_Node000113_Node000045" title=" " alt="" coords="548,2135,435,2101,436,2096,550,2130"/>
+<area shape="rect" id="Node000117" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a11332da47f15d18dca04604b5f4a505e" title=" " alt="" coords="806,325,987,365"/>
+<area shape="poly" id="edge119_Node000116_Node000117" title=" " alt="" coords="1068,389,981,368,982,363,1069,383"/>
+<area shape="poly" id="edge120_Node000117_Node000094" title=" " alt="" coords="792,348,722,348,722,343,792,343"/>
+<area shape="poly" id="edge122_Node000119_Node000117" title=" " alt="" coords="1069,307,982,328,981,323,1068,302"/>
+<area shape="rect" id="Node000084" href="$d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae779423b8e04bb7fd673e452e6f39be2" title=" " alt="" coords="827,696,966,736"/>
+<area shape="poly" id="edge124_Node000120_Node000084" title=" " alt="" coords="1061,719,966,719,966,713,1061,713"/>
+<area shape="rect" id="Node000122" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#a8db35620d4c1dd066063b2fcf2c12c5b" title="Called by MainWindow when the Signals tab becomes active." alt="" coords="1085,5,1248,45"/>
+<area shape="poly" id="edge127_Node000121_Node000122" title=" " alt="" coords="1335,751,1326,742,1311,715,1300,682,1294,643,1292,599,1294,502,1302,398,1310,293,1312,197,1309,154,1303,116,1293,84,1278,59,1264,46,1247,38,1249,33,1267,42,1282,56,1298,82,1308,115,1315,154,1317,197,1315,294,1308,398,1300,503,1297,599,1300,642,1306,680,1316,713,1330,738,1339,748"/>
+<area shape="rect" id="Node000123" href="$d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html#abe0cb3bc021ed12fb8a4fa02ded777f2" title="Update the set of signals to plot and redraw the chart immediately." alt="" coords="1085,325,1248,365"/>
+<area shape="poly" id="edge128_Node000121_Node000123" title=" " alt="" coords="1335,751,1326,742,1309,718,1298,694,1292,671,1289,648,1293,602,1302,557,1312,513,1315,468,1312,446,1306,424,1295,402,1278,379,1264,367,1247,358,1249,353,1267,362,1282,376,1299,399,1311,422,1318,445,1320,468,1317,514,1308,558,1298,603,1294,648,1297,670,1303,693,1314,715,1330,738,1339,747"/>
+<area shape="poly" id="edge129_Node000123_Node000005" title=" " alt="" coords="1075,363,1055,379,1038,408,1027,446,1020,490,1017,540,1021,652,1032,773,1042,894,1046,1007,1044,1057,1037,1102,1025,1140,1007,1171,991,1186,971,1195,969,1190,988,1181,1003,1168,1020,1138,1032,1101,1038,1056,1041,1007,1037,894,1026,773,1016,652,1012,540,1015,489,1021,445,1033,406,1051,376,1071,359"/>
 </map>

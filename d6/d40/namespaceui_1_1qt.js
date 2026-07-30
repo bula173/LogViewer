@@ -64,6 +64,7 @@ var namespaceui_1_1qt =
     [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
     [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
     [ "FrameSignals", "da/d91/structui_1_1qt_1_1FrameSignals.html", "da/d91/structui_1_1qt_1_1FrameSignals" ],
+    [ "GemmaDownloadDialog", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog" ],
     [ "GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy" ],
     [ "IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", "df/dae/classui_1_1qt_1_1IStatisticsStrategy" ],
     [ "ItemDetailsView", "d0/d5c/classui_1_1qt_1_1ItemDetailsView.html", "d0/d5c/classui_1_1qt_1_1ItemDetailsView" ],

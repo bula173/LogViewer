@@ -13,9 +13,10 @@ var searchData=
   ['installation_5fmanifest_2emd_10',['INSTALLATION_MANIFEST.md',['../d9/d26/INSTALLATION__MANIFEST_8md.html',1,'']]],
   ['iplugin_2ehpp_11',['IPlugin.hpp',['../d8/da3/IPlugin_8hpp.html',1,'']]],
   ['ipluginobserver_2ehpp_12',['IPluginObserver.hpp',['../d4/db4/IPluginObserver_8hpp.html',1,'']]],
-  ['istatisticsstrategy_2ehpp_13',['IStatisticsStrategy.hpp',['../d0/d9f/IStatisticsStrategy_8hpp.html',1,'']]],
-  ['itemdetailsview_2ecpp_14',['ItemDetailsView.cpp',['../d4/d23/ItemDetailsView_8cpp.html',1,'']]],
-  ['itemdetailsview_2ehpp_15',['ItemDetailsView.hpp',['../d7/d60/ItemDetailsView_8hpp.html',1,'']]],
-  ['iuipanels_2ehpp_16',['IUiPanels.hpp',['../dc/d91/IUiPanels_8hpp.html',1,'']]],
-  ['iview_2ehpp_17',['IView.hpp',['../d2/d7e/IView_8hpp.html',1,'']]]
+  ['iservice_2ehpp_13',['IService.hpp',['../da/d0c/IService_8hpp.html',1,'']]],
+  ['istatisticsstrategy_2ehpp_14',['IStatisticsStrategy.hpp',['../d0/d9f/IStatisticsStrategy_8hpp.html',1,'']]],
+  ['itemdetailsview_2ecpp_15',['ItemDetailsView.cpp',['../d4/d23/ItemDetailsView_8cpp.html',1,'']]],
+  ['itemdetailsview_2ehpp_16',['ItemDetailsView.hpp',['../d7/d60/ItemDetailsView_8hpp.html',1,'']]],
+  ['iuipanels_2ehpp_17',['IUiPanels.hpp',['../dc/d91/IUiPanels_8hpp.html',1,'']]],
+  ['iview_2ehpp_18',['IView.hpp',['../d2/d7e/IView_8hpp.html',1,'']]]
 ];

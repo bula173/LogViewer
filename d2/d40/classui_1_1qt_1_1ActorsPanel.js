@@ -10,6 +10,7 @@ var classui_1_1qt_1_1ActorsPanel =
     [ "GetUncheckedActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a33b00ce76100b1d6712d091521ea8967", null ],
     [ "PopulateActorTree", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#abc5b834aa0b0abb883137663405510fb", null ],
     [ "Refresh", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914", null ],
+    [ "RefreshFromDiscoveredActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a760811d21639210704bf92caf47ee780", null ],
     [ "RefreshWithDefinitions", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a4238fdfadd98e5ae5ec517423a3682c4", null ],
     [ "RestoreUncheckedActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae0d59a9f0c14bb58533a8da31c378522", null ],
     [ "SetDefinitions", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08", null ],

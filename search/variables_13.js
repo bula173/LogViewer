@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['wasconverted_0',['wasConverted',['../dd/d7c/structconfig_1_1TranslationResult.html#aa94f87ac1084919bf92e3133e1ffb400',1,'config::TranslationResult']]],
-  ['website_1',['website',['../de/d25/structplugin_1_1PluginMetadata.html#a9a19f88b574143f13c9e5dc4341775d4',1,'plugin::PluginMetadata']]],
-  ['width_2',['width',['../db/deb/structconfig_1_1ColumnConfig.html#a4ab9081149e4bd839eaf220231e0b592',1,'config::ColumnConfig']]],
-  ['windowstate_3',['windowState',['../de/d5a/structui_1_1qt_1_1LayoutDescriptor.html#ac19f37ba56c1ab1b4dc18c41bf0bd7ef',1,'ui::qt::LayoutDescriptor']]]
+  ['value_0',['value',['../d9/d3b/structui_1_1qt_1_1StatRow.html#aa12ee7a9ae9e2c2bc7e07dd7f66c62e0',1,'ui::qt::StatRow']]],
+  ['valuemap_1',['valueMap',['../d1/de4/structconfig_1_1FieldDictionary.html#a299bbad0d88b8831917d72e1a136e970',1,'config::FieldDictionary']]],
+  ['version_2',['version',['../de/d25/structplugin_1_1PluginMetadata.html#aebf57eb6ce15f624f035bf7949f00ef7',1,'plugin::PluginMetadata::version'],['../d5/d29/structupdates_1_1AppUpdateInfo.html#ac6a101830b6a67690de61af20b2ed2f5',1,'updates::AppUpdateInfo::version']]]
 ];

@@ -4,5 +4,6 @@ var searchData=
   ['dbcmessage_1',['DbcMessage',['../d9/d4f/structparser_1_1dbc_1_1DbcMessage.html',1,'parser::dbc']]],
   ['dbcsignal_2',['DbcSignal',['../d3/dc2/structparser_1_1dbc_1_1DbcSignal.html',1,'parser::dbc']]],
   ['dependencynode_3',['DependencyNode',['../d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html',1,'plugin::PluginDependencyGraph']]],
-  ['dltparser_4',['DltParser',['../db/de9/classparser_1_1DltParser.html',1,'parser']]]
+  ['directionpattern_4',['DirectionPattern',['../d5/d23/structai_1_1DirectionPattern.html',1,'ai']]],
+  ['dltparser_5',['DltParser',['../db/de9/classparser_1_1DltParser.html',1,'parser']]]
 ];

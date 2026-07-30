@@ -1,6 +1,6 @@
 var namespaces_dup =
 [
-    [ "ai", "de/d58/namespaceai.html", null ],
+    [ "ai", "de/d58/namespaceai.html", "de/d58/namespaceai" ],
     [ "analyzer", "dd/d3e/namespaceanalyzer.html", "dd/d3e/namespaceanalyzer" ],
     [ "anonymous_namespace{MyAppQt.cpp}", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html", [
       [ "ApplyModernStyle", "d6/d26/namespaceanonymous__namespace_02MyAppQt_8cpp_03.html#afb42b685164ecbec2720d91b1cdeb053", null ],
@@ -19,6 +19,7 @@ var namespaces_dup =
     [ "mvc", "da/ddc/namespacemvc.html", "da/ddc/namespacemvc" ],
     [ "parser", "d0/dd5/namespaceparser.html", "d0/dd5/namespaceparser" ],
     [ "plugin", "d3/d7e/namespaceplugin.html", "d3/d7e/namespaceplugin" ],
+    [ "services", "db/d91/namespaceservices.html", "db/d91/namespaceservices" ],
     [ "ui", "d3/df6/namespaceui.html", "d3/df6/namespaceui" ],
     [ "updates", "d5/d16/namespaceupdates.html", "d5/d16/namespaceupdates" ],
     [ "util", "d6/d72/namespaceutil.html", "d6/d72/namespaceutil" ],

@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['hastypefilter_0',['hasTypeFilter',['../db/d6d/structui_1_1qt_1_1FilterProfile.html#a320cba5ccfd557a72be7ab6e5366454f',1,'ui::qt::FilterProfile']]],
-  ['htyp_5fmsbf_1',['HTYP_MSBF',['../d0/dd5/namespaceparser.html#a66f6d4cd35b07e009ab8dd41c2705d18',1,'parser']]],
-  ['htyp_5fueh_2',['HTYP_UEH',['../d0/dd5/namespaceparser.html#a1de681b6abc25b5303079a06202c5293',1,'parser']]],
-  ['htyp_5fweid_3',['HTYP_WEID',['../d0/dd5/namespaceparser.html#ab7c8c212d9f97d38380253c62ca29c1b',1,'parser']]],
-  ['htyp_5fwsid_4',['HTYP_WSID',['../d0/dd5/namespaceparser.html#a5d3786d34e1f702dcef63899faad820c',1,'parser']]],
-  ['htyp_5fwtms_5',['HTYP_WTMS',['../d0/dd5/namespaceparser.html#a8259f5c348d330fd9a2175355b26ee6c',1,'parser']]]
+  ['gemma_5fmodel_5fname_0',['GEMMA_MODEL_NAME',['../de/d58/namespaceai.html#a1a437acf3ec5a254aaa5c624e99239c3',1,'ai']]],
+  ['gemma_5fmodels_5fdir_1',['GEMMA_MODELS_DIR',['../de/d58/namespaceai.html#a5e8eac5f9352b5730c198f0718b77bea',1,'ai']]]
 ];

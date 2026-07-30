@@ -92,7 +92,6 @@ $(document).ready(function(){initNavTree('d9/d49/classanalyzer_1_1ActorDiscovere
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="../../d0/db0/classanalyzer_1_1ActorDiscoverer-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">analyzer::ActorDiscoverer Class Reference</div></div>
 </div><!--header-->
@@ -104,14 +103,19 @@ Collaboration diagram for analyzer::ActorDiscoverer:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/dc8/classanalyzer_1_1ActorDiscoverer__coll__graph.png" border="0" usemap="#aanalyzer_1_1ActorDiscoverer_coll__map" alt="Collaboration graph"/></div>
 <map name="aanalyzer_1_1ActorDiscoverer_coll__map" id="aanalyzer_1_1ActorDiscoverer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,188,171"/>
+<area shape="rect" title=" " alt="" coords="5,5,196,231"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:adb44e1de745d846041d168f69eed4bfe" id="r_adb44e1de745d846041d168f69eed4bfe"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html">ActorDiscoveryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe">Discover</a> (<a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html">db::EventsContainer</a> &amp;events, size_t sampleLimit=10 '000)</td></tr>
+<tr class="memdesc:adb44e1de745d846041d168f69eed4bfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scan up to <code>sampleLimit</code> events and return all discovered patterns.  <br /></td></tr>
 <tr class="separator:adb44e1de745d846041d168f69eed4bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef0958c10eef8b7ebbb5c03cf8e50d88" id="r_aef0958c10eef8b7ebbb5c03cf8e50d88"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html">ActorDiscoveryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88">DiscoverWithAI</a> (<a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html">db::EventsContainer</a> &amp;events, size_t sampleLimit=10 '000)</td></tr>
+<tr class="separator:aef0958c10eef8b7ebbb5c03cf8e50d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b501b717dce3385bb8590205c6afcd4" id="r_a5b501b717dce3385bb8590205c6afcd4"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4">ToLower</a> (const std::string &amp;s)</td></tr>
+<tr class="separator:a5b501b717dce3385bb8590205c6afcd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca7a72af4ac2cca1f90169e6a5ed3df9" id="r_aca7a72af4ac2cca1f90169e6a5ed3df9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9">ScoreSender</a> (const std::string &amp;fieldName)</td></tr>
 <tr class="separator:aca7a72af4ac2cca1f90169e6a5ed3df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a147b84411c5fe2961d92bc13a1133b24" id="r_a147b84411c5fe2961d92bc13a1133b24"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24">ScoreReceiver</a> (const std::string &amp;fieldName)</td></tr>
@@ -120,16 +124,72 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a272603f6e82e78bca366822b51578f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4d40cd2458fdd5cedcb75ad5388dbf" id="r_adf4d40cd2458fdd5cedcb75ad5388dbf"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf">ScoreLabel</a> (const std::string &amp;fieldName)</td></tr>
 <tr class="separator:adf4d40cd2458fdd5cedcb75ad5388dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a5b501b717dce3385bb8590205c6afcd4" id="r_a5b501b717dce3385bb8590205c6afcd4"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4">ToLower</a> (const std::string &amp;s)</td></tr>
-<tr class="separator:a5b501b717dce3385bb8590205c6afcd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb40d381331bc5a41198a67759f6a8ac" id="r_afb40d381331bc5a41198a67759f6a8ac"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#afb40d381331bc5a41198a67759f6a8ac">ScoreDirection</a> (const std::string &amp;fieldName, const std::set&lt; std::string &gt; &amp;values, std::set&lt; std::string &gt; &amp;outValues, std::set&lt; std::string &gt; &amp;inValues)</td></tr>
+<tr class="separator:afb40d381331bc5a41198a67759f6a8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb7552691c643aeb0a3248e1fe36ac9e" id="r_abb7552691c643aeb0a3248e1fe36ac9e"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; std::string, std::set&lt; std::string &gt;, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#abb7552691c643aeb0a3248e1fe36ac9e">DetectSeparatorPattern</a> (const std::set&lt; std::string &gt; &amp;fieldValues)</td></tr>
+<tr class="separator:abb7552691c643aeb0a3248e1fe36ac9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Scans an EventsContainer and discovers actor/exchange patterns without any hard-coded field names — purely by keyword scoring and cardinality.</p>
-<p>Works on every log format: JSON microservices (service/target), DLT (ecuid/appid), CAN-bus (channel), XML traces (sender/receiver), etc. </p>
+<div class="textblock"><p>Scans an EventsContainer and discovers every plausible actor/exchange pattern without hard-coded field names.</p>
+<p>Detected patterns (in decreasing confidence order): Pair — two fields: senderField + receiverField DirectionField — one actor field + one direction-value field SenderOnly — only a sender-type field; receiver = self ReceiverOnly — only a receiver-type field; sender = self</p>
+<p>Works on every log format: JSON microservices, DLT (ecuid/appid), CAN-bus, XML traces, syslog, custom formats. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abb7552691c643aeb0a3248e1fe36ac9e" name="abb7552691c643aeb0a3248e1fe36ac9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb7552691c643aeb0a3248e1fe36ac9e">&#9670;&#160;</a></span>DetectSeparatorPattern()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; std::string, std::set&lt; std::string &gt;, int &gt; analyzer::ActorDiscoverer::DetectSeparatorPattern </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>fieldValues</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Detects if a field contains embedded actor names with a separator. Returns (separator, extractedActors, confidence) or empty if not detected. Example: "RBC: message" → separator=":", actors={"RBC"} </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_abb7552691c643aeb0a3248e1fe36ac9e_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_abb7552691c643aeb0a3248e1fe36ac9e_icgraph" alt=""/></div>
+<map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_abb7552691c643aeb0a3248e1fe36ac9e_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_abb7552691c643aeb0a3248e1fe36ac9e_icgraph">
+<area shape="rect" title=" " alt="" coords="1292,92,1483,132"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,92,1244,132"/>
+<area shape="poly" title=" " alt="" coords="1278,115,1244,115,1244,109,1278,109"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,5,992,45"/>
+<area shape="poly" title=" " alt="" coords="1076,90,955,48,957,43,1078,85"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,31,715,71"/>
+<area shape="poly" title=" " alt="" coords="1039,102,715,63,716,58,1040,97"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,120,966,160"/>
+<area shape="poly" title=" " alt="" coords="1040,127,967,135,966,130,1039,121"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,184,1005,224"/>
+<area shape="poly" title=" " alt="" coords="1092,140,1006,175,970,186,969,181,1004,169,1090,135"/>
+<area shape="poly" title=" " alt="" coords="788,38,716,45,715,40,787,33"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,31,449,71"/>
+<area shape="poly" title=" " alt="" coords="534,53,450,53,450,48,534,48"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,31,209,71"/>
+<area shape="poly" title=" " alt="" coords="269,53,210,53,210,48,269,48"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,120,701,160"/>
+<area shape="poly" title=" " alt="" coords="813,143,701,143,701,137,813,137"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,184,740,224"/>
+<area shape="poly" title=" " alt="" coords="774,207,740,207,740,201,774,201"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,184,475,224"/>
+<area shape="poly" title=" " alt="" coords="509,207,475,207,475,201,509,201"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="adb44e1de745d846041d168f69eed4bfe" name="adb44e1de745d846041d168f69eed4bfe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adb44e1de745d846041d168f69eed4bfe">&#9670;&#160;</a></span>Discover()</h2>
 
@@ -163,52 +223,54 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Scan up to <code>sampleLimit</code> events and return discovery results. The sample is spread evenly across the container so the result represents the whole log, not just the beginning. </p>
+
+<p>Scan up to <code>sampleLimit</code> events and return all discovered patterns. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_cgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_cgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_cgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_cgraph">
-<area shape="rect" title=" " alt="" coords="5,216,196,256"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="259,117,438,142"/>
-<area shape="poly" title=" " alt="" coords="129,214,181,182,243,151,265,144,267,149,245,156,183,186,132,218"/>
-<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="272,216,425,256"/>
-<area shape="poly" title=" " alt="" coords="196,234,258,234,258,239,196,239"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#a3af989b3030089d5e717aa8ec83cb206" title="Gets a const reference to the event&#39;s data items." alt="" coords="244,166,453,192"/>
-<area shape="poly" title=" " alt="" coords="187,214,279,192,281,197,188,219"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="533,20,661,45"/>
-<area shape="poly" title=" " alt="" coords="107,215,125,175,153,125,192,76,216,55,243,38,278,23,315,12,392,3,466,6,529,14,528,20,465,11,392,9,316,18,280,28,245,43,219,59,196,80,158,128,130,178,112,217"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="253,344,444,384"/>
-<area shape="poly" title=" " alt="" coords="128,254,181,292,245,330,261,337,259,342,243,335,178,297,125,259"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="253,408,444,448"/>
-<area shape="poly" title=" " alt="" coords="117,255,168,323,204,361,245,394,256,400,253,405,243,399,200,365,164,327,113,258"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="253,472,444,512"/>
-<area shape="poly" title=" " alt="" coords="112,255,129,298,158,353,197,410,220,435,246,458,253,463,250,468,242,462,216,439,192,413,153,355,125,300,107,257"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="253,280,444,320"/>
-<area shape="poly" title=" " alt="" coords="180,254,258,274,257,279,178,259"/>
-<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="272,52,425,92"/>
-<area shape="poly" title=" " alt="" coords="117,214,169,159,204,128,243,102,258,94,260,99,245,107,207,133,173,163,121,218"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="528,101,665,126"/>
-<area shape="poly" title=" " alt="" coords="438,121,514,116,514,122,438,127"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="740,61,921,86"/>
-<area shape="poly" title=" " alt="" coords="665,99,742,86,743,91,666,105"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="969,61,1128,86"/>
-<area shape="poly" title=" " alt="" coords="921,71,956,71,956,76,921,76"/>
-<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="520,216,673,256"/>
-<area shape="poly" title=" " alt="" coords="426,234,506,234,506,239,426,239"/>
-<area shape="poly" title=" " alt="" coords="403,164,453,151,538,128,539,133,454,156,404,169"/>
-<area shape="poly" title=" " alt="" coords="662,41,745,56,744,61,661,46"/>
-<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468" title=" " alt="" coords="511,413,682,438"/>
-<area shape="poly" title=" " alt="" coords="431,382,532,407,531,412,430,387"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4" title=" " alt="" coords="501,347,692,387"/>
-<area shape="poly" title=" " alt="" coords="444,363,487,363,487,368,444,368"/>
-<area shape="poly" title=" " alt="" coords="444,425,498,424,498,429,444,430"/>
-<area shape="poly" title=" " alt="" coords="430,406,502,388,503,393,431,411"/>
-<area shape="poly" title=" " alt="" coords="423,470,535,439,536,445,424,475"/>
-<area shape="poly" title=" " alt="" coords="430,470,452,458,467,444,475,429,484,414,500,398,511,391,514,395,503,402,488,417,480,432,471,447,455,462,433,475"/>
-<area shape="poly" title=" " alt="" coords="434,318,455,330,471,347,480,365,488,381,503,397,518,405,515,410,500,401,483,384,475,367,467,350,452,334,431,323"/>
-<area shape="poly" title=" " alt="" coords="424,318,509,341,508,346,423,323"/>
-<area shape="poly" title=" " alt="" coords="426,82,515,97,514,103,425,88"/>
+<area shape="rect" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="5,267,196,307"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#abb7552691c643aeb0a3248e1fe36ac9e" title=" " alt="" coords="253,5,444,45"/>
+<area shape="poly" title=" " alt="" coords="106,265,124,222,153,165,192,106,216,79,242,55,250,50,253,54,246,59,220,83,196,109,157,168,129,224,111,267"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="259,70,438,95"/>
+<area shape="poly" title=" " alt="" coords="110,265,130,230,159,187,197,143,243,106,257,98,259,103,245,110,201,147,164,190,134,233,114,268"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="272,120,425,160"/>
+<area shape="poly" title=" " alt="" coords="120,264,173,217,207,192,243,170,258,163,260,167,245,174,210,196,176,221,124,268"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#a3af989b3030089d5e717aa8ec83cb206" title="Gets a const reference to the event&#39;s data items." alt="" coords="244,185,453,210"/>
+<area shape="poly" title=" " alt="" coords="140,264,189,242,243,220,274,211,275,216,245,225,191,246,143,269"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="253,299,444,339"/>
+<area shape="poly" title=" " alt="" coords="196,296,240,302,239,307,196,302"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#afb40d381331bc5a41198a67759f6a8ac" title=" " alt="" coords="253,363,444,403"/>
+<area shape="poly" title=" " alt="" coords="144,304,245,348,266,356,264,361,243,353,142,309"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="253,427,444,467"/>
+<area shape="poly" title=" " alt="" coords="121,305,173,358,208,387,245,412,258,419,256,424,243,417,205,392,170,362,117,309"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="253,491,444,531"/>
+<area shape="poly" title=" " alt="" coords="114,306,133,342,163,388,200,436,246,477,254,482,251,487,242,481,196,439,158,391,129,345,109,308"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="253,235,444,275"/>
+<area shape="poly" title=" " alt="" coords="196,272,239,266,240,271,196,277"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="272,555,425,595"/>
+<area shape="poly" title=" " alt="" coords="110,306,126,354,153,417,193,484,218,514,246,541,261,551,258,555,242,545,214,518,189,487,149,420,121,356,105,308"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="520,120,673,160"/>
+<area shape="poly" title=" " alt="" coords="426,137,506,137,506,143,426,143"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468" title=" " alt="" coords="511,342,682,367"/>
+<area shape="poly" title=" " alt="" coords="445,330,498,338,497,343,444,335"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4" title=" " alt="" coords="501,392,692,432"/>
+<area shape="poly" title=" " alt="" coords="423,336,454,348,479,362,503,376,522,385,520,389,500,381,476,367,452,353,422,341"/>
+<area shape="poly" title=" " alt="" coords="444,369,497,363,498,368,444,375"/>
+<area shape="poly" title=" " alt="" coords="444,391,488,396,487,402,444,397"/>
+<area shape="poly" title=" " alt="" coords="424,424,452,412,476,395,500,378,521,369,523,374,503,382,479,399,455,417,426,429"/>
+<area shape="poly" title=" " alt="" coords="444,431,487,425,488,430,445,436"/>
+<area shape="poly" title=" " alt="" coords="434,488,452,477,462,465,469,453,475,428,481,403,488,390,500,378,508,372,512,376,503,382,492,393,486,405,480,430,474,455,467,468,455,481,437,493"/>
+<area shape="poly" title=" " alt="" coords="418,488,452,476,543,436,545,441,454,481,420,493"/>
+<area shape="poly" title=" " alt="" coords="421,272,454,284,560,333,558,338,452,289,419,277"/>
+<area shape="poly" title=" " alt="" coords="437,273,455,285,473,308,480,332,487,355,503,377,511,383,508,387,499,381,482,357,475,333,469,310,452,289,434,277"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="528,562,665,587"/>
+<area shape="poly" title=" " alt="" coords="426,572,514,572,514,577,426,577"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="740,562,921,587"/>
+<area shape="poly" title=" " alt="" coords="666,572,726,572,726,577,666,577"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="969,562,1128,587"/>
+<area shape="poly" title=" " alt="" coords="921,572,956,572,956,577,921,577"/>
 </map>
 </div>
 <div class="dynheader">
@@ -216,19 +278,138 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_adb44e1de745d846041d168f69eed4bfe_icgraph">
-<area shape="rect" title=" " alt="" coords="801,37,992,77"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,5,729,45"/>
-<area shape="poly" title=" " alt="" coords="787,46,729,39,729,33,788,41"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="788,74,754,78,753,73,787,68"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,5,463,45"/>
-<area shape="poly" title=" " alt="" coords="547,28,463,28,463,23,547,23"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,5,216,45"/>
-<area shape="poly" title=" " alt="" coords="282,28,216,28,216,23,282,23"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
+<area shape="rect" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,92,1244,132"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,5,992,45"/>
+<area shape="poly" title=" " alt="" coords="1076,90,955,48,957,43,1078,85"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,31,715,71"/>
+<area shape="poly" title=" " alt="" coords="1039,102,715,63,716,58,1040,97"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,120,966,160"/>
+<area shape="poly" title=" " alt="" coords="1040,127,967,135,966,130,1039,121"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,184,1005,224"/>
+<area shape="poly" title=" " alt="" coords="1092,140,1006,175,970,186,969,181,1004,169,1090,135"/>
+<area shape="poly" title=" " alt="" coords="788,38,716,45,715,40,787,33"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,31,449,71"/>
+<area shape="poly" title=" " alt="" coords="534,53,450,53,450,48,534,48"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,31,209,71"/>
+<area shape="poly" title=" " alt="" coords="269,53,210,53,210,48,269,48"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,120,701,160"/>
+<area shape="poly" title=" " alt="" coords="813,143,701,143,701,137,813,137"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,184,740,224"/>
+<area shape="poly" title=" " alt="" coords="774,207,740,207,740,201,774,201"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,184,475,224"/>
+<area shape="poly" title=" " alt="" coords="509,207,475,207,475,201,509,201"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aef0958c10eef8b7ebbb5c03cf8e50d88" name="aef0958c10eef8b7ebbb5c03cf8e50d88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef0958c10eef8b7ebbb5c03cf8e50d88">&#9670;&#160;</a></span>DiscoverWithAI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d24/structanalyzer_1_1ActorDiscoveryResult.html">ActorDiscoveryResult</a> analyzer::ActorDiscoverer::DiscoverWithAI </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html">db::EventsContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>events</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>sampleLimit</em> = <code>10'000</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Discover with AI direction detection (if LLM available). Combines heuristic actor discovery with AI-detected message directions. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_cgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_cgraph" alt=""/></div>
+<map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_cgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_cgraph">
+<area shape="rect" title=" " alt="" coords="5,443,196,483"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="267,96,412,121"/>
+<area shape="poly" title=" " alt="" coords="108,442,160,337,198,269,242,203,277,163,311,129,315,133,280,166,246,206,203,272,164,339,113,444"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="244,381,435,421"/>
+<area shape="poly" title=" " alt="" coords="177,441,249,422,250,427,178,446"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="511,82,664,122"/>
+<area shape="poly" title=" " alt="" coords="118,441,173,381,258,299,364,210,422,168,481,132,497,124,499,129,484,136,425,173,367,214,262,303,177,385,122,445"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="511,630,664,670"/>
+<area shape="poly" title=" " alt="" coords="149,481,297,544,484,616,506,623,505,628,482,621,295,548,147,486"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="275,627,403,652"/>
+<area shape="poly" title=" " alt="" coords="119,482,171,542,207,575,245,604,278,620,275,625,243,608,203,579,168,546,115,486"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="271,680,407,705"/>
+<area shape="poly" title=" " alt="" coords="113,483,132,521,161,569,199,619,246,661,265,672,262,677,242,666,196,622,157,572,128,523,109,485"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="979,667,1160,692"/>
+<area shape="poly" title=" " alt="" coords="366,94,467,52,538,30,617,13,700,4,782,7,823,15,861,27,898,45,932,68,950,86,965,111,993,177,1015,258,1033,349,1058,527,1069,653,1064,653,1052,527,1028,350,1010,260,988,178,961,113,945,89,929,72,895,49,859,32,821,20,782,13,700,9,618,18,540,36,469,57,368,99"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1208,667,1367,692"/>
+<area shape="poly" title=" " alt="" coords="1160,677,1194,677,1194,682,1160,682"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#abb7552691c643aeb0a3248e1fe36ac9e" title=" " alt="" coords="492,274,683,314"/>
+<area shape="poly" title=" " alt="" coords="374,378,424,351,482,324,501,316,503,321,484,329,426,356,376,383"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="498,339,677,364"/>
+<area shape="poly" title=" " alt="" coords="434,379,509,364,510,370,435,384"/>
+<area shape="poly" title=" " alt="" coords="351,379,389,318,432,241,444,210,450,183,460,158,481,132,496,121,499,125,484,136,464,160,456,184,449,211,437,243,394,321,356,382"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#a3af989b3030089d5e717aa8ec83cb206" title="Gets a const reference to the event&#39;s data items." alt="" coords="483,388,692,413"/>
+<area shape="poly" title=" " alt="" coords="435,398,469,398,469,403,435,403"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="492,438,683,478"/>
+<area shape="poly" title=" " alt="" coords="427,418,488,432,487,438,426,423"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#afb40d381331bc5a41198a67759f6a8ac" title=" " alt="" coords="492,502,683,542"/>
+<area shape="poly" title=" " alt="" coords="369,419,421,453,484,488,501,495,499,500,482,493,418,458,366,423"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="492,566,683,606"/>
+<area shape="poly" title=" " alt="" coords="356,419,407,484,443,521,484,552,495,558,492,563,481,556,440,525,403,488,352,423"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="492,146,683,186"/>
+<area shape="poly" title=" " alt="" coords="347,380,366,341,395,291,434,240,481,196,489,191,492,195,484,200,438,244,400,294,371,343,352,382"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="492,210,683,250"/>
+<area shape="poly" title=" " alt="" coords="354,379,406,320,442,288,481,260,493,253,496,258,484,264,445,292,410,324,358,383"/>
+<area shape="poly" title=" " alt="" coords="354,420,416,526,453,581,484,616,499,626,497,630,481,620,448,584,411,529,349,422"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="759,82,912,122"/>
+<area shape="poly" title=" " alt="" coords="664,99,745,99,745,105,664,105"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468" title=" " alt="" coords="750,417,921,443"/>
+<area shape="poly" title=" " alt="" coords="683,445,736,439,737,444,683,450"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4" title=" " alt="" coords="740,467,931,507"/>
+<area shape="poly" title=" " alt="" coords="683,467,727,472,726,477,683,472"/>
+<area shape="poly" title=" " alt="" coords="663,500,691,488,714,470,739,453,760,445,762,450,741,458,717,475,693,492,665,505"/>
+<area shape="poly" title=" " alt="" coords="682,506,726,500,727,505,683,511"/>
+<area shape="poly" title=" " alt="" coords="673,564,690,552,701,541,707,529,713,504,719,479,727,466,738,453,747,447,750,451,742,457,731,469,724,480,718,505,712,531,705,544,694,556,676,568"/>
+<area shape="poly" title=" " alt="" coords="657,564,691,552,782,511,784,516,693,557,659,569"/>
+<area shape="poly" title=" " alt="" coords="674,184,694,196,719,219,743,246,781,303,810,359,828,403,823,405,805,361,777,306,738,249,716,223,690,200,671,188"/>
+<area shape="poly" title=" " alt="" coords="680,184,694,196,716,229,724,262,724,294,719,326,715,357,714,389,722,420,742,452,746,457,742,461,738,456,717,422,709,389,709,357,714,325,719,294,719,263,711,231,690,200,676,188"/>
+<area shape="poly" title=" " alt="" coords="671,248,693,260,735,294,771,333,822,404,817,407,767,336,731,297,691,264,668,253"/>
+<area shape="poly" title=" " alt="" coords="679,248,694,260,711,285,719,309,721,334,719,358,717,382,719,405,726,429,742,452,747,457,743,461,738,456,721,431,713,406,712,382,714,357,715,334,714,310,707,287,690,264,676,252"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="767,640,904,665"/>
+<area shape="poly" title=" " alt="" coords="664,648,753,649,753,655,664,654"/>
+<area shape="poly" title=" " alt="" coords="905,658,965,665,965,670,904,663"/>
+<area shape="poly" title=" " alt="" coords="385,650,435,665,459,673,483,680,612,692,743,696,864,693,965,687,965,692,864,698,743,701,612,698,482,685,458,679,434,670,383,655"/>
+<area shape="poly" title=" " alt="" coords="384,703,432,715,483,723,609,738,707,744,805,740,930,724,980,711,1026,695,1028,700,982,716,931,729,806,746,707,750,608,743,482,729,430,720,383,708"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_icgraph" alt=""/></div>
+<map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_aef0958c10eef8b7ebbb5c03cf8e50d88_icgraph">
+<area shape="rect" title=" " alt="" coords="688,5,879,45"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="472,5,640,45"/>
+<area shape="poly" title=" " alt="" coords="674,28,640,28,640,23,674,23"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="257,5,424,45"/>
+<area shape="poly" title=" " alt="" coords="458,28,424,28,424,23,458,23"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,5,209,45"/>
+<area shape="poly" title=" " alt="" coords="243,28,210,28,210,23,243,23"/>
 </map>
 </div>
 
@@ -274,22 +455,119 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_a272603f6e82e78bca366822b51578f29_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_a272603f6e82e78bca366822b51578f29_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_a272603f6e82e78bca366822b51578f29_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_a272603f6e82e78bca366822b51578f29_icgraph">
-<area shape="rect" title=" " alt="" coords="1040,35,1231,75"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,63,992,103"/>
-<area shape="poly" title=" " alt="" coords="1027,70,992,74,992,69,1026,65"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,5,729,45"/>
-<area shape="poly" title=" " alt="" coords="1026,51,729,33,729,28,1027,46"/>
-<area shape="poly" title=" " alt="" coords="794,62,728,47,730,42,795,57"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="787,88,753,89,753,84,787,83"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,5,463,45"/>
-<area shape="poly" title=" " alt="" coords="547,28,463,28,463,23,547,23"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,5,216,45"/>
-<area shape="poly" title=" " alt="" coords="282,28,216,28,216,23,282,23"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
+<area shape="rect" title=" " alt="" coords="1292,9,1483,49"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,63,1244,103"/>
+<area shape="poly" title=" " alt="" coords="1285,55,1239,65,1238,60,1284,50"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,5,715,45"/>
+<area shape="poly" title=" " alt="" coords="1278,30,1005,25,788,25,716,26,716,21,788,20,1005,20,1278,24"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,63,992,103"/>
+<area shape="poly" title=" " alt="" coords="1039,85,992,85,992,80,1039,80"/>
+<area shape="poly" title=" " alt="" coords="1055,62,1005,53,852,37,715,30,716,25,852,32,1006,48,1056,57"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,127,966,167"/>
+<area shape="poly" title=" " alt="" coords="1057,109,967,132,966,127,1055,103"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,191,1005,231"/>
+<area shape="poly" title=" " alt="" coords="1113,113,1064,148,1006,181,977,193,975,188,1004,176,1061,144,1110,109"/>
+<area shape="poly" title=" " alt="" coords="790,62,715,46,716,41,791,57"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,5,449,45"/>
+<area shape="poly" title=" " alt="" coords="534,28,450,28,450,23,534,23"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,5,209,45"/>
+<area shape="poly" title=" " alt="" coords="269,28,210,28,210,23,269,23"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,127,701,167"/>
+<area shape="poly" title=" " alt="" coords="813,149,701,149,701,144,813,144"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,191,740,231"/>
+<area shape="poly" title=" " alt="" coords="774,213,740,213,740,208,774,208"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,191,475,231"/>
+<area shape="poly" title=" " alt="" coords="509,213,475,213,475,208,509,208"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afb40d381331bc5a41198a67759f6a8ac" name="afb40d381331bc5a41198a67759f6a8ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb40d381331bc5a41198a67759f6a8ac">&#9670;&#160;</a></span>ScoreDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int analyzer::ActorDiscoverer::ScoreDirection </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>fieldName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>outValues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>inValues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns how well a field's VALUES match known direction keywords. <code>outCount</code> / <code>inCount</code> — how many values matched outgoing / incoming. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_cgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_cgraph" alt=""/></div>
+<map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_cgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_cgraph">
+<area shape="rect" title=" " alt="" coords="5,27,196,67"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468" title=" " alt="" coords="254,5,425,31"/>
+<area shape="poly" title=" " alt="" coords="196,33,240,27,241,33,197,38"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a5b501b717dce3385bb8590205c6afcd4" title=" " alt="" coords="244,55,435,95"/>
+<area shape="poly" title=" " alt="" coords="197,56,231,60,230,65,196,61"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_icgraph" alt=""/></div>
+<map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_afb40d381331bc5a41198a67759f6a8ac_icgraph">
+<area shape="rect" title=" " alt="" coords="1292,92,1483,132"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,92,1244,132"/>
+<area shape="poly" title=" " alt="" coords="1278,115,1244,115,1244,109,1278,109"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,5,992,45"/>
+<area shape="poly" title=" " alt="" coords="1076,90,955,48,957,43,1078,85"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,31,715,71"/>
+<area shape="poly" title=" " alt="" coords="1039,102,715,63,716,58,1040,97"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,120,966,160"/>
+<area shape="poly" title=" " alt="" coords="1040,127,967,135,966,130,1039,121"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,184,1005,224"/>
+<area shape="poly" title=" " alt="" coords="1092,140,1006,175,970,186,969,181,1004,169,1090,135"/>
+<area shape="poly" title=" " alt="" coords="788,38,716,45,715,40,787,33"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,31,449,71"/>
+<area shape="poly" title=" " alt="" coords="534,53,450,53,450,48,534,48"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,31,209,71"/>
+<area shape="poly" title=" " alt="" coords="269,53,210,53,210,48,269,48"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,120,701,160"/>
+<area shape="poly" title=" " alt="" coords="813,143,701,143,701,137,813,137"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,184,740,224"/>
+<area shape="poly" title=" " alt="" coords="774,207,740,207,740,201,774,201"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,184,475,224"/>
+<area shape="poly" title=" " alt="" coords="509,207,475,207,475,201,509,201"/>
 </map>
 </div>
 
@@ -335,21 +613,28 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_adf4d40cd2458fdd5cedcb75ad5388dbf_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_adf4d40cd2458fdd5cedcb75ad5388dbf_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_adf4d40cd2458fdd5cedcb75ad5388dbf_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_adf4d40cd2458fdd5cedcb75ad5388dbf_icgraph">
-<area shape="rect" title=" " alt="" coords="1040,37,1231,77"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,37,992,77"/>
-<area shape="poly" title=" " alt="" coords="1026,60,992,60,992,55,1026,55"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,5,729,45"/>
-<area shape="poly" title=" " alt="" coords="787,46,729,39,729,33,788,41"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="788,74,754,78,753,73,787,68"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,5,463,45"/>
-<area shape="poly" title=" " alt="" coords="547,28,463,28,463,23,547,23"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,5,216,45"/>
-<area shape="poly" title=" " alt="" coords="282,28,216,28,216,23,282,23"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
+<area shape="rect" title=" " alt="" coords="1292,92,1483,132"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,92,1244,132"/>
+<area shape="poly" title=" " alt="" coords="1278,115,1244,115,1244,109,1278,109"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,5,992,45"/>
+<area shape="poly" title=" " alt="" coords="1076,90,955,48,957,43,1078,85"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,31,715,71"/>
+<area shape="poly" title=" " alt="" coords="1039,102,715,63,716,58,1040,97"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,120,966,160"/>
+<area shape="poly" title=" " alt="" coords="1040,127,967,135,966,130,1039,121"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,184,1005,224"/>
+<area shape="poly" title=" " alt="" coords="1092,140,1006,175,970,186,969,181,1004,169,1090,135"/>
+<area shape="poly" title=" " alt="" coords="788,38,716,45,715,40,787,33"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,31,449,71"/>
+<area shape="poly" title=" " alt="" coords="534,53,450,53,450,48,534,48"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,31,209,71"/>
+<area shape="poly" title=" " alt="" coords="269,53,210,53,210,48,269,48"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,120,701,160"/>
+<area shape="poly" title=" " alt="" coords="813,143,701,143,701,137,813,137"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,184,740,224"/>
+<area shape="poly" title=" " alt="" coords="774,207,740,207,740,201,774,201"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,184,475,224"/>
+<area shape="poly" title=" " alt="" coords="509,207,475,207,475,201,509,201"/>
 </map>
 </div>
 
@@ -395,22 +680,29 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_a147b84411c5fe2961d92bc13a1133b24_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_a147b84411c5fe2961d92bc13a1133b24_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_a147b84411c5fe2961d92bc13a1133b24_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_a147b84411c5fe2961d92bc13a1133b24_icgraph">
-<area shape="rect" title=" " alt="" coords="1040,35,1231,75"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,63,992,103"/>
-<area shape="poly" title=" " alt="" coords="1027,70,992,74,992,69,1026,65"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,5,729,45"/>
-<area shape="poly" title=" " alt="" coords="1026,51,729,33,729,28,1027,46"/>
-<area shape="poly" title=" " alt="" coords="794,62,728,47,730,42,795,57"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="787,88,753,89,753,84,787,83"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,5,463,45"/>
-<area shape="poly" title=" " alt="" coords="547,28,463,28,463,23,547,23"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,5,216,45"/>
-<area shape="poly" title=" " alt="" coords="282,28,216,28,216,23,282,23"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
+<area shape="rect" title=" " alt="" coords="1292,9,1483,49"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,63,1244,103"/>
+<area shape="poly" title=" " alt="" coords="1285,55,1239,65,1238,60,1284,50"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,5,715,45"/>
+<area shape="poly" title=" " alt="" coords="1278,30,1005,25,788,25,716,26,716,21,788,20,1005,20,1278,24"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,63,992,103"/>
+<area shape="poly" title=" " alt="" coords="1039,85,992,85,992,80,1039,80"/>
+<area shape="poly" title=" " alt="" coords="1055,62,1005,53,852,37,715,30,716,25,852,32,1006,48,1056,57"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,127,966,167"/>
+<area shape="poly" title=" " alt="" coords="1057,109,967,132,966,127,1055,103"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,191,1005,231"/>
+<area shape="poly" title=" " alt="" coords="1113,113,1064,148,1006,181,977,193,975,188,1004,176,1061,144,1110,109"/>
+<area shape="poly" title=" " alt="" coords="790,62,715,46,716,41,791,57"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,5,449,45"/>
+<area shape="poly" title=" " alt="" coords="534,28,450,28,450,23,534,23"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,5,209,45"/>
+<area shape="poly" title=" " alt="" coords="269,28,210,28,210,23,269,23"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,127,701,167"/>
+<area shape="poly" title=" " alt="" coords="813,149,701,149,701,144,813,144"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,191,740,231"/>
+<area shape="poly" title=" " alt="" coords="774,213,740,213,740,208,774,208"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,191,475,231"/>
+<area shape="poly" title=" " alt="" coords="509,213,475,213,475,208,509,208"/>
 </map>
 </div>
 
@@ -456,22 +748,29 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_aca7a72af4ac2cca1f90169e6a5ed3df9_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_aca7a72af4ac2cca1f90169e6a5ed3df9_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_aca7a72af4ac2cca1f90169e6a5ed3df9_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_aca7a72af4ac2cca1f90169e6a5ed3df9_icgraph">
-<area shape="rect" title=" " alt="" coords="1040,35,1231,75"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,63,992,103"/>
-<area shape="poly" title=" " alt="" coords="1027,70,992,74,992,69,1026,65"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,5,729,45"/>
-<area shape="poly" title=" " alt="" coords="1026,51,729,33,729,28,1027,46"/>
-<area shape="poly" title=" " alt="" coords="794,62,728,47,730,42,795,57"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="787,88,753,89,753,84,787,83"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,5,463,45"/>
-<area shape="poly" title=" " alt="" coords="547,28,463,28,463,23,547,23"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,5,216,45"/>
-<area shape="poly" title=" " alt="" coords="282,28,216,28,216,23,282,23"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
+<area shape="rect" title=" " alt="" coords="1292,9,1483,49"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,63,1244,103"/>
+<area shape="poly" title=" " alt="" coords="1285,55,1239,65,1238,60,1284,50"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,5,715,45"/>
+<area shape="poly" title=" " alt="" coords="1278,30,1005,25,788,25,716,26,716,21,788,20,1005,20,1278,24"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,63,992,103"/>
+<area shape="poly" title=" " alt="" coords="1039,85,992,85,992,80,1039,80"/>
+<area shape="poly" title=" " alt="" coords="1055,62,1005,53,852,37,715,30,716,25,852,32,1006,48,1056,57"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,127,966,167"/>
+<area shape="poly" title=" " alt="" coords="1057,109,967,132,966,127,1055,103"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,191,1005,231"/>
+<area shape="poly" title=" " alt="" coords="1113,113,1064,148,1006,181,977,193,975,188,1004,176,1061,144,1110,109"/>
+<area shape="poly" title=" " alt="" coords="790,62,715,46,716,41,791,57"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,5,449,45"/>
+<area shape="poly" title=" " alt="" coords="534,28,450,28,450,23,534,23"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,5,209,45"/>
+<area shape="poly" title=" " alt="" coords="269,28,210,28,210,23,269,23"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,127,701,167"/>
+<area shape="poly" title=" " alt="" coords="813,149,701,149,701,144,813,144"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,191,740,231"/>
+<area shape="poly" title=" " alt="" coords="774,213,740,213,740,208,774,208"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,191,475,231"/>
+<area shape="poly" title=" " alt="" coords="509,213,475,213,475,208,509,208"/>
 </map>
 </div>
 
@@ -496,7 +795,7 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -505,35 +804,45 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d49/classanalyzer_1_1ActorDiscoverer_a5b501b717dce3385bb8590205c6afcd4_icgraph.png" border="0" usemap="#ad9/d49/classanalyzer_1_1ActorDiscoverer_a5b501b717dce3385bb8590205c6afcd4_icgraph" alt=""/></div>
 <map name="ad9/d49/classanalyzer_1_1ActorDiscoverer_a5b501b717dce3385bb8590205c6afcd4_icgraph" id="ad9/d49/classanalyzer_1_1ActorDiscoverer_a5b501b717dce3385bb8590205c6afcd4_icgraph">
-<area shape="rect" title=" " alt="" coords="1279,101,1469,141"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="1040,5,1231,45"/>
-<area shape="poly" title=" " alt="" coords="1317,98,1230,60,1198,48,1200,43,1232,55,1320,93"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="1040,69,1231,109"/>
-<area shape="poly" title=" " alt="" coords="1265,109,1230,105,1231,99,1265,104"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="1040,197,1231,237"/>
-<area shape="poly" title=" " alt="" coords="1320,150,1232,188,1200,200,1198,195,1230,183,1317,145"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="1040,133,1231,173"/>
-<area shape="poly" title=" " alt="" coords="1265,139,1231,143,1230,138,1265,133"/>
-<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title=" " alt="" coords="801,72,992,112"/>
-<area shape="poly" title=" " alt="" coords="1051,52,970,74,968,69,1049,46"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="561,133,729,173"/>
-<area shape="poly" title=" " alt="" coords="1027,18,972,20,914,26,857,39,803,62,787,76,779,91,771,107,755,123,730,137,727,132,752,119,766,104,774,88,783,72,800,58,855,34,913,21,972,14,1027,13"/>
-<area shape="poly" title=" " alt="" coords="801,118,728,136,727,131,800,113"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="536,69,753,109"/>
-<area shape="poly" title=" " alt="" coords="787,94,753,93,753,88,787,88"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="296,133,463,173"/>
-<area shape="poly" title=" " alt="" coords="547,156,463,156,463,151,547,151"/>
-<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="12,133,216,173"/>
-<area shape="poly" title=" " alt="" coords="282,156,216,156,216,151,282,151"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="271,69,488,109"/>
-<area shape="poly" title=" " alt="" coords="522,92,488,92,488,87,522,87"/>
-<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="5,69,223,109"/>
-<area shape="poly" title=" " alt="" coords="257,92,223,92,223,87,257,87"/>
-<area shape="poly" title=" " alt="" coords="1026,93,992,94,992,88,1026,88"/>
-<area shape="poly" title=" " alt="" coords="1054,195,1039,188,975,151,922,114,926,110,978,146,1041,183,1057,190"/>
-<area shape="poly" title=" " alt="" coords="1026,206,728,167,729,162,1027,201"/>
-<area shape="poly" title=" " alt="" coords="1043,132,974,115,976,109,1044,127"/>
-<area shape="poly" title=" " alt="" coords="1026,156,729,156,729,151,1026,151"/>
+<area shape="rect" title=" " alt="" coords="1531,133,1721,173"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a272603f6e82e78bca366822b51578f29" title=" " alt="" coords="1292,69,1483,109"/>
+<area shape="poly" title=" " alt="" coords="1537,132,1462,112,1463,107,1538,127"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#afb40d381331bc5a41198a67759f6a8ac" title=" " alt="" coords="1292,197,1483,237"/>
+<area shape="poly" title=" " alt="" coords="1538,180,1463,200,1462,195,1537,174"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adf4d40cd2458fdd5cedcb75ad5388dbf" title=" " alt="" coords="1292,133,1483,173"/>
+<area shape="poly" title=" " alt="" coords="1517,156,1483,156,1483,151,1517,151"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#a147b84411c5fe2961d92bc13a1133b24" title=" " alt="" coords="1292,5,1483,45"/>
+<area shape="poly" title=" " alt="" coords="1587,127,1538,93,1481,60,1454,48,1456,43,1484,55,1541,88,1590,123"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aca7a72af4ac2cca1f90169e6a5ed3df9" title=" " alt="" coords="1292,261,1483,301"/>
+<area shape="poly" title=" " alt="" coords="1590,184,1541,218,1484,252,1456,264,1454,259,1481,247,1538,214,1587,180"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe" title="Scan up to sampleLimit events and return all discovered patterns." alt="" coords="1053,152,1244,192"/>
+<area shape="poly" title=" " alt="" coords="1315,116,1293,124,1206,154,1205,149,1291,119,1313,111"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a39ab1699209e7f516ecaf35fbfb1de0c" title=" " alt="" coords="547,95,715,135"/>
+<area shape="poly" title=" " alt="" coords="1278,96,716,115,715,109,1278,90"/>
+<area shape="rect" href="../../d9/d49/classanalyzer_1_1ActorDiscoverer.html#aef0958c10eef8b7ebbb5c03cf8e50d88" title=" " alt="" coords="801,152,992,192"/>
+<area shape="poly" title=" " alt="" coords="1039,175,992,175,992,169,1039,169"/>
+<area shape="poly" title=" " alt="" coords="1055,152,1005,143,852,127,715,119,716,114,852,121,1006,137,1056,146"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9decba73a06acade6ed691867bf7b914" title="Recompute actor statistics from the current visible row set." alt="" coords="827,331,966,371"/>
+<area shape="poly" title=" " alt="" coords="1109,203,928,333,924,328,1106,198"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ae2ebbd0bb141e5e210198b389b0b548a" title=" " alt="" coords="788,216,1005,256"/>
+<area shape="poly" title=" " alt="" coords="1057,198,977,219,975,213,1055,193"/>
+<area shape="poly" title=" " alt="" coords="790,152,715,135,716,130,791,146"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a935d204ab1acb8996d6c4d034cc6a4b6" title=" " alt="" coords="283,95,449,135"/>
+<area shape="poly" title=" " alt="" coords="534,117,450,117,450,112,534,112"/>
+<area shape="rect" href="../../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a5a2e927935dcea06978135ee4e30ad70" title=" " alt="" coords="5,95,209,135"/>
+<area shape="poly" title=" " alt="" coords="269,117,210,117,210,112,269,112"/>
+<area shape="rect" href="../../d2/d40/classui_1_1qt_1_1ActorsPanel.html#a69bb12f2ac1d9afe8f0c2d9d4a232c08" title="Set actor definitions and refresh the tree." alt="" coords="562,331,701,371"/>
+<area shape="poly" title=" " alt="" coords="813,353,701,353,701,348,813,348"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba" title=" " alt="" coords="523,216,740,256"/>
+<area shape="poly" title=" " alt="" coords="774,239,740,239,740,233,774,233"/>
+<area shape="rect" href="../../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b" title=" " alt="" coords="257,216,475,256"/>
+<area shape="poly" title=" " alt="" coords="509,239,475,239,475,233,509,233"/>
+<area shape="poly" title=" " alt="" coords="1278,199,1244,193,1245,187,1279,194"/>
+<area shape="poly" title=" " alt="" coords="1279,165,1244,167,1244,162,1278,159"/>
+<area shape="poly" title=" " alt="" coords="1306,53,1293,60,1258,82,1224,107,1172,154,1168,150,1221,103,1255,78,1291,55,1304,48"/>
+<area shape="poly" title=" " alt="" coords="1278,37,1052,59,788,91,716,102,715,97,788,85,1052,54,1278,32"/>
+<area shape="poly" title=" " alt="" coords="1308,259,1291,252,1232,223,1182,194,1184,190,1235,218,1293,247,1310,254"/>
+<area shape="poly" title=" " alt="" coords="1278,293,1150,299,1008,301,878,293,826,284,787,270,769,257,759,241,751,224,738,206,698,168,659,137,662,133,701,164,742,202,756,221,764,238,773,253,789,266,827,279,879,288,1008,296,1150,294,1278,287"/>
 </map>
 </div>
 
