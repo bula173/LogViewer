@@ -881,6 +881,25 @@ void MainWindow::SetupMenus()
 
     viewMenu->addSeparator();
 
+    auto* bookmarksAction = viewMenu->addAction(tr("Show &Bookmarks"));
+    bookmarksAction->setShortcut(QKeySequence(tr("Ctrl+B")));
+    connect(bookmarksAction, &QAction::triggered, this, [this]() {
+        if (!m_bookmarksPanel || !m_contentTabs)
+            return;
+        // Find the index of the bookmarks tab
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            if (m_contentTabs->widget(i) == m_bookmarksPanel)
+            {
+                // Make tab visible and switch to it
+                m_contentTabs->tabBar()->setTabVisible(i, true);
+                m_contentTabs->setCurrentIndex(i);
+                m_bookmarksPanel->setFocus();
+                break;
+            }
+        }
+    });
+
     auto* jumpAction = viewMenu->addAction(tr("Go to &Timestamp…"));
     jumpAction->setShortcut(QKeySequence(tr("Ctrl+G")));
     connect(jumpAction, &QAction::triggered, this, [this]() {
