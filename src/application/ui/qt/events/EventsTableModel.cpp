@@ -637,23 +637,25 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
         columnName = columns[static_cast<std::size_t>(columnConfigIndex)].name;
     }
 
-    util::Logger::Debug("[EventsTableModel] sort: column {} ({}), order {}",
-        column, columnName, order == Qt::AscendingOrder ? "asc" : "desc");
+    util::Logger::Debug("[EventsTableModel] sort: column {} ({}), order {}, filtering={}",
+        column, columnName, order == Qt::AscendingOrder ? "asc" : "desc", m_filteringActive);
 
     emit layoutAboutToBeChanged();
 
     // Get the list of indices to sort
     std::vector<unsigned long> indicesToSort;
-    if (m_filteredIndices.empty())
+    if (!m_filteringActive || m_filteredIndices.empty())
     {
-        // Sort all events
+        // Sort all events (filtering not active or no filtered results)
         indicesToSort.resize(m_events.Size());
         std::iota(indicesToSort.begin(), indicesToSort.end(), 0UL);
+        util::Logger::Debug("[EventsTableModel] sort: sorting all {} events", m_events.Size());
     }
     else
     {
         // Sort only filtered events
         indicesToSort = m_filteredIndices;
+        util::Logger::Debug("[EventsTableModel] sort: sorting {} filtered events", indicesToSort.size());
     }
 
     // Sort the indices based on the column values
@@ -707,16 +709,15 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
         });
 
     // Update the filtered indices with sorted order
-    if (m_filteredIndices.empty())
+    // CRITICAL: Check m_filteringActive (not empty!) to determine if we should activate filtering
+    // - If filtering is NOT active: sort all events, activate filtering to preserve sort order
+    // - If filtering IS active: sort only filtered events, keep filtering active
+    if (!m_filteringActive)
     {
-        // We sorted all events, but we don't set m_filteredIndices
-        // because empty m_filteredIndices means "show all"
-        // Instead, we need to actually reorder the container
-        // However, we can't reorder the container itself as it may break other references
-        // So we set the filtered indices to the sorted order
+        // Filtering was not active, but we sorted all events.
+        // To preserve the sort order, we need to activate filtering with sorted indices.
+        util::Logger::Debug("[EventsTableModel] sort: activating filtering to preserve sort order");
         m_filteredIndices = indicesToSort;
-        // When we populated filtered indices from a full sort, mark filtering
-        // as active so other model methods use the mapped indices.
         m_filteringActive = true;
         // Rebuild reverse lookup map for RowFromActualIndex
         m_reverseFilteredIndices.clear();
@@ -728,7 +729,15 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     }
     else
     {
+        // Filtering is active, update filtered indices with sorted order
         m_filteredIndices = indicesToSort;
+        // Rebuild reverse lookup map for RowFromActualIndex
+        m_reverseFilteredIndices.clear();
+        m_reverseFilteredIndices.reserve(m_filteredIndices.size());
+        for (int row = 0; row < static_cast<int>(m_filteredIndices.size()); ++row)
+        {
+            m_reverseFilteredIndices[m_filteredIndices[static_cast<std::size_t>(row)]] = row;
+        }
     }
 
     emit layoutChanged();
