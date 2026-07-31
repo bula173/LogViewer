@@ -18,11 +18,11 @@ ReportGenerator::ReportGenerator(db::EventsContainer& events)
 
 QString ReportGenerator::generateReport(const std::vector<int>& eventIndices, const ReportOptions& options)
 {
-    std::vector<db::LogEvent*> events;
+    std::vector<const db::LogEvent*> events;
     for (int idx : eventIndices)
     {
         if (idx >= 0 && idx < static_cast<int>(m_events.Size()))
-            events.push_back(const_cast<db::LogEvent*>(&m_events.GetEvent(static_cast<size_t>(idx))));
+            events.push_back(&m_events.GetEvent(static_cast<size_t>(idx)));
     }
 
     util::Logger::Info("[ReportGenerator] Generating report with {} events", events.size());
@@ -66,7 +66,7 @@ QString ReportGenerator::generateReportFiltered(const QString&, const ReportOpti
     return generateReport(indices, options);
 }
 
-QString ReportGenerator::GenerateHTML(const std::vector<db::LogEvent*>& events, const ReportOptions& options)
+QString ReportGenerator::GenerateHTML(const std::vector<const db::LogEvent*>& events, const ReportOptions& options)
 {
     auto stats = CalculateStatistics(events);
 
@@ -142,7 +142,7 @@ QString ReportGenerator::GenerateHTML(const std::vector<db::LogEvent*>& events, 
     return html;
 }
 
-QString ReportGenerator::GenerateMarkdown(const std::vector<db::LogEvent*>& events, const ReportOptions& options)
+QString ReportGenerator::GenerateMarkdown(const std::vector<const db::LogEvent*>& events, const ReportOptions& options)
 {
     auto stats = CalculateStatistics(events);
 
@@ -187,7 +187,7 @@ QString ReportGenerator::GenerateMarkdown(const std::vector<db::LogEvent*>& even
     return md;
 }
 
-QString ReportGenerator::GenerateJSON(const std::vector<db::LogEvent*>& events, const ReportOptions& options)
+QString ReportGenerator::GenerateJSON(const std::vector<const db::LogEvent*>& events, const ReportOptions& options)
 {
     nlohmann::json j;
     j["title"] = options.title.toStdString();
@@ -220,7 +220,7 @@ QString ReportGenerator::GenerateJSON(const std::vector<db::LogEvent*>& events, 
     return QString::fromStdString(j.dump(2));
 }
 
-QString ReportGenerator::GeneratePlainText(const std::vector<db::LogEvent*>& events, const ReportOptions& options)
+QString ReportGenerator::GeneratePlainText(const std::vector<const db::LogEvent*>& events, const ReportOptions& options)
 {
     auto stats = CalculateStatistics(events);
 
@@ -238,7 +238,7 @@ QString ReportGenerator::GeneratePlainText(const std::vector<db::LogEvent*>& eve
     return txt;
 }
 
-ReportGenerator::ReportStatistics ReportGenerator::CalculateStatistics(const std::vector<db::LogEvent*>& events)
+ReportGenerator::ReportStatistics ReportGenerator::CalculateStatistics(const std::vector<const db::LogEvent*>& events)
 {
     ReportStatistics stats{};
     stats.totalEvents = static_cast<int>(events.size());
@@ -293,13 +293,13 @@ QString ReportGenerator::GenerateStatisticsTable(const ReportStatistics& stats)
     return table;
 }
 
-QString ReportGenerator::GenerateTimeline(const std::vector<db::LogEvent*>& events)
+QString ReportGenerator::GenerateTimeline(const std::vector<const db::LogEvent*>& events)
 {
     // Placeholder for timeline generation
     return "Timeline data would be generated here";
 }
 
-QString ReportGenerator::GenerateTrendAnalysis(const std::vector<db::LogEvent*>&)
+QString ReportGenerator::GenerateTrendAnalysis(const std::vector<const db::LogEvent*>&)
 {
     // Placeholder for trend analysis
     return "Trend analysis would be generated here";

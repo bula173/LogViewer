@@ -74,16 +74,16 @@ class ReportGenerator
         std::map<QString, int> levelDistribution;
     };
 
-    QString GenerateHTML(const std::vector<db::LogEvent*>& events, const ReportOptions& options);
-    QString GenerateMarkdown(const std::vector<db::LogEvent*>& events, const ReportOptions& options);
-    QString GenerateJSON(const std::vector<db::LogEvent*>& events, const ReportOptions& options);
-    QString GeneratePlainText(const std::vector<db::LogEvent*>& events, const ReportOptions& options);
+    QString GenerateHTML(const std::vector<const db::LogEvent*>& events, const ReportOptions& options);
+    QString GenerateMarkdown(const std::vector<const db::LogEvent*>& events, const ReportOptions& options);
+    QString GenerateJSON(const std::vector<const db::LogEvent*>& events, const ReportOptions& options);
+    QString GeneratePlainText(const std::vector<const db::LogEvent*>& events, const ReportOptions& options);
 
-    ReportStatistics CalculateStatistics(const std::vector<db::LogEvent*>& events);
+    ReportStatistics CalculateStatistics(const std::vector<const db::LogEvent*>& events);
     QString GenerateSummary(const ReportStatistics& stats);
     QString GenerateStatisticsTable(const ReportStatistics& stats);
-    QString GenerateTimeline(const std::vector<db::LogEvent*>& events);
-    QString GenerateTrendAnalysis(const std::vector<db::LogEvent*>& events);
+    QString GenerateTimeline(const std::vector<const db::LogEvent*>& events);
+    QString GenerateTrendAnalysis(const std::vector<const db::LogEvent*>& events);
 
     db::EventsContainer& m_events;
 };
