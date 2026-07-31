@@ -11,6 +11,7 @@ target_sources(application_core
         StartupSplash.cpp
         panels/CanStatisticsStrategy.cpp
         panels/CanSignalTreePanel.cpp
+        panels/DashboardPanel.cpp
         panels/LayoutManager.cpp
         panels/ActorDefinitionsPanel.cpp
         panels/ActorsPanel.cpp

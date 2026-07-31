@@ -72,6 +72,7 @@ class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
 class FiltersPanel;
+class DashboardPanel;
 class StatsSummaryPanel;
 class PatternAnalysisPanel;
 class SignalPlotPanel;
@@ -292,6 +293,7 @@ class MainWindow : public QMainWindow,
     std::shared_ptr<services::IService> m_currentService;
     QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
+    DashboardPanel*         m_dashboardPanel{nullptr};
     StatsSummaryPanel*      m_statsPanel    {nullptr};
     PatternAnalysisPanel*   m_patternPanel  {nullptr};
     SignalPlotPanel*        m_signalPlotPanel {nullptr};

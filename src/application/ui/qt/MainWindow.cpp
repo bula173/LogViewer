@@ -6,6 +6,7 @@
 #include "utils/FileTailer.hpp"
 #include "FilterManager.hpp"
 #include "panels/LayoutManager.hpp"
+#include "panels/DashboardPanel.hpp"
 #include "panels/StatsSummaryPanel.hpp"
 #include "panels/PatternAnalysisPanel.hpp"
 #include "panels/SignalPlotPanel.hpp"
@@ -300,6 +301,26 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
             connect(m_sideBySidePanel, &SideBySidePanel::CloseRequested,
                     this, [this]() { m_eventsStack->setCurrentIndex(0); });
+
+            // ===== Dashboard Tab (First tab) =====
+            m_dashboardPanel = new DashboardPanel(m_contentTabs);
+            if (!m_dashboardPanel) {
+                throw std::runtime_error("Failed to create dashboard panel");
+            }
+            if (m_events) {
+                m_dashboardPanel->SetEventsSource(m_events);
+            }
+            m_contentTabs->addTab(m_dashboardPanel, "📊 Dashboard");
+            m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
+                tr("Overview with file info and quick statistics"));
+
+            // Connect dashboard signals
+            connect(m_dashboardPanel, &DashboardPanel::ExportRequested,
+                    this, [this]() { OnOpenFileRequested(); });  // Placeholder - could trigger export
+            connect(m_dashboardPanel, &DashboardPanel::GenerateReportRequested,
+                    this, [this]() { /* TODO: Launch report generator */ });
+            connect(m_dashboardPanel, &DashboardPanel::BookmarkCurrentRequested,
+                    this, [this]() { /* TODO: Bookmark current event */ });
 
             m_contentTabs->addTab(m_eventsStack, "Events");
             m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
