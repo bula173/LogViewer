@@ -13,6 +13,8 @@
 #include <QStandardPaths>
 #include <QStyle>
 #include <QIcon>
+#include <QDir>
+#include <QDebug>
 
 namespace ui::qt {
 
@@ -20,16 +22,40 @@ UnifiedSearchBar::UnifiedSearchBar(QWidget* parent)
     : QWidget(parent)
 {
     // Initialize settings for search history
-    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    m_settings = std::make_unique<QSettings>(configPath + "/search.ini", QSettings::IniFormat);
+    try
+    {
+        QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        if (configPath.isEmpty())
+        {
+            // Fallback to home directory if AppDataLocation is not available
+            configPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        }
+
+        if (!configPath.isEmpty())
+        {
+            // Ensure directory exists
+            QDir(configPath).mkpath(".");
+            m_settings = std::make_unique<QSettings>(configPath + "/search.ini", QSettings::IniFormat);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        qWarning() << "Failed to initialize search settings:" << e.what();
+    }
 
     CreateLayout();
     LoadSearchHistory();
 
     // Connect internal signals
-    connect(m_searchInput, &QLineEdit::textChanged, this, &UnifiedSearchBar::OnSearchTextChanged);
-    connect(m_searchInput, &QLineEdit::returnPressed, this, &UnifiedSearchBar::OnSearchReturn);
-    connect(m_clearButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnClearClicked);
+    if (m_searchInput)
+    {
+        connect(m_searchInput, &QLineEdit::textChanged, this, &UnifiedSearchBar::OnSearchTextChanged);
+        connect(m_searchInput, &QLineEdit::returnPressed, this, &UnifiedSearchBar::OnSearchReturn);
+    }
+    if (m_clearButton)
+    {
+        connect(m_clearButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnClearClicked);
+    }
 }
 
 void UnifiedSearchBar::CreateLayout()
@@ -89,19 +115,26 @@ void UnifiedSearchBar::SetEventsView(EventsTableView* view)
 
 void UnifiedSearchBar::FocusSearchInput()
 {
-    m_searchInput->setFocus();
-    m_searchInput->selectAll();
+    if (m_searchInput)
+    {
+        m_searchInput->setFocus();
+        m_searchInput->selectAll();
+    }
 }
 
 QString UnifiedSearchBar::GetSearchQuery() const
 {
+    if (!m_searchInput)
+        return QString();
     return m_searchInput->text();
 }
 
 void UnifiedSearchBar::ClearSearch()
 {
-    m_searchInput->clear();
-    m_matchCountLabel->setText("0/0");
+    if (m_searchInput)
+        m_searchInput->clear();
+    if (m_matchCountLabel)
+        m_matchCountLabel->setText("0/0");
 }
 
 void UnifiedSearchBar::OnSearchTextChanged(const QString& text)
@@ -114,7 +147,7 @@ void UnifiedSearchBar::OnSearchTextChanged(const QString& text)
 void UnifiedSearchBar::OnSearchReturn()
 {
     // When user presses Enter, apply search as filter
-    if (!m_searchInput->text().isEmpty())
+    if (m_searchInput && !m_searchInput->text().isEmpty())
     {
         AddToSearchHistory(m_searchInput->text());
         emit FilterRequested("*", m_searchInput->text());
@@ -128,7 +161,8 @@ void UnifiedSearchBar::OnClearClicked()
 
 void UnifiedSearchBar::OnSearchHistoryItemClicked(const QString& text)
 {
-    m_searchInput->setText(text);
+    if (m_searchInput)
+        m_searchInput->setText(text);
     FocusSearchInput();
 }
 
@@ -139,13 +173,23 @@ void UnifiedSearchBar::OnQuickFilterClicked()
 
 void UnifiedSearchBar::OnSearchSuggestionClicked(const QString& suggestion)
 {
-    m_searchInput->setText(suggestion);
+    if (m_searchInput)
+        m_searchInput->setText(suggestion);
     FocusSearchInput();
 }
 
 void UnifiedSearchBar::UpdateMatchCount()
 {
+    if (!m_matchCountLabel)
+        return;
+
     if (!m_events)
+    {
+        m_matchCountLabel->setText("0/0");
+        return;
+    }
+
+    if (!m_searchInput)
     {
         m_matchCountLabel->setText("0/0");
         return;
@@ -206,22 +250,32 @@ void UnifiedSearchBar::LoadSearchHistory()
     if (!m_settings)
         return;
 
-    m_settings->beginGroup("SearchHistory");
-    int size = m_settings->beginReadArray("items");
-    for (int i = 0; i < size; ++i)
+    try
     {
-        m_settings->setArrayIndex(i);
-        QString query = m_settings->value("query", "").toString();
-        if (!query.isEmpty())
-            m_searchHistory.append(query);
+        m_settings->beginGroup("SearchHistory");
+        int size = m_settings->beginReadArray("items");
+        for (int i = 0; i < size; ++i)
+        {
+            m_settings->setArrayIndex(i);
+            QString query = m_settings->value("query", "").toString();
+            if (!query.isEmpty())
+                m_searchHistory.append(query);
+        }
+        m_settings->endArray();
+        m_settings->endGroup();
     }
-    m_settings->endArray();
-    m_settings->endGroup();
+    catch (const std::exception& e)
+    {
+        qWarning() << "Error loading search history:" << e.what();
+    }
 
     // Update completer
-    if (auto model = qobject_cast<QStringListModel*>(m_completer->model()))
+    if (m_completer)
     {
-        model->setStringList(m_searchHistory);
+        if (auto model = qobject_cast<QStringListModel*>(m_completer->model()))
+        {
+            model->setStringList(m_searchHistory);
+        }
     }
 }
 
@@ -230,16 +284,23 @@ void UnifiedSearchBar::SaveSearchHistory()
     if (!m_settings)
         return;
 
-    m_settings->beginGroup("SearchHistory");
-    m_settings->beginWriteArray("items");
-    for (int i = 0; i < m_searchHistory.size(); ++i)
+    try
     {
-        m_settings->setArrayIndex(i);
-        m_settings->setValue("query", m_searchHistory[i]);
+        m_settings->beginGroup("SearchHistory");
+        m_settings->beginWriteArray("items");
+        for (int i = 0; i < m_searchHistory.size(); ++i)
+        {
+            m_settings->setArrayIndex(i);
+            m_settings->setValue("query", m_searchHistory[i]);
+        }
+        m_settings->endArray();
+        m_settings->endGroup();
+        m_settings->sync();
     }
-    m_settings->endArray();
-    m_settings->endGroup();
-    m_settings->sync();
+    catch (const std::exception& e)
+    {
+        qWarning() << "Error saving search history:" << e.what();
+    }
 }
 
 void UnifiedSearchBar::AddToSearchHistory(const QString& query)
@@ -257,9 +318,12 @@ void UnifiedSearchBar::AddToSearchHistory(const QString& query)
     SaveSearchHistory();
 
     // Update completer
-    if (auto model = qobject_cast<QStringListModel*>(m_completer->model()))
+    if (m_completer)
     {
-        model->setStringList(m_searchHistory);
+        if (auto model = qobject_cast<QStringListModel*>(m_completer->model()))
+        {
+            model->setStringList(m_searchHistory);
+        }
     }
 }
 
