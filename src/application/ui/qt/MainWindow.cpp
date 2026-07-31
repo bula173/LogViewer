@@ -1588,6 +1588,116 @@ void MainWindow::dropEvent(QDropEvent* event)
     event->acceptProposedAction();
 }
 
+void MainWindow::AutoSwitchViewForFile(const QString& filePath)
+{
+    if (!m_contentTabs || filePath.isEmpty())
+        return;
+
+    QFileInfo fileInfo(filePath);
+    QString ext = fileInfo.suffix().toLower();
+
+    int targetTabIndex = -1;
+
+    // Match file extension to appropriate view tab
+    if (ext == "xml")
+    {
+        // Find XML View tab (if it exists as a specific tab)
+        // For now, Events tab shows parsed content
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            QString tabText = m_contentTabs->tabText(i);
+            if (tabText.contains("Events", Qt::CaseInsensitive) || tabText.contains("Table", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+    }
+    else if (ext == "json" || ext == "jsonl")
+    {
+        // JSON files → Events tab
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            QString tabText = m_contentTabs->tabText(i);
+            if (tabText.contains("Events", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+    }
+    else if (ext == "csv")
+    {
+        // CSV files → Events tab
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            QString tabText = m_contentTabs->tabText(i);
+            if (tabText.contains("Events", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+    }
+    else if (ext == "asc" || ext == "dbc" || ext == "can")
+    {
+        // CAN/ASC files → Signal Browser
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            QString tabText = m_contentTabs->tabText(i);
+            if (tabText.contains("Signal", Qt::CaseInsensitive) || tabText.contains("CAN", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+        // Fallback to Events if Signal tab not found
+        if (targetTabIndex == -1)
+        {
+            for (int i = 0; i < m_contentTabs->count(); ++i)
+            {
+                if (m_contentTabs->tabText(i).contains("Events", Qt::CaseInsensitive))
+                {
+                    targetTabIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+    else if (ext == "dlt")
+    {
+        // DLT logs → Events tab
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            if (m_contentTabs->tabText(i).contains("Events", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+    }
+    else if (ext == "evl")
+    {
+        // Evlog binary → Events tab
+        for (int i = 0; i < m_contentTabs->count(); ++i)
+        {
+            if (m_contentTabs->tabText(i).contains("Events", Qt::CaseInsensitive))
+            {
+                targetTabIndex = i;
+                break;
+            }
+        }
+    }
+
+    // Switch to the target tab if found
+    if (targetTabIndex >= 0 && targetTabIndex < m_contentTabs->count())
+    {
+        m_contentTabs->setCurrentIndex(targetTabIndex);
+        util::Logger::Debug("[MainWindow] Auto-switched to tab {} for file: {}",
+            targetTabIndex, filePath.toStdString());
+    }
+}
+
 void MainWindow::HandleDroppedFile(const QString& path)
 {
     if (path.isEmpty())
@@ -1634,6 +1744,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     m_presenter->SetItemDetailsVisible(true);
                     m_currentLogFilePath = path;
                     if (m_tailAction) m_tailAction->setEnabled(true);
+                    AutoSwitchViewForFile(path);
                     const QString readyMsg = QString("Data ready. Path: %1").arg(path);
                     UpdateStatusText(readyMsg.toStdString());
                     AddToRecentFiles(path);
@@ -1672,6 +1783,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = path;
             if (m_tailAction) m_tailAction->setEnabled(true);
+            AutoSwitchViewForFile(path);
             const QString readyMsg = QString("Data ready. Path: %1").arg(path);
             UpdateStatusText(readyMsg.toStdString());
             AddToRecentFiles(path);

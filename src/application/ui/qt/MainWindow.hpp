@@ -173,6 +173,10 @@ class MainWindow : public QMainWindow,
     void dropEvent(QDropEvent* event) override;
 
     void HandleDroppedFile(const QString& path);
+
+    /// Auto-switch to appropriate view based on file extension
+    void AutoSwitchViewForFile(const QString& filePath);
+
     // Returns a parser appropriate for the file type, with DBC wired in for .asc files.
     std::unique_ptr<parser::IDataParser> CreateParserFor(const std::filesystem::path& path);
     void InitializeUi(db::EventsContainer& events);
