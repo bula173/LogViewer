@@ -15,6 +15,7 @@
 #include <QIcon>
 #include <QDir>
 #include <QDebug>
+#include <QTimer>
 
 namespace ui::qt {
 
@@ -46,16 +47,25 @@ UnifiedSearchBar::UnifiedSearchBar(QWidget* parent)
     CreateLayout();
     LoadSearchHistory();
 
+    // Verify all UI components were created successfully
+    Q_ASSERT_X(m_searchInput != nullptr, "UnifiedSearchBar", "m_searchInput failed to create");
+    Q_ASSERT_X(m_clearButton != nullptr, "UnifiedSearchBar", "m_clearButton failed to create");
+    Q_ASSERT_X(m_completer != nullptr, "UnifiedSearchBar", "m_completer failed to create");
+
+    // Initialize match count debounce timer to avoid O(n*m) on every keystroke
+    m_matchCountDebounceTimer = new QTimer(this);
+    Q_ASSERT_X(m_matchCountDebounceTimer != nullptr, "UnifiedSearchBar", "Failed to create debounce timer");
+    m_matchCountDebounceTimer->setSingleShot(true);
+    m_matchCountDebounceTimer->setInterval(MATCH_COUNT_DEBOUNCE_MS);
+    connect(m_matchCountDebounceTimer, &QTimer::timeout, this, &UnifiedSearchBar::UpdateMatchCount);
+
     // Connect internal signals
-    if (m_searchInput)
-    {
-        connect(m_searchInput, &QLineEdit::textChanged, this, &UnifiedSearchBar::OnSearchTextChanged);
-        connect(m_searchInput, &QLineEdit::returnPressed, this, &UnifiedSearchBar::OnSearchReturn);
-    }
-    if (m_clearButton)
-    {
-        connect(m_clearButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnClearClicked);
-    }
+    Q_ASSERT(m_searchInput != nullptr);
+    connect(m_searchInput, &QLineEdit::textChanged, this, &UnifiedSearchBar::OnSearchTextChanged);
+    connect(m_searchInput, &QLineEdit::returnPressed, this, &UnifiedSearchBar::OnSearchReturn);
+
+    Q_ASSERT(m_clearButton != nullptr);
+    connect(m_clearButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnClearClicked);
 }
 
 void UnifiedSearchBar::CreateLayout()
@@ -140,7 +150,14 @@ void UnifiedSearchBar::ClearSearch()
 void UnifiedSearchBar::OnSearchTextChanged(const QString& text)
 {
     m_lastQuery = text;
-    UpdateMatchCount();
+
+    // Debounce match count update to avoid O(n*m) computation on every keystroke
+    if (m_matchCountDebounceTimer) {
+        m_matchCountDebounceTimer->start();
+    } else {
+        UpdateMatchCount();
+    }
+
     emit SearchChanged(text);
 }
 
@@ -296,6 +313,11 @@ void UnifiedSearchBar::SaveSearchHistory()
         m_settings->endArray();
         m_settings->endGroup();
         m_settings->sync();
+
+        // Check if sync was successful
+        if (m_settings->status() != QSettings::NoError) {
+            qWarning() << "Failed to save search history, QSettings status:" << m_settings->status();
+        }
     }
     catch (const std::exception& e)
     {

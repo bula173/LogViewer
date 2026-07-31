@@ -3434,19 +3434,47 @@ void MainWindow::OnGenerateReportFromDashboard()
     if (path.isEmpty())
         return;
 
+    // Validate directory exists before attempting to write
+    QFileInfo fileInfo(path);
+    QDir dir = fileInfo.dir();
+    if (!dir.exists()) {
+        QMessageBox::warning(this, tr("Invalid Path"),
+                             tr("Directory does not exist:\n%1").arg(dir.absolutePath()));
+        return;
+    }
+
     SaveLastDir("reports", path);
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         UpdateStatusText("Failed to save report.");
         QMessageBox::warning(this, tr("Report Save Failed"),
-                             tr("Could not write to:\n%1").arg(path));
+                             tr("Could not write to:\n%1\n\nError: %2").arg(path, file.errorString()));
         return;
     }
 
     QTextStream stream(&file);
     stream << reportContent;
+
+    // Check for write errors
+    if (stream.status() != QTextStream::Ok || file.error() != QFile::NoError) {
+        UpdateStatusText("Report write failed.");
+        QMessageBox::warning(this, tr("Report Write Failed"),
+                             tr("Error writing report to:\n%1\n\nError: %2").arg(path, file.errorString()));
+        file.close();
+        file.remove();  // Clean up partial file
+        return;
+    }
+
     file.close();
+
+    // Verify file was written successfully
+    if (!file.exists() || file.size() == 0) {
+        UpdateStatusText("Report file is empty.");
+        QMessageBox::warning(this, tr("Report Write Failed"),
+                             tr("Report file is empty or was not created properly."));
+        return;
+    }
 
     UpdateStatusText(QString("Report generated: %1").arg(path).toStdString());
 

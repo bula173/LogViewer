@@ -101,6 +101,8 @@ class UnifiedSearchBar : public QWidget
     // State
     int m_lastMatchCount = 0;
     QString m_lastQuery;
+    QTimer* m_matchCountDebounceTimer = nullptr;
+    static constexpr int MATCH_COUNT_DEBOUNCE_MS = 300;
 };
 
 } // namespace ui::qt

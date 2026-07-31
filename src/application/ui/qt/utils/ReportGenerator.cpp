@@ -259,8 +259,30 @@ ReportGenerator::ReportStatistics ReportGenerator::CalculateStatistics(const std
             stats.uniqueActors.push_back(actor);
     }
 
-    // Time span calculation would parse timestamp fields in production
-    stats.timeSpanMs = static_cast<int64_t>(events.size()) * 1000;
+    // Calculate actual time span from timestamps
+    stats.timeSpanMs = 0;
+    if (events.size() > 1) {
+        QDateTime firstTime, lastTime;
+
+        for (const auto* event : events) {
+            QString tsStr = QString::fromStdString(event->findByKey("timestamp"));
+            if (tsStr.isEmpty()) continue;
+
+            QDateTime dt = QDateTime::fromString(tsStr, Qt::ISODate);
+            if (!dt.isValid()) {
+                dt = QDateTime::fromString(tsStr, "yyyy-MM-dd hh:mm:ss");
+            }
+
+            if (dt.isValid()) {
+                if (!firstTime.isValid()) firstTime = dt;
+                lastTime = dt;
+            }
+        }
+
+        if (firstTime.isValid() && lastTime.isValid()) {
+            stats.timeSpanMs = firstTime.msecsTo(lastTime);
+        }
+    }
 
     return stats;
 }
