@@ -32,14 +32,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache and install APT packages
-        uses: awalsh128/cache-apt-pkgs-action@v1
+      - name: Cache APT archives
+        uses: actions/cache@v4
         with:
-          packages: >-
-            ninja-build ccache libexpat1-dev libssh-dev libarchive-dev
-            zip libcurl4-openssl-dev g++ qt6-base-dev qt6-tools-dev
+          path: /var/cache/apt/archives
+          key: apt-archives-${{ runner.os }}-${{ hashFiles('.github/workflows/release.yml') }}
+          restore-keys: apt-archives-${{ runner.os }}-
+
+      - name: Install APT packages
+        run: |
+          sudo apt-get update
+          # Install required packages; --no-install-recommends keeps image small
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ninja-build ccache libexpat1-dev libssh-dev libarchive-dev \
+            zip libcurl4-openssl-dev g++ qt6-base-dev qt6-tools-dev \
             qt6-tools-dev-tools libqt6opengl6-dev qt6-charts-dev
-          version: 1.1
+          # Clean up package lists to reduce workflow run disk usage
+          sudo rm -rf /var/lib/apt/lists/*
+        shell: bash
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -59,20 +69,6 @@ jobs:
 
       - name: Configure
         run: |
-          # Compiler setup
-          CC_COMPILER=gcc
-          CXX_COMPILER=g++
-
-          # Use ccache if available, otherwise skip
-          if command -v ccache &> /dev/null; then
-            CCACHE_LAUNCHER_C="-DCMAKE_C_COMPILER_LAUNCHER=ccache"
-            CCACHE_LAUNCHER_CXX="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
-          else
-            echo "Warning: ccache not available, disabling compiler cache"
-            CCACHE_LAUNCHER_C=""
-            CCACHE_LAUNCHER_CXX=""
-          fi
-
           # Find Qt6 installation
           QT6_CONFIG=$(find /usr/lib -name "Qt6Config.cmake" -o -name "qt6-config.cmake" 2>/dev/null | head -1)
           if [ -n "$QT6_CONFIG" ]; then
@@ -105,13 +101,12 @@ jobs:
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_COMPILER=$CC_COMPILER \
-            -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
+            -DCMAKE_C_COMPILER=gcc \
+            -DCMAKE_CXX_COMPILER=g++ \
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
-            $CCACHE_LAUNCHER_C \
-            $CCACHE_LAUNCHER_CXX \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DSKIP_EXAMPLES=ON
 
       - name: Build
@@ -585,3 +580,8 @@ jobs:
             size=$(du -sh "$f" | cut -f1)
             echo "- $(basename $f) ($size)" >> $GITHUB_STEP_SUMMARY
           done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Plugins included:**" >> $GITHUB_STEP_SUMMARY
+          jq -r '.plugins[] | "- \(.id) v\(.version) (\(.apiVersion))"' plugins_manifest.json >> $GITHUB_STEP_SUMMARY
+          echo ""
+          
