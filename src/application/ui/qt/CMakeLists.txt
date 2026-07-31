@@ -22,6 +22,7 @@ target_sources(application_core
         panels/PatternAnalysisPanel.cpp
         panels/ScenariosPanel.cpp
         panels/SearchBar.cpp
+        panels/UnifiedSearchBar.cpp
         panels/SideBySidePanel.cpp
         panels/SearchResultsView.cpp
         panels/StatsSummaryPanel.cpp

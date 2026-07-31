@@ -84,6 +84,7 @@ class ScenariosPanel;
 class ActorsPanel;
 class ActorDefinitionsPanel;
 class SearchBar;
+class UnifiedSearchBar;
 class UpdateChecker;
 class TimeRangeFilterPanel;
 class FilterProfilesPanel;
@@ -305,6 +306,7 @@ class MainWindow : public QMainWindow,
     ActorsPanel*            m_actorsPanel   {nullptr};
     ActorDefinitionsPanel*  m_actorDefPanel{nullptr};
     SearchBar*              m_searchBar    {nullptr};
+    UnifiedSearchBar*       m_unifiedSearchBar{nullptr};
     UpdateChecker*          m_updateChecker{nullptr};
     FileTailer*             m_tailer       {nullptr};
     QAction*                m_tailAction   {nullptr};

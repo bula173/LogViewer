@@ -19,6 +19,7 @@
 #include "panels/ActorsPanel.hpp"
 #include "panels/ActorDefinitionsPanel.hpp"
 #include "panels/SearchBar.hpp"
+#include "panels/UnifiedSearchBar.hpp"
 #include "utils/UpdateChecker.hpp"
 #include "dialogs/UpdateDialog.hpp"
 #include "widgets/FilterStatusBar.hpp"
@@ -263,13 +264,32 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         });
         statusBar()->addPermanentWidget(helpHint, 0);
 
-        // ===== CENTRAL WIDGET: Main content area with tabs =====
-        m_contentTabs = new QTabWidget(this);
+        // ===== CENTRAL WIDGET: Main content area with search bar + tabs =====
+        auto* centralWidget = new QWidget(this);
+        if (!centralWidget) {
+            throw std::runtime_error("Failed to create central widget");
+        }
+        auto* centralLayout = new QVBoxLayout(centralWidget);
+        centralLayout->setContentsMargins(0, 0, 0, 0);
+        centralLayout->setSpacing(0);
+
+        // Unified search bar (top)
+        m_unifiedSearchBar = new UnifiedSearchBar(centralWidget);
+        if (!m_unifiedSearchBar) {
+            throw std::runtime_error("Failed to create unified search bar");
+        }
+        centralLayout->addWidget(m_unifiedSearchBar);
+
+        // Content tabs (main area)
+        m_contentTabs = new QTabWidget(centralWidget);
         if (!m_contentTabs) {
             throw std::runtime_error("Failed to create content tabs");
         }
-            // Ensure we always have a central widget before returning
-            setCentralWidget(m_contentTabs);
+        centralLayout->addWidget(m_contentTabs);
+        centralWidget->setLayout(centralLayout);
+
+        // Set the container as central widget
+        setCentralWidget(centralWidget);
         m_contentTabs->tabBar()->installEventFilter(this);
 
         // Create tab badge manager for showing activity indicators
@@ -321,6 +341,30 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                     this, [this]() { /* TODO: Launch report generator */ });
             connect(m_dashboardPanel, &DashboardPanel::BookmarkCurrentRequested,
                     this, [this]() { /* TODO: Bookmark current event */ });
+
+            // ===== Unified Search Bar Setup =====
+            if (m_events) {
+                m_unifiedSearchBar->SetEventsSource(m_events);
+            }
+            if (m_eventsView) {
+                m_unifiedSearchBar->SetEventsView(m_eventsView);
+            }
+
+            // Connect search bar signals
+            connect(m_unifiedSearchBar, &UnifiedSearchBar::SearchChanged,
+                    this, [this](const QString& query) {
+                        if (m_eventsView) {
+                            m_eventsView->SetSearchTerm(query, false);
+                        }
+                    });
+
+            connect(m_unifiedSearchBar, &UnifiedSearchBar::FilterRequested,
+                    this, [this](const QString& /* field */, const QString& value) {
+                        if (m_eventsView) {
+                            m_eventsView->SetSearchTerm(value, false);
+                            m_eventsView->NavigateToNextMatch();
+                        }
+                    });
 
             m_contentTabs->addTab(m_eventsStack, "Events");
             m_contentTabs->setTabToolTip(m_contentTabs->count() - 1,
@@ -1068,7 +1112,18 @@ void MainWindow::SetupMenus()
     connect(systemThemeAction, &QAction::triggered, this, &MainWindow::OnSetSystemTheme);
     
     viewMenu->addSeparator();
-    
+
+    auto* focusSearchAction = viewMenu->addAction(tr("&Find Events (Ctrl+F)"));
+    focusSearchAction->setShortcut(QKeySequence::Find);
+    focusSearchAction->setToolTip(tr("Focus the search bar and search across all event fields"));
+    connect(focusSearchAction, &QAction::triggered, this, [this]() {
+        if (m_unifiedSearchBar) {
+            m_unifiedSearchBar->FocusSearchInput();
+        }
+    });
+
+    viewMenu->addSeparator();
+
     auto* resetLayoutAction = viewMenu->addAction(tr("&Reset Layout"));
     connect(resetLayoutAction, &QAction::triggered, this, [this]() {
         // Reset all docks to default positions
