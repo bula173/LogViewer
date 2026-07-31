@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_DIR: ${{ github.workspace }}/build
+      CMAKE_GENERATOR: Ninja
       CCACHE_DIR: ${{ github.workspace }}/.ccache
 
     steps:
@@ -60,28 +61,20 @@ jobs:
         run: |
           # Find Qt6 installation
           QT6_CONFIG=$(find /usr/lib -name "Qt6Config.cmake" -o -name "qt6-config.cmake" 2>/dev/null | head -1)
-          echo "Qt6Config search result: $QT6_CONFIG"
-
           if [ -n "$QT6_CONFIG" ]; then
             QT6_PATH=$(dirname "$QT6_CONFIG")
-            echo "Found via find: $QT6_PATH"
           else
             # Try pkg-config as fallback
             QT6_LIBDIR=$(pkg-config --variable libdir Qt6Core 2>/dev/null)
-            echo "pkg-config result: $QT6_LIBDIR"
             if [ -n "$QT6_LIBDIR" ]; then
               QT6_PATH="${QT6_LIBDIR%/*}/cmake/Qt6"
-              echo "Derived path from pkg-config: $QT6_PATH"
             fi
           fi
 
           # Also try common Ubuntu/Debian paths
           if [ -z "$QT6_PATH" ] || [ ! -f "$QT6_PATH/Qt6Config.cmake" ]; then
-            echo "Qt6Config not found, checking standard paths..."
             for path in /usr/lib/x86_64-linux-gnu/cmake/Qt6 /usr/lib/cmake/Qt6 /usr/local/lib/cmake/Qt6; do
-              echo "Checking: $path"
               if [ -f "$path/Qt6Config.cmake" ]; then
-                echo "Found at: $path"
                 QT6_PATH="$path"
                 break
               fi
@@ -89,21 +82,20 @@ jobs:
           fi
 
           if [ -n "$QT6_PATH" ] && [ -f "$QT6_PATH/Qt6Config.cmake" ]; then
-            echo "Using Qt6 at: $QT6_PATH"
+            echo "Found Qt6 at: $QT6_PATH"
             CMAKE_PREFIX_PATH="$QT6_PATH:$CMAKE_PREFIX_PATH"
           else
-            echo "Warning: Qt6 not found in any location, CMake will use default search paths"
+            echo "Warning: Qt6 not found in standard locations, CMake will search default paths"
           fi
 
-          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
-            -G Ninja \
+            -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=gcc \
             -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
             -DSKIP_EXAMPLES=ON
 
