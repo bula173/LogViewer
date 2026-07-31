@@ -154,6 +154,7 @@ class MainWindow : public QMainWindow,
     void OnExportCsvRequested();
     void OnExportJsonRequested();
     void OnExportXmlRequested();
+    void OnGenerateReportFromDashboard();
     void OnCheckForUpdates();
     void OnUpdateCheckComplete(updates::UpdateCheckResult result);
     void OnApplyPluginUpdate(QString pluginId, QString tempZipPath);

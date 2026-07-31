@@ -42,6 +42,9 @@ class DashboardPanel : public QWidget
     /// Refresh dashboard (called from lazy refresh cycle)
     void Refresh() { UpdateStats(); }
 
+    /// Force immediate recalculation of statistics
+    void RecalculateStats() { UpdateStats(); }
+
   signals:
     void ExportRequested();
     void GenerateReportRequested();

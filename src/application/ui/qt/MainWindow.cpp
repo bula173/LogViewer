@@ -4,6 +4,7 @@
 #include "EventsContainer.hpp"
 #include "utils/ExportManager.hpp"
 #include "utils/FileTailer.hpp"
+#include "utils/ReportGenerator.hpp"
 #include "FilterManager.hpp"
 #include "panels/LayoutManager.hpp"
 #include "panels/DashboardPanel.hpp"
@@ -58,6 +59,7 @@
 #include <QDragEnterEvent>
 #include <QFile>
 #include <QFileDialog>
+#include <QTextStream>
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QHBoxLayout>
@@ -338,7 +340,12 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
             connect(m_dashboardPanel, &DashboardPanel::ExportRequested,
                     this, [this]() { OnOpenFileRequested(); });  // Placeholder - could trigger export
             connect(m_dashboardPanel, &DashboardPanel::GenerateReportRequested,
-                    this, [this]() { /* TODO: Launch report generator */ });
+                    this, [this]() {
+                        if (m_dashboardPanel) {
+                            m_dashboardPanel->RecalculateStats();
+                        }
+                        OnGenerateReportFromDashboard();
+                    });
             connect(m_dashboardPanel, &DashboardPanel::BookmarkCurrentRequested,
                     this, [this]() { /* TODO: Bookmark current event */ });
 
@@ -3357,6 +3364,83 @@ void MainWindow::OnExportXmlRequested()
                              tr("Could not write to:\n%1").arg(path));
     } else {
         UpdateStatusText(QString("Exported XML: %1").arg(path).toStdString());
+    }
+}
+
+void MainWindow::OnGenerateReportFromDashboard()
+{
+    if (!m_events || !m_eventsView)
+        return;
+
+    const auto rows = GetRowsToExport();
+    if (rows.empty()) {
+        QMessageBox::information(this, tr("Generate Report"), tr("No data to generate report."));
+        return;
+    }
+
+    UpdateStatusText("Generating report...");
+
+    // Create report generator
+    ui::qt::utils::ReportGenerator::ReportOptions options;
+    options.title = "Log Analysis Report";
+    options.format = ui::qt::utils::ReportGenerator::ReportFormat::HTML;
+    options.includeSummary = true;
+    options.includeStatistics = true;
+    options.includeTimeline = true;
+    options.includeTrends = true;
+    options.includeEventList = true;
+    options.includeActorAnalysis = true;
+    options.maxEventsInReport = static_cast<int>(rows.size());
+
+    ui::qt::utils::ReportGenerator generator(*m_events);
+    QString reportContent = generator.generateReport(rows, options);
+
+    if (reportContent.isEmpty()) {
+        UpdateStatusText("Report generation failed.");
+        QMessageBox::warning(this, tr("Report Generation Failed"),
+                             tr("Failed to generate report from events."));
+        return;
+    }
+
+    // Save report to file
+    QFileDialog dialog(this, tr("Save Report"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setNameFilter(tr("HTML files (*.html);;All files (*.*)"));
+    dialog.setDefaultSuffix(QStringLiteral("html"));
+    dialog.setDirectory(LastDir("reports",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+#ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+#endif
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const QString path = dialog.selectedFiles().value(0);
+    if (path.isEmpty())
+        return;
+
+    SaveLastDir("reports", path);
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        UpdateStatusText("Failed to save report.");
+        QMessageBox::warning(this, tr("Report Save Failed"),
+                             tr("Could not write to:\n%1").arg(path));
+        return;
+    }
+
+    QTextStream stream(&file);
+    stream << reportContent;
+    file.close();
+
+    UpdateStatusText(QString("Report generated: %1").arg(path).toStdString());
+
+    // Ask user if they want to open the report
+    if (QMessageBox::question(this, tr("Report Generated"),
+            tr("Report saved to:\n%1\n\nOpen in browser?").arg(path))
+            == QMessageBox::Yes) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
 }
 
