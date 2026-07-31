@@ -259,6 +259,13 @@ int EventsTableView::CurrentActualRow() const
     return m_model->ResolveToActualIndex(current.row());
 }
 
+int EventsTableView::ResolveToActualIndex(int modelRow) const
+{
+    if (!m_model)
+        return modelRow;
+    return m_model->ResolveToActualIndex(modelRow);
+}
+
 void EventsTableView::ScrollToActualRow(int actualRow, bool takeFocus)
 {
     util::Logger::Debug("[EventsTableView] ScrollToActualRow actualRow={} takeFocus={}", actualRow, takeFocus);

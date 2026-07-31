@@ -218,11 +218,16 @@ void DashboardPanel::UpdateEventStats()
     qint64 totalCount = m_events->Size();
     std::map<QString, qint64> levelCounts;
 
-    // Count events by level
-    for (size_t i = 0; i < m_events->Size(); ++i)
+    // Count events by level (thread-safe: cache size first)
+    const size_t eventCount = m_events->Size();
+    for (size_t i = 0; i < eventCount; ++i)
     {
         try
         {
+            // Gracefully handle concurrent modifications
+            if (i >= m_events->Size())
+                break;
+
             const auto& event = m_events->GetEvent(i);
             QString level = QString::fromStdString(event.findByKey("level"));
             if (!level.isEmpty())
@@ -230,7 +235,7 @@ void DashboardPanel::UpdateEventStats()
         }
         catch (const std::exception&)
         {
-            // Skip events with errors
+            // Skip events with errors (removed, invalid, etc.)
         }
     }
 
@@ -258,11 +263,16 @@ void DashboardPanel::UpdateTopActors()
 
     std::map<QString, qint64> actorCounts;
 
-    // Count events by actor
-    for (size_t i = 0; i < m_events->Size(); ++i)
+    // Count events by actor (thread-safe: cache size first)
+    const size_t eventCount = m_events->Size();
+    for (size_t i = 0; i < eventCount; ++i)
     {
         try
         {
+            // Gracefully handle concurrent modifications
+            if (i >= m_events->Size())
+                break;
+
             const auto& event = m_events->GetEvent(i);
             QString actor = QString::fromStdString(event.findByKey("actor"));
             if (!actor.isEmpty())
@@ -270,7 +280,7 @@ void DashboardPanel::UpdateTopActors()
         }
         catch (const std::exception&)
         {
-            // Skip events with errors
+            // Skip events with errors (removed, invalid, etc.)
         }
     }
 

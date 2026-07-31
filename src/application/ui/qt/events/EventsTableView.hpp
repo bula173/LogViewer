@@ -40,6 +40,10 @@ class EventsTableView : public QTableView,
     int CurrentActualRow() const;
     void ScrollToActualRow(int actualRow, bool takeFocus = true);
 
+    /// Converts a model row index to the corresponding EventsContainer index
+    /// (handles filtering: when filtering is active, model rows != container indices)
+    int ResolveToActualIndex(int modelRow) const;
+
     /// Returns the actual-container row of the first fully visible row,
     /// or -1 if the view has no model or no visible rows.
     int FirstVisibleActualRow() const;

@@ -3270,15 +3270,23 @@ void MainWindow::OnSetSystemTheme()
 
 std::vector<int> MainWindow::GetRowsToExport() const
 {
-    auto* m = m_eventsView ? m_eventsView->model() : nullptr;
+    if (!m_eventsView) return {};
+
+    auto* m = m_eventsView->model();
     if (!m) return {};
 
     // Always export all visible (filtered) rows regardless of selection.
     const int n = m->rowCount();
     std::vector<int> all;
     all.reserve(static_cast<size_t>(n));
+
+    // Convert model rows to actual EventsContainer indices
+    // (essential when filtering is active, as model rows != container indices)
     for (int r = 0; r < n; ++r)
-        all.push_back(r);
+    {
+        const int actualIdx = m_eventsView->ResolveToActualIndex(r);
+        all.push_back(actualIdx >= 0 ? actualIdx : r);
+    }
     return all;
 }
 

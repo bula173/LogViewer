@@ -235,28 +235,38 @@ int UnifiedSearchBar::CountMatches(const QString& query)
 
     try
     {
-        for (size_t i = 0; i < m_events->Size(); ++i)
+        const size_t totalEvents = m_events->Size();
+        for (size_t i = 0; i < totalEvents; ++i)
         {
-            const auto& event = m_events->GetEvent(i);
-            bool matches = false;
-
-            // Search across all event fields
-            for (const auto& [key, value] : event.getEventItems())
+            try
             {
-                if (QString::fromStdString(value).toLower().contains(lowerQuery))
-                {
-                    matches = true;
-                    break;
-                }
-            }
+                // Use thread-safe access to EventsContainer
+                const auto& event = m_events->GetEvent(i);
+                bool matches = false;
 
-            if (matches)
-                count++;
+                // Search across all event fields
+                for (const auto& [key, value] : event.getEventItems())
+                {
+                    if (QString::fromStdString(value).toLower().contains(lowerQuery))
+                    {
+                        matches = true;
+                        break;
+                    }
+                }
+
+                if (matches)
+                    count++;
+            }
+            catch (const std::exception&)
+            {
+                // Skip events that fail to access (removed or invalid)
+                continue;
+            }
         }
     }
     catch (const std::exception&)
     {
-        // Gracefully handle errors
+        // Gracefully handle container-level errors (resizing, etc.)
     }
 
     return count;
