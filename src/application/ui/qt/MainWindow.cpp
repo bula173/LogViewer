@@ -1528,7 +1528,18 @@ void MainWindow::OnRecentFileTriggered(const QString& filePath)
 
 std::string MainWindow::ReadSearchQuery() const
 {
-    return m_searchEdit->text().toStdString();
+    // Try unified search bar first (top of window - primary search interface)
+    if (m_unifiedSearchBar) {
+        QString query = m_unifiedSearchBar->GetSearchQuery();
+        if (!query.isEmpty())
+            return query.toStdString();
+    }
+
+    // Fall back to old search edit in Tools panel (bottom)
+    if (m_searchEdit)
+        return m_searchEdit->text().toStdString();
+
+    return "";
 }
 
 std::string MainWindow::CurrentStatusText() const
