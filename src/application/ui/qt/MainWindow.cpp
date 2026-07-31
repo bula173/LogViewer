@@ -3545,6 +3545,7 @@ void MainWindow::OnProfileLoadRequested(const FilterProfile& profile)
 
 void MainWindow::MarkAnalysisPanelsDirty()
 {
+    if (m_dashboardPanel) m_dirtyPanels.insert(m_dashboardPanel);
     if (m_statsPanel)   m_dirtyPanels.insert(m_statsPanel);
     if (m_patternPanel) m_dirtyPanels.insert(m_patternPanel);
     if (m_actorsPanel)  m_dirtyPanels.insert(m_actorsPanel);
@@ -3566,7 +3567,9 @@ void MainWindow::RefreshCurrentAnalysisPanel()
 
     m_dirtyPanels.erase(current);
 
-    if (current == m_statsPanel)
+    if (current == m_dashboardPanel)
+        m_dashboardPanel->Refresh();
+    else if (current == m_statsPanel)
         m_statsPanel->Refresh();
     else if (current == m_patternPanel)
         m_patternPanel->Refresh();

@@ -39,6 +39,9 @@ class DashboardPanel : public QWidget
     /// Manually trigger stats update (called automatically on events change)
     void UpdateStats();
 
+    /// Refresh dashboard (called from lazy refresh cycle)
+    void Refresh() { UpdateStats(); }
+
   signals:
     void ExportRequested();
     void GenerateReportRequested();
