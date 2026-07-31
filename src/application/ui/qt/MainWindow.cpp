@@ -36,6 +36,7 @@
 #include "Logger.hpp"
 #include "Config.hpp"
 #include "dialogs/ConfigEditorDialog.hpp"
+#include "dialogs/ExportDialog.hpp"
 #include "dialogs/GemmaDownloadDialog.hpp"
 #include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/PreferencesDialog.hpp"
@@ -795,13 +796,13 @@ void MainWindow::SetupMenus()
 
     fileMenu->addSeparator();
 
-    auto* exportMenu = fileMenu->addMenu(tr("E&xport"));
-    auto* exportCsvAction  = exportMenu->addAction(tr("Export to &CSV..."));
-    auto* exportJsonAction = exportMenu->addAction(tr("Export to &JSON..."));
-    auto* exportXmlAction  = exportMenu->addAction(tr("Export to &XML..."));
-    connect(exportCsvAction,  &QAction::triggered, this, &MainWindow::OnExportCsvRequested);
-    connect(exportJsonAction, &QAction::triggered, this, &MainWindow::OnExportJsonRequested);
-    connect(exportXmlAction,  &QAction::triggered, this, &MainWindow::OnExportXmlRequested);
+    auto* exportAction = fileMenu->addAction(tr("E&xport..."));
+    exportAction->setShortcut(QKeySequence(tr("Ctrl+E")));
+    connect(exportAction, &QAction::triggered, this, [this]() {
+        if (!m_events) return;
+        auto dialog = std::make_unique<ExportDialog>(*m_events, m_eventsView, this);
+        dialog->exec();
+    });
 
     fileMenu->addSeparator();
 
@@ -885,13 +886,69 @@ void MainWindow::SetupMenus()
         dlg.exec();
     });
 
+    // Analysis menu — new v1.10.0 features
+    auto* analysisMenu = bar->addMenu(tr("&Analysis"));
+
+    auto* generateReportAction = analysisMenu->addAction(tr("Generate &Report..."));
+    generateReportAction->setShortcut(QKeySequence(tr("Ctrl+Alt+R")));
+    generateReportAction->setToolTip(tr("Generate comprehensive HTML/Markdown/JSON analysis reports"));
+    connect(generateReportAction, &QAction::triggered, this, [this]() {
+        if (m_events && m_eventsView) {
+            // TODO: Launch ReportGenerator dialog here
+            QMessageBox::information(this, tr("Report Generator"),
+                tr("Report generation feature coming soon.\nUse Export for detailed data export."));
+        }
+    });
+
+    analysisMenu->addSeparator();
+
+    auto* groupEventsAction = analysisMenu->addAction(tr("&Group Events..."));
+    groupEventsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+G")));
+    groupEventsAction->setToolTip(tr("Group events by level, message, actor, or time bucket"));
+    connect(groupEventsAction, &QAction::triggered, this, [this]() {
+        if (m_events && m_eventsView) {
+            // TODO: Launch EventGroupManager dialog here
+            QMessageBox::information(this, tr("Event Grouping"),
+                tr("Event grouping feature is available in the panels.\nTry using different event analysis views."));
+        }
+    });
+
+    auto* tagEventsAction = analysisMenu->addAction(tr("&Tag & Annotate..."));
+    tagEventsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+T")));
+    tagEventsAction->setToolTip(tr("Add tags and annotations to events"));
+    connect(tagEventsAction, &QAction::triggered, this, [this]() {
+        if (m_events && m_eventsView) {
+            // TODO: Launch EventTagManager dialog here
+            QMessageBox::information(this, tr("Event Tagging"),
+                tr("Event tagging feature is available in the event details panel.\nRight-click on events to add tags."));
+        }
+    });
+
     // View menu for dock widgets
     auto* viewMenu = bar->addMenu(tr("&View"));
-    viewMenu->addAction(m_filtersDock->toggleViewAction());
-    viewMenu->addAction(m_signalBrowserDock->toggleViewAction());
-    viewMenu->addAction(m_pluginLeftDock->toggleViewAction());
-    viewMenu->addAction(m_detailsDock->toggleViewAction());
-    viewMenu->addAction(m_bottomDock->toggleViewAction());
+
+    // Panels submenu — organize dock widgets with descriptions
+    auto* panelsMenu = viewMenu->addMenu(tr("&Panels"));
+
+    auto* filtersAction = m_filtersDock->toggleViewAction();
+    filtersAction->setText(tr("&Filters & Search"));
+    panelsMenu->addAction(filtersAction);
+
+    auto* signalAction = m_signalBrowserDock->toggleViewAction();
+    signalAction->setText(tr("&Signal Browser"));
+    panelsMenu->addAction(signalAction);
+
+    auto* pluginAction = m_pluginLeftDock->toggleViewAction();
+    pluginAction->setText(tr("P&lugin Configuration"));
+    panelsMenu->addAction(pluginAction);
+
+    auto* detailsAction = m_detailsDock->toggleViewAction();
+    detailsAction->setText(tr("&Event Details (Right)"));
+    panelsMenu->addAction(detailsAction);
+
+    auto* toolsAction = m_bottomDock->toggleViewAction();
+    toolsAction->setText(tr("&Tools (Bottom)"));
+    panelsMenu->addAction(toolsAction);
 
     viewMenu->addSeparator();
 
