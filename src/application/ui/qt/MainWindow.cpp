@@ -1359,12 +1359,8 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
         connect(m_eventsView, &EventsTableView::MatchInfoChanged,
                 m_searchBar,  &SearchBar::SetMatchInfo);
 
-        // Ctrl+F: switch to Events tab and show the search bar
-        auto* findShortcut = new QShortcut(QKeySequence::Find, this);
-        connect(findShortcut, &QShortcut::activated, this, [this]() {
-            m_contentTabs->setCurrentIndex(0); // Events is the first tab
-            m_searchBar->FocusInput();
-        });
+        // Note: Ctrl+F is now handled by UnifiedSearchBar global shortcut in SetupMenus()
+        // The old SearchBar inline search is still available but not via keyboard shortcut
     }
 
     // Schedule automatic update check with a long startup delay.
