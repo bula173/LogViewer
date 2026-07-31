@@ -253,6 +253,15 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         m_progressBar->setFixedHeight(12);
         statusBar()->addPermanentWidget(m_progressBar, 0);
 
+        auto* helpHint = new QLabel(tr("💡 Press Ctrl+H for keyboard shortcuts"));
+        helpHint->setStyleSheet("color: #888; font-size: 11px; margin: 0 8px;");
+        helpHint->setCursor(Qt::PointingHandCursor);
+        connect(helpHint, &QLabel::linkActivated, this, [this]() {
+            auto dlg = std::make_unique<ShortcutsDialog>(this);
+            dlg->exec();
+        });
+        statusBar()->addPermanentWidget(helpHint, 0);
+
         // ===== CENTRAL WIDGET: Main content area with tabs =====
         m_contentTabs = new QTabWidget(this);
         if (!m_contentTabs) {
@@ -765,6 +774,7 @@ void MainWindow::SetupMenus()
     auto* fileMenu = bar->addMenu(tr("&File"));
     auto* openAction = fileMenu->addAction(tr("&Open..."));
     openAction->setShortcut(QKeySequence::Open);
+    openAction->setToolTip(tr("Open a log file (CSV, JSON, XML, ASC, Evlog)"));
     connect(openAction, &QAction::triggered, this, [this]() {
         util::Logger::Debug("[MainWindow] Open menu triggered");
         OnOpenFileRequested();
@@ -779,18 +789,22 @@ void MainWindow::SetupMenus()
 
     auto* openSessionAction = fileMenu->addAction(tr("Open Session…"));
     openSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+O")));
+    openSessionAction->setToolTip(tr("Load a saved analysis session with filters and layout"));
     connect(openSessionAction, &QAction::triggered, this, &MainWindow::OnOpenSession);
 
     auto* saveSessionAction = fileMenu->addAction(tr("Save Session…"));
     saveSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
+    saveSessionAction->setToolTip(tr("Save current filters, layout, and analysis state"));
     connect(saveSessionAction, &QAction::triggered, this, &MainWindow::OnSaveSession);
 
     fileMenu->addSeparator();
 
     auto* loadDbcAction = fileMenu->addAction(tr("Load &DBC file…"));
+    loadDbcAction->setToolTip(tr("Load a DBC file for CAN signal name translation"));
     connect(loadDbcAction, &QAction::triggered, this, &MainWindow::OnLoadDbcRequested);
 
     auto* loadEvlogTplAction = fileMenu->addAction(tr("Load &Evlog Templates…"));
+    loadEvlogTplAction->setToolTip(tr("Load Evlog message templates for parsing"));
     connect(loadEvlogTplAction, &QAction::triggered,
         this, &MainWindow::OnLoadEvlogTemplatesRequested);
 
@@ -798,6 +812,7 @@ void MainWindow::SetupMenus()
 
     auto* exportAction = fileMenu->addAction(tr("E&xport..."));
     exportAction->setShortcut(QKeySequence(tr("Ctrl+E")));
+    exportAction->setToolTip(tr("Export logs to CSV, JSON, XML, Markdown, HTML, or TSV format"));
     connect(exportAction, &QAction::triggered, this, [this]() {
         if (!m_events) return;
         auto dialog = std::make_unique<ExportDialog>(*m_events, m_eventsView, this);
@@ -961,6 +976,7 @@ void MainWindow::SetupMenus()
 
     auto* bookmarksAction = viewMenu->addAction(tr("Show &Bookmarks"));
     bookmarksAction->setShortcut(QKeySequence(tr("Ctrl+B")));
+    bookmarksAction->setToolTip(tr("Organize and categorize bookmarked events for quick reference"));
     connect(bookmarksAction, &QAction::triggered, this, [this]() {
         if (!m_bookmarksPanel || !m_contentTabs)
             return;
@@ -980,6 +996,7 @@ void MainWindow::SetupMenus()
 
     auto* jumpAction = viewMenu->addAction(tr("Go to &Timestamp…"));
     jumpAction->setShortcut(QKeySequence(tr("Ctrl+G")));
+    jumpAction->setToolTip(tr("Jump to a specific timestamp in the event log"));
     connect(jumpAction, &QAction::triggered, this, [this]() {
         if (m_eventsView) m_eventsView->JumpToTimestamp();
     });
