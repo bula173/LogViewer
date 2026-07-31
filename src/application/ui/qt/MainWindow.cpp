@@ -338,7 +338,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
             // Connect dashboard signals
             connect(m_dashboardPanel, &DashboardPanel::ExportRequested,
-                    this, [this]() { OnOpenFileRequested(); });  // Placeholder - could trigger export
+                    this, [this]() { OnExportCsvRequested(); });
             connect(m_dashboardPanel, &DashboardPanel::GenerateReportRequested,
                     this, [this]() {
                         if (m_dashboardPanel) {
