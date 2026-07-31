@@ -363,6 +363,13 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                         if (m_eventsView) {
                             m_eventsView->SetSearchTerm(query, false);
                         }
+                        // Also trigger search operation for SearchResultsView in Tools panel
+                        // Use debounce timer to avoid excessive searches during typing
+                        if (m_searchDebounceTimer) {
+                            m_searchDebounceTimer->start();
+                        } else {
+                            OnSearchRequested();
+                        }
                     });
 
             connect(m_unifiedSearchBar, &UnifiedSearchBar::FilterRequested,
