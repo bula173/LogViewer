@@ -59,6 +59,20 @@ jobs:
 
       - name: Configure
         run: |
+          # Compiler setup
+          CC_COMPILER=gcc
+          CXX_COMPILER=g++
+
+          # Use ccache if available, otherwise skip
+          if command -v ccache &> /dev/null; then
+            CCACHE_LAUNCHER_C="-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+            CCACHE_LAUNCHER_CXX="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+          else
+            echo "Warning: ccache not available, disabling compiler cache"
+            CCACHE_LAUNCHER_C=""
+            CCACHE_LAUNCHER_CXX=""
+          fi
+
           # Find Qt6 installation
           QT6_CONFIG=$(find /usr/lib -name "Qt6Config.cmake" -o -name "qt6-config.cmake" 2>/dev/null | head -1)
           if [ -n "$QT6_CONFIG" ]; then
@@ -91,12 +105,13 @@ jobs:
           cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
             -G "$CMAKE_GENERATOR" \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_COMPILER=gcc \
-            -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_C_COMPILER=$CC_COMPILER \
+            -DCMAKE_CXX_COMPILER=$CXX_COMPILER \
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            $CCACHE_LAUNCHER_C \
+            $CCACHE_LAUNCHER_CXX \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DSKIP_EXAMPLES=ON
 
       - name: Build
