@@ -311,9 +311,9 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
 
         setCentralWidget(m_contentTabs);
 
-    // ===== LEFT DOCK: Filters and AI Configuration =====
-    // Filters dock
-    m_filtersDock = new QDockWidget("Filters", this);
+    // ===== LEFT DOCK: Filters, Actors, Search & Configuration =====
+    // Filters dock with tabbed interface for actors, filters, time range, etc.
+    m_filtersDock = new QDockWidget("🔧 Filters & Actors", this);
     if (!m_filtersDock) {
         throw std::runtime_error("Failed to create filters dock");
     }
@@ -358,30 +358,38 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     typeLayout->addWidget(m_applyFilterButton);
     typeTab->setLayout(typeLayout);
 
-    m_filterTabs->addTab(filtersTab, "Extended Filters");
-    m_filterTabs->addTab(typeTab, "Type Filters");
-
-    // ── Actor Definitions tab (left panel) ───────────────────────────────
+    // ── Actor Definitions tab (FIRST - most important for many workflows) ──
     m_actorDefPanel = new ActorDefinitionsPanel(m_filterTabs);
     if (m_events) m_actorDefPanel->SetEventsSource(m_events);
-    m_filterTabs->addTab(m_actorDefPanel, "Actor Definitions");
+    int actorTabIndex = m_filterTabs->addTab(m_actorDefPanel, "🎭 Actors");
+    m_filterTabs->setTabToolTip(actorTabIndex, tr("Define and manage actors, view their definitions and relationships"));
+
+    // ── Extended Filters tab ──────────────────────────────────────────────
+    int filterTabIndex = m_filterTabs->addTab(filtersTab, "🔍 Filters");
+    m_filterTabs->setTabToolTip(filterTabIndex, tr("Create and manage complex filters with AND/OR/NOT logic"));
+
+    // ── Type Filters tab ──────────────────────────────────────────────────
+    int typeTabIndex = m_filterTabs->addTab(typeTab, "📊 Type Filter");
+    m_filterTabs->setTabToolTip(typeTabIndex, tr("Filter events by type and apply type-based selections"));
 
     // ── Time Range Filter tab ─────────────────────────────────────────────
     if (m_events)
     {
         m_timeRangePanel = new TimeRangeFilterPanel(*m_events, m_eventsView, m_filterTabs);
-        m_filterTabs->addTab(m_timeRangePanel, tr("Time Filter"));
+        int timeTabIndex = m_filterTabs->addTab(m_timeRangePanel, tr("⏱️ Time Range"));
+        m_filterTabs->setTabToolTip(timeTabIndex, tr("Filter events by date and time range"));
     }
 
     // ── Filter Profiles tab ───────────────────────────────────────────────
     m_profilesPanel = new FilterProfilesPanel(m_filterTabs);
-    m_filterTabs->addTab(m_profilesPanel, tr("Profiles"));
+    int profileTabIndex = m_filterTabs->addTab(m_profilesPanel, tr("💾 Profiles"));
+    m_filterTabs->setTabToolTip(profileTabIndex, tr("Save and load filter configurations as reusable profiles"));
 
     m_filtersDock->setWidget(m_filterTabs);
     addDockWidget(Qt::LeftDockWidgetArea, m_filtersDock);
 
     // Generic Plugin Configuration dock with tabs for multiple plugins
-    m_pluginLeftDock = new QDockWidget("Plugin Configuration", this);
+    m_pluginLeftDock = new QDockWidget("🔌 Plugin Configuration", this);
     if (!m_pluginLeftDock) {
         throw std::runtime_error("Failed to create plugin left/config dock");
     }
@@ -406,8 +414,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     tabifyDockWidget(m_filtersDock, m_pluginLeftDock);  // Tab with filters in left panel
     m_pluginLeftDock->hide(); // Hidden until plugins provide configuration UI
 
-    // ===== LEFT DOCK: Signal Browser =====
-    m_signalBrowserDock = new QDockWidget(tr("Signal Browser"), this);
+    // ===== LEFT DOCK: Signal Browser (CAN/ASC signals) =====
+    m_signalBrowserDock = new QDockWidget(tr("📡 Signal Browser (CAN)"), this);
     m_signalBrowserDock->setObjectName("SignalBrowserDockWidget");
     m_signalBrowserDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_signalBrowserDock->setFeatures(QDockWidget::DockWidgetMovable |
