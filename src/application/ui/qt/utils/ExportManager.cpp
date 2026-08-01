@@ -86,6 +86,15 @@ util::Result<void, error::Error> ToCsv(const QAbstractItemModel& model,
         out << fields.join(QLatin1Char(',')) << QLatin1Char('\n');
     }
 
+    // Flush and check for errors
+    out.flush();
+    file.close();
+    if (file.error() != QFileDevice::NoError) {
+        const std::string msg = "CSV write error: " + file.errorString().toStdString();
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
+
     util::Logger::Info("[ExportManager] CSV export complete: {} rows -> {}",
                        rows.size(), path.toStdString());
     return R::Ok({});
@@ -125,7 +134,15 @@ util::Result<void, error::Error> ToJson(const QAbstractItemModel& model,
         array.append(obj);
     }
 
-    file.write(QJsonDocument(array).toJson(QJsonDocument::Indented));
+    const QByteArray json = QJsonDocument(array).toJson(QJsonDocument::Indented);
+    qint64 bytesWritten = file.write(json);
+    file.close();
+
+    if (bytesWritten != json.size() || file.error() != QFileDevice::NoError) {
+        const std::string msg = "JSON write error: " + file.errorString().toStdString();
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
 
     util::Logger::Info("[ExportManager] JSON export complete: {} rows -> {}",
                        rows.size(), path.toStdString());
@@ -172,9 +189,16 @@ util::Result<void, error::Error> ToXml(const QAbstractItemModel& model,
     xml.writeEndElement(); // </events>
     xml.writeEndDocument();
 
-    if (xml.hasError())
-    {
+    file.close();
+
+    if (xml.hasError()) {
         const std::string msg = "XML write error: " + std::string(xml.errorString().toStdString());
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
+
+    if (file.error() != QFileDevice::NoError) {
+        const std::string msg = "XML file error: " + file.errorString().toStdString();
         util::Logger::Error("[ExportManager] {}", msg);
         return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
     }

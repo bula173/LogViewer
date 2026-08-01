@@ -2155,7 +2155,22 @@ void MainWindow::OnSaveSession()
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
             throw std::runtime_error("Cannot open file for writing");
         const std::string json = session.dump(2);
-        f.write(json.data(), static_cast<qint64>(json.size()));
+        qint64 bytesWritten = f.write(json.data(), static_cast<qint64>(json.size()));
+        if (bytesWritten != static_cast<qint64>(json.size())) {
+            f.close();
+            throw std::runtime_error(
+                "Failed to write complete session file (wrote " + std::to_string(bytesWritten) +
+                " of " + std::to_string(json.size()) + " bytes)");
+        }
+        if (!f.flush()) {
+            f.close();
+            throw std::runtime_error("Failed to flush session file to disk");
+        }
+        f.close();
+        if (f.error() != QFileDevice::NoError) {
+            throw std::runtime_error("File error after writing session: " +
+                std::string(f.errorString().toUtf8().constData()));
+        }
         UpdateStatusText(tr("Session saved to %1").arg(path).toStdString());
     }
     catch (const std::exception& ex)
@@ -2187,9 +2202,30 @@ void MainWindow::OnOpenSession()
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
             throw std::runtime_error("Cannot open session file");
+
+        if (f.size() == 0) {
+            f.close();
+            throw std::runtime_error("Session file is empty");
+        }
+
         const QByteArray data = f.readAll();
-        const nlohmann::json session = nlohmann::json::parse(
-            data.constData(), data.constData() + data.size());
+        f.close();
+
+        if (data.isEmpty()) {
+            throw std::runtime_error("Failed to read session file data");
+        }
+
+        nlohmann::json session;
+        try {
+            session = nlohmann::json::parse(data.constData(), data.constData() + data.size());
+        }
+        catch (const nlohmann::json::exception& e) {
+            throw std::runtime_error(std::string("Invalid session file format: ") + e.what());
+        }
+
+        if (session.is_null() || !session.is_object()) {
+            throw std::runtime_error("Session file does not contain a valid JSON object");
+        }
 
         // Load the log file if present
         const std::string logFile = session.value("log_file", std::string{});
