@@ -82,7 +82,11 @@ int main(int argc, char** argv)
             auto& cfg = config::GetConfig();
             cfg.SetAppName(kQtAppName);
             cfg.LoadConfig();
+
+            // Apply log level from config (was initialized with default before LoadConfig)
+            util::Logger::SetLevel(util::Logger::fromStrLevel(cfg.logLevel));
             util::Logger::Info("Configuration loaded successfully");
+            util::Logger::Debug("Log level set to: {}", cfg.logLevel);
         }
         catch (const std::exception& e)
         {
