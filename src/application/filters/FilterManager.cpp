@@ -324,7 +324,7 @@ const FilterList& FilterManager::getFilters() const
     return m_filters;
 }
 
-FilterPtr FilterManager::getFilterByName(const std::string& name) const
+std::optional<FilterPtr> FilterManager::getFilterByName(const std::string& name) const
 {
     for (const auto& filter : m_filters)
     {
@@ -333,7 +333,7 @@ FilterPtr FilterManager::getFilterByName(const std::string& name) const
             return filter;
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 } // namespace filters

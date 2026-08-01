@@ -6,6 +6,7 @@
 #include "Result.hpp"
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -83,7 +84,7 @@ class FilterManager
 
     // Access filters
     const FilterList& getFilters() const;
-    FilterPtr getFilterByName(const std::string& name) const;
+    std::optional<FilterPtr> getFilterByName(const std::string& name) const;
 
     // File operations
     std::string getFiltersFilePath() const;

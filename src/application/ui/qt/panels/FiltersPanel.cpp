@@ -211,12 +211,12 @@ void FiltersPanel::HandleEdit()
     if (filterName.isEmpty())
         return;
 
-    auto filter = filters::FilterManager::getInstance().getFilterByName(
+    auto filterOpt = filters::FilterManager::getInstance().getFilterByName(
         filterName.toStdString());
-    if (!filter)
+    if (!filterOpt)
         return;
 
-    FilterEditorDialog dialog(this, std::make_shared<filters::Filter>(*filter));
+    FilterEditorDialog dialog(this, std::make_shared<filters::Filter>(**filterOpt));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
