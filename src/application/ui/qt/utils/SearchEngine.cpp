@@ -133,14 +133,24 @@ bool SearchEngine::matchesSimple(const std::string& text) const
         m_normalizedPatternValid = true;
     }
 
-    // Fast path: if pattern is ASCII, we can use inline lowercasing
-    std::string lower_text;
-    lower_text.reserve(text.length());
-    for (unsigned char c : text) {
-        lower_text += static_cast<char>(std::tolower(static_cast<int>(c)));
-    }
+    // Use iterative comparison instead of allocating/lowercasing entire text string
+    // This avoids O(n) allocations for case-insensitive search
+    size_t patternLen = m_normalizedPattern.length();
+    size_t textLen = text.length();
+    if (patternLen > textLen) return false;
 
-    return lower_text.find(m_normalizedPattern) != std::string::npos;
+    for (size_t i = 0; i <= textLen - patternLen; ++i) {
+        bool match = true;
+        for (size_t j = 0; j < patternLen; ++j) {
+            if (std::tolower(static_cast<unsigned char>(text[i + j])) !=
+                m_normalizedPattern[j]) {
+                match = false;
+                break;
+            }
+        }
+        if (match) return true;
+    }
+    return false;
 }
 
 bool SearchEngine::matchesRegex(const std::string& text) const
@@ -164,10 +174,12 @@ bool SearchEngine::matchesAdvanced(const std::string& text) const
     const auto& query = *m_advancedQuery;
     const Qt::CaseSensitivity cs = m_caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
+    // Convert text once, reuse in all checks (avoid O(n) string conversions per term)
+    const QString text_q = QString::fromStdString(text);
+
     // All AND terms must be present
     for (const auto& term : query.andTerms) {
-        QString text_q = QString::fromStdString(text);
-        QString term_q = QString::fromStdString(term);
+        const QString term_q = QString::fromStdString(term);
         if (!text_q.contains(term_q, cs)) {
             return false;
         }
@@ -177,8 +189,7 @@ bool SearchEngine::matchesAdvanced(const std::string& text) const
     if (!query.orTerms.empty()) {
         bool foundOr = false;
         for (const auto& term : query.orTerms) {
-            QString text_q = QString::fromStdString(text);
-            QString term_q = QString::fromStdString(term);
+            const QString term_q = QString::fromStdString(term);
             if (text_q.contains(term_q, cs)) {
                 foundOr = true;
                 break;
@@ -190,8 +201,7 @@ bool SearchEngine::matchesAdvanced(const std::string& text) const
 
     // No NOT terms must be present
     for (const auto& term : query.notTerms) {
-        QString text_q = QString::fromStdString(text);
-        QString term_q = QString::fromStdString(term);
+        const QString term_q = QString::fromStdString(term);
         if (text_q.contains(term_q, cs)) {
             return false;
         }
@@ -250,16 +260,23 @@ std::vector<SearchMatch> SearchEngine::findSimpleMatches(const std::string& text
             m_normalizedPatternValid = true;
         }
 
-        std::string lower_text;
-        lower_text.reserve(text.length());
-        for (unsigned char c : text) {
-            lower_text += static_cast<char>(std::tolower(static_cast<int>(c)));
-        }
+        // Find all matches using iterative comparison to avoid allocating entire lowercased text
+        size_t patternLen = m_normalizedPattern.length();
+        size_t textLen = text.length();
+        if (patternLen > textLen) return matches;
 
-        size_t pos = 0;
-        while ((pos = lower_text.find(m_normalizedPattern, pos)) != std::string::npos) {
-            matches.push_back({static_cast<int>(pos), static_cast<int>(pos + m_normalizedPattern.length())});
-            pos += m_normalizedPattern.length();
+        for (size_t i = 0; i <= textLen - patternLen; ++i) {
+            bool match = true;
+            for (size_t j = 0; j < patternLen; ++j) {
+                if (std::tolower(static_cast<unsigned char>(text[i + j])) !=
+                    m_normalizedPattern[j]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                matches.push_back({static_cast<int>(i), static_cast<int>(i + patternLen)});
+            }
         }
     }
 
