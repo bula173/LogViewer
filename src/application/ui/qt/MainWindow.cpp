@@ -1130,7 +1130,20 @@ void MainWindow::SetupMenus()
     focusSearchAction->setToolTip(tr("Focus the search bar and search across all event fields"));
     connect(focusSearchAction, &QAction::triggered, this, [this]() {
         if (m_unifiedSearchBar) {
+            m_unifiedSearchBar->setVisible(true);  // Ensure it's visible first
             m_unifiedSearchBar->FocusSearchInput();
+        }
+    });
+
+    // Add window-level Ctrl+F shortcut (works on all platforms including Linux)
+    auto* globalFindShortcut = new QShortcut(QKeySequence::Find, this);
+    connect(globalFindShortcut, &QShortcut::activated, this, [this]() {
+        if (m_unifiedSearchBar) {
+            m_unifiedSearchBar->setVisible(true);
+            m_unifiedSearchBar->FocusSearchInput();
+            util::Logger::Debug("[MainWindow] Ctrl+F activated - focusing search bar");
+        } else {
+            util::Logger::Warn("[MainWindow] Ctrl+F pressed but m_unifiedSearchBar is null");
         }
     });
 
