@@ -132,10 +132,8 @@ static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
             j[kv.first] = kv.second;
         }
         std::string s = j.dump();
-        char* out = (char*)std::malloc(s.size() + 1);
-        if (!out) return nullptr;
-        memcpy(out, s.c_str(), s.size() + 1);
-        return out;
+        // Use qstrdup for Qt-managed memory instead of unsafe malloc
+        return qstrdup(s.c_str());
     } catch (...) {
         return nullptr;
     }

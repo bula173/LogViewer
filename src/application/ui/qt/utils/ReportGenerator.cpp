@@ -128,11 +128,25 @@ QString ReportGenerator::GenerateHTML(const std::vector<const db::LogEvent*>& ev
             QString rowClass = (level == "ERROR" || level == "CRITICAL") ? " class=\"error\"" :
                               (level == "WARNING") ? " class=\"warning\"" : " class=\"info\"";
 
+            // Escape all user-provided data to prevent XSS attacks
+            auto escapeHtml = [](QString text) -> QString {
+                return text
+                    .replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
+            };
+
+            QString timestamp = escapeHtml(QString::fromStdString(event->findByKey("timestamp")));
+            QString message = escapeHtml(QString::fromStdString(event->findByKey("message")).left(100));
+            QString actor = escapeHtml(QString::fromStdString(event->findByKey("actor")));
+
             html += "<tr" + rowClass + ">";
-            html += "<td>" + QString::fromStdString(event->findByKey("timestamp")) + "</td>";
+            html += "<td>" + timestamp + "</td>";
             html += "<td>" + level + "</td>";
-            html += "<td>" + QString::fromStdString(event->findByKey("message")).left(100) + "</td>";
-            html += "<td>" + QString::fromStdString(event->findByKey("actor")) + "</td>";
+            html += "<td>" + message + "</td>";
+            html += "<td>" + actor + "</td>";
             html += "</tr>\n";
         }
         html += "</table>\n";
@@ -176,9 +190,19 @@ QString ReportGenerator::GenerateMarkdown(const std::vector<const db::LogEvent*>
                 break;
 
             QString level = QString::fromStdString(event->findByKey("level"));
-            QString message = QString::fromStdString(event->findByKey("message")).left(100).replace('|', "\\|");
-            QString actor = QString::fromStdString(event->findByKey("actor"));
             QString timestamp = QString::fromStdString(event->findByKey("timestamp"));
+
+            // Properly escape Markdown table cell content
+            auto escapeMarkdownCell = [](QString text) -> QString {
+                return text
+                    .replace("\\", "\\\\")      // Backslash first!
+                    .replace("|", "\\|")        // Pipe character
+                    .replace("\n", " ")         // Newlines break tables
+                    .replace("\r", "");         // Remove carriage returns
+            };
+
+            QString message = escapeMarkdownCell(QString::fromStdString(event->findByKey("message")).left(100));
+            QString actor = escapeMarkdownCell(QString::fromStdString(event->findByKey("actor")));
 
             md += "| " + timestamp + " | " + level + " | " + message + " | " + actor + " |\n";
         }
@@ -243,6 +267,8 @@ ReportGenerator::ReportStatistics ReportGenerator::CalculateStatistics(const std
     ReportStatistics stats{};
     stats.totalEvents = static_cast<int>(events.size());
 
+    std::set<QString> uniqueActorSet;  // O(log n) insertion instead of O(n) search
+
     for (const auto* event : events)
     {
         QString level = QString::fromStdString(event->findByKey("level")).toUpper();
@@ -255,9 +281,13 @@ ReportGenerator::ReportStatistics ReportGenerator::CalculateStatistics(const std
         else if (level == "DEBUG") stats.debugCount++;
 
         QString actor = QString::fromStdString(event->findByKey("actor"));
-        if (!actor.isEmpty() && std::find(stats.uniqueActors.begin(), stats.uniqueActors.end(), actor) == stats.uniqueActors.end())
-            stats.uniqueActors.push_back(actor);
+        if (!actor.isEmpty()) {
+            uniqueActorSet.insert(actor);  // O(log n), not O(n)
+        }
     }
+
+    // Convert set to vector (now properly deduplicated)
+    stats.uniqueActors = std::vector<QString>(uniqueActorSet.begin(), uniqueActorSet.end());
 
     // Calculate actual time span from timestamps
     stats.timeSpanMs = 0;
