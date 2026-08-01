@@ -1528,14 +1528,25 @@ std::string MainWindow::ReadSearchQuery() const
 {
     // Try unified search bar first (top of window - primary search interface)
     if (m_unifiedSearchBar) {
-        QString query = m_unifiedSearchBar->GetSearchQuery();
-        if (!query.isEmpty())
-            return query.toStdString();
+        try {
+            QString query = m_unifiedSearchBar->GetSearchQuery();
+            if (!query.isEmpty())
+                return query.toStdString();
+        }
+        catch (const std::exception& e) {
+            util::Logger::Warn("[MainWindow] Exception reading from UnifiedSearchBar: {}", e.what());
+        }
     }
 
     // Fall back to old search edit in Tools panel (bottom)
-    if (m_searchEdit)
-        return m_searchEdit->text().toStdString();
+    if (m_searchEdit) {
+        try {
+            return m_searchEdit->text().toStdString();
+        }
+        catch (const std::exception& e) {
+            util::Logger::Warn("[MainWindow] Exception reading from SearchEdit: {}", e.what());
+        }
+    }
 
     return "";
 }
@@ -1632,8 +1643,17 @@ void MainWindow::OnSearchRequested()
 {
     util::Logger::Debug("[MainWindow] OnSearchRequested query='{}'",
         ReadSearchQuery());
-    if (m_presenter)
+    if (!m_presenter) {
+        util::Logger::Error("[MainWindow] OnSearchRequested: m_presenter is null!");
+        return;
+    }
+    try {
         m_presenter->PerformSearch();
+    }
+    catch (const std::exception& e) {
+        util::Logger::Error("[MainWindow] OnSearchRequested exception: {}", e.what());
+        ShowError(tr("Search Error"), tr("An error occurred during search: %1").arg(QString::fromUtf8(e.what())));
+    }
 }
 
 bool MainWindow::eventFilter(QObject* watched, QEvent* event)
