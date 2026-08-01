@@ -109,6 +109,13 @@ void UnifiedSearchBar::CreateLayout()
     m_clearButton->setMaximumWidth(32);
     mainLayout->addWidget(m_clearButton);
 
+    // Details button
+    auto* detailsButton = new QPushButton("⚙ Details...");
+    detailsButton->setToolTip("Advanced search options (regex, case-sensitive, columns)");
+    detailsButton->setMaximumWidth(100);
+    connect(detailsButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnDetailsClicked);
+    mainLayout->addWidget(detailsButton);
+
     mainLayout->addStretch();
 }
 
@@ -363,6 +370,20 @@ void UnifiedSearchBar::CreateFilterPresets()
 {
     // Placeholder for quick filter presets
     // Could be: Errors, Warnings, My Service, Recent errors, etc.
+}
+
+void UnifiedSearchBar::OnDetailsClicked()
+{
+    // TODO: Open SearchDetailsDialog with advanced options:
+    // - Regex checkbox
+    // - Case-sensitive checkbox
+    // - Column selector
+    // - Search mode (substring, regex, advanced)
+    // - Save/load search presets
+
+    qDebug() << "Details button clicked - advanced search dialog (TODO)";
+    // For now, just log that the button was clicked
+    // This will be expanded to open a proper dialog
 }
 
 } // namespace ui::qt

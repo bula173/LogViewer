@@ -71,6 +71,7 @@ class UnifiedSearchBar : public QWidget
     void OnSearchHistoryItemClicked(const QString& text);
     void OnQuickFilterClicked();
     void OnSearchSuggestionClicked(const QString& suggestion);
+    void OnDetailsClicked();
 
   private:
     void CreateLayout();
