@@ -9,6 +9,9 @@ target_sources(application_core
         ../MainWindowPresenter.cpp
         MainWindow.cpp
         MainWindowFileOpsHelper.cpp
+        MainWindowFilterOpsHelper.cpp
+        MainWindowPluginOpsHelper.cpp
+        MainWindowExportOpsHelper.cpp
         StartupSplash.cpp
         panels/CanStatisticsStrategy.cpp
         panels/CanSignalTreePanel.cpp
