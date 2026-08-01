@@ -6,6 +6,7 @@ enable_testing()
 # Functional Test Executable
 add_executable(functional_tests
     SearchFunctionalTest.cpp
+    SearchEngineFunctionalTest.cpp
     ConfigurationFunctionalTest.cpp
     ExportFunctionalTest.cpp
 )
