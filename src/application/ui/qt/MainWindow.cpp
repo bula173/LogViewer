@@ -1125,25 +1125,24 @@ void MainWindow::SetupMenus()
     
     viewMenu->addSeparator();
 
-    auto* focusSearchAction = viewMenu->addAction(tr("&Find Events (Ctrl+F)"));
+    auto* focusSearchAction = viewMenu->addAction(tr("&Find Events"));
+    // Note: QKeySequence::Find is Ctrl+F on Linux/Windows, Cmd+F on Mac
     focusSearchAction->setShortcut(QKeySequence::Find);
-    focusSearchAction->setToolTip(tr("Focus the search bar and search across all event fields"));
+    focusSearchAction->setToolTip(tr("Focus the search bar (Ctrl+F / Cmd+F)"));
     connect(focusSearchAction, &QAction::triggered, this, [this]() {
-        if (m_unifiedSearchBar) {
-            m_unifiedSearchBar->setVisible(true);  // Ensure it's visible first
-            m_unifiedSearchBar->FocusSearchInput();
-        }
-    });
+        try {
+            if (!m_unifiedSearchBar) {
+                util::Logger::Warn("[MainWindow] Search triggered but m_unifiedSearchBar is null");
+                return;
+            }
 
-    // Add window-level Ctrl+F shortcut (works on all platforms including Linux)
-    auto* globalFindShortcut = new QShortcut(QKeySequence::Find, this);
-    connect(globalFindShortcut, &QShortcut::activated, this, [this]() {
-        if (m_unifiedSearchBar) {
             m_unifiedSearchBar->setVisible(true);
+            m_unifiedSearchBar->raise();
             m_unifiedSearchBar->FocusSearchInput();
-            util::Logger::Debug("[MainWindow] Ctrl+F activated - focusing search bar");
-        } else {
-            util::Logger::Warn("[MainWindow] Ctrl+F pressed but m_unifiedSearchBar is null");
+            util::Logger::Debug("[MainWindow] Find shortcut activated - search bar focused");
+        }
+        catch (const std::exception& e) {
+            util::Logger::Error("[MainWindow] Exception in find shortcut: {}", e.what());
         }
     });
 
