@@ -1,0 +1,15 @@
+{
+  "mcp": {
+    "code-review-graph": {
+      "type": "local",
+      "command": [
+        "/opt/homebrew/opt/python@3.11/bin/python3.11",
+        "-m",
+        "code_review_graph",
+        "serve",
+        "--repo",
+        "/Users/Marcin/workspace/cpp/LogViewer"
+      ]
+    }
+  }
+}

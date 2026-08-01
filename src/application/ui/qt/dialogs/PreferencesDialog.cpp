@@ -268,7 +268,7 @@ void PreferencesDialog::onExportSettings()
     // Create JSON export of current settings
     QJsonObject root;
     root["version"] = "1.0";
-    root["timestamp"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    root["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
 
     QJsonDocument doc(root);
 

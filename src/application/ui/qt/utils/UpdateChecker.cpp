@@ -90,6 +90,7 @@ bool UpdateChecker::IsPluginCompatible(const updates::PluginUpdateInfo& info)
 UpdateChecker::UpdateChecker(QObject* parent)
     : QObject(parent)
 {
+    connect(&m_net, &QNetworkAccessManager::sslErrors, this, &UpdateChecker::OnSslErrors);
 }
 
 // ---------------------------------------------------------------------------
@@ -116,6 +117,7 @@ void UpdateChecker::CheckAsync()
     req.setRawHeader("Accept", "application/vnd.github+json");
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                      QNetworkRequest::NoLessSafeRedirectPolicy);
+    req.setTransferTimeout(30000);
 
     QNetworkReply* reply = m_net.get(req);
     connect(reply, &QNetworkReply::finished, this,
@@ -203,6 +205,7 @@ void UpdateChecker::OnReleaseReply(QNetworkReply* reply)
                          .toUtf8());
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                      QNetworkRequest::NoLessSafeRedirectPolicy);
+    req.setTransferTimeout(30000);
 
     QNetworkReply* manifestReply = m_net.get(req);
     connect(manifestReply, &QNetworkReply::finished, this,
@@ -314,6 +317,7 @@ void UpdateChecker::DownloadPlugin(const updates::PluginUpdateInfo& info)
                          .toUtf8());
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                      QNetworkRequest::NoLessSafeRedirectPolicy);
+    req.setTransferTimeout(30000);
 
     QNetworkReply* reply = m_net.get(req);
 
@@ -395,6 +399,15 @@ void UpdateChecker::DoPluginDownload(const updates::PluginUpdateInfo& info,
     util::Logger::Info("[UpdateChecker] Plugin {} downloaded to {}", info.id,
                        tempPath.toStdString());
     emit PluginDownloadComplete(pluginId, tempPath);
+}
+
+void UpdateChecker::OnSslErrors(QNetworkReply* reply, const QList<QSslError>& errors)
+{
+    util::Logger::Error("[UpdateChecker] SSL certificate verification failed:");
+    for (const auto& error : errors)
+    {
+        util::Logger::Error("[UpdateChecker]   - {}", error.errorString().toStdString());
+    }
 }
 
 } // namespace ui::qt

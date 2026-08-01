@@ -90,6 +90,8 @@ class UpdateChecker : public QObject
     updates::UpdateCheckResult m_pending;   ///< Assembled during the two-step check
     bool                       m_checking {false};
 
+    void OnSslErrors(QNetworkReply* reply, const QList<QSslError>& errors);
+
     static constexpr const char* kGitHubApiUrl =
         "https://api.github.com/repos/bula173/LogViewer/releases/latest";
 };

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh issue *)",
+      "Bash(cmake --build build/macos-debug-qt --target application_core -- -j4)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh release create v1.5.2 --title 'LogViewer v1.5.2' --notes ' *)",
+      "Bash(ctest --test-dir . -R \"AscParser|DbcParser|CanDecoder\" --output-on-failure -V)",
+      "Bash(git mv *)",
+      "Bash(git -C /Users/Marcin/workspace/cpp/LogViewer status)",
+      "Bash(git -C /Users/Marcin/workspace/cpp/LogViewer log --oneline -5)"
+    ]
+  }
+}

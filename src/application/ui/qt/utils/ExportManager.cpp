@@ -172,6 +172,13 @@ util::Result<void, error::Error> ToXml(const QAbstractItemModel& model,
     xml.writeEndElement(); // </events>
     xml.writeEndDocument();
 
+    if (xml.hasError())
+    {
+        const std::string msg = "XML write error: " + std::string(xml.errorString().toStdString());
+        util::Logger::Error("[ExportManager] {}", msg);
+        return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
+    }
+
     util::Logger::Info("[ExportManager] XML export complete: {} rows -> {}",
                        rows.size(), path.toStdString());
     return R::Ok({});

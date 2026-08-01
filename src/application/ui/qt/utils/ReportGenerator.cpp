@@ -95,7 +95,7 @@ QString ReportGenerator::GenerateHTML(const std::vector<const db::LogEvent*>& ev
 
     // Title
     html += "<h1>" + options.title + "</h1>\n";
-    html += "<p>Generated: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") + "</p>\n";
+    html += "<p>Generated: " + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss") + "</p>\n";
 
     // Summary
     if (options.includeSummary)
@@ -161,7 +161,7 @@ QString ReportGenerator::GenerateMarkdown(const std::vector<const db::LogEvent*>
     auto stats = CalculateStatistics(events);
 
     QString md = "# " + options.title + "\n\n";
-    md += "**Generated**: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") + "\n\n";
+    md += "**Generated**: " + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss") + "\n\n";
 
     if (options.includeSummary)
     {
@@ -215,7 +215,7 @@ QString ReportGenerator::GenerateJSON(const std::vector<const db::LogEvent*>& ev
 {
     nlohmann::json j;
     j["title"] = options.title.toStdString();
-    j["generated"] = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString();
+    j["generated"] = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss").toStdString();
     j["eventCount"] = events.size();
 
     // Statistics
@@ -250,7 +250,7 @@ QString ReportGenerator::GeneratePlainText(const std::vector<const db::LogEvent*
 
     QString txt = options.title + "\n";
     txt += QString(options.title.length(), '=') + "\n";
-    txt += "\nGenerated: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") + "\n";
+    txt += "\nGenerated: " + QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss") + "\n";
     txt += "\n" + GenerateSummary(stats) + "\n";
     txt += "\nStatistics:\n";
     txt += "- Total Events: " + QString::number(stats.totalEvents) + "\n";
