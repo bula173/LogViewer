@@ -129,7 +129,14 @@ public:
 
     void setLevel(LogLevel level) override
     {
-        m_logger->set_level(toSpdlogLevel(level));
+        auto spdlog_level = toSpdlogLevel(level);
+        m_logger->set_level(spdlog_level);
+        // Update all sink levels to match — in spdlog, both logger AND sinks have independent
+        // level checks. If only logger level changes, sinks may reject messages below their
+        // individual levels, causing debug/trace to disappear from file even if logger allows it.
+        for (auto& sink : m_logger->sinks()) {
+            sink->set_level(spdlog_level);
+        }
     }
 
     LogLevel getLevel() const override
