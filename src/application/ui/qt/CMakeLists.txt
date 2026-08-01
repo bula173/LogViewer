@@ -8,6 +8,7 @@ target_sources(application_core
     PRIVATE
         ../MainWindowPresenter.cpp
         MainWindow.cpp
+        MainWindowFileOpsHelper.cpp
         StartupSplash.cpp
         panels/CanStatisticsStrategy.cpp
         panels/CanSignalTreePanel.cpp
