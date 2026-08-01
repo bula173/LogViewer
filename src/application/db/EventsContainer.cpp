@@ -33,7 +33,6 @@ void EventsContainer::AddEvent(LogEvent&& event)
      * The vector will automatically manage memory allocation and resizing.
      * Thread-safe: Uses exclusive lock for modification.
      */
-    util::Logger::Trace("EventsContainer::AddEvent called");
     {
         std::unique_lock<std::shared_mutex> lock(m_mutex);
         this->AddItem(std::move(event));
@@ -47,14 +46,11 @@ void EventsContainer::AddEvent(LogEvent&& event)
 void EventsContainer::AddEventBatch(
     std::vector<std::pair<int, LogEvent::EventItems>>&& eventBatch)
 {
-    util::Logger::Trace("EventsContainer::AddEventBatch called with size: {}",
-        eventBatch.size());
-    
     // Thread-safe: Use exclusive lock for batch modification
     {
         std::unique_lock<std::shared_mutex> lock(m_mutex);
         m_data.reserve(m_data.size() + eventBatch.size());
-        
+
         for (auto& item : eventBatch)
         {
             m_data.emplace_back(item.first, std::move(item.second));
@@ -74,10 +70,7 @@ const LogEvent& EventsContainer::GetEvent(size_t index)
 
 int EventsContainer::GetCurrentItemIndex()
 {
-    const int idx = m_currentItem.load(std::memory_order_relaxed);
-    util::Logger::Trace("EventsContainer::GetCurrentItemIndex called, returning {}",
-        idx);
-    return idx;
+    return m_currentItem.load(std::memory_order_relaxed);
 }
 
 void EventsContainer::SetCurrentItem(const int item)
@@ -88,20 +81,18 @@ void EventsContainer::SetCurrentItem(const int item)
      * This method is typically called by virtual list controls to maintain
      * synchronization between the UI selection and the data model.
      */
-    util::Logger::Trace("EventsContainer::SetCurrentItem called with item: {}", item);
     m_currentItem.store(item, std::memory_order_relaxed);
+
+    // Notify via new IModelObservable pattern (weak_ptr observers)
+    this->NotifyCurrentIndexUpdated(item);
+
+    // Backward compatibility: also notify old IModel raw-pointer observers
     for (auto v : m_views)
-    {
-        util::Logger::Trace("EventsContainer::SetCurrentItem notifying view of "
-                      "current index update: {}",
-            item);
         v->OnCurrentIndexUpdated(item);
-    }
 }
 
 void EventsContainer::AddItem(LogEvent&& item)
 {
-    util::Logger::Trace("EventsContainer::AddItem called");
     // Note: AddItem is called from AddEvent which already holds the lock
     // So we don't acquire a lock here to avoid recursive locking
     m_data.push_back(std::forward<decltype(item)>(item));
@@ -143,14 +134,14 @@ void EventsContainer::Clear()
         m_data.clear();
         m_currentItem = -1; // Reset to no selection since container is empty
     } // Release lock before notifying views
-    
-    // Notify current item update after releasing the lock to avoid deadlock
+
+    // Notify current item update via new IModelObservable pattern (weak_ptr observers)
+    this->NotifyCurrentIndexUpdated(-1);
+
+    // Backward compatibility: also notify old IModel raw-pointer observers
     for (auto v : m_views)
-    {
-        util::Logger::Trace("EventsContainer::Clear notifying view of current index update: -1");
         v->OnCurrentIndexUpdated(-1);
-    }
-    
+
     // Notify views of data change after releasing the lock to avoid deadlock
     this->NotifyDataChanged();
 }
@@ -164,7 +155,6 @@ size_t EventsContainer::Size() const
      * Thread-safe: Uses shared lock for concurrent reads.
      */
     std::shared_lock<std::shared_mutex> lock(m_mutex);
-    util::Logger::Trace("EventsContainer::Size called, returning {}", m_data.size());
     return m_data.size();
 }
 
@@ -316,12 +306,24 @@ void EventsContainer::MergeEvents(EventsContainer& other,
     }
 
     // Locks released here. Notify views without holding the container mutexes.
+
+    // Notify current item update via new IModelObservable pattern (weak_ptr observers)
+    this->NotifyCurrentIndexUpdated(-1);
+
+    // Backward compatibility: also notify old IModel raw-pointer observers
     for (auto v : m_views)
-    {
-        util::Logger::Trace("EventsContainer::MergeEvents notifying view of current index update: -1");
         v->OnCurrentIndexUpdated(-1);
-    }
 
     this->NotifyDataChanged();
 }
+
+void EventsContainer::NotifyDataChanged()
+{
+    // Notify via new IModelObservable pattern (weak_ptr observers)
+    mvc::IModelObservable::NotifyDataChanged();
+
+    // Backward compatibility: also notify old IModel raw-pointer observers
+    mvc::IModel::NotifyDataChanged();
+}
+
 } // db namespace

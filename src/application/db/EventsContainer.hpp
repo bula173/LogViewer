@@ -8,6 +8,7 @@
 #pragma once
 #include "LogEvent.hpp"
 #include "IModel.hpp"
+#include "IModelObservable.hpp"
 #include <atomic>
 #include <shared_mutex>
 #include <vector>
@@ -120,7 +121,7 @@ namespace db
  * @see mvc::IModel for model interface details
  * @see FilterManager for filtering merged events
  */
-class EventsContainer : public mvc::IModel
+class EventsContainer : public mvc::IModel, public mvc::IModelObservable
 {
   public:
     /**
@@ -271,6 +272,10 @@ class EventsContainer : public mvc::IModel
     }
 
   private:
+    /// Override to disambiguate between IModel and IModelObservable versions
+    /// Calls both old (raw pointer) and new (weak_ptr) notification patterns
+    void NotifyDataChanged() override;
+
     std::vector<LogEvent> m_data; ///< Internal storage for events
     /// Currently selected item index (-1 = no selection).
     /// Declared atomic so that GetCurrentItemIndex() / SetCurrentItem()
