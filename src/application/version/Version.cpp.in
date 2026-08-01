@@ -54,29 +54,17 @@ std::string Version::asLongStr() const
     return asShortStr() + " / " + datetime + " / " + machine;
 }
 //-----------------------------------------------------------------------------------
-bool Version::operator<(const Version& other)
+// Three-way comparison operator (spaceship) - C++20
+// Compiler automatically generates <, >, <=, >= from this and operator==
+auto Version::operator<=>(const Version& other) const
 {
-    return asNumber() < other.asNumber();
+    return asNumber() <=> other.asNumber();
 }
-bool Version::operator>(const Version& other)
-{
-    return asNumber() > other.asNumber();
-}
-bool Version::operator<=(const Version& other)
-{
-    return asNumber() <= other.asNumber();
-}
-bool Version::operator>=(const Version& other)
-{
-    return asNumber() >= other.asNumber();
-}
-bool Version::operator==(const Version& other)
+
+// Equality operator - compiler generates != from this
+bool Version::operator==(const Version& other) const
 {
     return asNumber() == other.asNumber();
-}
-bool Version::operator!=(const Version& other)
-{
-    return asNumber() != other.asNumber();
 }
 //-----------------------------------------------------------------------------------
 

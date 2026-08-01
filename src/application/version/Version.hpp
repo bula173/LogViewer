@@ -7,6 +7,7 @@
 
 #pragma once
 #include <string>
+#include <compare>
 
 /**
  * @namespace Version
@@ -70,47 +71,21 @@ struct Version
     std::string asLongStr() const;
 
     /**
-     * @brief Less-than comparison operator for version ordering.
+     * @brief Three-way comparison operator (spaceship operator)
+     *
+     * Provides complete version ordering with semantic versioning rules.
+     * Compiler automatically generates <, >, <=, >=, != from this and operator==.
+     *
+     * Comparison order: major → minor → patch → type
+     * Pre-release versions (alpha, beta, rc) are considered less than stable.
+     *
      * @param other The version to compare against
-     * @return true if this version is less than the other version
+     * @return Strong ordering comparison result
      */
-    bool operator<(const Version& other);
+    auto operator<=>(const Version& other) const;
 
-    /**
-     * @brief Greater-than comparison operator for version ordering.
-     * @param other The version to compare against
-     * @return true if this version is greater than the other version
-     */
-    bool operator>(const Version& other);
-
-    /**
-     * @brief Less-than-or-equal comparison operator for version ordering.
-     * @param other The version to compare against
-     * @return true if this version is less than or equal to the other version
-     */
-    bool operator<=(const Version& other);
-
-    /**
-     * @brief Greater-than-or-equal comparison operator for version ordering.
-     * @param other The version to compare against
-     * @return true if this version is greater than or equal to the other
-     * version
-     */
-    bool operator>=(const Version& other);
-
-    /**
-     * @brief Equality comparison operator for version matching.
-     * @param other The version to compare against
-     * @return true if both versions are identical
-     */
-    bool operator==(const Version& other);
-
-    /**
-     * @brief Inequality comparison operator for version matching.
-     * @param other The version to compare against
-     * @return true if versions are different
-     */
-    bool operator!=(const Version& other);
+    /// Equality operator (compares numeric version; compiler generates != from this)
+    bool operator==(const Version& other) const;
 
     /// Creates empty Version object
     Version();
