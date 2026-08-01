@@ -49,3 +49,6 @@ endif()
 
 # Enable testing
 enable_testing()
+
+# Add functional tests subdirectory
+add_subdirectory(functional)

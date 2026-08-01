@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "SearchEngine.hpp"
+#include "application/ui/qt/utils/SearchEngine.hpp"
 #include <string>
 #include <vector>
 
