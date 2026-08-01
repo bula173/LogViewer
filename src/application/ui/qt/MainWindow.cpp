@@ -1126,9 +1126,9 @@ void MainWindow::SetupMenus()
     viewMenu->addSeparator();
 
     auto* focusSearchAction = viewMenu->addAction(tr("&Find Events"));
-    // Note: QKeySequence::Find is Ctrl+F on Linux/Windows, Cmd+F on Mac
-    focusSearchAction->setShortcut(QKeySequence::Find);
-    focusSearchAction->setToolTip(tr("Focus the search bar (Ctrl+F / Cmd+F)"));
+    // TODO: QKeySequence::Find causes segfault on macOS - investigating
+    // Temporarily disabled: focusSearchAction->setShortcut(QKeySequence::Find);
+    focusSearchAction->setToolTip(tr("Focus the search bar (use menu for now)"));
     connect(focusSearchAction, &QAction::triggered, this, [this]() {
         try {
             if (!m_unifiedSearchBar) {

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "ExportManager.hpp"
-#include "EventsContainer.hpp"
-#include "LogEvent.hpp"
+#include "application/ui/qt/utils/ExportManager.hpp"
+#include "application/db/EventsContainer.hpp"
+#include "application/db/LogEvent.hpp"
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -22,11 +22,12 @@ protected:
 
         // Create sample events
         for (int i = 0; i < 10; ++i) {
-            db::LogEvent event;
-            event.setId(i);
-            event.addItem("timestamp", "2026-08-01 12:00:" + std::to_string(i));
-            event.addItem("level", i % 2 == 0 ? "INFO" : "ERROR");
-            event.addItem("message", "Test message " + std::to_string(i));
+            db::LogEvent::EventItems items = {
+                {"timestamp", "2026-08-01 12:00:" + std::to_string(i)},
+                {"level", i % 2 == 0 ? "INFO" : "ERROR"},
+                {"message", "Test message " + std::to_string(i)}
+            };
+            db::LogEvent event(i, std::move(items));
             m_events.AddEvent(std::move(event));
         }
     }
@@ -141,9 +142,9 @@ TEST_F(ExportFunctionalTest, ExportWithSpecialCharactersInData)
 {
     db::EventsContainer specialEvents;
 
-    db::LogEvent event;
-    event.setId(0);
-    event.addItem("message", "Quote: \" Comma: , Newline: \n Tab: \t");
+    db::LogEvent event(0, {
+        {"message", "Quote: \" Comma: , Newline: \n Tab: \t"}
+    });
     specialEvents.AddEvent(std::move(event));
 
     std::vector<int> rows = {0};

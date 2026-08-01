@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "EventsContainer.hpp"
-#include "LogEvent.hpp"
-#include "MainController.hpp"
+#include "application/db/EventsContainer.hpp"
+#include "application/db/LogEvent.hpp"
+#include "application/mvc/MainController.hpp"
 
 namespace functional::tests {
 
@@ -15,16 +15,13 @@ protected:
     {
         // Create sample events
         for (int i = 0; i < 100; ++i) {
-            db::LogEvent event;
-            event.setId(i);
-            event.addItem("timestamp", "2026-08-01 12:" + std::to_string(i % 60) + ":00");
-            event.addItem("level", i % 10 == 0 ? "ERROR" : "INFO");
-            event.addItem("source", i % 2 == 0 ? "Module-A" : "Module-B");
-            event.addItem("message", "Test event " + std::to_string(i));
-
-            if (i % 5 == 0)
-                event.addItem("message", "CRITICAL error detected");
-
+            db::LogEvent::EventItems items = {
+                {"timestamp", "2026-08-01 12:" + std::to_string(i % 60) + ":00"},
+                {"level", i % 10 == 0 ? "ERROR" : "INFO"},
+                {"source", i % 2 == 0 ? "Module-A" : "Module-B"},
+                {"message", (i % 5 == 0) ? "CRITICAL error detected" : "Test event " + std::to_string(i)}
+            };
+            db::LogEvent event(i, std::move(items));
             m_events.AddEvent(std::move(event));
         }
     }
