@@ -6,6 +6,8 @@ enable_testing()
 # Functional Test Executable
 add_executable(functional_tests
     SearchEngineFunctionalTest.cpp
+    FilterWorkflowTest.cpp
+    LargeFileHandlingTest.cpp
 )
 
 target_link_libraries(functional_tests PRIVATE
