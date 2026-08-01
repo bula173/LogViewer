@@ -86,7 +86,10 @@ int main(int argc, char** argv)
             // Apply log level from config (was initialized with default before LoadConfig)
             util::Logger::SetLevel(util::Logger::fromStrLevel(cfg.logLevel));
             util::Logger::Info("Configuration loaded successfully");
-            util::Logger::Debug("Log level set to: {}", cfg.logLevel);
+            util::Logger::Info("Current log level: {} (to change: Tools → Edit Config → logLevel)",
+                               cfg.logLevel);
+            util::Logger::Debug("Debug logging is enabled. View logs via Tools → Open App Log");
+            util::Logger::Trace("Trace logging is enabled (maximum verbosity)");
         }
         catch (const std::exception& e)
         {
