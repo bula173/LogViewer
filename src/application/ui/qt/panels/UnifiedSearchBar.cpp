@@ -132,25 +132,9 @@ void UnifiedSearchBar::SetEventsView(EventsTableView* view)
 
 void UnifiedSearchBar::FocusSearchInput()
 {
-    try {
-        if (!m_searchInput) {
-            qWarning() << "UnifiedSearchBar::FocusSearchInput - m_searchInput is null";
-            return;
-        }
-
-        if (!m_searchInput->isVisible()) {
-            m_searchInput->setVisible(true);
-        }
-
-        m_searchInput->setFocus(Qt::ShortcutFocusReason);
+    if (m_searchInput) {
+        m_searchInput->setFocus();
         m_searchInput->selectAll();
-        qDebug() << "UnifiedSearchBar::FocusSearchInput - search input focused";
-    }
-    catch (const std::exception& e) {
-        qWarning() << "UnifiedSearchBar::FocusSearchInput - Exception:" << e.what();
-    }
-    catch (...) {
-        qWarning() << "UnifiedSearchBar::FocusSearchInput - Unknown exception";
     }
 }
 

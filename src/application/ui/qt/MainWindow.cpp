@@ -1125,30 +1125,12 @@ void MainWindow::SetupMenus()
     
     viewMenu->addSeparator();
 
+    // Search menu - simple approach without global shortcuts for now
     auto* focusSearchAction = viewMenu->addAction(tr("&Find Events"));
-    focusSearchAction->setShortcut(QKeySequence::Find);
-    focusSearchAction->setToolTip(tr("Focus the search bar (Ctrl+F / Cmd+F)"));
-
-    // Use QTimer::singleShot to defer the action until after event processing
-    // This prevents stack corruption from triggering during initialization
+    focusSearchAction->setToolTip(tr("Focus the search bar at the top of the window"));
     connect(focusSearchAction, &QAction::triggered, this, [this]() {
-        try {
-            if (!m_unifiedSearchBar) {
-                util::Logger::Warn("[MainWindow] Search triggered but m_unifiedSearchBar is null");
-                return;
-            }
-
-            // Defer the focus change to the next event loop iteration
-            QTimer::singleShot(0, this, [this]() {
-                if (!m_unifiedSearchBar) return;
-                m_unifiedSearchBar->setVisible(true);
-                m_unifiedSearchBar->raise();
-                m_unifiedSearchBar->FocusSearchInput();
-                util::Logger::Debug("[MainWindow] Find shortcut activated - search bar focused");
-            });
-        }
-        catch (const std::exception& e) {
-            util::Logger::Error("[MainWindow] Exception in find shortcut: {}", e.what());
+        if (m_unifiedSearchBar) {
+            m_unifiedSearchBar->FocusSearchInput();
         }
     });
 
