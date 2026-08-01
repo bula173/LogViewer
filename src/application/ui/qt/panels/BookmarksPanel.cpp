@@ -243,7 +243,7 @@ void BookmarksPanel::OnRemove()
     if (sel < 0 || sel >= static_cast<int>(m_filteredBookmarks.size())) return;
 
     const auto& filtered = m_filteredBookmarks[static_cast<size_t>(sel)];
-    auto it = std::find_if(m_bookmarks.begin(), m_bookmarks.end(),
+    auto it = std::ranges::find_if(m_bookmarks,
         [&filtered](const Bookmark& bm) { return bm.row == filtered.row && bm.label == filtered.label; });
     if (it != m_bookmarks.end())
     {
@@ -412,7 +412,7 @@ void BookmarksPanel::OnAddCategory()
 void BookmarksPanel::OnRemoveCategory()
 {
     const auto current = m_categoryCombo->currentText().toStdString();
-    auto it = std::find_if(m_categories.begin(), m_categories.end(),
+    auto it = std::ranges::find_if(m_categories,
         [&current](const Category& c) { return c.name == current; });
 
     if (it != m_categories.end())
@@ -457,7 +457,7 @@ void BookmarksPanel::UpdateCategoryCounts()
 {
     for (auto& cat : m_categories)
     {
-        cat.count = static_cast<int>(std::count_if(m_bookmarks.begin(), m_bookmarks.end(),
+        cat.count = static_cast<int>(std::ranges::count_if(m_bookmarks,
             [&cat](const Bookmark& b) { return b.category == cat.name; }));
     }
 }
