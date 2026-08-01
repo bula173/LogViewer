@@ -93,6 +93,7 @@
 #include <climits>
 #include <set>
 #include <numeric>
+#include <algorithm>
 
 #include <nlohmann/json.hpp>
 
@@ -1454,9 +1455,9 @@ void MainWindow::SaveRecentFiles()
 void MainWindow::AddToRecentFiles(const QString& filePath)
 {
     if (filePath.isEmpty()) return;
-    
+
     // Remove if already in list
-    auto it = std::find(m_recentFiles.begin(), m_recentFiles.end(), filePath);
+    auto it = std::ranges::find(m_recentFiles, filePath);
     if (it != m_recentFiles.end()) {
         m_recentFiles.erase(it);
     }
@@ -2495,8 +2496,7 @@ void MainWindow::ApplyActorFilter()
         return;
 
     const auto& defs = m_actorDefPanel->Definitions();
-    const bool hasEnabled = std::any_of(defs.begin(), defs.end(),
-                                        [](const ActorDefinition& d) { return d.enabled; });
+    const bool hasEnabled = std::ranges::any_of(defs, [](const ActorDefinition& d) { return d.enabled; });
     if (!hasEnabled)
     {
         UpdateStatusText("No enabled actor definitions — filter not applied");

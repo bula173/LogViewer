@@ -86,7 +86,7 @@ void LayoutManager::Save(LayoutDescriptor layout)
     const std::string name = layout.name.toStdString();
     util::Logger::Debug("[LayoutManager] Save layout: '{}'", name);
 
-    auto it = std::find_if(m_userLayouts.begin(), m_userLayouts.end(),
+    auto it = std::ranges::find_if(m_userLayouts,
         [&](const LayoutDescriptor& d) { return d.name == layout.name; });
     if (it != m_userLayouts.end())
     {
@@ -106,7 +106,7 @@ void LayoutManager::Remove(const QString& name)
 {
     util::Logger::Debug("[LayoutManager] Remove layout: '{}'", name.toStdString());
 
-    auto it = std::find_if(m_userLayouts.begin(), m_userLayouts.end(),
+    auto it = std::ranges::find_if(m_userLayouts,
         [&](const LayoutDescriptor& d) { return d.name == name; });
     if (it == m_userLayouts.end())
     {
