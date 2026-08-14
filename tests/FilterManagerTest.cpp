@@ -132,8 +132,8 @@ TEST(FilterManagerTest, GetFilterByNameReturnsExistingFilter)
         std::make_shared<Filter>(name, "svc", "auth"));
 
     auto ptr = FilterManager::getInstance().getFilterByName(name);
-    ASSERT_NE(ptr, nullptr);
-    EXPECT_EQ(ptr->name, name);
+    ASSERT_TRUE(ptr.has_value());
+    EXPECT_EQ((*ptr)->name, name);
 }
 
 /**
@@ -143,7 +143,7 @@ TEST(FilterManagerTest, GetFilterByNameReturnsNullForUnknown)
 {
     auto ptr = FilterManager::getInstance().getFilterByName(
         "DEFINITELY_DOES_NOT_EXIST_XYZ");
-    EXPECT_EQ(ptr, nullptr);
+    EXPECT_FALSE(ptr.has_value());
 }
 
 /**
@@ -190,8 +190,8 @@ TEST(FilterManagerTest, RemoveFilterLeavesOthersIntact)
 
     FilterManager::getInstance().removeFilter(nameA);
 
-    EXPECT_EQ(FilterManager::getInstance().getFilterByName(nameA), nullptr);
-    EXPECT_NE(FilterManager::getInstance().getFilterByName(nameB), nullptr);
+    EXPECT_FALSE(FilterManager::getInstance().getFilterByName(nameA).has_value());
+    EXPECT_TRUE(FilterManager::getInstance().getFilterByName(nameB).has_value());
 }
 
 // ---------------------------------------------------------------------------
@@ -215,8 +215,8 @@ TEST(FilterManagerTest, UpdateFilterReplacesExistingByName)
     FilterManager::getInstance().updateFilter(updated);
 
     auto ptr = FilterManager::getInstance().getFilterByName(name);
-    ASSERT_NE(ptr, nullptr);
-    EXPECT_EQ(ptr->pattern, "CRITICAL");
+    ASSERT_TRUE(ptr.has_value());
+    EXPECT_EQ((*ptr)->pattern, "CRITICAL");
 }
 
 /**
@@ -234,8 +234,8 @@ TEST(FilterManagerTest, UpdateFilterAppendsWhenNameIsNew)
         std::make_shared<Filter>(name, "svc", "auth"));
 
     auto ptr = FilterManager::getInstance().getFilterByName(name);
-    ASSERT_NE(ptr, nullptr);
-    EXPECT_EQ(ptr->columnName, "svc");
+    ASSERT_TRUE(ptr.has_value());
+    EXPECT_EQ((*ptr)->columnName, "svc");
 }
 
 // ---------------------------------------------------------------------------
@@ -411,12 +411,12 @@ TEST(FilterManagerTest, PersistenceRoundTripPreservesFilters)
     // Verify both filters are present
     auto ptrA = FilterManager::getInstance().getFilterByName(nameA);
     auto ptrB = FilterManager::getInstance().getFilterByName(nameB);
-    ASSERT_NE(ptrA, nullptr);
-    ASSERT_NE(ptrB, nullptr);
-    EXPECT_EQ(ptrA->columnName, "level");
-    EXPECT_EQ(ptrA->pattern,    "ERROR");
-    EXPECT_EQ(ptrB->columnName, "svc");
-    EXPECT_EQ(ptrB->pattern,    "database");
+    ASSERT_TRUE(ptrA.has_value());
+    ASSERT_TRUE(ptrB.has_value());
+    EXPECT_EQ((*ptrA)->columnName, "level");
+    EXPECT_EQ((*ptrA)->pattern,    "ERROR");
+    EXPECT_EQ((*ptrB)->columnName, "svc");
+    EXPECT_EQ((*ptrB)->pattern,    "database");
 
     // Cleanup
     FilterManager::getInstance().removeFilter(nameA);

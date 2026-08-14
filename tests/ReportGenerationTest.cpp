@@ -57,9 +57,9 @@ TEST_F(ReportGenerationTest, LevelDistributionAccuracy)
         levelCounts[level]++;
     }
 
-    // Expected: 3 ERROR, 2 INFO, 1 WARN, 1 DEBUG
+    // Expected: 3 ERROR, 3 INFO, 1 WARN, 1 DEBUG (see SetUp())
     EXPECT_EQ(levelCounts["ERROR"], 3);
-    EXPECT_EQ(levelCounts["INFO"], 2);
+    EXPECT_EQ(levelCounts["INFO"], 3);
     EXPECT_EQ(levelCounts["WARN"], 1);
     EXPECT_EQ(levelCounts["DEBUG"], 1);
 }
