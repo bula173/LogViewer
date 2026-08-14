@@ -14,38 +14,33 @@ The installation manifest (`LogViewer_install_manifest.json` / `.logviewer_manif
 
 The manifest is a JSON file containing:
 
-> **Note:** The `libraries` list below matches what `packaging/CMakeLists.txt` currently generates (`Qt5Core`, `Qt5Gui`, …), which is stale — the application has used Qt 6 since the Qt5→Qt6 migration. This is a build-system bug, not a doc error; the manifest generator's `LIBRARIES` argument needs updating to the `Qt6*` names.
-
 ```json
 {
-  "version": "1.4.0",
-  "installationDate": "2026-05-19T12:34:56Z",
+  "version": "1.11.0",
+  "installationDate": "2026-08-14T07:53:07Z",
   "installationPrefix": "/path/to/installation",
   "buildInfo": {
-    "cmakeVersion": "3.25.0",
-    "cmakeGenerator": "Unix Makefiles",
+    "cmakeVersion": "4.3.3",
+    "cmakeGenerator": "Ninja",
     "buildType": "Release",
-    "cxxStandard": "20",
-    "compiler": "Clang 14.0.0"
+    "cxxStandard": "23",
+    "compiler": "AppleClang 21.0.0.21000101"
   },
   "libraries": {
-    "Qt5Core": {
-      "version": "5.15.2"
+    "Qt6::Core": {
+      "version": "6.11.1"
     },
-    "Qt5Gui": {
-      "version": "5.15.2"
+    "Qt6::Widgets": {
+      "version": "6.11.1"
     },
-    "Qt5Widgets": {
-      "version": "5.15.2"
+    "Qt6::Charts": {
+      "version": "6.11.1"
     },
-    "Qt5Network": {
-      "version": "5.15.2"
+    "Qt6::Network": {
+      "version": "6.11.1"
     },
-    "Qt5Xml": {
-      "version": "5.15.2"
-    },
-    "Qt5Concurrent": {
-      "version": "5.15.2"
+    "Qt6::Concurrent": {
+      "version": "6.11.1"
     }
   },
   "metadata": {

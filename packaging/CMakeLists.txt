@@ -260,10 +260,15 @@ endif()
 
 set(MANIFEST_OUTPUT_FILE "${CMAKE_BINARY_DIR}/LogViewer_install_manifest.json")
 
+# Qt6_VERSION was set when src/application/CMakeLists.txt called find_package(Qt6),
+# but that's a sibling subdirectory scope and the variable doesn't propagate here.
+# Re-running find_package is cheap (Qt6_DIR is already cached) and brings it into scope.
+find_package(Qt6 REQUIRED COMPONENTS Core QUIET)
+
 generate_install_manifest(
     OUTPUT_FILE "${MANIFEST_OUTPUT_FILE}"
     INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
-    LIBRARIES "Qt5Core;Qt5Gui;Qt5Widgets;Qt5Network;Qt5Xml;Qt5Concurrent"
+    LIBRARIES "Qt6::Core;Qt6::Widgets;Qt6::Charts;Qt6::Network;Qt6::Concurrent"
 )
 
 # Install manifest with the application

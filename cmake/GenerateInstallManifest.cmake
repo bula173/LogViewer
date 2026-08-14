@@ -35,19 +35,24 @@ function(generate_install_manifest)
     
     foreach(lib IN LISTS MANIFEST_LIBRARIES)
         string(APPEND MANIFEST_JSON "\n    \"${lib}\": {")
-        
-        # Try to find library version from common sources
-        if(TARGET ${lib})
+
+        # Resolve version. Qt6's imported targets (Qt6::Core, Qt6::Widgets, ...)
+        # do not set a VERSION target property, so query find_package()'s own
+        # <Package>_VERSION variable for them; fall back to the target property
+        # for other imported targets that do set it.
+        set(lib_version "")
+        if(lib MATCHES "^Qt6::")
+            set(lib_version "${Qt6_VERSION}")
+        elseif(TARGET ${lib})
             get_target_property(lib_version ${lib} VERSION)
-            if(lib_version)
-                string(APPEND MANIFEST_JSON "\n      \"version\": \"${lib_version}\"")
-            else()
-                string(APPEND MANIFEST_JSON "\n      \"version\": \"unknown\"")
-            endif()
+        endif()
+
+        if(lib_version)
+            string(APPEND MANIFEST_JSON "\n      \"version\": \"${lib_version}\"")
         else()
             string(APPEND MANIFEST_JSON "\n      \"version\": \"unknown\"")
         endif()
-        
+
         string(APPEND MANIFEST_JSON "\n    }")
         
         math(EXPR lib_index "${lib_index} + 1")

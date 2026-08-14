@@ -9,10 +9,10 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER":             "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER":           "/usr/bin/clang++",
-                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
+                "CMAKE_OSX_ARCHITECTURES":      "arm64",
                 "CMAKE_PREFIX_PATH":            "/opt/homebrew/opt/qt",
                 "LibArchive_ROOT":              "/opt/homebrew/opt/libarchive",
+                "CURL_ROOT":                    "/opt/homebrew/opt/curl",
                 "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
             "condition": {
@@ -27,8 +27,6 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
                 "Qt6_DIR":                      "/usr/lib/cmake/Qt6",
                 "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
             },
@@ -40,7 +38,7 @@
         },
         {
             "name": "macos-debug-qt",
-            "displayName": "macOS Debug (Qt) [ASan+UBSan]",
+            "displayName": "macOS Debug (Qt) [AddressSanitizer]",
             "inherits": "macos-base",
             "binaryDir": "${sourceDir}/build/macos-debug-qt",
             "cacheVariables": {
@@ -58,18 +56,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE":    "Release",
                 "LOGVIEWER_SANITIZER": "None",
-                "ENABLE_CPPCHECK":    "OFF",
-                "ENABLE_CLANG_TIDY":  "OFF"
-            }
-        },
-        {
-            "name": "macos-asan-qt",
-            "displayName": "macOS Debug (Qt) [AddressSanitizer]",
-            "inherits": "macos-base",
-            "binaryDir": "${sourceDir}/build/macos-asan-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE":    "Debug",
-                "LOGVIEWER_SANITIZER": "Address",
                 "ENABLE_CPPCHECK":    "OFF",
                 "ENABLE_CLANG_TIDY":  "OFF"
             }
@@ -113,7 +99,7 @@
         },
         {
             "name": "linux-debug-qt",
-            "displayName": "Linux Debug (Qt) [ASan+UBSan]",
+            "displayName": "Linux Debug (Qt) [AddressSanitizer]",
             "inherits": "linux-base",
             "binaryDir": "${sourceDir}/build/linux-debug-qt",
             "cacheVariables": {
@@ -131,18 +117,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE":    "Release",
                 "LOGVIEWER_SANITIZER": "None",
-                "ENABLE_CPPCHECK":    "OFF",
-                "ENABLE_CLANG_TIDY":  "OFF"
-            }
-        },
-        {
-            "name": "linux-asan-qt",
-            "displayName": "Linux Debug (Qt) [AddressSanitizer]",
-            "inherits": "linux-base",
-            "binaryDir": "${sourceDir}/build/linux-asan-qt",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE":    "Debug",
-                "LOGVIEWER_SANITIZER": "Address",
                 "ENABLE_CPPCHECK":    "OFF",
                 "ENABLE_CLANG_TIDY":  "OFF"
             }
@@ -185,17 +159,13 @@
             }
         },
         {
-            "name": "windows-msys-debug-qt",
-            "displayName": "Windows MSYS2 Debug (Qt)",
+            "name": "windows-msys-base",
+            "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/windows-debug-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE":             "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_C_COMPILER":             "C:/msys64/mingw64/bin/clang.exe",
                 "CMAKE_CXX_COMPILER":           "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
                 "CMAKE_MAKE_PROGRAM":           "C:/msys64/mingw64/bin/ninja.exe",
                 "Qt6_DIR":                      "C:/msys64/mingw64/lib/cmake/Qt6",
                 "LOGVIEWER_SANITIZER":          "None",
@@ -205,29 +175,29 @@
             },
             "environment": {
                 "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-msys-debug-qt",
+            "displayName": "Windows MSYS2 Debug (Qt)",
+            "inherits": "windows-msys-base",
+            "binaryDir": "${sourceDir}/build/windows-debug-qt",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "name": "windows-msys-release-qt",
             "displayName": "Windows MSYS2 Release (Qt)",
-            "generator": "Ninja",
+            "inherits": "windows-msys-base",
             "binaryDir": "${sourceDir}/build/windows-release-qt",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE":             "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_C_COMPILER":             "C:/msys64/mingw64/bin/clang.exe",
-                "CMAKE_CXX_COMPILER":           "C:/msys64/mingw64/bin/clang++.exe",
-                "CMAKE_C_COMPILER_LAUNCHER":    "ccache",
-                "CMAKE_CXX_COMPILER_LAUNCHER":  "ccache",
-                "CMAKE_MAKE_PROGRAM":           "C:/msys64/mingw64/bin/ninja.exe",
-                "Qt6_DIR":                      "C:/msys64/mingw64/lib/cmake/Qt6",
-                "LOGVIEWER_SANITIZER":          "None",
-                "ENABLE_CPPCHECK":             "OFF",
-                "ENABLE_CLANG_TIDY":           "OFF",
-                "CMAKE_MESSAGE_LOG_LEVEL":      "WARNING"
-            },
-            "environment": {
-                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         }
     ],
@@ -266,7 +236,7 @@
         {
             "name": "macos-asan-build-qt",
             "displayName": "macOS ASan Build",
-            "configurePreset": "macos-asan-qt"
+            "configurePreset": "macos-debug-qt"
         },
         {
             "name": "macos-tsan-build-qt",
@@ -281,7 +251,7 @@
         {
             "name": "linux-asan-build-qt",
             "displayName": "Linux ASan Build",
-            "configurePreset": "linux-asan-qt"
+            "configurePreset": "linux-debug-qt"
         },
         {
             "name": "linux-tsan-build-qt",
@@ -405,7 +375,7 @@
         {
             "name": "macos-asan-test-qt",
             "displayName": "macOS ASan Tests",
-            "configurePreset": "macos-asan-qt",
+            "configurePreset": "macos-debug-qt",
             "output": { "outputOnFailure": true },
             "environment": {
                 "ASAN_OPTIONS":  "detect_leaks=1:halt_on_error=1",
@@ -433,7 +403,7 @@
         {
             "name": "linux-asan-test-qt",
             "displayName": "Linux ASan Tests",
-            "configurePreset": "linux-asan-qt",
+            "configurePreset": "linux-debug-qt",
             "output": { "outputOnFailure": true },
             "environment": {
                 "ASAN_OPTIONS":  "detect_leaks=1:halt_on_error=1",
@@ -505,7 +475,7 @@
             "name": "macos-asan-workflow-qt",
             "displayName": "macOS: Configure + Build + Test [AddressSanitizer]",
             "steps": [
-                { "type": "configure", "name": "macos-asan-qt" },
+                { "type": "configure", "name": "macos-debug-qt" },
                 { "type": "build",     "name": "macos-asan-build-qt" },
                 { "type": "test",      "name": "macos-asan-test-qt" }
             ]
@@ -560,7 +530,7 @@
             "name": "linux-asan-workflow-qt",
             "displayName": "Linux: Configure + Build + Test [AddressSanitizer]",
             "steps": [
-                { "type": "configure", "name": "linux-asan-qt" },
+                { "type": "configure", "name": "linux-debug-qt" },
                 { "type": "build",     "name": "linux-asan-build-qt" },
                 { "type": "test",      "name": "linux-asan-test-qt" }
             ]

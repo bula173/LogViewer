@@ -27,8 +27,8 @@ jobs:
         build_type: [Release]
 
     env:
-      BUILD_DIR: ${{ github.workspace }}/build
-      CMAKE_GENERATOR: Ninja
+      # Matches CMakePresets.json's macos-release-qt binaryDir — keep in sync.
+      BUILD_DIR: ${{ github.workspace }}/build/macos-release-qt
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       GTEST_COLOR: 1
 
@@ -79,26 +79,16 @@ jobs:
           ninja --version
 
       - name: Configure
-        run: |
-          cmake -B "$BUILD_DIR" -S "$GITHUB_WORKSPACE" \
-            -G "$CMAKE_GENERATOR" \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_C_COMPILER=/usr/bin/clang \
-            -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
-            -DCMAKE_OSX_ARCHITECTURES=arm64 \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_MESSAGE_LOG_LEVEL=WARNING \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DLibArchive_ROOT=$(brew --prefix libarchive) \
-            -DCURL_ROOT=$(brew --prefix curl) \
-            -DCMAKE_PREFIX_PATH=$(brew --prefix qt)
+        # Uses the same macos-release-qt preset as local development
+        # (CMakePresets.json) instead of a separately hand-rolled flag list,
+        # so CI and local builds can't drift apart.
+        run: cmake --preset macos-release-qt
 
       - name: Build
         run: |
           set -o pipefail
           mkdir -p dist/logs
-          cmake --build "$BUILD_DIR" --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
+          cmake --build --preset macos-release-build-qt --parallel 2>&1 | tee dist/logs/build-${{ matrix.build_type }}.log
 
       - name: Print ccache stats
         run: ccache --show-stats

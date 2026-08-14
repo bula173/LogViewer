@@ -195,7 +195,6 @@ jobs:
             -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
             -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
             -DCMAKE_PREFIX_PATH=/mingw64 \
-            -DGUI_FRAMEWORK=QT \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
           cmake --build build --parallel
 

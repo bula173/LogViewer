@@ -1,8 +1,8 @@
-@PACKAGE_INIT@
-
-# Imported target for plugin API
-# Using an INTERFACE library instead of INTERFACE IMPORTED to avoid issues
-# with set_target_properties on IMPORTED targets
+# Imported target for plugin API.
+# Processed via plain configure_file(@ONLY), not configure_package_config_file()
+# — this file computes the SDK prefix itself (below) relative to its own
+# location instead of relying on the @PACKAGE_INIT@ / PACKAGE_PREFIX_DIR
+# macros, so it doesn't need that processing.
 if(NOT TARGET LogViewer::plugin_api)
     add_library(LogViewer::plugin_api INTERFACE IMPORTED)
 

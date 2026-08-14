@@ -38,12 +38,14 @@ set(LOGVIEWER_SANITIZER "None" CACHE STRING
 # ---------------------------------------------------------------------------
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+include(cmake/Ccache.cmake)
 include(cmake/Warnings.cmake)
 include(cmake/EnableSanitizers.cmake)
 include(cmake/Cppcheck.cmake)
 include(cmake/ClangTidy.cmake)
 include(cmake/ClangFormat.cmake)
 include(cmake/GenerateInstallManifest.cmake)
+include(cmake/InterproceduralOptimization.cmake)
 
 # ---------------------------------------------------------------------------
 # Subproject detection — when used via FetchContent only build the SDK
@@ -77,6 +79,12 @@ endif()
 if(NOT LOGVIEWER_SUBPROJECT)
     logviewer_enable_sanitizers(application_core LogViewer LogViewer_tests)
 endif()
+
+# ---------------------------------------------------------------------------
+# LTO for Release builds — scoped to the project's own target only, see
+# cmake/InterproceduralOptimization.cmake for why thirdparty/ is excluded.
+# ---------------------------------------------------------------------------
+logviewer_enable_lto(application_core)
 
 # ---------------------------------------------------------------------------
 # Aggregate quality-tools target — depends on all individual tool targets

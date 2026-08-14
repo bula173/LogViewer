@@ -30,6 +30,7 @@ target_compile_definitions(${PROJECT_NAME}_tests PRIVATE
 target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(${PROJECT_NAME}_tests
+  PRIVATE
   gtest_main
   gmock
   application_core
@@ -39,16 +40,13 @@ target_link_libraries(${PROJECT_NAME}_tests
 )
 
 include(GoogleTest)
-include(CTest)
+include(CTest)  # also calls enable_testing()
 
 if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
     message(STATUS "Skipping test discovery in Debug on Windows")
 else()
     gtest_discover_tests(${PROJECT_NAME}_tests)
 endif()
-
-# Enable testing
-enable_testing()
 
 # Add functional tests subdirectory
 add_subdirectory(functional)

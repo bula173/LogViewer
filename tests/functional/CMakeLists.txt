@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(LogViewerFunctionalTests)
 
-enable_testing()
+# enable_testing() already called by tests/CMakeLists.txt's include(CTest)
 
 # Functional Test Executable
 add_executable(functional_tests

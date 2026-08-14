@@ -1,11 +1,11 @@
 # cmake/ClangTidy.cmake
 #
-# Creates a `tidy` custom target that runs clang-tidy on the project sources.
-# Also optionally integrates clang-tidy into the build via CMAKE_CXX_CLANG_TIDY
-# (runs during compilation rather than as a separate step).
+# Creates a `tidy` custom target that runs clang-tidy on the project sources
+# as a standalone batch step (not via CMAKE_CXX_CLANG_TIDY / per-TU on every
+# compile — that's noticeably slower and noisier for a default build).
 #
 # Controlled by:
-#   ENABLE_CLANG_TIDY  BOOL  — enable the tidy target and/or compile integration
+#   ENABLE_CLANG_TIDY  BOOL  — enable the tidy target
 #   CLANG_TIDY_FIX     BOOL  — pass --fix to clang-tidy (auto-apply suggestions)
 #
 # Usage:

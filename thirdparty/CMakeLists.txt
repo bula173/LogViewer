@@ -17,6 +17,7 @@ add_subdirectory(nlohmann)
 FetchContent_Declare(llama_cpp
     GIT_REPOSITORY https://github.com/ggerganov/llama.cpp.git
     GIT_TAG b2590  # Stable release - avoids master branch issues
+    GIT_SHALLOW TRUE
     EXCLUDE_FROM_ALL
 )
 
