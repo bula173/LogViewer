@@ -84,7 +84,7 @@ jobs:
           if [ -n "$QT6_CONFIG" ]; then
             QT6_PATH=$(dirname "$QT6_CONFIG")
           else
-            QT6_LIBDIR=$(pkg-config --variable libdir Qt6Core 2>/dev/null)
+            QT6_LIBDIR=$(pkg-config --variable libdir Qt6Core 2>/dev/null || true)
             if [ -n "$QT6_LIBDIR" ]; then
               QT6_PATH="${QT6_LIBDIR%/*}/cmake/Qt6"
             fi
