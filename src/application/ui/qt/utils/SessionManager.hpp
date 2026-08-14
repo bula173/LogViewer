@@ -72,7 +72,7 @@ class SessionManager
     bool m_autoSaveEnabled {true};
     bool m_hasCrashRecovery {false};
     std::chrono::steady_clock::time_point m_lastAutoSaveTime;
-    static constexpr int kAutoSaveIntervalMs = 30000;  // 30 seconds
+    static constexpr std::chrono::milliseconds kAutoSaveInterval {30000};  // 30 seconds
 };
 
 }  // namespace ui::qt::utils

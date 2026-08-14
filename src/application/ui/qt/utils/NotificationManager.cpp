@@ -99,7 +99,7 @@ void NotificationManager::clearHistory()
     util::Logger::Info("[NotificationManager] History cleared");
 }
 
-int NotificationManager::getUnreadCount() const
+int NotificationManager::unreadCount() const
 {
     return std::count_if(m_history.begin(), m_history.end(),
         [](const Notification& n) { return !n.read; });

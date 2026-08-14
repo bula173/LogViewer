@@ -32,7 +32,12 @@ class EventsTableView : public QTableView,
         const std::vector<unsigned long>& filteredIndices) override;
     void ClearFilter() override;
     void UpdateColors() override;
+    /// Returns nullptr if no filter is active, otherwise a pointer to the
+    /// (possibly empty) filtered indices — callers must not treat a non-null
+    /// empty result the same as "no filter" (see IsFilterActive()).
     const std::vector<unsigned long>* GetFilteredIndices() const;
+    /// True if a filter is active, even if it currently matches zero events.
+    bool IsFilterActive() const;
 
     void OnDataUpdated() override;
     void OnCurrentIndexUpdated(const int index) override;

@@ -143,7 +143,7 @@ void TimelineChartPanel::Refresh()
     const QDateTime tMax     = timed.back().first;
     const qint64    spanMs   = tMin.msecsTo(tMax);
     const int       buckets  = m_bucketSpin->value();
-    const qint64    bucketMs = std::max(qint64(1), spanMs / buckets);
+    const qint64    bucketMs = (std::max)(qint64(1), spanMs / buckets);
     const QString   labelFmt = (spanMs > 86'400'000LL) ? "MM-dd HH:mm" : "HH:mm:ss";
 
     // ── Detect level field and collect unique levels ──────────────────────

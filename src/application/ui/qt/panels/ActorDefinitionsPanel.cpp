@@ -590,7 +590,7 @@ void ActorDefinitionsPanel::HandleDiscover()
 
         // Collect up to 5 sample values from the first 500 events
         std::set<std::string> seen;
-        const size_t probe = std::min(m_events->Size(), size_t(500));
+        const size_t probe = (std::min)(m_events->Size(), size_t(500));
         for (size_t i = 0; i < probe && static_cast<int>(c.samples.size()) < 5; ++i)
         {
             try {

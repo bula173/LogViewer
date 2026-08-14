@@ -240,8 +240,10 @@ void PatternAnalysisPanel::Refresh()
 
 std::vector<unsigned long> PatternAnalysisPanel::VisibleIndices() const
 {
+    // A non-null result means a filter is active — even if it matches zero
+    // events, that must be honored, not treated as "no filter, show all".
     const std::vector<unsigned long>* filtered = m_eventsView->GetFilteredIndices();
-    if (filtered && !filtered->empty())
+    if (filtered)
         return *filtered;
 
     const size_t total = m_events.Size();
@@ -352,7 +354,7 @@ void PatternAnalysisPanel::RefreshTemplates(
     // 5 000 events per type gives reliable pattern coverage without blocking.
     constexpr size_t kMaxClusterEvents = 5'000;
 
-    for (auto& [typeName, typeIndices] : byType)
+    for (const auto& [typeName, typeIndices] : byType)
     {
         // Within the type group, build templates by iteratively merging
         // We cluster greedily: each new message is compared to all existing
@@ -360,7 +362,7 @@ void PatternAnalysisPanel::RefreshTemplates(
         // Otherwise start a new template.
         std::vector<TemplateEntry> clusters;
 
-        const size_t processCount = std::min(typeIndices.size(), kMaxClusterEvents);
+        const size_t processCount = (std::min)(typeIndices.size(), kMaxClusterEvents);
         for (size_t ei = 0; ei < processCount; ++ei)
         {
             const unsigned long idx = typeIndices[ei];
@@ -557,7 +559,7 @@ void PatternAnalysisPanel::RefreshCooccurrence(
     // Sliding window co-occurrence counting (unordered pair)
     // Limit to top pairs to avoid O(n²) explosion on huge logs
     constexpr size_t kMaxEvents = 20'000;
-    const size_t n = std::min(events.size(), kMaxEvents);
+    const size_t n = (std::min)(events.size(), kMaxEvents);
 
     // Use canonical pair key: alphabetically sorted (A, B) with A ≤ B
     auto pairKey = [](const std::string& a, const std::string& b) -> std::string {

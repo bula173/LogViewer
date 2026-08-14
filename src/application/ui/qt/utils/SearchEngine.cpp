@@ -135,8 +135,8 @@ bool SearchEngine::matchesSimple(const std::string& text) const
 
     // Use iterative comparison instead of allocating/lowercasing entire text string
     // This avoids O(n) allocations for case-insensitive search
-    size_t patternLen = m_normalizedPattern.length();
-    size_t textLen = text.length();
+    size_t patternLen = m_normalizedPattern.size();
+    size_t textLen = text.size();
     if (patternLen > textLen) return false;
 
     for (size_t i = 0; i <= textLen - patternLen; ++i) {
@@ -247,8 +247,8 @@ std::vector<SearchMatch> SearchEngine::findSimpleMatches(const std::string& text
     if (m_caseSensitive) {
         size_t pos = 0;
         while ((pos = text.find(m_pattern, pos)) != std::string::npos) {
-            matches.push_back({static_cast<int>(pos), static_cast<int>(pos + m_pattern.length())});
-            pos += m_pattern.length();
+            matches.push_back({static_cast<int>(pos), static_cast<int>(pos + m_pattern.size())});
+            pos += m_pattern.size();
         }
     } else {
         // Ensure normalized pattern is ready
@@ -261,8 +261,8 @@ std::vector<SearchMatch> SearchEngine::findSimpleMatches(const std::string& text
         }
 
         // Find all matches using iterative comparison to avoid allocating entire lowercased text
-        size_t patternLen = m_normalizedPattern.length();
-        size_t textLen = text.length();
+        size_t patternLen = m_normalizedPattern.size();
+        size_t textLen = text.size();
         if (patternLen > textLen) return matches;
 
         for (size_t i = 0; i <= textLen - patternLen; ++i) {
@@ -340,7 +340,7 @@ std::vector<std::string> SearchEngine::GetSuggestions(const std::string& prefix)
     std::vector<std::string> suggestions;
 
     for (const auto& item : m_history) {
-        if (item.substr(0, std::min(prefix.length(), item.length())) == prefix) {
+        if (item.substr(0, (std::min)(prefix.size(), item.size())) == prefix) {
             suggestions.push_back(item);
             if (suggestions.size() >= 10)  // Limit to 10 suggestions
                 break;

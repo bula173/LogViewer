@@ -34,8 +34,8 @@ int EventsTableModel::rowCount(const QModelIndex& parent) const
     // If filtering is active, use filtered indices (even if empty)
     // If filtering is not active, show all events
     const std::size_t sourceSize = m_filteringActive ? m_filteredIndices.size() : m_events.Size();
-    const auto maxInt = static_cast<std::size_t>(std::numeric_limits<int>::max());
-    return static_cast<int>(std::min(sourceSize, maxInt));
+    const auto maxInt = static_cast<std::size_t>((std::numeric_limits<int>::max)());
+    return static_cast<int>((std::min)(sourceSize, maxInt));
 }
 
 int EventsTableModel::columnCount(const QModelIndex& parent) const
@@ -493,7 +493,7 @@ bool EventsTableModel::ShouldShowSourceColumn() const
     // Check if any event has a source set
     const size_t count = m_events.Size();
     // Check first few events for performance (or check all if small dataset)
-    const size_t samplesToCheck = std::min(count, size_t(100));
+    const size_t samplesToCheck = (std::min)(count, size_t(100));
     
     for (size_t i = 0; i < samplesToCheck; ++i)
     {
@@ -512,7 +512,7 @@ bool EventsTableModel::ShouldShowOriginalIdColumn() const
     // Check if any event has an original_id field (set during merge)
     const size_t count = m_events.Size();
     // Check first few events for performance
-    const size_t samplesToCheck = std::min(count, size_t(100));
+    const size_t samplesToCheck = (std::min)(count, size_t(100));
     
     for (size_t i = 0; i < samplesToCheck; ++i)
     {
@@ -553,7 +553,7 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
     // Pre-calculate size for all values plus separators
     size_t totalSize = 0;
     for (const auto& value : values)
-        totalSize += value.length();
+        totalSize += value.size();
     totalSize += (values.size() - 1) * 2; // ", " separators
 
     std::string combined;
@@ -670,6 +670,18 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
 
     emit layoutAboutToBeChanged();
 
+    // Capture persistent indices (current selection, etc.) by their *actual*
+    // (unsorted) data index before anything below mutates m_filteredIndices /
+    // m_filteringActive — this is the row-count-preserving state needed by
+    // changePersistentIndexList() further down so the current row/selection
+    // follows its underlying event through the sort, per the
+    // QAbstractItemModel contract for layoutChanged-based reordering.
+    const QModelIndexList oldPersistentIndexes = persistentIndexList();
+    std::vector<int> persistentActualIndexes;
+    persistentActualIndexes.reserve(static_cast<std::size_t>(oldPersistentIndexes.size()));
+    for (const QModelIndex& idx : oldPersistentIndexes)
+        persistentActualIndexes.push_back(ResolveToActualIndex(idx.row()));
+
     // Get the list of indices to sort
     std::vector<unsigned long> indicesToSort;
     if (!m_filteringActive || m_filteredIndices.empty())
@@ -767,6 +779,21 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
             m_reverseFilteredIndices[m_filteredIndices[static_cast<std::size_t>(row)]] = row;
         }
     }
+
+    // Remap persistent indices to the new row of the same underlying event
+    // so QItemSelectionModel's current index/selection (and any other
+    // QPersistentModelIndex holder) follows the data, not the row number.
+    QModelIndexList newPersistentIndexes;
+    newPersistentIndexes.reserve(oldPersistentIndexes.size());
+    for (int i = 0; i < oldPersistentIndexes.size(); ++i)
+    {
+        const int actualIndex = persistentActualIndexes[static_cast<std::size_t>(i)];
+        const int newRow = RowFromActualIndex(actualIndex);
+        newPersistentIndexes.push_back(newRow < 0
+            ? QModelIndex()
+            : index(newRow, oldPersistentIndexes[i].column()));
+    }
+    changePersistentIndexList(oldPersistentIndexes, newPersistentIndexes);
 
     emit layoutChanged();
 }

@@ -39,8 +39,10 @@ inline QDateTime ParseTimestamp(const QString& s)
 inline std::vector<unsigned long> VisibleIndices(
     const EventsTableView* eventsView, const db::EventsContainer& events)
 {
+    // A non-null result means a filter is active — even if it matches zero
+    // events, that must be honored, not treated as "no filter, show all".
     const std::vector<unsigned long>* f = eventsView->GetFilteredIndices();
-    if (f && !f->empty()) return *f;
+    if (f) return *f;
     const size_t total = events.Size();
     std::vector<unsigned long> all;
     all.reserve(total);

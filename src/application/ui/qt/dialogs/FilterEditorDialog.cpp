@@ -252,7 +252,7 @@ void FilterEditorDialog::OnRemoveCondition()
     UpdateConditionList();
 
     // Select appropriate replacement
-    const int newRow = std::min(currentRow, static_cast<int>(m_conditions.size()) - 1);
+    const int newRow = (std::min)(currentRow, static_cast<int>(m_conditions.size()) - 1);
     if (newRow >= 0)
     {
         m_conditionsList->setCurrentRow(newRow);

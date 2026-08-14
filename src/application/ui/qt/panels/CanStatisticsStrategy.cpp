@@ -21,7 +21,7 @@ double ParseDouble(const std::string& s)
 }
 
 struct Accum {
-    double mn  {std::numeric_limits<double>::max()};
+    double mn  {(std::numeric_limits<double>::max)()};
     double mx  {std::numeric_limits<double>::lowest()};
     double sum {0.0};
     size_t n   {0};
@@ -55,7 +55,7 @@ std::string FmtF(double v, int decimals = 3)
 
 bool CanStatisticsStrategy::Matches(db::EventsContainer& events) const
 {
-    const size_t probe = std::min(events.Size(), size_t{20});
+    const size_t probe = (std::min)(events.Size(), size_t{20});
     for (size_t i = 0; i < probe; ++i)
     {
         if (!events.GetEvent(i).findByKey("CAN_ID").empty())
@@ -76,7 +76,7 @@ std::vector<StatsSection> CanStatisticsStrategy::Compute(
     size_t errCount  = 0;
     std::set<std::string> uniqueIds;
     std::set<std::string> channels;
-    double tsMin = std::numeric_limits<double>::max();
+    double tsMin = (std::numeric_limits<double>::max)();
     double tsMax = std::numeric_limits<double>::lowest();
     std::map<std::string, Accum> sigAccum;
 
@@ -98,8 +98,8 @@ std::vector<StatsSection> CanStatisticsStrategy::Compute(
 
         const double ts = ParseDouble(ev.findByKey("timestamp"));
         if (!std::isnan(ts)) {
-            tsMin = std::min(tsMin, ts);
-            tsMax = std::max(tsMax, ts);
+            tsMin = (std::min)(tsMin, ts);
+            tsMax = (std::max)(tsMax, ts);
         }
 
         for (const auto& [key, val] : ev.getEventItems())

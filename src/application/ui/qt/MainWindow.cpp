@@ -1,5 +1,9 @@
 #include "MainWindow.hpp"
 #include "StartupSplash.hpp"
+#include "MainWindowFileOpsHelper.hpp"
+#include "MainWindowFilterOpsHelper.hpp"
+#include "MainWindowPluginOpsHelper.hpp"
+#include "MainWindowExportOpsHelper.hpp"
 
 #include "EventsContainer.hpp"
 #include "utils/ExportManager.hpp"
@@ -118,7 +122,7 @@ static int PluginEvents_GetSizeBridge(void* handle)
     if (!handle) return 0;
     auto container = static_cast<db::EventsContainer*>(handle);
     const size_t sz = container->Size();
-    return static_cast<int>(std::min(sz, static_cast<size_t>(INT_MAX)));
+    return static_cast<int>((std::min)(sz, static_cast<size_t>(INT_MAX)));
 }
 
 static char* PluginEvents_GetEventJsonBridge(void* handle, int index)
@@ -155,6 +159,13 @@ MainWindow::MainWindow(mvc::IController& controller,
 {
     m_events = &events;
     m_layoutManager = std::make_unique<LayoutManager>();
+
+    // Initialize architecture helpers
+    m_fileOpsHelper = std::make_unique<MainWindowFileOpsHelper>(this);
+    m_filterOpsHelper = std::make_unique<MainWindowFilterOpsHelper>(this);
+    m_pluginOpsHelper = std::make_unique<MainWindowPluginOpsHelper>(this);
+    m_exportOpsHelper = std::make_unique<MainWindowExportOpsHelper>(this);
+
     util::Logger::Info("[MainWindow] Initializing main window");
 
     auto splashStep = [this](const QString& msg) {
@@ -204,7 +215,9 @@ MainWindow::MainWindow(mvc::IController& controller,
                 addDockWidget(Qt::LeftDockWidgetArea, m_pluginLeftDock);
             }
             // Tab with filters
-            tabifyDockWidget(m_filtersDock, m_pluginLeftDock);
+            if (m_filtersDock) {
+                tabifyDockWidget(m_filtersDock, m_pluginLeftDock);
+            }
         }
 
     } catch (const std::exception& ex) {
@@ -221,6 +234,7 @@ MainWindow::~MainWindow()
     // against partially-destroyed state.
     if (m_panelRefreshTimer)   m_panelRefreshTimer->stop();
     if (m_searchDebounceTimer) m_searchDebounceTimer->stop();
+    if (m_unifiedSearchDebounceTimer) m_unifiedSearchDebounceTimer->stop();
 
     // Save recent files before cleanup
     SaveRecentFiles();
@@ -279,7 +293,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         if (!m_unifiedSearchBar) {
             throw std::runtime_error("Failed to create unified search bar");
         }
-        centralLayout->addWidget(m_unifiedSearchBar);
+        m_unifiedSearchBar->setVisible(true);
+        centralLayout->addWidget(m_unifiedSearchBar, 0, Qt::AlignTop);
 
         // Content tabs (main area)
         m_contentTabs = new QTabWidget(centralWidget);
@@ -292,6 +307,14 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         // Set the container as central widget
         setCentralWidget(centralWidget);
         m_contentTabs->tabBar()->installEventFilter(this);
+
+        // Allow drag-to-reorder tabs, plus a right-click "Sort" menu
+        m_contentTabs->setMovable(true);
+        m_contentTabs->tabBar()->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(m_contentTabs->tabBar(), &QTabBar::customContextMenuRequested,
+                this, [this](const QPoint& pos) {
+                    ShowTabContextMenu(m_contentTabs, pos);
+                });
 
         // Create tab badge manager for showing activity indicators
         m_tabBadgeManager = new TabBadgeManager(m_contentTabs);
@@ -346,7 +369,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                         OnGenerateReportFromDashboard();
                     });
             connect(m_dashboardPanel, &DashboardPanel::BookmarkCurrentRequested,
-                    this, [this]() { /* TODO: Bookmark current event */ });
+                    this, []() { /* TODO: Bookmark current event */ });
 
             // ===== Unified Search Bar Setup =====
             if (m_events) {
@@ -356,6 +379,16 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                 m_unifiedSearchBar->SetEventsView(m_eventsView);
             }
 
+            // Dedicated debounce timer for the unified search bar's Tools-panel
+            // results (must not share m_searchDebounceTimer — that timer's
+            // timeout is wired to the old inline SearchBar's pending term and
+            // would otherwise clear this bar's highlight ~150ms after typing).
+            m_unifiedSearchDebounceTimer = new QTimer(this);
+            m_unifiedSearchDebounceTimer->setSingleShot(true);
+            m_unifiedSearchDebounceTimer->setInterval(150);
+            connect(m_unifiedSearchDebounceTimer, &QTimer::timeout, this,
+                    &MainWindow::OnSearchRequested);
+
             // Connect search bar signals
             connect(m_unifiedSearchBar, &UnifiedSearchBar::SearchChanged,
                     this, [this](const QString& query) {
@@ -364,8 +397,8 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
                         }
                         // Also trigger search operation for SearchResultsView in Tools panel
                         // Use debounce timer to avoid excessive searches during typing
-                        if (m_searchDebounceTimer) {
-                            m_searchDebounceTimer->start();
+                        if (m_unifiedSearchDebounceTimer) {
+                            m_unifiedSearchDebounceTimer->start();
                         } else {
                             OnSearchRequested();
                         }
@@ -387,8 +420,6 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
         // Generic service holder for plugins (AI, analyzer, etc.)
         m_currentService = nullptr;
 
-        setCentralWidget(m_contentTabs);
-
     // ===== LEFT DOCK: Filters, Actors, Search & Configuration =====
     // Filters dock with tabbed interface for actors, filters, time range, etc.
     m_filtersDock = new QDockWidget("🔧 Filters & Actors", this);
@@ -405,6 +436,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     if (!m_filterTabs) {
         throw std::runtime_error("Failed to create filter tabs");
     }
+    m_filterTabs->setMovable(true);
 
     auto* filtersTab = new QWidget(m_filterTabs);
     if (!filtersTab) {
@@ -481,6 +513,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     m_pluginLeftTabs = new QTabWidget(m_pluginLeftDock);
     m_pluginLeftTabs->setObjectName("PluginConfigTabs");
     m_pluginLeftTabs->setTabsClosable(false);
+    m_pluginLeftTabs->setMovable(true);
 
     // Set size policy to allow the tab widget to shrink/expand with available space
     m_pluginLeftTabs->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -653,6 +686,7 @@ void MainWindow::InitializeUi(db::EventsContainer& events)
     if (!m_bottomTabs) {
         throw std::runtime_error("Failed to create bottom tabs");
     }
+    m_bottomTabs->setMovable(true);
 
     // Search tab
     auto* searchPanel = new QWidget(m_bottomTabs);
@@ -791,6 +825,51 @@ void MainWindow::ApplyLayout(const LayoutDescriptor& layout)
     UpdateStatusText(tr("Layout applied: %1").arg(layout.name).toStdString());
 }
 
+void MainWindow::ShowTabContextMenu(QTabWidget* tabWidget, const QPoint& pos)
+{
+    if (!tabWidget) return;
+
+    QMenu menu(this);
+    QAction* sortAscAction = menu.addAction(tr("Sort Tabs A → Z"));
+    QAction* sortDescAction = menu.addAction(tr("Sort Tabs Z → A"));
+
+    QAction* chosen = menu.exec(tabWidget->tabBar()->mapToGlobal(pos));
+    if (chosen != sortAscAction && chosen != sortDescAction) return;
+
+    const bool ascending = (chosen == sortAscAction);
+
+    // Capture (label, widget) pairs and sort by label; QTabBar::moveTab()
+    // carries each tab's icon/tooltip along with its widget automatically.
+    struct TabEntry { QString label; QWidget* widget; };
+    std::vector<TabEntry> entries;
+    entries.reserve(static_cast<size_t>(tabWidget->count()));
+    for (int i = 0; i < tabWidget->count(); ++i) {
+        entries.push_back({tabWidget->tabText(i), tabWidget->widget(i)});
+    }
+
+    std::ranges::sort(entries, [ascending](const TabEntry& a, const TabEntry& b) {
+        const int cmp = QString::compare(a.label, b.label, Qt::CaseInsensitive);
+        return ascending ? cmp < 0 : cmp > 0;
+    });
+
+    QWidget* current = tabWidget->currentWidget();
+    tabWidget->blockSignals(true);
+    for (int newIndex = 0; newIndex < static_cast<int>(entries.size()); ++newIndex) {
+        const auto& entry = entries[static_cast<size_t>(newIndex)];
+        const int fromIndex = tabWidget->indexOf(entry.widget);
+        if (fromIndex != newIndex) {
+            tabWidget->tabBar()->moveTab(fromIndex, newIndex);
+        }
+    }
+    tabWidget->blockSignals(false);
+    if (current) {
+        tabWidget->setCurrentWidget(current);
+    }
+
+    util::Logger::Debug("[MainWindow] Sorted {} tabs {}", entries.size(),
+        ascending ? "ascending" : "descending");
+}
+
 void MainWindow::RefreshLayoutMenu()
 {
     if (!m_layoutsMenu) return;
@@ -802,10 +881,10 @@ void MainWindow::RefreshLayoutMenu()
     m_layoutsMenu->addSeparator();
     m_layoutsMenu->addSection(tr("Predefined"));
 
-    for (auto& builtIn : LayoutManager::BuiltInLayouts()) {
+    for (const auto& builtIn : LayoutManager::BuiltInLayouts()) {
         auto* action = m_layoutsMenu->addAction(builtIn.name);
         connect(action, &QAction::triggered, this,
-            [this, d = std::move(builtIn)]() { ApplyLayout(d); });
+            [this, d = builtIn]() { ApplyLayout(d); });
     }
 
     const auto& userLayouts = m_layoutManager->UserLayouts();
@@ -868,7 +947,9 @@ void MainWindow::SetupMenus()
 
     // Add Recent Files submenu
     m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
-    m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
+    if (m_fileOpsHelper) {
+        m_recentFilesMenu->setEnabled(!m_fileOpsHelper->GetRecentFiles().empty());
+    }
     RefreshRecentFilesMenu();
 
     fileMenu->addSeparator();
@@ -1422,107 +1503,73 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
 
 void MainWindow::LoadRecentFiles()
 {
-    QSettings settings("LogViewer", "LogViewer");
-    m_recentFiles.clear();
-    
-    int size = settings.beginReadArray("RecentFiles");
-    for (int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
-        QString path = settings.value("path", "").toString();
-        if (!path.isEmpty() && std::filesystem::exists(path.toStdString())) {
-            m_recentFiles.push_back(path);
-        }
+    if (m_fileOpsHelper) {
+        m_fileOpsHelper->LoadRecentFiles();
     }
-    settings.endArray();
-    
-    util::Logger::Debug("[MainWindow] Loaded {} recent files", m_recentFiles.size());
 }
 
 void MainWindow::SaveRecentFiles()
 {
-    QSettings settings("LogViewer", "LogViewer");
-    settings.beginWriteArray("RecentFiles");
-    
-    for (int i = 0; i < static_cast<int>(m_recentFiles.size()); ++i) {
-        settings.setArrayIndex(i);
-        settings.setValue("path", m_recentFiles[static_cast<std::size_t>(i)]);
+    if (m_fileOpsHelper) {
+        m_fileOpsHelper->SaveRecentFiles();
     }
-    
-    settings.endArray();
-    util::Logger::Debug("[MainWindow] Saved {} recent files", m_recentFiles.size());
 }
 
 void MainWindow::AddToRecentFiles(const QString& filePath)
 {
-    if (filePath.isEmpty()) return;
-
-    // Remove if already in list
-    auto it = std::ranges::find(m_recentFiles, filePath);
-    if (it != m_recentFiles.end()) {
-        m_recentFiles.erase(it);
+    if (m_fileOpsHelper) {
+        m_fileOpsHelper->AddToRecentFiles(filePath);
+        // Menu is refreshed by the helper via RefreshRecentFilesMenu
     }
-    
-    // Add to front
-    m_recentFiles.insert(m_recentFiles.begin(), filePath);
-    
-    // Keep only MAX_RECENT_FILES
-    if (m_recentFiles.size() > MAX_RECENT_FILES) {
-        m_recentFiles.resize(MAX_RECENT_FILES);
-    }
-    
-    // Refresh menu
-    if (m_recentFilesMenu) {
-        m_recentFilesMenu->setEnabled(!m_recentFiles.empty());
-        RefreshRecentFilesMenu();
-    }
-    
-    // Save to settings
-    SaveRecentFiles();
-    
-    util::Logger::Debug("[MainWindow] Added to recent files: {}", filePath.toStdString());
 }
 
 void MainWindow::RefreshRecentFilesMenu()
 {
-    if (!m_recentFilesMenu) return;
-    
+    if (!m_recentFilesMenu || !m_fileOpsHelper) return;
+
     m_recentFilesMenu->clear();
-    
-    if (m_recentFiles.empty()) {
+
+    const auto& recentFiles = m_fileOpsHelper->GetRecentFiles();
+    if (recentFiles.empty()) {
         auto* emptyAction = m_recentFilesMenu->addAction(tr("(Empty)"));
         emptyAction->setEnabled(false);
         return;
     }
-    
-    for (const auto& file : m_recentFiles) {
+
+    for (const auto& file : recentFiles) {
         QFileInfo fileInfo(file);
         QString displayName = fileInfo.fileName();
         QString fullPath = file;
-        
+
         auto* action = m_recentFilesMenu->addAction(displayName);
         action->setToolTip(fullPath);
-        
+
         connect(action, &QAction::triggered, this, [this, fullPath]() {
             OnRecentFileTriggered(fullPath);
         });
     }
-    
+
     m_recentFilesMenu->addSeparator();
     auto* clearAction = m_recentFilesMenu->addAction(tr("Clear Recent Files"));
     connect(clearAction, &QAction::triggered, this, [this]() {
-        m_recentFiles.clear();
-        SaveRecentFiles();
-        if (m_recentFilesMenu) {
-            m_recentFilesMenu->setEnabled(false);
-            RefreshRecentFilesMenu();
+        if (m_fileOpsHelper) {
+            // Clear via helper which manages the state
+            auto& files = const_cast<std::vector<QString>&>(m_fileOpsHelper->GetRecentFiles());
+            files.clear();
+            m_fileOpsHelper->SaveRecentFiles();
+            if (m_recentFilesMenu) {
+                m_recentFilesMenu->setEnabled(false);
+                RefreshRecentFilesMenu();
+            }
         }
     });
 }
 
 void MainWindow::OnRecentFileTriggered(const QString& filePath)
 {
-    util::Logger::Debug("[MainWindow] Recent file triggered: {}", filePath.toStdString());
-    HandleDroppedFile(filePath);
+    if (m_fileOpsHelper) {
+        m_fileOpsHelper->OnRecentFileTriggered(filePath);
+    }
 }
 
 std::string MainWindow::ReadSearchQuery() const
@@ -1648,12 +1695,100 @@ void MainWindow::OnSearchRequested()
         util::Logger::Error("[MainWindow] OnSearchRequested: m_presenter is null!");
         return;
     }
+    // PerformSearch() periodically pumps the event loop (ProcessPendingEvents)
+    // to stay responsive on large logs; that pump can let a debounce timer
+    // fire mid-search and re-enter here. Guard against that reentrancy.
+    if (m_searchInProgress) {
+        util::Logger::Debug("[MainWindow] OnSearchRequested: search already in progress, skipping");
+        return;
+    }
+    m_searchInProgress = true;
     try {
+        // Ensure bottom panel (search results) is visible
+        if (m_bottomDock) {
+            m_bottomDock->setVisible(true);
+            m_bottomDock->raise();
+        }
+        if (m_bottomTabs) {
+            m_bottomTabs->setCurrentIndex(m_bottomTabs->indexOf(m_bottomTabs->widget(0)));
+            for (int i = 0; i < m_bottomTabs->count(); ++i) {
+                if (m_bottomTabs->tabText(i).contains("Search", Qt::CaseInsensitive)) {
+                    m_bottomTabs->setCurrentIndex(i);
+                    break;
+                }
+            }
+        }
+
         m_presenter->PerformSearch();
+        m_searchInProgress = false;
     }
     catch (const std::exception& e) {
+        m_searchInProgress = false;
         util::Logger::Error("[MainWindow] OnSearchRequested exception: {}", e.what());
         ShowError(tr("Search Error"), tr("An error occurred during search: %1").arg(QString::fromUtf8(e.what())));
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+    if (!event) {
+        return;
+    }
+
+    try {
+        // Log keyboard shortcuts for debugging
+        Qt::KeyboardModifiers modifiers = event->modifiers();
+        QString modStr;
+        if (modifiers & Qt::ControlModifier) modStr += "Ctrl+";
+        if (modifiers & Qt::ShiftModifier) modStr += "Shift+";
+        if (modifiers & Qt::AltModifier) modStr += "Alt+";
+        if (modifiers & Qt::MetaModifier) modStr += "Meta+";
+
+        // Get the key name
+        QString keyStr = QKeySequence(event->key()).toString();
+        if (keyStr.isEmpty()) {
+            keyStr = QString::number(event->key());
+        }
+
+        QString shortcut = modStr + keyStr;
+        util::Logger::Debug("[MainWindow] Keyboard shortcut detected: {}", shortcut.toStdString());
+
+        // Handle Ctrl+F for search bar focus (macOS uses Cmd+F, Windows/Linux use Ctrl+F)
+        if ((event->modifiers() & Qt::ControlModifier || event->modifiers() & Qt::MetaModifier)
+            && event->key() == Qt::Key_F) {
+            util::Logger::Debug("[MainWindow] Ctrl/Cmd+F detected - focusing search bar");
+            if (m_unifiedSearchBar) {
+                try {
+                    m_unifiedSearchBar->FocusSearchInput();
+                    event->accept();
+                    return;
+                } catch (const std::exception& ex) {
+                    util::Logger::Error("[MainWindow] Exception while focusing search bar: {}", ex.what());
+                }
+            } else {
+                util::Logger::Warn("[MainWindow] Search bar not available for focus");
+            }
+            event->accept();
+            return;
+        }
+
+        // Handle Ctrl+O for open file (macOS uses Cmd+O)
+        if ((event->modifiers() & Qt::ControlModifier || event->modifiers() & Qt::MetaModifier)
+            && event->key() == Qt::Key_O) {
+            util::Logger::Debug("[MainWindow] Ctrl/Cmd+O detected - opening file dialog");
+            try {
+                OnOpenFileRequested();
+                event->accept();
+                return;
+            } catch (const std::exception& ex) {
+                util::Logger::Error("[MainWindow] Exception while opening file dialog: {}", ex.what());
+            }
+        }
+
+        // Allow normal shortcut processing by calling parent implementation
+        QMainWindow::keyPressEvent(event);
+    } catch (const std::exception& ex) {
+        util::Logger::Error("[MainWindow] Exception in keyPressEvent: {}", ex.what());
     }
 }
 
@@ -2065,9 +2200,18 @@ void MainWindow::OnLoadDbcRequested()
         return;
 
     SaveLastDir("dbc", filePath);
-    m_currentDbcFilePath = filePath;
 
-    const auto db = parser::dbc::ParseDbcFile(filePath.toStdString());
+    bool parseOk = false;
+    const auto db = parser::dbc::ParseDbcFile(filePath.toStdString(), &parseOk);
+    if (!parseOk)
+    {
+        util::Logger::Error("[MainWindow] Failed to load DBC file: {}", filePath.toStdString());
+        ShowError(tr("DBC Load Failed"),
+            tr("Could not read DBC file:\n%1").arg(filePath));
+        return;
+    }
+
+    m_currentDbcFilePath = filePath;
     if (m_canSignalTree)
         m_canSignalTree->SetDatabase(db);
 
@@ -2814,26 +2958,55 @@ void MainWindow::RemoveBottomPanel()
     m_bottomChatWidget = nullptr;
 }
 
-void MainWindow::RemoveRightPanel()
+void MainWindow::removePluginRightTab(const std::string& pluginId)
 {
-    // Remove all plugin-provided right dock tabs
-    std::vector<std::string> ids;
-    ids.reserve(m_pluginRightTabIndices.size());
-    for (const auto& [id, idx] : m_pluginRightTabIndices) ids.push_back(id);
-    for (const auto& id : ids) {
-        auto it = m_pluginRightTabIndices.find(id);
-        if (it == m_pluginRightTabIndices.end()) continue;
-        int tabIndex = it->second;
-        if (m_rightTabs && tabIndex >= 0 && tabIndex < m_rightTabs->count()) {
-            QWidget* widget = m_rightTabs->widget(tabIndex);
+    // The tab's live index is resolved via indexOf() so this stays correct
+    // even after drag-reordering.
+    auto it = m_pluginRightTabIndices.find(pluginId);
+    if (it == m_pluginRightTabIndices.end()) return;
+    QWidget* widget = it->second;
+    if (m_rightTabs && widget) {
+        const int tabIndex = m_rightTabs->indexOf(widget);
+        if (tabIndex >= 0) {
             m_rightTabs->removeTab(tabIndex);
-            if (widget) widget->deleteLater();
             util::Logger::Info("[MainWindow] Removed plugin right-panel at index {}", tabIndex);
         }
-        m_pluginRightTabIndices.erase(it);
-        for (auto& [pid, pidx] : m_pluginRightTabIndices) if (pidx > tabIndex) pidx--;
+        widget->deleteLater();
     }
-    m_activePluginId.clear();
+    m_pluginRightTabIndices.erase(it);
+}
+
+void MainWindow::RemoveRightPanel()
+{
+    // Remove all plugin-provided right dock tabs (used for a full plugin reload).
+    std::vector<std::string> ids;
+    ids.reserve(m_pluginRightTabIndices.size());
+    for (const auto& [id, widget] : m_pluginRightTabIndices) ids.push_back(id);
+    for (const auto& id : ids) removePluginRightTab(id);
+}
+
+void MainWindow::removePluginBottomTab(const std::string& pluginId)
+{
+    auto it = m_pluginBottomTabIndices.find(pluginId);
+    if (it == m_pluginBottomTabIndices.end()) return;
+    QWidget* widget = it->second;
+    if (m_bottomTabs && widget) {
+        const int tabIndex = m_bottomTabs->indexOf(widget);
+        if (tabIndex >= 0) {
+            m_bottomTabs->removeTab(tabIndex);
+            util::Logger::Info("[MainWindow] Removed plugin bottom-panel at index {}", tabIndex);
+        }
+        widget->deleteLater();
+    }
+    m_pluginBottomTabIndices.erase(it);
+}
+
+void MainWindow::RemoveAllPluginBottomPanels()
+{
+    std::vector<std::string> ids;
+    ids.reserve(m_pluginBottomTabIndices.size());
+    for (const auto& [id, widget] : m_pluginBottomTabIndices) ids.push_back(id);
+    for (const auto& id : ids) removePluginBottomTab(id);
 }
 
 void MainWindow::RefreshPluginPanels()
@@ -2875,7 +3048,7 @@ bool MainWindow::TryAddPluginMainPanel(const std::string& pluginId, plugin::IPlu
     if (!hostContainer) return false;
     const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name;
     int idx = m_contentTabs->addTab(hostContainer, QString::fromStdString(tabName));
-    m_pluginTabIndices[pluginId] = idx;
+    m_pluginTabIndices[pluginId] = hostContainer;
     util::Logger::Info("[MainWindow] Added plugin main tab '{}' at index {}", tabName, idx);
     return true;
 }
@@ -2898,7 +3071,7 @@ bool MainWindow::TryAddPluginBottomPanel(const std::string& pluginId, plugin::IP
     if (!hostContainer) return false;
     const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name + " Chat";
     int chatTabIndex = m_bottomTabs->addTab(hostContainer, QString::fromStdString(tabName));
-    m_bottomPluginPanel = hostContainer;
+    m_pluginBottomTabIndices[pluginId] = hostContainer;
     util::Logger::Info("[MainWindow] Added plugin bottom tab '{}' at index {}", tabName, chatTabIndex);
     return true;
 }
@@ -2931,7 +3104,7 @@ bool MainWindow::TryAddPluginRightPanel(const std::string& pluginId, plugin::IPl
 
     const std::string tabName = plugin->GetMetadata().name.empty() ? pluginId : plugin->GetMetadata().name + " Right";
     int idx = m_rightTabs->addTab(hostContainer, QString::fromStdString(tabName));
-    m_pluginRightTabIndices[pluginId] = idx;
+    m_pluginRightTabIndices[pluginId] = hostContainer;
     if (m_detailsDock) {
         m_detailsDock->setFloating(false);
         addDockWidget(Qt::RightDockWidgetArea, m_detailsDock);
@@ -2953,12 +3126,16 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
             
         case PluginEvent::Unloaded:
             util::Logger::Debug("[MainWindow] Plugin unloaded: {}", pluginId);
-            if (pluginId == m_activePluginId) {
-                RemoveMainPanel();
-                RemoveLeftPanel();
-                RemoveBottomPanel();
-                RemoveRightPanel();
-            }
+            // Tear down every panel this specific plugin registered. Must be
+            // unconditional on pluginId (not gated by a "which plugin is
+            // active" flag) — otherwise an unloaded plugin's widgets stay
+            // alive and interactive, pointing at code from an unloaded
+            // library. PluginManager notifies observers before actually
+            // unloading the library, so this runs while it's still safe.
+            removePluginTab(pluginId);
+            removePluginLeftTab(pluginId);
+            removePluginBottomTab(pluginId);
+            removePluginRightTab(pluginId);
             break;
 
         case PluginEvent::Enabled:
@@ -2992,13 +3169,9 @@ void MainWindow::OnPluginEvent(plugin::PluginEvent event,
             util::Logger::Info("[MainWindow] Plugin disabled: {}", pluginId);
             removePluginTab(pluginId);
             removePluginLeftTab(pluginId);
-            if (pluginId == m_activePluginId) {
-                RemoveMainPanel();
-                RemoveLeftPanel();
-                RemoveBottomPanel();
-                RemoveRightPanel();
-                util::Logger::Info("[MainWindow] Plugin disabled and panels removed: {}", pluginId);
-            }
+            removePluginBottomTab(pluginId);
+            removePluginRightTab(pluginId);
+            util::Logger::Info("[MainWindow] Plugin disabled and panels removed: {}", pluginId);
             break;
             
         case PluginEvent::Registered:
@@ -3046,7 +3219,7 @@ void MainWindow::createPluginTab(const std::string& pluginId, plugin::IPlugin* p
     auto metadata = plugin->GetMetadata();
     QString tabName = QString::fromStdString(metadata.name);
     int tabIndex = m_contentTabs->addTab(tab, tabName);
-    m_pluginTabIndices[pluginId] = tabIndex;
+    m_pluginTabIndices[pluginId] = tab;
     util::Logger::Info("[MainWindow] Created plugin tab: {} at index {}", metadata.name, tabIndex);
     
     // Analysis plugins should access events via PluginEvents_* helpers.
@@ -3054,29 +3227,22 @@ void MainWindow::createPluginTab(const std::string& pluginId, plugin::IPlugin* p
 
 void MainWindow::removePluginTab(const std::string& pluginId) {
     util::Logger::Info("[MainWindow] Removing tab for plugin: {}", pluginId);
-    
-    // Find and remove the tab for this plugin
+
+    // Find and remove the tab for this plugin. The tab's live index is
+    // resolved via indexOf() so this works correctly even if the user has
+    // dragged tabs around (movable tabs no longer invalidate a cached index).
     auto it = m_pluginTabIndices.find(pluginId);
     if (it != m_pluginTabIndices.end()) {
-        int tabIndex = it->second;
-        
-        // Remove the tab
-        if (tabIndex >= 0 && tabIndex < m_contentTabs->count()) {
-            QWidget* widget = m_contentTabs->widget(tabIndex);
-            m_contentTabs->removeTab(tabIndex);
-            if (widget) {
-                widget->deleteLater();
+        QWidget* widget = it->second;
+        if (m_contentTabs && widget) {
+            const int tabIndex = m_contentTabs->indexOf(widget);
+            if (tabIndex >= 0) {
+                m_contentTabs->removeTab(tabIndex);
+                util::Logger::Info("[MainWindow] Removed plugin tab at index {}", tabIndex);
             }
-            util::Logger::Info("[MainWindow] Removed plugin tab at index {}", tabIndex);
+            widget->deleteLater();
         }
-        
-        // Update indices for tabs that came after this one
         m_pluginTabIndices.erase(it);
-        for (auto& [id, idx] : m_pluginTabIndices) {
-            if (idx > tabIndex) {
-                idx--;
-            }
-        }
     }
 }
 
@@ -3186,7 +3352,7 @@ void MainWindow::createPluginLeftTab(const std::string& pluginId, plugin::IPlugi
         leftScroll->setFrameShape(QFrame::NoFrame);
 
         int tabIndex = m_pluginLeftTabs->addTab(leftScroll, tabName);
-        m_pluginLeftTabIndices[pluginId] = tabIndex;
+        m_pluginLeftTabIndices[pluginId] = leftScroll;
         // Ensure left dock is visible
         if (m_pluginLeftDock) {
             m_pluginLeftDock->setFloating(false);
@@ -3206,7 +3372,7 @@ void MainWindow::createPluginLeftTab(const std::string& pluginId, plugin::IPlugi
         scrollArea->setFrameShape(QFrame::NoFrame);
 
         int tabIndex = m_pluginLeftTabs->addTab(scrollArea, tabName);
-        m_pluginLeftTabIndices[pluginId] = tabIndex;
+        m_pluginLeftTabIndices[pluginId] = scrollArea;
 
         // Show the dock when first config tab is added
         if (m_pluginLeftDock && m_pluginLeftTabs->count() == 1) {
@@ -3238,22 +3404,22 @@ void MainWindow::removePluginLeftTab(const std::string& pluginId) {
         }
     }
 
-    // Also remove from plugin config tabs (fallback)
+    // Also remove from plugin config tabs (fallback). The tab's live index is
+    // resolved via indexOf() so this stays correct even after drag-reordering.
     auto cit = m_pluginLeftTabIndices.find(pluginId);
     if (cit != m_pluginLeftTabIndices.end()) {
-        int tabIndex = cit->second;
-        if (tabIndex >= 0 && m_pluginLeftTabs && tabIndex < m_pluginLeftTabs->count()) {
-            QWidget* widget = m_pluginLeftTabs->widget(tabIndex);
-            m_pluginLeftTabs->removeTab(tabIndex);
-            if (widget) widget->deleteLater();
-            util::Logger::Info("[MainWindow] Removed plugin config tab at index {}", tabIndex);
+        QWidget* widget = cit->second;
+        if (m_pluginLeftTabs && widget) {
+            const int tabIndex = m_pluginLeftTabs->indexOf(widget);
+            if (tabIndex >= 0) {
+                m_pluginLeftTabs->removeTab(tabIndex);
+                util::Logger::Info("[MainWindow] Removed plugin config tab at index {}", tabIndex);
+            }
+            widget->deleteLater();
         }
         m_pluginLeftTabIndices.erase(cit);
-        if (m_pluginLeftDock && m_pluginLeftTabs->count() == 0) {
+        if (m_pluginLeftDock && m_pluginLeftTabs && m_pluginLeftTabs->count() == 0) {
             m_pluginLeftDock->hide();
-        }
-        for (auto& [id, idx] : m_pluginLeftTabIndices) {
-            if (idx > tabIndex) idx--;
         }
     }
 }
@@ -3271,8 +3437,10 @@ void MainWindow::reloadPlugins() {
     RemoveLeftPanel();
     RemoveBottomPanel();
     RemoveRightPanel();
+    RemoveAllPluginBottomPanels();
 
-    // Clear plugin tab tracking
+    // Clear plugin tab tracking (RemoveLeftPanel/RemoveRightPanel/
+    // RemoveAllPluginBottomPanels already erased their own map entries above)
     m_pluginTabIndices.clear();
     m_pluginFilterTabIndices.clear();
     
@@ -3346,100 +3514,22 @@ std::vector<int> MainWindow::GetRowsToExport() const
 
 void MainWindow::OnExportCsvRequested()
 {
-    const auto rows = GetRowsToExport();
-    if (rows.empty()) {
-        QMessageBox::information(this, tr("Export"), tr("No data to export."));
-        return;
-    }
-    UpdateStatusText("Exporting to CSV...");
-    QFileDialog dialog(this, tr("Export to CSV"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setNameFilter(tr("CSV files (*.csv);;All files (*.*)"));
-    dialog.setDefaultSuffix(QStringLiteral("csv"));
-    dialog.setDirectory(LastDir("export",
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-#ifdef __APPLE__
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-#endif
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    const QString path = dialog.selectedFiles().value(0);
-    if (path.isEmpty())
-        return;
-    SaveLastDir("export", path);
-
-    if (!ExportManager::ToCsv(*m_eventsView->model(), rows, path)) {
-        UpdateStatusText("Export failed.");
-        QMessageBox::warning(this, tr("Export Failed"),
-                             tr("Could not write to:\n%1").arg(path));
-    } else {
-        UpdateStatusText(QString("Exported CSV: %1").arg(path).toStdString());
+    if (m_exportOpsHelper) {
+        m_exportOpsHelper->OnExportCsvRequested();
     }
 }
 
 void MainWindow::OnExportJsonRequested()
 {
-    const auto rows = GetRowsToExport();
-    if (rows.empty()) {
-        QMessageBox::information(this, tr("Export"), tr("No data to export."));
-        return;
-    }
-    UpdateStatusText("Exporting to JSON...");
-    QFileDialog dialog(this, tr("Export to JSON"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setNameFilter(tr("JSON files (*.json);;All files (*.*)"));
-    dialog.setDefaultSuffix(QStringLiteral("json"));
-    dialog.setDirectory(LastDir("export",
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-#ifdef __APPLE__
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-#endif
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    const QString path = dialog.selectedFiles().value(0);
-    if (path.isEmpty())
-        return;
-    SaveLastDir("export", path);
-
-    if (!ExportManager::ToJson(*m_eventsView->model(), rows, path)) {
-        UpdateStatusText("Export failed.");
-        QMessageBox::warning(this, tr("Export Failed"),
-                             tr("Could not write to:\n%1").arg(path));
-    } else {
-        UpdateStatusText(QString("Exported JSON: %1").arg(path).toStdString());
+    if (m_exportOpsHelper) {
+        m_exportOpsHelper->OnExportJsonRequested();
     }
 }
 
 void MainWindow::OnExportXmlRequested()
 {
-    const auto rows = GetRowsToExport();
-    if (rows.empty()) {
-        QMessageBox::information(this, tr("Export"), tr("No data to export."));
-        return;
-    }
-    UpdateStatusText("Exporting to XML...");
-    QFileDialog dialog(this, tr("Export to XML"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setNameFilter(tr("XML files (*.xml);;All files (*.*)"));
-    dialog.setDefaultSuffix(QStringLiteral("xml"));
-    dialog.setDirectory(LastDir("export",
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-#ifdef __APPLE__
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-#endif
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    const QString path = dialog.selectedFiles().value(0);
-    if (path.isEmpty())
-        return;
-    SaveLastDir("export", path);
-
-    if (!ExportManager::ToXml(*m_eventsView->model(), rows, path)) {
-        UpdateStatusText("Export failed.");
-        QMessageBox::warning(this, tr("Export Failed"),
-                             tr("Could not write to:\n%1").arg(path));
-    } else {
-        UpdateStatusText(QString("Exported XML: %1").arg(path).toStdString());
+    if (m_exportOpsHelper) {
+        m_exportOpsHelper->OnExportXmlRequested();
     }
 }
 

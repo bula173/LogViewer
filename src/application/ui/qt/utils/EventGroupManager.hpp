@@ -59,7 +59,7 @@ class EventGroupManager
 
     /// Set similarity threshold for pattern matching (0.0 to 1.0)
     void setSimilarityThreshold(double threshold);
-    double getSimilarityThreshold() const { return m_similarityThreshold; }
+    double similarityThreshold() const { return m_similarityThreshold; }
 
     /// Get available grouping strategies
     static std::vector<QString> getAvailableStrategies();

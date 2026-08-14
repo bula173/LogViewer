@@ -67,7 +67,7 @@ class KeyboardNavigationManager : public QObject
     bool areVimKeybindingsEnabled() const { return m_vimKeybindingsEnabled; }
 
     /// Get all registered shortcuts
-    const std::map<QString, QString>& getShortcuts() const { return m_shortcutDescriptions; }
+    const std::map<QString, QString>& shortcuts() const { return m_shortcutDescriptions; }
 
   private:
     void setupDefaultShortcuts();

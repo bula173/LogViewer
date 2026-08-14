@@ -60,7 +60,7 @@ private:
     QLabel*          m_statusLabel {nullptr};
     QPushButton*     m_refreshBtn  {nullptr};
 
-    std::optional<analyzer::ExchangePattern>        m_pattern;
+    std::optional<analyzer::ExchangePattern>        m_pattern {std::nullopt};
     QFutureWatcher<analyzer::ActorDiscoveryResult>* m_watcher {nullptr};
 
     // Derived from actor definitions; rebuilt on SetDefinitions().

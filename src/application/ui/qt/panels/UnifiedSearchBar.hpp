@@ -54,6 +54,9 @@ class UnifiedSearchBar : public QWidget
     /// Clear search and results
     void ClearSearch();
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
   signals:
     /// Emitted when search query changes
     void SearchChanged(const QString& query);

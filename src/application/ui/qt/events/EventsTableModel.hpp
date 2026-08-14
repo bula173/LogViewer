@@ -38,6 +38,8 @@ class EventsTableModel : public QAbstractTableModel
     void SetFilteredIndices(const std::vector<unsigned long>& indices);
     void ClearFilter(); // Clear filtering and show all events
     const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
+    /// True if a filter is active — distinguishes "no filter" from "filter active, zero matches".
+    bool IsFilteringActive() const { return m_filteringActive; }
 
     // ── Search / highlight ────────────────────────────────────────────────
     void SetSearchTerm(const QString& term, bool caseSensitive);

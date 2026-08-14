@@ -92,8 +92,8 @@ class SearchEngine
     SearchMode m_mode {SearchMode::Substring};
     bool m_caseSensitive {false};
     std::string m_pattern;
-    std::optional<std::regex> m_compiledRegex;
-    std::optional<AdvancedQuery> m_advancedQuery;
+    std::optional<std::regex> m_compiledRegex {std::nullopt};
+    std::optional<AdvancedQuery> m_advancedQuery {std::nullopt};
     std::vector<std::string> m_history;
 
     // Performance optimization: cache normalized pattern for case-insensitive searches

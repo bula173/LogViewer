@@ -11,6 +11,12 @@ namespace ui::qt::utils
 
 using json = nlohmann::json;
 
+namespace {
+// Bump when the session schema changes in a way older/newer code can't
+// safely interpret via the permissive j.value()/contains() reads below.
+constexpr const char* kSupportedSessionVersion = "1.0";
+}
+
 SessionManager& SessionManager::getInstance()
 {
     static SessionManager instance;
@@ -57,6 +63,15 @@ SessionManager::SessionState SessionManager::getCrashRecoveryState() const
         json j;
         file >> j;
         file.close();
+
+        const std::string version = j.value("version", std::string{});
+        if (version != kSupportedSessionVersion)
+        {
+            util::Logger::Warn(
+                "[SessionManager] Crash recovery file has unsupported version '{}' (expected '{}') — ignoring",
+                version, kSupportedSessionVersion);
+            return SessionState{};
+        }
 
         if (j.contains("state"))
         {
@@ -138,6 +153,15 @@ SessionManager::SessionState SessionManager::loadSession()
         file >> j;
         file.close();
 
+        const std::string version = j.value("version", std::string{});
+        if (version != kSupportedSessionVersion)
+        {
+            util::Logger::Warn(
+                "[SessionManager] Session file has unsupported version '{}' (expected '{}') — ignoring",
+                version, kSupportedSessionVersion);
+            return SessionState{};
+        }
+
         if (j.contains("state"))
         {
             const auto& s = j["state"];
@@ -202,9 +226,9 @@ void SessionManager::autoSave(const SessionState& state)
 
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-        now - m_lastAutoSaveTime).count();
+        now - m_lastAutoSaveTime);
 
-    if (elapsed > kAutoSaveIntervalMs)
+    if (elapsed > kAutoSaveInterval)
     {
         saveSession(state);
         m_lastAutoSaveTime = now;

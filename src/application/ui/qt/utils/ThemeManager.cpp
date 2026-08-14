@@ -124,7 +124,7 @@ void ThemeManager::setFont(const QString& componentName, const QFont& font)
     util::Logger::Debug("[ThemeManager] Font set for component: {}", componentName.toStdString());
 }
 
-QString ThemeManager::getStylesheet() const
+QString ThemeManager::stylesheet() const
 {
     QString bg = m_colorScheme.background.name();
     QString fg = m_colorScheme.foreground.name();
@@ -166,10 +166,10 @@ QString ThemeManager::getStylesheet() const
 
 void ThemeManager::ApplyColorScheme()
 {
-    QString stylesheet = getStylesheet();
+    QString css = stylesheet();
     auto* app = qobject_cast<QApplication*>(QCoreApplication::instance());
     if (app)
-        app->setStyleSheet(stylesheet);
+        app->setStyleSheet(css);
 
     util::Logger::Debug("[ThemeManager] Stylesheet applied");
 }

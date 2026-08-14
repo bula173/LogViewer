@@ -148,15 +148,17 @@ void PanelNavigator::selectCurrentItem()
     auto* currentItem = m_panelList->currentItem();
     if (!currentItem) return;
 
-    // Find matching panel
-    QString itemText = currentItem->text();
-    for (const auto& panel : m_allPanels) {
-        if (itemText.contains(panel.name)) {
-            panel.onSelect();
-            close();
-            return;
-        }
-    }
+    // Resolve the exact panel via the pointer stored at Qt::UserRole when the
+    // item was created (updateFilteredList()), rather than re-deriving it by
+    // substring-matching the display text — two panels with overlapping
+    // names (e.g. "Filter" vs. "FilterProfiles") would otherwise risk
+    // selecting the wrong one.
+    const auto ptrValue = currentItem->data(Qt::UserRole).value<quintptr>();
+    const auto* panel = reinterpret_cast<const PanelInfo*>(ptrValue);
+    if (!panel) return;
+
+    panel->onSelect();
+    close();
 }
 
 }  // namespace ui::qt::widgets

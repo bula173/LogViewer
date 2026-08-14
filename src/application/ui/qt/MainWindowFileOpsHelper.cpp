@@ -92,7 +92,9 @@ void MainWindowFileOpsHelper::RefreshRecentFilesMenu()
 {
     if (!m_mainWindow) return;
 
-    util::Logger::Trace("[FileOpsHelper] Recent files menu refresh triggered");
+    // Call back to MainWindow's public method to refresh the menu UI
+    m_mainWindow->RefreshRecentFilesMenu();
+    util::Logger::Trace("[FileOpsHelper] Recent files menu refreshed");
 }
 
 void MainWindowFileOpsHelper::OnRecentFileTriggered(const QString& filePath)
@@ -105,6 +107,10 @@ void MainWindowFileOpsHelper::OnRecentFileTriggered(const QString& filePath)
     }
 
     util::Logger::Debug("[FileOpsHelper] Opening recent file: {}", filePath.toStdString());
+
+    // Delegate to MainWindow to actually load the file
+    // This will trigger the file loading pipeline through the main controller
+    m_mainWindow->HandleDroppedFile(filePath);
 }
 
 void MainWindowFileOpsHelper::OnOpenFileRequested()

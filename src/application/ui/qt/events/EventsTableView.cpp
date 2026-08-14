@@ -211,11 +211,15 @@ void EventsTableView::ClearFilter()
 
 const std::vector<unsigned long>* EventsTableView::GetFilteredIndices() const
 {
-    if (!m_model)
+    if (!m_model || !m_model->IsFilteringActive())
         return nullptr;
-    
-    const auto& indices = m_model->GetFilteredIndices();
-    return indices.empty() ? nullptr : &indices;
+
+    return &m_model->GetFilteredIndices();
+}
+
+bool EventsTableView::IsFilterActive() const
+{
+    return m_model && m_model->IsFilteringActive();
 }
 
 void EventsTableView::UpdateColors()
@@ -584,7 +588,7 @@ void EventsTableView::JumpToTimestamp()
     if (rows == 0) return;
 
     int bestRow = -1;
-    double bestDiff = std::numeric_limits<double>::max();
+    double bestDiff = (std::numeric_limits<double>::max)();
 
     for (int row = 0; row < rows; ++row) {
         const int actual = m_model->ResolveToActualIndex(row);

@@ -19,6 +19,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <set>
 
 namespace ui::qt {
 
@@ -329,15 +330,46 @@ void FilterProfilesPanel::LoadFromFile()
             return;
         }
 
+        static constexpr size_t kLargeProfileCountWarningThreshold = 500;
+        if (j.size() > kLargeProfileCountWarningThreshold)
+        {
+            util::Logger::Warn("[FilterProfiles] Profiles file '{}' has an unusually large entry count ({})",
+                path, j.size());
+        }
+
         m_profiles.clear();
         size_t parseErrors = 0;
+        size_t rejected = 0;
+        std::set<std::string> seenNames;
         for (const auto& item : j)
         {
-            try { m_profiles.push_back(FilterProfile::FromJson(item)); }
-            catch (...) { ++parseErrors; }
+            FilterProfile profile;
+            try { profile = FilterProfile::FromJson(item); }
+            catch (...) { ++parseErrors; continue; }
+
+            // Name is the unique identifier — reject entries with no name
+            // (would collide with each other) or a name already seen in
+            // this file (last-writer-wins would otherwise silently drop
+            // one profile without any indication to the user).
+            if (profile.name.empty())
+            {
+                util::Logger::Warn("[FilterProfiles] Skipping profile entry with empty name");
+                ++rejected;
+                continue;
+            }
+            if (!seenNames.insert(profile.name).second)
+            {
+                util::Logger::Warn("[FilterProfiles] Skipping duplicate profile name '{}'", profile.name);
+                ++rejected;
+                continue;
+            }
+
+            m_profiles.push_back(std::move(profile));
         }
         if (parseErrors > 0)
             util::Logger::Warn("[FilterProfiles] {} profile entry/entries could not be parsed", parseErrors);
+        if (rejected > 0)
+            util::Logger::Warn("[FilterProfiles] {} profile entry/entries rejected (empty/duplicate name)", rejected);
         RebuildList();
         if (!m_profiles.empty())
         {

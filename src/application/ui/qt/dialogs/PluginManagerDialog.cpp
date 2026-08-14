@@ -562,6 +562,11 @@ void PluginManagerDialog::OnSelectionChanged()
 
 QString PluginManagerDialog::StatusText(int status) const
 {
+    // `status` originates as a raw int from external plugin data, so it may
+    // carry a value outside the enum's declared range — the trailing return
+    // (not a `default:` case) handles that safely while still letting
+    // -Wswitch warn if a new PluginStatus enumerator is ever added here
+    // without a matching case.
     using PS = plugin::PluginStatus;
     switch (static_cast<PS>(status))
     {
@@ -571,12 +576,15 @@ QString PluginManagerDialog::StatusText(int status) const
         case PS::Active:      return tr("Active");
         case PS::Error:       return tr("Error");
         case PS::Disabled:    return tr("Disabled");
-        default:              return tr("Unknown");
     }
+    return tr("Unknown");
 }
 
 QString PluginManagerDialog::TypeName(int type) const
 {
+    // See StatusText() above — `type` may be an out-of-range raw int from
+    // external plugin data; the trailing return handles that safely while
+    // keeping -Wswitch exhaustiveness checking for new PluginType values.
     using PT = plugin::PluginType;
     switch (static_cast<PT>(type))
     {
@@ -589,8 +597,8 @@ QString PluginManagerDialog::TypeName(int type) const
         case PT::Connector:       return tr("Connector");
         case PT::Visualizer:      return tr("Visualizer");
         case PT::Custom:          return tr("Custom");
-        default:                  return tr("Unknown");
     }
+    return tr("Unknown");
 }
 
 } // namespace ui::qt

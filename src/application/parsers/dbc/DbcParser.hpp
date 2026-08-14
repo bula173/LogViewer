@@ -39,6 +39,9 @@ struct DbcDatabase
 };
 
 // Returns a populated DbcDatabase, or an empty one on error/missing file.
-DbcDatabase ParseDbcFile(const std::filesystem::path& path);
+// If `ok` is non-null, it is set to false when the file could not be opened
+// (distinguishing that from a validly-opened file that simply defines no
+// messages, which also returns an empty DbcDatabase but with `ok` left true).
+DbcDatabase ParseDbcFile(const std::filesystem::path& path, bool* ok = nullptr);
 
 } // namespace parser::dbc

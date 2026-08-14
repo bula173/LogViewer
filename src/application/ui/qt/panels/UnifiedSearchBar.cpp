@@ -47,24 +47,27 @@ UnifiedSearchBar::UnifiedSearchBar(QWidget* parent)
     CreateLayout();
     LoadSearchHistory();
 
-    // Verify all UI components were created successfully
+    // Verify all UI components were created successfully. Q_ASSERT compiles
+    // out in release builds, so these are debug diagnostics only — the real
+    // guard is the `if` below, which fails safe (skips wiring) in release
+    // instead of connecting/dereferencing a null pointer.
     Q_ASSERT_X(m_searchInput != nullptr, "UnifiedSearchBar", "m_searchInput failed to create");
     Q_ASSERT_X(m_clearButton != nullptr, "UnifiedSearchBar", "m_clearButton failed to create");
     Q_ASSERT_X(m_completer != nullptr, "UnifiedSearchBar", "m_completer failed to create");
+    if (!m_searchInput || !m_clearButton || !m_completer) {
+        qWarning() << "UnifiedSearchBar: one or more UI components failed to create";
+        return;
+    }
 
     // Initialize match count debounce timer to avoid O(n*m) on every keystroke
     m_matchCountDebounceTimer = new QTimer(this);
-    Q_ASSERT_X(m_matchCountDebounceTimer != nullptr, "UnifiedSearchBar", "Failed to create debounce timer");
     m_matchCountDebounceTimer->setSingleShot(true);
     m_matchCountDebounceTimer->setInterval(MATCH_COUNT_DEBOUNCE_MS);
     connect(m_matchCountDebounceTimer, &QTimer::timeout, this, &UnifiedSearchBar::UpdateMatchCount);
 
     // Connect internal signals
-    Q_ASSERT(m_searchInput != nullptr);
     connect(m_searchInput, &QLineEdit::textChanged, this, &UnifiedSearchBar::OnSearchTextChanged);
     connect(m_searchInput, &QLineEdit::returnPressed, this, &UnifiedSearchBar::OnSearchReturn);
-
-    Q_ASSERT(m_clearButton != nullptr);
     connect(m_clearButton, &QPushButton::clicked, this, &UnifiedSearchBar::OnClearClicked);
 }
 
@@ -73,6 +76,13 @@ void UnifiedSearchBar::CreateLayout()
     auto* mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(8, 4, 8, 4);
     mainLayout->setSpacing(8);
+
+    // Ensure search bar has a stable, visible height. Colors are left to the
+    // application-wide theme (see ThemeManager) rather than hardcoded here —
+    // a widget-level stylesheet would override the global theme for this
+    // widget's subtree and break dark mode.
+    this->setMinimumHeight(40);
+    this->setMaximumHeight(50);
 
     // Search icon + input
     auto* searchIconLabel = new QLabel("🔍");
@@ -383,6 +393,16 @@ void UnifiedSearchBar::OnDetailsClicked()
     qDebug() << "Details button clicked - advanced search dialog (TODO)";
     // For now, just log that the button was clicked
     // This will be expanded to open a proper dialog
+}
+
+QSize UnifiedSearchBar::sizeHint() const
+{
+    return QSize(800, 40);
+}
+
+QSize UnifiedSearchBar::minimumSizeHint() const
+{
+    return QSize(200, 40);
 }
 
 } // namespace ui::qt

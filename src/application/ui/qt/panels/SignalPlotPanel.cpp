@@ -134,7 +134,7 @@ void SignalPlotPanel::RebuildChart()
     std::string tsField;
     for (const auto& candidate : panel_utils::kTsFields)
     {
-        for (size_t i = 0; i < std::min(total, size_t{20}); ++i)
+        for (size_t i = 0; i < (std::min)(total, size_t{20}); ++i)
         {
             if (!m_events.GetItem(i).findByKey(candidate).empty())
             {
@@ -166,9 +166,9 @@ void SignalPlotPanel::RebuildChart()
     const size_t step = (total > static_cast<size_t>(kMaxPoints))
                       ? (total / static_cast<size_t>(kMaxPoints)) : 1u;
 
-    double xMin = std::numeric_limits<double>::max();
+    double xMin = (std::numeric_limits<double>::max)();
     double xMax = std::numeric_limits<double>::lowest();
-    double yMin = std::numeric_limits<double>::max();
+    double yMin = (std::numeric_limits<double>::max)();
     double yMax = std::numeric_limits<double>::lowest();
 
     std::vector<QLineSeries*> seriesList;
@@ -199,10 +199,10 @@ void SignalPlotPanel::RebuildChart()
             if (!ok) continue;
 
             series->append(x, y);
-            xMin = std::min(xMin, x);
-            xMax = std::max(xMax, x);
-            yMin = std::min(yMin, y);
-            yMax = std::max(yMax, y);
+            xMin = (std::min)(xMin, x);
+            xMax = (std::max)(xMax, x);
+            yMin = (std::min)(yMin, y);
+            yMax = (std::max)(yMax, y);
         }
 
         if (series->count() > 0)

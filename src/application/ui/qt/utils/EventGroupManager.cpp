@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "../../../db/EventsContainer.hpp"
+#include "../utils/PanelUtils.hpp"
 
 #include <QRegularExpression>
 #include <algorithm>
@@ -51,7 +52,7 @@ double EventGroupManager::calculateSimilarity(const QString& msg1, const QString
     QString norm1 = NormalizeMessage(msg1);
     QString norm2 = NormalizeMessage(msg2);
 
-    int maxLen = std::max(norm1.length(), norm2.length());
+    int maxLen = (std::max)(norm1.length(), norm2.length());
     if (maxLen == 0)
         return 1.0;
 
@@ -69,7 +70,7 @@ double EventGroupManager::calculateSimilarity(const QString& msg1, const QString
         for (size_t j = 1; j <= norm2.length(); ++j)
         {
             int cost = (norm1[static_cast<int>(i) - 1] == norm2[static_cast<int>(j) - 1]) ? 0 : 1;
-            dp[i][j] = std::min({
+            dp[i][j] = (std::min)({
                 dp[i - 1][j] + 1,
                 dp[i][j - 1] + 1,
                 dp[i - 1][j - 1] + cost
@@ -79,7 +80,7 @@ double EventGroupManager::calculateSimilarity(const QString& msg1, const QString
 
     int distance = dp[norm1.length()][norm2.length()];
     double similarity = 1.0 - (static_cast<double>(distance) / maxLen);
-    return std::max(0.0, similarity);
+    return (std::max)(0.0, similarity);
 }
 
 void EventGroupManager::setSimilarityThreshold(double threshold)
@@ -281,9 +282,40 @@ std::vector<EventGroupManager::EventGroup> EventGroupManager::GroupByTimeBucket(
     for (size_t i = 0; i < events.size(); ++i)
     {
         const auto* event = events[i];
-        // Timestamp would be extracted from event data, using placeholder for now
-        // In production, would parse timestamp field to milliseconds
-        int64_t timestamp = static_cast<int64_t>(i) * 1000;  // Placeholder
+        if (!event)
+            continue;
+
+        // Find the timestamp field (same candidate fields/parser used by the
+        // other timeline/stats panels) and bucket by its epoch milliseconds.
+        // Events with no parseable timestamp fall into a single "Unknown"
+        // bucket rather than being silently mis-bucketed by array position.
+        int64_t timestamp = -1;
+        for (const auto& field : panel_utils::kTsFields)
+        {
+            const std::string val = event->findByKey(field);
+            if (val.empty())
+                continue;
+            const QDateTime dt = panel_utils::ParseTimestamp(QString::fromStdString(val));
+            if (dt.isValid())
+            {
+                timestamp = dt.toMSecsSinceEpoch();
+                break;
+            }
+        }
+
+        if (timestamp < 0)
+        {
+            auto& unknownGroup = groupMap[-1];
+            if (unknownGroup.groupId.isEmpty())
+            {
+                unknownGroup.groupId = QStringLiteral("unknown");
+                unknownGroup.groupName = QStringLiteral("Unknown time");
+                unknownGroup.strategy = GroupStrategy::ByTimeBucket;
+            }
+            unknownGroup.eventIndices.push_back(static_cast<int>(i));
+            continue;
+        }
+
         int64_t bucket = (timestamp / (m_timeBucketMinutes * 60 * 1000)) *
                         (m_timeBucketMinutes * 60 * 1000);
 
@@ -314,10 +346,15 @@ std::vector<EventGroupManager::EventGroup> EventGroupManager::GroupByTimeBucket(
 
 QString EventGroupManager::ExtractPattern(const QString& message) const
 {
-    // Replace numbers with #, IPs with @, UUIDs with $
+    // Replace UUIDs with $, IPs with @, then remaining numbers with #.
+    // Order matters: UUID/IP patterns contain digits, so they must run
+    // before the generic digit pattern or it consumes their digits first
+    // and they can never match.
     QString pattern = message;
-    pattern.replace(QRegularExpression("\\d+"), "#");
+    pattern.replace(QRegularExpression(
+        "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"), "$");
     pattern.replace(QRegularExpression("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"), "@");
+    pattern.replace(QRegularExpression("\\d+"), "#");
     return pattern.left(50);
 }
 

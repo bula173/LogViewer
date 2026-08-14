@@ -176,7 +176,7 @@ void ThemeCustomizationDialog::OnThemeChanged(int index)
 void ThemeCustomizationDialog::OnEditBackground()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.background, this, tr("Background Color"));
     if (color.isValid())
     {
@@ -189,7 +189,7 @@ void ThemeCustomizationDialog::OnEditBackground()
 void ThemeCustomizationDialog::OnEditForeground()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.foreground, this, tr("Foreground Color"));
     if (color.isValid())
     {
@@ -202,7 +202,7 @@ void ThemeCustomizationDialog::OnEditForeground()
 void ThemeCustomizationDialog::OnEditAccent()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.accent, this, tr("Accent Color"));
     if (color.isValid())
     {
@@ -215,7 +215,7 @@ void ThemeCustomizationDialog::OnEditAccent()
 void ThemeCustomizationDialog::OnEditError()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.errorColor, this, tr("Error Color"));
     if (color.isValid())
     {
@@ -227,7 +227,7 @@ void ThemeCustomizationDialog::OnEditError()
 void ThemeCustomizationDialog::OnEditWarning()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.warningColor, this, tr("Warning Color"));
     if (color.isValid())
     {
@@ -239,7 +239,7 @@ void ThemeCustomizationDialog::OnEditWarning()
 void ThemeCustomizationDialog::OnEditSuccess()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
     QColor color = QColorDialog::getColor(scheme.successColor, this, tr("Success Color"));
     if (color.isValid())
     {
@@ -305,7 +305,7 @@ void ThemeCustomizationDialog::OnApply()
 void ThemeCustomizationDialog::UpdateColorPreview()
 {
     auto& themeManager = utils::ThemeManager::getInstance();
-    auto scheme = themeManager.getColorScheme();
+    auto scheme = themeManager.colorScheme();
 
     m_previewLabel->setStyleSheet(QString(
         "background-color: %1; color: %2; padding: 10px; border: 1px solid %3;"

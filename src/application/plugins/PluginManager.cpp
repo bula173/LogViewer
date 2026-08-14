@@ -22,6 +22,8 @@
 #include <string_view>
 #include <cstdio>
 #include <QStandardPaths>
+#include <QCoreApplication>
+#include <QEvent>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -1033,6 +1035,17 @@ util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& 
     util::Logger::Info("PluginManager: Unloading plugin: {}", pluginId);
 
     auto& info = it->second;
+
+    // Notify observers FIRST, while the plugin instance/library are still
+    // mapped. Hosts (e.g. MainWindow) tear down any UI widgets the plugin
+    // created via deleteLater() in response to this event; flushing those
+    // deferred deletions below, before UnloadLibrary() runs, is what
+    // actually prevents a use-after-free into the about-to-be-unmapped
+    // library's code (reordering alone is not enough, since deleteLater()
+    // would otherwise fire on a later event-loop turn after unload).
+    NotifyObservers(PluginEvent::Unloaded, pluginId, info.instance.get());
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+
     // Destroy any plugin-created AI service before shutdown
     if (info.pluginDestroyAIService && info.pluginServiceHandle) {
         using DestroyServiceFn = void(*)(void*);
@@ -1054,9 +1067,6 @@ util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& 
         UnloadLibrary(info.libraryHandle);
         info.libraryHandle = nullptr;
     }
-
-    // Notify observers before unloading
-    NotifyObservers(PluginEvent::Unloaded, pluginId, nullptr);
 
     util::Logger::Info("PluginManager: Plugin unloaded: {}", pluginId);
     return util::Result<bool, error::Error>::Ok(true);

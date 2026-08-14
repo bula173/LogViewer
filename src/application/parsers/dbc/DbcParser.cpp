@@ -106,8 +106,9 @@ bool TryParseMessageHeader(const std::string& line, DbcMessage& msg)
 
 } // namespace
 
-DbcDatabase ParseDbcFile(const std::filesystem::path& path)
+DbcDatabase ParseDbcFile(const std::filesystem::path& path, bool* ok)
 {
+    if (ok) *ok = false;
     DbcDatabase db;
 
     if (path.empty())
@@ -121,6 +122,7 @@ DbcDatabase ParseDbcFile(const std::filesystem::path& path)
         return db;
     }
     util::Logger::Debug("DbcParser: opened '{}'", path.string());
+    if (ok) *ok = true;
 
     DbcMessage* current = nullptr;
     std::string line;

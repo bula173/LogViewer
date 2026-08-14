@@ -204,7 +204,7 @@ void TraceViewerPanel::PopulateFieldCombo()
     m_fieldCombo->clear();
 
     std::set<std::string> fieldNames;
-    const size_t probe = std::min(m_events.Size(), size_t(1000));
+    const size_t probe = (std::min)(m_events.Size(), size_t(1000));
     for (size_t i = 0; i < probe; ++i)
         for (const auto& [k, v] : m_events.GetEvent(i).getEventItems())
             fieldNames.insert(k);

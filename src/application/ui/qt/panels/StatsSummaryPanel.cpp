@@ -262,8 +262,10 @@ void StatsSummaryPanel::RefreshFormatStats(const std::vector<unsigned long>& ind
 
 std::vector<unsigned long> StatsSummaryPanel::VisibleIndices() const
 {
+    // A non-null result means a filter is active — even if it matches zero
+    // events, that must be honored, not treated as "no filter, show all".
     const std::vector<unsigned long>* filtered = m_eventsView->GetFilteredIndices();
-    if (filtered && !filtered->empty())
+    if (filtered)
         return *filtered;
 
     const size_t total = m_events.Size();
@@ -501,7 +503,7 @@ void StatsSummaryPanel::RefreshTypeChart(const std::vector<unsigned long>& indic
     chart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
 
-    const int chartH = std::max(150, nBars * 28 + 60);
+    const int chartH = (std::max)(150, nBars * 28 + 60);
     m_typeChartView->setMinimumHeight(chartH);
     m_typeChartView->setChart(chart);
 }

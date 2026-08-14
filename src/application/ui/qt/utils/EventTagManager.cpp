@@ -120,7 +120,7 @@ void EventTagManager::annotateEvent(int eventId, const std::string& notes)
     m_annotations[eventId].notes = notes;
     m_annotations[eventId].timestamp = std::chrono::system_clock::now().time_since_epoch().count();
 
-    util::Logger::Debug("[EventTagManager] Annotated event {} with {} chars", eventId, notes.length());
+    util::Logger::Debug("[EventTagManager] Annotated event {} with {} chars", eventId, notes.size());
 }
 
 std::vector<int> EventTagManager::getEventsWithTag(const std::string& tagName) const

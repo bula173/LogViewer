@@ -258,7 +258,7 @@ void ScenariosPanel::OnDeleteScenario()
     const size_t      deletedCount = sc->events.size();
     m_scenarios.erase(m_scenarios.begin() + m_activeScenario);
     const int newIdx = m_scenarios.empty() ? -1 :
-        std::min(m_activeScenario, static_cast<int>(m_scenarios.size()) - 1);
+        (std::min)(m_activeScenario, static_cast<int>(m_scenarios.size()) - 1);
     m_activeScenario = -1; // prevent OnScenarioChanged from using stale index
     UpdateScenarioCombo(newIdx);
     SaveToSettings();

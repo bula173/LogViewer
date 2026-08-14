@@ -74,13 +74,13 @@ class NotificationManager : public QObject
     void setGroupDuplicates(bool group);
 
     /// Get notification history
-    const std::vector<Notification>& getNotificationHistory() const { return m_history; }
+    const std::vector<Notification>& notificationHistory() const { return m_history; }
 
     /// Clear notification history
     void clearHistory();
 
     /// Get unread notification count
-    int getUnreadCount() const;
+    int unreadCount() const;
 
     /// Play sound alert (placeholder for audio system integration)
     void playSound(NotificationType type);

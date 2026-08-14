@@ -57,10 +57,10 @@ class ThemeManager
 
     /// Set the active theme
     void setTheme(Theme theme);
-    Theme getTheme() const { return m_currentTheme; }
+    Theme theme() const { return m_currentTheme; }
 
     /// Get current color scheme
-    const ColorScheme& getColorScheme() const { return m_colorScheme; }
+    const ColorScheme& colorScheme() const { return m_colorScheme; }
 
     /// Set custom color scheme
     void setColorScheme(const ColorScheme& scheme);
@@ -70,7 +70,7 @@ class ThemeManager
     void setFont(const QString& componentName, const QFont& font);
 
     /// Get stylesheet for Qt application
-    QString getStylesheet() const;
+    QString stylesheet() const;
 
     /// Save theme to file
     void saveTheme(const QString& name);

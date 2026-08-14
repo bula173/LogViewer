@@ -666,9 +666,21 @@ void ActorsPanel::ApplyCheckedFilter()
 
     if (combined.empty())
     {
-        util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: no actors checked, clearing filter");
-        m_ignoreNextRefresh = true;
-        m_eventsView->ClearFilter();
+        if (m_tree->topLevelItemCount() == 0)
+        {
+            // No actor data at all to filter by — nothing to apply.
+            util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: no actors present, clearing filter");
+            m_ignoreNextRefresh = true;
+            m_eventsView->ClearFilter();
+        }
+        else
+        {
+            // Actors exist but the user unchecked every one of them —
+            // that means "show nothing", not "no filter is active".
+            util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: all actors unchecked, showing zero events");
+            m_ignoreNextRefresh = true;
+            m_eventsView->SetFilteredEvents(combined);
+        }
         return;
     }
 
@@ -693,8 +705,10 @@ void ActorsPanel::ApplyCheckedFilter()
 
 std::vector<unsigned long> ActorsPanel::VisibleIndices() const
 {
+    // A non-null result means a filter is active — even if it matches zero
+    // events, that must be honored, not treated as "no filter, show all".
     const std::vector<unsigned long>* filtered = m_eventsView->GetFilteredIndices();
-    if (filtered && !filtered->empty())
+    if (filtered)
         return *filtered;
 
     const size_t total = m_events.Size();

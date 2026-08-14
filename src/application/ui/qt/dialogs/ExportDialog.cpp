@@ -154,12 +154,12 @@ void ExportDialog::OnFormatChanged(int index)
 
         switch (m_options.format)
         {
-            case CSV: path += ".csv"; break;
-            case JSON: path += ".json"; break;
-            case XML: path += ".xml"; break;
-            case Markdown: path += ".md"; break;
-            case HTML: path += ".html"; break;
-            case TSV: path += ".tsv"; break;
+            case ExportFormat::CSV: path += ".csv"; break;
+            case ExportFormat::JSON: path += ".json"; break;
+            case ExportFormat::XML: path += ".xml"; break;
+            case ExportFormat::Markdown: path += ".md"; break;
+            case ExportFormat::HTML: path += ".html"; break;
+            case ExportFormat::TSV: path += ".tsv"; break;
         }
         m_pathEdit->setText(path);
     }
@@ -170,22 +170,22 @@ void ExportDialog::UpdateFormatDescription()
     QString desc;
     switch (m_options.format)
     {
-        case CSV:
+        case ExportFormat::CSV:
             desc = tr("Standard CSV format, compatible with Excel, Sheets, and databases");
             break;
-        case JSON:
+        case ExportFormat::JSON:
             desc = tr("JSON array of objects - excellent for data analysis and APIs");
             break;
-        case XML:
+        case ExportFormat::XML:
             desc = tr("XML format - good for structured data and interoperability");
             break;
-        case Markdown:
+        case ExportFormat::Markdown:
             desc = tr("Markdown table - perfect for documentation and reports");
             break;
-        case HTML:
+        case ExportFormat::HTML:
             desc = tr("Standalone HTML - ready to view in browser with styling");
             break;
-        case TSV:
+        case ExportFormat::TSV:
             desc = tr("Tab-separated - lightweight alternative to CSV");
             break;
     }
@@ -203,12 +203,12 @@ void ExportDialog::OnBrowse()
     QString defaultName;
     switch (m_options.format)
     {
-        case CSV: defaultName = "export.csv"; break;
-        case JSON: defaultName = "export.json"; break;
-        case XML: defaultName = "export.xml"; break;
-        case Markdown: defaultName = "export.md"; break;
-        case HTML: defaultName = "export.html"; break;
-        case TSV: defaultName = "export.tsv"; break;
+        case ExportFormat::CSV: defaultName = "export.csv"; break;
+        case ExportFormat::JSON: defaultName = "export.json"; break;
+        case ExportFormat::XML: defaultName = "export.xml"; break;
+        case ExportFormat::Markdown: defaultName = "export.md"; break;
+        case ExportFormat::HTML: defaultName = "export.html"; break;
+        case ExportFormat::TSV: defaultName = "export.tsv"; break;
     }
 
     QString fileName = QFileDialog::getSaveFileName(this,
@@ -234,12 +234,12 @@ QString ExportDialog::GeneratePreview()
         return tr("Model not available");
 
     QString preview;
-    int rowCount = std::min(5, model->rowCount());
+    int rowCount = (std::min)(5, model->rowCount());
 
     // CSV preview
-    if (m_options.format == CSV || m_options.format == TSV)
+    if (m_options.format == ExportFormat::CSV || m_options.format == ExportFormat::TSV)
     {
-        char sep = (m_options.format == CSV) ? ',' : '\t';
+        char sep = (m_options.format == ExportFormat::CSV) ? ',' : '\t';
 
         // Headers
         if (m_headersCheckbox->isChecked())
@@ -274,7 +274,7 @@ QString ExportDialog::GeneratePreview()
         }
     }
     // JSON preview
-    else if (m_options.format == JSON)
+    else if (m_options.format == ExportFormat::JSON)
     {
         preview = "[\n";
         for (int row = 0; row < rowCount; ++row)
@@ -294,7 +294,7 @@ QString ExportDialog::GeneratePreview()
         preview += "]";
     }
     // Markdown preview
-    else if (m_options.format == Markdown)
+    else if (m_options.format == ExportFormat::Markdown)
     {
         // Table header
         if (m_headersCheckbox->isChecked())
@@ -322,7 +322,7 @@ QString ExportDialog::GeneratePreview()
         }
     }
     // HTML preview
-    else if (m_options.format == HTML)
+    else if (m_options.format == ExportFormat::HTML)
     {
         preview = "<table border=\"1\" cellpadding=\"4\">\n";
         if (m_headersCheckbox->isChecked())
@@ -347,6 +347,29 @@ QString ExportDialog::GeneratePreview()
 
     return preview;
 }
+
+namespace {
+// Escapes the characters that are special in both XML and HTML text/attribute
+// content. Without this, a field containing '&lt;', '&amp;', or '"' produces
+// malformed markup that downstream tools may fail to parse.
+std::string EscapeMarkup(const std::string& text)
+{
+    std::string out;
+    out.reserve(text.size());
+    for (char c : text)
+    {
+        switch (c)
+        {
+            case '&':  out += "&amp;";  break;
+            case '<':  out += "&lt;";   break;
+            case '>':  out += "&gt;";   break;
+            case '"':  out += "&quot;"; break;
+            default:   out += c;        break;
+        }
+    }
+    return out;
+}
+} // namespace
 
 void ExportDialog::OnExport()
 {
@@ -390,10 +413,10 @@ void ExportDialog::OnExport()
         // Export based on format
         switch (m_options.format)
         {
-            case CSV:
-            case TSV:
+            case ExportFormat::CSV:
+            case ExportFormat::TSV:
             {
-                char sep = (m_options.format == CSV) ? ',' : '\t';
+                char sep = (m_options.format == ExportFormat::CSV) ? ',' : '\t';
                 if (m_headersCheckbox->isChecked())
                 {
                     for (int col = 0; col < model->columnCount(); ++col)
@@ -418,7 +441,7 @@ void ExportDialog::OnExport()
                 break;
             }
 
-            case JSON:
+            case ExportFormat::JSON:
             {
                 file << "[\n";
                 for (size_t i = 0; i < rowsToExport.size(); ++i)
@@ -441,7 +464,7 @@ void ExportDialog::OnExport()
                 break;
             }
 
-            case Markdown:
+            case ExportFormat::Markdown:
             {
                 if (m_headersCheckbox->isChecked())
                 {
@@ -466,7 +489,7 @@ void ExportDialog::OnExport()
                 break;
             }
 
-            case HTML:
+            case ExportFormat::HTML:
             {
                 file << "<!DOCTYPE html>\n<html>\n<body>\n";
                 file << "<table border=\"1\" cellpadding=\"4\">\n";
@@ -475,7 +498,7 @@ void ExportDialog::OnExport()
                 {
                     file << "  <tr>";
                     for (int col = 0; col < model->columnCount(); ++col)
-                        file << "<th>" << model->headerData(col, Qt::Horizontal).toString().toStdString() << "</th>";
+                        file << "<th>" << EscapeMarkup(model->headerData(col, Qt::Horizontal).toString().toStdString()) << "</th>";
                     file << "</tr>\n";
                 }
 
@@ -483,7 +506,7 @@ void ExportDialog::OnExport()
                 {
                     file << "  <tr>";
                     for (int col = 0; col < model->columnCount(); ++col)
-                        file << "<td>" << model->index(row, col).data().toString().toStdString() << "</td>";
+                        file << "<td>" << EscapeMarkup(model->index(row, col).data().toString().toStdString()) << "</td>";
                     file << "</tr>\n";
                 }
 
@@ -491,7 +514,7 @@ void ExportDialog::OnExport()
                 break;
             }
 
-            case XML:
+            case ExportFormat::XML:
             {
                 file << "<?xml version=\"1.0\"?>\n<events>\n";
                 for (int row : rowsToExport)
@@ -501,7 +524,7 @@ void ExportDialog::OnExport()
                     {
                         QString key = model->headerData(col, Qt::Horizontal).toString();
                         QString val = model->index(row, col).data().toString();
-                        file << " " << key.toStdString() << "=\"" << val.toStdString() << "\"";
+                        file << " " << EscapeMarkup(key.toStdString()) << "=\"" << EscapeMarkup(val.toStdString()) << "\"";
                     }
                     file << " />\n";
                 }
@@ -510,7 +533,17 @@ void ExportDialog::OnExport()
             }
         }
 
+        const bool writeOk = !file.fail();
         file.close();
+        if (!writeOk || file.fail())
+        {
+            util::Logger::Error("[ExportDialog] Export failed: write error to {}",
+                m_pathEdit->text().toStdString());
+            QMessageBox::critical(this, tr("Export Failed"),
+                tr("An error occurred while writing to\n%1").arg(m_pathEdit->text()));
+            return;
+        }
+
         util::Logger::Info("[ExportDialog] Successfully exported {} rows", rowsToExport.size());
         QMessageBox::information(this, tr("Export Complete"),
             tr("Successfully exported %1 rows to\n%2")

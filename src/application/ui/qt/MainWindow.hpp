@@ -68,6 +68,10 @@ namespace ui::qt
 
 class StartupSplash;
 class SearchResultsView;
+class MainWindowFileOpsHelper;
+class MainWindowFilterOpsHelper;
+class MainWindowPluginOpsHelper;
+class MainWindowExportOpsHelper;
 class TypeFilterView;
 class ItemDetailsView;
 class EventsTableView;
@@ -138,6 +142,12 @@ class MainWindow : public QMainWindow,
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    // Public UI refresh method (called by file operations helper)
+    void RefreshRecentFilesMenu();
+
+    // Public file loading method (called by file operations helper)
+    void HandleDroppedFile(const QString& path);
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -172,10 +182,9 @@ class MainWindow : public QMainWindow,
     void OnTailError(const QString& message);
 
   private:
+    void keyPressEvent(QKeyEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;
-
-    void HandleDroppedFile(const QString& path);
 
     /// Auto-switch to appropriate view based on file extension
     void AutoSwitchViewForFile(const QString& filePath);
@@ -196,7 +205,6 @@ class MainWindow : public QMainWindow,
     void RunFilter(std::function<std::vector<unsigned long>()> worker,
                    const QString& statusMsg);
     void SetupMenus();
-    void RefreshRecentFilesMenu();
     void RefreshLayoutMenu();
 
     /// Apply a layout: restores dock state (user layouts) and tab visibility.
@@ -228,6 +236,8 @@ class MainWindow : public QMainWindow,
     // into the left filter tabs or the plugin config dock as appropriate.
     void createPluginLeftTab(const std::string& pluginId, plugin::IPlugin* plugin);
     void removePluginLeftTab(const std::string& pluginId);
+    void removePluginBottomTab(const std::string& pluginId);
+    void removePluginRightTab(const std::string& pluginId);
 
     // Helpers to simplify plugin panel embedding
     QWidget* CreateHostContainerForPluginWidget(QWidget* pluginWidget, QTabWidget* parentTabs);
@@ -243,6 +253,8 @@ class MainWindow : public QMainWindow,
     void RemoveLeftPanel();
     void RemoveBottomPanel();
     void RemoveRightPanel();
+    /// Remove all plugin-provided bottom-dock C-ABI panels (used by reloadPlugins()).
+    void RemoveAllPluginBottomPanels();
 
     StartupSplash* m_splash {nullptr}; ///< non-owning; valid only during construction
 
@@ -275,6 +287,13 @@ class MainWindow : public QMainWindow,
     QTabWidget* m_pluginLeftTabs {nullptr};     // Tabs for multiple plugin configs / left-panel fallback
 
     std::unique_ptr<ui::MainWindowPresenter> m_presenter;
+
+    // Architecture helpers for separation of concerns
+    std::unique_ptr<MainWindowFileOpsHelper> m_fileOpsHelper;
+    std::unique_ptr<MainWindowFilterOpsHelper> m_filterOpsHelper;
+    std::unique_ptr<MainWindowPluginOpsHelper> m_pluginOpsHelper;
+    std::unique_ptr<MainWindowExportOpsHelper> m_exportOpsHelper;
+
     TypeFilterView* m_typeFilterView {nullptr};
     ItemDetailsView* m_itemDetailsView {nullptr};
     QWidget* m_mainPanelWidget {nullptr};
@@ -285,15 +304,11 @@ class MainWindow : public QMainWindow,
     QString m_currentDbcFilePath;          ///< Optional DBC for CAN signal decoding
     QString m_evlogTemplateDir;            ///< Optional template dir for evlog BINARY payloads
 
-    // Recent files
-    std::vector<QString> m_recentFiles;
+    // Recent files menu (state owned by m_fileOpsHelper)
     QMenu* m_recentFilesMenu {nullptr};
-    static const int MAX_RECENT_FILES = 10;
-    
+
     // Active plugin tracking
-    std::string m_activePluginId;
     std::shared_ptr<services::IService> m_currentService;
-    QWidget* m_bottomPluginPanel {nullptr};
     QTabWidget* m_rightTabs {nullptr};
     DashboardPanel*         m_dashboardPanel{nullptr};
     StatsSummaryPanel*      m_statsPanel    {nullptr};
@@ -321,20 +336,29 @@ class MainWindow : public QMainWindow,
     updates::UpdateCheckResult m_lastUpdateResult;
     
     bool m_filteringInProgress {false};
+    bool m_searchInProgress {false};
 
     // Lazy analysis-panel refresh — panels only recompute when visible
     QTimer*             m_panelRefreshTimer  {nullptr};
     std::set<QWidget*>  m_dirtyPanels;
-    // Debounced in-panel search — avoids O(n×m) rebuild on every keystroke
+    // Debounced in-panel search (old inline SearchBar) — avoids O(n×m) rebuild on every keystroke
     QTimer*             m_searchDebounceTimer {nullptr};
     QString             m_pendingSearchTerm;
     bool                m_pendingSearchCase  {false};
+    // Debounced Tools-panel search (UnifiedSearchBar) — triggers OnSearchRequested()
+    QTimer*             m_unifiedSearchDebounceTimer {nullptr};
 
     // Plugin management
-    std::map<std::string, int> m_pluginTabIndices;        // Maps plugin ID to content tab index
-    std::map<std::string, int> m_pluginFilterTabIndices;  // Maps plugin ID to filter tab index
-    std::map<std::string, int> m_pluginLeftTabIndices;    // Maps plugin ID to left/config tab index
-    std::map<std::string, int> m_pluginRightTabIndices;   // Maps plugin ID to right dock tab index
+    // Widgets (not indices) are stored so tabs remain trackable after the user
+    // drags/reorders them — the live index is resolved via indexOf() on demand.
+    std::map<std::string, QWidget*> m_pluginTabIndices;        // Maps plugin ID to content tab widget
+    std::map<std::string, int> m_pluginFilterTabIndices;       // Maps plugin ID to filter tab index (unused)
+    std::map<std::string, QWidget*> m_pluginLeftTabIndices;    // Maps plugin ID to left/config tab widget
+    std::map<std::string, QWidget*> m_pluginRightTabIndices;   // Maps plugin ID to right dock tab widget
+    std::map<std::string, QWidget*> m_pluginBottomTabIndices;  // Maps plugin ID to bottom dock tab widget
+
+    /// Show a right-click context menu on a tab bar with sort/reorder actions.
+    void ShowTabContextMenu(QTabWidget* tabWidget, const QPoint& pos);
 };
 
 } // namespace ui::qt

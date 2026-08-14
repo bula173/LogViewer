@@ -48,19 +48,19 @@ class ExportDialog : public QDialog
     void OnExport();
 
   private:
-    enum ExportFormat
+    enum class ExportFormat
     {
         CSV,
         JSON,
         XML,
         Markdown,
         HTML,
-        TSV
+        TSV,
     };
 
     struct ExportOptions
     {
-        ExportFormat format {CSV};
+        ExportFormat format {ExportFormat::CSV};
         bool includeHeaders {true};
         bool selectedRowsOnly {false};
         bool includeStatistics {false};
