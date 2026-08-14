@@ -146,11 +146,7 @@ TEST_F(LargeFileHandlingTest, MergeContainersPerformance)
 
     // Merge
     auto start = std::chrono::high_resolution_clock::now();
-    std::vector<unsigned long> indices2;
-    for (unsigned long i = 0; i < container2.Size(); ++i) {
-        indices2.push_back(i);
-    }
-    container1.MergeEvents(container2, indices2, "File2");
+    container1.MergeEvents(container2, "File1", "File2");
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 

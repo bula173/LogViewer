@@ -40,6 +40,7 @@ bool SearchEngine::compileSimple(const std::string&)
 {
     m_compiledRegex.reset();
     m_advancedQuery.reset();
+    m_normalizedPatternValid = false;  // invalidate cached lowercase pattern
     return true;  // Simple patterns always compile
 }
 
@@ -65,27 +66,35 @@ bool SearchEngine::compileAdvanced(const std::string& pattern, std::string& outE
     m_compiledRegex.reset();
     AdvancedQuery query;
 
+    // Tokenize first so each term's group can be decided by looking at the
+    // operators on both sides — "OR" is infix ("A OR B" puts *both* A and B
+    // in the OR group), while "NOT" is prefix ("NOT A" excludes A only).
+    std::vector<std::string> tokens;
     std::istringstream stream(pattern);
     std::string token;
-    std::string currentOp = "AND";  // default operator
+    while (stream >> token)
+        tokens.push_back(token);
 
-    while (stream >> token) {
-        if (token == "AND" || token == "and") {
-            currentOp = "AND";
-        } else if (token == "OR" || token == "or") {
-            currentOp = "OR";
-        } else if (token == "NOT" || token == "not") {
-            currentOp = "NOT";
+    auto isOr  = [](const std::string& t) { return t == "OR"  || t == "or"; };
+    auto isNot = [](const std::string& t) { return t == "NOT" || t == "not"; };
+    auto isOp  = [&](const std::string& t) {
+        return isOr(t) || isNot(t) || t == "AND" || t == "and";
+    };
+
+    for (size_t i = 0; i < tokens.size(); ++i) {
+        if (isOp(tokens[i]))
+            continue;
+
+        const bool notBefore = i > 0 && isNot(tokens[i - 1]);
+        const bool orBefore  = i > 0 && isOr(tokens[i - 1]);
+        const bool orAfter   = i + 1 < tokens.size() && isOr(tokens[i + 1]);
+
+        if (notBefore) {
+            query.notTerms.push_back(tokens[i]);
+        } else if (orBefore || orAfter) {
+            query.orTerms.push_back(tokens[i]);
         } else {
-            // Regular term
-            if (currentOp == "NOT") {
-                query.notTerms.push_back(token);
-            } else if (currentOp == "OR") {
-                query.orTerms.push_back(token);
-            } else {
-                query.andTerms.push_back(token);
-            }
-            currentOp = "AND";  // reset to default
+            query.andTerms.push_back(tokens[i]);
         }
     }
 

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <set>
 
 namespace ui::qt::utils {
 

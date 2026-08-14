@@ -39,7 +39,6 @@ TEST_F(FilterWorkflowTest, CreateAndApplyTextFilter)
     filter.name = "ModuleA Filter";
     filter.columnName = "source";
     filter.pattern = "Module-A";
-    filter.type = filters::FilterType::Text;
     filter.isEnabled = true;
 
     // Apply filter to all event indices
@@ -60,14 +59,12 @@ TEST_F(FilterWorkflowTest, MultipleFiltersWithANDLogic)
     errorFilter.name = "Error Filter";
     errorFilter.columnName = "level";
     errorFilter.pattern = "ERROR";
-    errorFilter.type = filters::FilterType::Text;
     errorFilter.isEnabled = true;
 
     filters::Filter moduleFilter;
     moduleFilter.name = "Module Filter";
     moduleFilter.columnName = "source";
     moduleFilter.pattern = "Module-A";
-    moduleFilter.type = filters::FilterType::Text;
     moduleFilter.isEnabled = true;
 
     // Both filters should be applied (AND logic)
@@ -84,9 +81,10 @@ TEST_F(FilterWorkflowTest, ToggleFilterEnabled)
     filter.name = "Test Filter";
     filter.columnName = "level";
     filter.pattern = "INFO";
-    filter.type = filters::FilterType::Text;
 
-    EXPECT_FALSE(filter.isEnabled);
+    // Filters are enabled by default (Filter::isEnabled's default member
+    // initializer is true) — verify toggling in both directions.
+    EXPECT_TRUE(filter.isEnabled);
     filter.isEnabled = true;
     EXPECT_TRUE(filter.isEnabled);
     filter.isEnabled = false;
@@ -102,7 +100,6 @@ TEST_F(FilterWorkflowTest, InvertFilterLogic)
     filter.name = "Not ERROR";
     filter.columnName = "level";
     filter.pattern = "ERROR";
-    filter.type = filters::FilterType::Text;
     filter.isInverted = true;
     filter.isEnabled = true;
 
@@ -118,7 +115,6 @@ TEST_F(FilterWorkflowTest, WildcardFilterSearchesAllFields)
     filter.name = "Wildcard Filter";
     filter.columnName = "*";  // Wildcard - all fields
     filter.pattern = "100";
-    filter.type = filters::FilterType::Text;
     filter.isEnabled = true;
 
     EXPECT_EQ(filter.columnName, "*");
@@ -134,7 +130,6 @@ TEST_F(FilterWorkflowTest, FilterSerialization)
     filter.name = "Test Filter";
     filter.columnName = "level";
     filter.pattern = "ERROR";
-    filter.type = filters::FilterType::Text;
     filter.isEnabled = true;
     filter.isInverted = false;
 
@@ -160,12 +155,10 @@ TEST_F(FilterWorkflowTest, RegexFilterPatternValidation)
     regexFilter.name = "Regex Filter";
     regexFilter.columnName = "message";
     regexFilter.pattern = "Event [0-9]+";
-    regexFilter.type = filters::FilterType::Regex;
     regexFilter.isEnabled = true;
 
     // Ensure pattern compiles
-    std::string error;
-    EXPECT_TRUE(regexFilter.compileRegexPattern(regexFilter.pattern, error));
+    EXPECT_TRUE(filters::RegexFilterStrategy{}.isValidPattern(regexFilter.pattern));
 }
 
 /**
@@ -177,11 +170,8 @@ TEST_F(FilterWorkflowTest, InvalidRegexPatternFails)
     regexFilter.name = "Bad Regex";
     regexFilter.columnName = "message";
     regexFilter.pattern = "[invalid";  // Invalid regex
-    regexFilter.type = filters::FilterType::Regex;
 
-    std::string error;
-    EXPECT_FALSE(regexFilter.compileRegexPattern(regexFilter.pattern, error));
-    EXPECT_FALSE(error.empty());
+    EXPECT_FALSE(filters::RegexFilterStrategy{}.isValidPattern(regexFilter.pattern));
 }
 
 /**
@@ -189,18 +179,21 @@ TEST_F(FilterWorkflowTest, InvalidRegexPatternFails)
  */
 TEST_F(FilterWorkflowTest, FilterManagerAddRemove)
 {
-    filters::FilterManager manager;
+    // FilterManager is a singleton (private constructor) — use a unique
+    // name so this doesn't collide with filters left by other tests.
+    auto& manager = filters::FilterManager::getInstance();
+    const size_t countBefore = manager.getFilters().size();
 
     auto filter = std::make_shared<filters::Filter>();
-    filter->name = "Test";
+    filter->name = "FWT_FilterManagerAddRemove";
     filter->columnName = "level";
     filter->pattern = "ERROR";
 
     manager.addFilter(filter);
-    EXPECT_EQ(manager.getFilters().size(), 1);
+    EXPECT_EQ(manager.getFilters().size(), countBefore + 1);
 
-    manager.removeFilter("Test");
-    EXPECT_EQ(manager.getFilters().size(), 0);
+    manager.removeFilter("FWT_FilterManagerAddRemove");
+    EXPECT_EQ(manager.getFilters().size(), countBefore);
 }
 
 /**

@@ -124,8 +124,9 @@ TEST_F(SearchEngineFunctionalTest, RegexSearchWithCharacterClass)
 
     // Match 1-3 digit numbers
     EXPECT_TRUE(m_engine.CompilePattern("\\b\\d{1,3}\\b", error)) << "Error: " << error;
-    EXPECT_TRUE(m_engine.Matches(debugLog));  // Has "192", "168", etc.
-    EXPECT_TRUE(m_engine.Matches(errorLog));  // Has "30"
+    EXPECT_TRUE(m_engine.Matches(debugLog));   // Has "192", "168", etc.
+    EXPECT_FALSE(m_engine.Matches(errorLog));  // "30s" has no trailing \b —
+                                                // digit and letter are both \w
 }
 
 /**
