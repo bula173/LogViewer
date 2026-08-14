@@ -77,9 +77,40 @@ jobs:
 
       - name: Configure
         run: |
+          # Find Qt6 installation (same detection as cmake-linux.yml — apt's
+          # Qt6 layout varies enough across Ubuntu images that a single
+          # hardcoded path isn't reliable)
+          QT6_CONFIG=$(find /usr/lib -name "Qt6Config.cmake" -o -name "qt6-config.cmake" 2>/dev/null | head -1)
+          if [ -n "$QT6_CONFIG" ]; then
+            QT6_PATH=$(dirname "$QT6_CONFIG")
+          else
+            QT6_LIBDIR=$(pkg-config --variable libdir Qt6Core 2>/dev/null)
+            if [ -n "$QT6_LIBDIR" ]; then
+              QT6_PATH="${QT6_LIBDIR%/*}/cmake/Qt6"
+            fi
+          fi
+
+          if [ -z "$QT6_PATH" ] || [ ! -f "$QT6_PATH/Qt6Config.cmake" ]; then
+            for path in /usr/lib/x86_64-linux-gnu/cmake/Qt6 /usr/lib/cmake/Qt6 /usr/local/lib/cmake/Qt6; do
+              if [ -f "$path/Qt6Config.cmake" ]; then
+                QT6_PATH="$path"
+                break
+              fi
+            done
+          fi
+
+          if [ -n "$QT6_PATH" ] && [ -f "$QT6_PATH/Qt6Config.cmake" ]; then
+            echo "Found Qt6 at: $QT6_PATH"
+            CMAKE_PREFIX_PATH="$QT6_PATH:$CMAKE_PREFIX_PATH"
+          else
+            echo "Warning: Qt6 not found in standard locations, CMake will search default paths"
+          fi
+
           cmake -B build -S . \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DSKIP_EXAMPLES=ON \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
 
       # CodeQL requires an actual build to trace compilation
@@ -195,6 +226,7 @@ jobs:
             -DCMAKE_C_COMPILER="$(cygpath -m /mingw64/bin/clang.exe)" \
             -DCMAKE_CXX_COMPILER="$(cygpath -m /mingw64/bin/clang++.exe)" \
             -DCMAKE_PREFIX_PATH=/mingw64 \
+            -DSKIP_EXAMPLES=ON \
             -DCMAKE_MESSAGE_LOG_LEVEL=WARNING
           cmake --build build --parallel
 
