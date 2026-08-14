@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['with_20cppcheck_0',['Static Analysis with Cppcheck',['../d5/d22/md_docs_2CPPCHECK.html',1,'']]],
-  ['workflow_20diagrams_1',['LogViewer Architecture and Workflow Diagrams',['../d0/d52/md_docs_2DIAGRAMS.html',1,'']]]
+  ['test_20suite_20summary_0',['v1.11.0 Comprehensive Test Suite Summary',['../d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html',1,'']]],
+  ['type_20filter_20field_20—_20auto_20detection_20and_20override_1',['Type Filter Field — Auto-Detection and Override',['../d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html',1,'']]]
 ];

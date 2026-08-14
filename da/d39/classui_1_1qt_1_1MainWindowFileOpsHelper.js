@@ -1,0 +1,27 @@
+var classui_1_1qt_1_1MainWindowFileOpsHelper =
+[
+    [ "MainWindowFileOpsHelper", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a0eaea8e21aba4e660c7106015503a61d", null ],
+    [ "~MainWindowFileOpsHelper", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a2265ed55bd30176985ad14a8c210f331", null ],
+    [ "AddToRecentFiles", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a9396ae9e9537e3bfa6a7562c9e61a610", null ],
+    [ "AutoSwitchViewForFile", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#aa1d65da1ea607afca971490a3c23037d", null ],
+    [ "GetLastDirectory", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a0d21c3033479c4c8ae61feb98d609e04", null ],
+    [ "GetRecentFiles", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a4d03107c5faff0d54aa714e25a088fb7", null ],
+    [ "GetSessionFilePath", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a29f24f99011b27a94d7629c3f994ee50", null ],
+    [ "HandleDroppedFile", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a77369e9c4e9c356cab670627f65f2f7b", null ],
+    [ "LoadFileInternal", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#ad0ae406de153a9a8b660ce5797b516f3", null ],
+    [ "LoadRecentFiles", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a34c2dec5615e4df4059fe5bb0bfaad1c", null ],
+    [ "OnLoadDbcRequested", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a876a34c638cdf11a853040c023cf7fd5", null ],
+    [ "OnLoadEvlogTemplatesRequested", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a15e539ed6d967707147940fd734b5f7a", null ],
+    [ "OnOpenFileRequested", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#ac4e3fd59d03a80eb93991e1416216901", null ],
+    [ "OnOpenSession", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a36869a3dae7110cff1311ac26f6c7d96", null ],
+    [ "OnRecentFileTriggered", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#aaf6beb6f1f3f8e46e656f2bb6e772c2c", null ],
+    [ "OnSaveSession", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#ab736f27aa58e7f46beb73a55ddae19ba", null ],
+    [ "RefreshRecentFilesMenu", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#ae502e3a2b5ead505cd7ae03cb1bd7561", null ],
+    [ "SaveRecentFiles", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a512739e9d4fdb2b2dec003fef00dba56", null ],
+    [ "SetLastDirectory", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a9d6899f15964694f40a16dd92fd71fc1", null ],
+    [ "ValidateSessionFile", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a9c62a035a27c48e9b878f4a9f3ccaecd", null ],
+    [ "m_lastDirectory", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#ac44c5e9cb8e044cca7a17be71b63516a", null ],
+    [ "m_mainWindow", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a5f0488b39da18afbcce7b9a86e1995d2", null ],
+    [ "m_recentFiles", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a40c665b601c1de2fc41fea610cfeecd9", null ],
+    [ "MAX_RECENT_FILES", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a22d5853d55b525c8ad366a11e1e701c3", null ]
+];

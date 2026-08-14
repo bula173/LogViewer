@@ -99,16 +99,18 @@ Executive Summary</h1>
 <p>LogViewer's architecture is well-structured with clean separation of concerns, but the <b>plugin system</b> and <b>MVC observer pattern</b> can be significantly improved using modern C++20 features. This document proposes targeted improvements that maintain backward compatibility while enhancing safety, type-safety, and maintainability.</p>
 <p><b>Key Findings:</b></p><ul>
 <li>✅ Clean layered architecture (Presentation, Business Logic, Data)</li>
-<li>⚠️ Plugin system uses unsafe void* function pointers</li>
-<li>⚠️ MVC observer pattern uses raw pointers without lifetime management</li>
-<li>⚠️ No plugin dependency resolution or safe initialization order</li>
+<li>⚠️ Plugin system uses unsafe void* function pointers — a type-safe <code>PluginFunctionRegistry</code> was built and unit-tested (see <code>tests/ArchitectureImprovementsTests.cpp</code>) but is <b>not yet wired into <code>PluginManager</code></b></li>
+<li>✅ <b>Resolved:</b> MVC observer pattern now uses <code>std::weak_ptr</code> (<code>IModelObservable</code>, integrated into <code>EventsContainer</code>) — see Issue 2.1 below</li>
+<li>⚠️ No plugin dependency resolution or safe initialization order — a <code>PluginDependencyGraph</code> was built and unit-tested but is <b>not yet wired into <code>PluginManager</code></b></li>
 <li>✅ Thread-safe data layer with shared_mutex</li>
 </ul>
+<p><b>Status note (2026-08-14):</b> The safe replacement types proposed in Parts 1 and 3 below (<code>PluginFunctionRegistry</code>, <code>PluginDependencyGraph</code>, <code>PluginEventBus</code>) exist under <code>src/application/plugins/</code> and have test coverage, but <code>PluginManager</code> does not yet use them — they're built but not integrated. Part 2 (MVC observer pattern) is fully resolved and integrated. See status markers on each issue below.</p>
 <hr  />
 <h1><a class="anchor" id="autotoc_md169"></a>
 Part 1: Plugin System Issues</h1>
 <h2><a class="anchor" id="autotoc_md170"></a>
 Issue 1.1: Type-Unsafe Function Pointer Management</h2>
+<p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../d3/d9a/PluginFunctionRegistry_8hpp.html" title="Type-safe registry for dynamically loaded plugin functions.">PluginFunctionRegistry.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
 <p><b>Current Approach</b> (<code>PluginLoadInfo</code> struct): </p><div class="fragment"><div class="line"><span class="keyword">struct </span>PluginLoadInfo {</div>
 <div class="line">    <span class="keywordtype">void</span>* pluginCreateLeftPanel = <span class="keyword">nullptr</span>;</div>
 <div class="line">    <span class="keywordtype">void</span>* pluginCreateRightPanel = <span class="keyword">nullptr</span>;</div>
@@ -172,6 +174,7 @@ Issue 1.1: Type-Unsafe Function Pointer Management</h2>
 </ul>
 <h2><a class="anchor" id="autotoc_md171"></a>
 Issue 1.2: Duplicate Panel Creation Functions</h2>
+<p><b>Status:</b> ⚠️ Open — <code>PluginManager</code> still probes the four panel-type symbols individually.</p>
 <p><b>Current Approach:</b> </p><div class="fragment"><div class="line">info.pluginCreateLeftPanel = probe_sym(<span class="stringliteral">&quot;Plugin_CreateLeftPanel&quot;</span>);</div>
 <div class="line">info.pluginCreateRightPanel = probe_sym(<span class="stringliteral">&quot;Plugin_CreateRightPanel&quot;</span>);</div>
 <div class="line">info.pluginCreateBottomPanel = probe_sym(<span class="stringliteral">&quot;Plugin_CreateBottomPanel&quot;</span>);</div>
@@ -211,8 +214,9 @@ Issue 1.2: Duplicate Panel Creation Functions</h2>
 </ul>
 <h2><a class="anchor" id="autotoc_md172"></a>
 Issue 1.3: Mixed C++ and C-ABI Abstractions</h2>
+<p><b>Status:</b> ✅ Resolved — but via the opposite of the solution proposed below. Rather than consolidating around <code>IPlugin</code>, the codebase removed <code>IPlugin</code> entirely and standardized on C-ABI exports only (see <code><a class="el" href="../../df/d71/PLUGIN__SYSTEM_8md.html">docs/PLUGIN_SYSTEM.md</a></code>). The proposed code sample under "Solution" is historical only.</p>
 <p><b>Current State:</b></p><ul>
-<li><a class="el" href="../../d8/da3/IPlugin_8hpp.html" title="Generic plugin interface for LogViewer extensions.">IPlugin.hpp</a>: C++ virtual interfaces</li>
+<li>IPlugin.hpp: C++ virtual interfaces</li>
 <li><a class="el" href="../../da/dc5/PluginManager_8cpp.html" title="Implementation of plugin management system.">PluginManager.cpp</a>: C-ABI function pointer calls</li>
 <li>Two different extension mechanisms</li>
 </ul>
@@ -259,6 +263,7 @@ Issue 1.3: Mixed C++ and C-ABI Abstractions</h2>
 Part 2: MVC Observer Pattern Issues</h1>
 <h2><a class="anchor" id="autotoc_md175"></a>
 Issue 2.1: Raw Pointer Observer Pattern</h2>
+<p><b>Status:</b> ✅ Resolved and integrated — <code>IModelObservable</code> (weak_ptr-based) is implemented in <code><a class="el" href="../../d9/dfd/IModelObservable_8hpp.html" title="Modern C++20 observer pattern with automatic lifetime management.">src/application/mvc/IModelObservable.hpp</a></code> and used by <code>EventsContainer</code>.</p>
 <p><b>Current Code</b> (<code><a class="el" href="../../d1/d03/IModel_8hpp.html">IModel.hpp</a></code>): </p><div class="fragment"><div class="line"><span class="keyword">class </span>IModel {</div>
 <div class="line">  <span class="keyword">protected</span>:</div>
 <div class="line">    std::vector&lt;IView*&gt; m_views;  <span class="comment">// Raw pointers - dangling risk!</span></div>
@@ -349,6 +354,7 @@ Issue 2.1: Raw Pointer Observer Pattern</h2>
 </ul>
 <h2><a class="anchor" id="autotoc_md176"></a>
 Issue 2.2: No Observer Lifecycle Events</h2>
+<p><b>Status:</b> ✅ Resolved and integrated — <code>IView::OnAttachedToModel()</code> / <code>OnDetachedFromModel()</code> are implemented in <code><a class="el" href="../../d2/d7e/IView_8hpp.html" title="Interface for view components in the MVC architecture.">src/application/mvc/IView.hpp</a></code>.</p>
 <p><b>Current Problem:</b> Views can't react to being attached/detached from model</p>
 <p><b>Solution: Lifecycle Hooks</b></p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>IView {</div>
@@ -394,6 +400,7 @@ Issue 2.2: No Observer Lifecycle Events</h2>
 Part 3: Plugin Dependency Management</h1>
 <h2><a class="anchor" id="autotoc_md179"></a>
 Issue 3.1: No Dependency Resolution</h2>
+<p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../de/d40/PluginDependencyGraph_8hpp.html" title="Plugin dependency validation and topological sorting.">PluginDependencyGraph.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
 <p><b>Problem:</b></p><ul>
 <li>Plugins loaded in arbitrary order</li>
 <li>Circular dependencies not detected</li>
@@ -466,7 +473,7 @@ Issue 3.1: No Dependency Resolution</h2>
 <div class="line">} <span class="keywordflow">else</span> {</div>
 <div class="line">    <a class="code hl_function" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a>(<span class="stringliteral">&quot;Circular dependency detected&quot;</span>);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassutil_1_1Logger_html_ae7bdc34da771cb8878c176743e68ed17"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a></div><div class="ttdeci">static void Error(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:296</div></div>
+<div class="ttc" id="aclassutil_1_1Logger_html_ae7bdc34da771cb8878c176743e68ed17"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a></div><div class="ttdeci">static void Error(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:303</div></div>
 </div><!-- fragment --><p><b>Benefits:</b></p><ul>
 <li>✅ Prevents circular dependency issues</li>
 <li>✅ Guarantees safe initialization order</li>
@@ -476,6 +483,7 @@ Issue 3.1: No Dependency Resolution</h2>
 <hr  />
 <h1><a class="anchor" id="autotoc_md181"></a>
 Part 4: Plugin Event System</h1>
+<p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../d2/da4/PluginEventBus_8hpp.html" title="Enhanced plugin event system with fine-grained lifecycle notifications.">PluginEventBus.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
 <h2><a class="anchor" id="autotoc_md182"></a>
 Enhancement: Fine-Grained Events</h2>
 <p><b>Current:</b> </p><div class="fragment"><div class="line"><span class="keyword">enum class</span> PluginEvent {</div>

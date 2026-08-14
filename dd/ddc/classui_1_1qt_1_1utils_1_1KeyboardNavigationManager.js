@@ -2,7 +2,6 @@ var classui_1_1qt_1_1utils_1_1KeyboardNavigationManager =
 [
     [ "KeyboardNavigationManager", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#aff86ee103aff0ba2a3e986a55a1523bd", null ],
     [ "areVimKeybindingsEnabled", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#af3d6b53c4a91e52a00c798a448221f88", null ],
-    [ "getShortcuts", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#ad66da4c0b9a336b28a4ac835c470620e", null ],
     [ "handleKeyPress", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a2c01545f192ec78714c2aa311b924d6d", null ],
     [ "handleStandardBindings", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#ac359189fb1c26cc3dac560c811c41e97", null ],
     [ "handleVimBindings", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#af2b00652ebb79348f19ed5214dfd0b39", null ],
@@ -18,6 +17,7 @@ var classui_1_1qt_1_1utils_1_1KeyboardNavigationManager =
     [ "registerShortcut", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a044c91022f665af4e00365a6862fb5a3", null ],
     [ "setupDefaultShortcuts", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a7131f41cfe47d5727681d40798c2e690", null ],
     [ "setVimKeybindingsEnabled", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a7147d596600267d670fc5e51bb765107", null ],
+    [ "shortcuts", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a7b3ff2f74c1a04d8301c5fd51e880c1c", null ],
     [ "m_mainWindow", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a0553b34457af6babfd57ad3204bb0427", null ],
     [ "m_shortcutDescriptions", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a5c92fa012eb3f723e3f166e065e5452e", null ],
     [ "m_shortcuts", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a1a6fae596772dc04b25374e58c046751", null ],

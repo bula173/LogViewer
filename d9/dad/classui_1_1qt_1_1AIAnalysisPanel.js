@@ -1,0 +1,27 @@
+var classui_1_1qt_1_1AIAnalysisPanel =
+[
+    [ "AIAnalysisPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#aa7f47d88f7b27d48951ccd0175ca9ac2", null ],
+    [ "AnalysisCompleted", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a47b20af8e5a6e8dc79f92ed6c7a398b3", null ],
+    [ "AnalysisStarted", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#aef98d72adb076c944c58ffc6ddc3b18b", null ],
+    [ "BuildUi", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a714aecd1daa330f8f0fd0563d925278f", null ],
+    [ "LoadPredefinedPrompts", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#af858a183c0ef4d243cc386eebf9641ca", null ],
+    [ "LoadPromptFromFile", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#ad22f5a1272e9d7d5f47884d0a186e511", null ],
+    [ "OnAnalyzeClicked", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a0c88b93d821a53ceb6a5ea03bf958553", null ],
+    [ "OnLoadPromptFile", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#aa8f6bb29f7d9c33ef48607aa0019ae51", null ],
+    [ "OnPredefinedPromptSelected", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#aa9d4a42eb3cc6aa87079284c41b6bb85", null ],
+    [ "OnSavePromptFile", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#afa541684b536cad67e71a0fb925ac3b3", null ],
+    [ "OnSetupClicked", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a9be14bf1c9b9537b071a57ba0227bf8d", null ],
+    [ "SetConfigPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a525a1bfea0acb500603babb6ee699cf9", null ],
+    [ "m_aiService", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a4a120bb8832a0c389b2437ca236a7d69", null ],
+    [ "m_analyzeButton", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a6d9dd6635d7748da7e1faebe370904bb", null ],
+    [ "m_analyzer", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a76c243256fb0dd09dd847a27ca41f425", null ],
+    [ "m_configPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a8c025256ac6cfec702ffbe9cad2892d8", null ],
+    [ "m_customPromptEdit", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a637c1023b4b4685dcdec131f7ed27220", null ],
+    [ "m_eventsView", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#aba74fda06fabe396d15f9a141b48d81b", null ],
+    [ "m_loadPromptButton", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a63d0086292b3f66eb18cae9af9a70f33", null ],
+    [ "m_predefinedPromptCombo", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a3626985191ac5908f64c0875792652aa", null ],
+    [ "m_predefinedPrompts", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#af1dce1ebb7a9dd8ceaaef06dc8d27ac0", null ],
+    [ "m_resultsText", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a5883781b5742f5d2a5b5d0208d06d412", null ],
+    [ "m_savePromptButton", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#a00c97ac7f5df7a20aa9b58718f8da377", null ],
+    [ "m_useCustomPromptCheckbox", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html#ac04bda369c9a8e209dd031b923b762fa", null ]
+];

@@ -1,0 +1,27 @@
+var classai_1_1LLMClient =
+[
+    [ "LLMClient", "d7/d7b/classai_1_1LLMClient.html#a2d16ddf9a0e0a08fd077679a363c2134", null ],
+    [ "~LLMClient", "d7/d7b/classai_1_1LLMClient.html#a8e24253d15f785dc695b98f00bee5b87", null ],
+    [ "BuildRequestBody", "d7/d7b/classai_1_1LLMClient.html#a2f962bdda7c0441cd86bb2b8f5bc1da0", null ],
+    [ "GetBaseUrl", "d7/d7b/classai_1_1LLMClient.html#a16d23d2d2a61357eea9b0affbc1ebc16", null ],
+    [ "GetDefaultBaseUrl", "d7/d7b/classai_1_1LLMClient.html#a3ad80418dce203353cfd225be8904802", null ],
+    [ "GetInstalledModels", "d7/d7b/classai_1_1LLMClient.html#a3de25a9a2ea421e32e192404f242d7de", null ],
+    [ "GetModelName", "d7/d7b/classai_1_1LLMClient.html#ad7f73e9fba9f88155832da6e668bd11c", null ],
+    [ "GetProvider", "d7/d7b/classai_1_1LLMClient.html#ae6268dfe3cd2167d2a4fc3e7f02fd283", null ],
+    [ "GetProviderName", "d7/d7b/classai_1_1LLMClient.html#a4067ae07b348d4ed4db7b4fa5b359d9c", null ],
+    [ "GetServiceId", "d7/d7b/classai_1_1LLMClient.html#a7fea4a0b722f2e6ca0d79914f296c694", null ],
+    [ "GetServiceType", "d7/d7b/classai_1_1LLMClient.html#a007149a0e2c77623956ffb959f2050ba", null ],
+    [ "IsAvailable", "d7/d7b/classai_1_1LLMClient.html#af2ae6f55ba8af8047672a41cfe5b5ba7", null ],
+    [ "ParseResponse", "d7/d7b/classai_1_1LLMClient.html#a5291c07a766ca48338960bae8caf7581", null ],
+    [ "SendHttpGet", "d7/d7b/classai_1_1LLMClient.html#a991b1b1afdbed584105bc10786524f3c", null ],
+    [ "SendHttpPost", "d7/d7b/classai_1_1LLMClient.html#ac0e4c8c227d26e591c3d0cb25cec6666", null ],
+    [ "SendPrompt", "d7/d7b/classai_1_1LLMClient.html#a8a604c5e85d78bcd1157b4d58a159d6e", null ],
+    [ "SetApiKey", "d7/d7b/classai_1_1LLMClient.html#afbc8a84233e4bea332827921302f9a32", null ],
+    [ "SetBaseUrl", "d7/d7b/classai_1_1LLMClient.html#aee279b97e974a06d1ff7ec26fdeb15f4", null ],
+    [ "SetModelName", "d7/d7b/classai_1_1LLMClient.html#a0f7252b7d9429d7c32da035c3483f918", null ],
+    [ "SetProvider", "d7/d7b/classai_1_1LLMClient.html#ad6f634fc3ce6350d27538793f2269e55", null ],
+    [ "m_apiKey", "d7/d7b/classai_1_1LLMClient.html#adf0200b58c2e43bb96b05ce1a680a816", null ],
+    [ "m_baseUrl", "d7/d7b/classai_1_1LLMClient.html#a5131aa36edf9ea0a50e9176d39ee9c2f", null ],
+    [ "m_model", "d7/d7b/classai_1_1LLMClient.html#a52d343196f0c45fca1a27b9f1e008935", null ],
+    [ "m_provider", "d7/d7b/classai_1_1LLMClient.html#a566b139ca017be7c4b3c7bcac8eb9f19", null ]
+];

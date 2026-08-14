@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d2/d6e/md_docs_2REQUIREMENTS.html','..
   <div class="headertitle"><div class="title">LogViewer — Requirements Specification</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md576"></a> <b>Document ID</b>: LV-REQ-001 <br  />
+<div class="textblock"><p><a class="anchor" id="autotoc_md631"></a> <b>Document ID</b>: LV-REQ-001 <br  />
  <b><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a></b>: 1.5 <br  />
  <b>Status</b>: Active <br  />
- <b>Application version</b>: 1.7.0+ <br  />
+ <b>Application version</b>: 1.11.0+ <br  />
 </p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md578"></a>
+<h1><a class="anchor" id="autotoc_md633"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Purpose and Scope</li>
@@ -135,7 +135,7 @@ Table of Contents</h1>
 <li>Requirement Traceability</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md580"></a>
+<h1><a class="anchor" id="autotoc_md635"></a>
 1. Purpose and Scope</h1>
 <p>This document defines the system and software requirements for <b>LogViewer</b>, a cross-platform desktop application for inspecting, filtering, and analysing log files. It covers:</p>
 <ul>
@@ -155,9 +155,9 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone"><b>MAY</b>   </td><td class="markdownTableBodyNone">Optional — nice-to-have   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md582"></a>
+<h1><a class="anchor" id="autotoc_md637"></a>
 2. System Requirements (SYS)</h1>
-<h2><a class="anchor" id="autotoc_md583"></a>
+<h2><a class="anchor" id="autotoc_md638"></a>
 2.1 Supported Operating Systems</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -173,7 +173,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SYS-005   </td><td class="markdownTableBodyNone">The application MAY run on earlier OS versions but this is not tested or guaranteed   </td><td class="markdownTableBodyNone">MAY   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md584"></a>
+<h2><a class="anchor" id="autotoc_md639"></a>
 2.2 Hardware</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -193,7 +193,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SYS-016   </td><td class="markdownTableBodyNone"><b>Network</b>: Internet access is required only for AI provider features; the core viewer works offline   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md585"></a>
+<h2><a class="anchor" id="autotoc_md640"></a>
 2.3 Runtime Dependencies</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -210,11 +210,11 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone">SYS-024   </td><td class="markdownTableBodyNone">User configuration and application data MUST be stored in the platform-standard user data directory (<code>QStandardPaths</code>)   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md587"></a>
+<h1><a class="anchor" id="autotoc_md642"></a>
 3. Software Requirements (SW)</h1>
-<h2><a class="anchor" id="autotoc_md588"></a>
+<h2><a class="anchor" id="autotoc_md643"></a>
 3.1 Functional Requirements</h2>
-<h3><a class="anchor" id="autotoc_md589"></a>
+<h3><a class="anchor" id="autotoc_md644"></a>
 3.1.1 Log File Loading</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -260,7 +260,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-010k   </td><td class="markdownTableBodyNone">The application MUST provide a <b>File → Load Evlog Templates…</b> menu action to select the template directory; the selected path MUST be used for all subsequent <code>.evl</code> file loads in the session   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md590"></a>
+<h3><a class="anchor" id="autotoc_md645"></a>
 3.1.2 Event Display</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -282,7 +282,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-017   </td><td class="markdownTableBodyNone">The application SHOULD provide a <b>Jump to Timestamp</b> dialog (Ctrl+G) that scrolls the events table to the nearest event for a user-supplied timestamp   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md591"></a>
+<h3><a class="anchor" id="autotoc_md646"></a>
 3.1.3 Filtering</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -304,7 +304,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-027   </td><td class="markdownTableBodyNone">Search results MUST be highlighted in the table and navigable with next/previous controls   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md592"></a>
+<h3><a class="anchor" id="autotoc_md647"></a>
 3.1.4 AI-Assisted Analysis</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -324,7 +324,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-036   </td><td class="markdownTableBodyNone">AI analysis MUST respect the active filter — only visible/filtered events are sent for analysis   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md593"></a>
+<h3><a class="anchor" id="autotoc_md648"></a>
 3.1.5 Export</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -340,7 +340,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-042   </td><td class="markdownTableBodyNone">Selected events SHOULD be copyable as JSON or CSV directly to the clipboard via a context-menu action, independently of full-file export   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md594"></a>
+<h3><a class="anchor" id="autotoc_md649"></a>
 3.1.6 Signal Visualisation</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -360,7 +360,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-048   </td><td class="markdownTableBodyNone">The Signal Plot panel SHOULD downsample series to at most 2 000 points when the dataset is larger, to keep rendering responsive   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md595"></a>
+<h3><a class="anchor" id="autotoc_md650"></a>
 3.1.7 Format-Specific Statistics</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -374,7 +374,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-049c   </td><td class="markdownTableBodyNone">For non-CAN formats (XML, CSV) the format-specific statistics section MUST be hidden   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md596"></a>
+<h3><a class="anchor" id="autotoc_md651"></a>
 3.1.8 Configuration</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -390,7 +390,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-054   </td><td class="markdownTableBodyNone">The last-used Evlog template directory MUST be persisted across sessions and automatically applied when the next <code>.evl</code> file is loaded   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md597"></a>
+<h3><a class="anchor" id="autotoc_md652"></a>
 3.1.9 Named Layouts</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -406,7 +406,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-059   </td><td class="markdownTableBodyNone">Named layouts MUST be persisted across application restarts   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md598"></a>
+<h3><a class="anchor" id="autotoc_md653"></a>
 3.1.10 Side-by-Side Log Comparison</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -426,7 +426,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-121   </td><td class="markdownTableBodyNone">File loading in the Side-by-Side panel MUST be performed on a background thread; the UI MUST remain responsive during loading   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md599"></a>
+<h2><a class="anchor" id="autotoc_md654"></a>
 3.2 Performance Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -442,7 +442,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-064   </td><td class="markdownTableBodyNone">Memory usage MUST NOT grow unboundedly when the same file is reloaded multiple times   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md600"></a>
+<h2><a class="anchor" id="autotoc_md655"></a>
 3.3 Usability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -458,7 +458,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-074   </td><td class="markdownTableBodyNone">The application MUST display the current application version in the About dialog   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md601"></a>
+<h2><a class="anchor" id="autotoc_md656"></a>
 3.4 Reliability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -472,7 +472,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-083   </td><td class="markdownTableBodyNone">Plugin load failures MUST be logged and reported to the user; they MUST NOT prevent the core application from starting   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md602"></a>
+<h2><a class="anchor" id="autotoc_md657"></a>
 3.5 Security Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -490,7 +490,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">SW-095   </td><td class="markdownTableBodyNone">Release builds MUST be verified with GitHub Sigstore build attestations   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md603"></a>
+<h2><a class="anchor" id="autotoc_md658"></a>
 3.6 Portability Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -502,7 +502,7 @@ Table of Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">SW-102   </td><td class="markdownTableBodyNone">The build system MUST use <b>CMake ≥ 3.25</b> with CMakePresets for all supported platforms   </td><td class="markdownTableBodyNone">MUST   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md604"></a>
+<h2><a class="anchor" id="autotoc_md659"></a>
 3.7 Plugin System Requirements</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -519,7 +519,7 @@ Table of Contents</h1>
 <td class="markdownTableBodyNone">SW-114   </td><td class="markdownTableBodyNone">A plugin crash SHOULD NOT cause the host application to crash (fault isolation)   </td><td class="markdownTableBodyNone">SHOULD   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md606"></a>
+<h1><a class="anchor" id="autotoc_md661"></a>
 4. Build Requirements</h1>
 <p>These are requirements on the development toolchain, not on the end-user system.</p>
 <table class="markdownTable">
@@ -548,7 +548,7 @@ Table of Contents</h1>
 </table>
 <p>Third-party libraries bundled via CMake <code>FetchContent</code> (no separate install required): <code>gtest</code>, <code>fmt</code>, <code>gflags</code>.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md608"></a>
+<h1><a class="anchor" id="autotoc_md663"></a>
 5. Requirement Traceability</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

@@ -19,5 +19,5 @@ var namespaceparser_1_1dbc =
     [ "DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", "d3/dc2/structparser_1_1dbc_1_1DbcSignal" ],
     [ "DecodeFrame", "d8/d04/namespaceparser_1_1dbc.html#a83fdb618e738dda45a4fd29940ae5dab", null ],
     [ "ExtractRawValue", "d8/d04/namespaceparser_1_1dbc.html#ab1a5ef3eb3973ab6959ceefa7e9cb221", null ],
-    [ "ParseDbcFile", "d8/d04/namespaceparser_1_1dbc.html#abc519154efba34e7ba7b501a5393efb5", null ]
+    [ "ParseDbcFile", "d8/d04/namespaceparser_1_1dbc.html#afbf3fa1bdfddbf68cdd81b2078d2465a", null ]
 ];

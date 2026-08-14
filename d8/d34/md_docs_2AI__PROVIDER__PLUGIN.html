@@ -103,7 +103,7 @@ Architecture</h1>
 C-ABI Exports</h2>
 <p>The plugin exports the following C functions:</p>
 <p><b>Lifecycle:</b></p><ul>
-<li><code>Plugin_Create()</code> - Creates plugin instance</li>
+<li><code><a class="el" href="../../d1/d12/AIProviderPlugin_8cpp.html#aa6630f42809c9d2a79925ca4340cb209">Plugin_Create()</a></code> - Creates plugin instance</li>
 <li><code>Plugin_Destroy(handle)</code> - Destroys plugin instance</li>
 <li><code>Plugin_SetLoggerCallback(handle, logFn)</code> - Receives logging callback from application</li>
 <li><code>Plugin_GetMetadataJson(handle)</code> - Returns plugin metadata as JSON</li>
@@ -133,11 +133,12 @@ UI Panels</h1>
 <li>Base URL configuration (for Ollama/LM Studio)</li>
 <li>Connection testing</li>
 </ul>
-<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* Plugin_CreateLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
+<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a80d3680445923dff44d276cba0a8e99d">Plugin_CreateLeftPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
 <div class="line">    <span class="keyword">auto</span>* <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a> = <span class="keyword">reinterpret_cast&lt;</span>AIProviderPlugin*<span class="keyword">&gt;</span>(h);</div>
 <div class="line">    <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* parentWidget = <span class="keyword">reinterpret_cast&lt;</span><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>*<span class="keyword">&gt;</span>(parent);</div>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a>-&gt;GetConfigurationUI(parentWidget);</div>
 <div class="line">}</div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a80d3680445923dff44d276cba0a8e99d"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a80d3680445923dff44d276cba0a8e99d">Plugin_CreateLeftPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateLeftPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:455</div></div>
 <div class="ttc" id="aclassQWidget_html"><div class="ttname"><a href="../../d8/ded/classQWidget.html">QWidget</a></div></div>
 <div class="ttc" id="anamespaceplugin_html"><div class="ttname"><a href="../../d3/d7e/namespaceplugin.html">plugin</a></div><div class="ttdef"><b>Definition</b> IFieldConversionPlugin.hpp:8</div></div>
 </div><!-- fragment --><p><b>Created by:</b> <code>AIConfigPanel</code> class with parent widget properly set</p>
@@ -152,11 +153,12 @@ UI Panels</h1>
 <li>Analysis results display</li>
 <li>Save/load prompts</li>
 </ul>
-<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* Plugin_CreateMainPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
+<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a9e725c50e8ae0a344e3dc36e7c108e72">Plugin_CreateMainPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
 <div class="line">    <span class="keyword">auto</span>* <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a> = <span class="keyword">reinterpret_cast&lt;</span>AIProviderPlugin*<span class="keyword">&gt;</span>(h);</div>
 <div class="line">    <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* parentWidget = <span class="keyword">reinterpret_cast&lt;</span><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>*<span class="keyword">&gt;</span>(parent);</div>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a>-&gt;CreateTab(parentWidget);</div>
 <div class="line">}</div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a9e725c50e8ae0a344e3dc36e7c108e72"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a9e725c50e8ae0a344e3dc36e7c108e72">Plugin_CreateMainPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateMainPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:434</div></div>
 </div><!-- fragment --><p><b>Created by:</b> <code>AIAnalysisPanel</code> class</p>
 <h2><a class="anchor" id="autotoc_md59"></a>
 3. Chat Panel (Bottom Dock)</h2>
@@ -168,22 +170,26 @@ UI Panels</h1>
 <li>Context-aware responses (AI sees filtered log events)</li>
 <li>Clear chat button</li>
 </ul>
-<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* Plugin_CreateBottomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
+<p><b>Implementation:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a59c36ceea5547289122c196b836cc51a">Plugin_CreateBottomPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
 <div class="line">    <span class="keyword">auto</span>* <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a> = <span class="keyword">reinterpret_cast&lt;</span>AIProviderPlugin*<span class="keyword">&gt;</span>(h);</div>
 <div class="line">    <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* parentWidget = <span class="keyword">reinterpret_cast&lt;</span><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>*<span class="keyword">&gt;</span>(parent);</div>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a>-&gt;CreateBottomPanel(parentWidget, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>);</div>
 <div class="line">}</div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a59c36ceea5547289122c196b836cc51a"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a59c36ceea5547289122c196b836cc51a">Plugin_CreateBottomPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateBottomPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:444</div></div>
 </div><!-- fragment --><p><b>Created by:</b> <code>AIChatPanel</code> class</p>
 <h1><a class="anchor" id="autotoc_md60"></a>
 Logging</h1>
 <p>The plugin uses the application's logging system through a callback mechanism:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn) {</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#ad80c0e2c94459e084d728d353dacc9a8">Plugin_SetLoggerCallback</a>(PluginHandle h, PluginLogFn logFn) {</div>
 <div class="line">    <span class="comment">// Store the logging callback</span></div>
-<div class="line">    PluginLogger_Register(logFn);</div>
+<div class="line">    <a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#a1ed2b9f8095f50392653b573c476255e">PluginLogger_Register</a>(logFn);</div>
 <div class="line">}</div>
-</div><!-- fragment --><p><b>Usage in plugin:</b> </p><div class="fragment"><div class="line">PluginLogger_Log(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Creating AI service&quot;</span>);</div>
-<div class="line">PluginLogger_Log(PLUGIN_LOG_ERROR, <span class="stringliteral">&quot;Failed to connect to provider&quot;</span>);</div>
-<div class="line">PluginLogger_Log(PLUGIN_LOG_WARN, <span class="stringliteral">&quot;API key not configured&quot;</span>);</div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_ad80c0e2c94459e084d728d353dacc9a8"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#ad80c0e2c94459e084d728d353dacc9a8">Plugin_SetLoggerCallback</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:358</div></div>
+<div class="ttc" id="aPluginLoggerC_8cpp_html_a1ed2b9f8095f50392653b573c476255e"><div class="ttname"><a href="../../dc/d59/PluginLoggerC_8cpp.html#a1ed2b9f8095f50392653b573c476255e">PluginLogger_Register</a></div><div class="ttdeci">void PluginLogger_Register(PluginLogFn fn)</div><div class="ttdef"><b>Definition</b> PluginLoggerC.cpp:7</div></div>
+</div><!-- fragment --><p><b>Usage in plugin:</b> </p><div class="fragment"><div class="line"><a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Creating AI service&quot;</span>);</div>
+<div class="line"><a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_ERROR, <span class="stringliteral">&quot;Failed to connect to provider&quot;</span>);</div>
+<div class="line"><a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_WARN, <span class="stringliteral">&quot;API key not configured&quot;</span>);</div>
+<div class="ttc" id="aPluginLoggerC_8cpp_html_ad8276e3f08174e232ac7ac3f9fbc92db"><div class="ttname"><a href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a></div><div class="ttdeci">void PluginLogger_Log(int level, const char *message)</div><div class="ttdef"><b>Definition</b> PluginLoggerC.cpp:12</div></div>
 </div><!-- fragment --><p><b>Log output:</b> </p><div class="fragment"><div class="line">[2026-01-02 12:00:00.123] [LogViewer] [info] [plugin] Creating AI service</div>
 <div class="line">[2026-01-02 12:00:00.456] [LogViewer] [error] [plugin] Failed to connect to provider</div>
 <div class="line">[2026-01-02 12:00:00.789] [LogViewer] [warning] [plugin] API key not configured</div>
@@ -319,10 +325,10 @@ Adding Logging</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;PluginLoggerC.h&quot;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> MyFunction() {</div>
-<div class="line">    PluginLogger_Log(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Function called&quot;</span>);</div>
+<div class="line">    <a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Function called&quot;</span>);</div>
 <div class="line">    </div>
 <div class="line">    std::string msg = fmt::format(<span class="stringliteral">&quot;Processing {} events&quot;</span>, count);</div>
-<div class="line">    PluginLogger_Log(PLUGIN_LOG_DEBUG, msg.c_str());</div>
+<div class="line">    <a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_DEBUG, msg.c_str());</div>
 <div class="line">}</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md77"></a>
 Creating New Panels</h2>
@@ -331,20 +337,20 @@ Creating New Panels</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// In AIProviderPlugin.cpp</span></div>
 <div class="line"><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* AIProviderPlugin::CreateCustomPanel(<a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* parent) {</div>
-<div class="line">    PluginLogger_Log(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Creating custom panel&quot;</span>);</div>
+<div class="line">    <a class="code hl_function" href="../../dc/d59/PluginLoggerC_8cpp.html#ad8276e3f08174e232ac7ac3f9fbc92db">PluginLogger_Log</a>(PLUGIN_LOG_INFO, <span class="stringliteral">&quot;Creating custom panel&quot;</span>);</div>
 <div class="line">    <span class="keyword">auto</span>* panel = <span class="keyword">new</span> MyCustomWidget(parent);</div>
 <div class="line">    <span class="keywordflow">return</span> panel;</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Export via C-ABI</span></div>
 <div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a> <span class="keywordtype">void</span>* Plugin_CreateCustomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a> <span class="keywordtype">void</span>* Plugin_CreateCustomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* settings) {</div>
 <div class="line">    <span class="keyword">auto</span>* <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a> = <span class="keyword">reinterpret_cast&lt;</span>AIProviderPlugin*<span class="keyword">&gt;</span>(h);</div>
 <div class="line">    <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* parentWidget = <span class="keyword">reinterpret_cast&lt;</span><a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>*<span class="keyword">&gt;</span>(parent);</div>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_namespace" href="../../d3/d7e/namespaceplugin.html">plugin</a>-&gt;CreateCustomPanel(parentWidget);</div>
 <div class="line">}</div>
 <div class="line">}</div>
-<div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
+<div class="ttc" id="aapplication_2plugins_2IPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md78"></a>
 Testing</h1>
 <h2><a class="anchor" id="autotoc_md79"></a>

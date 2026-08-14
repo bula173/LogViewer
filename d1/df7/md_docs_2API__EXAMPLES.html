@@ -355,7 +355,7 @@ Basic Plugin Loading</h2>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Plugin: &quot;</span> &lt;&lt; metadata.name &lt;&lt; <span class="stringliteral">&quot; v&quot;</span> &lt;&lt; metadata.version &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">}</div>
 <div class="ttc" id="aPluginManager_8hpp_html"><div class="ttname"><a href="../../da/daa/PluginManager_8hpp.html">PluginManager.hpp</a></div><div class="ttdoc">Plugin management and registration system.</div></div>
-<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:367</div></div>
+<div class="ttc" id="aclassplugin_1_1PluginManager_html_a8c53d00f7759db5f94289d531bcc5c6a"><div class="ttname"><a href="../../d3/d67/classplugin_1_1PluginManager.html#a8c53d00f7759db5f94289d531bcc5c6a">plugin::PluginManager::GetInstance</a></div><div class="ttdeci">static PluginManager &amp; GetInstance()</div><div class="ttdoc">Gets singleton instance.</div><div class="ttdef"><b>Definition</b> PluginManager.cpp:369</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md106"></a>
 Working with Specific Plugin Types</h2>
 <div class="fragment"><div class="line"><span class="comment">// Get all plugins of specific type</span></div>
@@ -444,7 +444,7 @@ Checking AI Provider Capabilities</h2>
 Configuration Management</h1>
 <h2><a class="anchor" id="autotoc_md114"></a>
 Loading and Saving Configuration</h2>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../df/db4/Config_8hpp.html">Config.hpp</a>&quot;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;Config.hpp&quot;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">auto</span>&amp; <a class="code hl_namespace" href="../../d6/d7f/namespaceconfig.html">config</a> = config::Config::GetInstance();</div>
 <div class="line"> </div>
@@ -463,7 +463,6 @@ Loading and Saving Configuration</h2>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Reload from file</span></div>
 <div class="line"><a class="code hl_namespace" href="../../d6/d7f/namespaceconfig.html">config</a>.Reload();</div>
-<div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="../../df/db4/Config_8hpp.html">Config.hpp</a></div></div>
 <div class="ttc" id="anamespaceconfig_html"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html">config</a></div><div class="ttdef"><b>Definition</b> BuiltinConversionPlugins.cpp:5</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md115"></a>
 Working with Named Colors</h2>
@@ -503,12 +502,12 @@ Error Handling with Result Types</h1>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Using the result</span></div>
-<div class="line"><span class="keyword">auto</span> result = parse_number(<span class="stringliteral">&quot;42&quot;</span>);</div>
+<div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">result</a> = parse_number(<span class="stringliteral">&quot;42&quot;</span>);</div>
 <div class="line"><span class="keywordflow">if</span> (result) {</div>
-<div class="line">    <span class="keywordtype">int</span> value = result.unwrap();</div>
+<div class="line">    <span class="keywordtype">int</span> value = <a class="code hl_variable" href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">result</a>.unwrap();</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Parsed value: &quot;</span> &lt;&lt; value &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">} <span class="keywordflow">else</span> {</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; result.error().Message() &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; <a class="code hl_variable" href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">result</a>.error().Message() &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Chain operations with andThen</span></div>
@@ -528,6 +527,7 @@ Error Handling with Result Types</h1>
 <div class="ttc" id="aclassutil_1_1Result_html"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html">util::Result</a></div><div class="ttdef"><b>Definition</b> Result.hpp:15</div></div>
 <div class="ttc" id="aclassutil_1_1Result_html_a117ccc497f5110b1a28c3921cc8e2448"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448">util::Result::Ok</a></div><div class="ttdeci">static Result Ok(T value)</div><div class="ttdef"><b>Definition</b> Result.hpp:17</div></div>
 <div class="ttc" id="aclassutil_1_1Result_html_a8b6a3b9550ab82f2b4d23d34ff57289a"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a">util::Result::Err</a></div><div class="ttdeci">static Result Err(E error)</div><div class="ttdef"><b>Definition</b> Result.hpp:22</div></div>
+<div class="ttc" id="anamespaceai_html_a1706b46ac0630d4844b9f10352c30726"><div class="ttname"><a href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">ai::result</a></div><div class="ttdeci">std::string result</div><div class="ttdef"><b>Definition</b> OllamaClient.cpp:144</div></div>
 </div><!-- fragment --><hr  />
 <h1><a class="anchor" id="autotoc_md120"></a>
 Best Practices</h1>

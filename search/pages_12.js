@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['—_20auto_20detection_20and_20override_0',['Type Filter Field — Auto-Detection and Override',['../d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html',1,'']]],
-  ['—_20requirements_20specification_1',['LogViewer — Requirements Specification',['../d2/d6e/md_docs_2REQUIREMENTS.html',1,'']]]
+  ['update_0',['Event Merge Strategy Update',['../d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html',1,'']]],
+  ['usage_20examples_1',['LogViewer API Usage Examples',['../d1/df7/md_docs_2API__EXAMPLES.html',1,'']]],
+  ['user_20manual_2',['LogViewer User Manual',['../d6/dbf/md_docs_2USER__MANUAL.html',1,'']]]
 ];

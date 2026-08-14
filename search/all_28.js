@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['🔄_20to_20implement_20in_20ollamaclient_0',['🔄 To Implement in OllamaClient',['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md294',1,'']]]
+  ['🎯_0',['I Just Want To... 🎯',['../d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md388',1,'']]]
 ];

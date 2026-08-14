@@ -15,7 +15,7 @@ var classui_1_1qt_1_1utils_1_1SessionManager =
     [ "saveSession", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a4484ae4ac3e5b39baa2a453b0179806c", null ],
     [ "setAutoSaveEnabled", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a5b5c880c9728e557a63173103c707e11", null ],
     [ "setCrashFlag", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a2579024eca1ddf4e06dbe25202b1a295", null ],
-    [ "kAutoSaveIntervalMs", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#afc6744c2038c2ddfbd349509e109e1e7", null ],
+    [ "kAutoSaveInterval", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#ae7e87179bcb614a40d1fc1e66c55f95e", null ],
     [ "m_autoSaveEnabled", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#aac60894a502df068e6496e3c8eb07d8a", null ],
     [ "m_crashRecoveryFilePath", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#aedc086e4e976599923dabd6314134b34", null ],
     [ "m_hasCrashRecovery", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a1703bcfe766fac8552baac7553628caa", null ],

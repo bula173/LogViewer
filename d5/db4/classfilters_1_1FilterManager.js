@@ -8,7 +8,7 @@ var classfilters_1_1FilterManager =
     [ "createFilter", "d5/db4/classfilters_1_1FilterManager.html#abae6e35f843f69f2f5573b73adda3398", null ],
     [ "enableAllFilters", "d5/db4/classfilters_1_1FilterManager.html#ae151f0528a45f6a2e86e560c8b80da7d", null ],
     [ "enableFilter", "d5/db4/classfilters_1_1FilterManager.html#ac4c305d1b829432cf7530ee76ae6dc68", null ],
-    [ "getFilterByName", "d5/db4/classfilters_1_1FilterManager.html#a4a9f8018e11b13c19f9570d1207a744f", null ],
+    [ "getFilterByName", "d5/db4/classfilters_1_1FilterManager.html#a2c02072ac534876d5ccc0997a44a2bd3", null ],
     [ "getFilters", "d5/db4/classfilters_1_1FilterManager.html#a9ea6b5bfa3c595c7061ecc147ea7055f", null ],
     [ "getFiltersFilePath", "d5/db4/classfilters_1_1FilterManager.html#a6b70b7ceeb875205be134d7acb8668da", null ],
     [ "getInstance", "d5/db4/classfilters_1_1FilterManager.html#a4f12b78b24dd424dcf199eba3610057e", null ],

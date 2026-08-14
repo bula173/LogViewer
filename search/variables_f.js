@@ -8,6 +8,7 @@ var searchData=
   ['releasenotes_5',['releaseNotes',['../d5/d29/structupdates_1_1AppUpdateInfo.html#a971bec5aa6098e62efa0e381010143b0',1,'updates::AppUpdateInfo']]],
   ['releaseurl_6',['releaseUrl',['../d5/d29/structupdates_1_1AppUpdateInfo.html#a9a4750e196ed7b24a7ebf45ff54904f3',1,'updates::AppUpdateInfo']]],
   ['requireslicense_7',['requiresLicense',['../de/d25/structplugin_1_1PluginMetadata.html#af8a8c76d9ee66729c0428afe061ec6a4',1,'plugin::PluginMetadata']]],
-  ['row_8',['row',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#ae65aa5b61a8015a55f943247bc314597',1,'ui::qt::BookmarksPanel::Bookmark::row'],['../d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html#ab9019c397f898ae4fc67b5aa91186741',1,'ui::qt::ScenariosPanel::ScenarioEvent::row']]],
-  ['rows_9',['rows',['../d2/d71/structui_1_1qt_1_1StatsSection.html#a609b240bdd68b19aa5ab3ac29fb02974',1,'ui::qt::StatsSection']]]
+  ['result_8',['result',['../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726',1,'ai']]],
+  ['row_9',['row',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#ae65aa5b61a8015a55f943247bc314597',1,'ui::qt::BookmarksPanel::Bookmark::row'],['../d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html#ab9019c397f898ae4fc67b5aa91186741',1,'ui::qt::ScenariosPanel::ScenarioEvent::row']]],
+  ['rows_10',['rows',['../d2/d71/structui_1_1qt_1_1StatsSection.html#a609b240bdd68b19aa5ab3ac29fb02974',1,'ui::qt::StatsSection']]]
 ];

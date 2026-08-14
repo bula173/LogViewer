@@ -4,8 +4,16 @@ var searchData=
   ['maincontroller_2ehpp_1',['MainController.hpp',['../d2/d7a/MainController_8hpp.html',1,'']]],
   ['mainwindow_2ecpp_2',['MainWindow.cpp',['../d3/db7/MainWindow_8cpp.html',1,'']]],
   ['mainwindow_2ehpp_3',['MainWindow.hpp',['../da/d6e/MainWindow_8hpp.html',1,'']]],
-  ['mainwindowpresenter_2ecpp_4',['MainWindowPresenter.cpp',['../d4/d3a/MainWindowPresenter_8cpp.html',1,'']]],
-  ['mainwindowpresenter_2ehpp_5',['MainWindowPresenter.hpp',['../d6/d20/MainWindowPresenter_8hpp.html',1,'']]],
-  ['merge_5fstrategy_5fupdate_2emd_6',['MERGE_STRATEGY_UPDATE.md',['../d1/dce/MERGE__STRATEGY__UPDATE_8md.html',1,'']]],
-  ['myappqt_2ecpp_7',['MyAppQt.cpp',['../d3/d44/MyAppQt_8cpp.html',1,'']]]
+  ['mainwindowexportopshelper_2ecpp_4',['MainWindowExportOpsHelper.cpp',['../d9/d15/MainWindowExportOpsHelper_8cpp.html',1,'']]],
+  ['mainwindowexportopshelper_2ehpp_5',['MainWindowExportOpsHelper.hpp',['../db/d30/MainWindowExportOpsHelper_8hpp.html',1,'']]],
+  ['mainwindowfileopshelper_2ecpp_6',['MainWindowFileOpsHelper.cpp',['../d0/d76/MainWindowFileOpsHelper_8cpp.html',1,'']]],
+  ['mainwindowfileopshelper_2ehpp_7',['MainWindowFileOpsHelper.hpp',['../d9/dec/MainWindowFileOpsHelper_8hpp.html',1,'']]],
+  ['mainwindowfilteropshelper_2ecpp_8',['MainWindowFilterOpsHelper.cpp',['../d1/d03/MainWindowFilterOpsHelper_8cpp.html',1,'']]],
+  ['mainwindowfilteropshelper_2ehpp_9',['MainWindowFilterOpsHelper.hpp',['../d8/d27/MainWindowFilterOpsHelper_8hpp.html',1,'']]],
+  ['mainwindowpluginopshelper_2ecpp_10',['MainWindowPluginOpsHelper.cpp',['../df/d4a/MainWindowPluginOpsHelper_8cpp.html',1,'']]],
+  ['mainwindowpluginopshelper_2ehpp_11',['MainWindowPluginOpsHelper.hpp',['../d3/db1/MainWindowPluginOpsHelper_8hpp.html',1,'']]],
+  ['mainwindowpresenter_2ecpp_12',['MainWindowPresenter.cpp',['../d4/d3a/MainWindowPresenter_8cpp.html',1,'']]],
+  ['mainwindowpresenter_2ehpp_13',['MainWindowPresenter.hpp',['../d6/d20/MainWindowPresenter_8hpp.html',1,'']]],
+  ['merge_5fstrategy_5fupdate_2emd_14',['MERGE_STRATEGY_UPDATE.md',['../d1/dce/MERGE__STRATEGY__UPDATE_8md.html',1,'']]],
+  ['myappqt_2ecpp_15',['MyAppQt.cpp',['../d3/d44/MyAppQt_8cpp.html',1,'']]]
 ];

@@ -93,24 +93,24 @@ $(document).ready(function(){initNavTree('d0/de2/md_docs_2CONFIGURABLE__TYPE__FI
   <div class="headertitle"><div class="title">Type Filter Field — Auto-Detection and Override</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md308"></a> </p>
-<h1><a class="anchor" id="autotoc_md309"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md341"></a> </p>
+<h1><a class="anchor" id="autotoc_md342"></a>
 Overview</h1>
 <p>LogViewer automatically detects which field in your log events represents the event type or severity level. No manual configuration is required for common log formats. You can still pin a specific field name if your logs use a non-standard naming convention.</p>
-<h1><a class="anchor" id="autotoc_md310"></a>
+<h1><a class="anchor" id="autotoc_md343"></a>
 Auto-Detection</h1>
 <p>When a file is loaded, <code>UpdateTypeFilters()</code> scans the first 100 events for these field names (in priority order):</p>
 <div class="fragment"><div class="line">level → type → severity → priority → category →</div>
 <div class="line">loglevel → log_level → logLevel → eventtype → event_type</div>
 </div><!-- fragment --><p>The first field that is non-empty in any of the sampled events becomes the active type filter field for that session. The detected value is held in memory but <b>not written to config</b>, so auto-detection runs fresh on each file load.</p>
-<h1><a class="anchor" id="autotoc_md311"></a>
+<h1><a class="anchor" id="autotoc_md344"></a>
 Fallback: User Prompt</h1>
 <p>If none of the candidate field names match any event in the first 100 rows, a modal dialog asks the user to enter the field name manually. The provided value is:</p>
 <ul>
 <li>Immediately applied to the current session.</li>
 <li><b>Saved to <code><a class="el" href="../../d6/d7f/namespaceconfig.html#a5f7e2c5cc76af7d5515d1d3024aaec37">config.json</a></code></b> so it is used automatically for future loads without prompting again.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md312"></a>
+<h1><a class="anchor" id="autotoc_md345"></a>
 Manual Override (Settings)</h1>
 <p>Open <b>Tools &gt; Settings &gt; General</b> and set the <b>Type Filter Field</b>:</p>
 <ul>
@@ -124,7 +124,7 @@ Manual Override (Settings)</h1>
 <div class="line">  }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>Clearing the field and saving restores auto-detection.</p>
-<h1><a class="anchor" id="autotoc_md313"></a>
+<h1><a class="anchor" id="autotoc_md346"></a>
 Row Colouring</h1>
 <p>Row colours are driven by <code>columnColors</code> in the configuration, <b>not</b> limited to the type filter field. Any column can have colour rules; the first column (alphabetically by key) whose value matches an event is applied:</p>
 <div class="fragment"><div class="line">{</div>
@@ -138,7 +138,7 @@ Row Colouring</h1>
 <div class="line">  }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>Configure colours in <b>Tools &gt; Settings &gt; Colors</b>.</p>
-<h1><a class="anchor" id="autotoc_md314"></a>
+<h1><a class="anchor" id="autotoc_md347"></a>
 XML Structure Auto-Discovery</h1>
 <p>The XML parser also requires no configuration. It discovers structure by element depth:</p>
 <table class="markdownTable">

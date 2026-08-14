@@ -93,49 +93,46 @@ $(document).ready(function(){initNavTree('de/d6a/md_docs_2INSTALLATION__MANIFEST
   <div class="headertitle"><div class="title">LogViewer Installation Manifest System</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md449"></a> </p>
-<h1><a class="anchor" id="autotoc_md450"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md528"></a> </p>
+<h1><a class="anchor" id="autotoc_md529"></a>
 Overview</h1>
 <p>The installation manifest (<code>LogViewer_install_manifest.json</code> / <code>.logviewer_manifest.json</code>) is a metadata file that tracks installed libraries, versions, and build information. This prevents unintended overwriting of up-to-date files when upgrading LogViewer to a new version.</p>
-<h1><a class="anchor" id="autotoc_md451"></a>
+<h1><a class="anchor" id="autotoc_md530"></a>
 File Location</h1>
 <ul>
 <li><b>Windows</b>: <code>&lt;InstallDir&gt;/LogViewer_install_manifest.json</code></li>
 <li><b>macOS</b>: <code>&lt;InstallDir&gt;/.logviewer_manifest.json</code> (hidden file)</li>
 <li><b>Linux</b>: <code>/etc/LogViewer/.logviewer_manifest.json</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md452"></a>
+<h1><a class="anchor" id="autotoc_md531"></a>
 File Format</h1>
 <p>The manifest is a JSON file containing:</p>
 <div class="fragment"><div class="line">{</div>
-<div class="line">  &quot;version&quot;: &quot;1.4.0&quot;,</div>
-<div class="line">  &quot;installationDate&quot;: &quot;2026-05-19T12:34:56Z&quot;,</div>
+<div class="line">  &quot;version&quot;: &quot;1.11.0&quot;,</div>
+<div class="line">  &quot;installationDate&quot;: &quot;2026-08-14T07:53:07Z&quot;,</div>
 <div class="line">  &quot;installationPrefix&quot;: &quot;/path/to/installation&quot;,</div>
 <div class="line">  &quot;buildInfo&quot;: {</div>
-<div class="line">    &quot;cmakeVersion&quot;: &quot;3.25.0&quot;,</div>
-<div class="line">    &quot;cmakeGenerator&quot;: &quot;Unix Makefiles&quot;,</div>
+<div class="line">    &quot;cmakeVersion&quot;: &quot;4.3.3&quot;,</div>
+<div class="line">    &quot;cmakeGenerator&quot;: &quot;Ninja&quot;,</div>
 <div class="line">    &quot;buildType&quot;: &quot;Release&quot;,</div>
-<div class="line">    &quot;cxxStandard&quot;: &quot;20&quot;,</div>
-<div class="line">    &quot;compiler&quot;: &quot;Clang 14.0.0&quot;</div>
+<div class="line">    &quot;cxxStandard&quot;: &quot;23&quot;,</div>
+<div class="line">    &quot;compiler&quot;: &quot;AppleClang 21.0.0.21000101&quot;</div>
 <div class="line">  },</div>
 <div class="line">  &quot;libraries&quot;: {</div>
-<div class="line">    &quot;Qt5Core&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
+<div class="line">    &quot;Qt6::Core&quot;: {</div>
+<div class="line">      &quot;version&quot;: &quot;6.11.1&quot;</div>
 <div class="line">    },</div>
-<div class="line">    &quot;Qt5Gui&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
+<div class="line">    &quot;Qt6::Widgets&quot;: {</div>
+<div class="line">      &quot;version&quot;: &quot;6.11.1&quot;</div>
 <div class="line">    },</div>
-<div class="line">    &quot;Qt5Widgets&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
+<div class="line">    &quot;Qt6::Charts&quot;: {</div>
+<div class="line">      &quot;version&quot;: &quot;6.11.1&quot;</div>
 <div class="line">    },</div>
-<div class="line">    &quot;Qt5Network&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
+<div class="line">    &quot;Qt6::Network&quot;: {</div>
+<div class="line">      &quot;version&quot;: &quot;6.11.1&quot;</div>
 <div class="line">    },</div>
-<div class="line">    &quot;Qt5Xml&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
-<div class="line">    },</div>
-<div class="line">    &quot;Qt5Concurrent&quot;: {</div>
-<div class="line">      &quot;version&quot;: &quot;5.15.2&quot;</div>
+<div class="line">    &quot;Qt6::Concurrent&quot;: {</div>
+<div class="line">      &quot;version&quot;: &quot;6.11.1&quot;</div>
 <div class="line">    }</div>
 <div class="line">  },</div>
 <div class="line">  &quot;metadata&quot;: {</div>
@@ -143,9 +140,9 @@ File Format</h1>
 <div class="line">    &quot;format_version&quot;: &quot;1.0&quot;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md453"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md532"></a>
 Usage During Installation/Upgrade</h1>
-<h2><a class="anchor" id="autotoc_md454"></a>
+<h2><a class="anchor" id="autotoc_md533"></a>
 Installation Script Flow</h2>
 <ol type="1">
 <li><b>Check for existing manifest</b> <div class="fragment"><div class="line">if [ -f &quot;$INSTALL_DIR/.logviewer_manifest.json&quot; ]; then</div>
@@ -171,7 +168,7 @@ Installation Script Flow</h2>
 </ul>
 </li>
 </ol>
-<h2><a class="anchor" id="autotoc_md455"></a>
+<h2><a class="anchor" id="autotoc_md534"></a>
 Example Installation Script (Bash)</h2>
 <div class="fragment"><div class="line">#!/bin/bash</div>
 <div class="line"> </div>
@@ -209,7 +206,7 @@ Example Installation Script (Bash)</h2>
 <div class="line"># Update manifest</div>
 <div class="line">cp &quot;$NEW_MANIFEST&quot; &quot;$MANIFEST_FILE&quot;</div>
 <div class="line">echo &quot;Installation complete. Manifest updated.&quot;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md456"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md535"></a>
 Example Installation Script (NSIS - Windows)</h2>
 <div class="fragment"><div class="line">; Check for existing manifest</div>
 <div class="line">IfFileExists &quot;$INSTDIR\.logviewer_manifest.json&quot; HaveManifest NoManifest</div>
@@ -239,7 +236,7 @@ Example Installation Script (NSIS - Windows)</h2>
 <div class="line"> </div>
 <div class="line">Done:</div>
 <div class="line">  DetailPrint &quot;Installation complete&quot;</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md457"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md536"></a>
 Extending the Manifest</h1>
 <p>To add more libraries or metadata:</p>
 <ol type="1">
@@ -251,21 +248,21 @@ Extending the Manifest</h1>
 <div class="line">)</div>
 </div><!-- fragment --></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md458"></a>
+<h1><a class="anchor" id="autotoc_md537"></a>
 Version Handling</h1>
 <p>The manifest includes semantic versioning (MAJOR.MINOR.PATCH):</p><ul>
 <li><b>Major version change</b> (1.x → 2.x): Likely breaking changes, consider full reinstall</li>
 <li><b>Minor version change</b> (1.4 → 1.5): New features, safe upgrade</li>
 <li><b>Patch version change</b> (1.4.0 → 1.4.1): Bug fixes, safe upgrade</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md459"></a>
+<h1><a class="anchor" id="autotoc_md538"></a>
 Backward Compatibility</h1>
 <ul>
 <li>Manifest format is versioned (<code>"format_version": "1.0"</code>)</li>
 <li>Future versions can handle older manifest formats</li>
 <li>Scripts should gracefully handle missing manifest file (first installation)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md460"></a>
+<h1><a class="anchor" id="autotoc_md539"></a>
 Benefits</h1>
 <p>✅ <b>Prevents unnecessary file overwrites</b> during upgrades ✅ <b>Tracks installation metadata</b> for diagnostics ✅ <b>Enables intelligent installers</b> that preserve user files ✅ <b>Simplifies version management</b> for maintenance tools ✅ <b>Provides audit trail</b> of installation history </p>
 </div></div><!-- contents -->

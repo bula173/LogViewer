@@ -7,6 +7,9 @@ var hierarchy =
     [ "analyzer::ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", null ],
     [ "ui::qt::ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", null ],
     [ "ui::qt::utils::SearchEngine::AdvancedQuery", "de/dd6/structui_1_1qt_1_1utils_1_1SearchEngine_1_1AdvancedQuery.html", null ],
+    [ "plugin::AIProviderPlugin", "d5/d83/classplugin_1_1AIProviderPlugin.html", null ],
+    [ "ai::AIServiceFactory", "d9/deb/classai_1_1AIServiceFactory.html", null ],
+    [ "ai::AIServiceWrapper", "df/dca/classai_1_1AIServiceWrapper.html", null ],
     [ "updates::AppUpdateInfo", "d5/d29/structupdates_1_1AppUpdateInfo.html", null ],
     [ "ui::qt::BookmarksPanel::Bookmark", "da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html", null ],
     [ "ui::qt::BookmarksPanel::Category", "d8/d5a/structui_1_1qt_1_1BookmarksPanel_1_1Category.html", null ],
@@ -100,7 +103,9 @@ var hierarchy =
     [ "mvc::IModel", "dc/d2d/classmvc_1_1IModel.html", [
       [ "db::EventsContainer", "dd/dc2/classdb_1_1EventsContainer.html", null ]
     ] ],
-    [ "mvc::IModelObservable", "da/d80/classmvc_1_1IModelObservable.html", null ],
+    [ "mvc::IModelObservable", "da/d80/classmvc_1_1IModelObservable.html", [
+      [ "db::EventsContainer", "dd/dc2/classdb_1_1EventsContainer.html", null ]
+    ] ],
     [ "ai::GemmaInferenceEngine::Impl", "d2/d36/structai_1_1GemmaInferenceEngine_1_1Impl.html", null ],
     [ "plugin::IPlugin", "d4/d51/classplugin_1_1IPlugin.html", null ],
     [ "plugin::IPluginEventObserver", "d1/d7b/classplugin_1_1IPluginEventObserver.html", null ],
@@ -114,7 +119,15 @@ var hierarchy =
     [ "ui::ISearchResultsViewObserver", "d3/df7/classui_1_1ISearchResultsViewObserver.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
     ] ],
-    [ "services::IService", "d2/d99/classservices_1_1IService.html", null ],
+    [ "services::IService", "d2/d99/classservices_1_1IService.html", [
+      [ "ai::IAIService", "df/d97/classai_1_1IAIService.html", [
+        [ "ai::AnthropicClient", "dc/d89/classai_1_1AnthropicClient.html", null ],
+        [ "ai::GeminiClient", "d7/d05/classai_1_1GeminiClient.html", null ],
+        [ "ai::LLMClient", "d7/d7b/classai_1_1LLMClient.html", null ],
+        [ "ai::OllamaClient", "d1/d63/classai_1_1OllamaClient.html", null ],
+        [ "ai::OpenAIClient", "d8/d14/classai_1_1OpenAIClient.html", null ]
+      ] ]
+    ] ],
     [ "ui::qt::IStatisticsStrategy", "df/dae/classui_1_1qt_1_1IStatisticsStrategy.html", [
       [ "ui::qt::CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", null ],
       [ "ui::qt::GenericStatisticsStrategy", "d9/de8/classui_1_1qt_1_1GenericStatisticsStrategy.html", null ]
@@ -132,8 +145,14 @@ var hierarchy =
     [ "ui::qt::LayoutDescriptor", "de/d5a/structui_1_1qt_1_1LayoutDescriptor.html", null ],
     [ "ui::qt::LayoutManager", "d8/d9f/classui_1_1qt_1_1LayoutManager.html", null ],
     [ "ui::qt::SideBySidePanel::LoadJob", "dd/d74/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob.html", null ],
+    [ "ai::LogAnalyzer", "d3/da5/classai_1_1LogAnalyzer.html", null ],
     [ "db::LogEvent", "d1/d00/classdb_1_1LogEvent.html", null ],
     [ "util::Logger", "d2/d44/classutil_1_1Logger.html", null ],
+    [ "ui::qt::MainWindowExportOpsHelper", "da/d0e/classui_1_1qt_1_1MainWindowExportOpsHelper.html", null ],
+    [ "ui::qt::MainWindowFileOpsHelper", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html", null ],
+    [ "ui::qt::MainWindowFilterOpsHelper", "d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper.html", null ],
+    [ "ui::qt::MainWindowPluginOpsHelper", "d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper.html", null ],
+    [ "ai::ModelInfo", "df/db7/structai_1_1ModelInfo.html", null ],
     [ "ui::qt::utils::NotificationManager::Notification", "dc/d1e/structui_1_1qt_1_1utils_1_1NotificationManager_1_1Notification.html", null ],
     [ "ui::qt::widgets::PanelInfo", "d2/ddb/structui_1_1qt_1_1widgets_1_1PanelInfo.html", null ],
     [ "parser::ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", null ],
@@ -155,6 +174,7 @@ var hierarchy =
       [ "ui::qt::FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", null ],
       [ "ui::qt::GemmaDownloadDialog", "df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html", null ],
       [ "ui::qt::LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", null ],
+      [ "ui::qt::OllamaSetupDialog", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog.html", null ],
       [ "ui::qt::PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", null ],
       [ "ui::qt::PreferencesDialog", "dd/ddf/classui_1_1qt_1_1PreferencesDialog.html", null ],
       [ "ui::qt::ShortcutsDialog", "d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html", null ],
@@ -190,11 +210,15 @@ var hierarchy =
       [ "ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", null ]
     ] ],
     [ "QWidget", "d8/ded/classQWidget.html", [
+      [ "ui::qt::AIAnalysisPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html", null ],
+      [ "ui::qt::AIChatPanel", "d6/d8a/classui_1_1qt_1_1AIChatPanel.html", null ],
+      [ "ui::qt::AIConfigPanel", "d8/d24/classui_1_1qt_1_1AIConfigPanel.html", null ],
       [ "ui::qt::AIPreferencesPanel", "d4/d8b/classui_1_1qt_1_1AIPreferencesPanel.html", null ],
       [ "ui::qt::ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", null ],
       [ "ui::qt::ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", null ],
       [ "ui::qt::BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", null ],
       [ "ui::qt::CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", null ],
+      [ "ui::qt::DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", null ],
       [ "ui::qt::DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", null ],
       [ "ui::qt::FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", null ],
       [ "ui::qt::FilterStatusBar", "d7/ddd/classui_1_1qt_1_1FilterStatusBar.html", null ],
@@ -214,7 +238,8 @@ var hierarchy =
       [ "ui::qt::TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", null ],
       [ "ui::qt::TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", null ],
       [ "ui::qt::TraceViewerPanel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html", null ],
-      [ "ui::qt::TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", null ]
+      [ "ui::qt::TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", null ],
+      [ "ui::qt::UnifiedSearchBar", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html", null ]
     ] ],
     [ "ui::qt::utils::ReportGenerator", "d3/dbb/classui_1_1qt_1_1utils_1_1ReportGenerator.html", null ],
     [ "ui::qt::utils::ReportGenerator::ReportOptions", "d6/dba/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportOptions.html", null ],

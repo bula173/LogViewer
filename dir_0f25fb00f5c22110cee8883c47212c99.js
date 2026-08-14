@@ -7,6 +7,14 @@ var dir_0f25fb00f5c22110cee8883c47212c99 =
     [ "widgets", "dir_d7e0edf2ffb26b08ed865847cb246b63.html", "dir_d7e0edf2ffb26b08ed865847cb246b63" ],
     [ "MainWindow.cpp", "d3/db7/MainWindow_8cpp.html", "d3/db7/MainWindow_8cpp" ],
     [ "MainWindow.hpp", "da/d6e/MainWindow_8hpp.html", "da/d6e/MainWindow_8hpp" ],
+    [ "MainWindowExportOpsHelper.cpp", "d9/d15/MainWindowExportOpsHelper_8cpp.html", null ],
+    [ "MainWindowExportOpsHelper.hpp", "db/d30/MainWindowExportOpsHelper_8hpp.html", "db/d30/MainWindowExportOpsHelper_8hpp" ],
+    [ "MainWindowFileOpsHelper.cpp", "d0/d76/MainWindowFileOpsHelper_8cpp.html", null ],
+    [ "MainWindowFileOpsHelper.hpp", "d9/dec/MainWindowFileOpsHelper_8hpp.html", "d9/dec/MainWindowFileOpsHelper_8hpp" ],
+    [ "MainWindowFilterOpsHelper.cpp", "d1/d03/MainWindowFilterOpsHelper_8cpp.html", null ],
+    [ "MainWindowFilterOpsHelper.hpp", "d8/d27/MainWindowFilterOpsHelper_8hpp.html", "d8/d27/MainWindowFilterOpsHelper_8hpp" ],
+    [ "MainWindowPluginOpsHelper.cpp", "df/d4a/MainWindowPluginOpsHelper_8cpp.html", null ],
+    [ "MainWindowPluginOpsHelper.hpp", "d3/db1/MainWindowPluginOpsHelper_8hpp.html", "d3/db1/MainWindowPluginOpsHelper_8hpp" ],
     [ "StartupSplash.cpp", "df/d98/StartupSplash_8cpp.html", null ],
     [ "StartupSplash.hpp", "dd/dd4/StartupSplash_8hpp.html", "dd/dd4/StartupSplash_8hpp" ]
 ];

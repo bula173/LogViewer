@@ -1,0 +1,15 @@
+<map id="services::IService" name="services::IService">
+<area shape="rect" id="Node000001" title="Base interface for all pluggable services (AI, analyzer, exporter, etc.)" alt="" coords="375,5,515,111"/>
+<area shape="rect" id="Node000002" href="$df/d97/classai_1_1IAIService.html" title="Interface for AI service communication." alt="" coords="368,159,523,344"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="448,124,448,158,443,158,443,124"/>
+<area shape="rect" id="Node000003" href="$dc/d89/classai_1_1AnthropicClient.html" title="Client for Anthropic API (Claude)" alt="" coords="5,502,160,767"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="356,282,309,301,261,326,214,356,174,394,139,445,114,503,109,500,134,443,170,390,211,352,258,321,307,296,354,277"/>
+<area shape="rect" id="Node000004" href="$d7/d05/classai_1_1GeminiClient.html" title="Client for Google Gemini API." alt="" coords="184,502,339,767"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="374,357,353,393,328,447,306,503,301,501,323,445,348,391,369,354"/>
+<area shape="rect" id="Node000005" href="$d7/d7b/classai_1_1LLMClient.html" title="Generic client for communicating with LLM services." alt="" coords="363,392,528,877"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="448,358,448,392,443,392,443,358"/>
+<area shape="rect" id="Node000006" href="$d1/d63/classai_1_1OllamaClient.html" title="Client for communicating with local Ollama LLM server." alt="" coords="552,482,717,787"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="521,354,542,391,584,481,579,483,538,393,517,357"/>
+<area shape="rect" id="Node000007" href="$d8/d14/classai_1_1OpenAIClient.html" title="Client for OpenAI&#45;compatible APIs (OpenAI, xAI Grok, etc.)" alt="" coords="741,492,896,777"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="537,275,586,294,638,319,688,351,731,390,765,438,789,491,784,493,760,440,727,394,684,355,635,324,584,299,535,280"/>
+</map>

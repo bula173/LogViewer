@@ -8,6 +8,7 @@ var classui_1_1qt_1_1UpdateChecker =
     [ "IsPluginCompatible", "de/d35/classui_1_1qt_1_1UpdateChecker.html#a2c63bf79eceb48d1607655df3b71c62d", null ],
     [ "OnManifestReply", "de/d35/classui_1_1qt_1_1UpdateChecker.html#a565adfd804971876af8a4c064667fd29", null ],
     [ "OnReleaseReply", "de/d35/classui_1_1qt_1_1UpdateChecker.html#aea259a895aef91ad978d6a00bac443c0", null ],
+    [ "OnSslErrors", "de/d35/classui_1_1qt_1_1UpdateChecker.html#a27f151fcdac73ccea507becf42964b63", null ],
     [ "PlatformId", "de/d35/classui_1_1qt_1_1UpdateChecker.html#a81d33366b2048071ca4adc6a39f946cf", null ],
     [ "PluginDownloadComplete", "de/d35/classui_1_1qt_1_1UpdateChecker.html#a65ef132ac04e06164ecb4fd091b58924", null ],
     [ "PluginDownloadFailed", "de/d35/classui_1_1qt_1_1UpdateChecker.html#ae38584c5c9f7130e0a3addccaca4b1de", null ],

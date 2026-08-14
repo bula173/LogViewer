@@ -259,7 +259,6 @@ Building the Example Plugin</h2>
 Plugin Documentation</h2>
 <ul>
 <li><a class="el" href="d1/d53/md_docs_2PLUGIN__SYSTEM.html">Plugin System Architecture</a></li>
-<li><a class="el" href="d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html">Plugin Implementation Guide</a></li>
 <li><a class="el" href="d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html">AI Provider Plugin</a></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md20"></a>
@@ -333,8 +332,11 @@ Project Structure</h1>
 <div class="fragment"><div class="line">LogViewer/</div>
 <div class="line">├── src/</div>
 <div class="line">│   ├── application/         # Core application logic</div>
+<div class="line">│   │   ├── ai/              # Local/remote AI inference (Gemma via llama.cpp, providers)</div>
+<div class="line">│   │   ├── analyzers/       # Log analysis (pattern detection, actor discovery, etc.)</div>
 <div class="line">│   │   ├── config/          # Configuration management</div>
 <div class="line">│   │   ├── db/              # EventsContainer and LogEvent data model</div>
+<div class="line">│   │   ├── error/           # Result&lt;T,E&gt; and error types</div>
 <div class="line">│   │   ├── filters/         # Filtering system</div>
 <div class="line">│   │   ├── mvc/             # Model-View-Controller patterns</div>
 <div class="line">│   │   ├── parsers/         # Log parsers</div>
@@ -343,11 +345,13 @@ Project Structure</h1>
 <div class="line">│   │   │   ├── asc/         # CAN/ASC parser (Vector CANalyzer format)</div>
 <div class="line">│   │   │   └── dbc/         # DBC parser + CAN signal decoder</div>
 <div class="line">│   │   ├── plugins/         # Plugin system interfaces</div>
+<div class="line">│   │   ├── services/        # Application-level services</div>
 <div class="line">│   │   ├── ui/qt/           # Qt 6 UI components</div>
 <div class="line">│   │   │   ├── panels/      # Dock and content panels</div>
 <div class="line">│   │   │   ├── dialogs/     # Modal dialogs</div>
 <div class="line">│   │   │   ├── events/      # Events table model and view</div>
 <div class="line">│   │   │   └── utils/       # Shared UI utilities</div>
+<div class="line">│   │   ├── updates/         # Update checking</div>
 <div class="line">│   │   ├── util/            # General utilities</div>
 <div class="line">│   │   └── version/         # Version info</div>
 <div class="line">│   ├── plugin_api/          # C-ABI plugin interface headers</div>
@@ -367,7 +371,7 @@ Project Structure</h1>
 <div class="line">└── thirdparty/              # Third-party dependencies</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md26"></a>
 Packaging</h1>
-<div class="fragment"><div class="line"># macOS — produces dist/packages/LogViewer-1.0.0-Darwin.dmg</div>
+<div class="fragment"><div class="line"># macOS — produces dist/packages/LogViewer-1.11.0-Darwin.dmg</div>
 <div class="line">cmake --preset macos-release-qt</div>
 <div class="line">cmake --build --preset macos-release-build-qt</div>
 <div class="line">cmake --install build/macos-release-qt --prefix dist/staging</div>

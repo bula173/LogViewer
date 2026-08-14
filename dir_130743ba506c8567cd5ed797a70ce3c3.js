@@ -12,6 +12,8 @@ var dir_130743ba506c8567cd5ed797a70ce3c3 =
     [ "CanSignalUtils.hpp", "d3/d5e/CanSignalUtils_8hpp.html", "d3/d5e/CanSignalUtils_8hpp" ],
     [ "CanStatisticsStrategy.cpp", "de/db1/CanStatisticsStrategy_8cpp.html", "de/db1/CanStatisticsStrategy_8cpp" ],
     [ "CanStatisticsStrategy.hpp", "d0/d85/CanStatisticsStrategy_8hpp.html", "d0/d85/CanStatisticsStrategy_8hpp" ],
+    [ "DashboardPanel.cpp", "dd/de8/DashboardPanel_8cpp.html", null ],
+    [ "DashboardPanel.hpp", "dd/d10/DashboardPanel_8hpp.html", "dd/d10/DashboardPanel_8hpp" ],
     [ "FilterProfilesPanel.cpp", "d2/db8/FilterProfilesPanel_8cpp.html", null ],
     [ "FilterProfilesPanel.hpp", "d0/d66/FilterProfilesPanel_8hpp.html", "d0/d66/FilterProfilesPanel_8hpp" ],
     [ "FiltersPanel.cpp", "d0/d34/FiltersPanel_8cpp.html", "d0/d34/FiltersPanel_8cpp" ],
@@ -43,5 +45,7 @@ var dir_130743ba506c8567cd5ed797a70ce3c3 =
     [ "TimeRangeFilterPanel.cpp", "da/d47/TimeRangeFilterPanel_8cpp.html", null ],
     [ "TimeRangeFilterPanel.hpp", "d4/dda/TimeRangeFilterPanel_8hpp.html", "d4/dda/TimeRangeFilterPanel_8hpp" ],
     [ "TraceViewerPanel.cpp", "d2/db4/TraceViewerPanel_8cpp.html", "d2/db4/TraceViewerPanel_8cpp" ],
-    [ "TraceViewerPanel.hpp", "d7/d4a/TraceViewerPanel_8hpp.html", "d7/d4a/TraceViewerPanel_8hpp" ]
+    [ "TraceViewerPanel.hpp", "d7/d4a/TraceViewerPanel_8hpp.html", "d7/d4a/TraceViewerPanel_8hpp" ],
+    [ "UnifiedSearchBar.cpp", "d3/d7d/UnifiedSearchBar_8cpp.html", null ],
+    [ "UnifiedSearchBar.hpp", "d4/dc3/UnifiedSearchBar_8hpp.html", "d4/dc3/UnifiedSearchBar_8hpp" ]
 ];

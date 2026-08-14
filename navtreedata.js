@@ -245,646 +245,702 @@ var NAVTREE =
       ] ],
       [ "Conclusion", "df/dd1/md_docs_2ARCHITECTURE__IMPROVEMENTS.html#autotoc_md198", null ]
     ] ],
+    [ "v1.11.0 Bug Fixes Summary", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html", [
+      [ "Status: ✅ All Critical Issues Resolved", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md200", null ],
+      [ "Critical Fixes (Blocking Release)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md202", [
+        [ "Fix #1: Unsafe const_cast in ReportGenerator", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md203", null ],
+        [ "Fix #2: Debounce O(n×m) Search Performance", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md204", null ],
+        [ "Fix #3: Fix timeSpanMs Calculation", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md205", null ],
+        [ "Fix #4: Search History Persistence Error Handling", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md206", null ],
+        [ "Fix #5: File I/O Error Recovery & Path Validation", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md207", null ],
+        [ "Fix #6: Index Mismatch in Report Generation", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md208", null ],
+        [ "Fix #7: Thread Safety in EventsContainer Access", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md209", null ],
+        [ "Fix #8: Complete Dashboard Export Button", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md210", null ]
+      ] ],
+      [ "Summary by Category", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md212", [
+        [ "Thread Safety (2 fixes)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md213", null ],
+        [ "Data Integrity (3 fixes)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md214", null ],
+        [ "Error Handling (2 fixes)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md215", null ],
+        [ "Feature Completion (1 fix)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md216", null ]
+      ] ],
+      [ "Testing Recommendations", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md218", null ],
+      [ "Files Modified", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md220", null ],
+      [ "Release Readiness", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md222", [
+        [ "v1.11.0 Status: ✅ READY FOR RELEASE", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md223", null ],
+        [ "Commits", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md224", null ],
+        [ "Outstanding Items (Non-Critical)", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md225", null ]
+      ] ],
+      [ "Performance Impact", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md227", null ],
+      [ "Backward Compatibility", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md229", null ],
+      [ "Sign-Off", "da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html#autotoc_md231", null ]
+    ] ],
     [ "Build System Guide and Improvements", "d8/ddc/md_docs_2BUILD__GUIDE.html", [
-      [ "Overview", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md200", null ],
-      [ "Quick Start", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md202", [
-        [ "macOS", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md203", null ],
-        [ "Linux", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md204", null ],
-        [ "Windows (MSYS2)", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md205", null ]
+      [ "Overview", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md233", null ],
+      [ "Quick Start", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md235", [
+        [ "macOS", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236", null ],
+        [ "Linux", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md237", null ],
+        [ "Windows (MSYS2)", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md238", null ]
       ] ],
-      [ "Build Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md207", [
-        [ "Available Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md208", null ],
-        [ "Using Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md209", null ]
+      [ "Build Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md240", [
+        [ "Available Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md241", null ],
+        [ "Using Presets", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md242", null ]
       ] ],
-      [ "Build Directory Structure", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md211", null ],
-      [ "Build Configuration", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md213", [
-        [ "C++ Standard", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md214", null ],
-        [ "Compiler Requirements", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md215", null ],
-        [ "Qt Version", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md216", null ]
+      [ "Build Directory Structure", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md244", null ],
+      [ "Build Configuration", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md246", [
+        [ "C++ Standard", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md247", null ],
+        [ "Compiler Requirements", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md248", null ],
+        [ "Qt Version", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md249", null ]
       ] ],
-      [ "Build Optimization", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md218", [
-        [ "Release Build Flags", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md219", null ],
-        [ "Debug Build with Full Symbols", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md220", null ],
-        [ "Parallel Compilation", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md221", null ],
-        [ "Incremental Builds", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md222", null ],
-        [ "Clean Build", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md223", null ]
+      [ "Build Optimization", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md251", [
+        [ "Release Build Flags", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md252", null ],
+        [ "Debug Build with Full Symbols", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md253", null ],
+        [ "Parallel Compilation", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md254", null ],
+        [ "Incremental Builds", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md255", null ],
+        [ "Clean Build", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md256", null ]
       ] ],
-      [ "Dependency Management", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md225", [
-        [ "Third-Party Dependencies", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md226", null ],
-        [ "Reducing Build Time", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md227", null ]
+      [ "Dependency Management", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md258", [
+        [ "Third-Party Dependencies", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md259", null ],
+        [ "Reducing Build Time", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md260", null ]
       ] ],
-      [ "Troubleshooting Build Issues", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md229", [
-        [ "Qt Not Found", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md230", null ],
-        [ "Out of Memory During Linking", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md231", null ],
-        [ "C++20 Features Not Recognized", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md232", null ],
-        [ "Pre-compiled Header (PCH) Issues", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md233", null ]
+      [ "Troubleshooting Build Issues", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md262", [
+        [ "Qt Not Found", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md263", null ],
+        [ "Out of Memory During Linking", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md264", null ],
+        [ "C++20 Features Not Recognized", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md265", null ],
+        [ "Pre-compiled Header (PCH) Issues", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md266", null ]
       ] ],
-      [ "Development Workflow", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md235", [
-        [ "Setup Development Environment", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236", null ],
-        [ "Iterative Development", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md237", null ],
-        [ "Code Quality Checks", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md238", null ]
+      [ "Development Workflow", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md268", [
+        [ "Setup Development Environment", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md269", null ],
+        [ "Iterative Development", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md270", null ],
+        [ "Code Quality Checks", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md271", null ]
       ] ],
-      [ "Continuous Integration", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md240", [
-        [ "GitHub Actions", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md241", null ],
-        [ "Local Pre-commit Validation", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md242", null ]
+      [ "Continuous Integration", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md273", [
+        [ "GitHub Actions", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md274", null ],
+        [ "Local Pre-commit Validation", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md275", null ]
       ] ],
-      [ "Advanced Build Options", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md244", [
-        [ "Enable All Warnings", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md245", null ],
-        [ "Force Color Output", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md246", null ],
-        [ "Build Verbose (Show Full Commands)", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md247", null ],
-        [ "Generate Compilation Database", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md248", null ]
+      [ "Advanced Build Options", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md277", [
+        [ "Enable All Warnings", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md278", null ],
+        [ "Force Color Output", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md279", null ],
+        [ "Build Verbose (Show Full Commands)", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md280", null ],
+        [ "Generate Compilation Database", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md281", null ]
       ] ],
-      [ "Performance Benchmarks", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md250", null ],
-      [ "Distribution and Packaging", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md252", [
-        [ "macOS App Bundle", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md253", null ],
-        [ "Linux Package", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md254", null ],
-        [ "Windows Installer", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md255", null ]
+      [ "Performance Benchmarks", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md283", null ],
+      [ "Distribution and Packaging", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md285", [
+        [ "macOS App Bundle", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md286", null ],
+        [ "Linux Package", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md287", null ],
+        [ "Windows Installer", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md288", null ]
       ] ],
-      [ "See Also", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md257", null ]
+      [ "See Also", "d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md290", null ]
     ] ],
     [ "Building Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html", [
-      [ "Documentation System", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md259", null ],
-      [ "Building Locally", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md260", [
-        [ "Prerequisites", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md261", null ],
-        [ "Build Commands", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md262", null ]
+      [ "Documentation System", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md292", null ],
+      [ "Building Locally", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md293", [
+        [ "Prerequisites", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md294", null ],
+        [ "Build Commands", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md295", null ]
       ] ],
-      [ "Automatic GitHub Builds", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md263", [
-        [ "Workflow: <tt>.github/workflows/documentation.yml</tt>", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md264", null ],
-        [ "Viewing Built Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md265", null ]
+      [ "Automatic GitHub Builds", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md296", [
+        [ "Workflow: <tt>.github/workflows/documentation.yml</tt>", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md297", null ],
+        [ "Viewing Built Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md298", null ]
       ] ],
-      [ "Documentation Structure", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md266", null ],
-      [ "Writing Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md267", [
-        [ "Doxygen (API Documentation)", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md268", null ],
-        [ "Markdown (User Documentation)", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md269", null ]
+      [ "Documentation Structure", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md299", null ],
+      [ "Writing Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md300", [
+        [ "Doxygen (API Documentation)", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md301", null ],
+        [ "Markdown (User Documentation)", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md302", null ]
       ] ],
-      [ "MkDocs Configuration", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md270", null ],
-      [ "Troubleshooting", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md271", [
-        [ "Doxygen Issues", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md272", null ],
-        [ "MkDocs Issues", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md273", null ]
+      [ "MkDocs Configuration", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md303", null ],
+      [ "Troubleshooting", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md304", [
+        [ "Doxygen Issues", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md305", null ],
+        [ "MkDocs Issues", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md306", null ]
       ] ],
-      [ "Contributing to Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md274", [
-        [ "Documentation Review Checklist", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md275", null ]
+      [ "Contributing to Documentation", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md307", [
+        [ "Documentation Review Checklist", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md308", null ]
       ] ],
-      [ "Resources", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md276", null ]
+      [ "Resources", "d1/d38/md_docs_2BUILDING__DOCUMENTATION.html#autotoc_md309", null ]
     ] ],
     [ "Cloud AI Provider Integration", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html", [
-      [ "Supported Providers", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md278", [
-        [ "Local Providers (No API Key Required)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md279", null ],
-        [ "Cloud Providers (API Key Required)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md280", [
-          [ "OpenAI / ChatGPT", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md281", null ],
-          [ "Anthropic / Claude", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md282", null ],
-          [ "Google / Gemini", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md283", null ],
-          [ "xAI / Grok", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md284", null ]
+      [ "Supported Providers", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md311", [
+        [ "Local Providers (No API Key Required)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md312", null ],
+        [ "Cloud Providers (API Key Required)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md313", [
+          [ "OpenAI / ChatGPT", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md314", null ],
+          [ "Anthropic / Claude", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md315", null ],
+          [ "Google / Gemini", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md316", null ],
+          [ "xAI / Grok", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md317", null ]
         ] ]
       ] ],
-      [ "Configuration", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md285", [
-        [ "Via UI (Recommended)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md286", null ],
-        [ "Via config.json", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md287", null ]
+      [ "Configuration", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md318", [
+        [ "Via UI (Recommended)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md319", null ],
+        [ "Via config.json", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md320", null ]
       ] ],
-      [ "API Authentication", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md288", [
-        [ "OpenAI, xAI (Bearer Token)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md289", null ],
-        [ "Anthropic (x-api-key Header)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md290", null ],
-        [ "Google (API Key in URL)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md291", null ]
+      [ "API Authentication", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md321", [
+        [ "OpenAI, xAI (Bearer Token)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md322", null ],
+        [ "Anthropic (x-api-key Header)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md323", null ],
+        [ "Google (API Key in URL)", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md324", null ]
       ] ],
-      [ "Implementation Status", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md292", [
-        [ "✅ Completed", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md293", null ],
-        [ "🔄 To Implement in OllamaClient", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md294", null ]
+      [ "Implementation Status", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md325", [
+        [ "✅ Completed", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md326", null ],
+        [ "🔄 To Implement in OllamaClient", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md327", null ]
       ] ],
-      [ "Testing Cloud Providers", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md295", [
-        [ "1. Get API Key", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md296", null ],
-        [ "2. Configure in App", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md297", null ],
-        [ "3. Test with Simple Prompt", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md298", null ]
+      [ "Testing Cloud Providers", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md328", [
+        [ "1. Get API Key", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md329", null ],
+        [ "2. Configure in App", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md330", null ],
+        [ "3. Test with Simple Prompt", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md331", null ]
       ] ],
-      [ "Cost Considerations", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md299", null ],
-      [ "Security Notes", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md300", [
-        [ "Best Practices:", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md301", null ],
-        [ "Future Enhancement:", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md302", null ]
+      [ "Cost Considerations", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md332", null ],
+      [ "Security Notes", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md333", [
+        [ "Best Practices:", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md334", null ],
+        [ "Future Enhancement:", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md335", null ]
       ] ],
-      [ "Troubleshooting", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md303", [
-        [ "\"API key invalid\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md304", null ],
-        [ "\"Rate limit exceeded\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md305", null ],
-        [ "\"Model not found\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md306", null ]
+      [ "Troubleshooting", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md336", [
+        [ "\"API key invalid\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md337", null ],
+        [ "\"Rate limit exceeded\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md338", null ],
+        [ "\"Model not found\"", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md339", null ]
       ] ],
-      [ "Next Steps", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md307", null ]
+      [ "Next Steps", "da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md340", null ]
     ] ],
     [ "Type Filter Field — Auto-Detection and Override", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html", [
-      [ "Overview", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md309", null ],
-      [ "Auto-Detection", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md310", null ],
-      [ "Fallback: User Prompt", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md311", null ],
-      [ "Manual Override (Settings)", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md312", null ],
-      [ "Row Colouring", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md313", null ],
-      [ "XML Structure Auto-Discovery", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md314", null ]
+      [ "Overview", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md342", null ],
+      [ "Auto-Detection", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md343", null ],
+      [ "Fallback: User Prompt", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md344", null ],
+      [ "Manual Override (Settings)", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md345", null ],
+      [ "Row Colouring", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md346", null ],
+      [ "XML Structure Auto-Discovery", "d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html#autotoc_md347", null ]
     ] ],
     [ "Static Analysis with Cppcheck", "d5/d22/md_docs_2CPPCHECK.html", [
-      [ "Overview", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md316", null ],
-      [ "Quick Start", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md317", [
-        [ "Using Build Presets (Recommended)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md318", null ],
-        [ "Using Build Targets (Alternative)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md319", null ],
-        [ "Enable During Compilation", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md320", null ]
+      [ "Overview", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md349", null ],
+      [ "Quick Start", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md350", [
+        [ "Using Build Presets (Recommended)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md351", null ],
+        [ "Using Build Targets (Alternative)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md352", null ],
+        [ "Enable During Compilation", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md353", null ]
       ] ],
-      [ "Available Targets", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md321", [
-        [ "<tt>cppcheck</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md322", null ],
-        [ "<tt>format</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md323", null ],
-        [ "<tt>tidy</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md324", null ],
-        [ "<tt>run_tools</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md325", null ]
+      [ "Available Targets", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md354", [
+        [ "<tt>cppcheck</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md355", null ],
+        [ "<tt>format</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md356", null ],
+        [ "<tt>tidy</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md357", null ],
+        [ "<tt>run_tools</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md358", null ]
       ] ],
-      [ "Integration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md326", [
-        [ "Compile-Time Checks (Default for Debug)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md327", null ],
-        [ "Standalone Analysis", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md328", null ]
+      [ "Integration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md359", [
+        [ "Compile-Time Checks (Default for Debug)", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md360", null ],
+        [ "Standalone Analysis", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md361", null ]
       ] ],
-      [ "Configuration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md329", [
-        [ "Current Settings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md330", null ],
-        [ "Suppressing Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md331", [
-          [ "Inline Suppression", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md332", null ],
-          [ "File-Level Suppression", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md333", null ]
+      [ "Configuration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md362", [
+        [ "Current Settings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md363", null ],
+        [ "Suppressing Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md364", [
+          [ "Inline Suppression", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md365", null ],
+          [ "File-Level Suppression", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md366", null ]
         ] ],
-        [ "Adding More Checks", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md334", null ]
+        [ "Adding More Checks", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md367", null ]
       ] ],
-      [ "CI/CD Integration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md335", [
-        [ "GitHub Actions Example", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md336", null ],
-        [ "Fail on Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md337", null ]
+      [ "CI/CD Integration", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md368", [
+        [ "GitHub Actions Example", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md369", null ],
+        [ "Fail on Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md370", null ]
       ] ],
-      [ "Common Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md338", [
-        [ "<tt>useStlAlgorithm</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md339", null ],
-        [ "<tt>normalCheckLevelMaxBranches</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md340", null ],
-        [ "<tt>unknownMacro</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md341", null ]
+      [ "Common Warnings", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md371", [
+        [ "<tt>useStlAlgorithm</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md372", null ],
+        [ "<tt>normalCheckLevelMaxBranches</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md373", null ],
+        [ "<tt>unknownMacro</tt>", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md374", null ]
       ] ],
-      [ "Platform Support", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md342", null ],
-      [ "Performance", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md343", null ],
-      [ "Troubleshooting", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md344", [
-        [ "\"cppcheck not found\"", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md345", null ],
-        [ "Too Many False Positives", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md346", null ],
-        [ "Report Not Generated", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md347", null ]
+      [ "Platform Support", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md375", null ],
+      [ "Performance", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md376", null ],
+      [ "Troubleshooting", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md377", [
+        [ "\"cppcheck not found\"", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md378", null ],
+        [ "Too Many False Positives", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md379", null ],
+        [ "Report Not Generated", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md380", null ]
       ] ],
-      [ "Additional Tools", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md348", [
-        [ "Clang-Tidy", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md349", null ],
-        [ "Combine All Tools", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md350", null ]
+      [ "Additional Tools", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md381", [
+        [ "Clang-Tidy", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md382", null ],
+        [ "Combine All Tools", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md383", null ]
       ] ],
-      [ "References", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md351", null ]
+      [ "References", "d5/d22/md_docs_2CPPCHECK.html#autotoc_md384", null ]
+    ] ],
+    [ "LogViewer: Developer Quick Reference Guide", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html", [
+      [ "Quick Navigation", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md387", [
+        [ "I Just Want To... 🎯", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md388", null ]
+      ] ],
+      [ "Issue #1: Fix Service Interface TODO", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md390", [
+        [ "Step A: Create base service interface", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md391", null ],
+        [ "Step B: Update IAIService", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md392", null ],
+        [ "Step C: Update MainWindow", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md393", null ],
+        [ "Step D: Update usages in MainWindow.cpp", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md394", null ],
+        [ "Step E: Update CMakeLists.txt (if needed)", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md395", null ],
+        [ "Step F: Test", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md396", null ]
+      ] ],
+      [ "Issue #2: Enable Actual Gemma Inference", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md398", [
+        [ "Step A: Create inference utility", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md399", null ],
+        [ "Step B: Update GemmaInferenceEngine", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md400", null ],
+        [ "Step C: Update CMakeLists", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md401", null ],
+        [ "Step D: Test", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md402", null ]
+      ] ],
+      [ "Issue #3: Implement Anomaly Detection", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md404", null ],
+      [ "Issue #4: Build Filter Assistant", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md406", null ],
+      [ "Compilation Cheat Sheet", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md408", null ],
+      [ "Testing Your Changes", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md410", [
+        [ "Add Unit Test", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md411", null ],
+        [ "Run Specific Test", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md412", null ]
+      ] ],
+      [ "Common Patterns in LogViewer", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md414", [
+        [ "Return Result<T, E> Instead of Exceptions", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md415", null ],
+        [ "Logging (Structured)", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md416", null ],
+        [ "Thread Safety in EventsContainer", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md417", null ]
+      ] ],
+      [ "Common Build Issues & Fixes", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md419", [
+        [ "Issue: \"cannot find llama.h\"", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md420", null ],
+        [ "Issue: \"undefined reference to Qt symbols\"", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md421", null ],
+        [ "Issue: \"compilation errors in third-party\"", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md422", null ]
+      ] ],
+      [ "Where to Find Things", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md424", null ],
+      [ "Making a Commit", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md426", null ],
+      [ "Performance Tips", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md428", [
+        [ "Profile with Instruments", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md429", null ],
+        [ "Check Thread Safety", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md430", null ]
+      ] ],
+      [ "Resources", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md432", null ],
+      [ "Questions?", "d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md434", null ]
     ] ],
     [ "LogViewer Development Guide", "d8/d7b/md_docs_2DEVELOPMENT.html", [
-      [ "Getting Started", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md353", [
-        [ "Prerequisites", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md354", [
-          [ "Required", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md355", null ],
-          [ "GUI Framework (Choose One)", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md356", null ],
-          [ "Optional but Recommended", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md357", null ]
+      [ "Getting Started", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md437", [
+        [ "Prerequisites", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md438", [
+          [ "Required", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md439", null ],
+          [ "GUI Framework", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md440", null ],
+          [ "Optional but Recommended", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md441", null ]
         ] ],
-        [ "Quick Start", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md358", null ]
+        [ "Quick Start", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md442", null ]
       ] ],
-      [ "Build System Architecture", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md359", [
-        [ "Directory Structure", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md360", null ],
-        [ "CMake Output Directories", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md361", null ],
-        [ "Scripts", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md362", null ]
+      [ "Build System Architecture", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md443", [
+        [ "Directory Structure", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md444", null ],
+        [ "CMake Output Directories", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md445", null ],
+        [ "Scripts", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md446", null ]
       ] ],
-      [ "Code Style Guide", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md363", [
-        [ "Naming Conventions", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md364", null ],
-        [ "File Organization", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md365", null ],
-        [ "Documentation Standards", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md366", [
-          [ "Doxygen Comments", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md367", null ]
+      [ "Code Style Guide", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md447", [
+        [ "Naming Conventions", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md448", null ],
+        [ "File Organization", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md449", null ],
+        [ "Documentation Standards", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md450", [
+          [ "Doxygen Comments", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md451", null ]
         ] ],
-        [ "Code Quality Checklist", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md368", [
-          [ "Before Committing", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md369", null ]
+        [ "Code Quality Checklist", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md452", [
+          [ "Before Committing", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md453", null ]
         ] ]
       ] ],
-      [ "Design Patterns Usage", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md370", [
-        [ "When to Use Each Pattern", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md371", [
-          [ "Observer Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md372", null ],
-          [ "Factory Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md373", null ],
-          [ "Strategy Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md374", null ],
-          [ "Singleton Pattern ⚠️", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md375", null ]
+      [ "Design Patterns Usage", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md454", [
+        [ "When to Use Each Pattern", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md455", [
+          [ "Observer Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md456", null ],
+          [ "Factory Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md457", null ],
+          [ "Strategy Pattern ✅", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md458", null ],
+          [ "Singleton Pattern ⚠️", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md459", null ]
         ] ],
-        [ "Qt-Specific Patterns", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md376", [
-          [ "Signals and Slots", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md377", null ],
-          [ "Model/View Architecture", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md378", null ],
-          [ "Dock Widget System", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md379", null ]
-        ] ],
-        [ "wxWidgets-Specific Patterns", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md380", [
-          [ "Virtual List Controls", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md381", null ],
-          [ "Event Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md382", null ],
-          [ "wxWidgets Type Conversions", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md383", null ]
+        [ "Qt-Specific Patterns", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md460", [
+          [ "Signals and Slots", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md461", null ],
+          [ "Model/View Architecture", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md462", null ],
+          [ "Dock Widget System", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md463", null ]
         ] ]
       ] ],
-      [ "Error Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md384", [
-        [ "Error Categories", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md385", null ],
-        [ "Error Handling Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md386", null ]
+      [ "Error Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md464", [
+        [ "Error Categories", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md465", null ],
+        [ "Error Handling Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md466", null ]
       ] ],
-      [ "Thread Safety", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md387", [
-        [ "Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md388", null ]
+      [ "Thread Safety", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md467", [
+        [ "Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md468", null ]
       ] ],
-      [ "Performance Best Practices", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md389", [
-        [ "Memory Management", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md390", null ],
-        [ "String Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md391", null ],
-        [ "Container Operations", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md392", null ]
+      [ "Performance Best Practices", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md469", [
+        [ "Memory Management", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md470", null ],
+        [ "String Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md471", null ],
+        [ "Container Operations", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md472", null ]
       ] ],
-      [ "AI Integration Development", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md393", [
-        [ "Adding a New AI Provider", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md394", [
-          [ "1. Implement IAIService Interface", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md395", null ],
-          [ "2. Implement Chat Method with CURL", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md396", null ],
-          [ "3. Register in AIServiceFactory", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md397", null ],
-          [ "4. Add to Configuration", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md398", null ]
+      [ "AI Integration Development", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md473", [
+        [ "Adding a New AI Provider", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md474", [
+          [ "1. Implement IAIService Interface", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md475", null ],
+          [ "2. Implement Chat Method with CURL", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md476", null ],
+          [ "3. Register in AIServiceFactory", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md477", null ],
+          [ "4. Add to Configuration", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md478", null ]
         ] ],
-        [ "AI Provider Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md399", [
-          [ "Timeout Configuration", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md400", null ],
-          [ "Error Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md401", null ],
-          [ "Thread Safety", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md402", null ]
+        [ "AI Provider Guidelines", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md479", [
+          [ "Timeout Configuration", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md480", null ],
+          [ "Error Handling", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md481", null ],
+          [ "Thread Safety", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md482", null ]
         ] ],
-        [ "Filter-Aware Analysis", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md403", null ]
+        [ "Filter-Aware Analysis", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md483", null ]
       ] ],
-      [ "Testing", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md404", [
-        [ "Unit Test Structure", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md405", null ],
-        [ "Mock Objects", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md406", null ]
+      [ "Testing", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md484", [
+        [ "Unit Test Structure", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md485", null ],
+        [ "Mock Objects", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md486", null ]
       ] ],
-      [ "Debugging Tips", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md407", [
-        [ "Logging Levels", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md408", null ],
-        [ "Common Issues", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md409", null ]
+      [ "Debugging Tips", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md487", [
+        [ "Logging Levels", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md488", null ],
+        [ "Common Issues", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md489", null ]
       ] ],
-      [ "Git Workflow", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md410", [
-        [ "Branch Naming", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md411", null ],
-        [ "Commit Messages", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md412", null ],
-        [ "Pull Request Template", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md413", null ]
+      [ "Git Workflow", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md490", [
+        [ "Branch Naming", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md491", null ],
+        [ "Commit Messages", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md492", null ],
+        [ "Pull Request Template", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md493", null ]
       ] ],
-      [ "Useful Commands", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md414", null ],
-      [ "Resources", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md415", [
-        [ "C++ and General", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md416", null ],
-        [ "Qt Framework", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md417", null ],
-        [ "wxWidgets Framework", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md418", null ],
-        [ "AI Provider APIs", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md419", null ]
+      [ "Useful Commands", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md494", null ],
+      [ "Resources", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md495", [
+        [ "C++ and General", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md496", null ],
+        [ "Qt Framework", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md497", null ],
+        [ "AI Provider APIs", "d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md498", null ]
       ] ]
     ] ],
     [ "LogViewer Architecture and Workflow Diagrams", "d0/d52/md_docs_2DIAGRAMS.html", [
-      [ "Table of Contents", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md421", null ],
-      [ "System Architecture Overview", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md423", [
-        [ "architecture-overview.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md424", null ]
+      [ "Table of Contents", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md500", null ],
+      [ "System Architecture Overview", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md502", [
+        [ "architecture-overview.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md503", null ]
       ] ],
-      [ "Component Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md426", [
-        [ "data-model.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md427", null ],
-        [ "filter-system.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md429", null ],
-        [ "plugin-system.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md431", null ]
+      [ "Component Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md505", [
+        [ "data-model.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md506", null ],
+        [ "filter-system.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md508", null ],
+        [ "plugin-system.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md510", null ]
       ] ],
-      [ "Sequence Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md433", [
-        [ "log-loading-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md434", null ],
-        [ "filter-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md436", null ],
-        [ "ai-analysis-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md438", null ],
-        [ "plugin-loading-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md440", null ]
+      [ "Sequence Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md512", [
+        [ "log-loading-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md513", null ],
+        [ "filter-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md515", null ],
+        [ "ai-analysis-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md517", null ],
+        [ "plugin-loading-workflow.puml", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md519", null ]
       ] ],
-      [ "Using These Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md442", [
-        [ "Generating Images", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md443", null ],
-        [ "Integration with Doxygen", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md444", null ]
+      [ "Using These Diagrams", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md521", [
+        [ "Generating Images", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md522", null ],
+        [ "Integration with Doxygen", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md523", null ]
       ] ],
-      [ "Maintenance Notes", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md446", null ],
-      [ "Related Documentation", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md448", null ]
+      [ "Maintenance Notes", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md525", null ],
+      [ "Related Documentation", "d0/d52/md_docs_2DIAGRAMS.html#autotoc_md527", null ]
     ] ],
     [ "LogViewer Installation Manifest System", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html", [
-      [ "Overview", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md450", null ],
-      [ "File Location", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md451", null ],
-      [ "File Format", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md452", null ],
-      [ "Usage During Installation/Upgrade", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md453", [
-        [ "Installation Script Flow", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md454", null ],
-        [ "Example Installation Script (Bash)", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md455", null ],
-        [ "Example Installation Script (NSIS - Windows)", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md456", null ]
+      [ "Overview", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md529", null ],
+      [ "File Location", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md530", null ],
+      [ "File Format", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md531", null ],
+      [ "Usage During Installation/Upgrade", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md532", [
+        [ "Installation Script Flow", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md533", null ],
+        [ "Example Installation Script (Bash)", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md534", null ],
+        [ "Example Installation Script (NSIS - Windows)", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md535", null ]
       ] ],
-      [ "Extending the Manifest", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md457", null ],
-      [ "Version Handling", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md458", null ],
-      [ "Backward Compatibility", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md459", null ],
-      [ "Benefits", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md460", null ]
+      [ "Extending the Manifest", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md536", null ],
+      [ "Version Handling", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md537", null ],
+      [ "Backward Compatibility", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md538", null ],
+      [ "Benefits", "de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md539", null ]
     ] ],
     [ "Event Merge Strategy Update", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html", [
-      [ "Overview", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md462", null ],
-      [ "Changes Made", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md463", [
-        [ "1. <strong>Enhanced Merge Timestamp Comparison</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md464", null ],
-        [ "2. <strong>Original ID Preservation</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md465", null ],
-        [ "3. <strong>Event Merge Flow</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md466", null ]
+      [ "Overview", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md541", null ],
+      [ "Changes Made", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md542", [
+        [ "1. <strong>Enhanced Merge Timestamp Comparison</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md543", null ],
+        [ "2. <strong>Original ID Preservation</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md544", null ],
+        [ "3. <strong>Event Merge Flow</strong>", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md545", null ]
       ] ],
-      [ "Problem Solved", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md467", [
-        [ "Before", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md468", null ],
-        [ "After", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md469", null ]
+      [ "Problem Solved", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md546", [
+        [ "Before", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md547", null ],
+        [ "After", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md548", null ]
       ] ],
-      [ "Example", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md470", null ],
-      [ "Configuration", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md471", null ],
-      [ "Benefits", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md472", null ],
-      [ "Testing", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md473", null ]
+      [ "Example", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md549", null ],
+      [ "Configuration", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md550", null ],
+      [ "Benefits", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md551", null ],
+      [ "Testing", "d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md552", null ]
     ] ],
     [ "OpenAI Integration", "d2/d33/md_docs_2OPENAI__INTEGRATION.html", [
-      [ "Overview", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md475", null ],
-      [ "Implementation Details", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md476", [
-        [ "Class: <tt>OpenAIClient</tt>", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md477", null ],
-        [ "Key Features", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md478", null ]
+      [ "Overview", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md554", null ],
+      [ "Implementation Details", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md555", [
+        [ "Class: <tt>OpenAIClient</tt>", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md556", null ],
+        [ "Key Features", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md557", null ]
       ] ],
-      [ "API Endpoints", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md479", [
-        [ "Chat Completions", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md480", null ]
+      [ "API Endpoints", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md558", [
+        [ "Chat Completions", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md559", null ]
       ] ],
-      [ "Configuration", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md481", [
-        [ "Required Settings", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md482", null ],
-        [ "Supported Models", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md483", null ]
+      [ "Configuration", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md560", [
+        [ "Required Settings", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md561", null ],
+        [ "Supported Models", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md562", null ]
       ] ],
-      [ "Usage Example", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md484", null ],
-      [ "HTTP Implementation", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md485", [
-        [ "CURL Setup", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md486", null ],
-        [ "WriteCallback", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md487", null ]
+      [ "Usage Example", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md563", null ],
+      [ "HTTP Implementation", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md564", [
+        [ "CURL Setup", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md565", null ],
+        [ "WriteCallback", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md566", null ]
       ] ],
-      [ "Error Handling", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md488", [
-        [ "Connection Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md489", null ],
-        [ "API Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md490", null ],
-        [ "Response Parsing Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md491", null ]
+      [ "Error Handling", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md567", [
+        [ "Connection Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md568", null ],
+        [ "API Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md569", null ],
+        [ "Response Parsing Errors", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md570", null ]
       ] ],
-      [ "Security Considerations", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md492", null ],
-      [ "Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md493", [
-        [ "Manual Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md494", null ],
-        [ "Unit Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md495", null ]
+      [ "Security Considerations", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md571", null ],
+      [ "Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md572", [
+        [ "Manual Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md573", null ],
+        [ "Unit Testing", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md574", null ]
       ] ],
-      [ "Troubleshooting", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md496", [
-        [ "Common Issues", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md497", null ]
+      [ "Troubleshooting", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md575", [
+        [ "Common Issues", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md576", null ]
       ] ],
-      [ "Integration with Factory Pattern", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md498", null ],
-      [ "Future Enhancements", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md499", null ],
-      [ "References", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md500", null ]
-    ] ],
-    [ "Plugin System Implementation Summary", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html", [
-      [ "Overview", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md502", null ],
-      [ "Current Architecture (C-ABI)", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md503", [
-        [ "Plugin C-ABI Exports", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md504", null ],
-        [ "Plugin Logger", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md505", null ],
-        [ "Configuration UI", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md506", null ]
-      ] ],
-      [ "Plugin Manager Implementation", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md507", null ],
-      [ "AI Provider Plugin Example", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md508", null ],
-      [ "Creating New Plugins", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md509", null ],
-      [ "Build System", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md510", null ],
-      [ "Directory Structure", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md511", null ],
-      [ "Usage Examples", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md512", [
-        [ "Plugin Manager", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md513", null ],
-        [ "Creating UI Panels", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md514", null ]
-      ] ],
-      [ "Key Design Decisions", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md515", null ],
-      [ "Known Limitations", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md516", null ],
-      [ "Testing", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md517", null ],
-      [ "Success Criteria", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md518", null ],
-      [ "Future Enhancements", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md519", null ],
-      [ "Conclusion", "d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html#autotoc_md520", null ]
+      [ "Integration with Factory Pattern", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md577", null ],
+      [ "Future Enhancements", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md578", null ],
+      [ "References", "d2/d33/md_docs_2OPENAI__INTEGRATION.html#autotoc_md579", null ]
     ] ],
     [ "Plugin Observer Pattern", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html", [
-      [ "Overview", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md522", null ],
-      [ "Architecture", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md523", [
-        [ "IPluginObserver Interface", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md524", null ],
-        [ "Plugin Events", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md525", null ]
+      [ "Overview", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md581", null ],
+      [ "Architecture", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md582", [
+        [ "IPluginObserver Interface", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md583", null ],
+        [ "Plugin Events", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md584", null ]
       ] ],
-      [ "Event Flow", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md526", [
-        [ "Registration & Loading", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md527", null ],
-        [ "Enable/Disable Cycle", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md528", null ],
-        [ "Unregistration", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md529", null ]
+      [ "Event Flow", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md585", [
+        [ "Registration & Loading", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md586", null ],
+        [ "Enable/Disable Cycle", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md587", null ],
+        [ "Unregistration", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md588", null ]
       ] ],
-      [ "Implementation Example", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md530", [
-        [ "Register as Observer", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md531", null ],
-        [ "Multiple Observers", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md532", null ]
+      [ "Implementation Example", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md589", [
+        [ "Register as Observer", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md590", null ],
+        [ "Multiple Observers", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md591", null ]
       ] ],
-      [ "Benefits", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md533", null ],
-      [ "Migration from Callbacks", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md534", [
-        [ "Old Approach", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md535", null ],
-        [ "New Approach", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md536", null ]
+      [ "Benefits", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md592", null ],
+      [ "Migration from Callbacks", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md593", [
+        [ "Old Approach", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md594", null ],
+        [ "New Approach", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md595", null ]
       ] ],
-      [ "Event Timing", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md537", null ],
-      [ "Thread Safety", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md538", null ],
-      [ "Best Practices", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md539", null ]
+      [ "Event Timing", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md596", null ],
+      [ "Thread Safety", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md597", null ],
+      [ "Best Practices", "d8/d40/md_docs_2PLUGIN__OBSERVER__PATTERN.html#autotoc_md598", null ]
     ] ],
     [ "LogViewer Plugin System", "d1/d53/md_docs_2PLUGIN__SYSTEM.html", [
-      [ "Quick Start", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md541", null ],
-      [ "Overview", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md542", [
-        [ "C-ABI Plugin Architecture", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md543", null ]
+      [ "Quick Start", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md600", null ],
+      [ "Overview", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md601", [
+        [ "C-ABI Plugin Architecture", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md602", null ],
+        [ "Migrating from the old IPlugin interface", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md603", null ]
       ] ],
-      [ "Plugin Logging", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md544", null ],
-      [ "Plugin Types", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md545", null ],
-      [ "Plugin Architecture", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md546", [
-        [ "C Plugin Structure", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md547", null ],
-        [ "Plugin Metadata", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md548", null ]
+      [ "Plugin Logging", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md604", null ],
+      [ "Plugin Types", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md605", null ],
+      [ "Plugin Architecture", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md606", [
+        [ "C Plugin Structure", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md607", null ],
+        [ "Plugin Metadata", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md608", null ]
       ] ],
-      [ "Plugin Manager", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md549", [
-        [ "Plugin Loading Process", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md550", null ]
+      [ "Plugin Manager", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md609", [
+        [ "Plugin Loading Process", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md610", null ]
       ] ],
-      [ "Creating a Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md551", [
-        [ "1. Create Plugin Class", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md552", null ],
-        [ "2. Export C-ABI Functions", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md553", null ],
-        [ "3. Build as Shared Library", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md554", null ]
+      [ "Creating a Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md611", [
+        [ "1. Create Plugin Class", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md612", null ],
+        [ "2. Export C-ABI Functions", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md613", null ],
+        [ "3. Build as Shared Library", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md614", null ]
       ] ],
-      [ "Available Plugins", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md555", [
-        [ "Basic Example Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md556", null ],
-        [ "AI Provider Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md557", null ]
+      [ "Available Plugins", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md615", [
+        [ "Basic Example Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md616", null ],
+        [ "AI Provider Plugin", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md617", null ]
       ] ],
-      [ "Plugin Configuration", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md558", null ],
-      [ "Plugin Directory Structure", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md559", null ],
-      [ "Platform-Specific Notes", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md560", [
-        [ "macOS", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md561", null ],
-        [ "Linux", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md562", null ],
-        [ "Windows", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md563", null ]
+      [ "Plugin Configuration", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md618", null ],
+      [ "Plugin Directory Structure", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md619", null ],
+      [ "Platform-Specific Notes", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md620", [
+        [ "macOS", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md621", null ],
+        [ "Linux", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md622", null ],
+        [ "Windows", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md623", null ]
       ] ],
-      [ "Troubleshooting", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md564", [
-        [ "Plugin Not Loading", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md565", null ],
-        [ "Logger Issues", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md566", null ],
-        [ "Panel Not Appearing", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md567", null ],
-        [ "Best Practices", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md568", null ]
+      [ "Troubleshooting", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md624", [
+        [ "Plugin Not Loading", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md625", null ],
+        [ "Logger Issues", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md626", null ],
+        [ "Panel Not Appearing", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md627", null ],
+        [ "Best Practices", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md628", null ]
       ] ],
-      [ "Future Enhancements", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md569", null ]
-    ] ],
-    [ "Plugin System: Type-Specific Interfaces", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html", [
-      [ "Current Implementation", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md571", null ],
-      [ "Legacy: Type-Specific Interfaces (Deprecated)", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md572", [
-        [ "Old IPlugin Interface", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md573", null ],
-        [ "Migration to C-ABI", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md574", null ]
-      ] ],
-      [ "Summary", "d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html#autotoc_md575", null ]
+      [ "Key Design Decisions", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md629", null ],
+      [ "Future Enhancements", "d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md630", null ]
     ] ],
     [ "LogViewer — Requirements Specification", "d2/d6e/md_docs_2REQUIREMENTS.html", [
-      [ "Table of Contents", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md578", null ],
-      [ "1. Purpose and Scope", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md580", null ],
-      [ "2. System Requirements (SYS)", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md582", [
-        [ "2.1 Supported Operating Systems", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md583", null ],
-        [ "2.2 Hardware", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md584", null ],
-        [ "2.3 Runtime Dependencies", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md585", null ]
+      [ "Table of Contents", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md633", null ],
+      [ "1. Purpose and Scope", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md635", null ],
+      [ "2. System Requirements (SYS)", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md637", [
+        [ "2.1 Supported Operating Systems", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md638", null ],
+        [ "2.2 Hardware", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md639", null ],
+        [ "2.3 Runtime Dependencies", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md640", null ]
       ] ],
-      [ "3. Software Requirements (SW)", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md587", [
-        [ "3.1 Functional Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md588", [
-          [ "3.1.1 Log File Loading", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md589", null ],
-          [ "3.1.2 Event Display", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md590", null ],
-          [ "3.1.3 Filtering", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md591", null ],
-          [ "3.1.4 AI-Assisted Analysis", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md592", null ],
-          [ "3.1.5 Export", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md593", null ],
-          [ "3.1.6 Signal Visualisation", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md594", null ],
-          [ "3.1.7 Format-Specific Statistics", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md595", null ],
-          [ "3.1.8 Configuration", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md596", null ],
-          [ "3.1.9 Named Layouts", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md597", null ],
-          [ "3.1.10 Side-by-Side Log Comparison", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md598", null ]
+      [ "3. Software Requirements (SW)", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md642", [
+        [ "3.1 Functional Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md643", [
+          [ "3.1.1 Log File Loading", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md644", null ],
+          [ "3.1.2 Event Display", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md645", null ],
+          [ "3.1.3 Filtering", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md646", null ],
+          [ "3.1.4 AI-Assisted Analysis", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md647", null ],
+          [ "3.1.5 Export", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md648", null ],
+          [ "3.1.6 Signal Visualisation", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md649", null ],
+          [ "3.1.7 Format-Specific Statistics", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md650", null ],
+          [ "3.1.8 Configuration", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md651", null ],
+          [ "3.1.9 Named Layouts", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md652", null ],
+          [ "3.1.10 Side-by-Side Log Comparison", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md653", null ]
         ] ],
-        [ "3.2 Performance Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md599", null ],
-        [ "3.3 Usability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md600", null ],
-        [ "3.4 Reliability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md601", null ],
-        [ "3.5 Security Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md602", null ],
-        [ "3.6 Portability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md603", null ],
-        [ "3.7 Plugin System Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md604", null ]
+        [ "3.2 Performance Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md654", null ],
+        [ "3.3 Usability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md655", null ],
+        [ "3.4 Reliability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md656", null ],
+        [ "3.5 Security Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md657", null ],
+        [ "3.6 Portability Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md658", null ],
+        [ "3.7 Plugin System Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md659", null ]
       ] ],
-      [ "4. Build Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md606", null ],
-      [ "5. Requirement Traceability", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md608", null ]
+      [ "4. Build Requirements", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md661", null ],
+      [ "5. Requirement Traceability", "d2/d6e/md_docs_2REQUIREMENTS.html#autotoc_md663", null ]
     ] ],
     [ "AddressSanitizer Setup", "d0/dff/md_docs_2SANITIZERS.html", [
-      [ "Overview", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md610", null ],
-      [ "Automatic Configuration", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md611", null ],
-      [ "Building with ASAN", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md612", [
-        [ "macOS", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md613", null ],
-        [ "Linux", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md614", null ]
+      [ "Overview", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md665", null ],
+      [ "Automatic Configuration", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md666", null ],
+      [ "Building with ASAN", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md667", [
+        [ "macOS", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md668", null ],
+        [ "Linux", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md669", null ]
       ] ],
-      [ "ASAN Runtime Options", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md615", null ],
-      [ "Common Options", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md616", null ],
-      [ "Reading ASAN Output", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md617", null ],
-      [ "Disabling ASAN", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md618", null ],
-      [ "Other Sanitizers", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md619", null ],
-      [ "Performance Impact", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md620", null ],
-      [ "Platform Support", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md621", null ],
-      [ "Troubleshooting", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md622", [
-        [ "False Positives", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md623", null ],
-        [ "Slow Startup", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md624", null ],
-        [ "MinGW/Windows", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md625", null ]
+      [ "ASAN Runtime Options", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md670", null ],
+      [ "Common Options", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md671", null ],
+      [ "Reading ASAN Output", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md672", null ],
+      [ "Disabling ASAN", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md673", null ],
+      [ "Other Sanitizers", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md674", null ],
+      [ "Performance Impact", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md675", null ],
+      [ "Platform Support", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md676", null ],
+      [ "Troubleshooting", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md677", [
+        [ "False Positives", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md678", null ],
+        [ "Slow Startup", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md679", null ],
+        [ "MinGW/Windows", "d0/dff/md_docs_2SANITIZERS.html#autotoc_md680", null ]
       ] ]
     ] ],
     [ "LogViewer Plugin SDK - Getting Started Guide", "de/d35/md_docs_2SDK__GETTING__STARTED.html", [
-      [ "Quick Start (5 Minutes)", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md627", [
-        [ "1. Install LogViewer SDK", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md628", null ],
-        [ "2. Build the Example Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md629", null ],
-        [ "3. Run Your Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md630", null ]
+      [ "Quick Start (5 Minutes)", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md682", [
+        [ "1. Install LogViewer SDK", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md683", null ],
+        [ "2. Build the Example Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md684", null ],
+        [ "3. Run Your Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md685", null ]
       ] ],
-      [ "Detailed Guide", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md632", [
-        [ "What is the LogViewer Plugin SDK?", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md633", null ],
-        [ "SDK Installation", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md634", [
-          [ "Build from Source", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md635", null ],
-          [ "SDK Contents", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md636", null ]
+      [ "Detailed Guide", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md687", [
+        [ "What is the LogViewer Plugin SDK?", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md688", null ],
+        [ "SDK Installation", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md689", [
+          [ "Build from Source", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md690", null ],
+          [ "SDK Contents", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md691", null ]
         ] ],
-        [ "Creating Your First Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md637", [
-          [ "Step 1: Minimal Plugin Structure", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md638", null ],
-          [ "Step 2: Implement BasicPlugin.cpp", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md639", null ],
-          [ "Step 3: CMakeLists.txt", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md640", null ],
-          [ "Step 4: config.json.in", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md641", null ],
-          [ "Step 5: Build", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md642", null ]
+        [ "Creating Your First Plugin", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md692", [
+          [ "Step 1: Minimal Plugin Structure", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md693", null ],
+          [ "Step 2: Implement BasicPlugin.cpp", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md694", null ],
+          [ "Step 3: CMakeLists.txt", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md695", null ],
+          [ "Step 4: config.json.in", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md696", null ],
+          [ "Step 5: Build", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md697", null ]
         ] ],
-        [ "Understanding the Plugin Lifecycle", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md643", null ],
-        [ "Using the Logger", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md644", null ],
-        [ "Creating UI Panels", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md645", null ],
-        [ "Accessing Events", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md646", null ],
-        [ "Dependencies", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md647", null ],
-        [ "Platform Considerations", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md648", [
-          [ "Windows (MinGW)", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md649", null ],
-          [ "Linux", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md650", null ],
-          [ "macOS", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md651", null ]
+        [ "Understanding the Plugin Lifecycle", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md698", null ],
+        [ "Using the Logger", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md699", null ],
+        [ "Creating UI Panels", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md700", null ],
+        [ "Accessing Events", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md701", null ],
+        [ "Dependencies", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md702", null ],
+        [ "Platform Considerations", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md703", [
+          [ "Windows (MinGW)", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md704", null ],
+          [ "Linux", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md705", null ],
+          [ "macOS", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md706", null ]
         ] ],
-        [ "Distribution", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md652", null ],
-        [ "Debugging", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md653", [
-          [ "View Plugin Loads", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md654", null ],
-          [ "Missing config.json", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md655", null ],
-          [ "Symbol Visibility", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md656", null ]
+        [ "Distribution", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md707", null ],
+        [ "Debugging", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md708", [
+          [ "View Plugin Loads", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md709", null ],
+          [ "Missing config.json", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md710", null ],
+          [ "Symbol Visibility", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md711", null ]
         ] ],
-        [ "Best Practices", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md657", null ]
+        [ "Best Practices", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md712", null ]
       ] ],
-      [ "Examples", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md658", null ],
-      [ "API Reference", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md659", [
-        [ "Core Functions", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md660", null ],
-        [ "Optional UI Functions", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md661", null ]
+      [ "Examples", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md713", null ],
+      [ "API Reference", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md714", [
+        [ "Core Functions", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md715", null ],
+        [ "Optional UI Functions", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md716", null ]
       ] ],
-      [ "Next Steps", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md662", null ],
-      [ "Support", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md663", null ],
-      [ "License", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md664", null ]
+      [ "Next Steps", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md717", null ],
+      [ "Support", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md718", null ],
+      [ "License", "de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md719", null ]
     ] ],
     [ "LogViewer SDK Quick Reference", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html", [
-      [ "Building Your First Plugin (10 Minutes)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md666", [
-        [ "1. Prepare SDK", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md667", null ],
-        [ "2. Create Plugin Project", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md668", null ],
-        [ "3. Create Plugin Code", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md669", null ],
-        [ "4. Build", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md670", null ]
+      [ "Building Your First Plugin (10 Minutes)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md721", [
+        [ "1. Prepare SDK", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md722", null ],
+        [ "2. Create Plugin Project", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md723", null ],
+        [ "3. Create Plugin Code", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md724", null ],
+        [ "4. Build", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md725", null ]
       ] ],
-      [ "Required Plugin Exports", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md672", null ],
-      [ "Optional Plugin Exports", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md673", null ],
-      [ "Common Patterns", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md674", [
-        [ "Logger", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md675", null ],
-        [ "State Management", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md676", null ],
-        [ "String Returns (Malloc Pattern)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md677", null ]
+      [ "Required Plugin Exports", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md727", null ],
+      [ "Optional Plugin Exports", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md728", null ],
+      [ "Common Patterns", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md729", [
+        [ "Logger", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md730", null ],
+        [ "State Management", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md731", null ],
+        [ "String Returns (Malloc Pattern)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md732", null ]
       ] ],
-      [ "CMakeLists.txt Template", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md678", null ],
-      [ "config.json Template", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md679", null ],
-      [ "Available Dependencies After find_package(LogViewer)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md680", null ],
-      [ "Installing Your Plugin", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md681", [
-        [ "Plugin Distribution (Recommended)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md682", null ],
-        [ "Manual Installation", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md683", null ]
+      [ "CMakeLists.txt Template", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md733", null ],
+      [ "config.json Template", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md734", null ],
+      [ "Available Dependencies After find_package(LogViewer)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md735", null ],
+      [ "Installing Your Plugin", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md736", [
+        [ "Plugin Distribution (Recommended)", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md737", null ],
+        [ "Manual Installation", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md738", null ]
       ] ],
-      [ "Common Errors", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md684", null ],
-      [ "Headers Reference", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md685", null ],
-      [ "Example", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md686", null ],
-      [ "Useful Links", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md687", null ],
-      [ "Build with LogViewer", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md688", null ],
-      [ "Tips", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md689", null ]
+      [ "Common Errors", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md739", null ],
+      [ "Headers Reference", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md740", null ],
+      [ "Example", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md741", null ],
+      [ "Useful Links", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md742", null ],
+      [ "Build with LogViewer", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md743", null ],
+      [ "Tips", "da/d87/md_docs_2SDK__QUICK__REFERENCE.html#autotoc_md744", null ]
+    ] ],
+    [ "v1.11.0 Comprehensive Test Suite Summary", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html", [
+      [ "📊 Test Statistics", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md747", null ],
+      [ "🧪 Test Files Overview", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md749", [
+        [ "1. FilteredReportGenerationTest.cpp (7 tests)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md750", null ],
+        [ "2. ConcurrentEventAccessTest.cpp (6 tests)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md752", null ],
+        [ "3. TimestampParsingTest.cpp (13 tests)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md754", null ],
+        [ "4. FileIOErrorHandlingTest.cpp (15 tests)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md756", null ],
+        [ "5. SearchPerformanceTest.cpp (10 tests)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md758", null ]
+      ] ],
+      [ "🐛 Additional Bug Fix", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md760", [
+        [ "Log Level Configuration Fix (Non-Critical)", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md761", null ]
+      ] ],
+      [ "📈 Test Coverage by Bug Fix", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md763", null ],
+      [ "🚀 Test Execution", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md765", null ],
+      [ "✅ Release Readiness", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md767", null ],
+      [ "📝 Notes for QA", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md769", null ],
+      [ "📊 Metrics", "d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html#autotoc_md771", null ]
     ] ],
     [ "LogViewer User Manual", "d6/dbf/md_docs_2USER__MANUAL.html", [
-      [ "Table of Contents", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md693", null ],
-      [ "1. Introduction", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md695", null ],
-      [ "2. Getting Started", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md697", null ],
-      [ "3. Opening Log Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md699", [
-        [ "3.1 Supported Formats", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md700", [
-          [ "JSON log format", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md701", null ]
+      [ "Table of Contents", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md775", null ],
+      [ "1. Introduction", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md777", null ],
+      [ "2. Getting Started", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md779", null ],
+      [ "3. Opening Log Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md781", [
+        [ "3.1 Supported Formats", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md782", [
+          [ "JSON log format", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md783", null ]
         ] ],
-        [ "3.2 Opening a File", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md702", null ],
-        [ "3.3 Following a Live File (Tail Mode)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md703", null ],
-        [ "3.4 Drag and Drop", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md704", null ],
-        [ "3.5 Recent Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md705", null ],
-        [ "3.6 Loading a DBC File (CAN Signal Decoding)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md706", null ],
-        [ "3.7 Loading Evlog Templates", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md707", null ]
+        [ "3.2 Opening a File", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md784", null ],
+        [ "3.3 Following a Live File (Tail Mode)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md785", null ],
+        [ "3.4 Drag and Drop", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md786", null ],
+        [ "3.5 Recent Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md787", null ],
+        [ "3.6 Loading a DBC File (CAN Signal Decoding)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md788", null ],
+        [ "3.7 Loading Evlog Templates", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md789", null ]
       ] ],
-      [ "4. The Events Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md709", [
-        [ "4.1 Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md710", null ],
-        [ "4.2 Selecting and Navigating Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md711", null ],
-        [ "4.3 Copying Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md712", null ],
-        [ "4.4 Jump to Timestamp", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md713", null ]
+      [ "4. The Events Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md791", [
+        [ "4.1 Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md792", null ],
+        [ "4.2 Selecting and Navigating Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md793", null ],
+        [ "4.3 Copying Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md794", null ],
+        [ "4.4 Jump to Timestamp", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md795", null ]
       ] ],
-      [ "5. Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md715", [
-        [ "5.1 Text Search", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md716", null ],
-        [ "5.2 Type Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md717", null ],
-        [ "5.3 Time Range Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md718", null ],
-        [ "5.4 Actor Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md719", null ],
-        [ "5.5 Filter Profiles", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md720", null ]
+      [ "5. Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md797", [
+        [ "5.1 Text Search", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md798", null ],
+        [ "5.2 Type Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md799", null ],
+        [ "5.3 Time Range Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md800", null ],
+        [ "5.4 Actor Filter", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md801", null ],
+        [ "5.5 Filter Profiles", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md802", null ]
       ] ],
-      [ "6. Analysis Panels", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md722", [
-        [ "6.1 Statistics", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md723", null ],
-        [ "6.2 Signal Plot", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md724", null ],
-        [ "6.3 Timeline Chart", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md725", null ],
-        [ "6.4 Pattern Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md726", null ],
-        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md727", [
-          [ "Correlation Field", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md728", null ],
-          [ "Tree Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md729", null ],
-          [ "Child Rows", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md730", null ],
-          [ "Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md731", null ],
-          [ "Navigating to Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md732", null ]
+      [ "6. Analysis Panels", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md804", [
+        [ "6.1 Statistics", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md805", null ],
+        [ "6.2 Signal Plot", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md806", null ],
+        [ "6.3 Timeline Chart", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md807", null ],
+        [ "6.4 Pattern Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md808", null ],
+        [ "6.5 Trace Viewer", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md809", [
+          [ "Correlation Field", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md810", null ],
+          [ "Tree Columns", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md811", null ],
+          [ "Child Rows", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md812", null ],
+          [ "Filtering", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md813", null ],
+          [ "Navigating to Events", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md814", null ]
         ] ],
-        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md733", null ],
-        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md734", null ],
-        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md735", null ]
+        [ "6.6 Bookmarks", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md815", null ],
+        [ "6.7 Scenarios", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md816", null ],
+        [ "6.8 Actors", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md817", null ]
       ] ],
-      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md737", [
-        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md738", null ],
-        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md739", null ],
-        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md740", [
-          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md741", null ],
-          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md742", null ],
-          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md743", null ]
+      [ "7. Side-by-Side Comparison", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md819", [
+        [ "7.1 Opening the Panel", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md820", null ],
+        [ "7.2 Loading Files", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md821", null ],
+        [ "7.3 Synchronisation Modes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md822", [
+          [ "Timestamp Sync (default)", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md823", null ],
+          [ "Manual Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md824", null ],
+          [ "No Sync", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md825", null ]
         ] ]
       ] ],
-      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md745", null ],
-      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md747", [
-        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md748", null ],
-        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md749", null ]
+      [ "8. Signal Browser and DBC Decoding", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md827", null ],
+      [ "9. AI-Assisted Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md829", [
+        [ "9.1 Configuring an AI Provider", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md830", null ],
+        [ "9.2 Running an Analysis", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md831", null ]
       ] ],
-      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md751", null ],
-      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md753", null ],
-      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md755", null ],
-      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md757", null ],
-      [ "14. Plugin Manager", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md759", [
-        [ "Plugin Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md760", null ],
-        [ "Actions", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md761", null ],
-        [ "Plugin Details", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md762", null ]
+      [ "10. Named Layouts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md833", null ],
+      [ "11. Export", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md835", null ],
+      [ "12. Themes", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md837", null ],
+      [ "13. Configuration", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md839", null ],
+      [ "14. Plugin Manager", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md841", [
+        [ "Plugin Table", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md842", null ],
+        [ "Actions", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md843", null ],
+        [ "Plugin Details", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md844", null ]
       ] ],
-      [ "15. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md764", null ]
+      [ "15. Keyboard Shortcuts", "d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md846", null ]
     ] ],
     [ "Deprecated List", "da/d58/deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -928,34 +984,38 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a551132208728e02b62a3e7ed23c108e9",
-"d1/d10/classparser_1_1JsonParser.html#a8201a1934e548630c7000b7de38f95b2",
-"d1/dab/structui_1_1qt_1_1ExportDialog_1_1ExportOptions.html#aa83385fc671a16073dc7b5a8969163cb",
-"d2/d44/classutil_1_1Logger.html#ae38b041410e7e3e3794dc95dc8f3be91",
-"d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#aec11bccff4363350c52ece1a6a33cf06",
-"d3/dba/classmvc_1_1IView.html#ada9c25029c69a4a770a2357ae039a450",
-"d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html#aecfa7f638b4d8a36e51e30c49a1609b8",
-"d4/d7a/classui_1_1qt_1_1EventsTableModel.html#aad6c4f9f6af8f741523972aac29e737c",
-"d4/dfa/classui_1_1qt_1_1MainWindow.html#a5768f38133db7a8f531bc2bc7f9e2efe",
-"d4/dfa/structplugin_1_1PluginLoadInfo.html#adeecda83e8660cbe56da283d90dee7d4",
-"d5/db4/classfilters_1_1FilterManager.html#a24177957250a75765322630b5c4f76de",
-"d6/d26/md_docs_2MERGE__STRATEGY__UPDATE.html#autotoc_md472",
-"d6/dba/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportOptions.html#a2368672716a17c2f8c23d8847c61371d",
-"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a2c8c41853fbbdda2e493889be8f3cb70",
-"d7/ddd/classui_1_1qt_1_1FilterStatusBar.html#a6588eeb5911c7ab2cf94102a71fdc93a",
-"d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md411",
-"d8/ded/classQWidget.html",
-"d9/da2/classui_1_1qt_1_1widgets_1_1PanelNavigator.html#a22c667dde368c02aeb954dfb72c220aa",
-"da/d30/classplugin_1_1PluginEventBus.html#ad17c5a6793aadcda41a1cf340f7436ba",
-"da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#af9e90685bd89509ee0a40b897b9f651b",
-"dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929",
-"dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a67bdc6d7bbbc2ae4fbe5d689906fb5cb",
-"dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468",
-"dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#af41a3b2bc0ce926ea6379666a1c502c6",
-"de/d35/classui_1_1qt_1_1UpdateChecker.html#a490dfa7c7d4dec8a939563ab7c23a63f",
-"df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#a4c265dd161a689ad65997fc310af8b3e",
-"df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ae48bed1c020eebb927dbc7639e6cf65c",
-"index.html#autotoc_md5"
+"d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html#autotoc_md49",
+"d1/d03/MainWindowFilterOpsHelper_8cpp.html",
+"d1/d63/classai_1_1OllamaClient.html#af58350cdc7bbe3d1631ae16525cf3af0",
+"d2/d28/SequenceDiagramPanel_8cpp.html#a2aecb5c10c4d638336a470b129d8bffb",
+"d2/d5e/classconfig_1_1Config.html#ad191f2c5325600142bd2d0f0acc90195",
+"d3/d1f/classui_1_1IMainWindowView.html#a816fff92f0a7d1f06482c0de19bdd0d9",
+"d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a00d23a76e43b46dae9ec7aa9dcbebb32",
+"d3/de9/WxWidgetsUtils_8hpp.html#a6895a761f844a3e96b9745d2e3309094",
+"d4/d5b/classui_1_1NoopErrorPresenter.html",
+"d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#aa42d34a0ad175f82720682599b4a83d0",
+"d4/dfa/classui_1_1qt_1_1MainWindow.html#a5c1e7cdae7fcf5fb50418ad80f853252",
+"d4/dfa/structplugin_1_1PluginLoadInfo.html#ace649fc1e5b88910edf034447c7c109f",
+"d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#a22d294ae08f316da71fe1eb89aa4e17f",
+"d6/d26/classui_1_1qt_1_1EventsTableView.html#a27fc86c14e5fb79c7d27c324d3b30f26",
+"d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a126d9d7c625653a78b1257b56b3d0a44",
+"d7/d29/classconfig_1_1FieldConversionPluginRegistry.html#a4127d42a24c43034916e9c26f7b7e39b",
+"d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a48d3c4facfb72aa83d67723c35be7e68",
+"d7/def/structui_1_1qt_1_1FileTailer_1_1TailObserver.html#aff5556bd3580a7c5e95c1589c7d76f20",
+"d8/d76/structanalyzer_1_1ExchangePattern.html#a9ca8168e3efb7f12e9f1b8d839171fa9",
+"d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md242",
+"d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#a125620aa5b65c78f0de805f54945e3bf",
+"d9/dee/classui_1_1qt_1_1GeneralPreferencesPanel.html#a74a6ca0c2c5b3ada927fbdc00f97a6b3",
+"da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae",
+"da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md332",
+"dc/d0f/structparser_1_1EvlogTemplate.html#a41c4a8524e4edee00ae85424da78bbc8",
+"dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a866b78c4ee495c56fa74f51bdb28583c",
+"dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a167e10e073e771251ed882fa74cbef80",
+"dd/d7c/structconfig_1_1TranslationResult.html#aa94f87ac1084919bf92e3133e1ffb400",
+"dd/dfa/classparser_1_1AscParser.html#abda83b8d68f9be83f416f7ae685cea6f",
+"de/d72/EvlogTemplate_8hpp_source.html",
+"df/dae/classui_1_1qt_1_1IStatisticsStrategy.html",
+"dir_af57c064366bf6151e74a3e5c459bc17.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

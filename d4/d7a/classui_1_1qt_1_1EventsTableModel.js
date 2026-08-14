@@ -10,6 +10,7 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "GetSearchEngine", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a921fb3c1611154a0cb65b4bce1d58c10", null ],
     [ "GetSortValue", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3e229b903b49d91b74900def834af7fd", null ],
     [ "headerData", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4", null ],
+    [ "IsFilteringActive", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a860b41d15c88fe8820f216def1d8caec", null ],
     [ "MatchCount", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a0f0222e7436f9c94bc58df368523c75c", null ],
     [ "MatchedRows", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac32511ef2268583db6f7f0a37d652f17", null ],
     [ "RebuildSearchMatches", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9ef6bb565019fccdac5103ada3ad0902", null ],

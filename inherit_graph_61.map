@@ -1,7 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$dc/d38/classui_1_1ISearchResultsView.html" title="Toolkit&#45;agnostic contract for the search results panel." alt="" coords="5,5,176,31"/>
-<area shape="rect" id="Node000001" href="$d9/dfd/classui_1_1qt_1_1SearchResultsView.html" title=" " alt="" coords="224,31,411,56"/>
-<area shape="poly" id="edge88_Node000000_Node000001" title=" " alt="" coords="190,26,224,30,224,36,189,32"/>
-<area shape="rect" id="Node000002" href="$d3/d5f/classQTreeWidget.html" title=" " alt="" coords="38,55,143,80"/>
-<area shape="poly" id="edge89_Node000002_Node000001" title=" " alt="" coords="156,58,224,51,224,56,157,63"/>
+<area shape="rect" id="Node000000" href="$d2/d99/classservices_1_1IService.html" title="Base interface for all pluggable services (AI, analyzer, exporter, etc.)" alt="" coords="5,104,141,129"/>
+<area shape="rect" id="Node000001" href="$df/d97/classai_1_1IAIService.html" title="Interface for AI service communication." alt="" coords="189,104,296,129"/>
+<area shape="poly" id="edge55_Node000000_Node000001" title=" " alt="" coords="155,114,189,114,189,119,155,119"/>
+<area shape="rect" id="Node000002" href="$dc/d89/classai_1_1AnthropicClient.html" title="Client for Anthropic API (Claude)" alt="" coords="344,5,487,31"/>
+<area shape="poly" id="edge56_Node000001_Node000002" title=" " alt="" coords="267,92,302,65,343,40,369,28,371,33,345,44,305,70,271,97"/>
+<area shape="rect" id="Node000003" href="$d7/d05/classai_1_1GeminiClient.html" title="Client for Google Gemini API." alt="" coords="352,55,479,80"/>
+<area shape="poly" id="edge57_Node000001_Node000003" title=" " alt="" coords="300,98,369,78,371,83,301,103"/>
+<area shape="rect" id="Node000004" href="$d7/d7b/classai_1_1LLMClient.html" title="Generic client for communicating with LLM services." alt="" coords="362,104,469,129"/>
+<area shape="poly" id="edge58_Node000001_Node000004" title=" " alt="" coords="310,114,361,114,361,119,310,119"/>
+<area shape="rect" id="Node000005" href="$d1/d63/classai_1_1OllamaClient.html" title="Client for communicating with local Ollama LLM server." alt="" coords="352,153,479,179"/>
+<area shape="poly" id="edge59_Node000001_Node000005" title=" " alt="" coords="301,131,371,151,369,156,300,136"/>
+<area shape="rect" id="Node000006" href="$d8/d14/classai_1_1OpenAIClient.html" title="Client for OpenAI&#45;compatible APIs (OpenAI, xAI Grok, etc.)" alt="" coords="352,203,479,228"/>
+<area shape="poly" id="edge60_Node000001_Node000006" title=" " alt="" coords="271,136,305,162,345,188,374,200,372,205,343,192,302,167,267,140"/>
 </map>

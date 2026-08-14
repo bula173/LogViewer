@@ -10,8 +10,15 @@ var searchData=
   ['actorspanel_7',['ActorsPanel',['../d2/d40/classui_1_1qt_1_1ActorsPanel.html',1,'ui::qt']]],
   ['actortreeitem_8',['ActorTreeItem',['../d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html',1,'ui::qt::anonymous_namespace{ActorsPanel.cpp}']]],
   ['advancedquery_9',['AdvancedQuery',['../de/dd6/structui_1_1qt_1_1utils_1_1SearchEngine_1_1AdvancedQuery.html',1,'ui::qt::utils::SearchEngine']]],
-  ['aipreferencespanel_10',['AIPreferencesPanel',['../d4/d8b/classui_1_1qt_1_1AIPreferencesPanel.html',1,'ui::qt']]],
-  ['appupdateinfo_11',['AppUpdateInfo',['../d5/d29/structupdates_1_1AppUpdateInfo.html',1,'updates']]],
-  ['arrowitem_12',['ArrowItem',['../df/d2a/classArrowItem.html',1,'']]],
-  ['ascparser_13',['AscParser',['../dd/dfa/classparser_1_1AscParser.html',1,'parser']]]
+  ['aianalysispanel_10',['AIAnalysisPanel',['../d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html',1,'ui::qt']]],
+  ['aichatpanel_11',['AIChatPanel',['../d6/d8a/classui_1_1qt_1_1AIChatPanel.html',1,'ui::qt']]],
+  ['aiconfigpanel_12',['AIConfigPanel',['../d8/d24/classui_1_1qt_1_1AIConfigPanel.html',1,'ui::qt']]],
+  ['aipreferencespanel_13',['AIPreferencesPanel',['../d4/d8b/classui_1_1qt_1_1AIPreferencesPanel.html',1,'ui::qt']]],
+  ['aiproviderplugin_14',['AIProviderPlugin',['../d5/d83/classplugin_1_1AIProviderPlugin.html',1,'plugin']]],
+  ['aiservicefactory_15',['AIServiceFactory',['../d9/deb/classai_1_1AIServiceFactory.html',1,'ai']]],
+  ['aiservicewrapper_16',['AIServiceWrapper',['../df/dca/classai_1_1AIServiceWrapper.html',1,'ai']]],
+  ['anthropicclient_17',['AnthropicClient',['../dc/d89/classai_1_1AnthropicClient.html',1,'ai']]],
+  ['appupdateinfo_18',['AppUpdateInfo',['../d5/d29/structupdates_1_1AppUpdateInfo.html',1,'updates']]],
+  ['arrowitem_19',['ArrowItem',['../df/d2a/classArrowItem.html',1,'']]],
+  ['ascparser_20',['AscParser',['../dd/dfa/classparser_1_1AscParser.html',1,'parser']]]
 ];

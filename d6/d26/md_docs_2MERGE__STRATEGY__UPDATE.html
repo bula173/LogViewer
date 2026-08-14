@@ -93,13 +93,13 @@ $(document).ready(function(){initNavTree('d6/d26/md_docs_2MERGE__STRATEGY__UPDAT
   <div class="headertitle"><div class="title">Event Merge Strategy Update</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md461"></a> </p>
-<h1><a class="anchor" id="autotoc_md462"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md540"></a> </p>
+<h1><a class="anchor" id="autotoc_md541"></a>
 Overview</h1>
 <p>Updated the event merging strategy in LogViewer to handle timestamp ordering and ID preservation when merging events from multiple sources.</p>
-<h1><a class="anchor" id="autotoc_md463"></a>
+<h1><a class="anchor" id="autotoc_md542"></a>
 Changes Made</h1>
-<h2><a class="anchor" id="autotoc_md464"></a>
+<h2><a class="anchor" id="autotoc_md543"></a>
 1. &lt;strong&gt;Enhanced Merge Timestamp Comparison&lt;/strong&gt;</h2>
 <p><b>File</b>: <code><a class="el" href="../../de/d0e/EventsContainer_8cpp.html" title="Implementation of the EventsContainer class methods.">src/application/db/EventsContainer.cpp</a></code></p>
 <p>The <code>isBefore()</code> comparator in <code>MergeEvents()</code> now:</p><ul>
@@ -111,7 +111,7 @@ Changes Made</h1>
 <div class="line"> </div>
 <div class="line"><span class="comment">// If timestamps are equal, use event ID as tiebreaker</span></div>
 <div class="line"><span class="keywordflow">return</span> a.getId() &lt; b.getId();</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md465"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md544"></a>
 2. &lt;strong&gt;Original ID Preservation&lt;/strong&gt;</h2>
 <p><b>Files</b>:</p><ul>
 <li><code><a class="el" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries.">src/application/db/LogEvent.hpp</a></code> (added method declaration)</li>
@@ -124,7 +124,7 @@ Changes Made</h1>
 <li>Rebuilds the lookup index after adding the field</li>
 </ul>
 <p><b>Usage</b>: When merging events from different sources, the original event ID is automatically preserved as an event field.</p>
-<h2><a class="anchor" id="autotoc_md466"></a>
+<h2><a class="anchor" id="autotoc_md545"></a>
 3. &lt;strong&gt;Event Merge Flow&lt;/strong&gt;</h2>
 <p>When <code>MergeEvents()</code> is called:</p><ol type="1">
 <li>Events from both containers are sorted by timestamp + event ID</li>
@@ -132,16 +132,16 @@ Changes Made</h1>
 <li>Events from "other" container have their original IDs stored via <code>SetOriginalId()</code></li>
 <li>Final merged list preserves chronological order with consistent ID handling</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md467"></a>
+<h1><a class="anchor" id="autotoc_md546"></a>
 Problem Solved</h1>
-<h2><a class="anchor" id="autotoc_md468"></a>
+<h2><a class="anchor" id="autotoc_md547"></a>
 Before</h2>
 <ul>
 <li>When merging logs from two sources (e.g., two log files), events with the same ID could have different meanings</li>
 <li>No way to identify the original ID from the source container after merge</li>
 <li>Confusing duplicate IDs in the merged result</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md469"></a>
+<h2><a class="anchor" id="autotoc_md548"></a>
 After</h2>
 <ul>
 <li>Original event IDs are preserved as <code>original_id</code> field in the event data</li>
@@ -149,7 +149,7 @@ After</h2>
 <li>Events are sorted correctly by timestamp, with IDs used as tiebreaker when timestamps match</li>
 <li>Events show both their new and legacy IDs in the UI</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md470"></a>
+<h1><a class="anchor" id="autotoc_md549"></a>
 Example</h1>
 <p><b>Before Merge:</b></p><ul>
 <li>Log A: Event ID=1, timestamp="2025-01-07T10:00:00"</li>
@@ -163,7 +163,7 @@ Example</h1>
 <li>Event 1: ID: 1 | Original ID: 1 | Source: Log A | Time: 10:00:00</li>
 <li>Event 2: ID: 1 | Original ID: 1 | Source: Log B | Time: 10:00:05</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md471"></a>
+<h1><a class="anchor" id="autotoc_md550"></a>
 Configuration</h1>
 <p>No configuration needed - this is automatic when merging events: </p><div class="fragment"><div class="line">container.MergeEvents(other, <span class="stringliteral">&quot;existing_log.xml&quot;</span>, <span class="stringliteral">&quot;new_log.xml&quot;</span>, <span class="stringliteral">&quot;timestamp&quot;</span>);</div>
 </div><!-- fragment --><p>The merge automatically:</p><ol type="1">
@@ -173,7 +173,7 @@ Configuration</h1>
 <li>Stores original IDs for events from 'other'</li>
 <li>Maintains source information</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md472"></a>
+<h1><a class="anchor" id="autotoc_md551"></a>
 Benefits</h1>
 <p>✅ Clear identification of event origins <br  />
  ✅ Prevents ID collision confusion <br  />
@@ -181,7 +181,7 @@ Benefits</h1>
  ✅ Transparent handling of multi-source logs <br  />
  ✅ No additional user configuration required <br  />
 </p>
-<h1><a class="anchor" id="autotoc_md473"></a>
+<h1><a class="anchor" id="autotoc_md552"></a>
 Testing</h1>
 <p>The merge strategy preserves:</p><ul>
 <li>Chronological order (primary by timestamp, secondary by ID)</li>

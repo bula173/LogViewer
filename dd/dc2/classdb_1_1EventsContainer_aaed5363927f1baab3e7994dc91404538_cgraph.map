@@ -1,14 +1,26 @@
 <map id="db::EventsContainer::Clear" name="db::EventsContainer::Clear">
-<area shape="rect" id="Node000001" title="Removes all events from the container." alt="" coords="5,47,159,87"/>
-<area shape="rect" id="Node000002" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="253,5,398,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,49,206,39,248,31,249,36,207,45,160,54"/>
-<area shape="rect" id="Node000005" href="$dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="207,55,444,80"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="159,65,193,65,193,70,159,70"/>
-<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="257,104,394,129"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="159,80,249,99,248,104,158,85"/>
-<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="492,55,673,80"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,28,503,49,502,55,392,33"/>
-<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="721,55,880,80"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="673,65,708,65,708,70,673,70"/>
-<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="392,101,502,80,503,85,393,107"/>
+<area shape="rect" id="Node000001" title="Removes all events from the container." alt="" coords="5,39,159,79"/>
+<area shape="rect" id="Node000002" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="972,14,1117,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,36,206,24,311,13,418,7,628,3,815,8,958,17,958,22,815,14,628,9,418,12,311,19,207,29,149,41"/>
+<area shape="rect" id="Node000005" href="$da/d80/classmvc_1_1IModelObservable.html#aee327bfaecd260893032de205a8619dd" title="Notifies all views of current item index change." alt="" coords="207,39,415,79"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="159,56,193,56,193,61,159,61"/>
+<area shape="rect" id="Node000007" href="$dd/dc2/classdb_1_1EventsContainer.html#ab9f69c41adcbd8bda08ed3150a04e9e6" title=" " alt="" coords="232,103,389,143"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="155,76,227,96,225,102,153,81"/>
+<area shape="rect" id="Node000003" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1165,77,1347,102"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1089,37,1200,70,1199,75,1087,42"/>
+<area shape="rect" id="Node000004" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1395,77,1553,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1347,87,1381,87,1381,92,1347,92"/>
+<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="769,77,903,102"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="415,61,700,77,755,81,755,86,700,83,415,67"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="903,87,1152,87,1152,92,903,92"/>
+<area shape="rect" id="Node000008" href="$dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="463,93,700,118"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="389,115,449,111,449,116,390,120"/>
+<area shape="rect" id="Node000009" href="$da/d80/classmvc_1_1IModelObservable.html#afb9b84e8d2dc525ac24407b4a6487112" title="Notifies all registered views that data has changed." alt="" coords="493,143,669,183"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="390,132,480,145,479,150,389,137"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="657,140,699,128,781,104,782,109,701,133,659,145"/>
+<area shape="rect" id="Node000010" href="$da/d80/classmvc_1_1IModelObservable.html#ab0047bdfb7e8f0e6ff7fca9f911d4d99" title="Internal method to clean up expired weak pointers." alt="" coords="748,133,924,173"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="669,157,734,154,734,160,669,162"/>
+<area shape="rect" id="Node000011" href="$d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="976,130,1113,155"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="924,146,962,144,962,150,924,152"/>
+<area shape="poly" id="edge12_Node000011_Node000003" title=" " alt="" coords="1095,127,1191,103,1193,108,1097,132"/>
 </map>

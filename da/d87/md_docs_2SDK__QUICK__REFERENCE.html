@@ -93,15 +93,15 @@ $(document).ready(function(){initNavTree('da/d87/md_docs_2SDK__QUICK__REFERENCE.
   <div class="headertitle"><div class="title">LogViewer SDK Quick Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md665"></a> Quick reference for plugin developers building LogViewer plugins.</p>
-<h1><a class="anchor" id="autotoc_md666"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md720"></a> Quick reference for plugin developers building LogViewer plugins.</p>
+<h1><a class="anchor" id="autotoc_md721"></a>
 Building Your First Plugin (10 Minutes)</h1>
-<h2><a class="anchor" id="autotoc_md667"></a>
+<h2><a class="anchor" id="autotoc_md722"></a>
 1. Prepare SDK</h2>
 <div class="fragment"><div class="line">cd LogViewer</div>
 <div class="line">cmake -S . -B build -DBUILD_SDK=ON</div>
 <div class="line">cmake --install build --prefix ~/LogViewer_install</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md668"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md723"></a>
 2. Create Plugin Project</h2>
 <div class="fragment"><div class="line">mkdir MyPlugin &amp;&amp; cd MyPlugin</div>
 <div class="line">cat &gt; CMakeLists.txt &lt;&lt; &#39;EOF&#39;</div>
@@ -115,7 +115,7 @@ Building Your First Plugin (10 Minutes)</h1>
 <div class="line">target_link_libraries(my_plugin PRIVATE LogViewer::plugin_api Qt6::Core)</div>
 <div class="line">set_target_properties(my_plugin PROPERTIES PREFIX &quot;&quot;)</div>
 <div class="line">EOF</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md669"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md724"></a>
 3. Create Plugin Code</h2>
 <div class="fragment"><div class="line">mkdir src</div>
 <div class="line">cat &gt; src/MyPlugin.cpp &lt;&lt; &#39;EOF&#39;</div>
@@ -168,13 +168,13 @@ Building Your First Plugin (10 Minutes)</h1>
 <div class="line"> </div>
 <div class="line">}</div>
 <div class="line">EOF</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md670"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md725"></a>
 4. Build</h2>
 <div class="fragment"><div class="line">cmake -S . -B build -DCMAKE_PREFIX_PATH=~/LogViewer_install/sdk/lib/cmake</div>
 <div class="line">cmake --build build</div>
 </div><!-- fragment --><p>Done! Your plugin is in <code>build/libmy_plugin.so</code> (Linux) or <code>build/my_plugin.dll</code> (Windows).</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md672"></a>
+<h1><a class="anchor" id="autotoc_md727"></a>
 Required Plugin Exports</h1>
 <p>Every plugin MUST export these C-ABI functions:</p>
 <table class="markdownTable">
@@ -197,52 +197,56 @@ Required Plugin Exports</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Plugin_SetLoggerCallback</code>   </td><td class="markdownTableBodyNone"><code>void(PluginHandle, PluginLogFn)</code>   </td><td class="markdownTableBodyNone">Receive logger function   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md673"></a>
+<h1><a class="anchor" id="autotoc_md728"></a>
 Optional Plugin Exports</h1>
 <p>Plugins can optionally export UI creation functions:</p>
 <div class="fragment"><div class="line"><span class="comment">// These return QWidget* cast to void*</span></div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
+<div class="line"><span class="keywordtype">void</span>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a80d3680445923dff44d276cba0a8e99d">Plugin_CreateLeftPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
 <div class="line"><span class="keywordtype">void</span>* Plugin_CreateRightPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateBottomPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
+<div class="line"><span class="keywordtype">void</span>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a59c36ceea5547289122c196b836cc51a">Plugin_CreateBottomPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
-<div class="line"><span class="keywordtype">void</span>* Plugin_CreateMainPanel(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
+<div class="line"><span class="keywordtype">void</span>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a9e725c50e8ae0a344e3dc36e7c108e72">Plugin_CreateMainPanel</a>(PluginHandle h, <span class="keywordtype">void</span>* parent, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_typedef" href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a>) { ... }</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Optional cleanup</span></div>
-<div class="line"><a class="code hl_define" href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
+<div class="line"><a class="code hl_define" href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div>
 <div class="line"><span class="keywordtype">void</span> Plugin_DestroyLeftPanel(PluginHandle h, <span class="keywordtype">void</span>* widget) { ... }</div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a59c36ceea5547289122c196b836cc51a"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a59c36ceea5547289122c196b836cc51a">Plugin_CreateBottomPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateBottomPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:444</div></div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a80d3680445923dff44d276cba0a8e99d"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a80d3680445923dff44d276cba0a8e99d">Plugin_CreateLeftPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateLeftPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:455</div></div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a9e725c50e8ae0a344e3dc36e7c108e72"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a9e725c50e8ae0a344e3dc36e7c108e72">Plugin_CreateMainPanel</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void * Plugin_CreateMainPanel(PluginHandle pluginHandle, void *parentWidget, const char *)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:434</div></div>
 <div class="ttc" id="aFilterSerializer_8cpp_html_ab701e3ac61a85b337ec5c1abaad6742d"><div class="ttname"><a href="../../d2/d73/FilterSerializer_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdef"><b>Definition</b> FilterSerializer.cpp:9</div></div>
-<div class="ttc" id="aIPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d8/da3/IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md674"></a>
+<div class="ttc" id="aapplication_2plugins_2IPlugin_8hpp_html_a765468ecd249ce8f23c6833ad0c52db4"><div class="ttname"><a href="../../d0/d05/application_2plugins_2IPlugin_8hpp.html#a765468ecd249ce8f23c6833ad0c52db4">EXPORT_PLUGIN_SYMBOL</a></div><div class="ttdeci">#define EXPORT_PLUGIN_SYMBOL</div><div class="ttdef"><b>Definition</b> IPlugin.hpp:65</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md729"></a>
 Common Patterns</h1>
-<h2><a class="anchor" id="autotoc_md675"></a>
+<h2><a class="anchor" id="autotoc_md730"></a>
 Logger</h2>
 <div class="fragment"><div class="line"><span class="keyword">static</span> PluginLogFn g_logger = <span class="keyword">nullptr</span>;</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">void</span> Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn log) {</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#ad80c0e2c94459e084d728d353dacc9a8">Plugin_SetLoggerCallback</a>(PluginHandle h, PluginLogFn log) {</div>
 <div class="line">    g_logger = log;</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> log_info(<span class="keyword">const</span> <span class="keywordtype">char</span>* msg) {</div>
 <div class="line">    <span class="keywordflow">if</span> (g_logger) g_logger(0, msg);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md676"></a>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_ad80c0e2c94459e084d728d353dacc9a8"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#ad80c0e2c94459e084d728d353dacc9a8">Plugin_SetLoggerCallback</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void Plugin_SetLoggerCallback(PluginHandle h, PluginLogFn logFn)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:358</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md731"></a>
 State Management</h2>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>PluginState {</div>
 <div class="line">    <span class="keywordtype">int</span> value;</div>
 <div class="line">    <span class="keywordtype">bool</span> initialized;</div>
 <div class="line">};</div>
 <div class="line"> </div>
-<div class="line">PluginHandle Plugin_Create() {</div>
+<div class="line">PluginHandle <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#aa6630f42809c9d2a79925ca4340cb209">Plugin_Create</a>() {</div>
 <div class="line">    <span class="keywordflow">return</span> <span class="keyword">new</span> PluginState();</div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">void</span> Plugin_Destroy(PluginHandle h) {</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#ac3cb29fd0dfd8c5618acc79e4e4aeb8d">Plugin_Destroy</a>(PluginHandle h) {</div>
 <div class="line">    <span class="keyword">delete</span> (PluginState*)h;</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -251,9 +255,11 @@ State Management</h2>
 <div class="line">    state-&gt;initialized = <span class="keyword">true</span>;</div>
 <div class="line">    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md677"></a>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_aa6630f42809c9d2a79925ca4340cb209"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#aa6630f42809c9d2a79925ca4340cb209">Plugin_Create</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create()</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:350</div></div>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_ac3cb29fd0dfd8c5618acc79e4e4aeb8d"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#ac3cb29fd0dfd8c5618acc79e4e4aeb8d">Plugin_Destroy</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL void Plugin_Destroy(PluginHandle h)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:365</div></div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md732"></a>
 String Returns (Malloc Pattern)</h2>
-<div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* Plugin_GetMetadataJson(PluginHandle h) {</div>
+<div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="../../d1/d12/AIProviderPlugin_8cpp.html#a15ed01b6be6d7c4c83481e8aa0a3446b">Plugin_GetMetadataJson</a>(PluginHandle h) {</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* data = R<span class="stringliteral">&quot;({&quot;name&quot;:&quot;MyPlugin&quot;})&quot;;</span></div>
 <div class="line"><span class="stringliteral">    </span></div>
 <div class="line"><span class="stringliteral">    </span><span class="comment">// MUST malloc - caller will free()</span></div>
@@ -261,7 +267,8 @@ String Returns (Malloc Pattern)</h2>
 <div class="line">    strcpy(copy, data);</div>
 <div class="line">    <span class="keywordflow">return</span> copy;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md678"></a>
+<div class="ttc" id="aAIProviderPlugin_8cpp_html_a15ed01b6be6d7c4c83481e8aa0a3446b"><div class="ttname"><a href="../../d1/d12/AIProviderPlugin_8cpp.html#a15ed01b6be6d7c4c83481e8aa0a3446b">Plugin_GetMetadataJson</a></div><div class="ttdeci">EXPORT_PLUGIN_SYMBOL const char * Plugin_GetMetadataJson(PluginHandle pluginHandle)</div><div class="ttdef"><b>Definition</b> AIProviderPlugin.cpp:491</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md733"></a>
 CMakeLists.txt Template</h1>
 <div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.22)</div>
 <div class="line">project(MyPlugin)</div>
@@ -312,7 +319,7 @@ CMakeLists.txt Template</h1>
 <div class="line">        ${CMAKE_CURRENT_BINARY_DIR}/config.json</div>
 <div class="line">        $&lt;TARGET_FILE_DIR:my_plugin&gt;/config.json</div>
 <div class="line">)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md679"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md734"></a>
 config.json Template</h1>
 <div class="fragment"><div class="line">{</div>
 <div class="line">  &quot;id&quot;: &quot;my_plugin&quot;,</div>
@@ -326,7 +333,7 @@ config.json Template</h1>
 <div class="line">    &quot;ui_panel_right&quot;</div>
 <div class="line">  ]</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md680"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md735"></a>
 Available Dependencies After find_package(LogViewer)</h1>
 <p><b>Always included:</b></p><ul>
 <li>Qt6 (Core, Widgets, Gui, etc.)</li>
@@ -343,9 +350,9 @@ Available Dependencies After find_package(LogViewer)</h1>
 <p>Use them:</p>
 <div class="fragment"><div class="line">find_package(nlohmann_json REQUIRED)</div>
 <div class="line">target_link_libraries(my_plugin PRIVATE nlohmann_json::nlohmann_json)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md681"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md736"></a>
 Installing Your Plugin</h1>
-<h2><a class="anchor" id="autotoc_md682"></a>
+<h2><a class="anchor" id="autotoc_md737"></a>
 Plugin Distribution (Recommended)</h2>
 <p>Plugins are distributed as <b>ZIP archives</b> containing the binary, metadata, and all required dependencies:</p>
 <div class="fragment"><div class="line"># Build creates: build/package/my_plugin.zip</div>
@@ -391,7 +398,7 @@ Plugin Distribution (Recommended)</h2>
 <div class="line">    WORKING_DIRECTORY &quot;${CMAKE_CURRENT_BINARY_DIR}&quot;</div>
 <div class="line">)</div>
 </div><!-- fragment --><p>This ensures your plugin is <b>self-contained</b> and works on end-user systems without additional dependency installation.</p>
-<h2><a class="anchor" id="autotoc_md683"></a>
+<h2><a class="anchor" id="autotoc_md738"></a>
 Manual Installation</h2>
 <p>For development/testing, copy files directly:</p>
 <div class="fragment"><div class="line"># Linux</div>
@@ -408,7 +415,7 @@ Manual Installation</h2>
 <div class="line">mkdir -p ~/Library/Application\ Support/LogViewer/plugins</div>
 <div class="line">cp build/libmy_plugin.dylib ~/Library/Application\ Support/LogViewer/plugins/</div>
 <div class="line">cp build/config.json ~/Library/Application\ Support/LogViewer/plugins/</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md684"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md739"></a>
 Common Errors</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -424,7 +431,7 @@ Common Errors</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Undefined reference</code>   </td><td class="markdownTableBodyNone">Link against <code>LogViewer::plugin_api</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md685"></a>
+<h1><a class="anchor" id="autotoc_md740"></a>
 Headers Reference</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -444,21 +451,21 @@ Headers Reference</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PluginKeyEncryptionC.h</code>   </td><td class="markdownTableBodyNone">Key encryption interface   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md686"></a>
+<h1><a class="anchor" id="autotoc_md741"></a>
 Example</h1>
 <p>See <code>examples/BasicPlugin/</code> for a complete working example:</p>
 <div class="fragment"><div class="line">cd examples/BasicPlugin</div>
 <div class="line">cmake -S . -B build -DCMAKE_PREFIX_PATH=~/LogViewer_install/sdk/lib/cmake</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md687"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md742"></a>
 Useful Links</h1>
 <ul>
 <li><a class="el" href="../../de/d35/md_docs_2SDK__GETTING__STARTED.html">SDK Getting Started Guide</a></li>
-<li><a class="el" href="../../d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html">Plugin Implementation Guide</a></li>
+<li><a class="el" href="../../d1/d53/md_docs_2PLUGIN__SYSTEM.html">Plugin System Architecture</a></li>
 <li><a class="el" href="../../d4/d34/md_docs_2ARCHITECTURE.html">Plugin Architecture</a></li>
 <li><a href="../../../src/plugin_api/">API Headers</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md688"></a>
+<h1><a class="anchor" id="autotoc_md743"></a>
 Build with LogViewer</h1>
 <p>Add your plugin to the LogViewer repo:</p>
 <div class="fragment"><div class="line"># 1. Copy your plugin to plugins/ directory</div>
@@ -470,7 +477,7 @@ Build with LogViewer</h1>
 <div class="line"># 3. Build LogViewer with plugins</div>
 <div class="line">cmake -S LogViewer -B build -DBUILD_PLUGINS=ON</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md689"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md744"></a>
 Tips</h1>
 <ol type="1">
 <li><b>Always use <code>EXPORT_PLUGIN_SYMBOL</code></b> on exported functions</li>
@@ -484,7 +491,7 @@ Tips</h1>
 <p><b>For detailed documentation, see:</b></p><ul>
 <li><a class="el" href="../../de/d35/md_docs_2SDK__GETTING__STARTED.html">SDK Getting Started</a></li>
 <li>Basic Plugin Example</li>
-<li><a class="el" href="../../d9/d80/md_docs_2PLUGIN__IMPLEMENTATION.html">Plugin Implementation Guide</a> </li>
+<li><a class="el" href="../../d1/d53/md_docs_2PLUGIN__SYSTEM.html">Plugin System Architecture</a> </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

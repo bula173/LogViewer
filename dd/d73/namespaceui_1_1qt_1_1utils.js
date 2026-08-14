@@ -1,5 +1,8 @@
 var namespaceui_1_1qt_1_1utils =
 [
+    [ "anonymous_namespace{SessionManager.cpp}", "d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html", [
+      [ "kSupportedSessionVersion", "d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html#aa6743fbf252352210a0209813f657918", null ]
+    ] ],
     [ "EventGroupManager", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager" ],
     [ "EventTagManager", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager" ],
     [ "KeyboardNavigationManager", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager" ],

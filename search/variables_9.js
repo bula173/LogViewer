@@ -5,7 +5,7 @@ var searchData=
   ['kactorfields_2',['kActorFields',['../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a6d939c831b633aa1e4239e15eabfb4d4',1,'ui::qt::anonymous_namespace{TraceViewerPanel.cpp}']]],
   ['kactorwords_3',['kActorWords',['../dd/d3e/namespaceanalyzer.html#ad6f772cb0546635a3c47b9f3766033bf',1,'analyzer']]],
   ['karrowhead_4',['kArrowHead',['../d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a43ec2737aca073e252cbc6494349579f',1,'ui::qt::anonymous_namespace{SequenceDiagramPanel.cpp}']]],
-  ['kautosaveintervalms_5',['kAutoSaveIntervalMs',['../d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#afc6744c2038c2ddfbd349509e109e1e7',1,'ui::qt::utils::SessionManager']]],
+  ['kautosaveinterval_5',['kAutoSaveInterval',['../d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html#ae7e87179bcb614a40d1fc1e66c55f95e',1,'ui::qt::utils::SessionManager']]],
   ['kbase64chars_6',['kBase64Chars',['../d6/d72/namespaceutil.html#a3369ad35d3a607dd14dc07919febcace',1,'util']]],
   ['kcolautoload_7',['kColAutoLoad',['../d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a6962f48a825dff08d632e2bbdc5df44e',1,'ui::qt::anonymous_namespace{PluginManagerDialog.cpp}']]],
   ['kcolid_8',['kColId',['../d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#ae3c111412efc0b44293efca942af32b3',1,'ui::qt::anonymous_namespace{PluginManagerDialog.cpp}']]],
@@ -72,7 +72,8 @@ var searchData=
   ['ksupportedapimajor_69',['kSupportedApiMajor',['../d3/d7e/namespaceplugin.html#a9aa698e59c3fd8b3d4306c69236009ca',1,'plugin']]],
   ['ksupportedapimaxminor_70',['kSupportedApiMaxMinor',['../d3/d7e/namespaceplugin.html#a782eaf515f3baf4013807ffef5b40d3d',1,'plugin']]],
   ['ksupportedapiminminor_71',['kSupportedApiMinMinor',['../d3/d7e/namespaceplugin.html#abf303654e9e7a4fd5339007149f4f109',1,'plugin']]],
-  ['ktargetcolumn_72',['kTargetColumn',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
-  ['ktsfields_73',['kTsFields',['../da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aa30f57968bd4b4c632f8c9fa7968faa6',1,'ui::qt::panel_utils']]],
-  ['ktypefields_74',['kTypeFields',['../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a5c510eccb2f5a2c7f1b4a262cc366df6',1,'ui::qt::anonymous_namespace{TraceViewerPanel.cpp}']]]
+  ['ksupportedsessionversion_72',['kSupportedSessionVersion',['../d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html#aa6743fbf252352210a0209813f657918',1,'ui::qt::utils::anonymous_namespace{SessionManager.cpp}']]],
+  ['ktargetcolumn_73',['kTargetColumn',['../d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#a9b9ade3de27b6c9232a6ced155eae5cd',1,'ui::qt::anonymous_namespace{FiltersPanel.cpp}']]],
+  ['ktsfields_74',['kTsFields',['../da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aa30f57968bd4b4c632f8c9fa7968faa6',1,'ui::qt::panel_utils']]],
+  ['ktypefields_75',['kTypeFields',['../da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html#a5c510eccb2f5a2c7f1b4a262cc366df6',1,'ui::qt::anonymous_namespace{TraceViewerPanel.cpp}']]]
 ];

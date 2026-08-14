@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['build_20system_20guide_20and_20improvements_0',['Build System Guide and Improvements',['../d8/ddc/md_docs_2BUILD__GUIDE.html',1,'']]],
-  ['building_20documentation_1',['Building Documentation',['../d1/d38/md_docs_2BUILDING__DOCUMENTATION.html',1,'']]]
+  ['11_200_20bug_20fixes_20summary_0',['v1.11.0 Bug Fixes Summary',['../da/def/md_docs_2BUG__FIXES__SUMMARY__v1_811_80.html',1,'']]],
+  ['11_200_20comprehensive_20test_20suite_20summary_1',['v1.11.0 Comprehensive Test Suite Summary',['../d3/dfd/md_docs_2TEST__SUITE__SUMMARY__v1_811_80.html',1,'']]]
 ];

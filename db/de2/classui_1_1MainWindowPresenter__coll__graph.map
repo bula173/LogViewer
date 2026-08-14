@@ -1,35 +1,40 @@
 <map id="ui::MainWindowPresenter" name="ui::MainWindowPresenter">
-<area shape="rect" id="Node000001" title="Pure C++ presenter that orchestrates main&#45;window interactions independently of the underlying widget ..." alt="" coords="879,884,1081,1229"/>
-<area shape="rect" id="Node000002" href="$df/d79/classparser_1_1IDataParserObserver.html" title="Observer interface for receiving notifications from data parsers." alt="" coords="5,571,203,697"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,707,172,759,193,784,216,805,296,859,383,904,474,942,565,973,654,998,738,1017,879,1042,878,1047,737,1023,653,1003,563,979,472,947,381,909,294,863,213,809,189,787,168,762,135,710"/>
-<area shape="rect" id="Node000003" href="$d3/d1f/classui_1_1IMainWindowView.html" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="227,491,437,777"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,775,451,805,500,842,552,877,661,936,769,984,865,1018,863,1023,767,989,659,941,549,881,496,847,448,809,417,779"/>
-<area shape="rect" id="Node000004" href="$d1/d06/classmvc_1_1IController.html" title="Toolkit&#45;agnostic controller interface for the MVC architecture." alt="" coords="461,541,667,727"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="620,725,649,766,681,805,725,851,773,895,868,972,864,976,769,899,721,854,677,808,645,769,616,729"/>
-<area shape="rect" id="Node000005" href="$dd/dc2/classdb_1_1EventsContainer.html" title="High&#45;performance, thread&#45;safe container for managing large collections of LogEvent objects." alt="" coords="691,461,867,807"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="863,806,893,868,888,870,858,808"/>
-<area shape="rect" id="Node000006" href="$dc/d2d/classmvc_1_1IModel.html" title=" " alt="" coords="304,133,509,399"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="522,396,523,396,545,409,565,417,602,425,640,434,659,444,680,459,692,470,689,474,677,463,657,449,638,439,601,430,563,422,542,414,520,401,519,400"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="323,5,491,71"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="409,71,409,117,404,117,404,71"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="534,233,703,299"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="635,298,700,445,695,447,630,300"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="728,233,835,299"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="784,299,783,423,783,445,777,445,777,423,778,299"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="861,233,968,299"/>
-<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="915,299,906,364,888,438,876,469,871,467,883,437,901,363,910,298"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="992,233,1109,299"/>
-<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="1046,300,1036,333,1020,370,998,408,968,439,945,451,924,452,903,454,881,464,881,464,878,460,879,459,902,448,924,447,944,446,965,435,993,404,1015,368,1031,331,1041,298"/>
-<area shape="rect" id="Node000012" href="$dc/d38/classui_1_1ISearchResultsView.html" title="Toolkit&#45;agnostic contract for the search results panel." alt="" coords="891,551,1069,717"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="983,717,983,867,977,867,977,717"/>
-<area shape="rect" id="Node000013" href="$d6/d4a/classui_1_1IEventsListView.html" title="Interface describing the primary events list view used by the UI." alt="" coords="1093,551,1246,717"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1171,717,1163,788,1154,826,1141,861,1119,902,1093,941,1089,938,1115,900,1136,859,1149,824,1157,787,1166,716"/>
-<area shape="rect" id="Node000014" href="$df/d7e/classui_1_1ITypeFilterView.html" title="Toolkit&#45;neutral interface for the type filter checklist panel." alt="" coords="1271,521,1439,747"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1337,748,1317,807,1285,862,1244,907,1196,946,1146,980,1097,1007,1094,1003,1143,975,1193,942,1240,903,1281,858,1312,805,1332,746"/>
-<area shape="rect" id="Node000015" href="$dc/d5e/classui_1_1IItemDetailsView.html" title="Toolkit&#45;agnostic interface for the item/event details pane." alt="" coords="1463,591,1625,677"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1535,678,1520,720,1498,769,1468,818,1431,862,1394,894,1353,922,1266,969,1178,1005,1097,1031,1095,1026,1176,1000,1263,964,1350,917,1390,889,1427,858,1464,815,1493,767,1515,718,1530,676"/>
-<area shape="rect" id="Node000016" href="$d9/df7/classui_1_1IEventDetailsView.html" title="Interface describing the event details panel." alt="" coords="1459,223,1629,309"/>
-<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="1547,322,1547,591,1541,591,1541,322"/>
-<area shape="rect" id="Node000017" title=" " alt="" coords="1652,601,1695,667"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1676,667,1671,713,1659,767,1636,820,1618,843,1596,862,1536,899,1472,932,1405,959,1338,983,1209,1019,1097,1042,1096,1036,1208,1014,1336,978,1403,955,1469,927,1533,895,1593,858,1614,839,1631,817,1654,765,1666,712,1670,667"/>
+<area shape="rect" id="Node000001" title="Pure C++ presenter that orchestrates main&#45;window interactions independently of the underlying widget ..." alt="" coords="879,919,1081,1264"/>
+<area shape="rect" id="Node000002" href="$df/d79/classparser_1_1IDataParserObserver.html" title="Observer interface for receiving notifications from data parsers." alt="" coords="5,596,203,721"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,733,170,789,192,816,216,839,296,894,382,940,473,979,564,1010,653,1035,738,1053,879,1077,879,1082,737,1059,652,1040,563,1015,471,984,380,945,293,899,213,843,188,820,166,793,132,735"/>
+<area shape="rect" id="Node000003" href="$d3/d1f/classui_1_1IMainWindowView.html" title="Toolkit&#45;agnostic contract exposing the handful of main&#45;window interactions needed by the presenter lo..." alt="" coords="227,516,437,801"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="414,800,451,839,499,878,551,912,660,972,769,1019,865,1054,863,1059,767,1024,658,977,548,917,496,882,448,843,410,803"/>
+<area shape="rect" id="Node000004" href="$d1/d06/classmvc_1_1IController.html" title="Toolkit&#45;agnostic controller interface for the MVC architecture." alt="" coords="461,566,667,751"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="616,750,647,796,681,840,725,886,773,930,868,1008,864,1012,769,934,721,890,677,843,642,799,612,753"/>
+<area shape="rect" id="Node000005" href="$dd/dc2/classdb_1_1EventsContainer.html" title="High&#45;performance, thread&#45;safe container for managing large collections of LogEvent objects." alt="" coords="691,476,867,841"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="866,841,895,902,890,905,861,843"/>
+<area shape="rect" id="Node000006" href="$dc/d2d/classmvc_1_1IModel.html" title=" " alt="" coords="168,148,373,413"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="365,421,404,450,442,465,477,468,510,465,542,458,574,452,607,450,642,456,680,474,692,482,689,487,677,478,641,461,607,455,575,457,543,464,511,470,477,474,441,470,401,454,362,425"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="187,13,355,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="273,78,273,131,268,131,268,78"/>
+<area shape="rect" id="Node000008" href="$da/d80/classmvc_1_1IModelObservable.html" title="Improved IModel with weak_ptr observers for automatic cleanup." alt="" coords="518,178,735,383"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="675,395,708,475,703,477,670,397"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="397,13,504,78"/>
+<area shape="poly" id="edge12_Node000005_Node000009" title=" " alt="" coords="439,79,416,146,406,189,398,234,396,281,400,328,412,372,435,412,460,436,487,448,514,452,544,451,608,450,643,457,678,474,676,479,641,462,608,455,544,456,514,457,485,453,457,440,431,415,408,374,395,329,390,282,393,234,400,188,411,145,434,77"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="477,76,542,163,538,166,472,80"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="547,5,706,85"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="629,86,629,161,624,161,624,86"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="759,248,929,313"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="841,314,816,460,810,459,836,313"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="953,248,1060,313"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="997,315,974,363,944,415,927,434,913,447,898,459,882,478,878,483,874,479,878,474,894,456,909,443,924,430,939,412,969,361,992,313"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1084,248,1201,313"/>
+<area shape="poly" id="edge13_Node000005_Node000013" title=" " alt="" coords="1135,315,1121,350,1099,390,1069,427,1051,442,1030,454,1008,462,988,465,953,463,918,463,901,468,881,478,881,478,878,474,879,474,899,463,918,457,953,458,988,460,1007,457,1028,450,1048,438,1065,423,1094,387,1116,348,1130,312"/>
+<area shape="rect" id="Node000014" href="$dc/d38/classui_1_1ISearchResultsView.html" title="Toolkit&#45;agnostic contract for the search results panel." alt="" coords="891,576,1069,741"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="983,741,983,902,977,902,977,741"/>
+<area shape="rect" id="Node000015" href="$d6/d4a/classui_1_1IEventsListView.html" title="Interface describing the primary events list view used by the UI." alt="" coords="1093,576,1246,741"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="1172,742,1164,818,1154,858,1141,896,1120,937,1093,976,1089,973,1115,934,1136,894,1149,856,1158,817,1167,741"/>
+<area shape="rect" id="Node000016" href="$df/d7e/classui_1_1ITypeFilterView.html" title="Toolkit&#45;neutral interface for the type filter checklist panel." alt="" coords="1271,546,1439,771"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="1339,772,1317,836,1302,868,1283,896,1243,941,1196,981,1146,1014,1097,1042,1094,1037,1143,1010,1192,976,1239,937,1279,893,1298,865,1313,834,1334,771"/>
+<area shape="rect" id="Node000017" href="$dc/d5e/classui_1_1IItemDetailsView.html" title="Toolkit&#45;agnostic interface for the item/event details pane." alt="" coords="1463,616,1625,701"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="1536,702,1521,747,1498,798,1468,850,1430,897,1393,928,1352,957,1265,1004,1177,1040,1097,1066,1095,1061,1176,1035,1263,999,1349,952,1389,924,1426,893,1464,847,1494,796,1516,745,1531,700"/>
+<area shape="rect" id="Node000018" href="$d9/df7/classui_1_1IEventDetailsView.html" title="Interface describing the event details panel." alt="" coords="1459,238,1629,323"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="1547,337,1547,616,1541,616,1541,337"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1652,626,1695,691"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="1676,692,1672,740,1661,797,1650,826,1636,853,1618,877,1595,897,1534,934,1470,966,1404,993,1337,1017,1208,1053,1098,1076,1096,1071,1207,1047,1336,1012,1402,988,1468,961,1532,929,1592,893,1614,873,1632,850,1645,823,1655,795,1667,739,1671,691"/>
 </map>

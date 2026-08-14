@@ -2,6 +2,9 @@ var namespaceui_1_1qt =
 [
     [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03" ],
     [ "anonymous_namespace{CanStatisticsStrategy.cpp}", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03.html", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03" ],
+    [ "anonymous_namespace{ExportDialog.cpp}", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html", [
+      [ "EscapeMarkup", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html#abaaae8e87af68d043287423abc5f6a48", null ]
+    ] ],
     [ "anonymous_namespace{FilterEditorDialog.cpp}", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html", [
       [ "kColumnFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190", null ],
       [ "kParameterFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf", null ]
@@ -54,11 +57,15 @@ var namespaceui_1_1qt =
     [ "ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel" ],
     [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
     [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
+    [ "AIAnalysisPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel" ],
+    [ "AIChatPanel", "d6/d8a/classui_1_1qt_1_1AIChatPanel.html", "d6/d8a/classui_1_1qt_1_1AIChatPanel" ],
+    [ "AIConfigPanel", "d8/d24/classui_1_1qt_1_1AIConfigPanel.html", "d8/d24/classui_1_1qt_1_1AIConfigPanel" ],
     [ "AIPreferencesPanel", "d4/d8b/classui_1_1qt_1_1AIPreferencesPanel.html", "d4/d8b/classui_1_1qt_1_1AIPreferencesPanel" ],
     [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
     [ "CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel" ],
     [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
     [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
+    [ "DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", "d2/d8a/classui_1_1qt_1_1DashboardPanel" ],
     [ "DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel" ],
     [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
     [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
@@ -79,6 +86,11 @@ var namespaceui_1_1qt =
     [ "LayoutManager", "d8/d9f/classui_1_1qt_1_1LayoutManager.html", "d8/d9f/classui_1_1qt_1_1LayoutManager" ],
     [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
     [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
+    [ "MainWindowExportOpsHelper", "da/d0e/classui_1_1qt_1_1MainWindowExportOpsHelper.html", "da/d0e/classui_1_1qt_1_1MainWindowExportOpsHelper" ],
+    [ "MainWindowFileOpsHelper", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper" ],
+    [ "MainWindowFilterOpsHelper", "d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper.html", "d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper" ],
+    [ "MainWindowPluginOpsHelper", "d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper.html", "d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper" ],
+    [ "OllamaSetupDialog", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog.html", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog" ],
     [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel" ],
     [ "PerformancePreferencesPanel", "dd/d69/classui_1_1qt_1_1PerformancePreferencesPanel.html", "dd/d69/classui_1_1qt_1_1PerformancePreferencesPanel" ],
     [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
@@ -102,6 +114,7 @@ var namespaceui_1_1qt =
     [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],
     [ "TraceViewerPanel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel" ],
     [ "TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", "d3/df9/classui_1_1qt_1_1TypeFilterView" ],
+    [ "UnifiedSearchBar", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar" ],
     [ "UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", "de/d35/classui_1_1qt_1_1UpdateChecker" ],
     [ "UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", "d5/d32/classui_1_1qt_1_1UpdateDialog" ],
     [ "BuildFrameSignalTree", "d6/d40/namespaceui_1_1qt.html#ad28e1eb2bcce3d40559a6be650d01433", null ],
@@ -111,6 +124,7 @@ var namespaceui_1_1qt =
     [ "JsonEscape", "d6/d40/namespaceui_1_1qt.html#af445cb012cb412ec708d8e68c35b638f", null ],
     [ "MakeCanBusLayout", "d6/d40/namespaceui_1_1qt.html#a1de9ea1b3ef71a04fb127c162ae22e7c", null ],
     [ "MakeXmlLogLayout", "d6/d40/namespaceui_1_1qt.html#a22e0b07d229ab6009829cadd749ae21a", null ],
+    [ "PluginConfigPath", "d6/d40/namespaceui_1_1qt.html#ae5d4d8c6cc28e38100469125f01fba40", null ],
     [ "PluginEvents_GetEventJsonBridge", "d6/d40/namespaceui_1_1qt.html#a4f0b63cfd892ef57974198d29d2f175a", null ],
     [ "PluginEvents_GetSizeBridge", "d6/d40/namespaceui_1_1qt.html#a9b1095ad1ffe19865758ab336bb5c1e8", null ],
     [ "PluginHostUi_SetCurrentItemBridge", "d6/d40/namespaceui_1_1qt.html#a8a4882a0ad2e3814a64d3feb8658527a", null ],

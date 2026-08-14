@@ -10,7 +10,7 @@ var searchData=
   ['cloud_5fai_5fintegration_2emd_7',['CLOUD_AI_INTEGRATION.md',['../d0/d33/CLOUD__AI__INTEGRATION_8md.html',1,'']]],
   ['concepts_2ehpp_8',['Concepts.hpp',['../d3/d84/Concepts_8hpp.html',1,'']]],
   ['config_2ecpp_9',['Config.cpp',['../de/da7/Config_8cpp.html',1,'']]],
-  ['config_2ehpp_10',['Config.hpp',['../df/db4/Config_8hpp.html',1,'']]],
+  ['config_2ehpp_10',['config.hpp',['../dc/dbd/src_2application_2config_2Config_8hpp.html',1,'(Global Namespace)'],['../d8/d2e/plugins_2ai_2Config_8hpp.html',1,'(Global Namespace)']]],
   ['configeditordialog_2ecpp_11',['ConfigEditorDialog.cpp',['../df/de3/ConfigEditorDialog_8cpp.html',1,'']]],
   ['configeditordialog_2ehpp_12',['ConfigEditorDialog.hpp',['../df/d56/ConfigEditorDialog_8hpp.html',1,'']]],
   ['configobserver_2ehpp_13',['ConfigObserver.hpp',['../d4/d97/ConfigObserver_8hpp.html',1,'']]],

@@ -1,10 +1,20 @@
 var annotated_dup =
 [
     [ "ai", "de/d58/namespaceai.html", [
+      [ "AIServiceFactory", "d9/deb/classai_1_1AIServiceFactory.html", "d9/deb/classai_1_1AIServiceFactory" ],
+      [ "AIServiceWrapper", "df/dca/classai_1_1AIServiceWrapper.html", "df/dca/classai_1_1AIServiceWrapper" ],
+      [ "AnthropicClient", "dc/d89/classai_1_1AnthropicClient.html", "dc/d89/classai_1_1AnthropicClient" ],
       [ "DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", "d5/d23/structai_1_1DirectionPattern" ],
+      [ "GeminiClient", "d7/d05/classai_1_1GeminiClient.html", "d7/d05/classai_1_1GeminiClient" ],
       [ "GemmaActorResult", "d4/d8f/structai_1_1GemmaActorResult.html", "d4/d8f/structai_1_1GemmaActorResult" ],
       [ "GemmaDirectionResult", "d6/d78/structai_1_1GemmaDirectionResult.html", "d6/d78/structai_1_1GemmaDirectionResult" ],
-      [ "GemmaInferenceEngine", "d2/d47/classai_1_1GemmaInferenceEngine.html", "d2/d47/classai_1_1GemmaInferenceEngine" ]
+      [ "GemmaInferenceEngine", "d2/d47/classai_1_1GemmaInferenceEngine.html", "d2/d47/classai_1_1GemmaInferenceEngine" ],
+      [ "IAIService", "df/d97/classai_1_1IAIService.html", "df/d97/classai_1_1IAIService" ],
+      [ "LLMClient", "d7/d7b/classai_1_1LLMClient.html", "d7/d7b/classai_1_1LLMClient" ],
+      [ "LogAnalyzer", "d3/da5/classai_1_1LogAnalyzer.html", "d3/da5/classai_1_1LogAnalyzer" ],
+      [ "ModelInfo", "df/db7/structai_1_1ModelInfo.html", "df/db7/structai_1_1ModelInfo" ],
+      [ "OllamaClient", "d1/d63/classai_1_1OllamaClient.html", "d1/d63/classai_1_1OllamaClient" ],
+      [ "OpenAIClient", "d8/d14/classai_1_1OpenAIClient.html", "d8/d14/classai_1_1OpenAIClient" ]
     ] ],
     [ "analyzer", "dd/d3e/namespaceanalyzer.html", [
       [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
@@ -81,6 +91,7 @@ var annotated_dup =
       [ "anonymous_namespace{PluginManager.cpp}", "d8/d08/namespaceplugin_1_1anonymous__namespace_02PluginManager_8cpp_03.html", [
         [ "VersionParts", "df/d14/structplugin_1_1anonymous__namespace_02PluginManager_8cpp_03_1_1VersionParts.html", "df/d14/structplugin_1_1anonymous__namespace_02PluginManager_8cpp_03_1_1VersionParts" ]
       ] ],
+      [ "AIProviderPlugin", "d5/d83/classplugin_1_1AIProviderPlugin.html", "d5/d83/classplugin_1_1AIProviderPlugin" ],
       [ "FunctionRegistry", "d9/d75/classplugin_1_1FunctionRegistry.html", "d9/d75/classplugin_1_1FunctionRegistry" ],
       [ "IFieldConversionPlugin", "d8/d3a/classplugin_1_1IFieldConversionPlugin.html", "d8/d3a/classplugin_1_1IFieldConversionPlugin" ],
       [ "IPlugin", "d4/d51/classplugin_1_1IPlugin.html", "d4/d51/classplugin_1_1IPlugin" ],
@@ -126,11 +137,15 @@ var annotated_dup =
         [ "ActorDefinitionsPanel", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html", "dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel" ],
         [ "ActorKey", "d4/d72/structui_1_1qt_1_1ActorKey.html", "d4/d72/structui_1_1qt_1_1ActorKey" ],
         [ "ActorsPanel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html", "d2/d40/classui_1_1qt_1_1ActorsPanel" ],
+        [ "AIAnalysisPanel", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel.html", "d9/dad/classui_1_1qt_1_1AIAnalysisPanel" ],
+        [ "AIChatPanel", "d6/d8a/classui_1_1qt_1_1AIChatPanel.html", "d6/d8a/classui_1_1qt_1_1AIChatPanel" ],
+        [ "AIConfigPanel", "d8/d24/classui_1_1qt_1_1AIConfigPanel.html", "d8/d24/classui_1_1qt_1_1AIConfigPanel" ],
         [ "AIPreferencesPanel", "d4/d8b/classui_1_1qt_1_1AIPreferencesPanel.html", "d4/d8b/classui_1_1qt_1_1AIPreferencesPanel" ],
         [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
         [ "CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel" ],
         [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
         [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
+        [ "DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", "d2/d8a/classui_1_1qt_1_1DashboardPanel" ],
         [ "DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel" ],
         [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
         [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
@@ -151,6 +166,11 @@ var annotated_dup =
         [ "LayoutManager", "d8/d9f/classui_1_1qt_1_1LayoutManager.html", "d8/d9f/classui_1_1qt_1_1LayoutManager" ],
         [ "LogFileLoadDialog", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html", "d2/d11/classui_1_1qt_1_1LogFileLoadDialog" ],
         [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", "d4/dfa/classui_1_1qt_1_1MainWindow" ],
+        [ "MainWindowExportOpsHelper", "da/d0e/classui_1_1qt_1_1MainWindowExportOpsHelper.html", "da/d0e/classui_1_1qt_1_1MainWindowExportOpsHelper" ],
+        [ "MainWindowFileOpsHelper", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html", "da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper" ],
+        [ "MainWindowFilterOpsHelper", "d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper.html", "d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper" ],
+        [ "MainWindowPluginOpsHelper", "d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper.html", "d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper" ],
+        [ "OllamaSetupDialog", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog.html", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog" ],
         [ "PatternAnalysisPanel", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel" ],
         [ "PerformancePreferencesPanel", "dd/d69/classui_1_1qt_1_1PerformancePreferencesPanel.html", "dd/d69/classui_1_1qt_1_1PerformancePreferencesPanel" ],
         [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
@@ -174,6 +194,7 @@ var annotated_dup =
         [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],
         [ "TraceViewerPanel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel" ],
         [ "TypeFilterView", "d3/df9/classui_1_1qt_1_1TypeFilterView.html", "d3/df9/classui_1_1qt_1_1TypeFilterView" ],
+        [ "UnifiedSearchBar", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar" ],
         [ "UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", "de/d35/classui_1_1qt_1_1UpdateChecker" ],
         [ "UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", "d5/d32/classui_1_1qt_1_1UpdateDialog" ]
       ] ],

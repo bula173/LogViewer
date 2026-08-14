@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['type_20filter_20field_20—_20auto_20detection_20and_20override_0',['Type Filter Field — Auto-Detection and Override',['../d0/de2/md_docs_2CONFIGURABLE__TYPE__FILTER.html',1,'']]],
-  ['type_20specific_20interfaces_1',['Plugin System: Type-Specific Interfaces',['../d6/df9/md_docs_2PLUGIN__TYPE__INTERFACES.html',1,'']]]
+  ['reference_0',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]],
+  ['reference_20guide_1',['LogViewer: Developer Quick Reference Guide',['../d4/d61/md_docs_2DEVELOPER__QUICK__START.html',1,'']]],
+  ['requirements_20specification_2',['LogViewer — Requirements Specification',['../d2/d6e/md_docs_2REQUIREMENTS.html',1,'']]]
 ];

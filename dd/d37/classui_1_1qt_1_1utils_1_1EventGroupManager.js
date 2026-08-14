@@ -15,7 +15,6 @@ var classui_1_1qt_1_1utils_1_1EventGroupManager =
     [ "generateGroups", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a150033c7610f306b6fcca1ba7b6b24b7", null ],
     [ "getAvailableStrategies", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#aa18f2d8b7ad4ce979d798824d5aefd09", null ],
     [ "getInstance", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#adeae7be4b6891dcedcae4e58f9234c2c", null ],
-    [ "getSimilarityThreshold", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#aed5f7947fd9be87d1d13e9cbceb5f115", null ],
     [ "GroupByActor", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a24a3b97517220ee7515f5fc8e3a4c2ad", null ],
     [ "GroupByLevel", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a3dad92c8cea06761b1167efc67c4b4ee", null ],
     [ "GroupByMessage", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a135741cc55187134e74c75493bc3b58d", null ],
@@ -23,6 +22,7 @@ var classui_1_1qt_1_1utils_1_1EventGroupManager =
     [ "GroupByTimeBucket", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#af0e7d7d2af2c4df3061fe15f897c0443", null ],
     [ "NormalizeMessage", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a08e5be71af3038fb5415e427649dfd8b", null ],
     [ "setSimilarityThreshold", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a219636c04165b7b9d79cb2c01ac45f80", null ],
+    [ "similarityThreshold", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#a167e10e073e771251ed882fa74cbef80", null ],
     [ "m_similarityThreshold", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#ab495d3bb2bab92007ca522f4e98260b7", null ],
     [ "m_timeBucketMinutes", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#acf0632d76b789fe8beca6029108153fc", null ]
 ];
