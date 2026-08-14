@@ -68,6 +68,10 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
+## 5. Analysis Summaries
+
+If you create an analysis summary, report, or similar scratch document (not requested as a permanent doc in `docs/`), write it to `temp_analysis/` — never to the project root.
+
 <!-- code-review-graph MCP tools -->
 ## MCP Tools: code-review-graph
 
