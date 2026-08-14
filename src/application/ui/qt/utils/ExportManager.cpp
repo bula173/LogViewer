@@ -192,7 +192,9 @@ util::Result<void, error::Error> ToXml(const QAbstractItemModel& model,
     file.close();
 
     if (xml.hasError()) {
-        const std::string msg = "XML write error: " + std::string(xml.errorString().toStdString());
+        // QXmlStreamWriter has no errorString() of its own — hasError() only
+        // reflects the underlying device's I/O error, so read it from there.
+        const std::string msg = "XML write error: " + file.errorString().toStdString();
         util::Logger::Error("[ExportManager] {}", msg);
         return R::Err(error::Error(error::ErrorCode::IOError, msg, /*showMsgBox=*/false));
     }
