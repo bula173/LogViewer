@@ -343,5 +343,4 @@ This example is part of LogViewer. See [LICENSE](../../license.md) for details.
 ## See Also
 
 - [Plugin System Architecture](../../docs/PLUGIN_SYSTEM.md)
-- [Plugin Implementation Guide](../../docs/PLUGIN_IMPLEMENTATION.md)
 - [LogViewer Build Documentation](../../docs/BUILDING_DOCUMENTATION.md)

@@ -395,7 +395,7 @@ cmake --build build
 ## Useful Links
 
 - [SDK Getting Started Guide](SDK_GETTING_STARTED.md)
-- [Plugin Implementation Guide](PLUGIN_IMPLEMENTATION.md)
+- [Plugin System Architecture](PLUGIN_SYSTEM.md)
 - [Plugin Architecture](ARCHITECTURE.md)
 - [API Headers](../src/plugin_api/)
 
@@ -429,4 +429,4 @@ cmake --build build
 **For detailed documentation, see:**
 - [SDK Getting Started](SDK_GETTING_STARTED.md)
 - [Basic Plugin Example](../examples/BasicPlugin/README.md)
-- [Plugin Implementation Guide](PLUGIN_IMPLEMENTATION.md)
+- [Plugin System Architecture](PLUGIN_SYSTEM.md)

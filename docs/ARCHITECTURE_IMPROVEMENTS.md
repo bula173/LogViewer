@@ -6,16 +6,20 @@ LogViewer's architecture is well-structured with clean separation of concerns, b
 
 **Key Findings:**
 - ✅ Clean layered architecture (Presentation, Business Logic, Data)
-- ⚠️ Plugin system uses unsafe void* function pointers
-- ⚠️ MVC observer pattern uses raw pointers without lifetime management
-- ⚠️ No plugin dependency resolution or safe initialization order
+- ⚠️ Plugin system uses unsafe void* function pointers — a type-safe `PluginFunctionRegistry` was built and unit-tested (see `tests/ArchitectureImprovementsTests.cpp`) but is **not yet wired into `PluginManager`**
+- ✅ **Resolved:** MVC observer pattern now uses `std::weak_ptr` (`IModelObservable`, integrated into `EventsContainer`) — see Issue 2.1 below
+- ⚠️ No plugin dependency resolution or safe initialization order — a `PluginDependencyGraph` was built and unit-tested but is **not yet wired into `PluginManager`**
 - ✅ Thread-safe data layer with shared_mutex
+
+**Status note (2026-08-14):** The safe replacement types proposed in Parts 1 and 3 below (`PluginFunctionRegistry`, `PluginDependencyGraph`, `PluginEventBus`) exist under `src/application/plugins/` and have test coverage, but `PluginManager` does not yet use them — they're built but not integrated. Part 2 (MVC observer pattern) is fully resolved and integrated. See status markers on each issue below.
 
 ---
 
 ## Part 1: Plugin System Issues
 
 ### Issue 1.1: Type-Unsafe Function Pointer Management
+
+**Status:** ⚠️ Partially resolved — `PluginFunctionRegistry.hpp` implements this proposal and is unit-tested, but `PluginManager` has not been migrated to use it yet.
 
 **Current Approach** (`PluginLoadInfo` struct):
 ```cpp
@@ -88,6 +92,8 @@ if (auto creator = info.panelCreators[PanelType::Left]) {
 
 ### Issue 1.2: Duplicate Panel Creation Functions
 
+**Status:** ⚠️ Open — `PluginManager` still probes the four panel-type symbols individually.
+
 **Current Approach:**
 ```cpp
 info.pluginCreateLeftPanel = probe_sym("Plugin_CreateLeftPanel");
@@ -134,6 +140,8 @@ for (auto& [type, symbol] : PANEL_SYMBOLS) {
 - ✅ Less duplication
 
 ### Issue 1.3: Mixed C++ and C-ABI Abstractions
+
+**Status:** ✅ Resolved — but via the opposite of the solution proposed below. Rather than consolidating around `IPlugin`, the codebase removed `IPlugin` entirely and standardized on C-ABI exports only (see `docs/PLUGIN_SYSTEM.md`). The proposed code sample under "Solution" is historical only.
 
 **Current State:**
 - IPlugin.hpp: C++ virtual interfaces
@@ -185,6 +193,8 @@ std::unique_ptr<QWidget> CreatePanel(IPlugin* plugin, PanelType type, QWidget* p
 ## Part 2: MVC Observer Pattern Issues
 
 ### Issue 2.1: Raw Pointer Observer Pattern
+
+**Status:** ✅ Resolved and integrated — `IModelObservable` (weak_ptr-based) is implemented in `src/application/mvc/IModelObservable.hpp` and used by `EventsContainer`.
 
 **Current Code** (`IModel.hpp`):
 ```cpp
@@ -292,6 +302,8 @@ container->NotifyDataChanged();  // Safe: weak_ptr returns nullptr
 
 ### Issue 2.2: No Observer Lifecycle Events
 
+**Status:** ✅ Resolved and integrated — `IView::OnAttachedToModel()` / `OnDetachedFromModel()` are implemented in `src/application/mvc/IView.hpp`.
+
 **Current Problem:**
 Views can't react to being attached/detached from model
 
@@ -343,6 +355,8 @@ class IModelObservable {
 ## Part 3: Plugin Dependency Management
 
 ### Issue 3.1: No Dependency Resolution
+
+**Status:** ⚠️ Partially resolved — `PluginDependencyGraph.hpp` implements this proposal and is unit-tested, but `PluginManager` has not been migrated to use it yet.
 
 **Problem:**
 - Plugins loaded in arbitrary order
@@ -429,6 +443,8 @@ if (auto order = graph.GetInitializationOrder(); order.isOk()) {
 ---
 
 ## Part 4: Plugin Event System
+
+**Status:** ⚠️ Partially resolved — `PluginEventBus.hpp` implements this proposal and is unit-tested, but `PluginManager` has not been migrated to use it yet.
 
 ### Enhancement: Fine-Grained Events
 

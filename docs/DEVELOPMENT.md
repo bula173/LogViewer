@@ -8,9 +8,9 @@
 - **CMake** 3.25+
 - **C++20 Compiler**: Clang 15+, GCC 11+, or MSVC 2019+
 
-#### GUI Framework (Choose One)
+#### GUI Framework
 
-**Qt 6** (Default - includes AI features):
+**Qt 6** (required — includes AI features):
 - **Qt 6**: 6.5 or higher
   - Windows: Download Qt installer from qt.io or use vcpkg
   - macOS: `brew install qt@6`
@@ -19,13 +19,6 @@
   - Windows: Available through vcpkg
   - macOS: Included by default
   - Linux: `sudo apt-get install libcurl4-openssl-dev`
-
-**wxWidgets** (Traditional native UI):
-- **wxWidgets**: 3.2 or higher
-  - Windows: Download from wxwidgets.org or use vcpkg
-  - macOS: `brew install wxwidgets`
-  - Linux: `sudo apt-get install libwxgtk3.2-dev` (Ubuntu/Debian)
-  - Windows (MSYS2): `pacman -S mingw-w64-x86_64-wxwidgets3.2-msw`
 
 #### Optional but Recommended
 - **Ninja** build system (recommended for faster builds)
@@ -44,13 +37,9 @@
 git clone https://github.com/bula173/LogViewer.git
 cd LogViewer
 
-# Configure and build (Debug) - macOS example with Qt (default)
+# Configure and build (Debug) - macOS example
 cmake --preset macos-debug-qt
 cmake --build --preset macos-debug-build-qt
-
-# Or configure with wxWidgets
-cmake --preset macos-debug-wx
-cmake --build --preset macos-debug-build-wx
 
 # Run tests
 ctest --preset macos-debug-test-qt
@@ -62,25 +51,20 @@ ctest --preset macos-debug-test-qt
 ```
 
 **Platform-specific presets:**
-- macOS Qt: `macos-debug-qt`, `macos-release-qt`
-- macOS wxWidgets: `macos-debug-wx`, `macos-release-wx`
-- Windows (MSYS2) Qt: `windows-msys-debug-qt`, `windows-msys-release-qt`
-- Windows (MSYS2) wxWidgets: `windows-msys-debug-wx`, `windows-msys-release-wx`
-- Linux Qt: `linux-debug-qt`, `linux-release-qt`
-- Linux wxWidgets: `linux-debug-wx`, `linux-release-wx`
+- macOS: `macos-debug-qt`, `macos-release-qt`
+- Windows (MSYS2): `windows-msys-debug-qt`, `windows-msys-release-qt`
+- Linux: `linux-debug-qt`, `linux-release-qt`
 
 **Using VS Code Tasks (Recommended):**
 
 The project includes pre-configured tasks accessible via `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) > "Tasks: Run Task":
 
-- **Build Debug** - Configure and build debug version (Qt by default)
-- **Build Release** - Configure and build release version (Qt by default)
+- **Build Debug** - Configure and build debug version
+- **Build Release** - Configure and build release version
 - **Run App (Debug)** - Build and run debug application
 - **Test Debug** - Build and run tests
 - **Static Analysis (cppcheck)** - Run static analysis
 - **Package Release** - Create distributable package
-
-**Note:** VS Code tasks use Qt by default. For wxWidgets builds, use command line with `-DGUI_FRAMEWORK=WX`.
 
 ## Build System Architecture
 
@@ -188,12 +172,8 @@ class Result { };
 
 // Third-party includes
 #include <nlohmann/json.hpp>
-// Qt version:
 #include <QMainWindow>
 #include <QTableView>
-// wxWidgets version:
-// #include <wx/wx.h>
-// #include <wx/dataview.h>
 
 // Project includes
 #include "db/LogEvent.hpp"
@@ -416,101 +396,6 @@ private:
     QDockWidget* m_filtersDock = nullptr;
     QDockWidget* m_detailsDock = nullptr;
 };
-```
-
-### wxWidgets-Specific Patterns
-
-#### Virtual List Controls
-**Use when**: Displaying large datasets efficiently with wxWidgets
-
-```cpp
-class EventsVirtualListControl : public wxDataViewVirtualListCtrl {
-public:
-    EventsVirtualListControl(wxWindow* parent, const EventsContainer* container)
-        : wxDataViewVirtualListCtrl(parent, wxID_ANY), m_container(container) {
-        // Add columns
-        AppendTextColumn("ID", wxDATAVIEW_CELL_INERT, 80);
-        AppendTextColumn("Timestamp", wxDATAVIEW_CELL_INERT, 150);
-        AppendTextColumn("Message", wxDATAVIEW_CELL_INERT, 400);
-    }
-
-    // Override to provide row count
-    unsigned int GetRowCount() override {
-        return m_container ? m_container->Size() : 0;
-    }
-
-    // Override to provide cell values
-    void GetValueByRow(wxVariant& variant, unsigned int row,
-                       unsigned int col) const override {
-        if (!m_container || row >= m_container->Size()) return;
-        
-        const auto& event = m_container->GetEvent(row);
-        switch (col) {
-            case 0: variant = event.getId(); break;
-            case 1: variant = event.GetValue("timestamp"); break;
-            case 2: variant = event.GetValue("message"); break;
-        }
-    }
-
-private:
-    const EventsContainer* m_container = nullptr;
-};
-```
-
-#### Event Handling
-**Use when**: Responding to user interactions in wxWidgets
-
-```cpp
-class MainWindow : public wxFrame {
-public:
-    MainWindow() : wxFrame(nullptr, wxID_ANY, "LogViewer") {
-        // Bind events
-        Bind(wxEVT_MENU, &MainWindow::OnOpen, this, wxID_OPEN);
-        Bind(wxEVT_MENU, &MainWindow::OnExit, this, wxID_EXIT);
-        
-        // Custom events
-        m_eventsListCtrl->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
-            &MainWindow::OnEventSelected, this);
-    }
-
-private:
-    void OnOpen(wxCommandEvent& event) {
-        wxFileDialog dialog(this, _("Open Log File"),
-            wxEmptyString, wxEmptyString,
-            "XML files (*.xml)|*.xml|All files (*.*)|*.*",
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-        
-        if (dialog.ShowModal() == wxID_OK) {
-            LoadLogFile(dialog.GetPath().ToStdString());
-        }
-    }
-    
-    void OnEventSelected(wxDataViewEvent& event) {
-        int row = m_eventsListCtrl->GetSelectedRow();
-        if (row >= 0) {
-            DisplayEventDetails(row);
-        }
-    }
-    
-    wxDataViewVirtualListCtrl* m_eventsListCtrl = nullptr;
-};
-```
-
-#### wxWidgets Type Conversions
-**Use when**: Converting between std::string and wxString
-
-```cpp
-#include "util/WxWidgetsUtils.hpp"
-
-// String conversions
-std::string stdStr = "Hello";
-wxString wxStr = wxString::FromUTF8(stdStr);
-std::string backToStd = wxStr.ToStdString();
-
-// Safe numeric conversions
-size_t count = 1000000;
-long wxCount = util::ToLong(count);  // Safe conversion with overflow check
-int colIndex = util::ToInt(count);   // Safe conversion with bounds check
 ```
 
 ## Error Handling
@@ -1109,10 +994,6 @@ Brief description of changes
 ## Useful Commands
 
 ```bash
-# Build with specific framework
-cmake --preset macos-debug -DGUI_FRAMEWORK=QT   # Qt build
-cmake --preset macos-debug -DGUI_FRAMEWORK=WX   # wxWidgets build
-
 # Format all code
 find src -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
@@ -1122,17 +1003,17 @@ clang-tidy src/**/*.cpp -- -I src
 # Generate documentation
 doxygen Doxyfile
 
-# Run with sanitizers
-cmake --preset windows-msys-debug -DENABLE_SANITIZER=address
-cmake --build --preset windows-msys-debug-build
-./dist/Debug/LogViewer
+# Run with sanitizers (dedicated presets per sanitizer, see CMakePresets.json)
+cmake --preset macos-asan-qt      # AddressSanitizer
+cmake --build --preset macos-asan-build-qt
+./build/macos-asan-qt/bin/LogViewer.app/Contents/MacOS/LogViewer
 
 # Profile performance
-perf record ./dist/Release/LogViewer
+perf record ./build/linux-release-qt/bin/LogViewer
 perf report
 
 # Memory profiling
-valgrind --tool=massif ./dist/Debug/LogViewer
+valgrind --tool=massif ./build/linux-debug-qt/bin/LogViewer
 ```
 
 ## Resources
@@ -1148,12 +1029,6 @@ valgrind --tool=massif ./dist/Debug/LogViewer
 - [Qt Model/View Programming](https://doc.qt.io/qt-6/model-view-programming.html)
 - [Qt Signals and Slots](https://doc.qt.io/qt-6/signalsandslots.html)
 - [QMainWindow and Dock Widgets](https://doc.qt.io/qt-6/qmainwindow.html)
-
-### wxWidgets Framework
-- [wxWidgets Documentation](https://docs.wxwidgets.org/)
-- [wxDataViewCtrl](https://docs.wxwidgets.org/3.2/classwx_data_view_ctrl.html)
-- [Event Handling](https://docs.wxwidgets.org/3.2/overview_events.html)
-- [Virtual List Controls](https://docs.wxwidgets.org/3.2/overview_dataview.html)
 
 ### AI Provider APIs
 - [Ollama API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md)

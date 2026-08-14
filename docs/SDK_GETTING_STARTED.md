@@ -500,7 +500,7 @@ See [PluginC.h](../src/plugin_api/PluginC.h) for complete documentation.
 
 ## Next Steps
 
-1. Build the [BasicPlugin example](examples/BasicPlugin/)
+1. Build the [BasicPlugin example](../examples/BasicPlugin/)
 2. Modify it to add your own functionality
 3. Create a UI panel using Qt6
 4. Access log events via the Events API

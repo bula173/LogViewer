@@ -72,6 +72,16 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 If you create an analysis summary, report, or similar scratch document (not requested as a permanent doc in `docs/`), write it to `temp_analysis/` — never to the project root.
 
+## 6. Keep Documentation in Sync
+
+**When source code changes, update the documentation that describes it — in the same change, not as a follow-up.**
+
+- Changing a class, file layout, CLI flag, config option, or plugin interface? Check `README.md`, the relevant file(s) under `docs/`, and `CHANGELOG.md` for references that now describe the old behavior, and update them.
+- Adding a released, user-visible feature or fix? Add an entry to `CHANGELOG.md`.
+- Renaming or moving a file/directory that a doc points to? Update the reference, don't leave it dangling.
+- If a doc update is out of scope for the current task (too large, or requires product decisions), say so explicitly rather than silently leaving the docs stale.
+- This does not mean padding unrelated docs on every change — only touch documentation that your change actually made inaccurate.
+
 <!-- code-review-graph MCP tools -->
 ## MCP Tools: code-review-graph
 

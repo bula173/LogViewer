@@ -3,7 +3,7 @@
 **Document ID**: LV-REQ-001  
 **Version**: 1.5  
 **Status**: Active  
-**Application version**: 1.7.0+  
+**Application version**: 1.11.0+  
 
 ---
 

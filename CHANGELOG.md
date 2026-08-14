@@ -2,6 +2,97 @@
 
 All notable changes to LogViewer are documented here.
 
+## [Unreleased] — 1.11.0
+
+MainWindow architecture refactoring is in progress (extracting file-ops and other
+responsibilities out of `MainWindow` into dedicated helpers), alongside search,
+security, and stability fixes. Not yet tagged as a release.
+
+### New features
+
+- **Dashboard tab** — log overview and statistics panel with a "Generate Report" action that recalculates statistics on demand.
+- **Unified search bar** — Ctrl+F/Cmd+F with live match counting and a "Details…" panel for advanced query options, replacing the old `SearchBar`.
+- **Auto-switch view based on file type**, plus a reorganized left panel (icons, grouping) for discoverability.
+
+### Fixes
+
+- Resolved a Ctrl+F/Cmd+F crash on macOS caused by duplicate shortcuts, and made Ctrl+F work reliably on Linux via a window-level shortcut.
+- Removed an unsafe `const_cast` in `ReportGenerator` that could cause memory corruption; fixed an index mismatch in report generation and added thread-safe access.
+- Fixed several security- and network-related issues, and improved file I/O error handling for sessions and exports.
+- Fixed a logger initialization-order bug where the configured log level wasn't applied after config load.
+
+### Refactoring
+
+- **Weak_ptr observer pattern** — `IModelObservable` observers are now tracked via `std::weak_ptr`, removing the dangling-pointer risk of the previous raw-pointer observer list (see `docs/ARCHITECTURE_IMPROVEMENTS.md`).
+- Adopted C++20 `std::ranges`, `std::optional`, and three-way comparison (`<=>`) across several call sites (`BookmarksPanel`, filter lookups, `Version`).
+- `MainWindowFileOpsHelper` extracted from `MainWindow` as the first step of a broader architecture cleanup (Phase 3).
+
+### Testing
+
+- Added functional test suites for `SearchEngine`, filters, and large-file handling, and expanded unit/functional coverage for v1.11.0 bug fixes.
+
+## [1.10.0] — 2026-07-31
+
+### New features
+
+- **Unified Preferences dialog** consolidating all application settings into one place.
+- **Local Gemma 2B inference via llama.cpp** — replaces the earlier heuristic-fallback `GemmaInferenceEngine` with actual on-device LLM inference for actor discovery; model download available from the Help menu.
+- **Theme Customization dialog**, enhanced export options, improved Bookmarks UI, keyboard navigation, and event tagging (delivered as staged phases 1–11 of the v1.10.0 plan).
+- **Smart notifications, event grouping, and report generation.**
+- **Column width persistence** and session auto-save.
+- **Filter AND logic** and advanced search query support, with filter/search performance optimizations.
+
+### Fixes
+
+- Fixed Windows Unicode file-path handling in `BookmarksPanel` and `ExportDialog`.
+- Fixed several crash and correctness issues found in code review (8 correctness issues, 4 refactors).
+- Preserved active filter state across sorting; auto-apply type filters on selection change; added stale-index validation in `RefreshView` and cleared stale sort cache after merge to prevent merge+sort crashes.
+
+### Refactoring
+
+- Unified Export dialog and reorganized Analysis menu for discoverability; added tooltips and status-bar hints.
+- Prepared the Gemma inference architecture for real LLM integration ahead of the llama.cpp switch.
+
+## [1.7.2] — 2026-06-02
+
+### New features
+
+- **Actor discovery + sequence diagram panel** — auto-discovers communicating actors from log data and renders a sequence diagram.
+- **Startup update check** — notifies the user via a message box when a newer version is available.
+
+## [1.7.1] — 2026-06-02
+
+### Refactoring
+
+- Consolidated plugin management into a single **Tools → Manage Plugins…** entry point.
+
+### Fixes
+
+- Corrected `PluginManagerDialog` enable/disable logic.
+- Auto-reload the ASC log when a DBC is loaded, and wired signal selection through to the events filter.
+
+## [1.7.0] — 2026-06-01
+
+### New features
+
+- **Named window layouts** with predefined presets for XML and CAN workflows.
+- **Side-by-side log comparison** with three synchronization modes (binary-search based).
+- **Real-time file tailing** (Follow File, Ctrl+T).
+- **JSON/NDJSON log parser.**
+- **Plugin Manager dialog** (Tools → Manage Plugins…).
+- Copy as JSON/CSV, and jump-to-timestamp (Ctrl+G).
+- Scenarios now auto-persist in `QSettings` and survive without a session file.
+- Richer `TraceViewerPanel` — search bar, actor/type breakdown, span call tree.
+
+### Refactoring
+
+- Upgraded to C++23 and rewrote `Result<void, E>` using `std::expected`.
+- Applied several patterns across the codebase: index types, async filtering, interface cleanup.
+
+### Testing
+
+- Added unit tests for the DLT parser, Evlog parser, and `EvlogTemplateRegistry`.
+
 ## [1.6.1] — 2026-05-22
 
 ### New features

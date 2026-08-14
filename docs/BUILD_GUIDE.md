@@ -284,7 +284,7 @@ cd LogViewer
 cmake --preset macos-debug-build-qt
 
 # 3. Build
-cmake --build --preset macos-debug-build-qt -j$(nproc)
+cmake --build --preset macos-debug-build-qt -j$(sysctl -n hw.ncpu)
 
 # 4. Run tests
 ./build/macos-debug-qt/tests/bin/LogViewer_tests

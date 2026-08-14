@@ -32,8 +32,8 @@ git checkout -b feature/my-feature
 
 3. **Build Project**
 ```bash
-# macOS/Linux
-cmake --build --preset macos-debug-build-qt -j$(nproc)
+# macOS example — use nproc instead of sysctl -n hw.ncpu on Linux
+cmake --build --preset macos-debug-build-qt -j$(sysctl -n hw.ncpu)
 
 # Or use your platform preset
 cmake --build --preset <platform>-debug-build-qt
@@ -271,7 +271,7 @@ git fetch origin
 git rebase origin/main
 
 # 2. Build and test
-cmake --build --preset macos-debug-build-qt -j$(nproc)
+cmake --build --preset macos-debug-build-qt -j$(sysctl -n hw.ncpu)
 ./build/macos-debug-qt/tests/bin/LogViewer_tests
 
 # 3. Check code style
@@ -406,10 +406,10 @@ cmake --build --preset <preset> 2>&1 | grep -i warning
 
 ### Resources
 
-- [DEVELOPMENT.md](DEVELOPMENT.md) - Development guidelines
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture
-- [API_EXAMPLES.md](API_EXAMPLES.md) - Code examples
-- [DIAGRAMS.md](DIAGRAMS.md) - Architecture diagrams
+- [DEVELOPMENT.md](docs/DEVELOPMENT.md) - Development guidelines
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - System architecture
+- [API_EXAMPLES.md](docs/API_EXAMPLES.md) - Code examples
+- [DIAGRAMS.md](docs/DIAGRAMS.md) - Architecture diagrams
 
 ---
 

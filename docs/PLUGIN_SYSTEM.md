@@ -45,6 +45,32 @@ extern "C" {
 
 The application calls `Plugin_SetLoggerCallback` immediately after `Plugin_Create` to provide a logging function that plugins can use.
 
+**Why callback-based logging:** the original logger was header-only with static variables, which caused ODR violations across DLL boundaries — each shared library got its own copy of the global, so the application's registration was invisible inside the plugin. Passing the logging function in as a callback after `Plugin_Create` avoids this: it works across DLL boundaries, has no ABI dependencies, and keeps the API simple for plugin authors.
+
+### Migrating from the old IPlugin interface
+
+Older LogViewer plugins used a C++ `IPlugin` virtual interface. This has been fully replaced by the C-ABI exports described above:
+
+```cpp
+// OLD (do not use)
+class IPlugin {
+    virtual bool Initialize() = 0;
+    virtual void Shutdown() = 0;
+    // ... other virtual methods
+};
+
+// NEW (use this)
+extern "C" {
+    EXPORT_PLUGIN_SYMBOL PluginHandle Plugin_Create() { ... }
+    EXPORT_PLUGIN_SYMBOL bool Plugin_Initialize(PluginHandle h) { ... }
+    // ... other C-ABI exports
+}
+```
+
+To migrate an old `IPlugin`-based plugin: remove the `IPlugin` inheritance, export the C-ABI functions instead, store plugin state behind the opaque `PluginHandle`, and use `find_package(LogViewer CONFIG REQUIRED)` in `CMakeLists.txt`. Follow the [Basic Plugin Example](../examples/BasicPlugin/) for the current pattern.
+
+The internal `PluginManager` still notifies observers about plugin lifecycle events (loaded, enabled, disabled, …) — see [PLUGIN_OBSERVER_PATTERN.md](PLUGIN_OBSERVER_PATTERN.md) for that host-side architecture (not needed for plugin authors).
+
 ## Plugin Logging
 
 Plugins can log messages to the application's logging system using the provided callback:
@@ -426,6 +452,14 @@ LogViewer/
 6. **Testing**: Test plugin loading/unloading multiple times
 7. **Thread Safety**: Ensure plugins are thread-safe
 8. **Resource Cleanup**: Properly cleanup in `Plugin_Destroy`
+
+## Key Design Decisions
+
+1. **C-ABI only** — no C++ interfaces are exported, for maximum compatibility across compilers/versions.
+2. **Callback-based logging** — solves the ODR violation across DLL boundaries described above.
+3. **Opaque handles** — `PluginHandle` is `void*`, hiding the plugin's internal implementation.
+4. **Qt widget panels** — UI is created as `QWidget*`, cast to `void*` at the C-ABI boundary.
+5. **JSON metadata** — returned as a string for a flexible, forward-compatible schema.
 
 ## Future Enhancements
 

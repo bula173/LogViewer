@@ -2,38 +2,25 @@
 
 ## Application License
 
-**Proprietary License**
+**MIT License**
 
 Copyright (c) 2022-2026 LogViewer Contributors
 
-All rights reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-### Terms and Conditions
-
-**Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to:**
-
-1. **Use** the Software for personal, educational, or commercial purposes
-2. **Copy** and distribute verbatim copies of the Software
-3. **Modify** the Software only with explicit written permission from the copyright holders
-
-**The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.**
-
-### Restrictions
-
-**The following activities are expressly prohibited without prior written permission from the copyright holders:**
-
-1. Modification, adaptation, or creation of derivative works based on the Software
-2. Reverse engineering, decompilation, or disassembly of the Software
-3. Removal or alteration of copyright notices
-4. Commercial redistribution without explicit licensing agreement
-
-### Warranty Disclaimer
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Contact
 
-For permission to modify or commercially distribute this software, please contact the LogViewer Development Team at: https://github.com/bula173/LogViewer/issues
+For questions about this license, please contact the LogViewer Development Team at: https://github.com/bula173/LogViewer/issues
 
 ---
 
@@ -78,15 +65,15 @@ For the complete LGPL v3 license text, see: https://www.gnu.org/licenses/lgpl-3.
 - Copyright (c) 2001-2022 Expat maintainers
 - Source: https://github.com/libexpat/libexpat
 
+#### fmt
+- License: MIT License
+- Copyright (c) 2012 - present, Victor Zverovich
+- Source: https://github.com/fmtlib/fmt
+
 #### Google Test (gtest)
 - License: BSD 3-Clause License
 - Copyright 2008, Google Inc.
 - Source: https://github.com/google/googletest
-
-#### gflags
-- License: BSD 3-Clause License
-- Copyright (c) 2006, Google Inc.
-- Source: https://github.com/gflags/gflags
 
 #### CURL
 - License: curl License (MIT/X derivative)

@@ -38,8 +38,9 @@ EXTRACT_ANON_NSPACES   = YES
 INPUT                  = README.md \
                          docs \
                          src/application \
-                         src/dox \
-                         src/main
+                         src/plugin_api \
+                         src/main \
+                         plugins
 FILE_PATTERNS          = *.hpp *.cpp *.dox *.md
 RECURSIVE              = YES
 EXCLUDE                = docs/html \

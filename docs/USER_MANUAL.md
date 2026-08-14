@@ -1,6 +1,6 @@
 # LogViewer User Manual
 
-**Version**: 1.7  
+**Version**: 1.11.0  
 **Application**: LogViewer  
 
 ---

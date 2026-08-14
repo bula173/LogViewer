@@ -14,6 +14,8 @@ The installation manifest (`LogViewer_install_manifest.json` / `.logviewer_manif
 
 The manifest is a JSON file containing:
 
+> **Note:** The `libraries` list below matches what `packaging/CMakeLists.txt` currently generates (`Qt5Core`, `Qt5Gui`, …), which is stale — the application has used Qt 6 since the Qt5→Qt6 migration. This is a build-system bug, not a doc error; the manifest generator's `LIBRARIES` argument needs updating to the `Qt6*` names.
+
 ```json
 {
   "version": "1.4.0",

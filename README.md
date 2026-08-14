@@ -179,7 +179,6 @@ cmake --build build
 ### Plugin Documentation
 
 - [Plugin System Architecture](docs/PLUGIN_SYSTEM.md)
-- [Plugin Implementation Guide](docs/PLUGIN_IMPLEMENTATION.md)
 - [AI Provider Plugin](docs/AI_PROVIDER_PLUGIN.md)
 
 ## Configuration
@@ -255,8 +254,11 @@ Configure in Settings > AI with an API key:
 LogViewer/
 ├── src/
 │   ├── application/         # Core application logic
+│   │   ├── ai/              # Local/remote AI inference (Gemma via llama.cpp, providers)
+│   │   ├── analyzers/       # Log analysis (pattern detection, actor discovery, etc.)
 │   │   ├── config/          # Configuration management
 │   │   ├── db/              # EventsContainer and LogEvent data model
+│   │   ├── error/           # Result<T,E> and error types
 │   │   ├── filters/         # Filtering system
 │   │   ├── mvc/             # Model-View-Controller patterns
 │   │   ├── parsers/         # Log parsers
@@ -265,11 +267,13 @@ LogViewer/
 │   │   │   ├── asc/         # CAN/ASC parser (Vector CANalyzer format)
 │   │   │   └── dbc/         # DBC parser + CAN signal decoder
 │   │   ├── plugins/         # Plugin system interfaces
+│   │   ├── services/        # Application-level services
 │   │   ├── ui/qt/           # Qt 6 UI components
 │   │   │   ├── panels/      # Dock and content panels
 │   │   │   ├── dialogs/     # Modal dialogs
 │   │   │   ├── events/      # Events table model and view
 │   │   │   └── utils/       # Shared UI utilities
+│   │   ├── updates/         # Update checking
 │   │   ├── util/            # General utilities
 │   │   └── version/         # Version info
 │   ├── plugin_api/          # C-ABI plugin interface headers
@@ -292,7 +296,7 @@ LogViewer/
 ## Packaging
 
 ```bash
-# macOS — produces dist/packages/LogViewer-1.0.0-Darwin.dmg
+# macOS — produces dist/packages/LogViewer-1.11.0-Darwin.dmg
 cmake --preset macos-release-qt
 cmake --build --preset macos-release-build-qt
 cmake --install build/macos-release-qt --prefix dist/staging

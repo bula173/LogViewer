@@ -1,42 +1,38 @@
 # LogViewer Development Roadmap
 
-**Current Version:** 1.8.0 (Released 2026-07-30)  
-**Last Updated:** 2026-07-30  
-**Next Release Target:** v1.9.0 (2026-09-30)
+**Current Version:** 1.11.0 (Unreleased — in progress)  
+**Last Released:** 1.10.0 (2026-07-31)  
+**Last Updated:** 2026-08-14
 
 ---
 
-## 📊 Current State (v1.8.0)
+## 📊 Current State (v1.11.0, in progress)
 
 ### Recent Achievements ✅
-- **Column Reordering Persistence** - Save/restore column order across sessions
-- **Bookmarks Quick Access** - Ctrl+B to show bookmarks panel
-- **Filter Status Bar** - Real-time active filter visualization
-- **Tab Activity Badges** - Visual indicators for panel updates
-- **Critical Bug Fixes** - Merge/sort crashes, filter state preservation
-- **Auto-Apply Filters** - Immediate filter updates without Apply button
+- **Unified Preferences dialog** consolidating all settings
+- **Local Gemma 2B inference via llama.cpp** — replaces the earlier heuristic fallback with real on-device LLM inference
+- **Unified search bar** (Ctrl+F/Cmd+F) with live match counting and advanced query support
+- **Dashboard tab** with statistics and report generation
+- **Column width persistence, session auto-save, event tagging, keyboard navigation**
+- **Weak_ptr-based MVC observer pattern** — removed the dangling-pointer risk of the old raw-pointer observer list
+- **MainWindow architecture refactoring (Phase 3, in progress)** — extracting file-ops and other responsibilities into dedicated helpers
 
 ### Current Capabilities
 - ✅ Multiple log format support (XML, JSON, CSV, CAN, DLT, Evlog)
 - ✅ 13+ specialized analysis panels
 - ✅ Advanced filtering with actor hierarchies
 - ✅ Flexible dock-based UI with customization
-- ✅ Local Gemma 2B AI inference
+- ✅ Local Gemma 2B AI inference (llama.cpp-backed)
 - ✅ Plugin system with C-ABI stability
 - ✅ Virtual list rendering (handles millions of events)
 
+See `CHANGELOG.md` for the full, dated list of shipped changes per version.
+
 ---
 
-## 🎯 Short-Term (v1.9.0 - Next 4-6 weeks)
+## 🎯 Short-Term (Next Release)
 
 ### High Priority: Core Stability
-- **Implement Actual Gemma Inference** (6-8 hours)
-  - Fill in RunInference() token generation loop
-  - Add comprehensive inference tests
-  - Handle edge cases: timeouts, OOM, invalid responses
-  - Performance optimization for large datasets
-  - Status: Architecture complete, needs llama.cpp integration
-
 - **Export/Import Filter Configurations** (6-8 hours)
   - Save filter presets as `.filters.json`
   - Team-based filter sharing
@@ -44,29 +40,13 @@
   - Status: UI infrastructure in place, needs implementation
 
 ### Medium Priority: User Experience
-- **Enhanced Search Capabilities** (4-6 hours)
-  - Highlight search matches in both panels and details
-  - Search history/autocomplete
-  - Advanced search syntax (AND, OR, NOT, regex)
-  - Jump to next/previous match with keyboard shortcuts
-  
 - **Performance Optimizations** (6-8 hours)
   - Profile large file loading (100M+ events)
   - Optimize filter reapplication
   - Reduce memory footprint for filter indices
   - Streaming progress indicators
 
-- **Settings Consolidation** (8-10 hours)
-  - Unified Preferences dialog
-  - Move all config dialogs to one place
-  - Settings categories (General, AI, Plugins, UI, Performance)
-  - Import/export settings profiles
-
 ### Low Priority: Polish
-- **Column Width Persistence** (2-3 hours)
-  - Save and restore column widths
-  - Auto-fit column width option
-  
 - **Keyboard Shortcuts Reference** (2-3 hours)
   - In-app shortcuts dialog (Ctrl+?)
   - Print-friendly cheat sheet
@@ -225,22 +205,12 @@
 ## 🐛 Known Issues & Limitations
 
 ### Current Limitations
-1. **Gemma Inference** (v1.8.0)
-   - Stub implementation without token generation
-   - Requires llama.cpp API integration
-   - Estimated 6 hours to complete
-
-2. **Filter UI Complexity**
-   - 5 separate filter tabs can be overwhelming
-   - New users struggle with filter discovery
-   - Solution planned: v1.9.0 Unified Preferences
-
-3. **Large File Handling**
+1. **Large File Handling**
    - 500M+ events may cause slowdown
    - No streaming/chunked loading
    - Solution planned: v2.0.0 performance optimization
 
-4. **Plugin System Limitations**
+2. **Plugin System Limitations**
    - No GUI for plugin configuration (requires code)
    - Limited access to internal data structures
    - Binary compatibility tied to compiler version
@@ -255,13 +225,13 @@
 
 ## 📈 Performance Roadmap
 
-### Current Baselines (v1.8.0)
+### Current Baselines (v1.10.0)
 - Large file load (50M events): ~5 seconds
 - Filter application: 100-500ms
 - Sorting (10M events): 200-400ms
 - Memory per 1M events: ~200MB
 
-### v1.9.0 Targets
+### Near-Term Targets
 - Large file load (100M events): <10 seconds
 - Filter application: 50-200ms
 - Memory per 1M events: ~180MB
@@ -379,15 +349,18 @@
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
-| 1.8.0 | 2026-07-30 | Column persistence, Filter status bar, Tab badges, Bug fixes |
-| 1.7.2 | 2026-07-28 | Gemma integration, Actor discovery, Sequence diagrams |
-| 1.7.0 | 2026-07-01 | Multiple improvements and stability |
-| 1.6.0 | 2026-06-01 | Previous stable release |
+| 1.10.0 | 2026-07-31 | Unified Preferences, real Gemma/llama.cpp inference, theme customization, notifications, report generation |
+| 1.7.2 | 2026-06-02 | Actor discovery, sequence diagrams, startup update check |
+| 1.7.1 | 2026-06-02 | Consolidated plugin management |
+| 1.7.0 | 2026-06-01 | Named layouts, side-by-side comparison, file tailing, JSON/NDJSON parser |
+| 1.6.0 | 2026-05-22 | Previous stable release |
+
+See `CHANGELOG.md` for full details per version.
 
 ---
 
-**Last Reviewed:** 2026-07-30  
-**Next Review:** 2026-08-30  
+**Last Reviewed:** 2026-08-14  
+**Next Review:** 2026-09-14  
 **Maintained By:** LogViewer Development Team
 
 This roadmap is a living document and subject to change based on community feedback, technical constraints, and priority shifts.
