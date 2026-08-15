@@ -173,15 +173,14 @@ std::string OllamaClient::SendPrompt(const std::string& prompt,
 
 bool OllamaClient::IsAvailable() const
 {
-    try
-    {
-        const std::string response = SendHttpPost("/api/tags", "{}");
-        return !response.empty();
-    }
-    catch (...)
-    {
-        return false;
-    }
+    // Do NOT make a live network probe here — see OpenAIClient::IsAvailable()
+    // for why: a blocking HTTP call from this method (invoked automatically
+    // whenever the AI panel refreshes its status label, not just on explicit
+    // user action) creates a background-thread-plus-outbound-connection
+    // pattern that AV heuristics (Windows Defender's Wacatac family) treat
+    // as a C2 beacon. Availability is validated implicitly when a real
+    // prompt is sent; only report "available" when a base URL is configured.
+    return !m_baseUrl.empty();
 }
 
 std::string OllamaClient::GetServiceId() const
