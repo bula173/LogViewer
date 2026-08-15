@@ -1,12 +1,11 @@
 # LogViewer Development Roadmap
 
-**Current Version:** 1.11.0 (Unreleased — in progress)  
-**Last Released:** 1.10.0 (2026-07-31)  
-**Last Updated:** 2026-08-14
+**Current Version:** 1.11.0 (Released 2026-08-15)  
+**Last Updated:** 2026-08-15
 
 ---
 
-## 📊 Current State (v1.11.0, in progress)
+## 📊 Current State (v1.11.0, released)
 
 ### Recent Achievements ✅
 - **Unified Preferences dialog** consolidating all settings
@@ -349,6 +348,7 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
+| 1.11.0 | 2026-08-15 | Dashboard tab, unified search bar, weak_ptr observer pattern, SearchEngine/build-system/CI fixes |
 | 1.10.0 | 2026-07-31 | Unified Preferences, real Gemma/llama.cpp inference, theme customization, notifications, report generation |
 | 1.7.2 | 2026-06-02 | Actor discovery, sequence diagrams, startup update check |
 | 1.7.1 | 2026-06-02 | Consolidated plugin management |
