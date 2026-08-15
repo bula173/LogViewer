@@ -2,11 +2,7 @@
 
 All notable changes to LogViewer are documented here.
 
-## [Unreleased] — 1.11.0
-
-MainWindow architecture refactoring is in progress (extracting file-ops and other
-responsibilities out of `MainWindow` into dedicated helpers), alongside search,
-security, and stability fixes. Not yet tagged as a release.
+## [1.11.0] — 2026-08-15
 
 ### New features
 
@@ -20,6 +16,10 @@ security, and stability fixes. Not yet tagged as a release.
 - Removed an unsafe `const_cast` in `ReportGenerator` that could cause memory corruption; fixed an index mismatch in report generation and added thread-safe access.
 - Fixed several security- and network-related issues, and improved file I/O error handling for sessions and exports.
 - Fixed a logger initialization-order bug where the configured log level wasn't applied after config load.
+- **SearchEngine**: fixed a stale-pattern cache bug (recompiling a pattern on an existing engine kept matching the previous pattern) and a broken advanced-query parser (`"A OR B"` was silently evaluated as `"A AND B"`).
+- **ExportManager**: XML export error reporting called a nonexistent `QXmlStreamWriter::errorString()`; now reads the error from the underlying file device.
+- **Installation manifest**: fixed Qt5 library names left over from the Qt6 migration, and a broken version lookup that always reported "unknown" for every bundled library.
+- Fixed the Windows installer being flagged by Microsoft Defender (`Wacatac.B!ml`) — `OllamaClient::IsAvailable()` made a live network probe on every AI panel refresh, matching a background-thread-plus-outbound-connection pattern AV heuristics treat as a C2 beacon; now checks configuration state only, consistent with the other AI providers.
 
 ### Refactoring
 
@@ -27,9 +27,22 @@ security, and stability fixes. Not yet tagged as a release.
 - Adopted C++20 `std::ranges`, `std::optional`, and three-way comparison (`<=>`) across several call sites (`BookmarksPanel`, filter lookups, `Version`).
 - `MainWindowFileOpsHelper` extracted from `MainWindow` as the first step of a broader architecture cleanup (Phase 3).
 
+### Build system
+
+- Fixed the SDK's `find_package(LogViewer)` package config, which never actually expanded `@PACKAGE_INIT@`/`@PACKAGE_VERSION@` — version-compatibility checks were silently always empty.
+- Added LTO for Release builds of the application's own code, auto-detected ccache instead of hardcoding it, removed an unused `gflags` dependency, and collapsed several duplicate CMake presets.
+- CI: fixed a silent script-death bug in the Qt6-detection fallback (`bash -e` + unguarded `pkg-config`), a CMake target conflict from missing `SKIP_EXAMPLES`, and a VirusTotal scan crash caused by CPack leaving a duplicate installer copy that got uploaded twice.
+
 ### Testing
 
 - Added functional test suites for `SearchEngine`, filters, and large-file handling, and expanded unit/functional coverage for v1.11.0 bug fixes.
+- Fixed several pre-existing compile and logic errors across the test suite (`FilterManagerTest`, `FilterWorkflowTest`, `LargeFileHandlingTest`, `ReportGenerationTest`) left over from earlier refactors.
+
+### Documentation
+
+- Replaced a self-contradicting proprietary/MIT license file with the correct MIT license text.
+- Reconciled version numbers across `CHANGELOG.md`, `ROADMAP.md`, `USER_MANUAL.md`, and `REQUIREMENTS.md`, which had drifted independently.
+- Consolidated overlapping plugin documentation and removed dead wxWidgets content (the project has been Qt-only for some time).
 
 ## [1.10.0] — 2026-07-31
 
