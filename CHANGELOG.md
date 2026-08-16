@@ -9,6 +9,12 @@ All notable changes to LogViewer are documented here.
 - **Export/Import Filter Profiles** — the Filter Profiles panel can now export a selected profile to a `.filters.json` file and import one or more profiles from a file, merging them into the current list (with a prompt to overwrite on name collisions). Enables sharing filter setups between teammates.
 - **Customizable keyboard shortcuts** — the Keyboard Shortcuts dialog (Help → Keyboard Shortcuts) now reflects the application's actual live bindings instead of a hand-maintained (and previously stale/incomplete) list. Double-click any entry to rebind it; conflicting assignments are rejected. Includes **Reset to Default**, **Reset All**, and a **Print…** button for a print-friendly cheat sheet. Custom bindings persist to `<appdata>/keybindings.json`.
 
+### Performance
+
+- **Regex filter matching** no longer takes a shared global lock and allocates a cache-key string on every single value it tests — `RegexFilterStrategy` now caches its last-compiled pattern per filter instance instead. Matters most on large files with regex filters active, where this ran once per event per condition.
+- **JSON array-format loading** (`[...]` files) now streams via a SAX callback instead of parsing the entire file into one in-memory DOM tree before emitting any events — bounds peak memory and restores progress feedback during load. Events are also now batched (matching CSV/DLT/ASC/Evlog) instead of notified one at a time.
+- **`LogEvent` no longer builds a per-event `unordered_map` index.** Every loaded event was allocating its own hash table for its handful of fields; at large event counts this was plausibly the single largest memory cost in the whole load path (100M events → 100M separate hash tables plus that many extra heap allocations). `findByKey()` now does a linear scan over the event's field vector — faster in practice at this scale (no hashing, cache-friendly), and removes the per-event allocation entirely.
+
 ### Fixes
 
 - The in-app Keyboard Shortcuts reference had drifted out of sync with the real menu bindings (missing entries for Export, Generate Report, Group Events, Tag & Annotate; a wrong shortcut listed for Jump to Timestamp). It's now generated from the same registry the menus use, so it can't drift again.

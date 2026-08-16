@@ -24,15 +24,6 @@ const LogEvent::EventItems& LogEvent::getEventItems() const
 
 const std::string LogEvent::findByKey(std::string_view key) const
 {
-    // Use fast lookup index first
-    auto it = m_lookupIndex.find(std::string(key));
-    if (it != m_lookupIndex.end())
-    {
-        const auto& result = m_eventItems[it->second].second;
-        return result;
-    }
-
-    // Fallback to linear search for edge cases (shouldn't happen with proper index)
     auto pair = std::ranges::find_if(
         m_eventItems, [key](const auto& item) { return item.first == key; });
 
@@ -78,18 +69,6 @@ LogEvent::EventItemsIterator LogEvent::findInEvent(const std::string& search)
 
 
 
-void LogEvent::buildLookupIndex()
-{
-    m_lookupIndex.clear();
-    m_lookupIndex.reserve(m_eventItems.size());
-    
-    for (size_t i = 0; i < m_eventItems.size(); ++i)
-    {
-        // Only index the first occurrence of each key (maintains existing behavior)
-        m_lookupIndex.try_emplace(m_eventItems[i].first, i);
-    }
-}
-
 void LogEvent::SetOriginalId(int originalId)
 {
     // Store the original ID as a special field in the event data
@@ -103,11 +82,8 @@ void LogEvent::SetOriginalId(int originalId)
     
     // Add the original ID as a data field
     m_eventItems.push_back({"original_id", std::to_string(originalId)});
-    
-    // Rebuild the lookup index since we modified the items
-    buildLookupIndex();
-    
-    util::Logger::Debug("LogEvent::SetOriginalId: Set original_id={} for event id={}", 
+
+    util::Logger::Debug("LogEvent::SetOriginalId: Set original_id={} for event id={}",
                         originalId, m_id);
 }
 

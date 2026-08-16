@@ -41,6 +41,8 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -112,6 +114,12 @@ class RegexFilterStrategy : public IFilterStrategy {
 public:
     RegexFilterStrategy() = default;
 
+    // Each instance owns its own cache (see m_cacheMutex below), so a copy
+    // must not share it — start the clone with an empty, freshly-built cache
+    // rather than copying mutex/regex state.
+    RegexFilterStrategy(const RegexFilterStrategy&) noexcept {}
+    RegexFilterStrategy& operator=(const RegexFilterStrategy&) noexcept { return *this; }
+
     [[nodiscard]] bool matches(const std::string& value,
                 const std::string& pattern,
                 bool caseSensitive) const override;
@@ -125,8 +133,16 @@ public:
     }
 
 private:
-    // Note: std::regex is not stored here to keep strategy stateless
-    // Compiled regex is created per-call or cached in Filter class
+    // A Filter/FilterCondition owns its strategy exclusively (cloned, never
+    // shared), and the same (pattern, caseSensitive) is matched against many
+    // values in a row during one filter pass — cache the last compiled regex
+    // per instance instead of a global cache, avoiding both cross-filter
+    // lock contention and a cache-key string allocation on every call.
+    mutable std::mutex m_cacheMutex;
+    mutable std::string m_cachedPattern;
+    mutable bool m_cachedCaseSensitive {false};
+    mutable bool m_hasCachedRegex {false};
+    mutable std::regex m_cachedRegex;
 };
 
 /**

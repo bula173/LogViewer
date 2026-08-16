@@ -56,28 +56,56 @@ void JsonParser::ParseData(std::istream& input)
     if (first == '[')
     {
         // ── Array format ────────────────────────────────────────────────────
-        util::Logger::Debug("JsonParser: detected array format");
-        nlohmann::json doc;
+        // Streamed via a SAX parser callback rather than `input >> doc`: the
+        // naive form parses the entire array into one in-memory DOM tree
+        // before any event is emitted (no progress feedback, and peak memory
+        // is the full DOM *plus* the LogEvents built from it). Returning
+        // `false` at each top-level element's object_end event discards that
+        // subtree from the DOM being built once we've flattened it — see
+        // nlohmann's "discarding values" callback pattern — so memory stays
+        // bounded regardless of array size.
+        util::Logger::Debug("JsonParser: detected array format (streaming)");
+
+        int id = 0;
+        constexpr size_t BATCH_SIZE = 5000; // larger batch = fewer mutex + notify calls
+        std::vector<std::pair<int, db::LogEvent::EventItems>> eventBatch;
+        eventBatch.reserve(BATCH_SIZE);
+
+        auto flushBatch = [&]() {
+            if (eventBatch.empty()) return;
+            NotifyNewEventBatch(std::move(eventBatch));
+            eventBatch.clear();
+            eventBatch.reserve(BATCH_SIZE);
+            m_currentProgress = static_cast<uint32_t>(input.tellg());
+            NotifyProgressUpdated();
+        };
+
+        nlohmann::json::parser_callback_t callback =
+            [&](int depth, nlohmann::json::parse_event_t event, nlohmann::json& parsed) -> bool {
+            if (depth == 1 && event == nlohmann::json::parse_event_t::object_end)
+            {
+                db::LogEvent::EventItems items;
+                Flatten(parsed, "", items);
+                eventBatch.emplace_back(++id, std::move(items));
+                if (eventBatch.size() >= BATCH_SIZE)
+                    flushBatch();
+                return false; // discard this element from the DOM being built
+            }
+            return true;
+        };
+
         try {
-            input >> doc;
+            // Every top-level element is discarded by the callback above, so
+            // the returned (empty) document is intentionally unused.
+            [[maybe_unused]] auto doc = nlohmann::json::parse(input, callback);
         } catch (const nlohmann::json::exception& ex) {
             throw error::Error(error::ErrorCode::ParseError,
                 std::string("JsonParser: JSON parse error: ") + ex.what());
         }
 
-        if (!doc.is_array())
-        {
-            throw error::Error(error::ErrorCode::ParseError,
-                "JsonParser: expected a JSON array at top level");
-        }
-
-        int id = 0;
-        for (const auto& element : doc)
-        {
-            if (element.is_object())
-                EmitObject(element, ++id);
-        }
+        flushBatch();
         m_currentProgress = m_totalProgress;
+        NotifyProgressUpdated();
         util::Logger::Debug("JsonParser: parsed {} events (array format)", id);
     }
     else if (first == '{')

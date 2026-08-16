@@ -8,6 +8,7 @@
 ## 📊 Current State (v1.11.0, released)
 
 ### Recent Achievements ✅
+- **Performance: regex filter caching, streaming JSON load, LogEvent index removal** — see Performance Optimizations backlog item for details
 - **Customizable keyboard shortcuts** — Help → Keyboard Shortcuts is now generated from a live registry (no more stale hand-maintained list), supports rebinding/reset, and prints a cheat sheet
 - **Export/Import Filter Profiles** — share `.filters.json` profiles between teammates, with QTest-driven automated coverage
 - **Unified Preferences dialog** consolidating all settings
@@ -34,11 +35,12 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 ## 🎯 Short-Term (Next Release)
 
 ### Medium Priority: User Experience
-- **Performance Optimizations** (6-8 hours)
-  - Profile large file loading (100M+ events)
-  - Optimize filter reapplication
-  - Reduce memory footprint for filter indices
-  - Streaming progress indicators
+- **Performance Optimizations** (remaining: 4-6 hours)
+  - ✅ Regex filter matching: per-instance compiled-pattern cache, removed global lock + per-call allocation
+  - ✅ JSON array-format loading: streamed via SAX callback instead of full-DOM parse; progress reporting restored; events batched like other parsers
+  - ✅ `LogEvent`: removed per-event `unordered_map` index (was likely the largest single memory cost at 100M+ events); `findByKey()` is now a linear scan
+  - Remaining: filter reapplication still fully rescans the dataset on every change — no incremental caching or selectivity-based reordering (`FilterManager::applyFilters`/`applyFiltersToIndices`); `FilterOptimizer` already collects the stats needed for this but nothing consumes them yet. Real design work, not mechanical.
+  - Investigated and rejected: replacing `EventsTableModel`'s reverse-index `unordered_map` with `lower_bound` on `m_filteredIndices` — that vector is reordered by column value after a sort (not by ascending actual-index), so a binary search would silently break selection-preservation across sorts. The hash map is the correct structure here.
 
 ---
 

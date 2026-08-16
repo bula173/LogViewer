@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 #include <string_view>
-#include <unordered_map>
 #include "Concepts.hpp"
 
 /**
@@ -32,13 +31,13 @@ namespace db
  *
  * @par Design Philosophy
  * LogEvent is optimized for:
- * - Efficient key-value lookups via internal hash index
  * - Memory efficiency through move semantics and perfect forwarding
  * - Integration with filtering and display systems
  * - Support for multi-source event merging with original ID tracking
  *
  * @par Key Features
- * - Fast key-value lookup: O(1) amortized via cached LookupIndex
+ * - Key-value lookup: O(n) linear scan over a typically small field list —
+ *   deliberately not a per-event hash index (see findByKey())
  * - Multiple source tracking: Identifies events from different log files
  * - Original ID preservation: Retains pre-merge IDs for traceability
  * - Flexible construction: Supports initializer lists and perfect forwarding
@@ -101,9 +100,6 @@ class LogEvent
      * (eventFieldName, data). */
     using EventItems = std::vector<std::pair<std::string, std::string>>;
 
-    /** @brief Fast lookup index for key-value pairs */
-    using LookupIndex = std::unordered_map<std::string, size_t>;
-
     /** @brief Iterator type for traversing event items. */
     using EventItemsIterator =
         std::vector<std::pair<std::string, std::string>>::iterator;
@@ -143,7 +139,6 @@ class LogEvent
         : m_id(id)
         , m_eventItems(std::forward<Args>(args)...)
     {
-        buildLookupIndex();
     }
 
     /**
@@ -164,7 +159,6 @@ class LogEvent
         : m_id(id)
         , m_eventItems(items)
     {
-        buildLookupIndex();
     }
 
     /**
@@ -186,15 +180,13 @@ class LogEvent
     /**
      * @brief Finds a value by its key in the event's items.
      *
-     * Performs a fast lookup using the internal hash index to retrieve the
-     * value associated with the first occurrence of a key. If the key is not found,
-     * returns an empty string.
+     * Performs a linear scan to retrieve the value associated with the first
+     * occurrence of a key. If the key is not found, returns an empty string.
      *
      * @param key The key to search for (e.g., "timestamp", "level", "message")
      * @return const std::string The corresponding value, or empty string if not found
      *
      * @note Returns the first matching value if duplicate keys exist in event data
-     * @note The lookup is fast due to internal caching (O(1) average case)
      *
      * @par Example
      * @code
@@ -212,7 +204,12 @@ class LogEvent
      * @see findInEvent() for substring search in both keys and values
      *
      * @par Complexity
-     * O(1) average case (hash table lookup)
+     * O(n) where n is the number of fields in the event. Deliberately not
+     * backed by a per-event hash index: with typically a handful to a few
+     * dozen fields, a linear scan over a contiguous vector is both cheaper to
+     * build (no per-event heap allocations) and faster to query in practice
+     * than an unordered_map at this scale — and at 100M+ events, skipping
+     * that per-event hash table avoids the dominant memory cost.
      */
     const std::string findByKey(std::string_view key) const;
 
@@ -296,14 +293,8 @@ class LogEvent
     void SetSource(const std::string& source) { m_source = source; }
 
   private:
-    /**
-     * @brief Builds the fast lookup index from the event items
-     */
-    void buildLookupIndex();
-
     int m_id;                ///< Unique event identifier
     EventItems m_eventItems; ///< The structured data of the event
-    LookupIndex m_lookupIndex; ///< Fast lookup index for keys
     std::string m_source;    ///< Source identifier for multi-file merge
 };
 

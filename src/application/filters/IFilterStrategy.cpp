@@ -9,14 +9,6 @@
 #include "Logger.hpp"
 #include <algorithm>
 #include <cctype>
-#include <mutex>
-#include <regex>
-#include <unordered_map>
-
-// Static cache for compiled regexes to improve performance
-static std::unordered_map<std::string, std::regex> s_regexCache;
-static const size_t MAX_CACHE_SIZE = 100;
-static std::mutex s_regexCacheMutex; // protects s_regexCache from concurrent access
 
 namespace filters {
 
@@ -44,47 +36,27 @@ bool RegexFilterStrategy::matches(const std::string& value,
                                   const std::string& pattern,
                                   bool caseSensitive) const
 {
-    try {
-        std::regex::flag_type flags = std::regex::ECMAScript;
-        if (!caseSensitive) {
-            flags |= std::regex::icase;
-        }
+    std::lock_guard<std::mutex> lock(m_cacheMutex);
 
-        // Create cache key
-        std::string cacheKey = pattern + (caseSensitive ? "_cs" : "_ci");
-
-        {
-            std::lock_guard<std::mutex> lock(s_regexCacheMutex);
-
-            // Check cache first
-            auto it = s_regexCache.find(cacheKey);
-            if (it != s_regexCache.end()) {
-                bool result = std::regex_search(value, it->second);
-                util::Logger::Debug("RegexFilterStrategy::matches - cache hit, pattern='{}', result={}", pattern, result);
-                return result;
+    if (!m_hasCachedRegex || m_cachedPattern != pattern || m_cachedCaseSensitive != caseSensitive) {
+        try {
+            std::regex::flag_type flags = std::regex::ECMAScript;
+            if (!caseSensitive) {
+                flags |= std::regex::icase;
             }
-
-            // Compile and cache the regex
-            std::regex regex(pattern, flags);
-            bool result = std::regex_search(value, regex);
-
-            // Cache the compiled regex (limit cache size to prevent memory issues)
-            if (s_regexCache.size() < MAX_CACHE_SIZE) {
-                s_regexCache[cacheKey] = std::move(regex);
-                util::Logger::Debug("RegexFilterStrategy::matches - cached new regex, pattern='{}'", pattern);
-            }
-
-            util::Logger::Debug("RegexFilterStrategy::matches - pattern='{}', value='{}', caseSensitive={}, result={}",
-                pattern, value, caseSensitive, result);
-
-            return result;
+            m_cachedRegex = std::regex(pattern, flags);
+            m_cachedPattern = pattern;
+            m_cachedCaseSensitive = caseSensitive;
+            m_hasCachedRegex = true;
+        } catch (const std::regex_error& e) {
+            util::Logger::Error("RegexFilterStrategy::matches - Invalid regex '{}': {}",
+                pattern, e.what());
+            m_hasCachedRegex = false;
+            return false;
         }
-
-    } catch (const std::regex_error& e) {
-        util::Logger::Error("RegexFilterStrategy::matches - Invalid regex '{}': {}",
-            pattern, e.what());
-        return false;
     }
+
+    return std::regex_search(value, m_cachedRegex);
 }
 
 bool RegexFilterStrategy::isValidPattern(const std::string& pattern) const
