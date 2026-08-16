@@ -2,6 +2,12 @@
 
 All notable changes to LogViewer are documented here.
 
+## [Unreleased]
+
+### New features
+
+- **Export/Import Filter Profiles** — the Filter Profiles panel can now export a selected profile to a `.filters.json` file and import one or more profiles from a file, merging them into the current list (with a prompt to overwrite on name collisions). Enables sharing filter setups between teammates.
+
 ## [1.11.0] — 2026-08-15
 
 ### New features

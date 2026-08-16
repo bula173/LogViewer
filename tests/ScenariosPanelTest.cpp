@@ -7,16 +7,22 @@
 #include "ui/qt/panels/ScenariosPanel.hpp"
 #include "db/EventsContainer.hpp"
 
-#include <QCoreApplication>
+#include <QApplication>
 
-// Minimal QCoreApplication fixture so Qt internal machinery initialises cleanly.
+// Must be QApplication, not QCoreApplication: other test files in this binary
+// (e.g. FilterProfilesPanelTest) construct real QWidgets, and only one
+// Q(Core)Application may exist per process — whichever test's GetApp()/
+// EnsureQApplication() runs first wins for the rest of the binary's lifetime.
 static int   s_argc = 0;
 static char* s_argv = nullptr;
 
-static QCoreApplication& GetApp()
+static void GetApp()
 {
-    static QCoreApplication app(s_argc, &s_argv);
-    return app;
+    // A function-local static only guards its own construction — if another
+    // test file's GetApp() already created the process-wide QApplication,
+    // constructing a second one here would crash. Check first.
+    if (QApplication::instance()) return;
+    static QApplication app(s_argc, &s_argv);
 }
 
 namespace ui::qt::test

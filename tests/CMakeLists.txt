@@ -3,6 +3,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/bin)
 
 message(STATUS "Building LogViewer::tests")
 
+# Qt Test supplies QTest::mouseClick()/keyClicks()/etc. — synthetic Qt events
+# posted directly to a widget instance, not real OS-level input. Used for
+# in-process UI tests (e.g. FilterProfilesPanelTest) instead of OS UI
+# automation, which can't be scoped to a single application window.
+find_package(Qt6 REQUIRED COMPONENTS Test)
+
 # CONFIGURE_DEPENDS: CMake re-globs automatically during build when files are
 # added or removed, preventing stale builds after adding new test files.
 file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "*.cpp")
@@ -34,6 +40,7 @@ target_link_libraries(${PROJECT_NAME}_tests
   gtest_main
   gmock
   application_core
+  Qt6::Test
   # dlopen/dlclose used in ArchitectureImprovementsTests; requires -ldl on Linux
   # (empty on macOS and Windows where it's part of the system library)
   ${CMAKE_DL_LIBS}

@@ -8,6 +8,7 @@
 ## 📊 Current State (v1.11.0, released)
 
 ### Recent Achievements ✅
+- **Export/Import Filter Profiles** — share `.filters.json` profiles between teammates, with QTest-driven automated coverage
 - **Unified Preferences dialog** consolidating all settings
 - **Local Gemma 2B inference via llama.cpp** — replaces the earlier heuristic fallback with real on-device LLM inference
 - **Unified search bar** (Ctrl+F/Cmd+F) with live match counting and advanced query support
@@ -30,13 +31,6 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 ---
 
 ## 🎯 Short-Term (Next Release)
-
-### High Priority: Core Stability
-- **Export/Import Filter Configurations** (6-8 hours)
-  - Save filter presets as `.filters.json`
-  - Team-based filter sharing
-  - Load/apply saved profiles quickly
-  - Status: UI infrastructure in place, needs implementation
 
 ### Medium Priority: User Experience
 - **Performance Optimizations** (6-8 hours)

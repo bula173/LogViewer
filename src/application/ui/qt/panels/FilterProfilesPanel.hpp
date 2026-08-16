@@ -30,6 +30,8 @@
 #pragma once
 
 #include "TimeRangeFilterPanel.hpp"
+#include "Error.hpp"
+#include "Result.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -130,6 +132,21 @@ struct FilterProfile
  *
  * @par Double-click shortcut
  * Double-clicking a list item is equivalent to clicking **Load**.
+ *
+ * @par Export / Import
+ * **Export** writes the selected profile to a user-chosen `*.filters.json`
+ * file (same JSON array format as internal storage, just one entry) for
+ * sharing with teammates. **Import** reads a `*.filters.json` file (one or
+ * more profiles) and merges it into the current list, prompting once if any
+ * imported name collides with an existing profile.
+ *
+ * @par Testability
+ * The QFileDialog calls that pick the export/import path live only in the
+ * @c HandleExport() / @c HandleImport() slots. The actual file I/O
+ * (@c ExportProfileToPath(), @c ReadProfilesFile()) and the merge logic
+ * (@c MergeProfiles()) are separate public methods that take a path or a
+ * profile list directly, so they can be exercised in tests without going
+ * through a native file picker.
  */
 class FilterProfilesPanel : public QWidget
 {
@@ -153,6 +170,47 @@ public:
      * @param profile The complete filter state to persist.
      */
     void StoreProfile(const FilterProfile& profile);
+
+    /// Result of exporting a single profile to a file.
+    using ExportResult = util::Result<std::monostate, error::Error>;
+    /// Result of reading a .filters.json file: the profiles it contains.
+    using ReadProfilesResult = util::Result<std::vector<FilterProfile>, error::Error>;
+
+    /**
+     * @brief Writes @p profile to @p path as a single-entry .filters.json array.
+     *
+     * Pure I/O — does not touch this panel's own profile list or persisted
+     * storage, so it can be tested directly with a temp path.
+     */
+    [[nodiscard]] static ExportResult ExportProfileToPath(
+        const FilterProfile& profile, const QString& path);
+
+    /**
+     * @brief Reads and parses a .filters.json file (one or more profiles).
+     *
+     * Pure I/O — does not touch this panel's own state. Entries with an
+     * empty name or a name duplicated within the file are silently skipped
+     * (matches the same rule LoadFromFile() applies to internal storage).
+     */
+    [[nodiscard]] static ReadProfilesResult ReadProfilesFile(const QString& path);
+
+    /**
+     * @brief Merges @p incoming into this panel's profile list and persists
+     * the result to internal storage.
+     *
+     * Profiles whose name matches one already in the list are skipped
+     * unless @p overwriteCollisions is true, in which case the existing
+     * profile is replaced in place.
+     *
+     * @return The number of profiles actually added or overwritten.
+     */
+    size_t MergeProfiles(std::vector<FilterProfile> incoming, bool overwriteCollisions);
+
+    /// Number of profiles currently held by the panel.
+    [[nodiscard]] size_t ProfileCount() const { return m_profiles.size(); }
+
+    /// Whether a profile with the given name currently exists.
+    [[nodiscard]] bool HasProfile(const std::string& name) const;
 
 signals:
     /**
@@ -181,6 +239,8 @@ private slots:
     void HandleLoad();
     void HandleDelete();
     void HandleSelectionChanged();
+    void HandleExport();
+    void HandleImport();
 
 private:
     void BuildLayout();
@@ -195,6 +255,8 @@ private:
     QPushButton* m_saveBtn    {nullptr};
     QPushButton* m_loadBtn    {nullptr};
     QPushButton* m_deleteBtn  {nullptr};
+    QPushButton* m_exportBtn  {nullptr};
+    QPushButton* m_importBtn  {nullptr};
     QLabel*      m_statusLabel{nullptr};
 };
 

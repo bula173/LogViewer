@@ -77,7 +77,7 @@ endif()
 # Targets listed here are the ones whose runtime behaviour we want to check.
 # ---------------------------------------------------------------------------
 if(NOT LOGVIEWER_SUBPROJECT)
-    logviewer_enable_sanitizers(application_core LogViewer LogViewer_tests)
+    logviewer_enable_sanitizers(application_core LogViewer LogViewer_tests functional_tests)
 endif()
 
 # ---------------------------------------------------------------------------
