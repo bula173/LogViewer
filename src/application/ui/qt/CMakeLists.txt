@@ -57,6 +57,7 @@ target_sources(application_core
         utils/ReportGenerator.cpp
         utils/SearchEngine.cpp
         utils/SessionManager.cpp
+        utils/ShortcutManager.cpp
         utils/ThemeManager.cpp
         utils/TypeFilterView.cpp
         utils/UpdateChecker.cpp

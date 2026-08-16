@@ -7,6 +7,11 @@ All notable changes to LogViewer are documented here.
 ### New features
 
 - **Export/Import Filter Profiles** — the Filter Profiles panel can now export a selected profile to a `.filters.json` file and import one or more profiles from a file, merging them into the current list (with a prompt to overwrite on name collisions). Enables sharing filter setups between teammates.
+- **Customizable keyboard shortcuts** — the Keyboard Shortcuts dialog (Help → Keyboard Shortcuts) now reflects the application's actual live bindings instead of a hand-maintained (and previously stale/incomplete) list. Double-click any entry to rebind it; conflicting assignments are rejected. Includes **Reset to Default**, **Reset All**, and a **Print…** button for a print-friendly cheat sheet. Custom bindings persist to `<appdata>/keybindings.json`.
+
+### Fixes
+
+- The in-app Keyboard Shortcuts reference had drifted out of sync with the real menu bindings (missing entries for Export, Generate Report, Group Events, Tag & Annotate; a wrong shortcut listed for Jump to Timestamp). It's now generated from the same registry the menus use, so it can't drift again.
 
 ## [1.11.0] — 2026-08-15
 

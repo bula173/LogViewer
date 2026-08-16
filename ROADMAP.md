@@ -8,6 +8,7 @@
 ## 📊 Current State (v1.11.0, released)
 
 ### Recent Achievements ✅
+- **Customizable keyboard shortcuts** — Help → Keyboard Shortcuts is now generated from a live registry (no more stale hand-maintained list), supports rebinding/reset, and prints a cheat sheet
 - **Export/Import Filter Profiles** — share `.filters.json` profiles between teammates, with QTest-driven automated coverage
 - **Unified Preferences dialog** consolidating all settings
 - **Local Gemma 2B inference via llama.cpp** — replaces the earlier heuristic fallback with real on-device LLM inference
@@ -38,12 +39,6 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
   - Optimize filter reapplication
   - Reduce memory footprint for filter indices
   - Streaming progress indicators
-
-### Low Priority: Polish
-- **Keyboard Shortcuts Reference** (2-3 hours)
-  - In-app shortcuts dialog (Ctrl+?)
-  - Print-friendly cheat sheet
-  - Customizable keybindings
 
 ---
 

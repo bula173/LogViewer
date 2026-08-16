@@ -268,7 +268,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core QUIET)
 generate_install_manifest(
     OUTPUT_FILE "${MANIFEST_OUTPUT_FILE}"
     INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
-    LIBRARIES "Qt6::Core;Qt6::Widgets;Qt6::Charts;Qt6::Network;Qt6::Concurrent"
+    LIBRARIES "Qt6::Core;Qt6::Widgets;Qt6::Charts;Qt6::Network;Qt6::Concurrent;Qt6::PrintSupport"
 )
 
 # Install manifest with the application

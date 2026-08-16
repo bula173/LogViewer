@@ -48,6 +48,7 @@
 #include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/PreferencesDialog.hpp"
 #include "dialogs/ShortcutsDialog.hpp"
+#include "utils/ShortcutManager.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
 #include "Version.hpp"
 #include "PluginManager.hpp"
@@ -940,6 +941,7 @@ void MainWindow::SetupMenus()
     auto* openAction = fileMenu->addAction(tr("&Open..."));
     openAction->setShortcut(QKeySequence::Open);
     openAction->setToolTip(tr("Open a log file (CSV, JSON, XML, ASC, Evlog)"));
+    ShortcutManager::getInstance().Register("file.open", tr("File"), tr("Open"), openAction);
     connect(openAction, &QAction::triggered, this, [this]() {
         util::Logger::Debug("[MainWindow] Open menu triggered");
         OnOpenFileRequested();
@@ -957,11 +959,13 @@ void MainWindow::SetupMenus()
     auto* openSessionAction = fileMenu->addAction(tr("Open Session…"));
     openSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+O")));
     openSessionAction->setToolTip(tr("Load a saved analysis session with filters and layout"));
+    ShortcutManager::getInstance().Register("file.openSession", tr("File"), tr("Open Session"), openSessionAction);
     connect(openSessionAction, &QAction::triggered, this, &MainWindow::OnOpenSession);
 
     auto* saveSessionAction = fileMenu->addAction(tr("Save Session…"));
     saveSessionAction->setShortcut(QKeySequence(tr("Ctrl+Shift+S")));
     saveSessionAction->setToolTip(tr("Save current filters, layout, and analysis state"));
+    ShortcutManager::getInstance().Register("file.saveSession", tr("File"), tr("Save Session"), saveSessionAction);
     connect(saveSessionAction, &QAction::triggered, this, &MainWindow::OnSaveSession);
 
     fileMenu->addSeparator();
@@ -980,6 +984,7 @@ void MainWindow::SetupMenus()
     auto* exportAction = fileMenu->addAction(tr("E&xport..."));
     exportAction->setShortcut(QKeySequence(tr("Ctrl+E")));
     exportAction->setToolTip(tr("Export logs to CSV, JSON, XML, Markdown, HTML, or TSV format"));
+    ShortcutManager::getInstance().Register("file.export", tr("File"), tr("Export"), exportAction);
     connect(exportAction, &QAction::triggered, this, [this]() {
         if (!m_events) return;
         auto dialog = std::make_unique<ExportDialog>(*m_events, m_eventsView, this);
@@ -990,6 +995,7 @@ void MainWindow::SetupMenus()
 
     auto* clearAction = fileMenu->addAction(tr("&Clear Data"));
     clearAction->setShortcut(QKeySequence(tr("Ctrl+Shift+L")));
+    ShortcutManager::getInstance().Register("file.clear", tr("File"), tr("Clear Data"), clearAction);
     connect(clearAction, &QAction::triggered, this,
         &MainWindow::OnClearDataRequested);
 
@@ -1000,12 +1006,14 @@ void MainWindow::SetupMenus()
     m_tailAction->setToolTip(tr("Watch the current log file and automatically load new lines as they are appended.\n"
                                 "Supported formats: NDJSON (.json/.jsonl), CAN/ASC, DLT.\n"
                                 "Not supported: XML, CSV."));
+    ShortcutManager::getInstance().Register("file.tail", tr("File"), tr("Follow File (Tail)"), m_tailAction);
     connect(m_tailAction, &QAction::triggered, this, &MainWindow::OnToggleTailRequested);
 
     fileMenu->addSeparator();
 
     auto* exitAction = fileMenu->addAction(tr("E&xit"));
     exitAction->setShortcut(QKeySequence::Quit);
+    ShortcutManager::getInstance().Register("file.exit", tr("File"), tr("Exit"), exitAction);
     connect(exitAction, &QAction::triggered, this,
         &MainWindow::OnExitRequested);
 
@@ -1013,6 +1021,7 @@ void MainWindow::SetupMenus()
 
     auto* preferencesAction = toolsMenu->addAction(tr("&Preferences..."));
     preferencesAction->setShortcut(QKeySequence::Preferences);
+    ShortcutManager::getInstance().Register("tools.preferences", tr("Tools"), tr("Preferences"), preferencesAction);
     connect(preferencesAction, &QAction::triggered, this, [this]() {
         ui::qt::PreferencesDialog dlg(config::GetConfig(), this);
         dlg.exec();
@@ -1043,6 +1052,7 @@ void MainWindow::SetupMenus()
 
     auto* reloadPluginsAction = toolsMenu->addAction(tr("&Reload Plugins"));
     reloadPluginsAction->setShortcut(QKeySequence(tr("Ctrl+Shift+P")));
+    ShortcutManager::getInstance().Register("tools.reloadPlugins", tr("Tools"), tr("Reload Plugins"), reloadPluginsAction);
     connect(reloadPluginsAction, &QAction::triggered, this, [this]() {
         UpdateStatusText("Reloading plugins...");
         reloadPlugins();
@@ -1074,6 +1084,7 @@ void MainWindow::SetupMenus()
     auto* generateReportAction = analysisMenu->addAction(tr("Generate &Report..."));
     generateReportAction->setShortcut(QKeySequence(tr("Ctrl+Alt+R")));
     generateReportAction->setToolTip(tr("Generate comprehensive HTML/Markdown/JSON analysis reports"));
+    ShortcutManager::getInstance().Register("analysis.generateReport", tr("Analysis"), tr("Generate Report"), generateReportAction);
     connect(generateReportAction, &QAction::triggered, this, [this]() {
         if (m_events && m_eventsView) {
             // TODO: Launch ReportGenerator dialog here
@@ -1087,6 +1098,7 @@ void MainWindow::SetupMenus()
     auto* groupEventsAction = analysisMenu->addAction(tr("&Group Events..."));
     groupEventsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+G")));
     groupEventsAction->setToolTip(tr("Group events by level, message, actor, or time bucket"));
+    ShortcutManager::getInstance().Register("analysis.groupEvents", tr("Analysis"), tr("Group Events"), groupEventsAction);
     connect(groupEventsAction, &QAction::triggered, this, [this]() {
         if (m_events && m_eventsView) {
             // TODO: Launch EventGroupManager dialog here
@@ -1098,6 +1110,7 @@ void MainWindow::SetupMenus()
     auto* tagEventsAction = analysisMenu->addAction(tr("&Tag & Annotate..."));
     tagEventsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+T")));
     tagEventsAction->setToolTip(tr("Add tags and annotations to events"));
+    ShortcutManager::getInstance().Register("analysis.tagEvents", tr("Analysis"), tr("Tag & Annotate"), tagEventsAction);
     connect(tagEventsAction, &QAction::triggered, this, [this]() {
         if (m_events && m_eventsView) {
             // TODO: Launch EventTagManager dialog here
@@ -1144,6 +1157,7 @@ void MainWindow::SetupMenus()
     auto* bookmarksAction = viewMenu->addAction(tr("Show &Bookmarks"));
     bookmarksAction->setShortcut(QKeySequence(tr("Ctrl+B")));
     bookmarksAction->setToolTip(tr("Organize and categorize bookmarked events for quick reference"));
+    ShortcutManager::getInstance().Register("view.bookmarks", tr("View"), tr("Show Bookmarks"), bookmarksAction);
     connect(bookmarksAction, &QAction::triggered, this, [this]() {
         if (!m_bookmarksPanel || !m_contentTabs)
             return;
@@ -1164,6 +1178,7 @@ void MainWindow::SetupMenus()
     auto* jumpAction = viewMenu->addAction(tr("Go to &Timestamp…"));
     jumpAction->setShortcut(QKeySequence(tr("Ctrl+G")));
     jumpAction->setToolTip(tr("Jump to a specific timestamp in the event log"));
+    ShortcutManager::getInstance().Register("view.jumpToTimestamp", tr("View"), tr("Go to Timestamp"), jumpAction);
     connect(jumpAction, &QAction::triggered, this, [this]() {
         if (m_eventsView) m_eventsView->JumpToTimestamp();
     });
@@ -1252,6 +1267,7 @@ void MainWindow::SetupMenus()
 
     auto* shortcutsAction = helpMenu->addAction(tr("Keyboard &Shortcuts"));
     shortcutsAction->setShortcut(QKeySequence::HelpContents);
+    ShortcutManager::getInstance().Register("help.shortcuts", tr("Help"), tr("Keyboard Shortcuts"), shortcutsAction);
     connect(shortcutsAction, &QAction::triggered, this, [this]() {
         ui::qt::ShortcutsDialog dlg(this);
         dlg.exec();
