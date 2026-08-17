@@ -2,7 +2,7 @@ var searchData=
 [
   ['dashboardpanel_0',['DashboardPanel',['../d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a680a88f0b29dfed0ea539a818ea9b7fc',1,'ui::qt::DashboardPanel']]],
   ['data_1',['data',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496',1,'ui::qt::EventsTableModel']]],
-  ['debug_2',['debug',['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()'],['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()']]],
+  ['debug_2',['debug',['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()']]],
   ['decode_3',['Decode',['../d4/d72/structui_1_1qt_1_1ActorKey.html#a096151ec96264829cee20153c2c4a4e8',1,'ui::qt::ActorKey']]],
   ['decodearg_4',['DecodeArg',['../d0/dd5/namespaceparser.html#ab92c1d5521bca63732d884cbe495f41f',1,'parser']]],
   ['decodeframe_5',['DecodeFrame',['../d8/d04/namespaceparser_1_1dbc.html#a83fdb618e738dda45a4fd29940ae5dab',1,'parser::dbc']]],
@@ -11,7 +11,7 @@ var searchData=
   ['decodeverbose_8',['DecodeVerbose',['../d0/dd5/namespaceparser.html#a86656e578f7f7246f8ae82cb5fdbe888',1,'parser']]],
   ['decodewithtemplate_9',['DecodeWithTemplate',['../d0/dd5/namespaceparser.html#a5e254809895660d824801470d5c3d06f',1,'parser']]],
   ['decrypt_10',['Decrypt',['../dc/d46/classutil_1_1KeyEncryption.html#ab96199702c841c7c82eb5068829dfc67',1,'util::KeyEncryption']]],
-  ['defaultfilepath_11',['defaultfilepath',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd',1,'ui::qt::FilterProfilesPanel::DefaultFilePath()'],['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a7e20f56a701356718d29e870ff3b32c9',1,'ui::qt::ActorDefinitionsPanel::DefaultFilePath()']]],
+  ['defaultfilepath_11',['defaultfilepath',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd',1,'ui::qt::FilterProfilesPanel::DefaultFilePath()'],['../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9',1,'ui::qt::ShortcutManager::DefaultFilePath()'],['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a7e20f56a701356718d29e870ff3b32c9',1,'ui::qt::ActorDefinitionsPanel::DefaultFilePath()']]],
   ['definitions_12',['Definitions',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a576fbf3fbaaa1f38ccca65ee04dd6246',1,'ui::qt::ActorDefinitionsPanel']]],
   ['definitionschanged_13',['DefinitionsChanged',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a62c61e9fc0fb51ae6be56fcc1dc1e32e',1,'ui::qt::ActorDefinitionsPanel']]],
   ['deselectall_14',['deselectall',['../df/d7e/classui_1_1ITypeFilterView.html#adbeae81c144b5a082c70e59ae96db4ab',1,'ui::ITypeFilterView::DeselectAll()'],['../d3/df9/classui_1_1qt_1_1TypeFilterView.html#af6fb9081e764e5900467bf60deeaabdb',1,'ui::qt::TypeFilterView::DeselectAll()']]],

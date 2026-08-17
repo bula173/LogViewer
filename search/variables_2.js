@@ -2,7 +2,7 @@ var searchData=
 [
   ['canid_0',['canId',['../da/d91/structui_1_1qt_1_1FrameSignals.html#acf1c9de809d12d75007947930f69a20e',1,'ui::qt::FrameSignals']]],
   ['capturealiases_1',['captureAliases',['../de/db8/structui_1_1qt_1_1ActorDefinition.html#a8903e9d83c5c2e3471eb3f091648895b',1,'ui::qt::ActorDefinition']]],
-  ['category_2',['category',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#a585fd027081a2f50ba4cb0f5aa52f952',1,'ui::qt::BookmarksPanel::Bookmark::category'],['../d2/ddb/structui_1_1qt_1_1widgets_1_1PanelInfo.html#a3843598bab867bdb5d77880dbb8b4f93',1,'ui::qt::widgets::PanelInfo::category']]],
+  ['category_2',['category',['../d3/da1/structui_1_1qt_1_1ShortcutInfo.html#abf969e6bc3ef91e4033e765c590dd3fb',1,'ui::qt::ShortcutInfo::category'],['../d8/de5/structui_1_1qt_1_1ShortcutManager_1_1Entry.html#ae8fea8194ddba08d6a38cd39c96856a7',1,'ui::qt::ShortcutManager::Entry::category'],['../d2/ddb/structui_1_1qt_1_1widgets_1_1PanelInfo.html#a3843598bab867bdb5d77880dbb8b4f93',1,'ui::qt::widgets::PanelInfo::category'],['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#a585fd027081a2f50ba4cb0f5aa52f952',1,'ui::qt::BookmarksPanel::Bookmark::category']]],
   ['checkedtypes_3',['checkedTypes',['../db/d6d/structui_1_1qt_1_1FilterProfile.html#aa646361bc31169231172e11fa702504d',1,'ui::qt::FilterProfile']]],
   ['checker_4',['checker',['../d5/d32/classui_1_1qt_1_1UpdateDialog.html#a2d43d7cb32b8d2cbac2f7e1fc4855433',1,'ui::qt::UpdateDialog']]],
   ['checkintervaldays_5',['checkIntervalDays',['../d3/d63/structconfig_1_1Config_1_1UpdateSettings.html#a91f5c652081e7e393e307be774ded3f7',1,'config::Config::UpdateSettings']]],
@@ -13,7 +13,7 @@ var searchData=
   ['columnorder_10',['columnOrder',['../d2/d5e/classconfig_1_1Config.html#a3fa6706bf8c854693d1e621f4890afd5',1,'config::Config']]],
   ['columns_11',['columns',['../d2/d5e/classconfig_1_1Config.html#a2c710b0484690ab6c3e032ff31ba125e',1,'config::Config']]],
   ['columnvalues_12',['columnValues',['../de/d74/structmvc_1_1SearchResultRow.html#a121abdd11448c6e2177b92e10206720c',1,'mvc::SearchResultRow']]],
-  ['columnwidths_13',['columnwidths',['../d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#ad427084462bb821c1a4a4cb32da576e0',1,'ui::qt::utils::SessionManager::SessionState::columnWidths'],['../d2/d5e/classconfig_1_1Config.html#a943e0bdc6aa3968fefdfbb6bb83622e6',1,'config::Config::columnWidths']]],
+  ['columnwidths_13',['columnwidths',['../d2/d5e/classconfig_1_1Config.html#a943e0bdc6aa3968fefdfbb6bb83622e6',1,'config::Config::columnWidths'],['../d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#ad427084462bb821c1a4a4cb32da576e0',1,'ui::qt::utils::SessionManager::SessionState::columnWidths']]],
   ['conditions_14',['conditions',['../d9/d12/classfilters_1_1Filter.html#af186eb7a457e566e6461c2b9e8ee81f8',1,'filters::Filter']]],
   ['confidence_15',['confidence',['../d4/d8f/structai_1_1GemmaActorResult.html#aeb853196c6528db44572189ce97d17f1',1,'ai::GemmaActorResult::confidence'],['../d5/d23/structai_1_1DirectionPattern.html#a65013dd7c2206ab662a73a8a1efda4a8',1,'ai::DirectionPattern::confidence'],['../d8/d76/structanalyzer_1_1ExchangePattern.html#adfc35da3e671710149f1883925a3806b',1,'analyzer::ExchangePattern::confidence']]],
   ['configinstance_16',['configInstance',['../d6/d7f/namespaceconfig.html#a48ae5137390f6f43c531ab73a99a7296',1,'config']]],

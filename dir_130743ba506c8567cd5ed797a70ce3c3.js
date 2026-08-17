@@ -14,7 +14,7 @@ var dir_130743ba506c8567cd5ed797a70ce3c3 =
     [ "CanStatisticsStrategy.hpp", "d0/d85/CanStatisticsStrategy_8hpp.html", "d0/d85/CanStatisticsStrategy_8hpp" ],
     [ "DashboardPanel.cpp", "dd/de8/DashboardPanel_8cpp.html", null ],
     [ "DashboardPanel.hpp", "dd/d10/DashboardPanel_8hpp.html", "dd/d10/DashboardPanel_8hpp" ],
-    [ "FilterProfilesPanel.cpp", "d2/db8/FilterProfilesPanel_8cpp.html", null ],
+    [ "FilterProfilesPanel.cpp", "d2/db8/FilterProfilesPanel_8cpp.html", "d2/db8/FilterProfilesPanel_8cpp" ],
     [ "FilterProfilesPanel.hpp", "d0/d66/FilterProfilesPanel_8hpp.html", "d0/d66/FilterProfilesPanel_8hpp" ],
     [ "FiltersPanel.cpp", "d0/d34/FiltersPanel_8cpp.html", "d0/d34/FiltersPanel_8cpp" ],
     [ "FiltersPanel.hpp", "dc/d55/FiltersPanel_8hpp.html", "dc/d55/FiltersPanel_8hpp" ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xaiapikey_0',['xaiApiKey',['../d2/d5e/classconfig_1_1Config.html#a9846ee519a3d5672a8f3d292c9ca6868',1,'config::Config']]]
+  ['xaiapikey_0',['xaiApiKey',['../db/de8/structai_1_1Config.html#a19a8a0b505815113253563c2349b27c4',1,'ai::Config']]]
 ];

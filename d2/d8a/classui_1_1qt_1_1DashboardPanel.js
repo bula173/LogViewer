@@ -20,18 +20,16 @@ var classui_1_1qt_1_1DashboardPanel =
     [ "UpdateStats", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a8c8dd7f04c104e0893cfddd187307d31", null ],
     [ "UpdateTopActors", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a771dc02f8e6d41c06c35a2bb1f5c94e6", null ],
     [ "m_bookmarkButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a8a6d2bed57633c0283abd34b563f0c04", null ],
-    [ "m_debugLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a6df124398d1d3ad30bbacda4396d76a9", null ],
-    [ "m_errorsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a2fe6fd88f7b8024f809c1920ba562585", null ],
     [ "m_events", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a05eaf0e5c3e8204e496e9371659135c5", null ],
     [ "m_exportButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ae71e3dcb1032dca7cb5853ccc5e17d26", null ],
     [ "m_fileFormatLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a613be64e0e7d562bf261639abac46e87", null ],
     [ "m_fileNameLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ad07999bb1d05ae0af6925750f5d2762a", null ],
     [ "m_fileSizeLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a287cdb792488373eebb6cb9c0cd7b710", null ],
-    [ "m_infoLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a0ced5aca79a9642d4c309726eeaa9846", null ],
     [ "m_reportButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ad4b5155642fec3583823b44de9ed2be6", null ],
     [ "m_scrollArea", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a1a73bc53345d0f96106528d56aff65c9", null ],
     [ "m_timeRangeLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a76b981df786fc715d3045297b9bd42f5", null ],
     [ "m_topActorsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aa53fa444b1e6196b8d7d934b223cb06f", null ],
     [ "m_totalEventsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a07647488695249f0ac7709c2d8b682ee", null ],
-    [ "m_warningsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aeeb69b5ed1ef3afff4de28d6f4e3a410", null ]
+    [ "m_typeBreakdownLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a805dfc2ef613c8a8aaf431c4c88d5a47", null ],
+    [ "m_typeBreakdownTitleLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#af233dc5f18a48f99a1f7cf5b3b9af43e", null ]
 ];

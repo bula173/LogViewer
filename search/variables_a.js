@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['label_0',['label',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#ab70624e2c95c4824c466639057fea91f',1,'ui::qt::BookmarksPanel::Bookmark::label'],['../d9/d3b/structui_1_1qt_1_1StatRow.html#a2e83aa3b554c04a42e3175caf078c031',1,'ui::qt::StatRow::label']]],
+  ['label_0',['label',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#ab70624e2c95c4824c466639057fea91f',1,'ui::qt::BookmarksPanel::Bookmark::label'],['../d9/d3b/structui_1_1qt_1_1StatRow.html#a2e83aa3b554c04a42e3175caf078c031',1,'ui::qt::StatRow::label'],['../d3/da1/structui_1_1qt_1_1ShortcutInfo.html#a2b38eaa36b9d94c16425d9ec91fbaf5f',1,'ui::qt::ShortcutInfo::label'],['../d8/de5/structui_1_1qt_1_1ShortcutManager_1_1Entry.html#a4e7f1a4c4a7ea442ff695b5fe8131950',1,'ui::qt::ShortcutManager::Entry::label']]],
   ['labelfield_1',['labelField',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a9ca8168e3efb7f12e9f1b8d839171fa9',1,'analyzer::ExchangePattern']]],
   ['lastchecktime_2',['lastCheckTime',['../d3/d63/structconfig_1_1Config_1_1UpdateSettings.html#a3dcb2442394077f456abe6eb2dce9e19',1,'config::Config::UpdateSettings']]],
   ['lastopenedfile_3',['lastOpenedFile',['../d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#ac09ab5d86376a8c9ee84ca39872f41aa',1,'ui::qt::utils::SessionManager::SessionState']]],

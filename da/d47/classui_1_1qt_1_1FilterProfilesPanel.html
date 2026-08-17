@@ -91,8 +91,10 @@ $(document).ready(function(){initNavTree('da/d47/classui_1_1qt_1_1FilterProfiles
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-slots">Private Slots</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
@@ -111,9 +113,9 @@ Inheritance diagram for ui::qt::FilterProfilesPanel:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/df9/classui_1_1qt_1_1FilterProfilesPanel__inherit__graph.png" border="0" usemap="#aui_1_1qt_1_1FilterProfilesPanel_inherit__map" alt="Inheritance graph"/></div>
 <map name="aui_1_1qt_1_1FilterProfilesPanel_inherit__map" id="aui_1_1qt_1_1FilterProfilesPanel_inherit__map">
-<area shape="rect" title="Panel for saving and restoring named filter profiles." alt="" coords="5,119,207,504"/>
+<area shape="rect" title="Panel for saving and restoring named filter profiles." alt="" coords="5,119,207,684"/>
 <area shape="rect" href="../../d8/ded/classQWidget.html" title=" " alt="" coords="71,5,141,71"/>
-<area shape="poly" title=" " alt="" coords="109,84,109,118,103,118,103,84"/>
+<area shape="poly" title=" " alt="" coords="109,84,109,119,103,119,103,84"/>
 </map>
 </div>
 <div class="dynheader">
@@ -121,22 +123,31 @@ Collaboration diagram for ui::qt::FilterProfilesPanel:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/db3/classui_1_1qt_1_1FilterProfilesPanel__coll__graph.png" border="0" usemap="#aui_1_1qt_1_1FilterProfilesPanel_coll__map" alt="Collaboration graph"/></div>
 <map name="aui_1_1qt_1_1FilterProfilesPanel_coll__map" id="aui_1_1qt_1_1FilterProfilesPanel_coll__map">
-<area shape="rect" title="Panel for saving and restoring named filter profiles." alt="" coords="335,163,536,428"/>
+<area shape="rect" title="Panel for saving and restoring named filter profiles." alt="" coords="335,192,536,597"/>
 <area shape="rect" href="../../d8/ded/classQWidget.html" title=" " alt="" coords="5,5,76,71"/>
-<area shape="poly" title=" " alt="" coords="89,69,336,228,333,232,86,73"/>
+<area shape="poly" title=" " alt="" coords="87,78,336,301,333,305,84,82"/>
 <area shape="rect" title=" " alt="" coords="99,5,299,71"/>
-<area shape="poly" title=" " alt="" coords="231,69,325,171,321,175,227,73"/>
+<area shape="poly" title=" " alt="" coords="222,69,328,227,323,230,218,72"/>
 <area shape="rect" title=" " alt="" coords="323,5,427,71"/>
-<area shape="poly" title=" " alt="" coords="385,70,403,146,398,147,380,72"/>
+<area shape="poly" title=" " alt="" coords="383,70,401,175,396,176,378,71"/>
 <area shape="rect" title=" " alt="" coords="452,5,539,71"/>
-<area shape="poly" title=" " alt="" coords="490,72,473,147,468,146,485,70"/>
+<area shape="poly" title=" " alt="" coords="493,71,475,176,470,175,487,70"/>
 <area shape="rect" title=" " alt="" coords="563,5,673,71"/>
-<area shape="poly" title=" " alt="" coords="611,72,598,105,580,140,549,184,544,180,576,137,593,103,606,70"/>
+<area shape="poly" title=" " alt="" coords="615,72,603,118,584,169,547,240,542,237,580,167,598,117,609,70"/>
 <area shape="rect" title=" " alt="" coords="707,5,777,71"/>
-<area shape="poly" title=" " alt="" coords="736,72,721,107,699,140,666,172,629,201,553,247,550,242,626,196,662,168,695,137,716,104,731,70"/>
+<area shape="poly" title=" " alt="" coords="741,72,729,120,720,145,707,169,673,214,634,255,551,324,548,320,630,251,669,211,702,167,715,143,724,118,735,71"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ace2b89a5c246dfb7e5e7af3cf372fb58" id="r_ace2b89a5c246dfb7e5e7af3cf372fb58"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ace2b89a5c246dfb7e5e7af3cf372fb58">ExportResult</a> = <a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; std::monostate, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;</td></tr>
+<tr class="memdesc:ace2b89a5c246dfb7e5e7af3cf372fb58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of exporting a single profile to a file.  <br /></td></tr>
+<tr class="separator:ace2b89a5c246dfb7e5e7af3cf372fb58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81742954ac02b26a9cbd697eef116861" id="r_a81742954ac02b26a9cbd697eef116861"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a81742954ac02b26a9cbd697eef116861">ReadProfilesResult</a> = <a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; std::vector&lt; <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &gt;, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;</td></tr>
+<tr class="memdesc:a81742954ac02b26a9cbd697eef116861"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of reading a .filters.json file: the profiles it contains.  <br /></td></tr>
+<tr class="separator:a81742954ac02b26a9cbd697eef116861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="signals" name="signals"></a>
 Signals</h2></td></tr>
 <tr class="memitem:a71660bbe90856bc53cda96e03fd8cf49" id="r_a71660bbe90856bc53cda96e03fd8cf49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a71660bbe90856bc53cda96e03fd8cf49">SaveRequested</a> (const QString &amp;name)</td></tr>
@@ -154,6 +165,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0225d15768594074dd16e38e7528dfcc" id="r_a0225d15768594074dd16e38e7528dfcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc">StoreProfile</a> (const <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &amp;profile)</td></tr>
 <tr class="memdesc:a0225d15768594074dd16e38e7528dfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores (or replaces) a profile in the panel and persists it to disk.  <br /></td></tr>
 <tr class="separator:a0225d15768594074dd16e38e7528dfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dfeb7d690e257f703bf484fe5314ee5" id="r_a3dfeb7d690e257f703bf484fe5314ee5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5">MergeProfiles</a> (std::vector&lt; <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &gt; incoming, bool overwriteCollisions)</td></tr>
+<tr class="memdesc:a3dfeb7d690e257f703bf484fe5314ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges <code>incoming</code> into this panel's profile list and persists the result to internal storage.  <br /></td></tr>
+<tr class="separator:a3dfeb7d690e257f703bf484fe5314ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89ed6b4a0f2d3ab14330ecb65ddabca2" id="r_a89ed6b4a0f2d3ab14330ecb65ddabca2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a89ed6b4a0f2d3ab14330ecb65ddabca2">ProfileCount</a> () const</td></tr>
+<tr class="memdesc:a89ed6b4a0f2d3ab14330ecb65ddabca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of profiles currently held by the panel.  <br /></td></tr>
+<tr class="separator:a89ed6b4a0f2d3ab14330ecb65ddabca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783d3129a4eef46c22020c9f4b209680" id="r_a783d3129a4eef46c22020c9f4b209680"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680">HasProfile</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:a783d3129a4eef46c22020c9f4b209680"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a profile with the given name currently exists.  <br /></td></tr>
+<tr class="separator:a783d3129a4eef46c22020c9f4b209680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af4413d27f4751f90f24a5f478023b698" id="r_af4413d27f4751f90f24a5f478023b698"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ace2b89a5c246dfb7e5e7af3cf372fb58">ExportResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#af4413d27f4751f90f24a5f478023b698">ExportProfileToPath</a> (const <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &amp;profile, const QString &amp;path)</td></tr>
+<tr class="memdesc:af4413d27f4751f90f24a5f478023b698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <code>profile</code> to <code>path</code> as a single-entry .filters.json array.  <br /></td></tr>
+<tr class="separator:af4413d27f4751f90f24a5f478023b698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad393bc3cbea348a252f7d7590d2297ec" id="r_ad393bc3cbea348a252f7d7590d2297ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a81742954ac02b26a9cbd697eef116861">ReadProfilesResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad393bc3cbea348a252f7d7590d2297ec">ReadProfilesFile</a> (const QString &amp;path)</td></tr>
+<tr class="memdesc:ad393bc3cbea348a252f7d7590d2297ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and parses a .filters.json file (one or more profiles).  <br /></td></tr>
+<tr class="separator:ad393bc3cbea348a252f7d7590d2297ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-slots" name="pri-slots"></a>
 Private Slots</h2></td></tr>
@@ -165,6 +194,10 @@ Private Slots</h2></td></tr>
 <tr class="separator:abe0ca58acc220586b842f887a14cc8c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a590b404581956bd05da916946aac11b4" id="r_a590b404581956bd05da916946aac11b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4">HandleSelectionChanged</a> ()</td></tr>
 <tr class="separator:a590b404581956bd05da916946aac11b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc4f505fc52a3c4f58efa94e9bf9ae51" id="r_abc4f505fc52a3c4f58efa94e9bf9ae51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abc4f505fc52a3c4f58efa94e9bf9ae51">HandleExport</a> ()</td></tr>
+<tr class="separator:abc4f505fc52a3c4f58efa94e9bf9ae51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4361bf2d559ae73f4b6dee14deec5830" id="r_a4361bf2d559ae73f4b6dee14deec5830"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830">HandleImport</a> ()</td></tr>
+<tr class="separator:a4361bf2d559ae73f4b6dee14deec5830"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -196,6 +229,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a22bd452888c81c5555a1b7a1d85b66ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a542c4a4b33bbfdbb49e2d9c794acfc99" id="r_a542c4a4b33bbfdbb49e2d9c794acfc99"><td class="memItemLeft" align="right" valign="top">QPushButton *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a542c4a4b33bbfdbb49e2d9c794acfc99">m_deleteBtn</a> {nullptr}</td></tr>
 <tr class="separator:a542c4a4b33bbfdbb49e2d9c794acfc99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c605e84efb30b0c65e8fa097a18b445" id="r_a1c605e84efb30b0c65e8fa097a18b445"><td class="memItemLeft" align="right" valign="top">QPushButton *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a1c605e84efb30b0c65e8fa097a18b445">m_exportBtn</a> {nullptr}</td></tr>
+<tr class="separator:a1c605e84efb30b0c65e8fa097a18b445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff704ec3f16a2ee5eb5c5b4835aef1ae" id="r_aff704ec3f16a2ee5eb5c5b4835aef1ae"><td class="memItemLeft" align="right" valign="top">QPushButton *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aff704ec3f16a2ee5eb5c5b4835aef1ae">m_importBtn</a> {nullptr}</td></tr>
+<tr class="separator:aff704ec3f16a2ee5eb5c5b4835aef1ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4e2ef99fbfceedfc4d39a937370d175" id="r_ad4e2ef99fbfceedfc4d39a937370d175"><td class="memItemLeft" align="right" valign="top">QLabel *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad4e2ef99fbfceedfc4d39a937370d175">m_statusLabel</a> {nullptr}</td></tr>
 <tr class="separator:ad4e2ef99fbfceedfc4d39a937370d175"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -204,8 +241,43 @@ Private Attributes</h2></td></tr>
 <p>Profiles capture the complete filter state (time range, actor checks, type filter) and persist them to a JSON file in the app config directory.</p>
 <dl class="section user"><dt>Responsibility split</dt><dd>The panel is deliberately kept thin. It knows nothing about the other filter panels. All cross-panel coordination is delegated to <a class="el" href="../../d4/dfa/classui_1_1qt_1_1MainWindow.html">MainWindow</a> via the two signals below.</dd></dl>
 <dl class="section user"><dt>Persistence</dt><dd>Profiles are stored in <code>&lt;appdata&gt;/filter_profiles.json</code> (one JSON array). The file is loaded in the constructor and saved after every mutating operation (save / delete).</dd></dl>
-<dl class="section user"><dt>Double-click shortcut</dt><dd>Double-clicking a list item is equivalent to clicking <b>Load</b>. </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<dl class="section user"><dt>Double-click shortcut</dt><dd>Double-clicking a list item is equivalent to clicking <b>Load</b>.</dd></dl>
+<dl class="section user"><dt>Export / Import</dt><dd><b>Export</b> writes the selected profile to a user-chosen <code>*.filters.json</code> file (same JSON array format as internal storage, just one entry) for sharing with teammates. <b>Import</b> reads a <code>*.filters.json</code> file (one or more profiles) and merges it into the current list, prompting once if any imported name collides with an existing profile.</dd></dl>
+<dl class="section user"><dt>Testability</dt><dd>The QFileDialog calls that pick the export/import path live only in the <code><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abc4f505fc52a3c4f58efa94e9bf9ae51">HandleExport()</a></code> / <code><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830">HandleImport()</a></code> slots. The actual file I/O (<code><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#af4413d27f4751f90f24a5f478023b698" title="Writes profile to path as a single-entry .filters.json array.">ExportProfileToPath()</a></code>, <code><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad393bc3cbea348a252f7d7590d2297ec" title="Reads and parses a .filters.json file (one or more profiles).">ReadProfilesFile()</a></code>) and the merge logic (<code><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage.">MergeProfiles()</a></code>) are separate public methods that take a path or a profile list directly, so they can be exercised in tests without going through a native file picker. </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ace2b89a5c246dfb7e5e7af3cf372fb58" name="ace2b89a5c246dfb7e5e7af3cf372fb58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace2b89a5c246dfb7e5e7af3cf372fb58">&#9670;&#160;</a></span>ExportResult</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ace2b89a5c246dfb7e5e7af3cf372fb58">ui::qt::FilterProfilesPanel::ExportResult</a> =  <a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt;std::monostate, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Result of exporting a single profile to a file. </p>
+
+</div>
+</div>
+<a id="a81742954ac02b26a9cbd697eef116861" name="a81742954ac02b26a9cbd697eef116861"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81742954ac02b26a9cbd697eef116861">&#9670;&#160;</a></span>ReadProfilesResult</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a81742954ac02b26a9cbd697eef116861">ui::qt::FilterProfilesPanel::ReadProfilesResult</a> =  <a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt;std::vector&lt;<a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a>&gt;, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Result of reading a .filters.json file: the profiles it contains. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7cfa1301feed7a8a359a2d839ceb0f83" name="a7cfa1301feed7a8a359a2d839ceb0f83"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7cfa1301feed7a8a359a2d839ceb0f83">&#9670;&#160;</a></span>FilterProfilesPanel()</h2>
 
@@ -242,58 +314,83 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a7cfa1301feed7a8a359a2d839ceb0f83_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a7cfa1301feed7a8a359a2d839ceb0f83_cgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a7cfa1301feed7a8a359a2d839ceb0f83_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a7cfa1301feed7a8a359a2d839ceb0f83_cgraph">
-<area shape="rect" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,293,184,333"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,207,411,247"/>
-<area shape="poly" title=" " alt="" coords="147,291,254,249,256,254,149,296"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="459,400,637,440"/>
-<area shape="poly" title=" " alt="" coords="181,331,449,394,448,399,180,336"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,315,637,355"/>
-<area shape="poly" title=" " alt="" coords="365,244,494,306,491,311,363,249"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="912,43,1105,83"/>
-<area shape="poly" title=" " alt="" coords="333,205,382,142,417,107,457,78,512,48,562,26,608,12,652,5,698,3,747,6,864,20,937,36,936,41,864,25,746,11,698,8,653,10,609,17,564,31,515,52,460,82,421,111,386,145,338,208"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4f1dd939f5d3ed64ec0ded99bce53072" title=" " alt="" coords="459,207,637,247"/>
-<area shape="poly" title=" " alt="" coords="411,224,445,224,445,229,411,229"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631" title=" " alt="" coords="459,92,637,132"/>
-<area shape="poly" title=" " alt="" coords="361,204,494,136,497,141,363,209"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="936,379,1081,405"/>
-<area shape="poly" title=" " alt="" coords="626,352,686,364,810,379,923,386,922,392,809,384,685,369,625,357"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="711,265,839,290"/>
-<area shape="poly" title=" " alt="" coords="627,312,710,291,711,296,628,317"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="685,315,864,355"/>
-<area shape="poly" title=" " alt="" coords="638,332,671,332,671,337,638,337"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="685,480,864,520"/>
-<area shape="poly" title=" " alt="" coords="587,353,639,386,742,469,739,473,636,390,584,357"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1153,338,1335,363"/>
-<area shape="poly" title=" " alt="" coords="1081,377,1157,363,1158,368,1082,382"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1383,338,1541,363"/>
-<area shape="poly" title=" " alt="" coords="1335,348,1369,348,1369,353,1335,353"/>
-<area shape="poly" title=" " alt="" coords="839,285,1149,333,1148,339,839,290"/>
-<area shape="poly" title=" " alt="" coords="844,312,862,301,909,252,946,196,974,141,993,95,998,97,979,143,951,199,913,255,866,305,847,317"/>
-<area shape="poly" title=" " alt="" coords="822,477,863,459,968,409,970,413,865,464,824,482"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="919,595,1098,635"/>
-<area shape="poly" title=" " alt="" coords="818,518,956,586,953,591,816,523"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="941,487,1076,513"/>
-<area shape="poly" title=" " alt="" coords="864,497,927,497,927,503,864,503"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1177,602,1311,627"/>
-<area shape="poly" title=" " alt="" coords="1099,612,1164,612,1164,617,1099,617"/>
-<area shape="poly" title=" " alt="" coords="1028,485,1210,368,1213,373,1031,490"/>
-<area shape="poly" title=" " alt="" coords="637,216,690,216,749,220,808,231,865,251,906,275,941,306,993,366,989,370,938,310,903,280,863,256,807,237,748,226,690,221,637,221"/>
-<area shape="poly" title=" " alt="" coords="638,244,704,259,703,264,637,249"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aa70e7fb1476c90120e00687ae838b07e" title="Emitted when the user selects a profile and clicks Load (or double&#45;clicks the list item)." alt="" coords="685,149,864,189"/>
-<area shape="poly" title=" " alt="" coords="627,204,681,190,683,195,628,209"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a71660bbe90856bc53cda96e03fd8cf49" title="Emitted when the user clicks Save current state." alt="" coords="685,35,864,75"/>
-<area shape="poly" title=" " alt="" coords="627,89,681,76,683,81,628,95"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="707,99,843,125"/>
-<area shape="poly" title=" " alt="" coords="638,109,693,109,693,115,638,115"/>
-<area shape="poly" title=" " alt="" coords="829,122,865,135,968,183,1067,238,1214,328,1211,333,1065,242,966,188,863,140,827,127"/>
-<area shape="poly" title=" " alt="" coords="638,417,746,415,864,408,922,402,922,407,864,413,746,420,638,422"/>
-<area shape="poly" title=" " alt="" coords="588,398,636,365,650,348,658,332,667,316,684,301,696,293,699,298,687,305,671,320,663,335,654,351,639,369,591,402"/>
-<area shape="poly" title=" " alt="" coords="601,398,707,357,709,362,603,403"/>
-<area shape="poly" title=" " alt="" coords="557,439,571,485,597,543,614,572,635,600,659,625,687,644,718,658,752,666,787,669,822,667,890,655,948,637,950,642,892,660,823,673,787,674,751,671,717,663,684,649,655,629,631,604,610,575,592,545,566,487,552,441"/>
-<area shape="poly" title=" " alt="" coords="568,438,617,487,650,512,686,530,722,539,759,544,834,542,903,530,960,515,961,520,904,535,834,547,759,549,721,544,684,535,647,516,613,491,564,442"/>
-<area shape="poly" title=" " alt="" coords="596,398,618,383,635,365,651,335,658,305,658,277,655,249,652,221,654,193,663,164,683,136,693,127,696,132,687,139,668,167,659,194,658,221,660,249,663,277,663,306,656,337,639,368,621,388,599,402"/>
-<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#a2a282db418050d30b03199585268a7a8" title=" " alt="" coords="706,595,843,635"/>
-<area shape="poly" title=" " alt="" coords="565,439,614,504,649,541,687,574,707,586,704,591,684,578,645,545,610,507,560,442"/>
+<area shape="rect" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,352,184,392"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,321,411,361"/>
+<area shape="poly" title=" " alt="" coords="184,357,218,353,219,358,185,363"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="685,385,864,425"/>
+<area shape="poly" title=" " alt="" coords="184,374,672,398,671,403,184,379"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="685,193,864,233"/>
+<area shape="poly" title=" " alt="" coords="392,319,689,235,690,240,394,324"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="1139,85,1332,125"/>
+<area shape="poly" title=" " alt="" coords="336,319,387,262,420,229,457,199,573,123,622,96,671,74,720,57,775,42,912,16,1002,3,1042,5,1091,16,1122,27,1151,42,1201,75,1198,79,1149,47,1120,32,1090,21,1041,11,1002,9,912,21,776,48,722,62,673,79,625,100,576,127,460,204,424,233,391,265,340,323"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abc4f505fc52a3c4f58efa94e9bf9ae51" title=" " alt="" coords="459,609,637,649"/>
+<area shape="poly" title=" " alt="" coords="337,360,389,439,461,536,518,598,514,601,457,539,385,442,333,363"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,321,637,361"/>
+<area shape="poly" title=" " alt="" coords="411,339,445,339,445,344,411,344"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4f1dd939f5d3ed64ec0ded99bce53072" title=" " alt="" coords="685,109,864,149"/>
+<area shape="poly" title=" " alt="" coords="351,319,400,288,457,256,587,198,703,152,705,157,589,202,460,261,403,293,354,324"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631" title=" " alt="" coords="459,485,637,525"/>
+<area shape="poly" title=" " alt="" coords="352,359,510,475,507,480,349,364"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="1163,265,1308,290"/>
+<area shape="poly" title=" " alt="" coords="841,191,895,179,959,170,1026,170,1091,182,1126,196,1159,214,1212,253,1209,258,1156,219,1124,200,1090,187,1025,175,959,176,896,184,842,196"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="937,325,1065,350"/>
+<area shape="poly" title=" " alt="" coords="846,231,866,243,882,261,890,278,898,294,914,310,926,317,923,322,910,314,894,297,885,280,877,264,862,248,843,236"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="912,196,1091,236"/>
+<area shape="poly" title=" " alt="" coords="865,212,898,212,898,218,864,217"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="912,260,1091,300"/>
+<area shape="poly" title=" " alt="" coords="844,231,920,254,919,259,842,236"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1380,405,1561,430"/>
+<area shape="poly" title=" " alt="" coords="1307,288,1333,301,1350,314,1359,328,1368,343,1382,358,1435,396,1432,400,1378,362,1364,346,1355,331,1346,318,1331,305,1304,293"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1609,405,1768,430"/>
+<area shape="poly" title=" " alt="" coords="1561,415,1596,415,1596,420,1561,420"/>
+<area shape="poly" title=" " alt="" coords="1059,348,1139,364,1367,401,1366,406,1138,369,1058,353"/>
+<area shape="poly" title=" " alt="" coords="1043,194,1179,129,1181,134,1046,198"/>
+<area shape="poly" title=" " alt="" coords="1091,276,1149,276,1149,281,1091,282"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="1146,315,1325,355"/>
+<area shape="poly" title=" " alt="" coords="1088,298,1136,309,1135,314,1087,303"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1168,481,1303,506"/>
+<area shape="poly" title=" " alt="" coords="1069,298,1092,311,1148,377,1218,468,1214,471,1144,380,1089,316,1066,302"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1404,322,1537,347"/>
+<area shape="poly" title=" " alt="" coords="1325,332,1390,332,1390,337,1325,337"/>
+<area shape="poly" title=" " alt="" coords="1275,478,1417,432,1418,437,1276,483"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#af4413d27f4751f90f24a5f478023b698" title="Writes profile to path as a single&#45;entry .filters.json array." alt="" coords="685,671,864,711"/>
+<area shape="poly" title=" " alt="" coords="623,647,688,665,686,670,622,652"/>
+<area shape="poly" title=" " alt="" coords="847,668,862,657,876,640,885,624,893,592,898,557,909,515,949,430,984,361,989,363,954,432,915,517,903,558,899,593,890,626,881,643,866,661,851,673"/>
+<area shape="poly" title=" " alt="" coords="800,709,849,747,880,764,913,778,963,793,1005,802,1044,798,1089,778,1122,753,1149,721,1171,686,1190,649,1215,576,1227,519,1233,520,1220,578,1195,651,1176,689,1153,725,1125,756,1092,782,1046,804,1004,807,962,798,911,783,878,769,846,751,796,713"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="942,629,1061,654"/>
+<area shape="poly" title=" " alt="" coords="864,669,929,654,930,660,865,674"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="942,678,1061,703"/>
+<area shape="poly" title=" " alt="" coords="865,688,928,688,928,693,865,693"/>
+<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#ab68a5fa28840caba6b4f4f04b2118686" title="Serialises the profile to a JSON object." alt="" coords="933,728,1070,768"/>
+<area shape="poly" title=" " alt="" coords="855,708,920,725,919,730,854,713"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680" title="Whether a profile with the given name currently exists." alt="" coords="685,257,864,297"/>
+<area shape="poly" title=" " alt="" coords="619,319,689,299,691,304,620,324"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,321,864,361"/>
+<area shape="poly" title=" " alt="" coords="638,339,671,339,671,344,638,344"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad393bc3cbea348a252f7d7590d2297ec" title="Reads and parses a .filters.json file (one or more profiles)." alt="" coords="685,543,864,583"/>
+<area shape="poly" title=" " alt="" coords="571,360,745,531,741,535,568,363"/>
+<area shape="poly" title=" " alt="" coords="864,337,924,336,924,341,865,343"/>
+<area shape="poly" title=" " alt="" coords="842,319,862,307,877,293,886,277,894,262,910,246,918,241,921,245,914,250,899,265,890,280,882,296,866,312,845,324"/>
+<area shape="poly" title=" " alt="" coords="849,319,913,301,915,306,850,324"/>
+<area shape="poly" title=" " alt="" coords="864,572,973,576,1032,573,1090,563,1152,540,1203,511,1206,516,1154,545,1091,568,1033,578,973,582,864,577"/>
+<area shape="poly" title=" " alt="" coords="834,580,952,622,950,627,832,585"/>
+<area shape="poly" title=" " alt="" coords="846,581,866,593,882,611,890,630,898,648,914,665,930,674,928,679,910,669,893,651,885,632,878,614,862,597,844,585"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="933,527,1069,553"/>
+<area shape="poly" title=" " alt="" coords="864,551,919,546,920,551,865,556"/>
+<area shape="poly" title=" " alt="" coords="1021,525,1073,495,1138,467,1196,451,1255,438,1366,422,1367,428,1256,443,1197,456,1140,472,1075,500,1024,529"/>
+<area shape="poly" title=" " alt="" coords="864,122,917,123,975,128,1035,139,1092,158,1129,178,1164,203,1216,253,1213,257,1160,207,1127,182,1090,163,1033,145,974,134,917,128,864,127"/>
+<area shape="poly" title=" " alt="" coords="825,147,847,162,866,180,878,198,884,215,889,248,894,280,901,295,914,310,926,319,923,324,910,314,896,298,888,281,883,249,879,217,873,200,862,183,843,166,822,152"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aa70e7fb1476c90120e00687ae838b07e" title="Emitted when the user selects a profile and clicks Load (or double&#45;clicks the list item)." alt="" coords="912,31,1091,71"/>
+<area shape="poly" title=" " alt="" coords="832,107,930,73,931,78,834,112"/>
+<area shape="poly" title=" " alt="" coords="638,510,920,531,920,537,638,515"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a71660bbe90856bc53cda96e03fd8cf49" title="Emitted when the user clicks Save current state." alt="" coords="685,607,864,647"/>
+<area shape="poly" title=" " alt="" coords="577,523,627,558,687,592,701,599,699,604,684,597,624,562,574,528"/>
+<area shape="poly" title=" " alt="" coords="864,398,993,385,1050,374,1089,360,1105,347,1113,332,1121,316,1137,301,1151,293,1153,298,1140,305,1125,319,1117,335,1109,351,1092,365,1051,380,993,390,865,403"/>
+<area shape="poly" title=" " alt="" coords="841,383,944,352,946,357,843,388"/>
+<area shape="poly" title=" " alt="" coords="847,383,862,372,874,356,881,341,885,310,890,279,897,262,910,246,915,242,918,246,914,250,902,265,895,280,891,311,886,343,879,359,866,375,850,387"/>
+<area shape="poly" title=" " alt="" coords="864,414,973,418,1032,414,1090,404,1144,385,1191,360,1194,364,1146,390,1091,409,1033,419,973,423,864,419"/>
+<area shape="poly" title=" " alt="" coords="865,420,1155,476,1154,481,864,425"/>
+<area shape="poly" title=" " alt="" coords="800,423,850,464,913,506,946,520,943,525,911,510,847,469,796,428"/>
 </map>
 </div>
 
@@ -327,46 +424,73 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_ab22318c236728b851cb3a0dea68d97ae_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ab22318c236728b851cb3a0dea68d97ae_cgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ab22318c236728b851cb3a0dea68d97ae_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ab22318c236728b851cb3a0dea68d97ae_cgraph">
-<area shape="rect" title=" " alt="" coords="5,187,184,227"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="232,155,411,195"/>
-<area shape="poly" title=" " alt="" coords="184,191,218,187,219,192,185,197"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="685,5,879,45"/>
-<area shape="poly" title=" " alt="" coords="122,184,180,146,261,98,357,53,407,34,458,19,512,9,568,5,672,8,672,13,568,10,513,15,459,24,409,39,359,58,264,103,183,150,125,189"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4f1dd939f5d3ed64ec0ded99bce53072" title=" " alt="" coords="232,237,411,277"/>
-<area shape="poly" title=" " alt="" coords="185,224,219,232,218,237,184,229"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631" title=" " alt="" coords="232,371,411,411"/>
-<area shape="poly" title=" " alt="" coords="122,225,287,360,284,364,119,229"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="709,211,855,237"/>
-<area shape="poly" title=" " alt="" coords="411,182,696,212,695,217,411,187"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="484,263,612,289"/>
-<area shape="poly" title=" " alt="" coords="368,192,507,255,505,260,366,197"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="459,33,637,73"/>
-<area shape="poly" title=" " alt="" coords="348,152,397,118,457,83,472,76,474,81,460,88,400,122,351,157"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="459,97,637,137"/>
-<area shape="poly" title=" " alt="" coords="400,152,455,138,456,143,402,157"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="927,237,1108,262"/>
-<area shape="poly" title=" " alt="" coords="855,229,913,235,913,241,855,234"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1156,237,1315,262"/>
-<area shape="poly" title=" " alt="" coords="1108,247,1142,247,1142,252,1108,252"/>
-<area shape="poly" title=" " alt="" coords="612,270,913,253,913,258,612,275"/>
-<area shape="poly" title=" " alt="" coords="637,40,671,36,672,41,638,45"/>
-<area shape="poly" title=" " alt="" coords="604,135,639,154,653,166,663,177,672,188,687,198,701,204,699,209,684,202,669,192,659,181,650,170,636,158,602,140"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="693,97,871,137"/>
-<area shape="poly" title=" " alt="" coords="637,115,679,115,679,120,637,120"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="715,162,849,187"/>
-<area shape="poly" title=" " alt="" coords="631,135,717,156,716,161,630,140"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="951,105,1084,130"/>
-<area shape="poly" title=" " alt="" coords="872,115,937,115,937,120,872,120"/>
-<area shape="poly" title=" " alt="" coords="835,185,879,197,971,229,969,234,878,203,834,190"/>
-<area shape="poly" title=" " alt="" coords="411,248,695,228,696,233,411,254"/>
-<area shape="poly" title=" " alt="" coords="411,262,471,267,470,272,411,267"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aa70e7fb1476c90120e00687ae838b07e" title="Emitted when the user selects a profile and clicks Load (or double&#45;clicks the list item)." alt="" coords="459,313,637,353"/>
-<area shape="poly" title=" " alt="" coords="383,275,475,306,474,311,381,280"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a71660bbe90856bc53cda96e03fd8cf49" title="Emitted when the user clicks Save current state." alt="" coords="459,428,637,468"/>
-<area shape="poly" title=" " alt="" coords="402,408,456,422,455,427,400,413"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="714,345,850,370"/>
-<area shape="poly" title=" " alt="" coords="411,382,700,361,700,366,411,387"/>
-<area shape="poly" title=" " alt="" coords="810,342,975,265,977,270,812,347"/>
+<area shape="rect" title=" " alt="" coords="5,265,184,305"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,107,637,147"/>
+<area shape="poly" title=" " alt="" coords="137,263,231,223,351,182,461,148,463,153,353,187,233,228,139,268"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="912,5,1105,45"/>
+<area shape="poly" title=" " alt="" coords="115,263,166,220,231,175,351,111,449,70,551,42,685,19,739,12,795,10,899,12,898,18,795,15,740,18,686,24,552,48,450,75,353,116,233,180,169,224,119,267"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abc4f505fc52a3c4f58efa94e9bf9ae51" title=" " alt="" coords="232,357,411,397"/>
+<area shape="poly" title=" " alt="" coords="146,303,259,350,257,354,144,308"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="232,237,411,277"/>
+<area shape="poly" title=" " alt="" coords="184,272,218,267,218,273,185,277"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4f1dd939f5d3ed64ec0ded99bce53072" title=" " alt="" coords="459,299,637,339"/>
+<area shape="poly" title=" " alt="" coords="185,289,445,308,445,314,184,295"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631" title=" " alt="" coords="232,579,411,619"/>
+<area shape="poly" title=" " alt="" coords="113,304,300,566,295,569,108,307"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="936,213,1081,238"/>
+<area shape="poly" title=" " alt="" coords="637,107,691,102,750,103,809,113,865,134,883,148,891,166,899,182,914,198,926,205,924,210,910,202,894,185,886,168,879,152,863,138,808,118,749,109,691,108,638,112"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="711,263,839,289"/>
+<area shape="poly" title=" " alt="" coords="614,144,639,156,750,252,746,256,636,161,612,149"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="685,33,864,73"/>
+<area shape="poly" title=" " alt="" coords="610,104,698,75,700,80,611,109"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="685,148,864,188"/>
+<area shape="poly" title=" " alt="" coords="638,140,672,147,671,152,637,146"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1153,321,1335,346"/>
+<area shape="poly" title=" " alt="" coords="1039,236,1204,312,1202,317,1036,241"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1383,321,1541,346"/>
+<area shape="poly" title=" " alt="" coords="1335,331,1369,331,1369,336,1335,336"/>
+<area shape="poly" title=" " alt="" coords="839,281,1140,318,1140,323,839,286"/>
+<area shape="poly" title=" " alt="" coords="864,40,898,36,899,41,864,45"/>
+<area shape="poly" title=" " alt="" coords="858,185,944,207,942,212,856,191"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="919,148,1098,188"/>
+<area shape="poly" title=" " alt="" coords="864,165,905,165,905,171,864,171"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="941,410,1076,435"/>
+<area shape="poly" title=" " alt="" coords="801,186,866,249,937,329,991,397,987,401,933,333,862,253,797,190"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1177,155,1311,181"/>
+<area shape="poly" title=" " alt="" coords="1099,165,1164,165,1164,171,1099,171"/>
+<area shape="poly" title=" " alt="" coords="1042,407,1196,348,1198,353,1044,412"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#af4413d27f4751f90f24a5f478023b698" title="Writes profile to path as a single&#45;entry .filters.json array." alt="" coords="459,405,637,445"/>
+<area shape="poly" title=" " alt="" coords="412,394,446,401,445,406,411,399"/>
+<area shape="poly" title=" " alt="" coords="573,403,635,349,658,322,668,311,684,299,699,291,702,296,687,304,672,315,662,326,639,353,576,407"/>
+<area shape="poly" title=" " alt="" coords="638,426,685,427,864,427,928,424,928,430,864,432,685,432,637,431"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="715,542,834,567"/>
+<area shape="poly" title=" " alt="" coords="571,443,622,486,653,509,687,528,703,536,701,540,684,533,650,513,618,490,568,447"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="715,493,834,518"/>
+<area shape="poly" title=" " alt="" coords="607,443,726,486,724,491,605,448"/>
+<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#ab68a5fa28840caba6b4f4f04b2118686" title="Serialises the profile to a JSON object." alt="" coords="706,377,843,417"/>
+<area shape="poly" title=" " alt="" coords="638,412,692,405,693,410,638,417"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680" title="Whether a profile with the given name currently exists." alt="" coords="459,235,637,275"/>
+<area shape="poly" title=" " alt="" coords="411,254,445,253,445,259,411,259"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="459,171,637,211"/>
+<area shape="poly" title=" " alt="" coords="389,235,466,212,467,217,391,240"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad393bc3cbea348a252f7d7590d2297ec" title="Reads and parses a .filters.json file (one or more profiles)." alt="" coords="459,515,637,555"/>
+<area shape="poly" title=" " alt="" coords="349,276,382,306,413,344,429,375,437,401,444,427,461,456,483,482,509,504,505,508,480,485,456,459,440,429,432,402,424,377,408,347,378,310,346,280"/>
+<area shape="poly" title=" " alt="" coords="606,208,638,220,730,256,728,261,636,225,604,213"/>
+<area shape="poly" title=" " alt="" coords="611,168,636,156,692,119,740,80,743,85,696,123,639,161,613,173"/>
+<area shape="poly" title=" " alt="" coords="638,179,671,176,672,181,638,184"/>
+<area shape="poly" title=" " alt="" coords="604,552,686,577,777,594,816,593,863,578,906,551,942,516,971,478,992,446,996,449,975,481,946,519,909,555,865,582,817,598,777,599,685,583,603,557"/>
+<area shape="poly" title=" " alt="" coords="638,540,702,546,701,551,638,545"/>
+<area shape="poly" title=" " alt="" coords="638,520,701,512,702,517,638,526"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="707,643,843,669"/>
+<area shape="poly" title=" " alt="" coords="618,553,639,565,655,579,664,594,672,608,687,622,713,636,710,641,684,626,668,611,659,597,650,583,636,569,615,557"/>
+<area shape="poly" title=" " alt="" coords="796,641,863,600,985,526,1104,446,1165,397,1217,353,1220,357,1169,401,1107,450,988,531,865,605,799,645"/>
+<area shape="poly" title=" " alt="" coords="611,296,636,284,659,265,669,256,684,248,745,231,807,221,868,217,922,217,922,222,868,222,808,226,746,236,686,253,672,261,663,269,639,289,613,301"/>
+<area shape="poly" title=" " alt="" coords="637,299,697,288,698,293,638,304"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aa70e7fb1476c90120e00687ae838b07e" title="Emitted when the user selects a profile and clicks Load (or double&#45;clicks the list item)." alt="" coords="685,313,864,353"/>
+<area shape="poly" title=" " alt="" coords="638,322,672,324,671,329,638,327"/>
+<area shape="poly" title=" " alt="" coords="399,616,459,628,582,643,693,650,692,656,581,648,458,633,398,621"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a71660bbe90856bc53cda96e03fd8cf49" title="Emitted when the user clicks Save current state." alt="" coords="459,579,637,619"/>
+<area shape="poly" title=" " alt="" coords="411,596,445,596,445,601,411,601"/>
 </map>
 </div>
 <div class="dynheader">
@@ -419,20 +543,101 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_afffb0420d393926b1e913e238cea09bd_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_afffb0420d393926b1e913e238cea09bd_icgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_afffb0420d393926b1e913e238cea09bd_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_afffb0420d393926b1e913e238cea09bd_icgraph">
-<area shape="rect" title=" " alt="" coords="912,39,1091,79"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="232,5,411,45"/>
-<area shape="poly" title=" " alt="" coords="898,56,411,32,411,27,898,51"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="685,67,864,107"/>
-<area shape="poly" title=" " alt="" coords="898,74,865,78,864,73,898,69"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,37,184,77"/>
-<area shape="poly" title=" " alt="" coords="219,43,185,47,184,42,218,37"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,67,637,107"/>
-<area shape="poly" title=" " alt="" coords="671,89,638,89,638,84,671,84"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="459,131,637,171"/>
-<area shape="poly" title=" " alt="" coords="690,113,620,133,619,128,689,108"/>
+<area shape="rect" title=" " alt="" coords="1139,67,1317,107"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="1125,80,637,36,638,31,1125,75"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="912,95,1091,135"/>
+<area shape="poly" title=" " alt="" coords="1125,102,1091,106,1091,101,1124,97"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,41,184,81"/>
+<area shape="poly" title=" " alt="" coords="445,36,185,57,184,52,445,31"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,69,637,109"/>
+<area shape="poly" title=" " alt="" coords="898,112,637,97,638,92,898,106"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,127,864,167"/>
+<area shape="poly" title=" " alt="" coords="899,132,865,137,864,131,898,127"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="685,191,864,231"/>
+<area shape="poly" title=" " alt="" coords="949,143,865,181,835,193,833,188,863,176,947,138"/>
 <area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,69,411,109"/>
-<area shape="poly" title=" " alt="" coords="445,91,411,91,411,86,445,85"/>
-<area shape="poly" title=" " alt="" coords="218,77,184,73,185,67,219,72"/>
+<area shape="poly" title=" " alt="" coords="445,92,411,92,411,87,445,87"/>
+<area shape="poly" title=" " alt="" coords="218,79,184,75,185,70,218,74"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,133,637,173"/>
+<area shape="poly" title=" " alt="" coords="671,152,638,153,638,148,671,147"/>
+<area shape="poly" title=" " alt="" coords="462,132,392,112,393,107,464,127"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af4413d27f4751f90f24a5f478023b698" name="af4413d27f4751f90f24a5f478023b698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4413d27f4751f90f24a5f478023b698">&#9670;&#160;</a></span>ExportProfileToPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ace2b89a5c246dfb7e5e7af3cf372fb58">FilterProfilesPanel::ExportResult</a> ui::qt::FilterProfilesPanel::ExportProfileToPath </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>profile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes <code>profile</code> to <code>path</code> as a single-entry .filters.json array. </p>
+<p>Pure I/O — does not touch this panel's own profile list or persisted storage, so it can be tested directly with a temp path. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_cgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_cgraph">
+<area shape="rect" title="Writes profile to path as a single&#45;entry .filters.json array." alt="" coords="5,97,184,137"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="241,5,360,31"/>
+<area shape="poly" title=" " alt="" coords="128,94,231,40,246,33,248,38,233,44,131,99"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="233,55,368,80"/>
+<area shape="poly" title=" " alt="" coords="178,94,233,81,235,86,179,99"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="237,104,365,129"/>
+<area shape="poly" title=" " alt="" coords="184,114,223,114,223,119,184,119"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="241,153,360,179"/>
+<area shape="poly" title=" " alt="" coords="179,134,235,148,233,153,178,139"/>
+<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#ab68a5fa28840caba6b4f4f04b2118686" title="Serialises the profile to a JSON object." alt="" coords="232,203,369,243"/>
+<area shape="poly" title=" " alt="" coords="134,135,233,188,248,195,245,200,231,192,132,139"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="417,80,599,105"/>
+<area shape="poly" title=" " alt="" coords="369,73,404,77,403,83,368,78"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="647,80,805,105"/>
+<area shape="poly" title=" " alt="" coords="599,90,633,90,633,95,599,95"/>
+<area shape="poly" title=" " alt="" coords="365,107,403,102,404,107,365,112"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_af4413d27f4751f90f24a5f478023b698_icgraph">
+<area shape="rect" title="Writes profile to path as a single&#45;entry .filters.json array." alt="" coords="685,5,864,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abc4f505fc52a3c4f58efa94e9bf9ae51" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="671,28,638,28,638,23,671,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
 </map>
 </div>
 
@@ -496,6 +701,149 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_abe0ca58acc220586b842f887a14cc8c3_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abe0ca58acc220586b842f887a14cc8c3_icgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abe0ca58acc220586b842f887a14cc8c3_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abe0ca58acc220586b842f887a14cc8c3_icgraph">
+<area shape="rect" title=" " alt="" coords="459,5,637,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="abc4f505fc52a3c4f58efa94e9bf9ae51" name="abc4f505fc52a3c4f58efa94e9bf9ae51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc4f505fc52a3c4f58efa94e9bf9ae51">&#9670;&#160;</a></span>HandleExport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::FilterProfilesPanel::HandleExport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_cgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_cgraph">
+<area shape="rect" title=" " alt="" coords="5,97,184,137"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#af4413d27f4751f90f24a5f478023b698" title="Writes profile to path as a single&#45;entry .filters.json array." alt="" coords="232,97,411,137"/>
+<area shape="poly" title=" " alt="" coords="185,114,218,114,218,119,185,119"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="468,5,587,31"/>
+<area shape="poly" title=" " alt="" coords="355,94,458,40,473,33,475,38,460,44,357,99"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="460,55,595,80"/>
+<area shape="poly" title=" " alt="" coords="405,94,460,81,461,86,406,99"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="463,104,591,129"/>
+<area shape="poly" title=" " alt="" coords="411,114,449,114,449,119,411,119"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="468,153,587,179"/>
+<area shape="poly" title=" " alt="" coords="406,134,461,148,460,153,405,139"/>
+<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#ab68a5fa28840caba6b4f4f04b2118686" title="Serialises the profile to a JSON object." alt="" coords="459,203,596,243"/>
+<area shape="poly" title=" " alt="" coords="361,135,460,188,474,195,472,200,457,192,358,139"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="644,80,825,105"/>
+<area shape="poly" title=" " alt="" coords="595,73,631,77,630,83,595,78"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="873,80,1032,105"/>
+<area shape="poly" title=" " alt="" coords="825,90,860,90,860,95,825,95"/>
+<area shape="poly" title=" " alt="" coords="591,107,630,102,630,107,592,112"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_abc4f505fc52a3c4f58efa94e9bf9ae51_icgraph">
+<area shape="rect" title=" " alt="" coords="459,5,637,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4361bf2d559ae73f4b6dee14deec5830" name="a4361bf2d559ae73f4b6dee14deec5830"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4361bf2d559ae73f4b6dee14deec5830">&#9670;&#160;</a></span>HandleImport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::FilterProfilesPanel::HandleImport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_cgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_cgraph">
+<area shape="rect" title=" " alt="" coords="5,128,184,168"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680" title="Whether a profile with the given name currently exists." alt="" coords="232,64,411,104"/>
+<area shape="poly" title=" " alt="" coords="166,125,236,105,237,110,167,130"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="232,128,411,168"/>
+<area shape="poly" title=" " alt="" coords="185,145,218,145,218,151,185,151"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ad393bc3cbea348a252f7d7590d2297ec" title="Reads and parses a .filters.json file (one or more profiles)." alt="" coords="459,276,637,316"/>
+<area shape="poly" title=" " alt="" coords="158,166,473,269,472,274,156,171"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="484,93,612,118"/>
+<area shape="poly" title=" " alt="" coords="411,129,470,117,471,122,412,134"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="459,13,637,53"/>
+<area shape="poly" title=" " alt="" coords="384,125,409,114,433,96,457,78,492,57,495,62,460,82,437,101,412,118,386,130"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="459,171,637,211"/>
+<area shape="poly" title=" " alt="" coords="412,162,446,169,445,174,411,167"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="927,209,1108,234"/>
+<area shape="poly" title=" " alt="" coords="603,90,662,81,733,77,808,84,845,92,880,106,897,118,907,132,915,147,928,162,982,199,979,204,925,166,911,150,902,135,893,121,877,110,843,97,807,89,733,83,663,86,604,95"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1156,209,1315,234"/>
+<area shape="poly" title=" " alt="" coords="1108,219,1142,219,1142,224,1108,224"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="685,5,879,45"/>
+<area shape="poly" title=" " alt="" coords="637,28,672,26,672,32,638,33"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="709,185,855,210"/>
+<area shape="poly" title=" " alt="" coords="638,191,696,192,696,198,637,196"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="693,120,871,160"/>
+<area shape="poly" title=" " alt="" coords="637,169,679,160,680,165,638,174"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="715,234,849,259"/>
+<area shape="poly" title=" " alt="" coords="633,208,716,228,715,233,632,213"/>
+<area shape="poly" title=" " alt="" coords="855,202,913,208,913,213,855,207"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="951,127,1084,153"/>
+<area shape="poly" title=" " alt="" coords="872,137,937,137,937,143,872,143"/>
+<area shape="poly" title=" " alt="" coords="849,237,913,230,913,235,850,242"/>
+<area shape="poly" title=" " alt="" coords="637,275,707,260,708,265,638,280"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="723,382,841,407"/>
+<area shape="poly" title=" " alt="" coords="582,314,630,342,686,368,710,376,709,381,684,373,628,346,579,319"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="723,333,841,358"/>
+<area shape="poly" title=" " alt="" coords="638,312,710,328,709,333,637,317"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="714,283,850,309"/>
+<area shape="poly" title=" " alt="" coords="637,293,700,293,700,299,637,299"/>
+<area shape="poly" title=" " alt="" coords="837,281,878,269,970,237,972,242,879,275,839,286"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a4361bf2d559ae73f4b6dee14deec5830_icgraph">
 <area shape="rect" title=" " alt="" coords="459,5,637,45"/>
 <area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
 <area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
@@ -642,21 +990,60 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a590b404581956bd05da916946aac11b4_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a590b404581956bd05da916946aac11b4_icgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a590b404581956bd05da916946aac11b4_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a590b404581956bd05da916946aac11b4_icgraph">
-<area shape="rect" title=" " alt="" coords="912,23,1105,63"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,16,411,56"/>
-<area shape="poly" title=" " alt="" coords="898,30,804,19,694,11,576,8,459,14,411,20,410,15,458,8,576,3,694,6,804,14,898,24"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="685,51,864,91"/>
-<area shape="poly" title=" " alt="" coords="899,59,864,63,864,58,898,54"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,48,184,88"/>
-<area shape="poly" title=" " alt="" coords="219,53,185,58,184,53,218,48"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,23,637,63"/>
-<area shape="poly" title=" " alt="" coords="671,61,637,57,638,51,672,56"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="232,80,411,120"/>
-<area shape="poly" title=" " alt="" coords="672,80,411,97,411,92,671,75"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="459,138,637,178"/>
-<area shape="poly" title=" " alt="" coords="710,98,602,140,600,135,708,94"/>
-<area shape="poly" title=" " alt="" coords="444,43,411,42,411,36,445,37"/>
-<area shape="poly" title=" " alt="" coords="218,88,184,84,185,78,219,83"/>
+<area shape="rect" title=" " alt="" coords="1139,38,1332,78"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,90,411,130"/>
+<area shape="poly" title=" " alt="" coords="1125,39,989,21,821,9,731,9,639,14,548,26,459,46,404,67,357,92,354,88,402,63,458,41,547,21,638,9,730,3,821,4,989,15,1126,34"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="912,98,1091,138"/>
+<area shape="poly" title=" " alt="" coords="1144,85,1081,101,1079,96,1142,79"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,165,184,205"/>
+<area shape="poly" title=" " alt="" coords="248,137,157,167,155,162,246,132"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,125,637,165"/>
+<area shape="poly" title=" " alt="" coords="916,144,864,153,746,159,637,155,638,150,746,154,864,148,915,139"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="459,200,637,240"/>
+<area shape="poly" title=" " alt="" coords="931,145,865,165,747,191,638,209,637,204,746,185,863,160,930,140"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,34,864,74"/>
+<area shape="poly" title=" " alt="" coords="916,97,845,77,847,72,917,92"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="685,98,864,138"/>
+<area shape="poly" title=" " alt="" coords="898,121,864,121,864,116,898,116"/>
+<area shape="poly" title=" " alt="" coords="445,132,411,127,411,121,445,127"/>
+<area shape="poly" title=" " alt="" coords="445,214,184,194,185,189,445,209"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,56,637,96"/>
+<area shape="poly" title=" " alt="" coords="671,67,638,70,637,65,671,61"/>
+<area shape="poly" title=" " alt="" coords="445,94,411,99,411,94,445,89"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a783d3129a4eef46c22020c9f4b209680" name="a783d3129a4eef46c22020c9f4b209680"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a783d3129a4eef46c22020c9f4b209680">&#9670;&#160;</a></span>HasProfile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ui::qt::FilterProfilesPanel::HasProfile </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether a profile with the given name currently exists. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a783d3129a4eef46c22020c9f4b209680_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a783d3129a4eef46c22020c9f4b209680_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a783d3129a4eef46c22020c9f4b209680_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a783d3129a4eef46c22020c9f4b209680_icgraph">
+<area shape="rect" title="Whether a profile with the given name currently exists." alt="" coords="685,5,864,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="671,28,638,28,638,23,671,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
 </map>
 </div>
 
@@ -689,32 +1076,30 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a18588eac2a3d895fdf178096f862391e_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a18588eac2a3d895fdf178096f862391e_cgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a18588eac2a3d895fdf178096f862391e_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a18588eac2a3d895fdf178096f862391e_cgraph">
-<area shape="rect" title=" " alt="" coords="5,169,184,209"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="249,70,394,95"/>
-<area shape="poly" title=" " alt="" coords="122,167,172,135,231,104,250,97,252,102,233,109,174,140,125,171"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="232,5,411,45"/>
-<area shape="poly" title=" " alt="" coords="110,167,160,112,194,82,231,55,242,49,244,53,233,60,197,86,164,116,114,171"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="254,119,389,145"/>
-<area shape="poly" title=" " alt="" coords="174,167,257,145,258,151,175,172"/>
-<area shape="rect" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html#a2a282db418050d30b03199585268a7a8" title=" " alt="" coords="253,169,390,209"/>
-<area shape="poly" title=" " alt="" coords="185,187,239,187,239,192,185,192"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="257,234,385,259"/>
-<area shape="poly" title=" " alt="" coords="175,207,258,228,257,233,174,212"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="232,333,411,373"/>
-<area shape="poly" title=" " alt="" coords="114,208,164,262,197,293,233,319,244,325,242,330,231,324,194,297,160,266,110,211"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="253,283,389,309"/>
-<area shape="poly" title=" " alt="" coords="125,207,174,239,233,270,252,277,250,282,231,274,172,244,122,212"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="465,177,646,202"/>
-<area shape="poly" title=" " alt="" coords="379,93,412,104,473,135,525,167,523,171,471,140,410,109,377,98"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="700,177,859,202"/>
-<area shape="poly" title=" " alt="" coords="646,187,686,187,686,192,646,192"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="489,13,622,38"/>
-<area shape="poly" title=" " alt="" coords="411,23,475,23,475,28,411,28"/>
-<area shape="poly" title=" " alt="" coords="375,142,490,171,489,176,373,147"/>
-<area shape="poly" title=" " alt="" coords="373,231,489,203,490,208,375,237"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="459,333,652,373"/>
-<area shape="poly" title=" " alt="" coords="411,351,445,351,445,356,411,356"/>
-<area shape="poly" title=" " alt="" coords="377,281,410,270,471,239,523,207,525,212,473,244,412,274,379,286"/>
+<area shape="rect" title=" " alt="" coords="5,122,184,162"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="249,5,394,31"/>
+<area shape="poly" title=" " alt="" coords="116,120,166,79,231,40,247,33,249,38,233,44,170,84,120,124"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="232,203,411,243"/>
+<area shape="poly" title=" " alt="" coords="152,160,253,196,251,201,150,165"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="254,55,389,80"/>
+<area shape="poly" title=" " alt="" coords="146,119,231,89,256,81,258,86,233,94,148,124"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="257,104,385,129"/>
+<area shape="poly" title=" " alt="" coords="184,129,243,123,244,128,185,135"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="232,267,411,307"/>
+<area shape="poly" title=" " alt="" coords="117,160,168,206,233,253,245,259,243,264,231,258,164,210,114,164"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="253,153,389,179"/>
+<area shape="poly" title=" " alt="" coords="185,149,240,155,239,160,184,154"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="465,80,646,105"/>
+<area shape="poly" title=" " alt="" coords="372,28,411,39,508,73,507,78,410,45,371,33"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="700,80,859,105"/>
+<area shape="poly" title=" " alt="" coords="646,90,686,90,686,95,646,95"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="489,211,622,236"/>
+<area shape="poly" title=" " alt="" coords="411,221,475,221,475,226,411,226"/>
+<area shape="poly" title=" " alt="" coords="389,72,451,79,450,84,389,77"/>
+<area shape="poly" title=" " alt="" coords="386,107,450,101,451,106,386,113"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="459,267,652,307"/>
+<area shape="poly" title=" " alt="" coords="411,285,445,285,445,290,411,290"/>
+<area shape="poly" title=" " alt="" coords="368,151,410,138,503,107,505,112,411,143,369,156"/>
 </map>
 </div>
 <div class="dynheader">
@@ -727,6 +1112,109 @@ Here is the caller graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
 </map>
 </div>
+
+</div>
+</div>
+<a id="a3dfeb7d690e257f703bf484fe5314ee5" name="a3dfeb7d690e257f703bf484fe5314ee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dfeb7d690e257f703bf484fe5314ee5">&#9670;&#160;</a></span>MergeProfiles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ui::qt::FilterProfilesPanel::MergeProfiles </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="../../db/d6d/structui_1_1qt_1_1FilterProfile.html">FilterProfile</a> &gt;&#160;</td>
+          <td class="paramname"><em>incoming</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwriteCollisions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Merges <code>incoming</code> into this panel's profile list and persists the result to internal storage. </p>
+<p>Profiles whose name matches one already in the list are skipped unless <code>overwriteCollisions</code> is true, in which case the existing profile is replaced in place.</p>
+<dl class="section return"><dt>Returns</dt><dd>The number of profiles actually added or overwritten. </dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_cgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_cgraph">
+<area shape="rect" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="5,55,184,95"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="257,5,385,31"/>
+<area shape="poly" title=" " alt="" coords="174,53,257,31,258,37,175,58"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a230e60c90989077d5c579acc0cbb3a06" title=" " alt="" coords="232,55,411,95"/>
+<area shape="poly" title=" " alt="" coords="185,73,218,73,218,78,185,78"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a55d7cc51f043e2e2a612a701b5ed0179" title=" " alt="" coords="232,141,411,181"/>
+<area shape="poly" title=" " alt="" coords="149,93,256,133,254,138,148,98"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="700,120,881,145"/>
+<area shape="poly" title=" " alt="" coords="386,11,444,10,511,14,583,23,653,41,685,55,716,72,766,109,763,113,713,77,683,59,651,46,582,28,511,19,443,16,386,16"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="929,120,1088,145"/>
+<area shape="poly" title=" " alt="" coords="881,130,916,130,916,135,881,135"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4" title=" " alt="" coords="459,55,652,95"/>
+<area shape="poly" title=" " alt="" coords="411,73,445,73,445,78,411,78"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="483,120,628,145"/>
+<area shape="poly" title=" " alt="" coords="410,147,469,140,469,146,411,153"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#afffb0420d393926b1e913e238cea09bd" title=" " alt="" coords="466,219,645,259"/>
+<area shape="poly" title=" " alt="" coords="382,178,460,205,482,212,480,217,458,210,380,183"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="488,169,623,195"/>
+<area shape="poly" title=" " alt="" coords="411,166,474,172,474,177,411,171"/>
+<area shape="poly" title=" " alt="" coords="628,130,686,130,686,135,628,135"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="724,227,857,252"/>
+<area shape="poly" title=" " alt="" coords="645,237,710,237,710,242,645,242"/>
+<area shape="poly" title=" " alt="" coords="616,167,715,146,716,151,617,172"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a3dfeb7d690e257f703bf484fe5314ee5_icgraph">
+<area shape="rect" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,5,864,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="671,28,638,28,638,23,671,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a89ed6b4a0f2d3ab14330ecb65ddabca2" name="a89ed6b4a0f2d3ab14330ecb65ddabca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89ed6b4a0f2d3ab14330ecb65ddabca2">&#9670;&#160;</a></span>ProfileCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ui::qt::FilterProfilesPanel::ProfileCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of profiles currently held by the panel. </p>
 
 </div>
 </div>
@@ -779,6 +1267,70 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ad393bc3cbea348a252f7d7590d2297ec" name="ad393bc3cbea348a252f7d7590d2297ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad393bc3cbea348a252f7d7590d2297ec">&#9670;&#160;</a></span>ReadProfilesFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a81742954ac02b26a9cbd697eef116861">FilterProfilesPanel::ReadProfilesResult</a> ui::qt::FilterProfilesPanel::ReadProfilesFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads and parses a .filters.json file (one or more profiles). </p>
+<p>Pure I/O — does not touch this panel's own state. Entries with an empty name or a name duplicated within the file are silently skipped (matches the same rule <a class="el" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e">LoadFromFile()</a> applies to internal storage). </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_cgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_cgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_cgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_cgraph">
+<area shape="rect" title="Reads and parses a .filters.json file (one or more profiles)." alt="" coords="5,73,184,113"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="241,5,359,31"/>
+<area shape="poly" title=" " alt="" coords="149,70,231,39,250,33,251,38,233,45,150,75"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="233,55,367,80"/>
+<area shape="poly" title=" " alt="" coords="184,79,219,75,220,80,185,84"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="241,104,359,129"/>
+<area shape="poly" title=" " alt="" coords="185,100,227,106,227,111,184,106"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="232,153,368,179"/>
+<area shape="poly" title=" " alt="" coords="152,110,251,146,250,151,150,115"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="416,104,597,129"/>
+<area shape="poly" title=" " alt="" coords="354,77,440,98,439,103,353,83"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="645,104,804,129"/>
+<area shape="poly" title=" " alt="" coords="597,114,632,114,632,119,597,119"/>
+<area shape="poly" title=" " alt="" coords="353,151,439,130,440,135,354,156"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_icgraph" alt=""/></div>
+<map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_ad393bc3cbea348a252f7d7590d2297ec_icgraph">
+<area shape="rect" title="Reads and parses a .filters.json file (one or more profiles)." alt="" coords="685,5,864,45"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="671,28,638,28,638,23,671,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
+<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a230e60c90989077d5c579acc0cbb3a06" name="a230e60c90989077d5c579acc0cbb3a06"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a230e60c90989077d5c579acc0cbb3a06">&#9670;&#160;</a></span>RebuildList()</h2>
 
@@ -816,18 +1368,23 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a230e60c90989077d5c579acc0cbb3a06_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a230e60c90989077d5c579acc0cbb3a06_icgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a230e60c90989077d5c579acc0cbb3a06_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a230e60c90989077d5c579acc0cbb3a06_icgraph">
-<area shape="rect" title=" " alt="" coords="685,67,864,107"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,8,637,48"/>
-<area shape="poly" title=" " alt="" coords="683,66,625,51,627,45,684,61"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="232,69,411,109"/>
-<area shape="poly" title=" " alt="" coords="671,90,411,91,411,86,671,85"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="459,124,637,164"/>
-<area shape="poly" title=" " alt="" coords="683,113,628,127,627,121,681,107"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
-<area shape="poly" title=" " alt="" coords="445,29,411,29,411,24,445,24"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,37,184,77"/>
-<area shape="poly" title=" " alt="" coords="219,43,185,47,184,42,218,37"/>
-<area shape="poly" title=" " alt="" coords="218,77,184,73,185,67,219,72"/>
+<area shape="rect" title=" " alt="" coords="912,101,1091,141"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,69,637,109"/>
+<area shape="poly" title=" " alt="" coords="898,117,637,98,638,93,898,111"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a18588eac2a3d895fdf178096f862391e" title=" " alt="" coords="232,127,411,167"/>
+<area shape="poly" title=" " alt="" coords="898,128,411,146,411,141,898,122"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,11,864,51"/>
+<area shape="poly" title=" " alt="" coords="937,99,825,53,827,48,939,94"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="685,184,864,224"/>
+<area shape="poly" title=" " alt="" coords="934,149,831,186,830,181,932,144"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,63,411,103"/>
+<area shape="poly" title=" " alt="" coords="444,89,411,88,411,83,445,84"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,95,184,135"/>
+<area shape="poly" title=" " alt="" coords="219,100,185,105,184,99,218,95"/>
+<area shape="poly" title=" " alt="" coords="218,135,184,130,185,125,219,129"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,5,637,45"/>
+<area shape="poly" title=" " alt="" coords="671,31,638,30,638,25,671,26"/>
+<area shape="poly" title=" " alt="" coords="456,51,402,65,400,60,455,46"/>
 </map>
 </div>
 
@@ -930,15 +1487,20 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel_a55d7cc51f043e2e2a612a701b5ed0179_icgraph.png" border="0" usemap="#ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a55d7cc51f043e2e2a612a701b5ed0179_icgraph" alt=""/></div>
 <map name="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a55d7cc51f043e2e2a612a701b5ed0179_icgraph" id="ada/d47/classui_1_1qt_1_1FilterProfilesPanel_a55d7cc51f043e2e2a612a701b5ed0179_icgraph">
-<area shape="rect" title=" " alt="" coords="685,37,864,77"/>
+<area shape="rect" title=" " alt="" coords="912,67,1091,107"/>
 <area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#abe0ca58acc220586b842f887a14cc8c3" title=" " alt="" coords="459,5,637,45"/>
-<area shape="poly" title=" " alt="" coords="671,45,637,41,638,35,672,40"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="459,69,637,109"/>
-<area shape="poly" title=" " alt="" coords="672,75,638,79,637,74,671,69"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,5,411,45"/>
-<area shape="poly" title=" " alt="" coords="445,28,411,28,411,23,445,23"/>
-<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,5,184,45"/>
-<area shape="poly" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+<area shape="poly" title=" " alt="" coords="909,66,864,57,746,42,637,33,638,28,746,37,864,52,910,61"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a3dfeb7d690e257f703bf484fe5314ee5" title="Merges incoming into this panel&#39;s profile list and persists the result to internal storage." alt="" coords="685,67,864,107"/>
+<area shape="poly" title=" " alt="" coords="898,89,864,89,864,84,898,84"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a0225d15768594074dd16e38e7528dfcc" title="Stores (or replaces) a profile in the panel and persists it to disk." alt="" coords="685,131,864,171"/>
+<area shape="poly" title=" " alt="" coords="917,113,847,133,845,128,916,108"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#ab22318c236728b851cb3a0dea68d97ae" title=" " alt="" coords="232,37,411,77"/>
+<area shape="poly" title=" " alt="" coords="445,43,411,47,411,42,445,37"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a7cfa1301feed7a8a359a2d839ceb0f83" title="Constructs the panel, builds its layout, and loads persisted profiles." alt="" coords="5,37,184,77"/>
+<area shape="poly" title=" " alt="" coords="218,60,184,60,184,55,218,55"/>
+<area shape="rect" href="../../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a4361bf2d559ae73f4b6dee14deec5830" title=" " alt="" coords="459,69,637,109"/>
+<area shape="poly" title=" " alt="" coords="671,91,638,91,638,86,671,85"/>
+<area shape="poly" title=" " alt="" coords="445,77,411,73,411,67,445,72"/>
 </map>
 </div>
 
@@ -1014,6 +1576,50 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">QPushButton* ui::qt::FilterProfilesPanel::m_deleteBtn {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c605e84efb30b0c65e8fa097a18b445" name="a1c605e84efb30b0c65e8fa097a18b445"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c605e84efb30b0c65e8fa097a18b445">&#9670;&#160;</a></span>m_exportBtn</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPushButton* ui::qt::FilterProfilesPanel::m_exportBtn {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff704ec3f16a2ee5eb5c5b4835aef1ae" name="aff704ec3f16a2ee5eb5c5b4835aef1ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff704ec3f16a2ee5eb5c5b4835aef1ae">&#9670;&#160;</a></span>m_importBtn</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPushButton* ui::qt::FilterProfilesPanel::m_importBtn {nullptr}</td>
         </tr>
       </table>
   </td>

@@ -92,8 +92,7 @@ $(document).ready(function(){initNavTree('d8/dac/IFilterStrategy_8cpp.html','../
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">IFilterStrategy.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -104,47 +103,42 @@ $(document).ready(function(){initNavTree('d8/dac/IFilterStrategy_8cpp.html','../
 <code>#include &quot;<a class="el" href="../../d9/d11/Logger_8hpp_source.html">Logger.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cctype&gt;</code><br />
-<code>#include &lt;mutex&gt;</code><br />
-<code>#include &lt;regex&gt;</code><br />
-<code>#include &lt;unordered_map&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for IFilterStrategy.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d65/IFilterStrategy_8cpp__incl.png" border="0" usemap="#asrc_2application_2filters_2IFilterStrategy_8cpp" alt=""/></div>
 <map name="asrc_2application_2filters_2IFilterStrategy_8cpp" id="asrc_2application_2filters_2IFilterStrategy_8cpp">
-<area shape="rect" title="Implementation of filter matching strategies." alt="" coords="492,5,651,45"/>
-<area shape="rect" href="../../da/d4d/IFilterStrategy_8hpp.html" title="Strategy interface for different filter matching algorithms." alt="" coords="120,93,260,119"/>
-<area shape="poly" title=" " alt="" coords="492,46,260,93,259,88,491,40"/>
-<area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="311,93,405,119"/>
-<area shape="poly" title=" " alt="" coords="521,48,403,91,402,86,519,43"/>
-<area shape="rect" title=" " alt="" coords="429,93,514,119"/>
-<area shape="poly" title=" " alt="" coords="549,48,499,87,496,82,545,43"/>
-<area shape="rect" title=" " alt="" coords="539,93,604,119"/>
-<area shape="poly" title=" " alt="" coords="574,46,574,79,569,79,569,46"/>
-<area shape="rect" title=" " alt="" coords="629,93,693,119"/>
-<area shape="poly" title=" " alt="" coords="595,44,639,82,635,86,591,48"/>
-<area shape="rect" title=" " alt="" coords="717,93,775,119"/>
-<area shape="poly" title=" " alt="" coords="614,43,709,85,707,90,612,48"/>
-<area shape="rect" title=" " alt="" coords="800,93,924,119"/>
-<area shape="poly" title=" " alt="" coords="642,43,807,87,806,92,640,48"/>
-<area shape="rect" title=" " alt="" coords="93,174,170,199"/>
-<area shape="poly" title=" " alt="" coords="183,120,150,164,146,161,179,117"/>
-<area shape="rect" title=" " alt="" coords="194,174,253,199"/>
-<area shape="poly" title=" " alt="" coords="197,118,216,160,211,163,192,120"/>
-<area shape="rect" title=" " alt="" coords="5,174,68,199"/>
-<area shape="poly" title=" " alt="" coords="169,121,73,170,70,165,166,116"/>
-<area shape="poly" title=" " alt="" coords="324,121,183,169,175,172,174,167,181,164,322,116"/>
-<area shape="poly" title=" " alt="" coords="339,121,256,169,254,165,337,117"/>
-<area shape="rect" title=" " alt="" coords="399,174,523,199"/>
-<area shape="poly" title=" " alt="" coords="375,117,436,163,433,167,372,121"/>
-<area shape="rect" title=" " alt="" coords="547,174,671,199"/>
-<area shape="poly" title=" " alt="" coords="395,116,560,167,558,172,394,121"/>
-<area shape="rect" title=" " alt="" coords="695,167,837,207"/>
-<area shape="poly" title=" " alt="" coords="405,114,417,116,682,164,681,169,416,121,404,119"/>
-<area shape="rect" title=" " alt="" coords="861,167,1009,207"/>
-<area shape="poly" title=" " alt="" coords="405,114,417,116,536,131,630,139,726,148,848,164,847,169,725,153,630,145,535,136,416,121,404,119"/>
-<area shape="rect" title=" " alt="" coords="277,174,375,199"/>
-<area shape="poly" title=" " alt="" coords="356,120,338,162,334,160,351,118"/>
+<area shape="rect" title="Implementation of filter matching strategies." alt="" coords="924,5,1083,45"/>
+<area shape="rect" href="../../da/d4d/IFilterStrategy_8hpp.html" title="Strategy interface for different filter matching algorithms." alt="" coords="865,93,1005,119"/>
+<area shape="poly" title=" " alt="" coords="989,47,956,84,952,81,985,44"/>
+<area shape="rect" href="../../d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="569,93,662,119"/>
+<area shape="poly" title=" " alt="" coords="924,45,676,95,675,90,923,40"/>
+<area shape="rect" title=" " alt="" coords="1030,93,1115,119"/>
+<area shape="poly" title=" " alt="" coords="1022,44,1055,81,1051,84,1018,47"/>
+<area shape="rect" title=" " alt="" coords="1140,93,1205,119"/>
+<area shape="poly" title=" " alt="" coords="1045,43,1136,85,1134,90,1043,48"/>
+<area shape="rect" title=" " alt="" coords="762,174,839,199"/>
+<area shape="poly" title=" " alt="" coords="917,121,834,169,831,165,914,117"/>
+<area shape="rect" title=" " alt="" coords="946,174,1010,199"/>
+<area shape="poly" title=" " alt="" coords="944,118,968,161,963,163,939,120"/>
+<area shape="rect" title=" " alt="" coords="1034,174,1093,199"/>
+<area shape="poly" title=" " alt="" coords="956,117,1034,164,1031,169,953,121"/>
+<area shape="rect" title=" " alt="" coords="863,174,922,199"/>
+<area shape="poly" title=" " alt="" coords="931,120,908,163,903,161,927,118"/>
+<area shape="rect" title=" " alt="" coords="1117,174,1180,199"/>
+<area shape="poly" title=" " alt="" coords="971,116,1106,164,1111,166,1109,171,1104,169,969,121"/>
+<area shape="poly" title=" " alt="" coords="643,116,762,166,760,171,641,121"/>
+<area shape="poly" title=" " alt="" coords="663,114,751,134,852,164,858,166,856,171,850,169,750,140,662,119"/>
+<area shape="rect" title=" " alt="" coords="5,174,129,199"/>
+<area shape="poly" title=" " alt="" coords="569,114,381,133,261,149,141,169,122,173,121,168,140,164,261,144,381,128,568,109"/>
+<area shape="rect" title=" " alt="" coords="153,174,277,199"/>
+<area shape="poly" title=" " alt="" coords="569,118,443,139,291,169,273,173,272,168,289,164,442,134,568,112"/>
+<area shape="rect" title=" " alt="" coords="302,167,443,207"/>
+<area shape="poly" title=" " alt="" coords="581,121,445,165,443,160,579,116"/>
+<area shape="rect" title=" " alt="" coords="468,167,616,207"/>
+<area shape="poly" title=" " alt="" coords="606,121,571,158,567,155,603,117"/>
+<area shape="rect" title=" " alt="" coords="640,174,737,199"/>
+<area shape="poly" title=" " alt="" coords="628,117,670,162,666,165,624,121"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -163,88 +157,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a608458e323943224ef04efa1781a17ca" id="r_a608458e323943224ef04efa1781a17ca"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="../../df/d7b/classfilters_1_1IFilterStrategy.html">IFilterStrategy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d6b/namespacefilters.html#a608458e323943224ef04efa1781a17ca">filters::createStrategy</a> (const std::string &amp;strategyName)</td></tr>
 <tr class="memdesc:a608458e323943224ef04efa1781a17ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strategy factory for creating strategies from names.  <br /></td></tr>
 <tr class="separator:a608458e323943224ef04efa1781a17ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:aacbf2939ddb6941e2b0215738e3196a5" id="r_aacbf2939ddb6941e2b0215738e3196a5"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, std::regex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dac/IFilterStrategy_8cpp.html#aacbf2939ddb6941e2b0215738e3196a5">s_regexCache</a></td></tr>
-<tr class="separator:aacbf2939ddb6941e2b0215738e3196a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a874c02999dff02fba1abf14e7ad98c08" id="r_a874c02999dff02fba1abf14e7ad98c08"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dac/IFilterStrategy_8cpp.html#a874c02999dff02fba1abf14e7ad98c08">MAX_CACHE_SIZE</a> = 100</td></tr>
-<tr class="separator:a874c02999dff02fba1abf14e7ad98c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8681f16c66dd27fa61dd89e4ea14f7be" id="r_a8681f16c66dd27fa61dd89e4ea14f7be"><td class="memItemLeft" align="right" valign="top">static std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dac/IFilterStrategy_8cpp.html#a8681f16c66dd27fa61dd89e4ea14f7be">s_regexCacheMutex</a></td></tr>
-<tr class="separator:a8681f16c66dd27fa61dd89e4ea14f7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Implementation of filter matching strategies. </p>
 <dl class="section author"><dt>Author</dt><dd>LogViewer Development Team </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2025 </dd></dl>
-</div><h2 class="groupheader">Variable Documentation</h2>
-<a id="a874c02999dff02fba1abf14e7ad98c08" name="a874c02999dff02fba1abf14e7ad98c08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a874c02999dff02fba1abf14e7ad98c08">&#9670;&#160;</a></span>MAX_CACHE_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const size_t MAX_CACHE_SIZE = 100</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aacbf2939ddb6941e2b0215738e3196a5" name="aacbf2939ddb6941e2b0215738e3196a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacbf2939ddb6941e2b0215738e3196a5">&#9670;&#160;</a></span>s_regexCache</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string, std::regex&gt; s_regexCache</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8681f16c66dd27fa61dd89e4ea14f7be" name="a8681f16c66dd27fa61dd89e4ea14f7be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8681f16c66dd27fa61dd89e4ea14f7be">&#9670;&#160;</a></span>s_regexCacheMutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mutex s_regexCacheMutex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

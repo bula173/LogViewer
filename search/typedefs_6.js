@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lookupindex_0',['LookupIndex',['../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e',1,'db::LogEvent']]]
+  ['observerptr_0',['ObserverPtr',['../da/d30/classplugin_1_1PluginEventBus.html#a175c255e5096e88349606f6ba355587b',1,'plugin::PluginEventBus']]]
 ];

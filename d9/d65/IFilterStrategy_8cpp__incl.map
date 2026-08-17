@@ -1,35 +1,33 @@
 <map id="src/application/filters/IFilterStrategy.cpp" name="src/application/filters/IFilterStrategy.cpp">
-<area shape="rect" id="Node000001" title="Implementation of filter matching strategies." alt="" coords="492,5,651,45"/>
-<area shape="rect" id="Node000002" href="$da/d4d/IFilterStrategy_8hpp.html" title="Strategy interface for different filter matching algorithms." alt="" coords="120,93,260,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="492,46,260,93,259,88,491,40"/>
-<area shape="rect" id="Node000006" href="$d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="311,93,405,119"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="521,48,403,91,402,86,519,43"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="429,93,514,119"/>
-<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="549,48,499,87,496,82,545,43"/>
-<area shape="rect" id="Node000013" title=" " alt="" coords="539,93,604,119"/>
-<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="574,46,574,79,569,79,569,46"/>
-<area shape="rect" id="Node000014" title=" " alt="" coords="629,93,693,119"/>
-<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="595,44,639,82,635,86,591,48"/>
-<area shape="rect" id="Node000015" title=" " alt="" coords="717,93,775,119"/>
-<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="614,43,709,85,707,90,612,48"/>
-<area shape="rect" id="Node000016" title=" " alt="" coords="800,93,924,119"/>
-<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="642,43,807,87,806,92,640,48"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="93,174,170,199"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,120,150,164,146,161,179,117"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="194,174,253,199"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="197,118,216,160,211,163,192,120"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,174,68,199"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="169,121,73,170,70,165,166,116"/>
-<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="324,121,183,169,175,172,174,167,181,164,322,116"/>
-<area shape="poly" id="edge11_Node000006_Node000004" title=" " alt="" coords="339,121,256,169,254,165,337,117"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="399,174,523,199"/>
-<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="375,117,436,163,433,167,372,121"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="547,174,671,199"/>
-<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="395,116,560,167,558,172,394,121"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="695,167,837,207"/>
-<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="405,114,417,116,682,164,681,169,416,121,404,119"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="861,167,1009,207"/>
-<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="405,114,417,116,536,131,630,139,726,148,848,164,847,169,725,153,630,145,535,136,416,121,404,119"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="277,174,375,199"/>
-<area shape="poly" id="edge12_Node000006_Node000011" title=" " alt="" coords="356,120,338,162,334,160,351,118"/>
+<area shape="rect" id="Node000001" title="Implementation of filter matching strategies." alt="" coords="924,5,1083,45"/>
+<area shape="rect" id="Node000002" href="$da/d4d/IFilterStrategy_8hpp.html" title="Strategy interface for different filter matching algorithms." alt="" coords="865,93,1005,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="989,47,956,84,952,81,985,44"/>
+<area shape="rect" id="Node000008" href="$d9/d11/Logger_8hpp.html" title="Logging facade for application&#45;wide logging." alt="" coords="569,93,662,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="924,45,676,95,675,90,923,40"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1030,93,1115,119"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1022,44,1055,81,1051,84,1018,47"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1140,93,1205,119"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="1045,43,1136,85,1134,90,1043,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="762,174,839,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="917,121,834,169,831,165,914,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="946,174,1010,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="944,118,968,161,963,163,939,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1034,174,1093,199"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="956,117,1034,164,1031,169,953,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="863,174,922,199"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="931,120,908,163,903,161,927,118"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1117,174,1180,199"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="971,116,1106,164,1111,166,1109,171,1104,169,969,121"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="643,116,762,166,760,171,641,121"/>
+<area shape="poly" id="edge13_Node000008_Node000006" title=" " alt="" coords="663,114,751,134,852,164,858,166,856,171,850,169,750,140,662,119"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="5,174,129,199"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="569,114,381,133,261,149,141,169,122,173,121,168,140,164,261,144,381,128,568,109"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="153,174,277,199"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="569,118,443,139,291,169,273,173,272,168,289,164,442,134,568,112"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="302,167,443,207"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="581,121,445,165,443,160,579,116"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="468,167,616,207"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="606,121,571,158,567,155,603,117"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="640,174,737,199"/>
+<area shape="poly" id="edge14_Node000008_Node000013" title=" " alt="" coords="628,117,670,162,666,165,624,121"/>
 </map>

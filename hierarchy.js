@@ -16,6 +16,7 @@ var hierarchy =
     [ "ui::qt::utils::ThemeManager::ColorScheme", "dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html", null ],
     [ "config::ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", null ],
     [ "config::ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", null ],
+    [ "ai::Config", "db/de8/structai_1_1Config.html", null ],
     [ "config::Config", "d2/d5e/classconfig_1_1Config.html", null ],
     [ "config::ConfigObserver", "d0/d90/classconfig_1_1ConfigObserver.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
@@ -25,6 +26,7 @@ var hierarchy =
     [ "parser::dbc::DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", null ],
     [ "plugin::PluginDependencyGraph::DependencyNode", "d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html", null ],
     [ "ai::DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", null ],
+    [ "ui::qt::ShortcutManager::Entry", "d8/de5/structui_1_1qt_1_1ShortcutManager_1_1Entry.html", null ],
     [ "ui::qt::utils::EventTagManager::EventAnnotation", "d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html", null ],
     [ "ui::qt::utils::EventGroupManager::EventGroup", "df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html", null ],
     [ "ui::qt::utils::EventGroupManager", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html", null ],
@@ -256,6 +258,8 @@ var hierarchy =
     [ "mvc::SearchResultRow", "de/d74/structmvc_1_1SearchResultRow.html", null ],
     [ "ui::qt::utils::SessionManager", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html", null ],
     [ "ui::qt::utils::SessionManager::SessionState", "d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html", null ],
+    [ "ui::qt::ShortcutInfo", "d3/da1/structui_1_1qt_1_1ShortcutInfo.html", null ],
+    [ "ui::qt::ShortcutManager", "db/d66/classui_1_1qt_1_1ShortcutManager.html", null ],
     [ "ui::qt::TimeRangeFilterPanel::State", "d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html", null ],
     [ "ui::qt::StatRow", "d9/d3b/structui_1_1qt_1_1StatRow.html", null ],
     [ "ui::qt::StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", null ],

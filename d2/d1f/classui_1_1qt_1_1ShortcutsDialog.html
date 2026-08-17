@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('d2/d1f/classui_1_1qt_1_1ShortcutsDialo
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-slots">Private Slots</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="../../d1/d4e/classui_1_1qt_1_1ShortcutsDialog-members.html">List of all members</a>  </div>
@@ -99,7 +100,7 @@ $(document).ready(function(){initNavTree('d2/d1f/classui_1_1qt_1_1ShortcutsDialo
 </div><!--header-->
 <div class="contents">
 
-<p>Dialog showing all keyboard shortcuts available in the application.  
+<p>Dialog showing every registered keyboard shortcut, grouped by category (File, Tools, Analysis, View, Help).  
  <a href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../db/df6/ShortcutsDialog_8hpp_source.html">ShortcutsDialog.hpp</a>&gt;</code></p>
@@ -108,9 +109,9 @@ Inheritance diagram for ui::qt::ShortcutsDialog:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d0/d3d/classui_1_1qt_1_1ShortcutsDialog__inherit__graph.png" border="0" usemap="#aui_1_1qt_1_1ShortcutsDialog_inherit__map" alt="Inheritance graph"/></div>
 <map name="aui_1_1qt_1_1ShortcutsDialog_inherit__map" id="aui_1_1qt_1_1ShortcutsDialog_inherit__map">
-<area shape="rect" title="Dialog showing all keyboard shortcuts available in the application." alt="" coords="5,119,164,264"/>
-<area shape="rect" href="../../d9/d46/classQDialog.html" title=" " alt="" coords="51,5,118,71"/>
-<area shape="poly" title=" " alt="" coords="87,84,87,118,82,118,82,84"/>
+<area shape="rect" title="Dialog showing every registered keyboard shortcut, grouped by category (File, Tools,..." alt="" coords="5,119,208,424"/>
+<area shape="rect" href="../../d9/d46/classQDialog.html" title=" " alt="" coords="73,5,140,71"/>
+<area shape="poly" title=" " alt="" coords="109,84,109,119,104,119,104,84"/>
 </map>
 </div>
 <div class="dynheader">
@@ -118,11 +119,15 @@ Collaboration diagram for ui::qt::ShortcutsDialog:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/d7f/classui_1_1qt_1_1ShortcutsDialog__coll__graph.png" border="0" usemap="#aui_1_1qt_1_1ShortcutsDialog_coll__map" alt="Collaboration graph"/></div>
 <map name="aui_1_1qt_1_1ShortcutsDialog_coll__map" id="aui_1_1qt_1_1ShortcutsDialog_coll__map">
-<area shape="rect" title="Dialog showing all keyboard shortcuts available in the application." alt="" coords="17,133,175,279"/>
+<area shape="rect" title="Dialog showing every registered keyboard shortcut, grouped by category (File, Tools,..." alt="" coords="120,148,323,393"/>
 <area shape="rect" href="../../d9/d46/classQDialog.html" title=" " alt="" coords="5,5,72,71"/>
-<area shape="poly" title=" " alt="" coords="57,83,74,132,69,134,51,84"/>
+<area shape="poly" title=" " alt="" coords="74,80,127,146,123,150,70,83"/>
 <area shape="rect" title=" " alt="" coords="96,5,211,71"/>
-<area shape="poly" title=" " alt="" coords="145,72,129,119,124,117,140,70"/>
+<area shape="poly" title=" " alt="" coords="165,70,183,131,178,133,160,72"/>
+<area shape="rect" title=" " alt="" coords="235,5,344,71"/>
+<area shape="poly" title=" " alt="" coords="283,72,265,133,259,131,277,70"/>
+<area shape="rect" title=" " alt="" coords="369,5,519,71"/>
+<area shape="poly" title=" " alt="" coords="415,73,336,155,332,151,412,69"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -133,23 +138,44 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd98b169ae9b4c66ab471424334b822d" id="r_abd98b169ae9b4c66ab471424334b822d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#abd98b169ae9b4c66ab471424334b822d">~ShortcutsDialog</a> () override</td></tr>
 <tr class="separator:abd98b169ae9b4c66ab471424334b822d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-slots" name="pri-slots"></a>
+Private Slots</h2></td></tr>
+<tr class="memitem:a0f8f2976ab0d8f7d5ec25cdacd74afdd" id="r_a0f8f2976ab0d8f7d5ec25cdacd74afdd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0f8f2976ab0d8f7d5ec25cdacd74afdd">HandleCellDoubleClicked</a> (int row, int column)</td></tr>
+<tr class="separator:a0f8f2976ab0d8f7d5ec25cdacd74afdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9424b3eb5917025c06c13888b896acb" id="r_ad9424b3eb5917025c06c13888b896acb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad9424b3eb5917025c06c13888b896acb">HandleEditSelected</a> ()</td></tr>
+<tr class="separator:ad9424b3eb5917025c06c13888b896acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91e3ebecdfd9e6f4b96ede2b36f98acc" id="r_a91e3ebecdfd9e6f4b96ede2b36f98acc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a91e3ebecdfd9e6f4b96ede2b36f98acc">HandleResetSelected</a> ()</td></tr>
+<tr class="separator:a91e3ebecdfd9e6f4b96ede2b36f98acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203811f940845fede43b71ab6dba19a8" id="r_a203811f940845fede43b71ab6dba19a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a203811f940845fede43b71ab6dba19a8">HandleResetAll</a> ()</td></tr>
+<tr class="separator:a203811f940845fede43b71ab6dba19a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac926863351202c13f1ea4317e475ea51" id="r_ac926863351202c13f1ea4317e475ea51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ac926863351202c13f1ea4317e475ea51">HandlePrint</a> ()</td></tr>
+<tr class="separator:ac926863351202c13f1ea4317e475ea51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ab100b53ca90506f894d4f55cda49c5d8" id="r_ab100b53ca90506f894d4f55cda49c5d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8">setupUI</a> ()</td></tr>
 <tr class="separator:ab100b53ca90506f894d4f55cda49c5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa618ef2adb0b3b7abaeb3e755b376868" id="r_aa618ef2adb0b3b7abaeb3e755b376868"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868">populateShortcuts</a> ()</td></tr>
 <tr class="separator:aa618ef2adb0b3b7abaeb3e755b376868"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06bb98897b3045651528425d41fea2fb" id="r_a06bb98897b3045651528425d41fea2fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a06bb98897b3045651528425d41fea2fb">addShortcut</a> (const QString &amp;action, const QString &amp;shortcut, const QString &amp;category)</td></tr>
-<tr class="separator:a06bb98897b3045651528425d41fea2fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7636245dbbaa5b1601a882bad37bde8e" id="r_a7636245dbbaa5b1601a882bad37bde8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e">EditRow</a> (int row)</td></tr>
+<tr class="separator:a7636245dbbaa5b1601a882bad37bde8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2eef223b659de3ab653dac6963740aea" id="r_a2eef223b659de3ab653dac6963740aea"><td class="memItemLeft" align="right" valign="top">QTableWidget *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a2eef223b659de3ab653dac6963740aea">m_table</a> {nullptr}</td></tr>
 <tr class="separator:a2eef223b659de3ab653dac6963740aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4c01af593ffcc72b314adbc1382afe6" id="r_ae4c01af593ffcc72b314adbc1382afe6"><td class="memItemLeft" align="right" valign="top">QPushButton *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ae4c01af593ffcc72b314adbc1382afe6">m_editBtn</a> {nullptr}</td></tr>
+<tr class="separator:ae4c01af593ffcc72b314adbc1382afe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d7b853e61d73c285e123a8faac72bb" id="r_ad8d7b853e61d73c285e123a8faac72bb"><td class="memItemLeft" align="right" valign="top">QPushButton *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad8d7b853e61d73c285e123a8faac72bb">m_resetBtn</a> {nullptr}</td></tr>
+<tr class="separator:ad8d7b853e61d73c285e123a8faac72bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8db481a11f6c8f08b6df0fdf44a7c97c" id="r_a8db481a11f6c8f08b6df0fdf44a7c97c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a8db481a11f6c8f08b6df0fdf44a7c97c">m_rowIds</a></td></tr>
+<tr class="separator:a8db481a11f6c8f08b6df0fdf44a7c97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Dialog showing all keyboard shortcuts available in the application. </p>
-<p>Organized by category (File, Edit, View, Tools, Help). Provides quick reference for users. </p>
+<div class="textblock"><p>Dialog showing every registered keyboard shortcut, grouped by category (File, Tools, Analysis, View, Help). </p>
+<dl class="section user"><dt>Data source</dt><dd>Rows are populated from <code><a class="el" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order.">ShortcutManager::GetAll()</a></code>, so the list always reflects the application's actual current bindings — not a hand-maintained copy that can drift out of sync.</dd></dl>
+<dl class="section user"><dt>Customization</dt><dd>Double-clicking a shortcut cell (or selecting a row and clicking <b>Edit Shortcut…</b>) opens a small capture dialog. The new binding is rejected if it's already used by another action. <b>Reset</b> restores the selected row's default; <b>Reset All</b> restores every shortcut.</dd></dl>
+<dl class="section user"><dt>Printing</dt><dd><b>Print…</b> renders the current table as a simple HTML document and sends it to the system print dialog — a print-friendly cheat sheet. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0b718c54c42be766c7b927768882c7ca" name="a0b718c54c42be766c7b927768882c7ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b718c54c42be766c7b927768882c7ca">&#9670;&#160;</a></span>ShortcutsDialog()</h2>
@@ -179,13 +205,58 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0b718c54c42be766c7b927768882c7ca_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0b718c54c42be766c7b927768882c7ca_cgraph" alt=""/></div>
 <map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0b718c54c42be766c7b927768882c7ca_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0b718c54c42be766c7b927768882c7ca_cgraph">
-<area shape="rect" title=" " alt="" coords="5,37,172,77"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="220,5,387,45"/>
-<area shape="poly" title=" " alt="" coords="172,42,206,37,207,42,173,48"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,69,387,109"/>
-<area shape="poly" title=" " alt="" coords="173,67,207,72,206,77,172,72"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a06bb98897b3045651528425d41fea2fb" title=" " alt="" coords="435,5,601,45"/>
-<area shape="poly" title=" " alt="" coords="387,23,421,23,421,28,387,28"/>
+<area shape="rect" title=" " alt="" coords="5,56,172,96"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="899,17,1065,57"/>
+<area shape="poly" title=" " alt="" coords="172,53,295,28,434,9,556,3,678,5,791,13,886,22,885,27,791,18,678,11,556,8,435,14,296,34,173,59"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,116,387,156"/>
+<area shape="poly" title=" " alt="" coords="162,93,219,109,217,114,160,98"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="1117,17,1292,57"/>
+<area shape="poly" title=" " alt="" coords="1066,34,1103,34,1103,40,1066,40"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="1117,104,1292,144"/>
+<area shape="poly" title=" " alt="" coords="1035,55,1141,96,1139,101,1033,60"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0f8f2976ab0d8f7d5ec25cdacd74afdd" title=" " alt="" coords="435,24,629,64"/>
+<area shape="poly" title=" " alt="" coords="344,113,434,73,453,66,455,71,436,78,346,118"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad9424b3eb5917025c06c13888b896acb" title=" " alt="" coords="449,88,615,128"/>
+<area shape="poly" title=" " alt="" coords="387,123,435,117,435,122,387,128"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ac926863351202c13f1ea4317e475ea51" title=" " alt="" coords="449,253,615,293"/>
+<area shape="poly" title=" " alt="" coords="329,154,377,192,436,232,462,245,460,250,433,237,374,197,326,158"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a203811f940845fede43b71ab6dba19a8" title=" " alt="" coords="679,132,845,172"/>
+<area shape="poly" title=" " alt="" coords="387,136,665,146,665,151,387,141"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a91e3ebecdfd9e6f4b96ede2b36f98acc" title=" " alt="" coords="677,196,847,236"/>
+<area shape="poly" title=" " alt="" coords="387,147,664,196,663,201,386,153"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e" title=" " alt="" coords="679,68,845,108"/>
+<area shape="poly" title=" " alt="" coords="630,60,666,67,665,72,629,65"/>
+<area shape="poly" title=" " alt="" coords="845,66,885,57,886,62,846,71"/>
+<area shape="poly" title=" " alt="" coords="846,92,1103,113,1103,118,845,97"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ac0e0dbc03f830ec811c824ac7b284d50" title="Assigns sequence to the shortcut identified by id." alt="" coords="895,233,1069,273"/>
+<area shape="poly" title=" " alt="" coords="826,105,848,117,880,141,910,168,958,220,954,224,907,172,877,145,845,122,823,110"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="1145,194,1264,219"/>
+<area shape="poly" title=" " alt="" coords="1069,232,1131,219,1132,224,1070,237"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="1145,243,1264,268"/>
+<area shape="poly" title=" " alt="" coords="1070,251,1132,252,1132,257,1070,257"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="1117,297,1292,337"/>
+<area shape="poly" title=" " alt="" coords="1053,270,1122,291,1121,296,1052,276"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="1340,268,1515,308"/>
+<area shape="poly" title=" " alt="" coords="1292,303,1326,298,1327,303,1293,308"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1360,332,1495,358"/>
+<area shape="poly" title=" " alt="" coords="1293,325,1346,332,1346,337,1292,331"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1587,275,1720,300"/>
+<area shape="poly" title=" " alt="" coords="1515,285,1573,285,1573,290,1515,290"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1563,332,1744,358"/>
+<area shape="poly" title=" " alt="" coords="1495,342,1548,342,1548,348,1495,348"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1792,332,1951,358"/>
+<area shape="poly" title=" " alt="" coords="1744,342,1778,342,1778,348,1744,348"/>
+<area shape="poly" title=" " alt="" coords="615,98,664,93,665,99,616,103"/>
+<area shape="poly" title=" " alt="" coords="819,129,845,117,939,62,942,67,848,122,821,134"/>
+<area shape="poly" title=" " alt="" coords="845,144,1103,127,1103,133,846,149"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a77195f6923c3690755074a3431f316b6" title="Restores every registered shortcut to its default." alt="" coords="895,297,1069,337"/>
+<area shape="poly" title=" " alt="" coords="832,170,849,182,867,208,873,234,879,259,897,283,902,287,898,291,893,287,874,261,868,235,862,210,845,185,829,174"/>
+<area shape="poly" title=" " alt="" coords="1070,314,1104,314,1104,320,1070,320"/>
+<area shape="poly" title=" " alt="" coords="824,193,845,181,879,155,909,125,957,67,961,70,913,128,882,159,848,186,827,198"/>
+<area shape="poly" title=" " alt="" coords="847,195,1104,142,1105,147,848,201"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ae064406af71ec51c96fdf111d159338c" title="Restores the shortcut identified by id to its default." alt="" coords="895,361,1069,401"/>
+<area shape="poly" title=" " alt="" coords="781,234,829,290,861,320,896,347,906,353,903,357,893,351,857,324,825,293,777,238"/>
+<area shape="poly" title=" " alt="" coords="1052,358,1121,338,1122,343,1053,363"/>
 </map>
 </div>
 
@@ -217,8 +288,8 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a06bb98897b3045651528425d41fea2fb" name="a06bb98897b3045651528425d41fea2fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06bb98897b3045651528425d41fea2fb">&#9670;&#160;</a></span>addShortcut()</h2>
+<a id="a7636245dbbaa5b1601a882bad37bde8e" name="a7636245dbbaa5b1601a882bad37bde8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7636245dbbaa5b1601a882bad37bde8e">&#9670;&#160;</a></span>EditRow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,27 +298,11 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void ui::qt::ShortcutsDialog::addShortcut </td>
+          <td class="memname">void ui::qt::ShortcutsDialog::EditRow </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>action</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>shortcut</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>category</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -257,12 +312,374 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_cgraph">
+<area shape="rect" title=" " alt="" coords="5,68,172,108"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="443,5,617,45"/>
+<area shape="poly" title=" " alt="" coords="163,65,220,53,327,38,429,29,429,34,328,44,220,59,164,71"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="224,68,391,108"/>
+<area shape="poly" title=" " alt="" coords="172,85,210,85,210,91,172,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ac0e0dbc03f830ec811c824ac7b284d50" title="Assigns sequence to the shortcut identified by id." alt="" coords="220,153,395,193"/>
+<area shape="poly" title=" " alt="" coords="142,106,244,146,242,151,140,110"/>
+<area shape="poly" title=" " alt="" coords="378,65,444,47,446,52,380,71"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="443,69,617,109"/>
+<area shape="poly" title=" " alt="" coords="391,86,429,86,429,91,391,91"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="471,134,589,159"/>
+<area shape="poly" title=" " alt="" coords="395,160,457,153,457,158,395,166"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="471,183,589,209"/>
+<area shape="poly" title=" " alt="" coords="395,180,457,186,457,191,395,185"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="443,233,617,273"/>
+<area shape="poly" title=" " alt="" coords="365,191,462,226,460,231,363,196"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="665,204,840,244"/>
+<area shape="poly" title=" " alt="" coords="617,239,652,235,652,240,618,244"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="685,269,820,294"/>
+<area shape="poly" title=" " alt="" coords="618,262,672,268,671,274,617,267"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="912,211,1045,237"/>
+<area shape="poly" title=" " alt="" coords="840,221,898,221,898,227,840,227"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="888,269,1069,294"/>
+<area shape="poly" title=" " alt="" coords="820,279,874,279,874,284,820,284"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1117,269,1276,294"/>
+<area shape="poly" title=" " alt="" coords="1069,279,1104,279,1104,284,1069,284"/>
+</map>
+</div>
+<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a06bb98897b3045651528425d41fea2fb_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a06bb98897b3045651528425d41fea2fb_icgraph" alt=""/></div>
-<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a06bb98897b3045651528425d41fea2fb_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a06bb98897b3045651528425d41fea2fb_icgraph">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a7636245dbbaa5b1601a882bad37bde8e_icgraph">
+<area shape="rect" title=" " alt="" coords="677,37,844,77"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0f8f2976ab0d8f7d5ec25cdacd74afdd" title=" " alt="" coords="435,5,629,45"/>
+<area shape="poly" title=" " alt="" coords="663,46,629,42,630,36,664,41"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad9424b3eb5917025c06c13888b896acb" title=" " alt="" coords="449,69,615,109"/>
+<area shape="poly" title=" " alt="" coords="664,74,616,80,615,75,663,68"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,37,387,77"/>
+<area shape="poly" title=" " alt="" coords="421,44,387,48,387,43,420,38"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,37,172,77"/>
+<area shape="poly" title=" " alt="" coords="206,60,172,60,172,55,206,55"/>
+<area shape="poly" title=" " alt="" coords="435,78,386,72,387,66,435,73"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0f8f2976ab0d8f7d5ec25cdacd74afdd" name="a0f8f2976ab0d8f7d5ec25cdacd74afdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f8f2976ab0d8f7d5ec25cdacd74afdd">&#9670;&#160;</a></span>HandleCellDoubleClicked</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::ShortcutsDialog::HandleCellDoubleClicked </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_cgraph">
+<area shape="rect" title=" " alt="" coords="5,68,200,108"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e" title=" " alt="" coords="248,68,415,108"/>
+<area shape="poly" title=" " alt="" coords="200,85,234,85,234,91,200,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="685,5,860,45"/>
+<area shape="poly" title=" " alt="" coords="406,65,462,53,570,38,671,29,672,34,571,44,463,59,407,71"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="467,68,633,108"/>
+<area shape="poly" title=" " alt="" coords="415,85,453,85,453,91,415,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ac0e0dbc03f830ec811c824ac7b284d50" title="Assigns sequence to the shortcut identified by id." alt="" coords="463,153,637,193"/>
+<area shape="poly" title=" " alt="" coords="384,106,486,146,484,151,382,110"/>
+<area shape="poly" title=" " alt="" coords="621,65,687,47,688,52,622,71"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="685,69,860,109"/>
+<area shape="poly" title=" " alt="" coords="634,86,671,86,671,91,634,91"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="713,134,832,159"/>
+<area shape="poly" title=" " alt="" coords="637,160,699,153,700,158,638,166"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="713,183,832,209"/>
+<area shape="poly" title=" " alt="" coords="638,180,700,186,699,191,637,185"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="685,233,860,273"/>
+<area shape="poly" title=" " alt="" coords="608,191,704,226,702,231,606,196"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="908,204,1083,244"/>
+<area shape="poly" title=" " alt="" coords="860,239,894,235,895,240,861,244"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="928,269,1063,294"/>
+<area shape="poly" title=" " alt="" coords="861,262,914,268,914,274,860,267"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1155,211,1288,237"/>
+<area shape="poly" title=" " alt="" coords="1083,221,1141,221,1141,227,1083,227"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1131,269,1312,294"/>
+<area shape="poly" title=" " alt="" coords="1063,279,1116,279,1116,284,1063,284"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1360,269,1519,294"/>
+<area shape="poly" title=" " alt="" coords="1312,279,1346,279,1346,284,1312,284"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a0f8f2976ab0d8f7d5ec25cdacd74afdd_icgraph">
+<area shape="rect" title=" " alt="" coords="435,5,629,45"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,5,387,45"/>
+<area shape="poly" title=" " alt="" coords="421,28,387,28,387,23,421,23"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
+<area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad9424b3eb5917025c06c13888b896acb" name="ad9424b3eb5917025c06c13888b896acb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9424b3eb5917025c06c13888b896acb">&#9670;&#160;</a></span>HandleEditSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::ShortcutsDialog::HandleEditSelected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_cgraph">
+<area shape="rect" title=" " alt="" coords="5,68,172,108"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e" title=" " alt="" coords="220,68,387,108"/>
+<area shape="poly" title=" " alt="" coords="173,85,206,85,206,91,173,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="657,5,832,45"/>
+<area shape="poly" title=" " alt="" coords="378,65,434,53,542,38,643,29,644,34,543,44,435,59,379,71"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="439,68,605,108"/>
+<area shape="poly" title=" " alt="" coords="387,85,425,85,425,91,387,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ac0e0dbc03f830ec811c824ac7b284d50" title="Assigns sequence to the shortcut identified by id." alt="" coords="435,153,609,193"/>
+<area shape="poly" title=" " alt="" coords="356,106,458,146,456,151,354,110"/>
+<area shape="poly" title=" " alt="" coords="593,65,659,47,660,52,594,71"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="657,69,832,109"/>
+<area shape="poly" title=" " alt="" coords="606,86,643,86,643,91,606,91"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="685,134,804,159"/>
+<area shape="poly" title=" " alt="" coords="609,160,671,153,672,158,610,166"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="685,183,804,209"/>
+<area shape="poly" title=" " alt="" coords="610,180,672,186,671,191,609,185"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="657,233,832,273"/>
+<area shape="poly" title=" " alt="" coords="580,191,676,226,674,231,578,196"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="880,204,1055,244"/>
+<area shape="poly" title=" " alt="" coords="832,239,866,235,867,240,833,244"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="900,269,1035,294"/>
+<area shape="poly" title=" " alt="" coords="833,262,886,268,886,274,832,267"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1127,211,1260,237"/>
+<area shape="poly" title=" " alt="" coords="1055,221,1113,221,1113,227,1055,227"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1103,269,1284,294"/>
+<area shape="poly" title=" " alt="" coords="1035,279,1088,279,1088,284,1035,284"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1332,269,1491,294"/>
+<area shape="poly" title=" " alt="" coords="1284,279,1318,279,1318,284,1284,284"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ad9424b3eb5917025c06c13888b896acb_icgraph">
 <area shape="rect" title=" " alt="" coords="435,5,601,45"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="220,5,387,45"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,5,387,45"/>
+<area shape="poly" title=" " alt="" coords="421,28,387,28,387,23,421,23"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
+<area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac926863351202c13f1ea4317e475ea51" name="ac926863351202c13f1ea4317e475ea51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac926863351202c13f1ea4317e475ea51">&#9670;&#160;</a></span>HandlePrint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::ShortcutsDialog::HandlePrint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_ac926863351202c13f1ea4317e475ea51_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ac926863351202c13f1ea4317e475ea51_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ac926863351202c13f1ea4317e475ea51_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ac926863351202c13f1ea4317e475ea51_icgraph">
+<area shape="rect" title=" " alt="" coords="435,5,601,45"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,5,387,45"/>
+<area shape="poly" title=" " alt="" coords="421,28,387,28,387,23,421,23"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
+<area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a203811f940845fede43b71ab6dba19a8" name="a203811f940845fede43b71ab6dba19a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a203811f940845fede43b71ab6dba19a8">&#9670;&#160;</a></span>HandleResetAll</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::ShortcutsDialog::HandleResetAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_cgraph">
+<area shape="rect" title=" " alt="" coords="5,68,172,108"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="443,5,617,45"/>
+<area shape="poly" title=" " alt="" coords="163,65,220,53,327,38,429,29,429,34,328,44,220,59,164,71"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="224,68,391,108"/>
+<area shape="poly" title=" " alt="" coords="172,85,210,85,210,91,172,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a77195f6923c3690755074a3431f316b6" title="Restores every registered shortcut to its default." alt="" coords="220,132,395,172"/>
+<area shape="poly" title=" " alt="" coords="159,106,226,126,225,131,157,111"/>
+<area shape="poly" title=" " alt="" coords="378,65,444,47,446,52,380,71"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="443,69,617,109"/>
+<area shape="poly" title=" " alt="" coords="391,86,429,86,429,91,391,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="443,133,617,173"/>
+<area shape="poly" title=" " alt="" coords="395,150,429,150,429,155,395,155"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="665,104,840,144"/>
+<area shape="poly" title=" " alt="" coords="617,139,652,135,652,140,618,144"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="685,169,820,194"/>
+<area shape="poly" title=" " alt="" coords="618,162,672,168,671,174,617,167"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="912,111,1045,137"/>
+<area shape="poly" title=" " alt="" coords="840,121,898,121,898,127,840,127"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="888,169,1069,194"/>
+<area shape="poly" title=" " alt="" coords="820,179,874,179,874,184,820,184"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1117,169,1276,194"/>
+<area shape="poly" title=" " alt="" coords="1069,179,1104,179,1104,184,1069,184"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a203811f940845fede43b71ab6dba19a8_icgraph">
+<area shape="rect" title=" " alt="" coords="435,5,601,45"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,5,387,45"/>
+<area shape="poly" title=" " alt="" coords="421,28,387,28,387,23,421,23"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
+<area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a91e3ebecdfd9e6f4b96ede2b36f98acc" name="a91e3ebecdfd9e6f4b96ede2b36f98acc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91e3ebecdfd9e6f4b96ede2b36f98acc">&#9670;&#160;</a></span>HandleResetSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::ShortcutsDialog::HandleResetSelected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_cgraph">
+<area shape="rect" title=" " alt="" coords="5,68,175,108"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="445,5,620,45"/>
+<area shape="poly" title=" " alt="" coords="165,65,222,53,330,39,431,29,432,34,331,44,223,59,166,71"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="227,68,393,108"/>
+<area shape="poly" title=" " alt="" coords="175,85,213,85,213,91,175,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ae064406af71ec51c96fdf111d159338c" title="Restores the shortcut identified by id to its default." alt="" coords="223,132,397,172"/>
+<area shape="poly" title=" " alt="" coords="160,106,229,126,227,131,159,111"/>
+<area shape="poly" title=" " alt="" coords="381,65,447,47,448,52,382,71"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="445,69,620,109"/>
+<area shape="poly" title=" " alt="" coords="394,86,431,86,431,91,394,91"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="445,133,620,173"/>
+<area shape="poly" title=" " alt="" coords="398,150,432,150,432,155,398,155"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="668,104,843,144"/>
+<area shape="poly" title=" " alt="" coords="620,139,654,135,655,140,621,144"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="688,169,823,194"/>
+<area shape="poly" title=" " alt="" coords="621,162,674,168,674,174,620,167"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="915,111,1048,137"/>
+<area shape="poly" title=" " alt="" coords="843,121,901,121,901,127,843,127"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="891,169,1072,194"/>
+<area shape="poly" title=" " alt="" coords="823,179,876,179,876,184,823,184"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1120,169,1279,194"/>
+<area shape="poly" title=" " alt="" coords="1072,179,1106,179,1106,184,1072,184"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_icgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_a91e3ebecdfd9e6f4b96ede2b36f98acc_icgraph">
+<area shape="rect" title=" " alt="" coords="435,5,604,45"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,5,387,45"/>
 <area shape="poly" title=" " alt="" coords="421,28,387,28,387,23,421,23"/>
 <area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
 <area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
@@ -298,9 +715,11 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_cgraph" alt=""/></div>
 <map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,172,45"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a06bb98897b3045651528425d41fea2fb" title=" " alt="" coords="220,5,387,45"/>
-<area shape="poly" title=" " alt="" coords="173,23,206,23,206,28,173,28"/>
+<area shape="rect" title=" " alt="" coords="5,37,172,77"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="220,5,395,45"/>
+<area shape="poly" title=" " alt="" coords="172,43,206,37,207,43,173,48"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="220,69,395,109"/>
+<area shape="poly" title=" " alt="" coords="173,67,207,72,206,77,172,72"/>
 </map>
 </div>
 <div class="dynheader">
@@ -308,9 +727,25 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_icgraph" alt=""/></div>
 <map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_icgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_aa618ef2adb0b3b7abaeb3e755b376868_icgraph">
-<area shape="rect" title=" " alt="" coords="220,5,387,45"/>
-<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,5,172,45"/>
-<area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+<area shape="rect" title=" " alt="" coords="895,130,1061,170"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e" title=" " alt="" coords="679,101,845,141"/>
+<area shape="poly" title=" " alt="" coords="881,140,845,135,846,129,881,134"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0b718c54c42be766c7b927768882c7ca" title=" " alt="" coords="5,162,172,202"/>
+<area shape="poly" title=" " alt="" coords="882,174,847,181,739,204,630,219,532,224,435,219,295,209,172,195,172,190,296,204,435,214,532,219,629,214,738,199,846,176,881,168"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a203811f940845fede43b71ab6dba19a8" title=" " alt="" coords="449,165,615,205"/>
+<area shape="poly" title=" " alt="" coords="881,160,616,181,615,176,881,155"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a91e3ebecdfd9e6f4b96ede2b36f98acc" title=" " alt="" coords="677,9,847,49"/>
+<area shape="poly" title=" " alt="" coords="928,126,797,51,800,47,931,121"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0f8f2976ab0d8f7d5ec25cdacd74afdd" title=" " alt="" coords="435,101,629,141"/>
+<area shape="poly" title=" " alt="" coords="665,123,630,123,630,118,665,118"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad9424b3eb5917025c06c13888b896acb" title=" " alt="" coords="449,37,615,77"/>
+<area shape="poly" title=" " alt="" coords="676,100,604,79,605,74,677,95"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ab100b53ca90506f894d4f55cda49c5d8" title=" " alt="" coords="220,101,387,141"/>
+<area shape="poly" title=" " alt="" coords="421,123,387,123,387,118,421,118"/>
+<area shape="poly" title=" " alt="" coords="220,147,160,165,158,160,219,142"/>
+<area shape="poly" title=" " alt="" coords="448,83,376,103,375,98,446,78"/>
+<area shape="poly" title=" " alt="" coords="446,164,375,143,376,138,448,159"/>
+<area shape="poly" title=" " alt="" coords="663,14,610,9,552,9,493,14,436,27,403,42,372,62,325,103,322,99,369,57,400,37,434,22,492,9,552,3,611,4,664,9"/>
 </map>
 </div>
 
@@ -339,6 +774,62 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_cgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_cgraph" alt=""/></div>
+<map name="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_cgraph" id="ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_cgraph">
+<area shape="rect" title=" " alt="" coords="5,198,172,238"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a0f8f2976ab0d8f7d5ec25cdacd74afdd" title=" " alt="" coords="220,141,415,181"/>
+<area shape="poly" title=" " alt="" coords="168,195,223,181,225,187,170,201"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ad9424b3eb5917025c06c13888b896acb" title=" " alt="" coords="234,77,401,117"/>
+<area shape="poly" title=" " alt="" coords="113,196,161,161,219,126,234,119,237,124,221,131,164,165,116,200"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#ac926863351202c13f1ea4317e475ea51" title=" " alt="" coords="234,306,401,346"/>
+<area shape="poly" title=" " alt="" coords="127,236,221,285,252,298,250,303,219,290,124,241"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a203811f940845fede43b71ab6dba19a8" title=" " alt="" coords="464,286,631,326"/>
+<area shape="poly" title=" " alt="" coords="173,231,451,285,450,290,172,236"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a91e3ebecdfd9e6f4b96ede2b36f98acc" title=" " alt="" coords="463,197,632,237"/>
+<area shape="poly" title=" " alt="" coords="172,215,449,214,449,220,172,220"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a7636245dbbaa5b1601a882bad37bde8e" title=" " alt="" coords="464,79,631,119"/>
+<area shape="poly" title=" " alt="" coords="392,138,458,120,459,126,394,143"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a9971640cc8c6081e3b85094f5fa4d267" title=" " alt="" coords="903,198,1077,238"/>
+<area shape="poly" title=" " alt="" coords="631,86,684,85,742,89,801,100,856,122,873,137,882,153,890,169,904,184,912,189,909,193,901,188,885,172,877,155,869,140,853,127,799,105,741,94,684,90,631,92"/>
+<area shape="rect" href="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#aa618ef2adb0b3b7abaeb3e755b376868" title=" " alt="" coords="684,251,851,291"/>
+<area shape="poly" title=" " alt="" coords="576,117,732,241,728,245,572,121"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ac0e0dbc03f830ec811c824ac7b284d50" title="Assigns sequence to the shortcut identified by id." alt="" coords="680,22,855,62"/>
+<area shape="poly" title=" " alt="" coords="624,77,676,63,678,68,625,82"/>
+<area shape="poly" title=" " alt="" coords="851,249,892,239,893,244,852,254"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#aa3d97ddef5e30380489c4937f52b0e90" title="All currently registered shortcuts, in registration order." alt="" coords="903,262,1077,302"/>
+<area shape="poly" title=" " alt="" coords="851,273,889,274,889,280,851,278"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="931,5,1049,31"/>
+<area shape="poly" title=" " alt="" coords="855,30,917,23,917,28,855,35"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="931,55,1049,80"/>
+<area shape="poly" title=" " alt="" coords="855,49,917,56,917,62,855,55"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a5396873c27b99cffe58442bdc7c84e10" title=" " alt="" coords="903,134,1077,174"/>
+<area shape="poly" title=" " alt="" coords="816,60,856,78,943,125,941,130,853,83,814,64"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a70df45a6c99c33310ed753fa36b48dd9" title=" " alt="" coords="1125,106,1300,146"/>
+<area shape="poly" title=" " alt="" coords="1077,140,1112,136,1112,141,1078,146"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1145,171,1280,196"/>
+<area shape="poly" title=" " alt="" coords="1078,163,1132,170,1131,175,1077,168"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="1372,113,1505,139"/>
+<area shape="poly" title=" " alt="" coords="1300,123,1358,123,1358,129,1300,129"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1348,171,1529,196"/>
+<area shape="poly" title=" " alt="" coords="1280,181,1334,181,1334,186,1280,186"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1577,171,1736,196"/>
+<area shape="poly" title=" " alt="" coords="1529,181,1564,181,1564,186,1529,186"/>
+<area shape="poly" title=" " alt="" coords="401,95,450,96,450,101,401,100"/>
+<area shape="poly" title=" " alt="" coords="581,324,637,353,708,379,745,387,783,388,820,381,853,365,866,353,874,340,878,311,882,280,889,264,901,248,905,244,909,248,905,252,893,266,887,281,884,312,879,342,871,357,856,370,821,386,784,393,745,392,706,384,634,358,579,329"/>
+<area shape="poly" title=" " alt="" coords="630,290,670,284,671,289,631,296"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#a77195f6923c3690755074a3431f316b6" title="Restores every registered shortcut to its default." alt="" coords="680,315,855,355"/>
+<area shape="poly" title=" " alt="" coords="631,314,667,319,666,325,630,320"/>
+<area shape="poly" title=" " alt="" coords="837,313,853,301,864,287,871,273,876,244,881,215,888,199,901,184,905,180,909,184,905,188,893,202,886,216,881,245,876,275,869,290,857,305,840,317"/>
+<area shape="poly" title=" " alt="" coords="632,214,889,215,889,220,632,220"/>
+<area shape="poly" title=" " alt="" coords="629,234,674,245,673,251,628,239"/>
+<area shape="rect" href="../../db/d66/classui_1_1qt_1_1ShortcutManager.html#ae064406af71ec51c96fdf111d159338c" title="Restores the shortcut identified by id to its default." alt="" coords="680,137,855,177"/>
+<area shape="poly" title=" " alt="" coords="621,194,679,178,681,183,622,199"/>
+<area shape="poly" title=" " alt="" coords="855,153,889,153,889,158,855,158"/>
+</map>
+</div>
+<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_icgraph.png" border="0" usemap="#ad2/d1f/classui_1_1qt_1_1ShortcutsDialog_ab100b53ca90506f894d4f55cda49c5d8_icgraph" alt=""/></div>
@@ -352,6 +843,73 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae4c01af593ffcc72b314adbc1382afe6" name="ae4c01af593ffcc72b314adbc1382afe6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4c01af593ffcc72b314adbc1382afe6">&#9670;&#160;</a></span>m_editBtn</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPushButton* ui::qt::ShortcutsDialog::m_editBtn {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad8d7b853e61d73c285e123a8faac72bb" name="ad8d7b853e61d73c285e123a8faac72bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d7b853e61d73c285e123a8faac72bb">&#9670;&#160;</a></span>m_resetBtn</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPushButton* ui::qt::ShortcutsDialog::m_resetBtn {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8db481a11f6c8f08b6df0fdf44a7c97c" name="a8db481a11f6c8f08b6df0fdf44a7c97c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8db481a11f6c8f08b6df0fdf44a7c97c">&#9670;&#160;</a></span>m_rowIds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; ui::qt::ShortcutsDialog::m_rowIds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Shortcut id for each table row, parallel to m_table's rows. Rows for non-editable reference entries (e.g. standard "Copy") hold an empty id. </p>
+
+</div>
+</div>
 <a id="a2eef223b659de3ab653dac6963740aea" name="a2eef223b659de3ab653dac6963740aea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2eef223b659de3ab653dac6963740aea">&#9670;&#160;</a></span>m_table</h2>
 

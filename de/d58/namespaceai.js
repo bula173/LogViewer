@@ -19,6 +19,7 @@ var namespaceai =
     [ "AIServiceFactory", "d9/deb/classai_1_1AIServiceFactory.html", "d9/deb/classai_1_1AIServiceFactory" ],
     [ "AIServiceWrapper", "df/dca/classai_1_1AIServiceWrapper.html", "df/dca/classai_1_1AIServiceWrapper" ],
     [ "AnthropicClient", "dc/d89/classai_1_1AnthropicClient.html", "dc/d89/classai_1_1AnthropicClient" ],
+    [ "Config", "db/de8/structai_1_1Config.html", "db/de8/structai_1_1Config" ],
     [ "DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", "d5/d23/structai_1_1DirectionPattern" ],
     [ "GeminiClient", "d7/d05/classai_1_1GeminiClient.html", "d7/d05/classai_1_1GeminiClient" ],
     [ "GemmaActorResult", "d4/d8f/structai_1_1GemmaActorResult.html", "d4/d8f/structai_1_1GemmaActorResult" ],
@@ -36,6 +37,7 @@ var namespaceai =
       [ "OpenAI", "de/d58/namespaceai.html#a7a7a34c0e22549675ce3e3bab2196e46a0523b13262b12c215d8009938f5c14f1", null ],
       [ "Custom", "de/d58/namespaceai.html#a7a7a34c0e22549675ce3e3bab2196e46a90589c47f06eb971d548591f23c285af", null ]
     ] ],
+    [ "GetConfig", "de/d58/namespaceai.html#a64eb1e0bb6d7dc6a648a67daf9e7b02d", null ],
     [ "if", "de/d58/namespaceai.html#a513a58b27e6a9915ccf2c9798d54f09c", null ],
     [ "if", "de/d58/namespaceai.html#ab404ddd2bbd87952efc570a709c6d53b", null ],
     [ "PLUGIN_LOG", "de/d58/namespaceai.html#a25bc5078844e20ff8cccade79507099c", null ],

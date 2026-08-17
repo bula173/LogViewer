@@ -14,7 +14,7 @@ var dir_c3d382106f44a2c7de54a61a6e81f45c =
     [ "PluginManagerDialog.hpp", "dd/d2a/PluginManagerDialog_8hpp.html", "dd/d2a/PluginManagerDialog_8hpp" ],
     [ "PreferencesDialog.cpp", "de/d88/PreferencesDialog_8cpp.html", "de/d88/PreferencesDialog_8cpp" ],
     [ "PreferencesDialog.hpp", "d2/d3b/PreferencesDialog_8hpp.html", "d2/d3b/PreferencesDialog_8hpp" ],
-    [ "ShortcutsDialog.cpp", "d6/d7d/ShortcutsDialog_8cpp.html", null ],
+    [ "ShortcutsDialog.cpp", "d6/d7d/ShortcutsDialog_8cpp.html", "d6/d7d/ShortcutsDialog_8cpp" ],
     [ "ShortcutsDialog.hpp", "db/df6/ShortcutsDialog_8hpp.html", "db/df6/ShortcutsDialog_8hpp" ],
     [ "StructuredConfigDialog.cpp", "d8/d1a/StructuredConfigDialog_8cpp.html", null ],
     [ "StructuredConfigDialog.hpp", "da/dcc/StructuredConfigDialog_8hpp.html", "da/dcc/StructuredConfigDialog_8hpp" ],

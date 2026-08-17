@@ -19,6 +19,8 @@ var dir_7b77f44ce27838791a51e832875d93d4 =
     [ "SearchEngine.hpp", "d9/d8e/SearchEngine_8hpp.html", "d9/d8e/SearchEngine_8hpp" ],
     [ "SessionManager.cpp", "df/d32/SessionManager_8cpp.html", "df/d32/SessionManager_8cpp" ],
     [ "SessionManager.hpp", "da/d73/SessionManager_8hpp.html", "da/d73/SessionManager_8hpp" ],
+    [ "ShortcutManager.cpp", "d9/dd4/ShortcutManager_8cpp.html", null ],
+    [ "ShortcutManager.hpp", "d3/d7e/ShortcutManager_8hpp.html", "d3/d7e/ShortcutManager_8hpp" ],
     [ "ThemeManager.cpp", "d9/dfc/ThemeManager_8cpp.html", null ],
     [ "ThemeManager.hpp", "d8/ddf/ThemeManager_8hpp.html", "d8/ddf/ThemeManager_8hpp" ],
     [ "ThemeSwitcher.hpp", "d8/d5b/ThemeSwitcher_8hpp.html", "d8/d5b/ThemeSwitcher_8hpp" ],

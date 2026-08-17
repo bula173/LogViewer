@@ -9,6 +9,9 @@ var namespaceui_1_1qt =
       [ "kColumnFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190", null ],
       [ "kParameterFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf", null ]
     ] ],
+    [ "anonymous_namespace{FilterProfilesPanel.cpp}", "da/da9/namespaceui_1_1qt_1_1anonymous__namespace_02FilterProfilesPanel_8cpp_03.html", [
+      [ "ParseProfilesArray", "da/da9/namespaceui_1_1qt_1_1anonymous__namespace_02FilterProfilesPanel_8cpp_03.html#a290133ae7bac35d91f31081c22d4748a", null ]
+    ] ],
     [ "anonymous_namespace{FiltersPanel.cpp}", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html", [
       [ "kEnabledColumn", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#ad722549d69b7f1543b506ba7ac39eb69", null ],
       [ "kNameColumn", "d8/dda/namespaceui_1_1qt_1_1anonymous__namespace_02FiltersPanel_8cpp_03.html#af7c2a59790efbde0976900d4d9e3de72", null ],
@@ -42,6 +45,9 @@ var namespaceui_1_1qt =
       [ "kHeaderY", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a2f13988c30fc1555733ba5353587e44a", null ],
       [ "kLabelOffY", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a2aecb5c10c4d638336a470b129d8bffb", null ],
       [ "kRowH", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a1f84f09f51607df68427a3b417661486", null ]
+    ] ],
+    [ "anonymous_namespace{ShortcutsDialog.cpp}", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html", [
+      [ "CaptureShortcut", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html#aefc30fa7503a19121e6907ccba2fb515", null ]
     ] ],
     [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" ],
     [ "ExportManager", "dd/d0e/namespaceui_1_1qt_1_1ExportManager.html", "dd/d0e/namespaceui_1_1qt_1_1ExportManager" ],
@@ -100,6 +106,8 @@ var namespaceui_1_1qt =
     [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
     [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],
     [ "SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel" ],
+    [ "ShortcutInfo", "d3/da1/structui_1_1qt_1_1ShortcutInfo.html", "d3/da1/structui_1_1qt_1_1ShortcutInfo" ],
+    [ "ShortcutManager", "db/d66/classui_1_1qt_1_1ShortcutManager.html", "db/d66/classui_1_1qt_1_1ShortcutManager" ],
     [ "ShortcutsDialog", "d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html", "d2/d1f/classui_1_1qt_1_1ShortcutsDialog" ],
     [ "SideBySidePanel", "df/dbf/classui_1_1qt_1_1SideBySidePanel.html", "df/dbf/classui_1_1qt_1_1SideBySidePanel" ],
     [ "SignalPlotPanel", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html", "d5/d5c/classui_1_1qt_1_1SignalPlotPanel" ],
@@ -117,6 +125,7 @@ var namespaceui_1_1qt =
     [ "UnifiedSearchBar", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html", "d4/da3/classui_1_1qt_1_1UnifiedSearchBar" ],
     [ "UpdateChecker", "de/d35/classui_1_1qt_1_1UpdateChecker.html", "de/d35/classui_1_1qt_1_1UpdateChecker" ],
     [ "UpdateDialog", "d5/d32/classui_1_1qt_1_1UpdateDialog.html", "d5/d32/classui_1_1qt_1_1UpdateDialog" ],
+    [ "ShortcutResult", "d6/d40/namespaceui_1_1qt.html#aa3d2c05ca70db059b3052f9f4d64a4a8", null ],
     [ "BuildFrameSignalTree", "d6/d40/namespaceui_1_1qt.html#ad28e1eb2bcce3d40559a6be650d01433", null ],
     [ "CsvEscape", "d6/d40/namespaceui_1_1qt.html#af83e24cc7b34c08e2fc03b55c2acf929", null ],
     [ "FormatCanId", "d6/d40/namespaceui_1_1qt.html#a107ef7c76c64a0e5ce72bc9c060288e3", null ],

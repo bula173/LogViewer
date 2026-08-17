@@ -48,9 +48,10 @@ var searchData=
   ['_7eopenaiclient_45',['~OpenAIClient',['../d8/d14/classai_1_1OpenAIClient.html#a52b84867062d6cdddd1429b61d5442e4',1,'ai::OpenAIClient']]],
   ['_7epluginmanager_46',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
   ['_7epreferencesdialog_47',['~PreferencesDialog',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html#af93f614586954bf54009832fbf845933',1,'ui::qt::PreferencesDialog']]],
-  ['_7eshortcutsdialog_48',['~ShortcutsDialog',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#abd98b169ae9b4c66ab471424334b822d',1,'ui::qt::ShortcutsDialog']]],
-  ['_7esidebysidepanel_49',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
-  ['_7etabbadgemanager_50',['~TabBadgeManager',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#adbeb681af60720add6674345696bada4',1,'ui::qt::TabBadgeManager']]],
-  ['_7eunifiedsearchbar_51',['~UnifiedSearchBar',['../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#a5ecb799695f3adbc075d8df7c731c7b3',1,'ui::qt::UnifiedSearchBar']]],
-  ['_7exmlparser_52',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
+  ['_7eshortcutmanager_48',['~ShortcutManager',['../db/d66/classui_1_1qt_1_1ShortcutManager.html#a070acd6f5452bec05081785af809fa5e',1,'ui::qt::ShortcutManager']]],
+  ['_7eshortcutsdialog_49',['~ShortcutsDialog',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#abd98b169ae9b4c66ab471424334b822d',1,'ui::qt::ShortcutsDialog']]],
+  ['_7esidebysidepanel_50',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
+  ['_7etabbadgemanager_51',['~TabBadgeManager',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#adbeb681af60720add6674345696bada4',1,'ui::qt::TabBadgeManager']]],
+  ['_7eunifiedsearchbar_52',['~UnifiedSearchBar',['../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#a5ecb799695f3adbc075d8df7c731c7b3',1,'ui::qt::UnifiedSearchBar']]],
+  ['_7exmlparser_53',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
 ];

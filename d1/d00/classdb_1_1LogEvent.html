@@ -93,7 +93,6 @@ $(document).ready(function(){initNavTree('d1/d00/classdb_1_1LogEvent.html','../.
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="../../d7/ddd/classdb_1_1LogEvent-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">db::LogEvent Class Reference</div></div>
@@ -109,15 +108,13 @@ Collaboration diagram for db::LogEvent:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/d8d/classdb_1_1LogEvent__coll__graph.png" border="0" usemap="#adb_1_1LogEvent_coll__map" alt="Collaboration graph"/></div>
 <map name="adb_1_1LogEvent_coll__map" id="adb_1_1LogEvent_coll__map">
-<area shape="rect" title="Represents a single, structured log event with key&#45;value data." alt="" coords="169,148,323,453"/>
+<area shape="rect" title="Represents a single, structured log event with key&#45;value data." alt="" coords="87,148,221,433"/>
 <area shape="rect" title=" " alt="" coords="5,13,36,78"/>
-<area shape="poly" title=" " alt="" coords="38,67,51,84,160,207,156,210,47,87,34,71"/>
+<area shape="poly" title=" " alt="" coords="39,74,82,152,77,155,34,76"/>
 <area shape="rect" title=" " alt="" coords="61,5,247,85"/>
-<area shape="poly" title=" " alt="" coords="171,85,188,131,183,133,166,87"/>
-<area shape="rect" title=" " alt="" coords="272,5,423,85"/>
-<area shape="poly" title=" " alt="" coords="334,87,315,134,310,132,329,85"/>
-<area shape="rect" title=" " alt="" coords="454,13,505,78"/>
-<area shape="poly" title=" " alt="" coords="466,80,436,126,388,179,337,228,333,224,384,176,432,122,461,77"/>
+<area shape="poly" title=" " alt="" coords="157,86,157,132,151,132,151,86"/>
+<area shape="rect" title=" " alt="" coords="271,13,322,78"/>
+<area shape="poly" title=" " alt="" coords="287,79,266,125,232,182,228,179,261,123,282,77"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -126,9 +123,6 @@ Public Types</h2></td></tr>
 <tr class="memitem:affe5a0ef68b68583c1c7e3e440fa12c2" id="r_affe5a0ef68b68583c1c7e3e440fa12c2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">EventItems</a> = std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;</td></tr>
 <tr class="memdesc:affe5a0ef68b68583c1c7e3e440fa12c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">A collection of key-value pairs representing event data (eventFieldName, data).  <br /></td></tr>
 <tr class="separator:affe5a0ef68b68583c1c7e3e440fa12c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e7805adc68ccddf1882cde539e1799e" id="r_a0e7805adc68ccddf1882cde539e1799e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e">LookupIndex</a> = std::unordered_map&lt; std::string, size_t &gt;</td></tr>
-<tr class="memdesc:a0e7805adc68ccddf1882cde539e1799e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fast lookup index for key-value pairs.  <br /></td></tr>
-<tr class="separator:a0e7805adc68ccddf1882cde539e1799e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a016c0cae9d7309e200fba3aba16be2ab" id="r_a016c0cae9d7309e200fba3aba16be2ab"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a016c0cae9d7309e200fba3aba16be2ab">EventItemsIterator</a> = std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;::iterator</td></tr>
 <tr class="memdesc:a016c0cae9d7309e200fba3aba16be2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterator type for traversing event items.  <br /></td></tr>
 <tr class="separator:a016c0cae9d7309e200fba3aba16be2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,12 +171,6 @@ requires <a class="el" href="../../de/d12/conceptutil_1_1Constructible.html">uti
 <tr class="memdesc:a6ed745251bf307ebb51037b731bb3662"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the source identifier for this event.  <br /></td></tr>
 <tr class="separator:a6ed745251bf307ebb51037b731bb3662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:aff92a0973060a3990f6fbbadbc147b31" id="r_aff92a0973060a3990f6fbbadbc147b31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#aff92a0973060a3990f6fbbadbc147b31">buildLookupIndex</a> ()</td></tr>
-<tr class="memdesc:aff92a0973060a3990f6fbbadbc147b31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the fast lookup index from the event items.  <br /></td></tr>
-<tr class="separator:aff92a0973060a3990f6fbbadbc147b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aaf80f7bbb57cc917517704db840e3d81" id="r_aaf80f7bbb57cc917517704db840e3d81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#aaf80f7bbb57cc917517704db840e3d81">m_id</a></td></tr>
@@ -191,9 +179,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a20a21824db803b81042f7fec1bf16a39" id="r_a20a21824db803b81042f7fec1bf16a39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">EventItems</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a20a21824db803b81042f7fec1bf16a39">m_eventItems</a></td></tr>
 <tr class="memdesc:a20a21824db803b81042f7fec1bf16a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The structured data of the event.  <br /></td></tr>
 <tr class="separator:a20a21824db803b81042f7fec1bf16a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa721421c6acd265007180d0c02d03cb5" id="r_aa721421c6acd265007180d0c02d03cb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e">LookupIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#aa721421c6acd265007180d0c02d03cb5">m_lookupIndex</a></td></tr>
-<tr class="memdesc:aa721421c6acd265007180d0c02d03cb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fast lookup index for keys.  <br /></td></tr>
-<tr class="separator:aa721421c6acd265007180d0c02d03cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32ded1250910fcd9f7aebd1e0bae599e" id="r_a32ded1250910fcd9f7aebd1e0bae599e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a32ded1250910fcd9f7aebd1e0bae599e">m_source</a></td></tr>
 <tr class="memdesc:a32ded1250910fcd9f7aebd1e0bae599e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source identifier for multi-file merge.  <br /></td></tr>
 <tr class="separator:a32ded1250910fcd9f7aebd1e0bae599e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,14 +187,13 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>Represents a single, structured log event with key-value data. </p>
 <p>A <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> encapsulates a log entry as a collection of key-value pairs, providing efficient access to structured log data. Each event has a unique identifier and contains metadata such as timestamps, severity levels, and custom attributes.</p>
 <dl class="section user"><dt>Design Philosophy</dt><dd><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html" title="Represents a single, structured log event with key-value data.">LogEvent</a> is optimized for:<ul>
-<li>Efficient key-value lookups via internal hash index</li>
 <li>Memory efficiency through move semantics and perfect forwarding</li>
 <li>Integration with filtering and display systems</li>
 <li>Support for multi-source event merging with original ID tracking</li>
 </ul>
 </dd></dl>
 <dl class="section user"><dt>Key Features</dt><dd><ul>
-<li>Fast key-value lookup: O(1) amortized via cached LookupIndex</li>
+<li>Key-value lookup: O(n) linear scan over a typically small field list — deliberately not a per-event hash index (see <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items.">findByKey()</a>)</li>
 <li>Multiple source tracking: Identifies events from different log files</li>
 <li>Original ID preservation: Retains pre-merge IDs for traceability</li>
 <li>Flexible construction: Supports initializer lists and perfect forwarding</li>
@@ -228,7 +212,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Accessing data</span></div>
 <div class="line">std::string timestamp = <span class="keyword">event</span>.<a class="code hl_function" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7">findByKey</a>(<span class="stringliteral">&quot;timestamp&quot;</span>);</div>
 <div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;Level: &quot;</span> &lt;&lt; <span class="keyword">event</span>.findByKey(<span class="stringliteral">&quot;level&quot;</span>) &lt;&lt; std::endl;</div>
-<div class="ttc" id="aclassdb_1_1LogEvent_html"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a></div><div class="ttdoc">Represents a single, structured log event with key-value data.</div><div class="ttdef"><b>Definition</b> LogEvent.hpp:98</div></div>
+<div class="ttc" id="aclassdb_1_1LogEvent_html"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a></div><div class="ttdoc">Represents a single, structured log event with key-value data.</div><div class="ttdef"><b>Definition</b> LogEvent.hpp:97</div></div>
 <div class="ttc" id="aclassdb_1_1LogEvent_html_af4455982dc04b3468bacf909c46c60a7"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7">db::LogEvent::findByKey</a></div><div class="ttdeci">const std::string findByKey(std::string_view key) const</div><div class="ttdoc">Finds a value by its key in the event's items.</div><div class="ttdef"><b>Definition</b> LogEvent.cpp:25</div></div>
 </div><!-- fragment --><p><b>Searching for values:</b> </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (!event.findByKey(<span class="stringliteral">&quot;error_code&quot;</span>).empty()) {</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Error code: &quot;</span> &lt;&lt; <span class="keyword">event</span>.findByKey(<span class="stringliteral">&quot;error_code&quot;</span>) &lt;&lt; std::endl;</div>
@@ -241,7 +225,7 @@ Private Attributes</h2></td></tr>
 <div class="line">original_event.<a class="code hl_function" href="../../d1/d00/classdb_1_1LogEvent.html#afcecb89a1078000f36b7a70e10fd2056">SetOriginalId</a>(1);  <span class="comment">// Track original ID</span></div>
 <div class="line">original_event.SetId(100);        <span class="comment">// Assign merged ID</span></div>
 <div class="line">original_event.SetSource(<span class="stringliteral">&quot;log_file_1.txt&quot;</span>);  <span class="comment">// Track source</span></div>
-<div class="ttc" id="aclassdb_1_1LogEvent_html_afcecb89a1078000f36b7a70e10fd2056"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html#afcecb89a1078000f36b7a70e10fd2056">db::LogEvent::SetOriginalId</a></div><div class="ttdeci">void SetOriginalId(int originalId)</div><div class="ttdoc">Sets the original ID before merge (stores as event data)</div><div class="ttdef"><b>Definition</b> LogEvent.cpp:93</div></div>
+<div class="ttc" id="aclassdb_1_1LogEvent_html_afcecb89a1078000f36b7a70e10fd2056"><div class="ttname"><a href="../../d1/d00/classdb_1_1LogEvent.html#afcecb89a1078000f36b7a70e10fd2056">db::LogEvent::SetOriginalId</a></div><div class="ttdeci">void SetOriginalId(int originalId)</div><div class="ttdoc">Sets the original ID before merge (stores as event data)</div><div class="ttdef"><b>Definition</b> LogEvent.cpp:72</div></div>
 </div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html" title="High-performance, thread-safe container for managing large collections of LogEvent objects.">EventsContainer</a> for thread-safe collection management </dd>
 <dd>
 FilterManager for filtering events based on key-value data </dd></dl>
@@ -291,22 +275,6 @@ FilterManager for filtering events based on key-value data </dd></dl>
 </div><div class="memdoc">
 
 <p>Iterator type for traversing event items. </p>
-
-</div>
-</div>
-<a id="a0e7805adc68ccddf1882cde539e1799e" name="a0e7805adc68ccddf1882cde539e1799e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e7805adc68ccddf1882cde539e1799e">&#9670;&#160;</a></span>LookupIndex</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e">db::LogEvent::LookupIndex</a> =  std::unordered_map&lt;std::string, size_t&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Fast lookup index for key-value pairs. </p>
 
 </div>
 </div>
@@ -372,16 +340,6 @@ requires <a class="el" href="../../de/d12/conceptutil_1_1Constructible.html">uti
 <div class="line"><a class="code hl_class" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> event(456, {{<span class="stringliteral">&quot;key&quot;</span>, <span class="stringliteral">&quot;value&quot;</span>}});</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section see"><dt>See also</dt><dd>LogEvent(int, std::initializer_list) </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d1/d00/classdb_1_1LogEvent_a42371b66329bfcdd87e354993fc0b871_cgraph.png" border="0" usemap="#ad1/d00/classdb_1_1LogEvent_a42371b66329bfcdd87e354993fc0b871_cgraph" alt=""/></div>
-<map name="ad1/d00/classdb_1_1LogEvent_a42371b66329bfcdd87e354993fc0b871_cgraph" id="ad1/d00/classdb_1_1LogEvent_a42371b66329bfcdd87e354993fc0b871_cgraph">
-<area shape="rect" title="Template constructor with perfect forwarding." alt="" coords="5,13,180,38"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#aff92a0973060a3990f6fbbadbc147b31" title="Builds the fast lookup index from the event items." alt="" coords="228,5,420,45"/>
-<area shape="poly" title=" " alt="" coords="180,23,214,23,214,28,180,28"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -430,61 +388,10 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><a class="code hl_class" href="../../d1/d00/classdb_1_1LogEvent.html">LogEvent</a> event(1, {{<span class="stringliteral">&quot;timestamp&quot;</span>, <span class="stringliteral">&quot;2025-01-01&quot;</span>}, {<span class="stringliteral">&quot;type&quot;</span>, <span class="stringliteral">&quot;INFO&quot;</span>}});</div>
 </div><!-- fragment --> </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d1/d00/classdb_1_1LogEvent_ade2cbe216c097884b6b78191db2a0865_cgraph.png" border="0" usemap="#ad1/d00/classdb_1_1LogEvent_ade2cbe216c097884b6b78191db2a0865_cgraph" alt=""/></div>
-<map name="ad1/d00/classdb_1_1LogEvent_ade2cbe216c097884b6b78191db2a0865_cgraph" id="ad1/d00/classdb_1_1LogEvent_ade2cbe216c097884b6b78191db2a0865_cgraph">
-<area shape="rect" title="Constructs a LogEvent from an initializer list." alt="" coords="5,13,180,38"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#aff92a0973060a3990f6fbbadbc147b31" title="Builds the fast lookup index from the event items." alt="" coords="228,5,420,45"/>
-<area shape="poly" title=" " alt="" coords="180,23,214,23,214,28,180,28"/>
-</map>
-</div>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aff92a0973060a3990f6fbbadbc147b31" name="aff92a0973060a3990f6fbbadbc147b31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff92a0973060a3990f6fbbadbc147b31">&#9670;&#160;</a></span>buildLookupIndex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void db::LogEvent::buildLookupIndex </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Builds the fast lookup index from the event items. </p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d1/d00/classdb_1_1LogEvent_aff92a0973060a3990f6fbbadbc147b31_icgraph.png" border="0" usemap="#ad1/d00/classdb_1_1LogEvent_aff92a0973060a3990f6fbbadbc147b31_icgraph" alt=""/></div>
-<map name="ad1/d00/classdb_1_1LogEvent_aff92a0973060a3990f6fbbadbc147b31_icgraph" id="ad1/d00/classdb_1_1LogEvent_aff92a0973060a3990f6fbbadbc147b31_icgraph">
-<area shape="rect" title="Builds the fast lookup index from the event items." alt="" coords="252,47,444,87"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#a42371b66329bfcdd87e354993fc0b871" title="Template constructor with perfect forwarding." alt="" coords="17,5,192,31"/>
-<area shape="poly" title=" " alt="" coords="238,48,168,33,169,28,239,43"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#ade2cbe216c097884b6b78191db2a0865" title="Constructs a LogEvent from an initializer list." alt="" coords="17,55,192,80"/>
-<area shape="poly" title=" " alt="" coords="238,70,192,70,192,65,238,65"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#afcecb89a1078000f36b7a70e10fd2056" title="Sets the original ID before merge (stores as event data)" alt="" coords="5,104,204,129"/>
-<area shape="poly" title=" " alt="" coords="239,92,169,107,168,101,238,87"/>
-</map>
-</div>
-
-</div>
-</div>
 <a id="a8eb2e3b1aa43ad40d4c8db9861b0b542" name="a8eb2e3b1aa43ad40d4c8db9861b0b542"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8eb2e3b1aa43ad40d4c8db9861b0b542">&#9670;&#160;</a></span>findAllByKey()</h2>
 
@@ -532,7 +439,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Finds a value by its key in the event's items. </p>
-<p>Performs a fast lookup using the internal hash index to retrieve the value associated with the first occurrence of a key. If the key is not found, returns an empty string.</p>
+<p>Performs a linear scan to retrieve the value associated with the first occurrence of a key. If the key is not found, returns an empty string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key to search for (e.g., "timestamp", "level", "message") </td></tr>
@@ -540,9 +447,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>const std::string The corresponding value, or empty string if not found</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Returns the first matching value if duplicate keys exist in event data </dd>
-<dd>
-The lookup is fast due to internal caching (O(1) average case)</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Returns the first matching value if duplicate keys exist in event data</dd></dl>
 <dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><a class="code hl_class" href="../../d1/d00/classdb_1_1LogEvent.html">db::LogEvent</a> event(1, {</div>
 <div class="line">    {<span class="stringliteral">&quot;timestamp&quot;</span>, <span class="stringliteral">&quot;2025-03-15&quot;</span>},</div>
 <div class="line">    {<span class="stringliteral">&quot;level&quot;</span>, <span class="stringliteral">&quot;INFO&quot;</span>},</div>
@@ -555,7 +460,7 @@ The lookup is fast due to internal caching (O(1) average case)</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a8eb2e3b1aa43ad40d4c8db9861b0b542" title="Finds all values by its key in the event&#39;s items.">findAllByKey()</a> for retrieving all values with the same key </dd>
 <dd>
 <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a3127be5b344071f7b8d1cd0f55f8f8e5" title="Finds an iterator to the first item matching the search term.">findInEvent()</a> for substring search in both keys and values</dd></dl>
-<dl class="section user"><dt>Complexity</dt><dd>O(1) average case (hash table lookup) </dd></dl>
+<dl class="section user"><dt>Complexity</dt><dd>O(n) where n is the number of fields in the event. Deliberately not backed by a per-event hash index: with typically a handful to a few dozen fields, a linear scan over a contiguous vector is both cheaper to build (no per-event heap allocations) and faster to query in practice than an unordered_map at this scale — and at 100M+ events, skipping that per-event hash table avoids the dominant memory cost. </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1129,15 +1034,13 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d00/classdb_1_1LogEvent_afcecb89a1078000f36b7a70e10fd2056_cgraph.png" border="0" usemap="#ad1/d00/classdb_1_1LogEvent_afcecb89a1078000f36b7a70e10fd2056_cgraph" alt=""/></div>
 <map name="ad1/d00/classdb_1_1LogEvent_afcecb89a1078000f36b7a70e10fd2056_cgraph" id="ad1/d00/classdb_1_1LogEvent_afcecb89a1078000f36b7a70e10fd2056_cgraph">
-<area shape="rect" title="Sets the original ID before merge (stores as event data)" alt="" coords="5,42,204,67"/>
-<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#aff92a0973060a3990f6fbbadbc147b31" title="Builds the fast lookup index from the event items." alt="" coords="252,5,444,45"/>
-<area shape="poly" title=" " alt="" coords="204,40,238,36,239,41,205,45"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="275,70,421,95"/>
-<area shape="poly" title=" " alt="" coords="205,63,262,70,262,75,204,69"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="492,70,673,95"/>
-<area shape="poly" title=" " alt="" coords="421,80,478,80,478,85,421,85"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="721,70,880,95"/>
-<area shape="poly" title=" " alt="" coords="673,80,708,80,708,85,673,85"/>
+<area shape="rect" title="Sets the original ID before merge (stores as event data)" alt="" coords="5,5,204,31"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="252,5,397,31"/>
+<area shape="poly" title=" " alt="" coords="204,15,238,15,238,21,204,21"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="445,5,627,31"/>
+<area shape="poly" title=" " alt="" coords="398,15,432,15,432,21,398,21"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="675,5,833,31"/>
+<area shape="poly" title=" " alt="" coords="627,15,661,15,661,21,627,21"/>
 </map>
 </div>
 
@@ -1223,30 +1126,6 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Unique event identifier. </p>
-
-</div>
-</div>
-<a id="aa721421c6acd265007180d0c02d03cb5" name="aa721421c6acd265007180d0c02d03cb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa721421c6acd265007180d0c02d03cb5">&#9670;&#160;</a></span>m_lookupIndex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#a0e7805adc68ccddf1882cde539e1799e">LookupIndex</a> db::LogEvent::m_lookupIndex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Fast lookup index for keys. </p>
 
 </div>
 </div>
