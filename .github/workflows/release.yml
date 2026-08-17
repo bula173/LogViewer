@@ -113,6 +113,13 @@ jobs:
         run: cmake --build "$BUILD_DIR" --parallel
 
       - name: Run tests
+        env:
+          # Several tests construct a real QApplication/QWidget (e.g.
+          # DashboardPanelTest, FilterProfilesPanelTest). Linux CI runners
+          # have no X11 display, so the default "xcb" platform plugin
+          # aborts the whole test binary on the first such test. QPA's
+          # "offscreen" platform needs no display server.
+          QT_QPA_PLATFORM: offscreen
         run: |
           "$BUILD_DIR/tests/bin/LogViewer_tests" \
             --gtest_output="xml:dist/test-results/results.xml"

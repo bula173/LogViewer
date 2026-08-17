@@ -196,6 +196,13 @@ jobs:
 
       - name: Run tests
         id: run-tests
+        env:
+          # Several tests construct a real QApplication/QWidget (e.g.
+          # DashboardPanelTest, FilterProfilesPanelTest). Linux CI runners
+          # have no X11 display, so the default "xcb" platform plugin
+          # aborts the whole test binary on the first such test. QPA's
+          # "offscreen" platform needs no display server.
+          QT_QPA_PLATFORM: offscreen
         run: |
           TEST_BIN="${{ env.BUILD_DIR }}/tests/bin/LogViewer_tests"
           if [ ! -f "$TEST_BIN" ]; then
