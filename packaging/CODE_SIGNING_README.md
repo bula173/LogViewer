@@ -46,6 +46,15 @@ Apple Developer Program membership.
 
 #### Windows signing
 
+**Status: deployed (self-signed).** `WINDOWS_CERTIFICATE`/`WINDOWS_CERTIFICATE_PWD`
+are set on this repo with a self-signed certificate (`CN=LogViewer`, RSA 2048,
+3-year validity). Windows release builds sign automatically. As covered above,
+this gives a named publisher and tamper-evidence, not a SmartScreen-trusted
+badge — replace with a commercial certificate for that. The `.pfx` and its
+password are backed up locally at `~/Documents/LogViewer-CodeSigning/` (not
+committed to the repo) — keep that backup private and consider moving it to
+a password manager instead of a plain folder.
+
 | Secret | Description |
 |---|---|
 | `WINDOWS_CERTIFICATE` | Base64-encoded code-signing `.pfx` certificate |
