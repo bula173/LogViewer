@@ -1,13 +1,16 @@
 # LogViewer Development Roadmap
 
-**Current Version:** 1.11.0 (Released 2026-08-15)  
-**Last Updated:** 2026-08-15
+**Current Version:** 1.12.0 (Released 2026-08-17)  
+**Last Updated:** 2026-08-17
 
 ---
 
-## 📊 Current State (v1.11.0, released)
+## 📊 Current State (v1.12.0, released)
 
 ### Recent Achievements ✅
+- **Fixed a critical crash-on-row-click bug** — the AI plugin's local config accidentally shared a symbol name with the app's real config across the dylib boundary (ODR violation), corrupting `FieldTranslator`'s internal map
+- **Dashboard event breakdown now respects the configured type filter field** instead of a hardcoded "level"/ERROR-WARN-INFO-DEBUG assumption
+- **Windows self-signed code signing deployed** — release builds get a named publisher and tamper-evidence
 - **Performance: regex filter caching, streaming JSON load, LogEvent index removal** — see Performance Optimizations backlog item for details
 - **Customizable keyboard shortcuts** — Help → Keyboard Shortcuts is now generated from a live registry (no more stale hand-maintained list), supports rebinding/reset, and prints a cheat sheet
 - **Export/Import Filter Profiles** — share `.filters.json` profiles between teammates, with QTest-driven automated coverage
@@ -339,6 +342,7 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
+| 1.12.0 | 2026-08-17 | Filter profile export/import, customizable keyboard shortcuts, perf (regex cache, streaming JSON, LogEvent index removal), critical AI-plugin-config crash fix, Windows self-signed code signing |
 | 1.11.0 | 2026-08-15 | Dashboard tab, unified search bar, weak_ptr observer pattern, SearchEngine/build-system/CI fixes |
 | 1.10.0 | 2026-07-31 | Unified Preferences, real Gemma/llama.cpp inference, theme customization, notifications, report generation |
 | 1.7.2 | 2026-06-02 | Actor discovery, sequence diagrams, startup update check |
