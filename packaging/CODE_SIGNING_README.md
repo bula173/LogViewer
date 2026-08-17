@@ -34,6 +34,16 @@ base64 -i DeveloperID.p12 | pbcopy   # copies base64 to clipboard
 **Notarization** is only attempted when `APPLE_ID` is set and requires a valid
 Developer ID Application certificate (not just a self-signed one).
 
+**Without `MACOS_CERTIFICATE` set**, the build falls back to ad-hoc signing
+(`codesign --sign -`) — this keeps the bundle's own signature internally
+consistent (useful after `macdeployqt` copies in Qt frameworks) but does
+**not** satisfy Gatekeeper. Downloaded ad-hoc-signed and unsigned builds show
+the same "Apple could not verify... is free of malware" prompt; only a real
+Developer ID certificate plus notarization removes it. There is no
+self-signed-certificate equivalent of the Windows path on macOS — Gatekeeper
+only trusts certificates chained to Apple's own CA, which requires a paid
+Apple Developer Program membership.
+
 #### Windows signing
 
 | Secret | Description |
@@ -55,52 +65,61 @@ secrets are present. SHA-256 digest + RFC 3161 timestamping via DigiCert is used
 
 **Self-signed certificates are for DEVELOPMENT and TESTING ONLY!**
 
-- They will show security warnings to end users
-- They provide NO security benefits for distribution
-- For production software, use certificates from trusted Certificate Authorities
+- Windows SmartScreen is reputation-based, not signature-based — a self-signed
+  certificate does **not** stop the "Windows protected your PC" prompt on
+  first downloads (only a paid EV certificate gets instant reputation; a
+  standard paid certificate still has to build reputation over time). What it
+  *does* give you: a named publisher instead of "Unknown publisher", and
+  tamper-evidence (the signature breaks if the binary is modified after
+  signing).
+- For production software, use a certificate from a trusted Certificate
+  Authority.
 
 ## Quick Start
 
 ### 1. Prerequisites
 
-Install Windows SDK (includes `makecert.exe` and `pvk2pfx.exe`):
-- Download from: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
-- Or install Visual Studio with C++ development tools
+None beyond PowerShell (built into Windows 10/11). The cert-generation script
+uses the built-in `New-SelfSignedCertificate` cmdlet — no Windows SDK download
+needed. (An older version of this script used `makecert.exe`/`pvk2pfx.exe`,
+which Microsoft has since removed from current Windows SDK releases.)
 
 ### 2. Create Self-Signed Certificate
 
-Run one of these scripts:
-
-**Batch script:**
-```cmd
-create_self_signed_cert.bat
-```
-
-**PowerShell script:**
 ```powershell
 .\create_self_signed_cert.ps1 -CertName "MyAppDev" -Password "mysecurepassword"
 ```
 
-This creates:
-- `LogViewerDev.pfx` - The certificate file for signing
-- `LogViewerDev.cer` - Certificate only
-- `LogViewerDev.pvk` - Private key
+(`create_self_signed_cert.bat` is a thin wrapper around the same script, for
+double-click convenience.)
 
-### 3. Configure CMake
+This creates `LogViewerDev.pfx` — the certificate + private key, used for
+signing.
+
+### 3a. Local builds (CMake)
 
 ```cmake
 cmake -DCODE_SIGN_CERTIFICATE="C:/path/to/LogViewerDev.pfx" \
       -DCODE_SIGN_PASSWORD="password123" \
       ..
-```
-
-### 4. Build
-
-```cmake
 cmake --build . --config Release
 ```
 
-The executable will be automatically signed during the build process.
+The executable is signed automatically during the build.
+
+### 3b. CI builds (GitHub Actions release.yml)
+
+Release builds are signed automatically when the `WINDOWS_CERTIFICATE` /
+`WINDOWS_CERTIFICATE_PWD` repo secrets are set (see "Required GitHub Secrets"
+above) — a self-signed `.pfx` works exactly the same way a commercial one
+does here, it's just a `.pfx` + password either way. Base64-encode it:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("LogViewerDev.pfx")) | Set-Clipboard
+```
+
+then paste as `WINDOWS_CERTIFICATE`, and set `WINDOWS_CERTIFICATE_PWD` to the
+password you passed to the script.
 
 ## Certificate Types
 

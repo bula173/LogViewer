@@ -18,6 +18,12 @@ All notable changes to LogViewer are documented here.
 ### Fixes
 
 - The in-app Keyboard Shortcuts reference had drifted out of sync with the real menu bindings (missing entries for Export, Generate Report, Group Events, Tag & Annotate; a wrong shortcut listed for Jump to Timestamp). It's now generated from the same registry the menus use, so it can't drift again.
+- `packaging/create_self_signed_cert.ps1`/`.bat` called `makecert.exe`/`pvk2pfx.exe`, which Microsoft has removed from current Windows SDK releases — the script would fail with "not recognized" on a fresh install. Rewritten to use PowerShell's built-in `New-SelfSignedCertificate`, which needs no separate SDK download.
+
+### Build system
+
+- macOS release builds now fall back to ad-hoc code signing (`codesign --sign -`) when no `MACOS_CERTIFICATE` secret is configured, instead of shipping the app bundle with no signature at all. This does not satisfy Gatekeeper (only a paid Apple Developer ID + notarization does), but keeps the bundle's signature internally consistent after `macdeployqt` copies in Qt's frameworks, and is required outright on Apple Silicon. See `packaging/CODE_SIGNING_README.md`.
+- `packaging/CODE_SIGNING_README.md` now documents the actual GitHub Actions signing path (`WINDOWS_CERTIFICATE`/`WINDOWS_CERTIFICATE_PWD` secrets) for self-signed certificates, not just the local CMake-flag path.
 
 ## [1.11.0] — 2026-08-15
 

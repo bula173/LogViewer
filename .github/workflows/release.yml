@@ -233,6 +233,25 @@ jobs:
           codesign --verify --deep --strict "$APP"
           echo "macOS app bundle signed successfully"
 
+      - name: Ad-hoc sign macOS app bundle (no certificate configured)
+        if: env.HAS_MACOS_CERT != 'true'
+        run: |
+          # No Developer ID certificate available. Ad-hoc signing (identity
+          # "-") does NOT satisfy Gatekeeper - it shows the same "could not
+          # verify... is free of malware" prompt as a fully unsigned bundle -
+          # but it does give every binary/framework in the bundle a valid,
+          # internally-consistent signature (macdeployqt's copied-in Qt
+          # frameworks otherwise end up unsigned or inconsistently signed),
+          # which avoids "app is damaged" failures some users hit with
+          # partially-signed bundles, and is required outright on Apple
+          # Silicon where the OS enforces code signing for all executables.
+          APP="$BUILD_DIR/src/main/LogViewer.app"
+          codesign --deep --force --options runtime \
+            --entitlements "$GITHUB_WORKSPACE/packaging/entitlements.plist" \
+            --sign - "$APP"
+          codesign --verify --deep --strict "$APP"
+          echo "macOS app bundle ad-hoc signed (no Gatekeeper trust - see CODE_SIGNING_README.md)"
+
       - name: Notarize macOS app bundle
         if: env.HAS_APPLE_ID == 'true'
         env:

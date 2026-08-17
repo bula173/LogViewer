@@ -8,68 +8,58 @@ param(
 )
 
 Write-Host "Creating self-signed code signing certificate..." -ForegroundColor Yellow
-Write-Host "WARNING: This certificate is for DEVELOPMENT ONLY" -ForegroundColor Red
-Write-Host "It will show security warnings when users run the signed executable" -ForegroundColor Red
+Write-Host "WARNING: A self-signed certificate does NOT eliminate Windows SmartScreen" -ForegroundColor Red
+Write-Host "warnings - SmartScreen is reputation-based, not signature-based. It gives" -ForegroundColor Red
+Write-Host "you a named publisher and tamper-evidence, not a 'trusted' badge." -ForegroundColor Red
 Write-Host ""
 
-# Check if makecert and pvk2pfx are available
-$makecert = Get-Command makecert -ErrorAction SilentlyContinue
-$pvk2pfx = Get-Command pvk2pfx -ErrorAction SilentlyContinue
+# New-SelfSignedCertificate is a built-in PowerShell PKI cmdlet (Windows 10/11,
+# Server 2016+) - no Windows SDK / makecert.exe download required. makecert.exe
+# and pvk2pfx.exe (used by the previous version of this script) were removed
+# from current Windows SDK releases, so that approach no longer works on a
+# freshly-installed machine.
+$cert = New-SelfSignedCertificate `
+    -Type CodeSigningCert `
+    -Subject "CN=$CertName" `
+    -CertStoreLocation "Cert:\CurrentUser\My" `
+    -KeyAlgorithm RSA `
+    -KeyLength 2048 `
+    -HashAlgorithm SHA256 `
+    -NotAfter (Get-Date).AddYears(3)
 
-if (-not $makecert) {
-    Write-Host "ERROR: makecert.exe not found. Install Windows SDK." -ForegroundColor Red
+if (-not $cert) {
+    Write-Host "ERROR: Failed to create certificate" -ForegroundColor Red
     exit 1
 }
 
-if (-not $pvk2pfx) {
-    Write-Host "ERROR: pvk2pfx.exe not found. Install Windows SDK." -ForegroundColor Red
-    exit 1
-}
+Write-Host "Certificate created in the current user's certificate store."
+Write-Host "Exporting to PFX..."
 
-Write-Host "Creating certificate authority..."
-& makecert -r -pe -n "CN=$CertName CA" -ss CA -sr CurrentUser `
-           -a sha256 -cy authority -sky signature `
-           -sv "$CertName CA.pvk" "$CertName CA.cer"
+$securePassword = ConvertTo-SecureString -String $Password -Force -AsPlainText
+$pfxPath = Join-Path $PWD "$CertName.pfx"
+Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePassword | Out-Null
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Failed to create certificate authority" -ForegroundColor Red
-    exit 1
-}
-
-Write-Host "Creating code signing certificate..."
-& makecert -pe -n "CN=$CertName" -ss MY -sr CurrentUser `
-           -a sha256 -cy end -sky signature `
-           -ic "$CertName CA.cer" -iv "$CertName CA.pvk" `
-           -sv "$CertName.pvk" "$CertName.cer"
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Failed to create code signing certificate" -ForegroundColor Red
-    exit 1
-}
-
-Write-Host "Creating PFX file..."
-& pvk2pfx -pvk "$CertName.pvk" -spc "$CertName.cer" -pfx "$CertName.pfx" `
-          -po $Password
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Failed to create PFX file" -ForegroundColor Red
-    exit 1
-}
+# Remove the certificate from the store now that it's exported - the .pfx is
+# the portable artifact; leaving a duplicate copy in the store isn't needed.
+Remove-Item -Path "Cert:\CurrentUser\My\$($cert.Thumbprint)" -ErrorAction SilentlyContinue
 
 Write-Host ""
 Write-Host "Certificate created successfully!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Files created:" -ForegroundColor Cyan
-Write-Host "  $CertName.pfx    - Certificate file (use with CODE_SIGN_CERTIFICATE)"
-Write-Host "  $CertName.cer    - Certificate only"
-Write-Host "  $CertName.pvk    - Private key"
+Write-Host "File created:" -ForegroundColor Cyan
+Write-Host "  $pfxPath"
 Write-Host ""
-Write-Host "CMake configuration:" -ForegroundColor Cyan
-Write-Host "  -DCODE_SIGN_CERTIFICATE=`"$PWD\$CertName.pfx`""
+Write-Host "For local builds (CMake):" -ForegroundColor Cyan
+Write-Host "  -DCODE_SIGN_CERTIFICATE=`"$pfxPath`""
 Write-Host "  -DCODE_SIGN_PASSWORD=`"$Password`""
 Write-Host ""
-Write-Host "IMPORTANT: Delete these files after development testing" -ForegroundColor Red
-Write-Host "Never distribute software signed with self-signed certificates" -ForegroundColor Red
+Write-Host "For CI (GitHub Actions release.yml), base64-encode it and store as repo secrets:" -ForegroundColor Cyan
+Write-Host "  [Convert]::ToBase64String([IO.File]::ReadAllBytes(`"$pfxPath`")) | Set-Clipboard"
+Write-Host "  Then set WINDOWS_CERTIFICATE (the base64 text) and WINDOWS_CERTIFICATE_PWD ($Password)"
+Write-Host "  under Settings -> Secrets and variables -> Actions."
+Write-Host ""
+Write-Host "IMPORTANT: Keep the .pfx and password private - anyone with both can" -ForegroundColor Red
+Write-Host "sign executables that claim to be from '$CertName'." -ForegroundColor Red
 Write-Host ""
 
 Read-Host "Press Enter to continue"
