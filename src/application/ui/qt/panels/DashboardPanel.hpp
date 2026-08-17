@@ -19,7 +19,10 @@ namespace ui::qt {
  *
  * Displays:
  * - File info (name, format, size, time range)
- * - Event statistics (total count, breakdown by level)
+ * - Event statistics (total count, breakdown by the configured type filter
+ *   field — config::GetConfig().typeFilterField, e.g. "level" — shown as
+ *   whatever distinct values actually occur in that column, not a fixed
+ *   ERROR/WARN/INFO/DEBUG vocabulary)
  * - Top actors/services
  * - Quick action buttons (Export, Report, Bookmark)
  *
@@ -77,10 +80,8 @@ class DashboardPanel : public QWidget
     QLabel* m_timeRangeLabel = nullptr;
 
     QLabel* m_totalEventsLabel = nullptr;
-    QLabel* m_errorsLabel = nullptr;
-    QLabel* m_warningsLabel = nullptr;
-    QLabel* m_infoLabel = nullptr;
-    QLabel* m_debugLabel = nullptr;
+    QLabel* m_typeBreakdownTitleLabel = nullptr;
+    QLabel* m_typeBreakdownLabel = nullptr;
 
     QLabel* m_topActorsLabel = nullptr;
 

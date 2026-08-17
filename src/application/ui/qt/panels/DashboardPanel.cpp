@@ -1,5 +1,6 @@
 #include "DashboardPanel.hpp"
 #include "EventsContainer.hpp"
+#include "Config.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -100,34 +101,14 @@ void DashboardPanel::CreateLayout()
     totalRow->addStretch();
     statsLayout->addLayout(totalRow);
 
-    auto* levelsGrid = new QHBoxLayout();
+    m_typeBreakdownTitleLabel = new QLabel("Breakdown:");
+    m_typeBreakdownTitleLabel->setStyleSheet("font-weight: bold;");
+    statsLayout->addWidget(m_typeBreakdownTitleLabel);
 
-    auto* errorCol = new QVBoxLayout();
-    errorCol->addWidget(new QLabel("🔴 Errors:"));
-    m_errorsLabel = new QLabel("0");
-    errorCol->addWidget(m_errorsLabel);
-    levelsGrid->addLayout(errorCol);
-
-    auto* warningCol = new QVBoxLayout();
-    warningCol->addWidget(new QLabel("🟡 Warnings:"));
-    m_warningsLabel = new QLabel("0");
-    warningCol->addWidget(m_warningsLabel);
-    levelsGrid->addLayout(warningCol);
-
-    auto* infoCol = new QVBoxLayout();
-    infoCol->addWidget(new QLabel("🔵 Info:"));
-    m_infoLabel = new QLabel("0");
-    infoCol->addWidget(m_infoLabel);
-    levelsGrid->addLayout(infoCol);
-
-    auto* debugCol = new QVBoxLayout();
-    debugCol->addWidget(new QLabel("⚪ Debug:"));
-    m_debugLabel = new QLabel("0");
-    debugCol->addWidget(m_debugLabel);
-    levelsGrid->addLayout(debugCol);
-
-    levelsGrid->addStretch();
-    statsLayout->addLayout(levelsGrid);
+    m_typeBreakdownLabel = new QLabel("(No data yet)");
+    m_typeBreakdownLabel->setObjectName("dashboardTypeBreakdownLabel");
+    m_typeBreakdownLabel->setWordWrap(true);
+    statsLayout->addWidget(m_typeBreakdownLabel);
 
     scrollLayout->addWidget(statsGroup);
 
@@ -205,20 +186,23 @@ void DashboardPanel::UpdateFileInfo()
 
 void DashboardPanel::UpdateEventStats()
 {
+    const std::string& typeField = config::GetConfig().typeFilterField;
+    const QString typeFieldLabel = typeField.empty()
+        ? tr("type")
+        : QString::fromStdString(typeField);
+    m_typeBreakdownTitleLabel->setText(tr("Breakdown by \"%1\":").arg(typeFieldLabel));
+
     if (!m_events || m_events->Size() == 0)
     {
         m_totalEventsLabel->setText("0");
-        m_errorsLabel->setText("0");
-        m_warningsLabel->setText("0");
-        m_infoLabel->setText("0");
-        m_debugLabel->setText("0");
+        m_typeBreakdownLabel->setText(tr("(No data yet)"));
         return;
     }
 
     qint64 totalCount = m_events->Size();
-    std::map<QString, qint64> levelCounts;
+    std::map<QString, qint64> valueCounts;
 
-    // Count events by level (thread-safe: cache size first)
+    // Count events by the configured type field (thread-safe: cache size first)
     const size_t eventCount = m_events->Size();
     for (size_t i = 0; i < eventCount; ++i)
     {
@@ -229,9 +213,9 @@ void DashboardPanel::UpdateEventStats()
                 break;
 
             const auto& event = m_events->GetEvent(i);
-            QString level = QString::fromStdString(event.findByKey("level"));
-            if (!level.isEmpty())
-                levelCounts[level]++;
+            QString value = QString::fromStdString(event.findByKey(typeField));
+            if (!value.isEmpty())
+                valueCounts[value]++;
         }
         catch (const std::exception&)
         {
@@ -241,16 +225,32 @@ void DashboardPanel::UpdateEventStats()
 
     m_totalEventsLabel->setText(FormatNumber(totalCount));
 
-    // Map common level names
-    qint64 errors = levelCounts["ERROR"] + levelCounts["ERR"] + levelCounts["FATAL"];
-    qint64 warnings = levelCounts["WARN"] + levelCounts["WARNING"];
-    qint64 info = levelCounts["INFO"] + levelCounts["INFORMATION"];
-    qint64 debug = levelCounts["DEBUG"] + levelCounts["TRACE"];
+    if (valueCounts.empty())
+    {
+        m_typeBreakdownLabel->setText(typeField.empty()
+            ? tr("(No type filter field configured)")
+            : tr("(No events have a \"%1\" field)").arg(typeFieldLabel));
+        return;
+    }
 
-    m_errorsLabel->setText(FormatNumber(errors));
-    m_warningsLabel->setText(FormatNumber(warnings));
-    m_infoLabel->setText(FormatNumber(info));
-    m_debugLabel->setText(FormatNumber(debug));
+    // Sort by count descending, show top 8
+    std::vector<std::pair<QString, qint64>> sorted(valueCounts.begin(), valueCounts.end());
+    std::sort(sorted.begin(), sorted.end(),
+        [](const auto& a, const auto& b) { return a.second > b.second; });
+
+    QString breakdownText;
+    int shown = 0;
+    for (const auto& [value, count] : sorted)
+    {
+        if (shown >= 8)
+            break;
+        breakdownText += QString("• %1: %2\n").arg(value, FormatNumber(count));
+        ++shown;
+    }
+    if (sorted.size() > 8)
+        breakdownText += tr("… and %1 more").arg(sorted.size() - 8);
+
+    m_typeBreakdownLabel->setText(breakdownText.trimmed());
 }
 
 void DashboardPanel::UpdateTopActors()
