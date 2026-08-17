@@ -37,7 +37,7 @@ target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(${PROJECT_NAME}_tests
   PRIVATE
-  gtest_main
+  gtest
   gmock
   application_core
   Qt6::Test
