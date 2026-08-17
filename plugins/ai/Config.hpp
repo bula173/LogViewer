@@ -5,7 +5,22 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-namespace config {
+// This must NOT live in `namespace config` with a class named `Config` and a
+// `GetConfig()` free function: the main application defines an unrelated,
+// much larger config::Config/config::GetConfig() in
+// src/application/config/Config.hpp. Since this plugin is a separate dylib
+// (dlopen'd, not linked against application_core) but shares the running
+// process, an identically-named-and-namespaced inline GetConfig() is a One
+// Definition Rule violation — the dynamic linker can bind a call in this
+// plugin to the *main app's* config::GetConfig() (a strong symbol beats this
+// header's weak/inline one), returning a real, large config::Config object
+// while this plugin's compiled code still uses the small local struct's
+// field offsets. Writes like `ollamaBaseUrl = "..."` then land inside
+// whatever real member happens to sit at that byte offset in the actual
+// config::Config object — in practice, FieldTranslator's internal map,
+// corrupting it. Namespaced under `ai` (matching this plugin's other
+// headers) instead, so the symbol can never collide with the app's.
+namespace ai {
 
 struct Config {
     std::string aiProvider = "ollama";
@@ -55,4 +70,4 @@ inline Config& GetConfig() {
     return cfg;
 }
 
-} // namespace config
+} // namespace ai

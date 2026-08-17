@@ -64,7 +64,7 @@ void AIConfigPanel::BuildUi()
     
     // Load from plugin config (with main config as fallback)
     nlohmann::json pluginConfig = LoadPluginConfig();
-    const auto& cfg = config::GetConfig();
+    const auto& cfg = ai::GetConfig();
     std::string provider = pluginConfig.value("provider", cfg.aiProvider);
     const int providerIdx = m_providerCombo->findData(QString::fromStdString(provider));
     if (providerIdx >= 0)
@@ -503,7 +503,7 @@ void AIConfigPanel::PopulateModelList()
     
     // Load plugin config to get saved model
     nlohmann::json pluginConfig = LoadPluginConfig();
-    const auto& mainConfig = config::GetConfig();
+    const auto& mainConfig = ai::GetConfig();
     std::string savedModel = pluginConfig.value("model", mainConfig.ollamaDefaultModel);
     
     // Select the configured model if it exists, otherwise select the first one
@@ -533,7 +533,7 @@ void AIConfigPanel::PopulateModelList()
 void AIConfigPanel::RefreshAIClient()
 {
     nlohmann::json pluginConfig = LoadPluginConfig();
-    auto& mainConfig = config::GetConfig();
+    auto& mainConfig = ai::GetConfig();
     
     // Plugin config takes priority, main config as fallback
     std::string provider = pluginConfig.value("provider", mainConfig.aiProvider);
@@ -785,7 +785,7 @@ void AIConfigPanel::SavePluginConfig()
         PLUGIN_LOG(PLUGIN_LOG_INFO, "[AIConfigPanel] Saved plugin config to: {}", configPath.string());
         // Apply saved settings to runtime plugin-local config
         try {
-            config::GetConfig().ApplyJson(config);
+            ai::GetConfig().ApplyJson(config);
             PLUGIN_LOG(PLUGIN_LOG_DEBUG, "[AIConfigPanel] Applied plugin config to runtime");
         } catch (...) {
             PLUGIN_LOG(PLUGIN_LOG_WARN, "[AIConfigPanel] Failed to apply plugin config to runtime");

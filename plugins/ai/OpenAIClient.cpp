@@ -175,7 +175,7 @@ std::string OpenAIClient::SendHttpPost(const std::string& endpoint,
     curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, 2L);
 
     // Use configurable timeout from config
-    const int timeout = config::GetConfig().aiTimeoutSeconds;
+    const int timeout = ai::GetConfig().aiTimeoutSeconds;
     curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, static_cast<long>(timeout));
 
     // Set headers with Bearer token authentication
