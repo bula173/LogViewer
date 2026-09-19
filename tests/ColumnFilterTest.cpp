@@ -158,6 +158,32 @@ TEST_F(ColumnFilterTest, ActiveSortSurvivesFilterChanges)
     EXPECT_EQ(Cell(model, 3, 0), "1");
 }
 
+TEST_F(ColumnFilterTest, AppendedEventsAreTestedAgainstColumnFilters)
+{
+    EventsTableModel model(m_events);
+    model.SetColumnFilter(1, Set({"ERROR"}));
+    ASSERT_EQ(model.rowCount(), 2);
+
+    Add(6, "ERROR", "c"); // e.g. follow-file mode appends
+    Add(7, "INFO", "c");
+    model.SyncWithContainer();
+    ASSERT_EQ(model.rowCount(), 3);
+    EXPECT_EQ(Cell(model, 2, 0), "6");
+}
+
+TEST_F(ColumnFilterTest, ViewDropsColumnFiltersWhenDataIsCleared)
+{
+    EventsTableView view(m_events);
+    auto* model = view.findChild<EventsTableModel*>();
+    ASSERT_NE(model, nullptr);
+    model->SetColumnFilter(1, Set({"ERROR"}));
+    ASSERT_TRUE(view.HasColumnFilters());
+
+    m_events.Clear();
+    view.RefreshView();
+    EXPECT_FALSE(view.HasColumnFilters());
+}
+
 TEST_F(ColumnFilterTest, ColumnFiltersChangedSignalFires)
 {
     EventsTableModel model(m_events);

@@ -169,6 +169,10 @@ QVariant EventsTableModel::headerData(int section,
 
 void EventsTableModel::SyncWithContainer()
 {
+    // Events appended since the last filter run (tailing, incremental load)
+    // must be tested against the column filters, otherwise the view freezes.
+    if (!m_columnFilters.empty())
+        ApplyEffectiveFilter();
     RefreshAll();
 }
 

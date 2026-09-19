@@ -246,10 +246,10 @@ void SequenceDiagramPanel::BuildLayout()
                                      "seqZoomOutButton");
     auto* zoomIn    = makeZoomButton(QStringLiteral("+"), tr("Zoom in (Ctrl++)"),
                                      "seqZoomInButton");
-    auto* zoom100   = makeZoomButton(tr("100%"), tr("Actual size (Ctrl+0)"),
+    auto* zoom100   = makeZoomButton(tr("100%"), tr("Actual size (100%)"),
                                      "seqZoom100Button");
     auto* fitWidth  = makeZoomButton(tr("Fit width"),
-                                     tr("Scale the diagram to the panel width"),
+                                     tr("Scale the diagram to the panel width (Ctrl+0)"),
                                      "seqFitWidthButton");
 
     toolbar->addStretch();

@@ -199,6 +199,10 @@ void EventsTableView::RefreshView()
         }
     }
 
+    // Data was cleared: value filters chosen for the old data no longer apply.
+    if (m_events.Size() == 0)
+        m_model->ClearColumnFilters();
+
     m_model->SyncWithContainer();
     viewport()->update();
 }
