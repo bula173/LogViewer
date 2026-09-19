@@ -16,6 +16,7 @@ namespace ui::qt
 {
 
 class EventsTableModel;
+class FilterHeaderView;
 
 class EventsTableView : public QTableView,
                         public ui::IEventsListView,
@@ -38,6 +39,12 @@ class EventsTableView : public QTableView,
     const std::vector<unsigned long>* GetFilteredIndices() const;
     /// True if a filter is active, even if it currently matches zero events.
     bool IsFilterActive() const;
+
+    /// Excel-style per-column value filters (opened from the filter button in
+    /// each column header). They are ANDed with each other and with every
+    /// filter set through SetFilteredEvents()/ClearFilter().
+    bool HasColumnFilters() const;
+    void ClearColumnFilters();
 
     void OnDataUpdated() override;
     void OnCurrentIndexUpdated(const int index) override;
@@ -82,6 +89,7 @@ class EventsTableView : public QTableView,
     void InitializeView();
     void ConnectSelectionSignals();
     void ShowContextMenu(const QPoint& pos);
+    void ShowColumnFilterPopup(int column);
     void ResizeColumnsToConfiguration();
     void ScrollToMatchIndex(int matchIndex);
     void RestoreColumnOrder();
@@ -96,6 +104,7 @@ class EventsTableView : public QTableView,
 
     db::EventsContainer& m_events;
     EventsTableModel* m_model {nullptr};
+    FilterHeaderView* m_filterHeader {nullptr};
     int m_currentMatchIndex {-1};
 };
 

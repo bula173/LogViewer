@@ -2,12 +2,14 @@
 
 #include <QAbstractTableModel>
 #include <QColor>
+#include <QSet>
 #include <QString>
 
 #include "Config.hpp"
 #include "EventsContainer.hpp"
 #include "utils/SearchEngine.hpp"
 
+#include <map>
 #include <unordered_set>
 #include <vector>
 #include <unordered_map>
@@ -15,6 +17,20 @@
 
 namespace ui::qt
 {
+
+/// One distinct cell value of a column and how many rows show it.
+struct ColumnValueCount
+{
+    QString    value;
+    qsizetype  count {0};
+};
+
+/// Distinct values offered by an Excel-style column filter.
+struct ColumnDistinctValues
+{
+    std::vector<ColumnValueCount> values; ///< Sorted (numeric-aware, case-insensitive)
+    bool truncated {false};               ///< More distinct values exist than were listed
+};
 
 class EventsTableModel : public QAbstractTableModel
 {
@@ -51,11 +67,50 @@ class EventsTableModel : public QAbstractTableModel
     /// Asynchronous search rebuild (doesn't block UI)
     void RebuildSearchMatchesAsync();
 
+    // ── Column value filters (Excel-style) ────────────────────────────────
+    // Each column may restrict the rows to a set of allowed cell values; all
+    // column filters are ANDed with each other and with whatever filter the
+    // rest of the application set through SetFilteredIndices()/ClearFilter().
+    // Filters are keyed by column name, so they survive column reordering.
+
+    /// Distinct cell texts of @p column among the rows that pass every filter
+    /// *except* this column's own (so the list narrows as other columns are
+    /// filtered, like Excel). At most @p maxValues values are returned.
+    ColumnDistinctValues DistinctColumnValues(int column, std::size_t maxValues) const;
+    bool HasColumnFilter(int column) const;
+    bool HasAnyColumnFilter() const { return !m_columnFilters.empty(); }
+    /// Allowed values of @p column's filter (empty set if none).
+    QSet<QString> ColumnFilterValues(int column) const;
+    /// Restricts @p column to @p allowed (an empty set matches nothing).
+    void SetColumnFilter(int column, const QSet<QString>& allowed);
+    void ClearColumnFilter(int column);
+    void ClearColumnFilters();
+
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;
     std::vector<int> ColumnWidths() const;
 
+  signals:
+    void ColumnFiltersChanged();
+
   private:
+    struct ColumnFilter
+    {
+        std::string   name;
+        bool          mergeSource {false};
+        QSet<QString> allowed;
+    };
+
+    /// Resolves a model column to its data-column name / merge-source flag.
+    bool ResolveColumn(int column, std::string& name, bool& mergeSource) const;
+    static std::string ColumnFilterKey(const std::string& name, bool mergeSource);
+    bool PassesColumnFilters(const db::LogEvent& event, const std::string* skipKey) const;
+    /// Rebuilds m_filteredIndices from the upstream filter + column filters
+    /// (+ the active sort). Does not reset the model — callers do.
+    void ApplyEffectiveFilter();
+    void SortIndices(std::vector<unsigned long>& indices, const std::string& columnName,
+        bool isMergeSource, Qt::SortOrder order) const;
+
     void RebuildVisibleColumns();
     bool ShouldShowSourceColumn() const;
     bool ShouldShowOriginalIdColumn() const;
@@ -68,7 +123,13 @@ class EventsTableModel : public QAbstractTableModel
         const std::string& columnName, bool mergeSource) const;
 
     db::EventsContainer& m_events;
-    std::vector<unsigned long> m_filteredIndices;
+    std::vector<unsigned long> m_filteredIndices;  ///< Effective rows (upstream ∩ column filters, sorted if m_hasSort)
+    std::vector<unsigned long> m_baseFilteredIndices; ///< Rows chosen by the rest of the app
+    bool m_baseFilterActive {false};
+    std::map<std::string, ColumnFilter> m_columnFilters;
+    bool          m_hasSort {false};
+    int           m_sortColumn {-1};
+    Qt::SortOrder m_sortOrder {Qt::AscendingOrder};
     std::unordered_map<unsigned long, int> m_reverseFilteredIndices; // actual index -> filtered row
     std::vector<int> m_visibleColumnIndices;
     const config::Config& m_config;

@@ -46,8 +46,10 @@ target_sources(application_core
         dialogs/StructuredConfigDialog.cpp
         dialogs/ThemeCustomizationDialog.cpp
         dialogs/UpdateDialog.cpp
+        events/ColumnFilterPopup.cpp
         events/EventsTableModel.cpp
         events/EventsTableView.cpp
+        events/FilterHeaderView.cpp
         utils/EventGroupManager.cpp
         utils/EventTagManager.cpp
         utils/ExportManager.cpp

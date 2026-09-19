@@ -2016,6 +2016,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     if (!parser) return; // user cancelled type selection
                     const QString message = QString("Loading %1 ...").arg(path);
                     UpdateStatusText(message.toStdString());
+                    if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
                     m_presenter->LoadLogFile(std::move(parser), filePath);
                     m_presenter->SetItemDetailsVisible(true);
                     m_currentLogFilePath = path;
@@ -2055,7 +2056,8 @@ void MainWindow::HandleDroppedFile(const QString& path)
             if (!parser) return; // user cancelled type selection
             const QString message = QString("Loading %1 ...").arg(path);
             UpdateStatusText(message.toStdString());
-            m_presenter->LoadLogFile(std::move(parser), filePath);
+            if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
+                    m_presenter->LoadLogFile(std::move(parser), filePath);
             m_presenter->SetItemDetailsVisible(true);
             m_currentLogFilePath = path;
             if (m_tailAction) m_tailAction->setEnabled(true);
@@ -2513,6 +2515,8 @@ void MainWindow::OnClearDataRequested()
             m_searchEdit->clear();
         if (m_events)
             m_events->Clear();
+        if (m_eventsView)
+            m_eventsView->ClearColumnFilters();
         if (m_eventsView)
         {
             m_eventsView->RefreshView();

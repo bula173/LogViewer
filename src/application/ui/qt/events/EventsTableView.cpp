@@ -2,7 +2,9 @@
 
 #include "Logger.hpp"
 #include "EventsContainer.hpp"
+#include "ColumnFilterPopup.hpp"
 #include "EventsTableModel.hpp"
+#include "FilterHeaderView.hpp"
 
 #include <QHeaderView>
 #include <QInputDialog>
@@ -20,6 +22,7 @@
 
 #include <cmath>
 #include <limits>
+#include <optional>
 #include <unordered_map>
 
 namespace ui::qt
@@ -30,8 +33,18 @@ EventsTableView::EventsTableView(
     : QTableView(parent)
     , m_events(events)
 {
+    m_filterHeader = new FilterHeaderView(Qt::Horizontal, this);
+    setHorizontalHeader(m_filterHeader);
+
     m_model = new EventsTableModel(m_events, this);
     setModel(m_model);
+
+    m_filterHeader->SetFilteredPredicate(
+        [this](int column) { return m_model && m_model->HasColumnFilter(column); });
+    connect(m_filterHeader, &FilterHeaderView::FilterIndicatorClicked,
+            this, &EventsTableView::ShowColumnFilterPopup);
+    connect(m_model, &EventsTableModel::ColumnFiltersChanged, this,
+            [this] { m_filterHeader->viewport()->update(); });
 
     InitializeView();
     ConnectSelectionSignals();
@@ -220,6 +233,52 @@ const std::vector<unsigned long>* EventsTableView::GetFilteredIndices() const
 bool EventsTableView::IsFilterActive() const
 {
     return m_model && m_model->IsFilteringActive();
+}
+
+bool EventsTableView::HasColumnFilters() const
+{
+    return m_model && m_model->HasAnyColumnFilter();
+}
+
+void EventsTableView::ClearColumnFilters()
+{
+    if (!m_model)
+        return;
+
+    m_model->ClearColumnFilters();
+    viewport()->update();
+}
+
+void EventsTableView::ShowColumnFilterPopup(int column)
+{
+    if (!m_model)
+        return;
+
+    // Listing every distinct value of a free-text column would freeze the UI.
+    constexpr std::size_t kMaxFilterValues = 2000;
+    const ColumnDistinctValues distinct = m_model->DistinctColumnValues(column, kMaxFilterValues);
+
+    std::optional<QSet<QString>> allowed;
+    if (m_model->HasColumnFilter(column))
+        allowed = m_model->ColumnFilterValues(column);
+
+    const QString title = m_model->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString();
+    auto* popup = new ColumnFilterPopup(title, distinct, allowed, this);
+    popup->setAttribute(Qt::WA_DeleteOnClose);
+
+    connect(popup, &ColumnFilterPopup::Applied, this, [this, column](const QSet<QString>& values) {
+        m_model->SetColumnFilter(column, values);
+        viewport()->update();
+    });
+    connect(popup, &ColumnFilterPopup::Cleared, this, [this, column] {
+        m_model->ClearColumnFilter(column);
+        viewport()->update();
+    });
+
+    const QRect button = m_filterHeader->IndicatorRect(column);
+    popup->move(m_filterHeader->viewport()->mapToGlobal(
+        QPoint(button.right() - popup->sizeHint().width(), m_filterHeader->height())));
+    popup->show();
 }
 
 void EventsTableView::UpdateColors()
@@ -416,6 +475,13 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
     auto* scenarioAction = menu.addAction(tr("Add to Scenario…"));
     scenarioAction->setEnabled(row >= 0);
 
+    QAction* clearColumnFiltersAction = nullptr;
+    if (HasColumnFilters())
+    {
+        menu.addSeparator();
+        clearColumnFiltersAction = menu.addAction(tr("Clear All Column Filters"));
+    }
+
     QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
     if (!chosen) return;
 
@@ -439,6 +505,10 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
     else if (chosen == scenarioAction && row >= 0)
     {
         emit AddToScenarioRequested(row);
+    }
+    else if (chosen == clearColumnFiltersAction)
+    {
+        ClearColumnFilters();
     }
 }
 
