@@ -245,10 +245,12 @@ Key Components</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>.dlt</code>   </td><td class="markdownTableBodyNone"><code>DltParser</code>   </td><td class="markdownTableBodyNone">AUTOSAR Diagnostic Log and Trace binary    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>.evl</code>   </td><td class="markdownTableBodyNone"><code>EvlogParser</code>   </td><td class="markdownTableBodyNone">POSIX 1003.25 evlog binary; constructed with optional template directory via <code>CreateParserFor()</code>   </td></tr>
+<td class="markdownTableBodyNone"><code>.evl</code>   </td><td class="markdownTableBodyNone"><code>EvlogParser</code>   </td><td class="markdownTableBodyNone">POSIX 1003.25 evlog binary; constructed with optional template directory via <code>CreateParserFor()</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>.txt</code> (sniffed) / <code>.sapilog</code>   </td><td class="markdownTableBodyNone"><code>SapiLogParser</code>   </td><td class="markdownTableBodyNone">safeAPI RBC 2oo2 merged test log; <code>ParserFactory</code> maps <code>.txt</code> to it only when the <code># FULL MERGED TEST STEPS</code> header is present, otherwise <code>.txt</code> keeps the existing fallback/prompt   </td></tr>
 </table>
 <p><b>JsonParser</b> (<code>parsers/json/</code>): Parses JSON log files in two layouts.</p><ul>
-<li><b>Array format</b>: the file contains a single top-level JSON array of objects. The whole file is parsed in one <code>nlohmann::json</code> call.</li>
+<li><b>Array format</b>: the file contains a single top-level JSON array of objects. Streamed through a <code>nlohmann::json</code> parser callback that flattens and discards each top-level element as it completes (bounded memory), emitting events in batches.</li>
 <li><b>NDJSON/JSONL format</b>: one JSON object per line. Each line is parsed independently; malformed lines are skipped with a <code>WARN</code> log entry.</li>
 <li>Format is auto-detected by the first non-whitespace character (<code>[</code> → array, <code>{</code> → NDJSON).</li>
 <li>Nested objects and arrays are flattened with dot notation (<code>ctx.host</code>) and index suffixes (<code>tags.0</code>, <code>tags.1</code>), respectively.</li>
@@ -267,6 +269,12 @@ Key Components</h1>
 <li>Verbose payloads: iterates type-info words and decodes each argument (BOOL, SINT, UINT, FLOA, STRG, RAWD); skips VARI variable-info prefix when present.</li>
 <li>Non-verbose payloads: emits <code>MsgID=0x…</code> + hex dump.</li>
 <li>Emitted fields: <code>timestamp</code>, <code>level</code> (Off/Fatal/Error/Warn/Info/Debug/Verbose), <code>type</code> (Log/AppTrace/NwTrace/Control), <code>AppID</code>, <code>ContextID</code>, <code>EcuID</code>, <code>MsgCtr</code>, optional <code>SessionID</code>, <code>info</code>.</li>
+</ul>
+<p><b>SapiLogParser</b> (<code>parsers/sapi/</code>): Parses merged test-run logs from the safeAPI RBC 2oo2 test environment (robot steps + container + simulator logs).</p><ul>
+<li>Header block of <code>#</code> lines, then one event per line: <code>[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]</code>.</li>
+<li>Fields are split by bracket depth (brackets nest inside <code>info</code>/<code>payload</code>); <code>payload</code> is the remainder after the 7th field, multiple groups kept verbatim. Malformed lines are skipped; a file with no matching line throws <code>ParseError</code>.</li>
+<li>Emitted fields: <code>timestamp</code> (ISO-8601 string), <code>category</code>, <code>source</code>, <code>destination</code>, <code>level</code>, <code>event_type</code>, <code>info</code>, optional <code>payload</code>.</li>
+<li><code>SapiLogParser::LooksLikeSapiLog()</code> sniffs the header so generic <code>.txt</code> files are auto-routed here (in <code>ParserFactory::CreateFromFile</code> and <code>MainWindow::CreateParserFor</code>); the file-type prompt also lists it (<code>.sapilog</code>).</li>
 </ul>
 <p><b>EvlogParser</b> (<code>parsers/evlog/</code>): Parses POSIX 1003.25 evlog binary files (<code>.evl</code>).</p><ul>
 <li>Fixed 60-byte little-endian <code>posix_log_entry</code> header at known byte offsets; no file-level magic (sanity-checked via severity ≤ 7 and format ∈ {0,1,2,3}).</li>

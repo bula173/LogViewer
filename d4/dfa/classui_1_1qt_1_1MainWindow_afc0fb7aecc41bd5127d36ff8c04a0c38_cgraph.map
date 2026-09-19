@@ -1,31 +1,34 @@
 <map id="ui::qt::MainWindow::CreateParserFor" name="ui::qt::MainWindow::CreateParserFor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,87,152,127"/>
-<area shape="rect" id="Node000002" href="$dc/d03/classparser_1_1ParserFactory.html#a4cc82a6d204dc907e7e4aec21efd6be5" title="Creates a parser based on file extension." alt="" coords="200,119,359,159"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,116,187,122,186,127,152,122"/>
-<area shape="rect" id="Node000012" href="$dc/d03/classparser_1_1ParserFactory.html#ac98b7450fc39e7bddde68edc9d62e698" title="Checks if a parser is registered for an extension." alt="" coords="200,55,359,95"/>
-<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="152,93,186,87,187,93,152,98"/>
-<area shape="rect" id="Node000003" href="$dc/d03/classparser_1_1ParserFactory.html#a94dd4f2b5e4d13a40c683f71132294d8" title="Ensures default parsers are registered (called automatically)" alt="" coords="407,55,565,95"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,117,407,97,409,102,345,122"/>
-<area shape="rect" id="Node000009" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1027,104,1161,129"/>
-<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="359,134,1013,116,1013,122,359,140"/>
-<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1030,153,1158,179"/>
-<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="359,139,1017,161,1016,166,359,145"/>
-<area shape="rect" id="Node000011" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="625,221,761,247"/>
-<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="314,157,358,180,407,199,459,212,513,221,611,230,611,235,512,226,458,217,406,205,355,185,312,162"/>
-<area shape="rect" id="Node000004" href="$dc/d03/classparser_1_1ParserFactory.html#a6b9c9b8b7b240f54f9d593e15c76e14d" title="Initializes default parsers (XML, JSON, etc.)" alt="" coords="613,55,772,95"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="566,73,600,73,600,78,566,78"/>
-<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="827,5,972,31"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="765,53,839,32,840,37,766,58"/>
-<area shape="rect" id="Node000008" href="$dc/d03/classparser_1_1ParserFactory.html#a6191bfd8e41d1b5f671a1e7b407fd899" title="Registers a custom parser creator for a file extension." alt="" coords="820,55,979,95"/>
-<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="772,73,806,73,806,78,772,78"/>
-<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1209,129,1391,155"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="951,28,1162,89,1254,122,1253,127,1161,94,950,33"/>
-<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1439,129,1597,155"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1391,139,1425,139,1425,145,1391,145"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="979,90,1021,98,1020,104,978,95"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="937,93,1028,140,1044,146,1041,151,1026,144,934,98"/>
-<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="1162,122,1196,127,1196,132,1161,128"/>
-<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="1158,156,1195,152,1196,157,1159,161"/>
-<area shape="poly" id="edge15_Node000011_Node000006" title=" " alt="" coords="761,231,943,220,1052,208,1161,189,1211,174,1257,157,1258,162,1213,179,1162,194,1053,213,943,226,761,236"/>
-<area shape="poly" id="edge17_Node000012_Node000003" title=" " alt="" coords="359,73,393,73,393,78,359,78"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,163,152,203"/>
+<area shape="rect" id="Node000002" href="$dc/d03/classparser_1_1ParserFactory.html#a4cc82a6d204dc907e7e4aec21efd6be5" title="Creates a parser based on file extension." alt="" coords="200,163,359,203"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,181,187,181,187,186,152,186"/>
+<area shape="rect" id="Node000011" href="$d3/de3/classparser_1_1SapiLogParser.html#a17951a3f572bb285742e556383e10af9" title=" " alt="" coords="407,271,569,311"/>
+<area shape="poly" id="edge19_Node000001_Node000011" title=" " alt="" coords="153,200,201,213,398,265,397,270,199,218,152,205"/>
+<area shape="rect" id="Node000013" href="$dc/d03/classparser_1_1ParserFactory.html#ac98b7450fc39e7bddde68edc9d62e698" title="Checks if a parser is registered for an extension." alt="" coords="200,78,359,118"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="125,161,218,121,220,126,127,166"/>
+<area shape="rect" id="Node000003" href="$dc/d03/classparser_1_1ParserFactory.html#a94dd4f2b5e4d13a40c683f71132294d8" title="Ensures default parsers are registered (called automatically)" alt="" coords="409,55,567,95"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="315,161,405,112,431,99,433,104,408,116,318,165"/>
+<area shape="rect" id="Node000009" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1031,153,1165,179"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="359,179,1017,165,1017,170,359,184"/>
+<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1034,104,1162,129"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="358,164,406,157,578,139,749,127,1020,116,1020,121,749,132,578,144,407,162,359,170"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="318,201,408,250,433,263,431,268,405,255,315,206"/>
+<area shape="rect" id="Node000012" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="629,221,765,247"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="359,193,407,199,615,223,614,229,406,205,359,198"/>
+<area shape="rect" id="Node000004" href="$dc/d03/classparser_1_1ParserFactory.html#a6b9c9b8b7b240f54f9d593e15c76e14d" title="Initializes default parsers (XML, JSON, etc.)" alt="" coords="617,55,776,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="568,73,604,73,604,78,568,78"/>
+<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="831,5,976,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="769,53,843,32,844,37,770,58"/>
+<area shape="rect" id="Node000008" href="$dc/d03/classparser_1_1ParserFactory.html#a6191bfd8e41d1b5f671a1e7b407fd899" title="Registers a custom parser creator for a file extension." alt="" coords="824,55,983,95"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="776,73,810,73,810,78,776,78"/>
+<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1213,129,1395,155"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="955,28,1166,89,1258,122,1257,127,1165,94,954,33"/>
+<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1443,129,1601,155"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1395,139,1429,139,1429,145,1395,145"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="942,93,1032,138,1050,146,1048,151,1030,143,940,98"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="983,90,1025,98,1024,104,982,95"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="1165,156,1200,151,1200,157,1166,161"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="1163,122,1200,126,1199,132,1162,127"/>
+<area shape="poly" id="edge16_Node000012_Node000006" title=" " alt="" coords="765,231,947,220,1056,208,1165,189,1215,174,1261,157,1262,162,1217,179,1166,194,1057,213,947,226,765,236"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="359,87,395,83,395,88,359,92"/>
 </map>

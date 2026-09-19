@@ -20,7 +20,8 @@ var annotated_dup =
     [ "analyzer", "dd/d3e/namespaceanalyzer.html", [
       [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
       [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
-      [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ]
+      [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ],
+      [ "SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", "d1/da6/structanalyzer_1_1SequenceMessage" ]
     ] ],
     [ "config", "d6/d7f/namespaceconfig.html", [
       [ "ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", "da/dc9/structconfig_1_1ColumnColor" ],
@@ -86,6 +87,7 @@ var annotated_dup =
       [ "JsonParser", "d1/d10/classparser_1_1JsonParser.html", "d1/d10/classparser_1_1JsonParser" ],
       [ "ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", "dc/d03/classparser_1_1ParserFactory" ],
       [ "ParserState", "de/d53/structparser_1_1ParserState.html", "de/d53/structparser_1_1ParserState" ],
+      [ "SapiLogParser", "d3/de3/classparser_1_1SapiLogParser.html", "d3/de3/classparser_1_1SapiLogParser" ],
       [ "XmlParser", "db/d5c/classparser_1_1XmlParser.html", "db/d5c/classparser_1_1XmlParser" ]
     ] ],
     [ "plugin", "d3/d7e/namespaceplugin.html", [
@@ -145,6 +147,9 @@ var annotated_dup =
         [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
         [ "CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel" ],
         [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
+        [ "ColumnDistinctValues", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues.html", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues" ],
+        [ "ColumnFilterPopup", "d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html", "d2/df6/classui_1_1qt_1_1ColumnFilterPopup" ],
+        [ "ColumnValueCount", "d1/d7c/structui_1_1qt_1_1ColumnValueCount.html", "d1/d7c/structui_1_1qt_1_1ColumnValueCount" ],
         [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
         [ "DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", "d2/d8a/classui_1_1qt_1_1DashboardPanel" ],
         [ "DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel" ],
@@ -153,6 +158,7 @@ var annotated_dup =
         [ "ExportDialog", "d3/de3/classui_1_1qt_1_1ExportDialog.html", "d3/de3/classui_1_1qt_1_1ExportDialog" ],
         [ "FileTailer", "d6/d80/classui_1_1qt_1_1FileTailer.html", "d6/d80/classui_1_1qt_1_1FileTailer" ],
         [ "FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog" ],
+        [ "FilterHeaderView", "d2/ddc/classui_1_1qt_1_1FilterHeaderView.html", "d2/ddc/classui_1_1qt_1_1FilterHeaderView" ],
         [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
         [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
         [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],
@@ -235,11 +241,14 @@ var annotated_dup =
     [ "QDialog", "d9/d46/classQDialog.html", null ],
     [ "QGraphicsLineItem", "d6/d1f/classQGraphicsLineItem.html", null ],
     [ "QGraphicsScene", "d9/d74/classQGraphicsScene.html", null ],
+    [ "QGraphicsView", "d4/dca/classQGraphicsView.html", null ],
+    [ "QHeaderView", "de/dd3/classQHeaderView.html", null ],
     [ "QMainWindow", "df/d90/classQMainWindow.html", null ],
     [ "QObject", "d9/d5b/classQObject.html", null ],
     [ "QTableView", "d8/d5e/classQTableView.html", null ],
     [ "QTreeWidget", "d3/d5f/classQTreeWidget.html", null ],
     [ "QTreeWidgetItem", "d1/d15/classQTreeWidgetItem.html", null ],
     [ "QWidget", "d8/ded/classQWidget.html", null ],
+    [ "SequenceZoomView", "d4/d07/classSequenceZoomView.html", "d4/d07/classSequenceZoomView" ],
     [ "Version", "d4/d46/structVersion.html", null ]
 ];

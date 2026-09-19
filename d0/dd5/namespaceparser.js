@@ -8,6 +8,15 @@ var namespaceparser =
       [ "Trim", "d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#ac2123f85a6b830baba522a77180b62fd", null ],
       [ "kProgressBatchSize", "d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a8b719aaa14dbe54c54cf4866a19043c8", null ]
     ] ],
+    [ "anonymous_namespace{SapiLogParser.cpp}", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html", [
+      [ "LooksLikeIsoTimestamp", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a51d6c73bd7e23e4c1f8a2e2f2bc68283", null ],
+      [ "ReadGroup", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a9a5c0bc1e596c023737b9ab5f59cdc4a", null ],
+      [ "Trim", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#af6adac304867e0d328b0b2ffa6ed4ee4", null ],
+      [ "kBatchSize", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a6bb574152035cb2777ea936c9c296f5a", null ],
+      [ "kFixedFields", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#abf1ff2eb8fb2b0c840d2113a808ff152", null ],
+      [ "kHeaderMarker", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a47abecedc49b593e6fadcc829361c404", null ],
+      [ "kHeaderProbeLines", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#afb47dfab7c2ea26d68cecaf8baa5b028", null ]
+    ] ],
     [ "dbc", "d8/d04/namespaceparser_1_1dbc.html", "d8/d04/namespaceparser_1_1dbc" ],
     [ "AscParser", "dd/dfa/classparser_1_1AscParser.html", "dd/dfa/classparser_1_1AscParser" ],
     [ "CsvParser", "d9/dd2/classparser_1_1CsvParser.html", "d9/dd2/classparser_1_1CsvParser" ],
@@ -21,6 +30,7 @@ var namespaceparser =
     [ "JsonParser", "d1/d10/classparser_1_1JsonParser.html", "d1/d10/classparser_1_1JsonParser" ],
     [ "ParserFactory", "dc/d03/classparser_1_1ParserFactory.html", "dc/d03/classparser_1_1ParserFactory" ],
     [ "ParserState", "de/d53/structparser_1_1ParserState.html", "de/d53/structparser_1_1ParserState" ],
+    [ "SapiLogParser", "d3/de3/classparser_1_1SapiLogParser.html", "d3/de3/classparser_1_1SapiLogParser" ],
     [ "XmlParser", "db/d5c/classparser_1_1XmlParser.html", "db/d5c/classparser_1_1XmlParser" ],
     [ "ParserType", "d0/dd5/namespaceparser.html#a16916297b67db86e922c36c2c9b1bc29", [
       [ "XML", "d0/dd5/namespaceparser.html#a16916297b67db86e922c36c2c9b1bc29a3501bb093d363810b671059b9cfed3f8", null ],

@@ -2,12 +2,20 @@ var namespaceui_1_1qt =
 [
     [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03" ],
     [ "anonymous_namespace{CanStatisticsStrategy.cpp}", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03.html", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03" ],
+    [ "anonymous_namespace{ColumnFilterPopup.cpp}", "d2/dc3/namespaceui_1_1qt_1_1anonymous__namespace_02ColumnFilterPopup_8cpp_03.html", [
+      [ "kValueRole", "d2/dc3/namespaceui_1_1qt_1_1anonymous__namespace_02ColumnFilterPopup_8cpp_03.html#a1c341fa99a66cdeb322e82453ee3d672", null ]
+    ] ],
     [ "anonymous_namespace{ExportDialog.cpp}", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html", [
       [ "EscapeMarkup", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html#abaaae8e87af68d043287423abc5f6a48", null ]
     ] ],
     [ "anonymous_namespace{FilterEditorDialog.cpp}", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html", [
       [ "kColumnFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#a950b5d80599ef7dc25846225e81b5190", null ],
       [ "kParameterFilterIndex", "dc/d3e/namespaceui_1_1qt_1_1anonymous__namespace_02FilterEditorDialog_8cpp_03.html#afc3390c8273c4bca5743e25b804af4cf", null ]
+    ] ],
+    [ "anonymous_namespace{FilterHeaderView.cpp}", "d0/d92/namespaceui_1_1qt_1_1anonymous__namespace_02FilterHeaderView_8cpp_03.html", [
+      [ "kButtonH", "d0/d92/namespaceui_1_1qt_1_1anonymous__namespace_02FilterHeaderView_8cpp_03.html#a56175b46a36e92129ac8bafee8476fc9", null ],
+      [ "kButtonW", "d0/d92/namespaceui_1_1qt_1_1anonymous__namespace_02FilterHeaderView_8cpp_03.html#abef3e3adc4efb978bceadd97a82b00ef", null ],
+      [ "kMargin", "d0/d92/namespaceui_1_1qt_1_1anonymous__namespace_02FilterHeaderView_8cpp_03.html#a6a6aea234c5283162cc5d779b3e7ae95", null ]
     ] ],
     [ "anonymous_namespace{FilterProfilesPanel.cpp}", "da/da9/namespaceui_1_1qt_1_1anonymous__namespace_02FilterProfilesPanel_8cpp_03.html", [
       [ "ParseProfilesArray", "da/da9/namespaceui_1_1qt_1_1anonymous__namespace_02FilterProfilesPanel_8cpp_03.html#a290133ae7bac35d91f31081c22d4748a", null ]
@@ -70,6 +78,9 @@ var namespaceui_1_1qt =
     [ "BookmarksPanel", "d0/d5d/classui_1_1qt_1_1BookmarksPanel.html", "d0/d5d/classui_1_1qt_1_1BookmarksPanel" ],
     [ "CanSignalTreePanel", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel.html", "d8/d9e/classui_1_1qt_1_1CanSignalTreePanel" ],
     [ "CanStatisticsStrategy", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy.html", "dc/de5/classui_1_1qt_1_1CanStatisticsStrategy" ],
+    [ "ColumnDistinctValues", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues.html", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues" ],
+    [ "ColumnFilterPopup", "d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html", "d2/df6/classui_1_1qt_1_1ColumnFilterPopup" ],
+    [ "ColumnValueCount", "d1/d7c/structui_1_1qt_1_1ColumnValueCount.html", "d1/d7c/structui_1_1qt_1_1ColumnValueCount" ],
     [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
     [ "DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", "d2/d8a/classui_1_1qt_1_1DashboardPanel" ],
     [ "DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel" ],
@@ -78,6 +89,7 @@ var namespaceui_1_1qt =
     [ "ExportDialog", "d3/de3/classui_1_1qt_1_1ExportDialog.html", "d3/de3/classui_1_1qt_1_1ExportDialog" ],
     [ "FileTailer", "d6/d80/classui_1_1qt_1_1FileTailer.html", "d6/d80/classui_1_1qt_1_1FileTailer" ],
     [ "FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog" ],
+    [ "FilterHeaderView", "d2/ddc/classui_1_1qt_1_1FilterHeaderView.html", "d2/ddc/classui_1_1qt_1_1FilterHeaderView" ],
     [ "FilterProfile", "db/d6d/structui_1_1qt_1_1FilterProfile.html", "db/d6d/structui_1_1qt_1_1FilterProfile" ],
     [ "FilterProfilesPanel", "da/d47/classui_1_1qt_1_1FilterProfilesPanel.html", "da/d47/classui_1_1qt_1_1FilterProfilesPanel" ],
     [ "FiltersPanel", "d8/db0/classui_1_1qt_1_1FiltersPanel.html", "d8/db0/classui_1_1qt_1_1FiltersPanel" ],

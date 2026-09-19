@@ -2,6 +2,7 @@ var SequenceDiagramPanel_8cpp =
 [
     [ "ClickScene", "d5/ddf/classClickScene.html", "d5/ddf/classClickScene" ],
     [ "ArrowItem", "df/d2a/classArrowItem.html", "df/d2a/classArrowItem" ],
+    [ "SequenceZoomView", "d4/d07/classSequenceZoomView.html", "d4/d07/classSequenceZoomView" ],
     [ "kActorBoxH", "d2/d28/SequenceDiagramPanel_8cpp.html#a90f8c8d194c3663ae6c6af8a8d45ac2a", null ],
     [ "kActorBoxW", "d2/d28/SequenceDiagramPanel_8cpp.html#a0daafc93c7e58208d1148021204dbf49", null ],
     [ "kArrowHead", "d2/d28/SequenceDiagramPanel_8cpp.html#a43ec2737aca073e252cbc6494349579f", null ],

@@ -99,7 +99,7 @@ Features</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Core</h2>
 <ul>
-<li><b>Multiple Log Formats</b>: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (<code>.dlt</code>), and POSIX Evlog (<code>.evl</code>)</li>
+<li><b>Multiple Log Formats</b>: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (<code>.dlt</code>), POSIX Evlog (<code>.evl</code>), and safeAPI RBC 2oo2 merged test logs (<code>.txt</code> with the merged-log header)</li>
 <li><b>DBC Signal Decoding</b>: Load a <code>.dbc</code> file alongside an ASC log to decode raw CAN frames into named signals</li>
 <li><b>Evlog Template Decoding</b>: Load a directory of <code>.t</code>/<code>.tmpl</code>/<code>.template</code> files to decode structured BINARY evlog payloads into named fields</li>
 <li><b>High Performance</b>: Virtual list architecture handles millions of log entries</li>
@@ -314,7 +314,7 @@ Cloud Providers</h2>
 <h1><a class="anchor" id="autotoc_md24"></a>
 Usage</h1>
 <ol type="1">
-<li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, and <code>.evl</code> Evlog; drag and drop also works</li>
+<li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, <code>.evl</code> Evlog, and safeAPI merged test logs (<code>.txt</code>, auto-detected by header); drag and drop also works</li>
 <li><b>Load DBC</b> — File &gt; Load DBC… to decode CAN signals from a <code>.dbc</code> database (optional, ASC only)</li>
 <li><b>Load Evlog Templates</b> — File &gt; Load Evlog Templates… to select a directory of template files for <code>.evl</code> BINARY payload decoding</li>
 <li><b>Filter</b> — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles</li>

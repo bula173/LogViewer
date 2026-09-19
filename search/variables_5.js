@@ -22,5 +22,5 @@ var searchData=
   ['foregroundcolor_19',['foregroundColor',['../de/d64/structconfig_1_1ItemHighlight.html#a00e1b2bf55b06e6156cfba92a58aabfb',1,'config::ItemHighlight']]],
   ['format_20',['format',['../d6/dba/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportOptions.html#a6e3de019a1d8ddf2c1683230331d4ce1',1,'ui::qt::utils::ReportGenerator::ReportOptions::format'],['../d1/dab/structui_1_1qt_1_1ExportDialog_1_1ExportOptions.html#aa83385fc671a16073dc7b5a8969163cb',1,'ui::qt::ExportDialog::ExportOptions::format']]],
   ['formatstr_21',['formatStr',['../dc/d0f/structparser_1_1EvlogTemplate.html#a7046d143e3d20ac6a1bb274022b49939',1,'parser::EvlogTemplate']]],
-  ['from_22',['from',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html#ad4cde10d546fa8524acb925ecbe3376e',1,'ui::qt::TimeRangeFilterPanel::State']]]
+  ['from_22',['from',['../d1/da6/structanalyzer_1_1SequenceMessage.html#ae8ebd8bbf8b110272fb3bbeeaa7ffa0f',1,'analyzer::SequenceMessage::from'],['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html#ad4cde10d546fa8524acb925ecbe3376e',1,'ui::qt::TimeRangeFilterPanel::State::from']]]
 ];

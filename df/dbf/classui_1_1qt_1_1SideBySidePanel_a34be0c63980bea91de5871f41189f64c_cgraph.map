@@ -1,52 +1,54 @@
 <map id="ui::qt::SideBySidePanel::LoadFile" name="ui::qt::SideBySidePanel::LoadFile">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,205,176,245"/>
-<area shape="rect" id="Node000002" href="$dc/d03/classparser_1_1ParserFactory.html#a4cc82a6d204dc907e7e4aec21efd6be5" title="Creates a parser based on file extension." alt="" coords="230,108,389,148"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,203,250,151,252,156,138,208"/>
-<area shape="rect" id="Node000012" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a45fa8dbd963e67f71dabc3f8266f59a1" title=" " alt="" coords="224,263,395,303"/>
-<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="168,243,220,257,219,262,167,248"/>
-<area shape="rect" id="Node000003" href="$dc/d03/classparser_1_1ParserFactory.html#a94dd4f2b5e4d13a40c683f71132294d8" title="Ensures default parsers are registered (called automatically)" alt="" coords="449,108,607,148"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="389,125,435,125,435,131,389,131"/>
-<area shape="rect" id="Node000009" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1223,209,1358,234"/>
-<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="385,145,443,157,659,185,875,203,1065,213,1210,217,1209,223,1065,218,874,208,659,190,442,163,384,151"/>
-<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1227,101,1355,126"/>
-<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="381,105,442,93,642,68,798,56,955,59,1155,79,1234,94,1233,100,1154,84,955,65,798,62,642,73,443,99,382,111"/>
-<area shape="rect" id="Node000011" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1427,23,1563,49"/>
-<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="345,105,391,83,442,63,530,34,600,16,672,6,764,3,1037,3,1241,10,1414,25,1413,30,1241,16,1037,8,764,8,672,11,601,21,531,40,444,68,393,88,348,110"/>
-<area shape="rect" id="Node000004" href="$dc/d03/classparser_1_1ParserFactory.html#a6b9c9b8b7b240f54f9d593e15c76e14d" title="Initializes default parsers (XML, JSON, etc.)" alt="" coords="686,108,845,148"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="607,125,672,125,672,131,607,131"/>
-<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="963,158,1109,183"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="845,138,950,154,949,160,844,143"/>
-<area shape="rect" id="Node000008" href="$dc/d03/classparser_1_1ParserFactory.html#a6191bfd8e41d1b5f671a1e7b407fd899" title="Registers a custom parser creator for a file extension." alt="" coords="957,93,1115,133"/>
-<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="845,121,943,116,943,121,845,126"/>
-<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1612,158,1793,183"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1109,168,1598,168,1598,173,1109,173"/>
-<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1841,158,2000,183"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1793,168,1828,168,1828,173,1793,173"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1117,130,1156,144,1211,171,1259,199,1257,203,1209,176,1154,149,1115,135"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="1115,111,1213,111,1213,116,1115,116"/>
-<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="1358,211,1564,187,1598,182,1599,188,1564,192,1359,216"/>
-<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="1355,120,1599,154,1598,159,1355,125"/>
-<area shape="poly" id="edge15_Node000011_Node000006" title=" " alt="" coords="1517,46,1672,148,1669,152,1514,51"/>
-<area shape="rect" id="Node000013" href="$dd/dc2/classdb_1_1EventsContainer.html#aaed5363927f1baab3e7994dc91404538" title="Removes all events from the container." alt="" coords="451,359,605,399"/>
-<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="351,300,444,344,460,351,458,356,442,349,349,305"/>
-<area shape="rect" id="Node000020" href="$dd/dc2/classdb_1_1EventsContainer.html#a15c2bf78cbdfa732a52a7db0078abfec" title="Temporarily disables view notifications during bulk loading." alt="" coords="445,231,611,271"/>
-<area shape="poly" id="edge28_Node000012_Node000020" title=" " alt="" coords="394,268,431,262,431,267,395,273"/>
-<area shape="rect" id="Node000021" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab8df81b25378f325737c6c8ba89877fe" title=" " alt="" coords="443,295,613,335"/>
-<area shape="poly" id="edge29_Node000012_Node000021" title=" " alt="" coords="395,292,429,298,429,303,394,298"/>
-<area shape="poly" id="edge18_Node000013_Node000005" title=" " alt="" coords="592,356,612,345,627,328,635,312,643,295,660,278,730,238,807,209,882,189,949,177,950,182,883,194,808,214,733,243,663,282,647,298,639,314,631,331,615,349,595,361"/>
-<area shape="rect" id="Node000014" href="$da/d80/classmvc_1_1IModelObservable.html#aee327bfaecd260893032de205a8619dd" title="Notifies all views of current item index change." alt="" coords="661,292,869,332"/>
-<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="599,356,679,333,681,338,600,361"/>
-<area shape="rect" id="Node000015" href="$dd/dc2/classdb_1_1EventsContainer.html#ab9f69c41adcbd8bda08ed3150a04e9e6" title=" " alt="" coords="687,359,844,399"/>
-<area shape="poly" id="edge21_Node000013_Node000015" title=" " alt="" coords="605,376,673,376,673,381,605,381"/>
-<area shape="poly" id="edge20_Node000014_Node000009" title=" " alt="" coords="869,291,1209,233,1210,238,870,297"/>
-<area shape="rect" id="Node000016" href="$dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="917,374,1155,399"/>
-<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="844,378,904,380,904,385,844,384"/>
-<area shape="rect" id="Node000017" href="$da/d80/classmvc_1_1IModelObservable.html#afb9b84e8d2dc525ac24407b4a6487112" title="Notifies all registered views that data has changed." alt="" coords="948,309,1124,349"/>
-<area shape="poly" id="edge23_Node000015_Node000017" title=" " alt="" coords="844,362,934,345,935,350,845,367"/>
-<area shape="poly" id="edge27_Node000017_Node000009" title=" " alt="" coords="1103,307,1154,288,1254,238,1256,243,1156,293,1105,312"/>
-<area shape="rect" id="Node000018" href="$da/d80/classmvc_1_1IModelObservable.html#ab0047bdfb7e8f0e6ff7fca9f911d4d99" title="Internal method to clean up expired weak pointers." alt="" coords="1203,284,1379,324"/>
-<area shape="poly" id="edge24_Node000017_Node000018" title=" " alt="" coords="1124,318,1188,311,1189,317,1124,323"/>
-<area shape="rect" id="Node000019" href="$d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="1427,275,1564,301"/>
-<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="1379,294,1413,292,1413,297,1379,300"/>
-<area shape="poly" id="edge26_Node000019_Node000006" title=" " alt="" coords="1518,273,1666,188,1668,193,1520,278"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,267,176,307"/>
+<area shape="rect" id="Node000002" href="$dc/d03/classparser_1_1ParserFactory.html#a4cc82a6d204dc907e7e4aec21efd6be5" title="Creates a parser based on file extension." alt="" coords="230,138,389,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,265,262,183,264,187,127,269"/>
+<area shape="rect" id="Node000013" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a45fa8dbd963e67f71dabc3f8266f59a1" title=" " alt="" coords="224,325,395,365"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="168,305,220,319,219,324,167,310"/>
+<area shape="rect" id="Node000003" href="$dc/d03/classparser_1_1ParserFactory.html#a94dd4f2b5e4d13a40c683f71132294d8" title="Ensures default parsers are registered (called automatically)" alt="" coords="449,166,607,206"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,166,436,172,435,177,389,171"/>
+<area shape="rect" id="Node000009" href="$d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1223,281,1358,307"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="348,176,393,197,443,215,549,240,657,259,766,273,872,283,1064,293,1209,293,1209,299,1064,298,872,289,765,279,656,265,548,246,442,221,391,202,345,181"/>
+<area shape="rect" id="Node000010" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1227,173,1355,199"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="389,149,532,140,723,133,938,136,1048,141,1155,151,1234,167,1233,172,1154,157,1047,147,938,141,723,139,532,145,389,154"/>
+<area shape="rect" id="Node000011" href="$d3/de3/classparser_1_1SapiLogParser.html#a17951a3f572bb285742e556383e10af9" title=" " alt="" coords="447,51,609,91"/>
+<area shape="poly" id="edge14_Node000002_Node000011" title=" " alt="" coords="360,135,463,94,465,99,362,140"/>
+<area shape="rect" id="Node000012" href="$d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1427,64,1563,89"/>
+<area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="324,136,372,84,405,58,442,37,488,20,528,9,564,4,599,3,672,7,764,11,1037,11,1144,16,1250,28,1425,59,1424,64,1249,33,1144,21,1037,17,764,17,672,13,599,8,565,9,529,14,489,25,444,42,408,62,376,88,328,140"/>
+<area shape="rect" id="Node000004" href="$dc/d03/classparser_1_1ParserFactory.html#a6b9c9b8b7b240f54f9d593e15c76e14d" title="Initializes default parsers (XML, JSON, etc.)" alt="" coords="686,166,845,206"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="607,183,672,183,672,189,607,189"/>
+<area shape="rect" id="Node000005" href="$d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="963,231,1109,256"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="845,200,962,225,961,230,844,205"/>
+<area shape="rect" id="Node000008" href="$dc/d03/classparser_1_1ParserFactory.html#a6191bfd8e41d1b5f671a1e7b407fd899" title="Registers a custom parser creator for a file extension." alt="" coords="957,166,1115,206"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="845,183,943,183,943,189,845,189"/>
+<area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1612,231,1793,256"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1109,241,1598,241,1598,246,1109,246"/>
+<area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1841,231,2000,256"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1793,241,1828,241,1828,246,1793,246"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1117,203,1156,217,1211,244,1259,272,1257,276,1209,249,1154,222,1115,208"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="1115,183,1213,183,1213,189,1115,189"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="1358,284,1564,259,1598,255,1599,260,1564,265,1359,289"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="1355,192,1599,226,1598,232,1355,198"/>
+<area shape="poly" id="edge16_Node000012_Node000006" title=" " alt="" coords="1514,88,1677,220,1673,224,1511,92"/>
+<area shape="rect" id="Node000014" href="$dd/dc2/classdb_1_1EventsContainer.html#aaed5363927f1baab3e7994dc91404538" title="Removes all events from the container." alt="" coords="451,421,605,461"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="351,363,444,406,460,413,458,418,442,411,349,367"/>
+<area shape="rect" id="Node000021" href="$dd/dc2/classdb_1_1EventsContainer.html#a15c2bf78cbdfa732a52a7db0078abfec" title="Temporarily disables view notifications during bulk loading." alt="" coords="445,357,611,397"/>
+<area shape="poly" id="edge29_Node000013_Node000021" title=" " alt="" coords="395,355,431,360,431,365,394,360"/>
+<area shape="rect" id="Node000022" href="$df/dbf/classui_1_1qt_1_1SideBySidePanel.html#ab8df81b25378f325737c6c8ba89877fe" title=" " alt="" coords="443,293,613,333"/>
+<area shape="poly" id="edge30_Node000013_Node000022" title=" " alt="" coords="394,330,429,325,429,330,395,335"/>
+<area shape="poly" id="edge19_Node000014_Node000005" title=" " alt="" coords="592,418,612,407,627,390,635,374,643,356,660,340,694,319,731,301,807,274,882,257,949,247,950,252,883,262,809,279,733,306,697,324,663,344,647,360,639,376,631,393,615,411,595,423"/>
+<area shape="rect" id="Node000015" href="$da/d80/classmvc_1_1IModelObservable.html#aee327bfaecd260893032de205a8619dd" title="Notifies all views of current item index change." alt="" coords="661,354,869,394"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="599,418,679,395,681,400,600,423"/>
+<area shape="rect" id="Node000016" href="$dd/dc2/classdb_1_1EventsContainer.html#ab9f69c41adcbd8bda08ed3150a04e9e6" title=" " alt="" coords="687,421,844,461"/>
+<area shape="poly" id="edge22_Node000014_Node000016" title=" " alt="" coords="605,438,673,438,673,443,605,443"/>
+<area shape="poly" id="edge21_Node000015_Node000009" title=" " alt="" coords="870,356,1209,304,1210,309,870,361"/>
+<area shape="rect" id="Node000017" href="$dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="917,383,1155,408"/>
+<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="844,425,946,408,947,413,845,430"/>
+<area shape="rect" id="Node000018" href="$da/d80/classmvc_1_1IModelObservable.html#afb9b84e8d2dc525ac24407b4a6487112" title="Notifies all registered views that data has changed." alt="" coords="948,433,1124,473"/>
+<area shape="poly" id="edge24_Node000016_Node000018" title=" " alt="" coords="844,442,935,446,934,451,844,447"/>
+<area shape="poly" id="edge28_Node000018_Node000009" title=" " alt="" coords="1123,432,1153,418,1168,407,1178,396,1201,368,1261,314,1265,318,1205,372,1182,399,1172,411,1156,423,1125,437"/>
+<area shape="rect" id="Node000019" href="$da/d80/classmvc_1_1IModelObservable.html#ab0047bdfb7e8f0e6ff7fca9f911d4d99" title="Internal method to clean up expired weak pointers." alt="" coords="1203,382,1379,422"/>
+<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="1124,433,1189,420,1190,425,1125,438"/>
+<area shape="rect" id="Node000020" href="$d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="1427,360,1564,385"/>
+<area shape="poly" id="edge26_Node000019_Node000020" title=" " alt="" coords="1378,387,1412,382,1413,387,1379,392"/>
+<area shape="poly" id="edge27_Node000020_Node000006" title=" " alt="" coords="1516,358,1668,261,1671,266,1518,362"/>
 </map>

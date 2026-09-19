@@ -16,6 +16,9 @@ var hierarchy =
     [ "ui::qt::utils::ThemeManager::ColorScheme", "dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html", null ],
     [ "config::ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", null ],
     [ "config::ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", null ],
+    [ "ui::qt::ColumnDistinctValues", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues.html", null ],
+    [ "ui::qt::EventsTableModel::ColumnFilter", "d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html", null ],
+    [ "ui::qt::ColumnValueCount", "d1/d7c/structui_1_1qt_1_1ColumnValueCount.html", null ],
     [ "ai::Config", "db/de8/structai_1_1Config.html", null ],
     [ "config::Config", "d2/d5e/classconfig_1_1Config.html", null ],
     [ "config::ConfigObserver", "d0/d90/classconfig_1_1ConfigObserver.html", [
@@ -61,6 +64,7 @@ var hierarchy =
       [ "parser::DltParser", "db/de9/classparser_1_1DltParser.html", null ],
       [ "parser::EvlogParser", "d1/d55/classparser_1_1EvlogParser.html", null ],
       [ "parser::JsonParser", "d1/d10/classparser_1_1JsonParser.html", null ],
+      [ "parser::SapiLogParser", "d3/de3/classparser_1_1SapiLogParser.html", null ],
       [ "parser::XmlParser", "db/d5c/classparser_1_1XmlParser.html", null ]
     ] ],
     [ "parser::IDataParserObserver", "df/d79/classparser_1_1IDataParserObserver.html", [
@@ -171,6 +175,7 @@ var hierarchy =
       [ "ui::qt::EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", null ]
     ] ],
     [ "QDialog", "d9/d46/classQDialog.html", [
+      [ "ui::qt::ColumnFilterPopup", "d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html", null ],
       [ "ui::qt::ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", null ],
       [ "ui::qt::ExportDialog", "d3/de3/classui_1_1qt_1_1ExportDialog.html", null ],
       [ "ui::qt::FilterEditorDialog", "dd/d5e/classui_1_1qt_1_1FilterEditorDialog.html", null ],
@@ -190,6 +195,12 @@ var hierarchy =
     ] ],
     [ "QGraphicsScene", "d9/d74/classQGraphicsScene.html", [
       [ "ClickScene", "d5/ddf/classClickScene.html", null ]
+    ] ],
+    [ "QGraphicsView", "d4/dca/classQGraphicsView.html", [
+      [ "SequenceZoomView", "d4/d07/classSequenceZoomView.html", null ]
+    ] ],
+    [ "QHeaderView", "de/dd3/classQHeaderView.html", [
+      [ "ui::qt::FilterHeaderView", "d2/ddc/classui_1_1qt_1_1FilterHeaderView.html", null ]
     ] ],
     [ "QMainWindow", "df/d90/classQMainWindow.html", [
       [ "ui::qt::MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html", null ]
@@ -256,6 +267,7 @@ var hierarchy =
     [ "ui::qt::utils::SearchEngine", "d6/da4/classui_1_1qt_1_1utils_1_1SearchEngine.html", null ],
     [ "ui::qt::utils::SearchMatch", "db/d1c/structui_1_1qt_1_1utils_1_1SearchMatch.html", null ],
     [ "mvc::SearchResultRow", "de/d74/structmvc_1_1SearchResultRow.html", null ],
+    [ "analyzer::SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", null ],
     [ "ui::qt::utils::SessionManager", "d5/da1/classui_1_1qt_1_1utils_1_1SessionManager.html", null ],
     [ "ui::qt::utils::SessionManager::SessionState", "d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html", null ],
     [ "ui::qt::ShortcutInfo", "d3/da1/structui_1_1qt_1_1ShortcutInfo.html", null ],

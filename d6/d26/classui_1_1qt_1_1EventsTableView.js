@@ -3,6 +3,7 @@ var classui_1_1qt_1_1EventsTableView =
     [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a1236d6317442e8eba476faced5e006a7", null ],
     [ "AddToScenarioRequested", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a9e3c265f4df320d9c953f028603c3592", null ],
     [ "BookmarkRequested", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a437d78877878f4be619411e2e2a954b0", null ],
+    [ "ClearColumnFilters", "d6/d26/classui_1_1qt_1_1EventsTableView.html#af108ffcf117730d0d6a48c5161d15bde", null ],
     [ "ClearFilter", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aca2687c5a3c9afb99c99c18154cf537c", null ],
     [ "ConnectSelectionSignals", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a1a677a95e7674a8f12c30642fd340b16", null ],
     [ "CopySelectedRowsAsCsv", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ad935b090ba82bc045a13ed5e8b07d5ca", null ],
@@ -11,6 +12,7 @@ var classui_1_1qt_1_1EventsTableView =
     [ "CurrentActualRowChanged", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ac3d49dcdfa61953e2cf86ee08b6bd7b0", null ],
     [ "FirstVisibleActualRow", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a37f33c9c575aac4a6ee14cbe0007bc89", null ],
     [ "GetFilteredIndices", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a409eade5a30a8decff92f33539f2e0e4", null ],
+    [ "HasColumnFilters", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ad052011ad51de818bd5a6e0620d02774", null ],
     [ "InitializeView", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a13b0d98e213448d3f4a2fe4e5572f890", null ],
     [ "IsFilterActive", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a214a51fd382ae0d5a80c4525ac7f04b8", null ],
     [ "JumpToTimestamp", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a5f3eb6a67d149d861d4a95ebdfc5686e", null ],
@@ -35,10 +37,12 @@ var classui_1_1qt_1_1EventsTableView =
     [ "SelectedActualIndices", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a8cd630eb869bc2ed260854389d668fa1", null ],
     [ "SetFilteredEvents", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a67d1fd190b97f20f16d96dba016d4b7a", null ],
     [ "SetSearchTerm", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a14ed4ff1d49eeec7709cad19154f4f75", null ],
+    [ "ShowColumnFilterPopup", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a26fdf075db5d0c74afd18bb7a5e828cc", null ],
     [ "ShowContextMenu", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a9431d9fa28cc1148dccdbd8e1741f28b", null ],
     [ "SyncScrollTo", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a8d23e065172b9232d098251ab93f3e32", null ],
     [ "UpdateColors", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a12913201ba2ec7d3a7c97d4fa9bd30a9", null ],
     [ "m_currentMatchIndex", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a59d9ff25f760c0b30de0f3e5acc1d4ad", null ],
     [ "m_events", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a54361be38b9094118b0a26e40945c0f5", null ],
+    [ "m_filterHeader", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aec663ed780ce813d8d8261239519d50d", null ],
     [ "m_model", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a3792f7182e7bdcd90a124596df678d9f", null ]
 ];

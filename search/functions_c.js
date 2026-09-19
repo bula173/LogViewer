@@ -32,5 +32,7 @@ var searchData=
   ['messagesent_29',['MessageSent',['../d6/d8a/classui_1_1qt_1_1AIChatPanel.html#a2716ca6891d111b965fb256df2bbe04f',1,'ui::qt::AIChatPanel']]],
   ['minimumsizehint_30',['minimumSizeHint',['../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#a6716f6fbe5193a3a40e0c9294f63096a',1,'ui::qt::UnifiedSearchBar']]],
   ['modelavailable_31',['ModelAvailable',['../df/de6/classui_1_1qt_1_1GemmaDownloadDialog.html#a6c925ac21f9c889540c68e1f80d84598',1,'ui::qt::GemmaDownloadDialog']]],
-  ['mousedoubleclickevent_32',['mouseDoubleClickEvent',['../d5/ddf/classClickScene.html#a6897aac58db9208393be66f37fb8da92',1,'ClickScene']]]
+  ['mousedoubleclickevent_32',['mouseDoubleClickEvent',['../d5/ddf/classClickScene.html#a6897aac58db9208393be66f37fb8da92',1,'ClickScene']]],
+  ['mousepressevent_33',['mousePressEvent',['../d2/ddc/classui_1_1qt_1_1FilterHeaderView.html#a11a0c0ee4e3ed9cfd552a000170c014c',1,'ui::qt::FilterHeaderView']]],
+  ['mousereleaseevent_34',['mouseReleaseEvent',['../d2/ddc/classui_1_1qt_1_1FilterHeaderView.html#aa1f0df20ceab208ecc07b951ddff1238',1,'ui::qt::FilterHeaderView']]]
 ];

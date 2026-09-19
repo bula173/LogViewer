@@ -8,13 +8,14 @@ var searchData=
   ['errorcount_5',['errorcount',['../d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html#a96aae381f76bd15f1fff2ba187372687',1,'ui::qt::ActorsPanel::ActorData::errorCount'],['../d1/d31/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportStatistics.html#aad098177c2bece98fa438017c8ebf552',1,'ui::qt::utils::ReportGenerator::ReportStatistics::errorCount']]],
   ['eventbatch_6',['eventBatch',['../de/d53/structparser_1_1ParserState.html#a284e91d89bcf9681823aed7d4e8e2a37',1,'parser::ParserState']]],
   ['eventid_7',['eventid',['../de/d74/structmvc_1_1SearchResultRow.html#a98b01985af5c157f90b19f16905a2c29',1,'mvc::SearchResultRow::eventId'],['../de/d53/structparser_1_1ParserState.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState::eventId'],['../d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html#ad67c12c0b404b5f1d2129d3ad32617cf',1,'ui::qt::utils::EventTagManager::EventAnnotation::eventId']]],
-  ['eventindices_8',['eventIndices',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#a7da0c90aa1e8a3242d7b149541194e92',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
-  ['eventitems_9',['eventItems',['../de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
-  ['eventrow_10',['eventRow',['../dc/d1e/structui_1_1qt_1_1utils_1_1NotificationManager_1_1Notification.html#a38b4703dbb9d7561dec3cc8278516b1f',1,'ui::qt::utils::NotificationManager::Notification']]],
-  ['events_11',['events',['../d6/d35/structui_1_1qt_1_1ScenariosPanel_1_1Scenario.html#abd70c6901425518da4e1a3385a6ab4a4',1,'ui::qt::ScenariosPanel::Scenario']]],
-  ['eventssincelastnotify_12',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
-  ['eventtype_13',['eventType',['../dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929',1,'parser::EvlogTemplate']]],
-  ['exception_14',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
-  ['expanded_15',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
-  ['extractionpattern_16',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
+  ['eventindex_8',['eventIndex',['../d1/da6/structanalyzer_1_1SequenceMessage.html#aca04ddc9eb7e297a8a247801efbcab28',1,'analyzer::SequenceMessage']]],
+  ['eventindices_9',['eventIndices',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#a7da0c90aa1e8a3242d7b149541194e92',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
+  ['eventitems_10',['eventItems',['../de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
+  ['eventrow_11',['eventRow',['../dc/d1e/structui_1_1qt_1_1utils_1_1NotificationManager_1_1Notification.html#a38b4703dbb9d7561dec3cc8278516b1f',1,'ui::qt::utils::NotificationManager::Notification']]],
+  ['events_12',['events',['../d6/d35/structui_1_1qt_1_1ScenariosPanel_1_1Scenario.html#abd70c6901425518da4e1a3385a6ab4a4',1,'ui::qt::ScenariosPanel::Scenario']]],
+  ['eventssincelastnotify_13',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
+  ['eventtype_14',['eventType',['../dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929',1,'parser::EvlogTemplate']]],
+  ['exception_15',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
+  ['expanded_16',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
+  ['extractionpattern_17',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
 ];
