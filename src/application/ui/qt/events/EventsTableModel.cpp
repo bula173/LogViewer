@@ -95,7 +95,7 @@ QVariant EventsTableModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return ComposeCellText(event, columnName);
+            return ComposeCellText(event, columnName, columnConfigIndex == -1);
         case Qt::ForegroundRole:
         case Qt::BackgroundRole:
         {
@@ -528,12 +528,12 @@ bool EventsTableModel::ShouldShowOriginalIdColumn() const
 }
 
 QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
-    const std::string& columnName) const
+    const std::string& columnName, bool mergeSource) const
 {
     if (columnName == "id")
         return QString::number(event.getId());
     
-    if (columnName == "source")
+    if (mergeSource)
         return QString::fromStdString(event.GetSource());
     
     if (columnName == "original_id")
@@ -571,12 +571,12 @@ QString EventsTableModel::ComposeCellText(const db::LogEvent& event,
 
 
 QVariant EventsTableModel::GetSortValue(const db::LogEvent& event,
-    const std::string& columnName) const
+    const std::string& columnName, bool mergeSource) const
 {
     if (columnName == "id")
         return QVariant::fromValue(static_cast<long long>(event.getId()));
     
-    if (columnName == "source")
+    if (mergeSource)
         return QString::fromStdString(event.GetSource());
     
     if (columnName == "original_id")
@@ -648,6 +648,7 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     const int columnConfigIndex = m_visibleColumnIndices[static_cast<std::size_t>(column)];
 
     // Determine column name
+    const bool isMergeSource = (columnConfigIndex == -1);
     std::string columnName;
     if (columnConfigIndex == -1)
     {
@@ -700,12 +701,12 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
 
     // Sort the indices based on the column values
     std::sort(indicesToSort.begin(), indicesToSort.end(),
-        [this, &columnName, order](unsigned long a, unsigned long b) {
+        [this, &columnName, order, isMergeSource](unsigned long a, unsigned long b) {
             const auto& eventA = m_events.GetEvent(a);
             const auto& eventB = m_events.GetEvent(b);
             
-            QVariant valA = GetSortValue(eventA, columnName);
-            QVariant valB = GetSortValue(eventB, columnName);
+            QVariant valA = GetSortValue(eventA, columnName, isMergeSource);
+            QVariant valB = GetSortValue(eventB, columnName, isMergeSource);
             
             // Handle different types
             bool isEqual = false;

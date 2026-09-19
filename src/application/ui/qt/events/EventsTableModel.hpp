@@ -59,10 +59,13 @@ class EventsTableModel : public QAbstractTableModel
     void RebuildVisibleColumns();
     bool ShouldShowSourceColumn() const;
     bool ShouldShowOriginalIdColumn() const;
+    /// @p mergeSource: the column is the dynamic multi-file "source" column
+    /// (shows LogEvent::GetSource()). A configured data column that merely
+    /// happens to be named "source" reads the event's own "source" field.
     QString ComposeCellText(const db::LogEvent& event,
-        const std::string& columnName) const;
+        const std::string& columnName, bool mergeSource) const;
     QVariant GetSortValue(const db::LogEvent& event,
-        const std::string& columnName) const;
+        const std::string& columnName, bool mergeSource) const;
 
     db::EventsContainer& m_events;
     std::vector<unsigned long> m_filteredIndices;

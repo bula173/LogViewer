@@ -8,6 +8,10 @@ All notable changes to LogViewer are documented here.
 
 - **safeAPI merged test-log parser** — opens the `*_merged_logs.txt` files produced by the safeAPI RBC 2oo2 test environment (robot steps, container and simulator logs merged into one file). Bracket-delimited lines are split into `timestamp`, `category`, `source`, `destination`, `level`, `event_type`, `info` and `payload` fields. Generic `.txt` files are auto-detected by the merged-log header; other `.txt` files behave as before. Also selectable in the file-type prompt.
 
+### Fixes
+
+- **A column named `source` showed blank cells in the event table.** The table treated that name as the multi-file merge alias (`LogEvent::GetSource()`, empty for unmerged files) instead of the event's own `source` field. Only the dynamic merge column now shows the alias; a configured `source` column reads the data field (and sorts by it).
+
 ## [1.12.0] — 2026-08-17
 
 ### New features

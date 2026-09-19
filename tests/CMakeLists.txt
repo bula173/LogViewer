@@ -33,7 +33,10 @@ target_compile_definitions(${PROJECT_NAME}_tests PRIVATE
     LOGVIEWER_TEST_DATA_DIR="${CMAKE_BINARY_DIR}/tests/data"
 )
 
-target_include_directories(${PROJECT_NAME}_tests PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME}_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}
+    # Qt UI headers include siblings as "utils/...", "panels/..." (e.g. EventsTableModel.hpp)
+    ${CMAKE_SOURCE_DIR}/src/application/ui/qt)
 
 target_link_libraries(${PROJECT_NAME}_tests
   PRIVATE
