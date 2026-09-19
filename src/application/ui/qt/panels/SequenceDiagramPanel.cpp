@@ -15,6 +15,12 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsTextItem>
+#include <QGraphicsView>
+#include <QNativeGestureEvent>
+#include <QScrollBar>
+#include <QShortcut>
+#include <QToolButton>
+#include <QWheelEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPolygonF>
@@ -24,6 +30,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cmath>
 #include <map>
 #include <set>
 #include <vector>
@@ -99,6 +106,83 @@ void ClickScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
 }
 
 // ---------------------------------------------------------------------------
+// SequenceZoomView — QGraphicsView with wheel / pinch zoom and fit-to-width
+// ---------------------------------------------------------------------------
+
+class SequenceZoomView : public QGraphicsView
+{
+public:
+    static constexpr qreal kMinZoom = 0.05;
+    static constexpr qreal kMaxZoom = 5.0;
+
+    using QGraphicsView::QGraphicsView;
+
+    qreal ZoomLevel() const { return transform().m11(); }
+
+    /// Zooms by @p factor around the view centre (for buttons / shortcuts).
+    void ZoomCentered(qreal factor)
+    {
+        const auto anchor = transformationAnchor();
+        setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+        ZoomBy(factor);
+        setTransformationAnchor(anchor);
+    }
+
+    void ResetZoom() { setTransform(QTransform()); }
+
+    /// Scales so the whole scene width fits the viewport (never above 100%),
+    /// then scrolls to the top-left so the actor headers are visible.
+    void FitWidth()
+    {
+        const QRectF r = sceneRect();
+        if (r.isEmpty() || r.width() <= 0) return;
+        const qreal s = std::clamp(viewport()->width() / r.width(), kMinZoom, 1.0);
+        setTransform(QTransform::fromScale(s, s));
+        horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+        verticalScrollBar()->setValue(verticalScrollBar()->minimum());
+    }
+
+protected:
+    void wheelEvent(QWheelEvent* e) override
+    {
+        // Ctrl (Cmd on macOS) + wheel zooms under the cursor; a plain wheel
+        // keeps its normal scrolling behaviour.
+        if (e->modifiers() & Qt::ControlModifier)
+        {
+            const int dy = e->angleDelta().y();
+            if (dy != 0)
+                ZoomBy(std::pow(1.0015, dy)); // ~1.2x per 120-unit wheel notch
+            e->accept();
+            return;
+        }
+        QGraphicsView::wheelEvent(e);
+    }
+
+    bool viewportEvent(QEvent* e) override
+    {
+        if (e->type() == QEvent::NativeGesture)
+        {
+            auto* g = static_cast<QNativeGestureEvent*>(e);
+            if (g->gestureType() == Qt::ZoomNativeGesture)
+            {
+                ZoomBy(1.0 + g->value());
+                return true;
+            }
+        }
+        return QGraphicsView::viewportEvent(e);
+    }
+
+private:
+    void ZoomBy(qreal factor)
+    {
+        const qreal target = std::clamp(ZoomLevel() * factor, kMinZoom, kMaxZoom);
+        const qreal f = target / ZoomLevel();
+        if (f != 1.0)
+            scale(f, f);
+    }
+};
+
+// ---------------------------------------------------------------------------
 // Panel implementation
 // ---------------------------------------------------------------------------
 
@@ -148,6 +232,26 @@ void SequenceDiagramPanel::BuildLayout()
     m_limitSpin->setSuffix(tr(" messages"));
     toolbar->addWidget(m_limitSpin);
 
+    // Zoom controls (wheel/pinch zoom is handled by SequenceZoomView itself).
+    auto makeZoomButton = [this, toolbar](const QString& text, const QString& tip,
+                                          const char* objectName) {
+        auto* b = new QToolButton(this);
+        b->setText(text);
+        b->setToolTip(tip);
+        b->setObjectName(objectName);
+        toolbar->addWidget(b);
+        return b;
+    };
+    auto* zoomOut   = makeZoomButton(QStringLiteral("\u2212"), tr("Zoom out (Ctrl+-)"),
+                                     "seqZoomOutButton");
+    auto* zoomIn    = makeZoomButton(QStringLiteral("+"), tr("Zoom in (Ctrl++)"),
+                                     "seqZoomInButton");
+    auto* zoom100   = makeZoomButton(tr("100%"), tr("Actual size (Ctrl+0)"),
+                                     "seqZoom100Button");
+    auto* fitWidth  = makeZoomButton(tr("Fit width"),
+                                     tr("Scale the diagram to the panel width"),
+                                     "seqFitWidthButton");
+
     toolbar->addStretch();
 
     m_statusLabel = new QLabel(tr("Load a log file to generate the diagram"), this);
@@ -161,7 +265,8 @@ void SequenceDiagramPanel::BuildLayout()
     m_scene = scene;
     m_scene->setBackgroundBrush(palette().base());
 
-    m_view = new QGraphicsView(m_scene, this);
+    m_view = new SequenceZoomView(m_scene, this);
+    m_view->setObjectName("seqDiagramView");
     m_view->setRenderHint(QPainter::Antialiasing);
     m_view->setDragMode(QGraphicsView::ScrollHandDrag);
     m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -175,6 +280,21 @@ void SequenceDiagramPanel::BuildLayout()
             this, &SequenceDiagramPanel::OnLimitChanged);
     connect(scene, &ClickScene::arrowClicked,
             this, &SequenceDiagramPanel::OnSceneClicked);
+
+    constexpr qreal kZoomStep = 1.25;
+    connect(zoomIn,   &QToolButton::clicked, this, [this] { m_view->ZoomCentered(kZoomStep); });
+    connect(zoomOut,  &QToolButton::clicked, this, [this] { m_view->ZoomCentered(1.0 / kZoomStep); });
+    connect(zoom100,  &QToolButton::clicked, this, [this] { m_view->ResetZoom(); });
+    connect(fitWidth, &QToolButton::clicked, this, [this] { m_view->FitWidth(); });
+
+    auto addShortcut = [this](const QKeySequence& keys, auto&& action) {
+        auto* sc = new QShortcut(keys, this);
+        sc->setContext(Qt::WidgetWithChildrenShortcut);
+        connect(sc, &QShortcut::activated, this, action);
+    };
+    addShortcut(QKeySequence::ZoomIn,  [this] { m_view->ZoomCentered(kZoomStep); });
+    addShortcut(QKeySequence::ZoomOut, [this] { m_view->ZoomCentered(1.0 / kZoomStep); });
+    addShortcut(QKeySequence(Qt::CTRL | Qt::Key_0), [this] { m_view->FitWidth(); });
 }
 
 // ---------------------------------------------------------------------------
@@ -245,7 +365,7 @@ void SequenceDiagramPanel::SetDefinitions(const std::vector<ActorDefinition>& de
 
     // Re-render with updated aliases/self if a pattern is already known.
     if (m_pattern)
-        RenderDiagram(*m_pattern);
+        RenderDiagram(*m_pattern, /*resetZoom=*/false);
 }
 
 void SequenceDiagramPanel::OnDiscoveryFinished()
@@ -263,14 +383,14 @@ void SequenceDiagramPanel::OnDiscoveryFinished()
     }
 
     m_pattern = result.patterns[0];
-    RenderDiagram(*m_pattern);
+    RenderDiagram(*m_pattern, /*resetZoom=*/true);
 }
 
 // ---------------------------------------------------------------------------
 // Rendering
 // ---------------------------------------------------------------------------
 
-void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
+void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat, bool resetZoom)
 {
     m_scene->clear();
 
@@ -428,7 +548,8 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
     }
 
     m_scene->setSceneRect(m_scene->itemsBoundingRect().adjusted(-10, -10, 10, 10));
-    m_view->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
+    if (resetZoom)
+        m_view->FitWidth();
 
     const bool trunc = (static_cast<int>(rows.size()) == limit);
     m_statusLabel->setText(
@@ -449,7 +570,7 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
 
 void SequenceDiagramPanel::OnLimitChanged(int)
 {
-    if (m_pattern) RenderDiagram(*m_pattern);
+    if (m_pattern) RenderDiagram(*m_pattern, /*resetZoom=*/false);
 }
 
 void SequenceDiagramPanel::OnSceneClicked(qulonglong eventIndex)

@@ -15,6 +15,8 @@
 #include <optional>
 #include <string>
 
+class SequenceZoomView; // defined in SequenceDiagramPanel.cpp
+
 namespace db   { class EventsContainer; }
 namespace ui::qt { class EventsTableView; }
 
@@ -27,6 +29,11 @@ namespace ui::qt
 /// (QtConcurrent) so the UI stays responsive.  Once discovery completes
 /// the exchange pattern is stored and RenderDiagram() draws the swimlane.
 /// Each arrow is clickable (double-click) to navigate to the source event.
+///
+/// Navigation: scroll bars / mouse wheel scroll, drag pans, Ctrl(Cmd)+wheel,
+/// trackpad pinch, the toolbar buttons and Ctrl++ / Ctrl+- / Ctrl+0 zoom.
+/// A freshly discovered diagram opens fit to width (never enlarged past
+/// 100%); changing the message limit or aliases keeps the current zoom.
 class SequenceDiagramPanel : public QWidget
 {
     Q_OBJECT
@@ -49,13 +56,13 @@ private slots:
 
 private:
     void BuildLayout();
-    void RenderDiagram(const analyzer::ExchangePattern& pat);
+    void RenderDiagram(const analyzer::ExchangePattern& pat, bool resetZoom);
 
     db::EventsContainer& m_events;
     EventsTableView*     m_eventsView;
 
     QGraphicsScene*  m_scene       {nullptr};
-    QGraphicsView*   m_view        {nullptr};
+    SequenceZoomView* m_view       {nullptr};
     QSpinBox*        m_limitSpin   {nullptr};
     QLabel*          m_statusLabel {nullptr};
     QPushButton*     m_refreshBtn  {nullptr};

@@ -7,6 +7,7 @@ All notable changes to LogViewer are documented here.
 ### New features
 
 - **safeAPI merged test-log parser** — opens the `*_merged_logs.txt` files produced by the safeAPI RBC 2oo2 test environment (robot steps, container and simulator logs merged into one file). Bracket-delimited lines are split into `timestamp`, `category`, `source`, `destination`, `level`, `event_type`, `info` and `payload` fields. Generic `.txt` files are auto-detected by the merged-log header; other `.txt` files behave as before. Also selectable in the file-type prompt.
+- **Zoom and scroll in the Sequence tab** — Ctrl/Cmd+wheel, trackpad pinch, the new −/+/100%/Fit width toolbar buttons and Ctrl++ / Ctrl+- / Ctrl+0 zoom the diagram (5%–500%); the wheel, scroll bars and drag scroll/pan it. A newly discovered diagram opens fit to width (never enlarged past 100%) instead of shrunk to fit its full height, which made long diagrams unreadable; changing the message limit or actor aliases keeps your zoom.
 
 ### Fixes
 
