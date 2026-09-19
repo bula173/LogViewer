@@ -10,6 +10,7 @@ All notable changes to LogViewer are documented here.
 
 ### Fixes
 
+- **Sequence tab now shows only messages between actors.** Events addressed to a placeholder receiver (`internal`, `none`, `n/a`, `-`) are local log lines, not messages, but were drawn as arrows to a bogus "internal" lifeline (2469 of 4055 events in a safeAPI merged log). Multi-actor receivers such as `c-west,c-east` were a single fake lifeline; they are now split into one arrow per actor. Lifelines are drawn only for actors that take part in a message (plus the configured self actor), and the message limit counts real messages only.
 - **A column named `source` showed blank cells in the event table.** The table treated that name as the multi-file merge alias (`LogEvent::GetSource()`, empty for unmerged files) instead of the event's own `source` field. Only the dynamic merge column now shows the alias; a configured `source` column reads the data field (and sorts by it).
 
 ## [1.12.0] — 2026-08-17

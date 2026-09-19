@@ -3,6 +3,7 @@
 #include "EventsContainer.hpp"
 #include "events/EventsTableView.hpp"
 #include "Logger.hpp"
+#include "analyzers/SequenceMessages.hpp"
 #include "panels/ActorDefinition.hpp"
 
 #include <QFutureWatcher>
@@ -24,6 +25,7 @@
 #include <algorithm>
 #include <climits>
 #include <map>
+#include <set>
 #include <vector>
 
 // ---------------------------------------------------------------------------
@@ -280,9 +282,20 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
         return QString::fromStdString(it != m_aliasMap.end() ? it->second : raw);
     };
 
-    // Ordered actor list — self actor placed first if present.
-    std::vector<std::string> actors(pat.actors.begin(), pat.actors.end());
-    std::sort(actors.begin(), actors.end());
+    // ── Collect messages between actors ───────────────────────────────────
+    // Only real actor-to-actor messages: events addressed to a placeholder
+    // ("internal", "none", …) are local log lines, not part of the sequence.
+    const auto messages = analyzer::CollectSequenceMessages(
+        m_events, pat, static_cast<std::size_t>(limit));
+
+    // Lifelines: actors that take part in at least one message, plus the
+    // "self" actor when the pattern knows it.
+    std::set<std::string> used;
+    for (const auto& m : messages) { used.insert(m.from); used.insert(m.to); }
+    if (!m_selfActor.empty() && pat.actors.count(m_selfActor))
+        used.insert(m_selfActor);
+
+    std::vector<std::string> actors(used.begin(), used.end()); // sorted
     // Move self to front for visual prominence.
     if (!m_selfActor.empty())
     {
@@ -297,26 +310,24 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat)
     const int   numActors = static_cast<int>(actors.size());
     const qreal actorCX   = kActorBoxW / 2.0;
 
-    // ── Collect message rows ──────────────────────────────────────────────
     struct MsgRow { int fromCol, toCol; QString label; qulonglong idx; };
     std::vector<MsgRow> rows;
-    rows.reserve(static_cast<size_t>(limit));
-
-    for (size_t i = 0; i < m_events.Size() && static_cast<int>(rows.size()) < limit; ++i)
+    rows.reserve(messages.size());
+    for (const auto& m : messages)
     {
-        const auto& ev  = m_events.GetEvent(i);
-        const auto  frm = ev.findByKey(pat.senderField);
-        const auto  too = ev.findByKey(pat.receiverField);
-        if (frm.empty() || too.empty()) continue;
-        auto fIt = col.find(frm), tIt = col.find(too);
-        if (fIt == col.end() || tIt == col.end()) continue;
-
-        QString lbl = pat.labelField.empty()
-                      ? QString{}
-                      : QString::fromStdString(ev.findByKey(pat.labelField));
+        QString lbl = QString::fromStdString(m.label);
         if (lbl.size() > 32) { using namespace Qt::StringLiterals; lbl = lbl.left(30) + u"…"_s; }
-        rows.push_back({fIt->second, tIt->second, std::move(lbl),
-                        static_cast<qulonglong>(i)});
+        rows.push_back({col.at(m.from), col.at(m.to), std::move(lbl),
+                        static_cast<qulonglong>(m.eventIndex)});
+    }
+
+    if (rows.empty())
+    {
+        m_statusLabel->setText(tr("No messages between actors (fields %1 → %2)")
+            .arg(QString::fromStdString(pat.senderField),
+                 QString::fromStdString(pat.receiverField)));
+        m_statusLabel->setStyleSheet("color: gray;");
+        return;
     }
 
     // ── Draw lifelines + actor boxes ──────────────────────────────────────
