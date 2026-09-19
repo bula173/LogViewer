@@ -152,9 +152,10 @@ Registered parsers (extension → class):
 | `.asc` | `AscParser` | CAN/Vector CANalyzer; constructed with optional DBC path via `CreateParserFor()` |
 | `.dlt` | `DltParser` | AUTOSAR Diagnostic Log and Trace binary |
 | `.evl` | `EvlogParser` | POSIX 1003.25 evlog binary; constructed with optional template directory via `CreateParserFor()` |
+| `.txt` (sniffed) / `.sapilog` | `SapiLogParser` | safeAPI RBC 2oo2 merged test log; `ParserFactory` maps `.txt` to it only when the `# FULL MERGED TEST STEPS` header is present, otherwise `.txt` keeps the existing fallback/prompt |
 
 **JsonParser** (`parsers/json/`): Parses JSON log files in two layouts.
-- **Array format**: the file contains a single top-level JSON array of objects. The whole file is parsed in one `nlohmann::json` call.
+- **Array format**: the file contains a single top-level JSON array of objects. Streamed through a `nlohmann::json` parser callback that flattens and discards each top-level element as it completes (bounded memory), emitting events in batches.
 - **NDJSON/JSONL format**: one JSON object per line. Each line is parsed independently; malformed lines are skipped with a `WARN` log entry.
 - Format is auto-detected by the first non-whitespace character (`[` → array, `{` → NDJSON).
 - Nested objects and arrays are flattened with dot notation (`ctx.host`) and index suffixes (`tags.0`, `tags.1`), respectively.
@@ -173,6 +174,12 @@ Registered parsers (extension → class):
 - Verbose payloads: iterates type-info words and decodes each argument (BOOL, SINT, UINT, FLOA, STRG, RAWD); skips VARI variable-info prefix when present.
 - Non-verbose payloads: emits `MsgID=0x…` + hex dump.
 - Emitted fields: `timestamp`, `level` (Off/Fatal/Error/Warn/Info/Debug/Verbose), `type` (Log/AppTrace/NwTrace/Control), `AppID`, `ContextID`, `EcuID`, `MsgCtr`, optional `SessionID`, `info`.
+
+**SapiLogParser** (`parsers/sapi/`): Parses merged test-run logs from the safeAPI RBC 2oo2 test environment (robot steps + container + simulator logs).
+- Header block of `#` lines, then one event per line: `[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]`.
+- Fields are split by bracket depth (brackets nest inside `info`/`payload`); `payload` is the remainder after the 7th field, multiple groups kept verbatim. Malformed lines are skipped; a file with no matching line throws `ParseError`.
+- Emitted fields: `timestamp` (ISO-8601 string), `category`, `source`, `destination`, `level`, `event_type`, `info`, optional `payload`.
+- `SapiLogParser::LooksLikeSapiLog()` sniffs the header so generic `.txt` files are auto-routed here (in `ParserFactory::CreateFromFile` and `MainWindow::CreateParserFor`); the file-type prompt also lists it (`.sapilog`).
 
 **EvlogParser** (`parsers/evlog/`): Parses POSIX 1003.25 evlog binary files (`.evl`).
 - Fixed 60-byte little-endian `posix_log_entry` header at known byte offsets; no file-level magic (sanity-checked via severity ≤ 7 and format ∈ {0,1,2,3}).

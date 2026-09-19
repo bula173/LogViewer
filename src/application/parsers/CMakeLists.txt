@@ -7,6 +7,7 @@ add_subdirectory(dbc)
 add_subdirectory(asc)
 add_subdirectory(dlt)
 add_subdirectory(evlog)
+add_subdirectory(sapi)
 
 # Define sources and headers for the parsers target
 target_sources(application_core

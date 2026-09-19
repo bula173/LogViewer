@@ -5,7 +5,7 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 ## Features
 
 ### Core
-- **Multiple Log Formats**: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (`.dlt`), and POSIX Evlog (`.evl`)
+- **Multiple Log Formats**: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (`.dlt`), POSIX Evlog (`.evl`), and safeAPI RBC 2oo2 merged test logs (`.txt` with the merged-log header)
 - **DBC Signal Decoding**: Load a `.dbc` file alongside an ASC log to decode raw CAN frames into named signals
 - **Evlog Template Decoding**: Load a directory of `.t`/`.tmpl`/`.template` files to decode structured BINARY evlog payloads into named fields
 - **High Performance**: Virtual list architecture handles millions of log entries
@@ -235,7 +235,7 @@ Configure in Settings > AI with an API key:
 
 ## Usage
 
-1. **Open Log File** — File > Open (Ctrl+O); supports XML, CSV, `.asc` CAN, `.dlt` DLT, and `.evl` Evlog; drag and drop also works
+1. **Open Log File** — File > Open (Ctrl+O); supports XML, CSV, `.asc` CAN, `.dlt` DLT, `.evl` Evlog, and safeAPI merged test logs (`.txt`, auto-detected by header); drag and drop also works
 2. **Load DBC** — File > Load DBC… to decode CAN signals from a `.dbc` database (optional, ASC only)
 3. **Load Evlog Templates** — File > Load Evlog Templates… to select a directory of template files for `.evl` BINARY payload decoding
 4. **Filter** — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles

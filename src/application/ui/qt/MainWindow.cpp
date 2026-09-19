@@ -55,6 +55,7 @@
 #include "utils/ThemeSwitcher.hpp"
 #include "asc/AscParser.hpp"
 #include "evlog/EvlogParser.hpp"
+#include "sapi/SapiLogParser.hpp"
 #include "ParserFactory.hpp"
 
 #include <QAction>
@@ -2123,6 +2124,10 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
     std::transform(ext.begin(), ext.end(), ext.begin(),
         [](unsigned char c){ return static_cast<char>(std::tolower(c)); });
 
+    // Generic .txt: claim it only when the safeAPI merged-log header is present.
+    if (ext == ".txt" && parser::SapiLogParser::LooksLikeSapiLog(path))
+        ext = ".sapilog";
+
     // Unknown or missing extension → ask the user.
     const bool isKnown = (ext == ".asc" || ext == ".evl"
                           || parser::ParserFactory::IsRegistered(ext));
@@ -2169,12 +2174,13 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
 QString MainWindow::PromptForFileType(const std::filesystem::path& path)
 {
     struct FileType { QString label; QString ext; };
-    static const std::array<FileType, 5> kTypes = {{
+    static const std::array<FileType, 6> kTypes = {{
         { tr("XML"),                          ".xml" },
         { tr("CSV"),                          ".csv" },
         { tr("CAN/ASC (Vector CANalyzer)"),   ".asc" },
         { tr("AUTOSAR DLT"),                  ".dlt" },
         { tr("Evlog binary (POSIX 1003.25)"), ".evl" },
+        { tr("safeAPI merged test log"),      ".sapilog" },
     }};
 
     QStringList labels;

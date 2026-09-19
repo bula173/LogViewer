@@ -12,6 +12,7 @@
 #include "asc/AscParser.hpp"
 #include "dlt/DltParser.hpp"
 #include "evlog/EvlogParser.hpp"
+#include "sapi/SapiLogParser.hpp"
 #include "Logger.hpp"
 #include <algorithm>
 
@@ -65,6 +66,15 @@ void ParserFactory::InitializeDefaults()
         util::Logger::Debug("Creating EvlogParser instance");
         return std::make_unique<EvlogParser>();
     });
+
+    // Register safeAPI RBC 2oo2 merged test-log parser. Real files are usually
+    // plain `.txt` (too generic to claim), so this synthetic ".sapilog" key is
+    // reached via MainWindow::CreateParserFor() header sniffing or the
+    // file-type prompt.
+    Register(".sapilog", []() {
+        util::Logger::Debug("Creating SapiLogParser instance");
+        return std::make_unique<SapiLogParser>();
+    });
 }
 
 void ParserFactory::EnsureInitialized()
@@ -89,7 +99,11 @@ util::Result<std::unique_ptr<IDataParser>, error::Error> ParserFactory::CreateFr
     std::transform(extension.begin(), extension.end(), extension.begin(),
         [](unsigned char c) { return std::tolower(c); });
 
-    util::Logger::Info("ParserFactory::CreateFromFile - Creating parser for extension: {}", 
+    // Generic .txt: claim it only when the safeAPI merged-log header is present.
+    if (extension == ".txt" && SapiLogParser::LooksLikeSapiLog(filepath))
+        extension = ".sapilog";
+
+    util::Logger::Info("ParserFactory::CreateFromFile - Creating parser for extension: {}",
         extension);
 
     auto it = s_creators.find(extension);

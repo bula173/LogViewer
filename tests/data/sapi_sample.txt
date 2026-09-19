@@ -1,0 +1,21 @@
+# ================================================================================
+# FULL MERGED TEST STEPS, CONTAINER & SIMULATOR LOGS
+# Test Case   : Train Traverses Entire Track Layout
+# Status      : FAIL
+# Timestamp   : 2026-09-19T06:47:27.601806+00:00
+# Sources     : robot, c-il-east
+# Entries     : 9
+# Line Format : [timestamp] [category] [source] [destination] [log level] [event type] [info] [payload]
+# ================================================================================
+[2026-09-19T06:46:46.456779Z] [GENERAL] [c-il-east] [internal] [INFO] [LOG] [Log message] [/opt/safeapi/dist/Darwin-arm64/bin/safeapi_gateway_c_il version 0.1.0+ac82fa2a (framework 0.1.0+002d574e, expected 0.1.0+002d574e)]
+[2026-09-19T06:46:46.456975Z] [GENERAL] [c-il-west] [internal] [INFO] [LOG] [Log message] [/opt/safeapi/dist/Darwin-arm64/bin/safeapi_gateway_c_il version 0.1.0+ac82fa2a (framework 0.1.0+002d574e, expected 0.1.0+002d574e)]
+[2026-09-19T06:46:46.457190Z] [GENERAL] [c-il-east] [internal] [INFO] [LOG] [Log message] [watchdog: manager initialized]
+[2026-09-19T06:46:46.457218Z] [GENERAL] [c-il-east] [internal] [INFO] [LOG] [Log message] [APPMANAGER: safeAPIRBC2oo2-Gateway-IL v3.0.0 starting]
+[2026-09-19T06:46:46.457230Z] [GENERAL] [c-il-east] [internal] [INFO] [LOG] [Log message] [[ 419310003] [GW-IL EAST] starting]
+[2026-09-19T06:46:47.831579Z] [GENERAL] [c-train-west] [internal] [INFO] [LOG] [Log message] [/opt/safeapi/dist/Darwin-arm64/bin/safeapi_gateway_c_train version 0.1.0+ac82fa2a (framework 0.1.0+002d574e, expected 0.1.0+002d574e)]
+[2026-09-19T06:46:47.831585Z] [GENERAL] [status] [internal] [INFO] [SELF] [self] [cycle=0 level=INFO site=EAST unit=GW-STATUS/EAST up=1 clients=0]
+[2026-09-19T06:46:47.831590Z] [GENERAL] [status] [internal] [INFO] [SELF] [self] [cycle=0 level=INFO site=WEST unit=GW-STATUS/WEST up=1 clients=0]
+[2026-09-19T06:47:19.218205Z] [IO] [train-multi] [c-west,c-east] [INFO] [M136] [ERTMS Train periodic position report] [train_id=1] [P0] [cycle=1 d_lrbg=0 l_doubtover=0 l_doubtunder=0 m_level=2 m_mode=0 nid_bg=1001 nid_c=0 nid_lrbg=1001 q_dirlrbg=1 q_dlrbg=1 q_scale=1 v_train=0 balise=BG_W_TRK1]
+[2026-09-19T06:47:22.775540Z] [GENERAL] [robot] [internal] [FAIL] [LOG] [Log message] [CTC_TRAIN_INFO.CTC_TRAIN_INFO.nid_lrbg for nidEngine 1: expected 1001 (tolerance 0), got 0]
+[2026-09-19T06:47:22.777683Z] [IO] [robot] [internal] [ERROR] [STEP_FAIL] [Verify CTC Packet] [CTC_TRAIN_INFO.CTC_TRAIN_INFO.nid_lrbg for nidEngine 1: expected 1001 (tolerance 0), got 0]
+[2026-09-19T06:47:22.777849Z] [IO] [robot] [internal] [ERROR] [STEP_FAIL] [Verify Train Position In CTC] [CTC_TRAIN_INFO.CTC_TRAIN_INFO.nid_lrbg for nidEngine 1: expected 1001 (tolerance 0), got 0]
