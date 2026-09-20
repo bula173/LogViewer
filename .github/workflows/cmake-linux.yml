@@ -46,7 +46,7 @@ jobs:
             qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev
             qt6-charts-dev
             lcov gcovr
-          version: 1.1
+          version: 1.2
 
       # Cache linuxdeployqt binary across runs
       - name: Cache linuxdeployqt
