@@ -91,7 +91,7 @@ var searchData=
   ['createstrategy_88',['createStrategy',['../d8/d6b/namespacefilters.html#a608458e323943224ef04efa1781a17ca',1,'filters']]],
   ['createtab_89',['createtab',['../d4/d51/classplugin_1_1IPlugin.html#a653df883dd9963b6233d174ee4be2627',1,'plugin::IPlugin::CreateTab()'],['../d5/d83/classplugin_1_1AIProviderPlugin.html#acf4ed6f6741f5632196fd891fd42d315',1,'plugin::AIProviderPlugin::CreateTab()']]],
   ['createtabs_90',['createTabs',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html#a2790862e1edb3339e0894254bf398ea0',1,'ui::qt::PreferencesDialog']]],
-  ['critical_91',['critical',['../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65',1,'util::Logger::Critical()'],['../dd/d6b/classutil_1_1SpdLogger.html#ac87b1d90282df17cc73e2bef148df839',1,'util::SpdLogger::critical()'],['../d3/dc4/classutil_1_1ILogger.html#a80b0b25ea3f252f78ac64b308ff19ffd',1,'util::ILogger::critical()']]],
+  ['critical_91',['critical',['../dd/d6b/classutil_1_1SpdLogger.html#ac87b1d90282df17cc73e2bef148df839',1,'util::SpdLogger::critical()'],['../d3/dc4/classutil_1_1ILogger.html#a80b0b25ea3f252f78ac64b308ff19ffd',1,'util::ILogger::critical()'],['../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65',1,'util::Logger::Critical()']]],
   ['csvescape_92',['CsvEscape',['../d6/d40/namespaceui_1_1qt.html#af83e24cc7b34c08e2fc03b55c2acf929',1,'ui::qt']]],
   ['csvparser_93',['CsvParser',['../d9/dd2/classparser_1_1CsvParser.html#a434889da3e025b66398baca58c83bd2f',1,'parser::CsvParser']]],
   ['current_94',['current',['../d8/d16/namespaceVersion.html#a2a52fceba26d3d00378c737bb1ec62e2',1,'Version']]],

@@ -1,5 +1,6 @@
 var classui_1_1qt_1_1SequenceDiagramPanel =
 [
+    [ "~SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9740611f2e0262fbf9f0beb96f04374a", null ],
     [ "SequenceDiagramPanel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#aaa04f7d6a5bdbb5563df46ac032e1b7b", null ],
     [ "BuildLayout", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a7df3ff51bb1dbfaecca6556d8ec0d4ba", null ],
     [ "OnDiscoveryFinished", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9e93f2214309a662012e08a50690ac84", null ],

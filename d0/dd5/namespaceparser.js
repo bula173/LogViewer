@@ -15,7 +15,9 @@ var namespaceparser =
       [ "kBatchSize", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a6bb574152035cb2777ea936c9c296f5a", null ],
       [ "kFixedFields", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#abf1ff2eb8fb2b0c840d2113a808ff152", null ],
       [ "kHeaderMarker", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a47abecedc49b593e6fadcc829361c404", null ],
-      [ "kHeaderProbeLines", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#afb47dfab7c2ea26d68cecaf8baa5b028", null ]
+      [ "kHeaderProbeLines", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#afb47dfab7c2ea26d68cecaf8baa5b028", null ],
+      [ "kSniffBytes", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a338a4417136a5f3cb084f59de38b7134", null ],
+      [ "kUtf8Bom", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a8c5585dc459f03c857925e198c8c10f0", null ]
     ] ],
     [ "dbc", "d8/d04/namespaceparser_1_1dbc.html", "d8/d04/namespaceparser_1_1dbc" ],
     [ "AscParser", "dd/dfa/classparser_1_1AscParser.html", "dd/dfa/classparser_1_1AscParser" ],

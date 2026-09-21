@@ -16,6 +16,7 @@ var searchData=
   ['eventssincelastnotify_13',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
   ['eventtype_14',['eventType',['../dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929',1,'parser::EvlogTemplate']]],
   ['exception_15',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
-  ['expanded_16',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
-  ['extractionpattern_17',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
+  ['exclude_16',['exclude',['../d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html#ad3b316384d5db564c2a6a3a20fa7bf4d',1,'ui::qt::EventsTableModel::ColumnFilter']]],
+  ['expanded_17',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
+  ['extractionpattern_18',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
 ];
