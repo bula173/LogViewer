@@ -11,9 +11,11 @@
 #include "Logger.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <numeric>
 #include <memory>
+#include <set>
 
 namespace ui::qt
 {
@@ -170,8 +172,10 @@ QVariant EventsTableModel::headerData(int section,
 void EventsTableModel::SyncWithContainer()
 {
     // Events appended since the last filter run (tailing, incremental load)
-    // must be tested against the column filters, otherwise the view freezes.
-    if (!m_columnFilters.empty())
+    // must be tested against the column filters and slotted into the active
+    // sort; otherwise the view stays frozen on the old snapshot. (With an
+    // upstream filter the row set is fixed by the rest of the application.)
+    if (!m_columnFilters.empty() || (m_hasSort && !m_baseFilterActive))
         ApplyEffectiveFilter();
     RefreshAll();
 }
@@ -225,7 +229,13 @@ void EventsTableModel::RefreshColumns()
     
     // Rebuild the visible columns list based on current config
     RebuildVisibleColumns();
-    
+
+    // Filters / sort of a column that is gone would hide every row (renamed
+    // column reads as empty) with no header cue, so drop them.
+    const bool droppedFilters = PruneStaleColumnState();
+    if (droppedFilters)
+        ApplyEffectiveFilter();
+
     const int newColumnCount = static_cast<int>(m_visibleColumnIndices.size());
     
     // If column count changed, notify the view properly
@@ -242,6 +252,9 @@ void EventsTableModel::RefreshColumns()
         // Just refresh the data
         RefreshAll();
     }
+
+    if (droppedFilters)
+        emit ColumnFiltersChanged();
 }
 
 void EventsTableModel::UpdateColors()
@@ -264,7 +277,6 @@ void EventsTableModel::SetFilteredIndices(
         indices.size(), m_events.Size());
     m_baseFilteredIndices = indices;
     m_baseFilterActive    = true; // Mark that filtering is now active
-    m_hasSort             = false; // an upstream filter restores natural order
 
     ApplyEffectiveFilter();
     RefreshAll();
@@ -276,7 +288,6 @@ void EventsTableModel::ClearFilter()
         m_events.Size());
     m_baseFilteredIndices.clear();
     m_baseFilterActive = false; // Mark that filtering is no longer active
-    m_hasSort          = false;
 
     ApplyEffectiveFilter();
     RefreshAll();
@@ -325,7 +336,9 @@ bool EventsTableModel::PassesColumnFilters(const db::LogEvent& event,
     {
         if (skipKey && key == *skipKey)
             continue;
-        if (!filter.allowed.contains(ComposeCellText(event, filter.name, filter.mergeSource)))
+        const bool listed = filter.allowed.contains(
+            ComposeCellText(event, filter.name, filter.mergeSource));
+        if (listed == filter.exclude)
             return false;
     }
     return true;
@@ -368,10 +381,8 @@ void EventsTableModel::ApplyEffectiveFilter()
 
         // An empty result must not be sorted: sort() treats "active but empty"
         // as "sort everything".
-        std::string sortName;
-        bool        sortMerge = false;
-        if (m_hasSort && !result.empty() && ResolveColumn(m_sortColumn, sortName, sortMerge))
-            SortIndices(result, sortName, sortMerge, m_sortOrder);
+        if (m_hasSort && !result.empty())
+            SortIndices(result, m_sortName, m_sortMergeSource, m_sortOrder);
     }
 
     m_filteredIndices = std::move(result);
@@ -425,7 +436,10 @@ ColumnDistinctValues EventsTableModel::DistinctColumnValues(int column,
     collator.setCaseSensitivity(Qt::CaseInsensitive);
     std::sort(out.values.begin(), out.values.end(),
         [&collator](const ColumnValueCount& a, const ColumnValueCount& b) {
-            return collator.compare(a.value, b.value) < 0;
+            const int cmp = collator.compare(a.value, b.value);
+            // "Error" / "error" collate equal but are distinct values: keep
+            // their order stable between popup openings.
+            return cmp != 0 ? cmp < 0 : a.value < b.value;
         });
     return out;
 }
@@ -450,15 +464,67 @@ QSet<QString> EventsTableModel::ColumnFilterValues(int column) const
 
 void EventsTableModel::SetColumnFilter(int column, const QSet<QString>& allowed)
 {
+    StoreColumnFilter(column, allowed, false);
+}
+
+void EventsTableModel::SetColumnFilterExcluding(int column, const QSet<QString>& excluded)
+{
+    StoreColumnFilter(column, excluded, true);
+}
+
+void EventsTableModel::StoreColumnFilter(int column, const QSet<QString>& values, bool exclude)
+{
     std::string name;
     bool        mergeSource = false;
     if (!ResolveColumn(column, name, mergeSource))
         return;
 
-    m_columnFilters[ColumnFilterKey(name, mergeSource)] = {name, mergeSource, allowed};
+    m_columnFilters[ColumnFilterKey(name, mergeSource)] = {name, mergeSource, values, exclude};
     ApplyEffectiveFilter();
     RefreshAll();
     emit ColumnFiltersChanged();
+}
+
+bool EventsTableModel::IsColumnFilterExclusion(int column) const
+{
+    std::string name;
+    bool        mergeSource = false;
+    if (!ResolveColumn(column, name, mergeSource))
+        return false;
+    const auto it = m_columnFilters.find(ColumnFilterKey(name, mergeSource));
+    return it != m_columnFilters.end() && it->second.exclude;
+}
+
+bool EventsTableModel::PruneStaleColumnState()
+{
+    std::set<std::string> visibleKeys;
+    bool sortVisible = false;
+    for (int column = 0; column < static_cast<int>(m_visibleColumnIndices.size()); ++column)
+    {
+        std::string name;
+        bool        mergeSource = false;
+        if (!ResolveColumn(column, name, mergeSource))
+            continue;
+        visibleKeys.insert(ColumnFilterKey(name, mergeSource));
+        if (name == m_sortName && mergeSource == m_sortMergeSource)
+            sortVisible = true;
+    }
+
+    if (m_hasSort && !sortVisible)
+        m_hasSort = false;
+
+    bool dropped = false;
+    for (auto it = m_columnFilters.begin(); it != m_columnFilters.end();)
+    {
+        if (visibleKeys.count(it->first) == 0)
+        {
+            it = m_columnFilters.erase(it);
+            dropped = true;
+        }
+        else
+            ++it;
+    }
+    return dropped;
 }
 
 void EventsTableModel::ClearColumnFilter(int column)
@@ -890,9 +956,10 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     }
 
     SortIndices(indicesToSort, columnName, isMergeSource, order);
-    m_hasSort    = true;
-    m_sortColumn = column;
-    m_sortOrder  = order;
+    m_hasSort         = true;
+    m_sortName        = columnName;
+    m_sortMergeSource = isMergeSource;
+    m_sortOrder       = order;
 
     // Update the filtered indices with sorted order
     // CRITICAL: Check m_filteringActive (not empty!) to determine if we should activate filtering
@@ -947,40 +1014,76 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
 void EventsTableModel::SortIndices(std::vector<unsigned long>& indices,
     const std::string& columnName, bool isMergeSource, Qt::SortOrder order) const
 {
-    std::sort(indices.begin(), indices.end(),
-        [this, &columnName, order, isMergeSource](unsigned long a, unsigned long b) {
-            const auto& eventA = m_events.GetEvent(a);
-            const auto& eventB = m_events.GetEvent(b);
+    // Sort keys are computed once per row (not once per comparison), and the
+    // ordering is total: numbers first (integers exactly, mixed with decimals
+    // as doubles), then text case-insensitively, ties broken by event id.
+    struct Key
+    {
+        unsigned long index {0};
+        int           id {0};
+        bool          numeric {false};
+        bool          isInt {false};
+        long long     asInt {0};
+        double        asDouble {0.0};
+        QString       text;
+    };
 
-            QVariant valA = GetSortValue(eventA, columnName, isMergeSource);
-            QVariant valB = GetSortValue(eventB, columnName, isMergeSource);
+    std::vector<Key> keys;
+    keys.reserve(indices.size());
+    for (const unsigned long idx : indices)
+    {
+        const auto&    event = m_events.GetEvent(idx);
+        const QVariant value = GetSortValue(event, columnName, isMergeSource);
 
-            if (valA.typeId() == QMetaType::LongLong && valB.typeId() == QMetaType::LongLong)
-            {
-                const long long aNum = valA.toLongLong();
-                const long long bNum = valB.toLongLong();
-                if (aNum != bNum)
-                    return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
-            }
-            else if (valA.typeId() == QMetaType::Double && valB.typeId() == QMetaType::Double)
-            {
-                const double aNum = valA.toDouble();
-                const double bNum = valB.toDouble();
-                if (aNum != bNum)
-                    return order == Qt::AscendingOrder ? aNum < bNum : aNum > bNum;
-            }
+        Key key;
+        key.index = idx;
+        key.id    = event.getId();
+        if (value.typeId() == QMetaType::LongLong)
+        {
+            key.numeric  = true;
+            key.isInt    = true;
+            key.asInt    = value.toLongLong();
+            key.asDouble = static_cast<double>(key.asInt);
+        }
+        else if (value.typeId() == QMetaType::Double && !std::isnan(value.toDouble()))
+        {
+            key.numeric  = true;
+            key.asDouble = value.toDouble();
+        }
+        else
+        {
+            key.text = value.toString(); // also "nan", which has no numeric order
+        }
+        keys.push_back(std::move(key));
+    }
+
+    const auto ascending = [](const Key& a, const Key& b) {
+        if (a.numeric != b.numeric)
+            return a.numeric ? -1 : 1;
+        int cmp = 0;
+        if (a.numeric)
+        {
+            if (a.isInt && b.isInt)
+                cmp = a.asInt < b.asInt ? -1 : (a.asInt > b.asInt ? 1 : 0);
             else
-            {
-                const int cmp = valA.toString().compare(valB.toString(), Qt::CaseInsensitive);
-                if (cmp != 0)
-                    return order == Qt::AscendingOrder ? cmp < 0 : cmp > 0;
-            }
+                cmp = a.asDouble < b.asDouble ? -1 : (a.asDouble > b.asDouble ? 1 : 0);
+        }
+        else
+        {
+            cmp = a.text.compare(b.text, Qt::CaseInsensitive);
+        }
+        if (cmp != 0)
+            return cmp;
+        return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+    };
 
-            // Equal values: event ID as tiebreaker
-            const int idA = eventA.getId();
-            const int idB = eventB.getId();
-            return order == Qt::AscendingOrder ? idA < idB : idA > idB;
-        });
+    const bool desc = order != Qt::AscendingOrder;
+    std::sort(keys.begin(), keys.end(), [&](const Key& a, const Key& b) {
+        return desc ? ascending(a, b) > 0 : ascending(a, b) < 0;
+    });
+
+    for (std::size_t i = 0; i < keys.size(); ++i)
+        indices[i] = keys[i].index;
 }
 
 } // namespace ui::qt

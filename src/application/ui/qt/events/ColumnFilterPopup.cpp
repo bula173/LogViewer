@@ -20,7 +20,11 @@ ColumnFilterPopup::ColumnFilterPopup(const QString& columnTitle,
     const std::optional<QSet<QString>>& allowed,
     QWidget* parent)
     : QDialog(parent, Qt::Popup)
+    , m_truncated(distinct.truncated)
 {
+    // Qt replays the click that dismisses a popup to the widget below; on the
+    // header funnel that would immediately reopen the popup.
+    setAttribute(Qt::WA_NoMouseReplay);
     setWindowTitle(tr("Filter: %1").arg(columnTitle));
     setMinimumWidth(280);
 
@@ -48,7 +52,7 @@ ColumnFilterPopup::ColumnFilterPopup(const QString& columnTitle,
     for (const auto& v : distinct.values)
     {
         const QString shown = v.value.isEmpty() ? tr("(empty)") : v.value;
-        auto* item = new QListWidgetItem(QStringLiteral("%1   (%2)").arg(shown).arg(v.count), m_list);
+        auto* item = new QListWidgetItem(QStringLiteral("%1   (%2)").arg(shown, QString::number(v.count)), m_list);
         item->setData(kValueRole, v.value);
         item->setData(Qt::UserRole + 1, shown); // text the search box matches against
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
@@ -59,7 +63,8 @@ ColumnFilterPopup::ColumnFilterPopup(const QString& columnTitle,
     if (distinct.truncated)
     {
         auto* note = new QLabel(
-            tr("Too many distinct values — showing the first %1.").arg(distinct.values.size()), this);
+            tr("Too many distinct values — showing the first %1. Unchecked values are hidden; "
+               "values not listed stay visible.").arg(distinct.values.size()), this);
         note->setWordWrap(true);
         note->setStyleSheet("color: gray; font-style: italic;");
         layout->addWidget(note);
@@ -100,6 +105,18 @@ QSet<QString> ColumnFilterPopup::CheckedValues() const
     {
         const auto* item = m_list->item(i);
         if (item->checkState() == Qt::Checked)
+            out.insert(item->data(kValueRole).toString());
+    }
+    return out;
+}
+
+QSet<QString> ColumnFilterPopup::UncheckedValues() const
+{
+    QSet<QString> out;
+    for (int i = 0; i < m_list->count(); ++i)
+    {
+        const auto* item = m_list->item(i);
+        if (item->checkState() != Qt::Checked)
             out.insert(item->data(kValueRole).toString());
     }
     return out;
@@ -167,6 +184,8 @@ void ColumnFilterPopup::Accept()
     const QSet<QString> checked = CheckedValues();
     if (checked.size() == m_list->count())
         emit Cleared(); // everything allowed = no filter
+    else if (m_truncated)
+        emit AppliedExcluding(UncheckedValues()); // unlisted values must stay visible
     else
         emit Applied(checked);
     accept();

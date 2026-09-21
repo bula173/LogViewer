@@ -20,6 +20,8 @@ constexpr size_t           kBatchSize    = 5000;
 constexpr size_t           kFixedFields  = 7; // timestamp … info; payload is the remainder
 constexpr std::string_view kHeaderMarker = "# FULL MERGED TEST STEPS";
 constexpr int              kHeaderProbeLines = 5;
+constexpr size_t           kSniffBytes       = 4096;
+constexpr std::string_view kUtf8Bom          = "\xEF\xBB\xBF";
 
 /// Reads the balanced `[...]` group starting at line[pos] (which must be '[').
 /// On success @p content is the text between the outer brackets and @p pos
@@ -64,15 +66,28 @@ bool LooksLikeIsoTimestamp(std::string_view ts)
 
 bool SapiLogParser::LooksLikeSapiLog(const std::filesystem::path& filepath)
 {
-    std::ifstream file(filepath);
+    std::ifstream file(filepath, std::ios::binary);
     if (!file.is_open())
         return false;
 
-    std::string line;
-    for (int i = 0; i < kHeaderProbeLines && std::getline(file, line); ++i)
+    // Read a bounded prefix: a .txt without newlines (minified blob, binary)
+    // must not be slurped whole just to be sniffed.
+    std::string prefix(kSniffBytes, '\0');
+    file.read(prefix.data(), static_cast<std::streamsize>(prefix.size()));
+    prefix.resize(static_cast<size_t>(file.gcount()));
+
+    std::string_view rest{prefix};
+    if (rest.substr(0, kUtf8Bom.size()) == kUtf8Bom)
+        rest.remove_prefix(kUtf8Bom.size());
+
+    for (int i = 0; i < kHeaderProbeLines && !rest.empty(); ++i)
     {
-        if (std::string_view{line}.substr(0, kHeaderMarker.size()) == kHeaderMarker)
+        if (rest.substr(0, kHeaderMarker.size()) == kHeaderMarker)
             return true;
+        const size_t eol = rest.find('\n');
+        if (eol == std::string_view::npos)
+            break;
+        rest.remove_prefix(eol + 1);
     }
     return false;
 }
@@ -176,11 +191,20 @@ void SapiLogParser::ParseStream(std::istream& input)
     size_t      dataLines = 0;
     size_t      skipped   = 0;
 
+    bool firstLine = true;
     while (std::getline(input, line))
     {
         m_currentProgress += static_cast<uint32_t>(line.size() + 1);
 
-        const std::string_view trimmed = Trim(line);
+        std::string_view content{line};
+        if (firstLine)
+        {
+            firstLine = false;
+            if (content.substr(0, kUtf8Bom.size()) == kUtf8Bom)
+                content.remove_prefix(kUtf8Bom.size()); // else the first event is lost
+        }
+
+        const std::string_view trimmed = Trim(content);
         if (trimmed.empty() || trimmed.front() == '#')
             continue;
         ++dataLines;
@@ -198,6 +222,12 @@ void SapiLogParser::ParseStream(std::istream& input)
             flush();
     }
     flush();
+
+    if (input.bad())
+    {
+        throw error::Error(error::ErrorCode::ParseError,
+            "SapiLogParser: read error, the file may be truncated");
+    }
 
     if (id == 0 && dataLines > 0)
     {

@@ -2,6 +2,28 @@
 
 All notable changes to LogViewer are documented here.
 
+## [1.13.1] — 2026-09-21
+
+Audit follow-up to 1.13.0.
+
+### Fixes
+
+- **Column filters on long value lists** — when a column has more than 2000 distinct values, OK now hides only the values you unchecked; values that were not listed stay visible (before, everything not listed was silently hidden).
+- **Sort + follow-file** — appended events now show up while a column sort is active, without a column filter (they stayed invisible until the sort was cleared).
+- **Sort survives filter changes** — a sort now also stays applied when the type / actor / time filters change, matching the header's sort indicator.
+- **Renamed or hidden columns** — a column filter (or sort) on a column that is removed or renamed in the column configuration is dropped instead of hiding every row. The sort follows its column when columns are reordered.
+- **Sorting mixed numbers and text** — the sort order is now a strict total order (numbers first, then text) and computed once per row; it could misbehave, and was slow, on columns mixing integers, decimals and text.
+- **Filter popup** — stays on screen, no longer reopens when the funnel is clicked to close it (Windows/Linux), shows values containing `%2` verbatim, and keeps a stable order for values that differ only in case.
+- **Sequence tab** — zoom and scroll are kept when the log is re-analysed while following a file (previously reset on every batch); an empty result no longer leaves the old scroll extent; invalid wheel/pinch values are ignored; closing the tab during analysis no longer risks a crash.
+- **safeAPI parser** — a UTF-8 BOM no longer hides the header or drops the first event; file detection reads a bounded prefix instead of a whole single-line file; a read error is reported instead of showing a truncated file as complete.
+
+### Release process
+
+- Release notes are now taken from this changelog (they always said "Initial Release" before).
+- The release fails early if the tag and the CMake version differ, and if an expected package (deb, tar.gz, Windows installer) is missing.
+- Windows signatures are verified after signing; an unsigned build now shows a warning.
+- CodeQL job: same apt-index refresh as the Linux CI.
+
 ## [1.13.0] — 2026-09-19
 
 ### New features

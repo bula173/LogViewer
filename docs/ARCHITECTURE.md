@@ -76,7 +76,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 |---|---|
 | `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …) |
 | `dialogs/` | Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …) |
-| `events/` | Event table model and view (EventsTableModel, EventsTableView) |
+| `events/` | Event table model and view (EventsTableModel, EventsTableView), Excel-style column value filters (ColumnFilterPopup, FilterHeaderView) |
 | `utils/` | Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker) |
 
 **MainWindow**: Central orchestrator

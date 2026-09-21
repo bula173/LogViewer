@@ -1,11 +1,11 @@
 # LogViewer Development Roadmap
 
-**Current Version:** 1.13.0 (Released 2026-09-19)  
+**Current Version:** 1.13.1 (Released 2026-09-21)  
 **Last Updated:** 2026-09-19
 
 ---
 
-## 📊 Current State (v1.13.0, released)
+## 📊 Current State (v1.13.1, released)
 
 ### Recent Achievements ✅
 - **Excel-style column filters** in the event table (per-column value check boxes, ANDed with each other and all other filters)
@@ -344,6 +344,7 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
+| 1.13.1 | 2026-09-21 | Audit follow-up: column-filter/sort correctness, sequence zoom kept while tailing, safeAPI BOM handling, release-notes/asset/signature checks in CI |
 | 1.13.0 | 2026-09-19 | Excel-style column filters, safeAPI merged-log parser, sequence diagram zoom/scroll and actor-only messages, `source` column fix |
 | 1.12.0 | 2026-08-17 | Filter profile export/import, customizable keyboard shortcuts, perf (regex cache, streaming JSON, LogEvent index removal), critical AI-plugin-config crash fix, Windows self-signed code signing |
 | 1.11.0 | 2026-08-15 | Dashboard tab, unified search bar, weak_ptr observer pattern, SearchEngine/build-system/CI fixes |

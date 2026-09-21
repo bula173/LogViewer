@@ -22,7 +22,9 @@ namespace ui::qt
 /// "Select all" check box and one check box per distinct value.
 ///
 /// Emits Applied(allowed) on OK, or Cleared() when OK is pressed with every
-/// value checked (nothing to filter) or "Clear filter" is pressed.
+/// value checked (nothing to filter) or "Clear filter" is pressed. When the
+/// value list was truncated, OK emits AppliedExcluding(unchecked) instead: the
+/// values that could not be listed must stay visible.
 class ColumnFilterPopup : public QDialog
 {
     Q_OBJECT
@@ -37,9 +39,12 @@ class ColumnFilterPopup : public QDialog
 
     /// Raw values of every checked entry (including ones hidden by the search).
     QSet<QString> CheckedValues() const;
+    /// Raw values of every listed entry that is not checked.
+    QSet<QString> UncheckedValues() const;
 
   signals:
     void Applied(const QSet<QString>& allowed);
+    void AppliedExcluding(const QSet<QString>& excluded);
     void Cleared();
 
   private:
@@ -53,6 +58,7 @@ class ColumnFilterPopup : public QDialog
     QCheckBox*   m_selectAll {nullptr};
     QListWidget* m_list      {nullptr};
     bool         m_updating  {false};
+    bool         m_truncated {false};
 };
 
 } // namespace ui::qt

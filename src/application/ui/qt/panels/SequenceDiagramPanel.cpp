@@ -175,6 +175,8 @@ protected:
 private:
     void ZoomBy(qreal factor)
     {
+        if (!std::isfinite(factor) || factor <= 0.0)
+            return; // a corrupt gesture / wheel value must never poison the transform
         const qreal target = std::clamp(ZoomLevel() * factor, kMinZoom, kMaxZoom);
         const qreal f = target / ZoomLevel();
         if (f != 1.0)
@@ -301,6 +303,13 @@ void SequenceDiagramPanel::BuildLayout()
 // Public slot
 // ---------------------------------------------------------------------------
 
+SequenceDiagramPanel::~SequenceDiagramPanel()
+{
+    // The discovery task reads m_events and captures this; it must not outlive the panel.
+    if (m_watcher)
+        m_watcher->waitForFinished();
+}
+
 void SequenceDiagramPanel::Refresh()
 {
     // Prevent re-entrant calls while discovery or rendering is in progress.
@@ -382,8 +391,13 @@ void SequenceDiagramPanel::OnDiscoveryFinished()
         return;
     }
 
-    m_pattern = result.patterns[0];
-    RenderDiagram(*m_pattern, /*resetZoom=*/true);
+    // Re-discovery also runs while tailing; keep the user's zoom and scroll
+    // unless the diagram is about a different set of actors.
+    const auto& found = result.patterns[0];
+    const bool samePattern = m_pattern && m_pattern->senderField == found.senderField
+        && m_pattern->receiverField == found.receiverField && m_pattern->actors == found.actors;
+    m_pattern = found;
+    RenderDiagram(*m_pattern, /*resetZoom=*/!samePattern);
 }
 
 // ---------------------------------------------------------------------------
@@ -443,6 +457,7 @@ void SequenceDiagramPanel::RenderDiagram(const analyzer::ExchangePattern& pat, b
 
     if (rows.empty())
     {
+        m_scene->setSceneRect(QRectF()); // drop the previous diagram's extent
         m_statusLabel->setText(tr("No messages between actors (fields %1 → %2)")
             .arg(QString::fromStdString(pat.senderField),
                  QString::fromStdString(pat.receiverField)));

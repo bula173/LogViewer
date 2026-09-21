@@ -79,10 +79,16 @@ class EventsTableModel : public QAbstractTableModel
     ColumnDistinctValues DistinctColumnValues(int column, std::size_t maxValues) const;
     bool HasColumnFilter(int column) const;
     bool HasAnyColumnFilter() const { return !m_columnFilters.empty(); }
-    /// Allowed values of @p column's filter (empty set if none).
+    /// Values of @p column's filter (empty set if none): the allowed values, or
+    /// the excluded ones when IsColumnFilterExclusion().
     QSet<QString> ColumnFilterValues(int column) const;
+    /// True if @p column's filter hides the listed values instead of showing them.
+    bool IsColumnFilterExclusion(int column) const;
     /// Restricts @p column to @p allowed (an empty set matches nothing).
     void SetColumnFilter(int column, const QSet<QString>& allowed);
+    /// Hides the @p excluded values of @p column and keeps every other value
+    /// (used when the value list was too long to show completely).
+    void SetColumnFilterExcluding(int column, const QSet<QString>& excluded);
     void ClearColumnFilter(int column);
     void ClearColumnFilters();
 
@@ -98,7 +104,8 @@ class EventsTableModel : public QAbstractTableModel
     {
         std::string   name;
         bool          mergeSource {false};
-        QSet<QString> allowed;
+        QSet<QString> allowed;      ///< allowed values, or excluded ones when @c exclude
+        bool          exclude {false};
     };
 
     /// Resolves a model column to its data-column name / merge-source flag.
@@ -110,6 +117,11 @@ class EventsTableModel : public QAbstractTableModel
     void ApplyEffectiveFilter();
     void SortIndices(std::vector<unsigned long>& indices, const std::string& columnName,
         bool isMergeSource, Qt::SortOrder order) const;
+    /// Drops column filters and the sort whose column is no longer visible
+    /// (renamed / hidden in the column configuration). Returns true if a
+    /// column filter was dropped.
+    bool PruneStaleColumnState();
+    void StoreColumnFilter(int column, const QSet<QString>& values, bool exclude);
 
     void RebuildVisibleColumns();
     bool ShouldShowSourceColumn() const;
@@ -128,7 +140,8 @@ class EventsTableModel : public QAbstractTableModel
     bool m_baseFilterActive {false};
     std::map<std::string, ColumnFilter> m_columnFilters;
     bool          m_hasSort {false};
-    int           m_sortColumn {-1};
+    std::string   m_sortName;          ///< sort column by data name, so it survives column changes
+    bool          m_sortMergeSource {false};
     Qt::SortOrder m_sortOrder {Qt::AscendingOrder};
     std::unordered_map<unsigned long, int> m_reverseFilteredIndices; // actual index -> filtered row
     std::vector<int> m_visibleColumnIndices;

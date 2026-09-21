@@ -20,9 +20,29 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # ─── Fail fast when the tag and the CMake project version disagree ──────────
+  check-version:
+    name: Check tag matches CMake version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare tag with project(VERSION)
+        run: |
+          CMAKE_VERSION=$(sed -n 's/^project(LogViewer VERSION \([0-9][0-9.]*\).*/\1/p' CMakeLists.txt)
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          TAG_VERSION="${TAG_VERSION%%-*}"   # v1.2.3-rc1 -> 1.2.3
+          echo "tag=$TAG_VERSION cmake=$CMAKE_VERSION"
+          if [ "$CMAKE_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match CMakeLists.txt VERSION ${CMAKE_VERSION}"
+            exit 1
+          fi
+
   # ─── Build all three platforms in parallel ──────────────────────────────────
   build-linux:
     name: Build Linux
+    needs: check-version
     runs-on: ubuntu-latest
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -156,6 +176,7 @@ jobs:
 
   build-macos:
     name: Build macOS
+    needs: check-version
     runs-on: macos-latest
     env:
       BUILD_DIR: ${{ github.workspace }}/build
@@ -307,6 +328,7 @@ jobs:
 
   build-windows:
     name: Build Windows
+    needs: check-version
     runs-on: windows-latest
     env:
       BUILD_DIR: ${{ github.workspace }}\build
@@ -435,6 +457,26 @@ jobs:
           Remove-Item "$env:TEMP\certificate.pfx"
           Write-Host "Windows installer signed successfully"
 
+      - name: Verify Windows signatures
+        if: env.HAS_WIN_CERT == 'true'
+        shell: pwsh
+        run: |
+          $signtool = (Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" `
+            -Recurse -Filter "signtool.exe" -ErrorAction SilentlyContinue |
+            Select-Object -Last 1).FullName
+          if (-not $signtool) { throw "signtool.exe not found" }
+          $targets = @(Join-Path $env:BUILD_DIR "src\main\LogViewer.exe") +
+            (Get-ChildItem "$env:GITHUB_WORKSPACE\dist\packages\*.exe").FullName
+          foreach ($t in $targets) {
+            & $signtool verify /pa /v $t
+            if ($LASTEXITCODE -ne 0) { throw "Authenticode verification failed for $t" }
+          }
+
+      - name: Warn about unsigned Windows build
+        if: env.HAS_WIN_CERT != 'true'
+        shell: bash
+        run: echo "::warning title=Unsigned Windows build::WINDOWS_CERTIFICATE secret is not set; the installer is NOT code-signed and SmartScreen will show 'Unknown publisher'."
+
       - name: Attest Windows packages (GitHub Sigstore)
         uses: actions/attest-build-provenance@v2
         with:
@@ -465,6 +507,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history + tags, needed to find the previous release tag
+          fetch-tags: true
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -479,18 +524,25 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-      - name: Generate changelog
+      - name: Generate release notes
         id: changelog
         run: |
-          # Get commits since last tag
-          PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sed -n '2p')
-          if [ -n "$PREV_TAG" ]; then
-            echo "## Changes since $PREV_TAG" > changelog.md
-            git log "${PREV_TAG}..HEAD" \
-              --pretty=format:"- %s (%h)" \
-              --no-merges >> changelog.md
-          else
-            echo "## Initial Release" > changelog.md
+          VERSION="${GITHUB_REF_NAME#v}"
+          # Prefer the hand-written CHANGELOG.md section for this version.
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/          { exit }
+            found                       { print }
+          ' CHANGELOG.md > changelog.md
+          if [ ! -s changelog.md ]; then
+            echo "::warning::No CHANGELOG.md section for $VERSION; falling back to the commit list"
+            PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | grep -vx "$GITHUB_REF_NAME" | head -n1)
+            if [ -n "$PREV_TAG" ]; then
+              echo "## Changes since $PREV_TAG" > changelog.md
+              git log "${PREV_TAG}..${GITHUB_REF_NAME}" --pretty=format:"- %s (%h)" --no-merges >> changelog.md
+            else
+              echo "## Initial Release" > changelog.md
+            fi
           fi
           echo "" >> changelog.md
           echo "## Supported Platforms" >> changelog.md
@@ -574,6 +626,22 @@ jobs:
               fi
             done
           done
+
+      - name: Verify expected release assets
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          missing=0
+          for pattern in \
+            "LogViewer-${VERSION}-Linux.deb" \
+            "LogViewer-${VERSION}-Linux.tar.gz" \
+            "LogViewer-${VERSION}-Darwin.tar.gz" \
+            "LogViewer-${VERSION}-win64.exe"; do
+            if [ -z "$(find release-assets -type f -name "$pattern" -print -quit)" ]; then
+              echo "::error::Missing release asset: $pattern"
+              missing=1
+            fi
+          done
+          exit $missing
 
       - name: Delete existing release if present
         env:

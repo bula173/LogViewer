@@ -39,6 +39,7 @@ class SequenceDiagramPanel : public QWidget
     Q_OBJECT
 
 public:
+    ~SequenceDiagramPanel() override;
     explicit SequenceDiagramPanel(db::EventsContainer& events,
                                   EventsTableView*     eventsView,
                                   QWidget*             parent = nullptr);

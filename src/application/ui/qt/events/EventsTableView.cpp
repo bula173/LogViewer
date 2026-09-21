@@ -17,9 +17,11 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPoint>
+#include <QScreen>
 #include <QTableWidget>
 #include <QVBoxLayout>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <optional>
@@ -264,7 +266,18 @@ void EventsTableView::ShowColumnFilterPopup(int column)
 
     std::optional<QSet<QString>> allowed;
     if (m_model->HasColumnFilter(column))
+    {
         allowed = m_model->ColumnFilterValues(column);
+        if (m_model->IsColumnFilterExclusion(column))
+        {
+            // The popup checks what stays visible: everything listed but the excluded values.
+            QSet<QString> visible;
+            for (const auto& v : distinct.values)
+                if (!allowed->contains(v.value))
+                    visible.insert(v.value);
+            allowed = visible;
+        }
+    }
 
     const QString title = m_model->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString();
     auto* popup = new ColumnFilterPopup(title, distinct, allowed, this);
@@ -274,14 +287,28 @@ void EventsTableView::ShowColumnFilterPopup(int column)
         m_model->SetColumnFilter(column, values);
         viewport()->update();
     });
+    connect(popup, &ColumnFilterPopup::AppliedExcluding, this,
+        [this, column](const QSet<QString>& values) {
+            m_model->SetColumnFilterExcluding(column, values);
+            viewport()->update();
+        });
     connect(popup, &ColumnFilterPopup::Cleared, this, [this, column] {
         m_model->ClearColumnFilter(column);
         viewport()->update();
     });
 
+    // Right-align with the funnel button, but keep the popup on the screen.
+    popup->adjustSize();
     const QRect button = m_filterHeader->IndicatorRect(column);
-    popup->move(m_filterHeader->viewport()->mapToGlobal(
-        QPoint(button.right() - popup->sizeHint().width(), m_filterHeader->height())));
+    QPoint pos = m_filterHeader->viewport()->mapToGlobal(
+        QPoint(button.right() - popup->width(), m_filterHeader->height()));
+    if (const QScreen* screen = m_filterHeader->screen())
+    {
+        const QRect area = screen->availableGeometry();
+        pos.setX(std::clamp(pos.x(), area.left(), std::max(area.left(), area.right() - popup->width())));
+        pos.setY(std::clamp(pos.y(), area.top(), std::max(area.top(), area.bottom() - popup->height())));
+    }
+    popup->move(pos);
     popup->show();
 }
 
