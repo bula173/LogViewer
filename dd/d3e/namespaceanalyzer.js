@@ -1,8 +1,5 @@
 var namespaceanalyzer =
 [
-    [ "anonymous_namespace{ActorDiscoverer.cpp}", "d3/da7/namespaceanalyzer_1_1anonymous__namespace_02ActorDiscoverer_8cpp_03.html", [
-      [ "AddActors", "d3/da7/namespaceanalyzer_1_1anonymous__namespace_02ActorDiscoverer_8cpp_03.html#aa4c6c7acd9695088fd6591af28709391", null ]
-    ] ],
     [ "anonymous_namespace{SequenceMessages.cpp}", "d6/d1b/namespaceanalyzer_1_1anonymous__namespace_02SequenceMessages_8cpp_03.html", [
       [ "ActorsIn", "d6/d1b/namespaceanalyzer_1_1anonymous__namespace_02SequenceMessages_8cpp_03.html#a38165ca7652ddc355e9cdaf4c19f20ba", null ],
       [ "EqualsIgnoreCase", "d6/d1b/namespaceanalyzer_1_1anonymous__namespace_02SequenceMessages_8cpp_03.html#ac65439552a4e81e0a034b36f5e68b3ce", null ],
