@@ -2,7 +2,7 @@
 
 All notable changes to LogViewer are documented here.
 
-## [Unreleased]
+## [1.13.3] — 2026-09-21
 
 ### New features
 
