@@ -1,6 +1,7 @@
 #include "ActorDiscoverer.hpp"
 
 #include "Logger.hpp"
+#include "SequenceMessages.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -91,6 +92,18 @@ int ActorDiscoverer::ScoreDirection(const std::string& fieldName,
     return score;
 }
 
+namespace
+{
+/// Adds the actor name(s) held by one cell: a comma list contributes each
+/// member, placeholders such as "internal" contribute nothing.
+void AddActors(std::set<std::string>& actors, const std::string& cell)
+{
+    for (auto& name : SplitActorList(cell))
+        if (!IsPlaceholderActor(name))
+            actors.insert(std::move(name));
+}
+} // namespace
+
 // Main discovery
 ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size_t sampleLimit)
 {
@@ -99,6 +112,9 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
 
     const size_t step = (total + sampleLimit - 1) / sampleLimit;
     std::map<std::string, std::set<std::string>> fieldVals;
+    // Actor-name view of every column (comma lists split, placeholders dropped);
+    // used to offer *all* columns as potential actor lists.
+    std::map<std::string, std::set<std::string>> actorVals;
     for (size_t i = 0; i < total; i += step)
     {
         try {
@@ -106,6 +122,8 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
             {
                 auto& s = fieldVals[k];
                 if (s.size() < 201) s.insert(v);
+                auto& names = actorVals[k];
+                if (names.size() < 201) AddActors(names, v);
             }
         } catch (const std::out_of_range&) { break; }
     }
@@ -186,8 +204,8 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
                         const auto& ev = events.GetEvent(i);
                         const auto s = ev.findByKey(pat.senderField);
                         const auto r = ev.findByKey(pat.receiverField);
-                        if (!s.empty()) pat.actors.insert(s);
-                        if (!r.empty()) pat.actors.insert(r);
+                        AddActors(pat.actors, s);
+                        AddActors(pat.actors, r);
                     } catch (const std::out_of_range&) { break; }
                 }
                 pat.actors.erase("");
@@ -222,7 +240,7 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
                 try {
                     const auto& ev = events.GetEvent(i);
                     const auto a = ev.findByKey(pat.actorField);
-                    if (!a.empty()) pat.actors.insert(a);
+                    AddActors(pat.actors, a);
                 } catch (const std::out_of_range&) { break; }
             }
             pat.actors.erase("");
@@ -257,7 +275,7 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
                     try {
                         const auto& ev = events.GetEvent(i);
                         const auto s = ev.findByKey(pat.senderField);
-                        if (!s.empty()) pat.actors.insert(s);
+                        AddActors(pat.actors, s);
                     } catch (const std::out_of_range&) { break; }
                 }
                 pat.actors.erase("");
@@ -283,7 +301,7 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
                     try {
                         const auto& ev = events.GetEvent(i);
                         const auto r = ev.findByKey(pat.receiverField);
-                        if (!r.empty()) pat.actors.insert(r);
+                        AddActors(pat.actors, r);
                     } catch (const std::out_of_range&) { break; }
                 }
                 pat.actors.erase("");
@@ -340,12 +358,25 @@ ActorDiscoveryResult ActorDiscoverer::Discover(db::EventsContainer& events, size
         usedFields.insert(p.receiverField);
         usedFields.insert(p.actorField);
     }
-    for (const auto& fs : scored)
+    // Every column not already used by a pattern is a potential actor list:
+    // 2..200 distinct actor names qualify; a column with at most one name
+    // only when its own name says it holds actors (e.g. "source" with a
+    // single sender, "destination" that is always "internal").
+    struct ActorField { std::string field; int score; };
+    std::vector<ActorField> actorFieldCandidates;
+    for (const auto& [field, names] : actorVals)
     {
-        if (usedFields.count(fs.field)) continue;
-        if (fs.actorScore > 0 || fs.senderScore > 0 || fs.receiverScore > 0)
-            result.actorFields.push_back(fs.field);
+        if (usedFields.count(field)) continue;
+        const size_t card = names.size();
+        const int keywordScore = ScoreSender(field) + ScoreReceiver(field) + ScoreActor(field);
+        if (card > 200 || (card <= 1 && keywordScore == 0)) continue;
+        actorFieldCandidates.push_back({field, keywordScore});
     }
+    // Name-matched columns first, then the rest alphabetically (map order).
+    std::stable_sort(actorFieldCandidates.begin(), actorFieldCandidates.end(),
+        [](const ActorField& x, const ActorField& y) { return x.score > y.score; });
+    for (const auto& c : actorFieldCandidates)
+        result.actorFields.push_back(c.field);
 
     return result;
 }

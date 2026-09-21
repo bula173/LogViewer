@@ -38,6 +38,8 @@ class DashboardPanel : public QWidget
 
     /// Set the events container to display stats for
     void SetEventsSource(db::EventsContainer* events);
+    /// Path of the loaded log file (name, format, size and time range are shown for it).
+    void SetFilePath(const QString& path);
 
     /// Manually trigger stats update (called automatically on events change)
     void UpdateStats();
@@ -74,6 +76,7 @@ class DashboardPanel : public QWidget
     db::EventsContainer* m_events = nullptr;
 
     // UI components
+    QString m_filePath;
     QLabel* m_fileNameLabel = nullptr;
     QLabel* m_fileFormatLabel = nullptr;
     QLabel* m_fileSizeLabel = nullptr;

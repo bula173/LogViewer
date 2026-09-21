@@ -3872,7 +3872,10 @@ void MainWindow::RefreshCurrentAnalysisPanel()
     m_dirtyPanels.erase(current);
 
     if (current == m_dashboardPanel)
+    {
+        m_dashboardPanel->SetFilePath(m_currentLogFilePath);
         m_dashboardPanel->Refresh();
+    }
     else if (current == m_statsPanel)
         m_statsPanel->Refresh();
     else if (current == m_patternPanel)

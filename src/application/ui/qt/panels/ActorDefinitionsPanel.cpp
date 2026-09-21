@@ -614,7 +614,7 @@ void ActorDefinitionsPanel::HandleDiscover()
         util::Logger::Warn("[ActorDefinitionsPanel] Discover: no suitable actor fields found");
         QMessageBox::information(this, tr("Discover Actors"),
             tr("No suitable actor fields found in the loaded log data.\n\n"
-               "Suitable fields have between 2 and 200 distinct values.\n"
+               "Every column is checked; suitable ones have up to 200 distinct actor names.\n"
                "Fields already covered by existing definitions are skipped."));
         return;
     }

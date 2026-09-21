@@ -1,6 +1,13 @@
 #include "DashboardPanel.hpp"
 #include "EventsContainer.hpp"
 #include "Config.hpp"
+#include "analyzers/ActorDiscoverer.hpp"
+#include "analyzers/SequenceMessages.hpp"
+#include <QFileInfo>
+#include <QLocale>
+#include <algorithm>
+#include <cctype>
+#include <set>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -161,6 +168,59 @@ void DashboardPanel::SetEventsSource(db::EventsContainer* events)
     }
 }
 
+void DashboardPanel::SetFilePath(const QString& path)
+{
+    m_filePath = path;
+}
+
+namespace
+{
+
+constexpr size_t kFieldProbeEvents = 200;
+
+/// True if any of the first events carries @p key.
+bool FieldOccurs(db::EventsContainer& events, const std::string& key)
+{
+    if (key.empty())
+        return false;
+    const size_t n = (std::min)(events.Size(), kFieldProbeEvents);
+    for (size_t i = 0; i < n; ++i)
+        if (!events.GetEvent(i).findByKey(key).empty())
+            return true;
+    return false;
+}
+
+/// The configured type field when the log has it; otherwise the first common
+/// severity/kind column the log does have (e.g. "event_type" in safeAPI logs).
+std::string ResolveTypeField(db::EventsContainer& events, const std::string& configured)
+{
+    if (FieldOccurs(events, configured))
+        return configured;
+    for (const char* candidate : {"level", "severity", "type", "event_type", "category"})
+        if (FieldOccurs(events, candidate))
+            return candidate;
+    return configured;
+}
+
+/// Columns whose values are actor names: those of the best exchange pattern
+/// (source + destination, actor, ...), or the legacy "actor" field.
+std::vector<std::string> ResolveActorFields(db::EventsContainer& events)
+{
+    std::vector<std::string> fields;
+    const auto discovered = analyzer::ActorDiscoverer::Discover(events);
+    if (const auto* best = discovered.bestPattern())
+    {
+        for (const auto* f : {&best->senderField, &best->receiverField, &best->actorField})
+            if (!f->empty())
+                fields.push_back(*f);
+    }
+    if (fields.empty())
+        fields.push_back("actor");
+    return fields;
+}
+
+} // namespace
+
 void DashboardPanel::UpdateStats()
 {
     if (!m_events)
@@ -176,17 +236,56 @@ void DashboardPanel::UpdateFileInfo()
     if (!m_events)
         return;
 
-    // File info is typically stored in EventsContainer
-    // For now, show basic stats
-    m_fileNameLabel->setText("(Log file)");
-    m_fileFormatLabel->setText("—");
-    m_fileSizeLabel->setText("—");
-    m_timeRangeLabel->setText("—");
+    if (m_filePath.isEmpty())
+    {
+        m_fileNameLabel->setText(tr("(No file loaded)"));
+        m_fileFormatLabel->setText("—");
+        m_fileSizeLabel->setText("—");
+    }
+    else
+    {
+        const QFileInfo info(m_filePath);
+        m_fileNameLabel->setText(info.fileName());
+        m_fileFormatLabel->setText(info.suffix().isEmpty() ? QString("—") : info.suffix().toUpper());
+        m_fileSizeLabel->setText(info.exists() ? QLocale().formattedDataSize(info.size()) : QString("—"));
+    }
+
+    // Time range: first and last value of the log's timestamp-like column.
+    QString range = "—";
+    if (m_events && m_events->Size() > 0)
+    {
+        std::string timeKey;
+        for (const auto& [key, value] : m_events->GetEvent(0).getEventItems())
+        {
+            std::string lower = key;
+            std::transform(lower.begin(), lower.end(), lower.begin(),
+                [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            if (lower.find("time") != std::string::npos || lower == "ts" || lower == "date")
+            {
+                timeKey = key;
+                break;
+            }
+        }
+        if (!timeKey.empty())
+        {
+            const size_t n = m_events->Size();
+            std::string first, last;
+            for (size_t i = 0; i < n && first.empty(); ++i)
+                first = m_events->GetEvent(i).findByKey(timeKey);
+            for (size_t i = n; i > 0 && last.empty(); --i)
+                last = m_events->GetEvent(i - 1).findByKey(timeKey);
+            if (!first.empty())
+                range = QString::fromStdString(first) + " → " + QString::fromStdString(last.empty() ? first : last);
+        }
+    }
+    m_timeRangeLabel->setText(range);
 }
 
 void DashboardPanel::UpdateEventStats()
 {
-    const std::string& typeField = config::GetConfig().typeFilterField;
+    const std::string typeField = (m_events && m_events->Size() > 0)
+        ? ResolveTypeField(*m_events, config::GetConfig().typeFilterField)
+        : config::GetConfig().typeFilterField;
     const QString typeFieldLabel = typeField.empty()
         ? tr("type")
         : QString::fromStdString(typeField);
@@ -262,6 +361,7 @@ void DashboardPanel::UpdateTopActors()
     }
 
     std::map<QString, qint64> actorCounts;
+    const std::vector<std::string> actorFields = ResolveActorFields(*m_events);
 
     // Count events by actor (thread-safe: cache size first)
     const size_t eventCount = m_events->Size();
@@ -274,9 +374,15 @@ void DashboardPanel::UpdateTopActors()
                 break;
 
             const auto& event = m_events->GetEvent(i);
-            QString actor = QString::fromStdString(event.findByKey("actor"));
-            if (!actor.isEmpty())
-                actorCounts[actor]++;
+            // An event counts once per actor it names (sender and receiver
+            // fields, comma lists split, placeholders such as "internal" skipped).
+            std::set<std::string> named;
+            for (const auto& field : actorFields)
+                for (auto& name : analyzer::SplitActorList(event.findByKey(field)))
+                    if (!analyzer::IsPlaceholderActor(name))
+                        named.insert(std::move(name));
+            for (const auto& name : named)
+                actorCounts[QString::fromStdString(name)]++;
         }
         catch (const std::exception&)
         {
