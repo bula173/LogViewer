@@ -2,6 +2,12 @@
 
 All notable changes to LogViewer are documented here.
 
+## [Unreleased]
+
+### Release process
+
+- GitHub Actions moved to Node 24 based versions (checkout v5, cache v5, upload-artifact v6, download-artifact v7, attest-build-provenance v3, action-gh-release v3, gitleaks v3, CodeQL v4), removing the "Node.js 20 is deprecated" warnings. `actions/dependency-review-action` has no Node 24 release yet.
+
 ## [1.13.2] — 2026-09-21
 
 ### Fixes

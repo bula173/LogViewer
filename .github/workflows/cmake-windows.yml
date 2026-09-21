@@ -34,13 +34,13 @@ jobs:
       GTEST_COLOR: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # msys2/setup-msys2 has its own internal caching via cache: true.
       # We add an outer cache keyed on the workflow file so the full MSYS2
       # installation is reused across runs when the package list hasn't changed.
       - name: Cache MSYS2 installation
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\msys64
           key: msys2-${{ hashFiles('.github/workflows/cmake-windows.yml') }}
@@ -85,7 +85,7 @@ jobs:
 
       # Key on source hashes — reused across commits, invalidated on real changes
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-win-clang-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -95,7 +95,7 @@ jobs:
 
       # Include thirdparty hashes so cache invalidates when dependency versions change
       - name: Cache FetchContent dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-win-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -179,7 +179,7 @@ jobs:
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-${{ matrix.build_type }}-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -187,7 +187,7 @@ jobs:
 
       - name: Upload tests artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-${{ matrix.build_type }}-tests
           path: |
@@ -198,14 +198,14 @@ jobs:
 
       - name: Upload staging artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-${{ matrix.build_type }}-staging
           path: dist/staging/**
           if-no-files-found: ignore
 
       - name: Upload installer artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         continue-on-error: true  # artifact service is occasionally flaky; build success matters more
         with:
           name: windows-${{ matrix.build_type }}-installer
@@ -214,7 +214,7 @@ jobs:
 
       - name: Upload build logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-${{ matrix.build_type }}-logs
           path: dist/logs/**

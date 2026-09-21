@@ -33,12 +33,12 @@ jobs:
       GTEST_COLOR: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Cache Homebrew downloads — key on Brewfile or workflow file so cache
       # is invalidated when package list changes
       - name: Cache Homebrew packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/Library/Caches/Homebrew/downloads
@@ -53,7 +53,7 @@ jobs:
 
       # Key on source hashes — reused across commits, invalidated on real changes
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-macos-clang-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -63,7 +63,7 @@ jobs:
 
       # Include thirdparty hashes so cache invalidates when dependency versions change
       - name: Cache FetchContent dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-macos-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -155,7 +155,7 @@ jobs:
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-${{ matrix.build_type }}-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -163,7 +163,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-${{ matrix.build_type }}-artifacts
           path: |
@@ -175,7 +175,7 @@ jobs:
 
       - name: Upload build logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-${{ matrix.build_type }}-logs
           path: dist/logs/**

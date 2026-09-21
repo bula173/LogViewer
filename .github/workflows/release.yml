@@ -27,7 +27,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Compare tag with project(VERSION)
         run: |
           CMAKE_VERSION=$(sed -n 's/^project(LogViewer VERSION \([0-9][0-9.]*\).*/\1/p' CMakeLists.txt)
@@ -50,10 +50,10 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Cache APT archives
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /var/cache/apt/archives
           key: apt-archives-${{ runner.os }}-${{ hashFiles('.github/workflows/release.yml') }}
@@ -72,7 +72,7 @@ jobs:
         shell: bash
 
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-linux-gcc-Release-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -81,7 +81,7 @@ jobs:
             ccache-linux-gcc-
 
       - name: Cache FetchContent
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-linux-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -155,19 +155,19 @@ jobs:
             -exec cp {} $GITHUB_WORKSPACE/dist/packages/ \;
 
       - name: Attest Linux packages (GitHub Sigstore)
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: dist/packages/*
 
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-linux-packages
           path: dist/packages/*
           retention-days: 1
 
       - name: Upload plugins
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-linux-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -185,10 +185,10 @@ jobs:
       HAS_APPLE_ID: ${{ secrets.APPLE_ID != '' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Cache Homebrew
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/Library/Caches/Homebrew/downloads
           key: brew-${{ runner.os }}-${{ hashFiles('.github/workflows/release.yml') }}
@@ -198,7 +198,7 @@ jobs:
         run: brew install ninja ccache expat libssh libarchive qt curl
 
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-macos-clang-Release-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -207,7 +207,7 @@ jobs:
             ccache-macos-clang-
 
       - name: Cache FetchContent
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-macos-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -307,19 +307,19 @@ jobs:
           find . -maxdepth 1 -name "*.tar.gz" -exec cp {} $GITHUB_WORKSPACE/dist/packages/ \;
 
       - name: Attest macOS packages (GitHub Sigstore)
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: dist/packages/*
 
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-macos-packages
           path: dist/packages/*
           retention-days: 1
 
       - name: Upload plugins
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-macos-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -336,10 +336,10 @@ jobs:
       HAS_WIN_CERT: ${{ secrets.WINDOWS_CERTIFICATE != '' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Cache MSYS2
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\msys64
           key: msys2-${{ hashFiles('.github/workflows/release.yml') }}
@@ -361,7 +361,7 @@ jobs:
             mingw-w64-x86_64-curl mingw-w64-x86_64-nsis
 
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-win-clang-Release-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -370,7 +370,7 @@ jobs:
             ccache-win-clang-
 
       - name: Cache FetchContent
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-win-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -486,19 +486,19 @@ jobs:
         run: echo "::warning title=Unsigned Windows build::WINDOWS_CERTIFICATE secret is not set; the installer is NOT code-signed and SmartScreen will show 'Unknown publisher'."
 
       - name: Attest Windows packages (GitHub Sigstore)
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: dist/packages/*
 
       - name: Upload packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-windows-packages
           path: dist/packages/*
           retention-days: 1
 
       - name: Upload plugins
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-windows-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -514,13 +514,13 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0   # full history + tags, needed to find the previous release tag
           fetch-tags: true
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: release-assets
           pattern: release-*
@@ -657,7 +657,7 @@ jobs:
         run: gh release delete ${{ github.ref_name }} --yes 2>/dev/null || true
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: LogViewer ${{ github.ref_name }}

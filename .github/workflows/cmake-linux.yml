@@ -34,7 +34,7 @@ jobs:
       GTEST_COLOR: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Runner images ship a stale apt index; security.ubuntu.com then 404s on
       # superseded .debs and cache-apt-pkgs silently caches a broken install.
@@ -56,7 +56,7 @@ jobs:
       # Cache linuxdeployqt binary across runs
       - name: Cache linuxdeployqt
         id: cache-linuxdeployqt
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /usr/local/bin/linuxdeployqt
           key: linuxdeployqt-continuous-${{ runner.os }}
@@ -70,7 +70,7 @@ jobs:
 
       # Key on source hashes so cache is reused across commits, invalidated on real changes
       - name: Cache ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-linux-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ hashFiles('src/**/*.cpp', 'src/**/*.hpp', 'CMakeLists.txt') }}
@@ -80,7 +80,7 @@ jobs:
 
       # Include thirdparty hashes so cache is invalidated when dependency versions change
       - name: Cache FetchContent dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.BUILD_DIR }}/_deps
           key: fetchcontent-linux-${{ hashFiles('CMakeLists.txt', 'thirdparty/**/CMakeLists.txt') }}
@@ -251,7 +251,7 @@ jobs:
 
       - name: Upload plugins
         if: matrix.build_type == 'Release'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-${{ matrix.build_type }}-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
@@ -259,7 +259,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-${{ matrix.build_type }}-artifacts
           path: |
@@ -273,7 +273,7 @@ jobs:
 
       - name: Upload build logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-${{ matrix.build_type }}-logs
           path: dist/logs/**
