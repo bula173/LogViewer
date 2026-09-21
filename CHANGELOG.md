@@ -2,12 +2,6 @@
 
 All notable changes to LogViewer are documented here.
 
-## [Unreleased]
-
-### Fixes
-
-- **Item details** — long values are word-wrapped as soon as an event is selected. Before, the value column grew to the width of the longest value and text only wrapped after the panel was resized.
-
 ## [1.13.1] — 2026-09-21
 
 Audit follow-up to 1.13.0.
@@ -22,12 +16,13 @@ Audit follow-up to 1.13.0.
 - **Filter popup** — stays on screen, no longer reopens when the funnel is clicked to close it (Windows/Linux), shows values containing `%2` verbatim, and keeps a stable order for values that differ only in case.
 - **Sequence tab** — zoom and scroll are kept when the log is re-analysed while following a file (previously reset on every batch); an empty result no longer leaves the old scroll extent; invalid wheel/pinch values are ignored; closing the tab during analysis no longer risks a crash.
 - **safeAPI parser** — a UTF-8 BOM no longer hides the header or drops the first event; file detection reads a bounded prefix instead of a whole single-line file; a read error is reported instead of showing a truncated file as complete.
+- **Item details** — long values are word-wrapped as soon as an event is selected. Before, the value column grew to the width of the longest value and text only wrapped after the panel was resized.
 
 ### Release process
 
 - Release notes are now taken from this changelog (they always said "Initial Release" before).
 - The release fails early if the tag and the CMake version differ, and if an expected package (deb, tar.gz, Windows installer) is missing.
-- Windows signatures are verified after signing; an unsigned build now shows a warning.
+- Windows signatures are verified after signing (missing/invalid fails the release; an untrusted certificate chain warns); an unsigned build shows a warning.
 - CodeQL job: same apt-index refresh as the Linux CI.
 
 ## [1.13.0] — 2026-09-19
