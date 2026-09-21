@@ -461,16 +461,24 @@ jobs:
         if: env.HAS_WIN_CERT == 'true'
         shell: pwsh
         run: |
-          $signtool = (Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" `
-            -Recurse -Filter "signtool.exe" -ErrorAction SilentlyContinue |
-            Select-Object -Last 1).FullName
-          if (-not $signtool) { throw "signtool.exe not found" }
+          # Fail if a file is unsigned or tampered with. A signature whose
+          # certificate chain is not trusted (self-signed / not yet a public CA
+          # certificate) only warns: the release still ships, but Windows shows
+          # "Unknown publisher".
           $targets = @(Join-Path $env:BUILD_DIR "src\main\LogViewer.exe") +
             (Get-ChildItem "$env:GITHUB_WORKSPACE\dist\packages\*.exe").FullName
+          $bad = @()
           foreach ($t in $targets) {
-            & $signtool verify /pa /v $t
-            if ($LASTEXITCODE -ne 0) { throw "Authenticode verification failed for $t" }
+            $sig = Get-AuthenticodeSignature -FilePath $t
+            Write-Host "$t : $($sig.Status) - $($sig.StatusMessage)"
+            if ($sig.SignerCertificate) { Write-Host "  signer: $($sig.SignerCertificate.Subject)" }
+            if ($sig.Status -in 'NotSigned', 'HashMismatch', 'NotSupportedFileFormat') {
+              $bad += $t
+            } elseif ($sig.Status -ne 'Valid') {
+              Write-Host "::warning title=Untrusted Windows signature::$t is signed, but its certificate is not trusted; Windows will show 'Unknown publisher'."
+            }
           }
+          if ($bad.Count -gt 0) { throw "Missing or invalid Authenticode signature: $($bad -join ', ')" }
 
       - name: Warn about unsigned Windows build
         if: env.HAS_WIN_CERT != 'true'

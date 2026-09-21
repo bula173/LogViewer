@@ -21,7 +21,7 @@ Audit follow-up to 1.13.0.
 
 - Release notes are now taken from this changelog (they always said "Initial Release" before).
 - The release fails early if the tag and the CMake version differ, and if an expected package (deb, tar.gz, Windows installer) is missing.
-- Windows signatures are verified after signing; an unsigned build now shows a warning.
+- Windows signatures are verified after signing (missing/invalid fails the release; an untrusted certificate chain warns); an unsigned build shows a warning.
 - CodeQL job: same apt-index refresh as the Linux CI.
 
 ## [1.13.0] — 2026-09-19
