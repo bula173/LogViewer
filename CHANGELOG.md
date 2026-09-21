@@ -2,6 +2,12 @@
 
 All notable changes to LogViewer are documented here.
 
+## [Unreleased]
+
+### Fixes
+
+- **Item details** — long values are word-wrapped as soon as an event is selected. Before, the value column grew to the width of the longest value and text only wrapped after the panel was resized.
+
 ## [1.13.1] — 2026-09-21
 
 Audit follow-up to 1.13.0.

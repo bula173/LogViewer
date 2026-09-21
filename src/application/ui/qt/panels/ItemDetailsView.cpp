@@ -35,7 +35,13 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
     QStringList headers;
     headers << "Key" << "Value";
     m_details->setHorizontalHeaderLabels(headers);
+    // Keys size to their text; the value column always fills the rest of the
+    // viewport so long values wrap there. (Sizing it to its contents made it
+    // as wide as the longest unwrapped value, so nothing wrapped until the
+    // panel was resized.)
     m_details->horizontalHeader()->setStretchLastSection(true);
+    m_details->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    m_details->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     m_details->verticalHeader()->setVisible(false);
     m_details->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_details->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -273,8 +279,7 @@ void ItemDetailsView::DisplayEvent(int actualRow)
             populateRow(row++, key, value, true);
     }
 
-    m_details->resizeColumnsToContents();
-    m_details->resizeRowsToContents();
+    m_details->resizeRowsToContents(); // wrapped at the stretched value-column width
     util::Logger::Debug("[ItemDetails] Displayed event row {} ({} field(s){})",
         actualRow, regularItems.size(),
         hasSignals ? ", with CAN signals" : "");
