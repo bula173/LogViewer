@@ -5,6 +5,12 @@ var namespaceui_1_1qt =
     [ "anonymous_namespace{ColumnFilterPopup.cpp}", "d2/dc3/namespaceui_1_1qt_1_1anonymous__namespace_02ColumnFilterPopup_8cpp_03.html", [
       [ "kValueRole", "d2/dc3/namespaceui_1_1qt_1_1anonymous__namespace_02ColumnFilterPopup_8cpp_03.html#a1c341fa99a66cdeb322e82453ee3d672", null ]
     ] ],
+    [ "anonymous_namespace{DashboardPanel.cpp}", "d8/dd5/namespaceui_1_1qt_1_1anonymous__namespace_02DashboardPanel_8cpp_03.html", [
+      [ "FieldOccurs", "d8/dd5/namespaceui_1_1qt_1_1anonymous__namespace_02DashboardPanel_8cpp_03.html#a76349de0694162a41d20fe4d29c6cd32", null ],
+      [ "ResolveActorFields", "d8/dd5/namespaceui_1_1qt_1_1anonymous__namespace_02DashboardPanel_8cpp_03.html#a8d7fbc0db8be5d8ceb72b2f41e5c59a0", null ],
+      [ "ResolveTypeField", "d8/dd5/namespaceui_1_1qt_1_1anonymous__namespace_02DashboardPanel_8cpp_03.html#a48a4cf564d09ce76c0cb17bfcd0e1252", null ],
+      [ "kFieldProbeEvents", "d8/dd5/namespaceui_1_1qt_1_1anonymous__namespace_02DashboardPanel_8cpp_03.html#a1d63436e5bb77e941fd4791a38129081", null ]
+    ] ],
     [ "anonymous_namespace{ExportDialog.cpp}", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html", [
       [ "EscapeMarkup", "d7/d07/namespaceui_1_1qt_1_1anonymous__namespace_02ExportDialog_8cpp_03.html#abaaae8e87af68d043287423abc5f6a48", null ]
     ] ],
