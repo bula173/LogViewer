@@ -17,6 +17,8 @@ var searchData=
   ['pluginmanager_2ehpp_14',['PluginManager.hpp',['../da/daa/PluginManager_8hpp.html',1,'']]],
   ['pluginmanagerdialog_2ecpp_15',['PluginManagerDialog.cpp',['../d0/d6e/PluginManagerDialog_8cpp.html',1,'']]],
   ['pluginmanagerdialog_2ehpp_16',['PluginManagerDialog.hpp',['../dd/d2a/PluginManagerDialog_8hpp.html',1,'']]],
-  ['preferencesdialog_2ecpp_17',['PreferencesDialog.cpp',['../de/d88/PreferencesDialog_8cpp.html',1,'']]],
-  ['preferencesdialog_2ehpp_18',['PreferencesDialog.hpp',['../d2/d3b/PreferencesDialog_8hpp.html',1,'']]]
+  ['portablemode_2ecpp_17',['PortableMode.cpp',['../df/d51/PortableMode_8cpp.html',1,'']]],
+  ['portablemode_2ehpp_18',['PortableMode.hpp',['../d6/df9/PortableMode_8hpp.html',1,'']]],
+  ['preferencesdialog_2ecpp_19',['PreferencesDialog.cpp',['../de/d88/PreferencesDialog_8cpp.html',1,'']]],
+  ['preferencesdialog_2ehpp_20',['PreferencesDialog.hpp',['../d2/d3b/PreferencesDialog_8hpp.html',1,'']]]
 ];

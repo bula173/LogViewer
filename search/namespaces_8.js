@@ -25,5 +25,7 @@ var searchData=
   ['ui_3a_3aqt_3a_3autils_3a_3aanonymous_5fnamespace_7bsessionmanager_2ecpp_7d_22',['anonymous_namespace{SessionManager.cpp}',['../d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html',1,'ui::qt::utils']]],
   ['ui_3a_3aqt_3a_3awidgets_23',['widgets',['../d0/d00/namespaceui_1_1qt_1_1widgets.html',1,'ui::qt']]],
   ['updates_24',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
-  ['util_25',['util',['../d6/d72/namespaceutil.html',1,'']]]
+  ['util_25',['util',['../d6/d72/namespaceutil.html',1,'']]],
+  ['util_3a_3aportable_26',['portable',['../d8/d0b/namespaceutil_1_1portable.html',1,'util']]],
+  ['util_3a_3aportable_3a_3aanonymous_5fnamespace_7bportablemode_2ecpp_7d_27',['anonymous_namespace{PortableMode.cpp}',['../d8/d6e/namespaceutil_1_1portable_1_1anonymous__namespace_02PortableMode_8cpp_03.html',1,'util::portable']]]
 ];

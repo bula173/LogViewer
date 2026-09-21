@@ -1,5 +1,6 @@
 var dir_7b77f44ce27838791a51e832875d93d4 =
 [
+    [ "AppDataDir.hpp", "d8/dc0/AppDataDir_8hpp.html", "d8/dc0/AppDataDir_8hpp" ],
     [ "EventGroupManager.cpp", "d5/d09/EventGroupManager_8cpp.html", null ],
     [ "EventGroupManager.hpp", "da/d18/EventGroupManager_8hpp.html", "da/d18/EventGroupManager_8hpp" ],
     [ "EventTagManager.cpp", "dc/de4/EventTagManager_8cpp.html", "dc/de4/EventTagManager_8cpp" ],

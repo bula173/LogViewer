@@ -93,27 +93,27 @@ $(document).ready(function(){initNavTree('da/def/md_docs_2BUG__FIXES__SUMMARY__v
   <div class="headertitle"><div class="title">v1.11.0 Bug Fixes Summary</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md199"></a> </p>
-<h1><a class="anchor" id="autotoc_md200"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md200"></a> </p>
+<h1><a class="anchor" id="autotoc_md201"></a>
 Status: ✅ All Critical Issues Resolved</h1>
 <p>This document tracks all bugs identified in the comprehensive code review and their fixes.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md202"></a>
+<h1><a class="anchor" id="autotoc_md203"></a>
 Critical Fixes (Blocking Release)</h1>
-<h2><a class="anchor" id="autotoc_md203"></a>
+<h2><a class="anchor" id="autotoc_md204"></a>
 Fix #1: Unsafe const_cast in ReportGenerator</h2>
 <p><b>Commit:</b> <code>3ad5de37</code> <b>Severity:</b> 🔴 CRITICAL - Memory corruption risk <b>Issue:</b> <code>const_cast&lt;<a class="el" href="../../d1/d00/classdb_1_1LogEvent.html" title="Represents a single, structured log event with key-value data.">db::LogEvent</a>*&gt;</code> casting away const from EventsContainer data <b>Fix:</b> Changed all method signatures to use <code>const <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html" title="Represents a single, structured log event with key-value data.">db::LogEvent</a>*</code> throughout:</p><ul>
 <li><code>GenerateHTML</code>, <code>GenerateMarkdown</code>, <code>GenerateJSON</code>, <code>GeneratePlainText</code></li>
 <li><code>CalculateStatistics</code>, <code>GenerateTimeline</code>, <code>GenerateTrendAnalysis</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md204"></a>
+<h2><a class="anchor" id="autotoc_md205"></a>
 Fix #2: Debounce O(n×m) Search Performance</h2>
 <p><b>Commit:</b> <code>3ad5de37</code> <b>Severity:</b> 🔴 CRITICAL - UI lag on every keystroke <b>Issue:</b> <code>CountMatches()</code> called on every keystroke with no debounce <b>Fix:</b></p><ul>
 <li>Added <code>m_matchCountDebounceTimer</code> (300ms debounce)</li>
 <li><code>UpdateMatchCount()</code> only called after typing pause</li>
 <li>Prevents O(n×m) computation on every key press</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md205"></a>
+<h2><a class="anchor" id="autotoc_md206"></a>
 Fix #3: Fix timeSpanMs Calculation</h2>
 <p><b>Commit:</b> <code>3ad5de37</code> <b>Severity:</b> 🔴 CRITICAL - Meaningless statistics <b>Issue:</b> <code>stats.timeSpanMs = events.size() * 1000</code> (always wrong) <b>Fix:</b></p><ul>
 <li>Parse actual timestamps from events</li>
@@ -121,10 +121,10 @@ Fix #3: Fix timeSpanMs Calculation</h2>
 <li>Calculate duration using <code>QDateTime::msecsTo()</code></li>
 <li>Reports now show accurate time spans</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md206"></a>
+<h2><a class="anchor" id="autotoc_md207"></a>
 Fix #4: Search History Persistence Error Handling</h2>
 <p><b>Commit:</b> <code>3ad5de37</code> <b>Severity:</b> 🟠 HIGH - Silent failures <b>Issue:</b> <code>SaveSearchHistory()</code> didn't check QSettings::sync() status <b>Fix:</b> Added status check after <code>sync()</code> to log errors instead of silently failing</p>
-<h2><a class="anchor" id="autotoc_md207"></a>
+<h2><a class="anchor" id="autotoc_md208"></a>
 Fix #5: File I/O Error Recovery &amp; Path Validation</h2>
 <p><b>Commit:</b> <code>3ad5de37</code> <b>Severity:</b> 🟠 HIGH - Poor error messages <b>Issue:</b> Report generation didn't validate paths or check write status <b>Fix:</b></p><ul>
 <li>Validate directory exists before write attempt</li>
@@ -133,14 +133,14 @@ Fix #5: File I/O Error Recovery &amp; Path Validation</h2>
 <li>Provide detailed error messages with <code>QFile::errorString()</code></li>
 <li>Verify final file is not empty</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md208"></a>
+<h2><a class="anchor" id="autotoc_md209"></a>
 Fix #6: Index Mismatch in Report Generation</h2>
 <p><b>Commit:</b> <code>6e78f65a</code> <b>Severity:</b> 🔴 CRITICAL - Wrong data in reports <b>Issue:</b> <code>GetRowsToExport()</code> returns model row indices, but when filtering is active, model rows ≠ container indices <b>Fix:</b></p><ul>
 <li>Added <code>EventsTableView::ResolveToActualIndex()</code> public method</li>
 <li>Updated <code>GetRowsToExport()</code> to convert model rows to EventsContainer indices</li>
 <li>Reports now include correct events regardless of active filters</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md209"></a>
+<h2><a class="anchor" id="autotoc_md210"></a>
 Fix #7: Thread Safety in EventsContainer Access</h2>
 <p><b>Commit:</b> <code>6e78f65a</code> <b>Severity:</b> 🔴 CRITICAL - Race conditions <b>Issue:</b> Concurrent event loading causes crashes in UnifiedSearchBar and DashboardPanel <b>Fix:</b></p><ul>
 <li>Added per-event try-catch in <code>CountMatches()</code>, <code>UpdateEventStats()</code>, <code>UpdateTopActors()</code></li>
@@ -148,38 +148,38 @@ Fix #7: Thread Safety in EventsContainer Access</h2>
 <li>Check size before each access to handle concurrent modifications</li>
 <li>Gracefully skip events that fail to access (removed/invalid)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md210"></a>
+<h2><a class="anchor" id="autotoc_md211"></a>
 Fix #8: Complete Dashboard Export Button</h2>
 <p><b>Commit:</b> <code>af710c18</code> <b>Severity:</b> 🟠 HIGH - Non-functional button <b>Issue:</b> Export button in Dashboard was a placeholder (called <code>OnOpenFileRequested()</code>) <b>Fix:</b> Connected to actual <code>OnExportCsvRequested()</code> for CSV export</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md212"></a>
+<h1><a class="anchor" id="autotoc_md213"></a>
 Summary by Category</h1>
-<h2><a class="anchor" id="autotoc_md213"></a>
+<h2><a class="anchor" id="autotoc_md214"></a>
 Thread Safety (2 fixes)</h2>
 <ul>
 <li>✅ Debounce search counting to prevent O(n×m) computation lag</li>
 <li>✅ Add per-event error handling for concurrent modifications</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md214"></a>
+<h2><a class="anchor" id="autotoc_md215"></a>
 Data Integrity (3 fixes)</h2>
 <ul>
 <li>✅ Fix timeSpanMs calculation using actual timestamps</li>
 <li>✅ Fix index mismatch converting model rows to container indices</li>
 <li>✅ Remove unsafe const_cast preventing memory corruption</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md215"></a>
+<h2><a class="anchor" id="autotoc_md216"></a>
 Error Handling (2 fixes)</h2>
 <ul>
 <li>✅ Check QSettings::sync() status after save</li>
 <li>✅ Validate paths and check file I/O status before/after write</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md216"></a>
+<h2><a class="anchor" id="autotoc_md217"></a>
 Feature Completion (1 fix)</h2>
 <ul>
 <li>✅ Complete Dashboard export button implementation</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md218"></a>
+<h1><a class="anchor" id="autotoc_md219"></a>
 Testing Recommendations</h1>
 <p>Before v1.11.0 release, verify:</p>
 <ol type="1">
@@ -218,7 +218,7 @@ Testing Recommendations</h1>
 </li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md220"></a>
+<h1><a class="anchor" id="autotoc_md221"></a>
 Files Modified</h1>
 <div class="fragment"><div class="line">src/application/ui/qt/MainWindow.cpp              (+50 lines, -20 lines)</div>
 <div class="line">src/application/ui/qt/MainWindow.hpp              (+1 method)</div>
@@ -229,19 +229,19 @@ Files Modified</h1>
 <div class="line">src/application/ui/qt/panels/DashboardPanel.cpp   (+40 lines, -25 lines)</div>
 <div class="line">src/application/ui/qt/panels/UnifiedSearchBar.cpp (+20 lines, -10 lines)</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md222"></a>
+<h1><a class="anchor" id="autotoc_md223"></a>
 Release Readiness</h1>
-<h2><a class="anchor" id="autotoc_md223"></a>
+<h2><a class="anchor" id="autotoc_md224"></a>
 v1.11.0 Status: ✅ READY FOR RELEASE</h2>
 <p>All critical bugs fixed. No known blockers remain.</p>
-<h2><a class="anchor" id="autotoc_md224"></a>
+<h2><a class="anchor" id="autotoc_md225"></a>
 Commits</h2>
 <ol type="1">
 <li><code>3ad5de37</code> - Fix 5 critical bugs (const_cast, debounce, timeSpan, path validation, error checking)</li>
 <li><code>6e78f65a</code> - Fix index mismatch and thread safety</li>
 <li><code>af710c18</code> - Complete Dashboard export</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md225"></a>
+<h2><a class="anchor" id="autotoc_md226"></a>
 Outstanding Items (Non-Critical)</h2>
 <ul>
 <li>Magic numbers: Search debounce (150ms), history limit (10) - document as constants in v1.12.0</li>
@@ -249,15 +249,15 @@ Outstanding Items (Non-Critical)</h2>
 <li>Integration tests for filtered reports - add in v1.12.0</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md227"></a>
+<h1><a class="anchor" id="autotoc_md228"></a>
 Performance Impact</h1>
 <p>✅ <b>Improved:</b> Search with 10k+ events now responsive (300ms debounce prevents lag) ✅ <b>Improved:</b> Report generation with filters now correct (no wasted cycles on wrong indices) ✅ <b>Stable:</b> No performance regression, error handling adds &lt;1ms per iteration</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md229"></a>
+<h1><a class="anchor" id="autotoc_md230"></a>
 Backward Compatibility</h1>
 <p>✅ <b>Maintained:</b> All fixes are backward compatible ✅ <b>No API changes:</b> Public interfaces unchanged ✅ <b>No behavior changes:</b> Only bugs fixed, no features removed</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md231"></a>
+<h1><a class="anchor" id="autotoc_md232"></a>
 Sign-Off</h1>
 <p>All 8 critical and high-priority bugs identified in CODE_REVIEW_v1.11.0_FINDINGS.md have been resolved. v1.11.0 is ready for release with these fixes.</p>
 <p><b>Generated:</b> 2026-07-31 <b>Status:</b> Ready for Production </p>

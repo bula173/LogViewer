@@ -22,8 +22,9 @@ var searchData=
   ['anthropicclient_2ecpp_19',['AnthropicClient.cpp',['../db/d8f/AnthropicClient_8cpp.html',1,'']]],
   ['anthropicclient_2ehpp_20',['AnthropicClient.hpp',['../dc/dbf/AnthropicClient_8hpp.html',1,'']]],
   ['api_5fexamples_2emd_21',['API_EXAMPLES.md',['../de/d33/API__EXAMPLES_8md.html',1,'']]],
-  ['architecture_2emd_22',['ARCHITECTURE.md',['../da/d01/ARCHITECTURE_8md.html',1,'']]],
-  ['architecture_5fimprovements_2emd_23',['ARCHITECTURE_IMPROVEMENTS.md',['../d5/d16/ARCHITECTURE__IMPROVEMENTS_8md.html',1,'']]],
-  ['ascparser_2ecpp_24',['AscParser.cpp',['../dc/d73/AscParser_8cpp.html',1,'']]],
-  ['ascparser_2ehpp_25',['AscParser.hpp',['../d7/d8f/AscParser_8hpp.html',1,'']]]
+  ['appdatadir_2ehpp_22',['AppDataDir.hpp',['../d8/dc0/AppDataDir_8hpp.html',1,'']]],
+  ['architecture_2emd_23',['ARCHITECTURE.md',['../da/d01/ARCHITECTURE_8md.html',1,'']]],
+  ['architecture_5fimprovements_2emd_24',['ARCHITECTURE_IMPROVEMENTS.md',['../d5/d16/ARCHITECTURE__IMPROVEMENTS_8md.html',1,'']]],
+  ['ascparser_2ecpp_25',['AscParser.cpp',['../dc/d73/AscParser_8cpp.html',1,'']]],
+  ['ascparser_2ehpp_26',['AscParser.hpp',['../d7/d8f/AscParser_8hpp.html',1,'']]]
 ];

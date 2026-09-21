@@ -4,6 +4,8 @@ var dir_93599c5c7872e95ad0eab07babcb5b60 =
     [ "KeyEncryption.cpp", "df/dc7/KeyEncryption_8cpp.html", "df/dc7/KeyEncryption_8cpp" ],
     [ "KeyEncryption.hpp", "d0/de3/KeyEncryption_8hpp.html", "d0/de3/KeyEncryption_8hpp" ],
     [ "Logger.hpp", "d9/d11/Logger_8hpp.html", "d9/d11/Logger_8hpp" ],
+    [ "PortableMode.cpp", "df/d51/PortableMode_8cpp.html", "df/d51/PortableMode_8cpp" ],
+    [ "PortableMode.hpp", "d6/df9/PortableMode_8hpp.html", "d6/df9/PortableMode_8hpp" ],
     [ "Result.hpp", "d3/db2/Result_8hpp.html", "d3/db2/Result_8hpp" ],
     [ "ThirdPartyWarnings.hpp", "d2/de7/ThirdPartyWarnings_8hpp.html", "d2/de7/ThirdPartyWarnings_8hpp" ],
     [ "WxWidgetsUtils.hpp", "d3/de9/WxWidgetsUtils_8hpp.html", "d3/de9/WxWidgetsUtils_8hpp" ]

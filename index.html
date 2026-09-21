@@ -288,15 +288,18 @@ Configuration</h1>
 <div class="line">    }</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md21"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md21"></a>
+Portable mode (no installation)</h2>
+<p>The Windows release ships <code>LogViewer-&lt;version&gt;-win64-portable.zip</code>: unzip it anywhere and run <code>LogViewer.exe</code>. It contains an empty <code>portable.txt</code> next to the executable; while that file exists, LogViewer keeps everything in a <code>data/</code> folder beside the executable (config, themes, plugins, session, search history, window layout, logs) and writes nothing to <code>APPDATA%</code> or the registry. Delete <code>portable.txt</code> to switch back to the normal per-user profile. The same marker works for any other build of the app.</p>
+<h1><a class="anchor" id="autotoc_md22"></a>
 AI Setup</h1>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Local AI (Recommended for Privacy)</h2>
 <p><b>Ollama:</b> </p><div class="fragment"><div class="line">brew install ollama   # macOS</div>
 <div class="line">ollama serve</div>
 <div class="line">ollama pull llama3.2</div>
 </div><!-- fragment --><p><b>LM Studio:</b> Download from <a href="https://lmstudio.ai">https://lmstudio.ai</a>, load a model, start the local server, and point LogViewer at <code><a href="http://localhost:1234">http://localhost:1234</a></code>.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Cloud Providers</h2>
 <p>Configure in Settings &gt; AI with an API key:</p>
 <table class="markdownTable">
@@ -311,7 +314,7 @@ Cloud Providers</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">xAI Grok   </td><td class="markdownTableBodyNone"><a href="https://x.ai">https://x.ai</a>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Usage</h1>
 <ol type="1">
 <li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, <code>.evl</code> Evlog, and safeAPI merged test logs (<code>.txt</code>, auto-detected by header); drag and drop also works</li>
@@ -327,7 +330,7 @@ Usage</h1>
 <li><b>Layouts</b> — View &gt; Layouts to save, restore, or delete named dock arrangements</li>
 <li><b>Export</b> — File &gt; Export to save visible events as CSV, JSON, or XML</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Project Structure</h1>
 <div class="fragment"><div class="line">LogViewer/</div>
 <div class="line">├── src/</div>
@@ -369,7 +372,7 @@ Project Structure</h1>
 <div class="line">├── docs/                    # Documentation</div>
 <div class="line">├── etc/                     # Default config files</div>
 <div class="line">└── thirdparty/              # Third-party dependencies</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md26"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md27"></a>
 Packaging</h1>
 <div class="fragment"><div class="line"># macOS — produces dist/packages/LogViewer-1.11.0-Darwin.dmg</div>
 <div class="line">cmake --preset macos-release-qt</div>
@@ -388,7 +391,7 @@ Packaging</h1>
 <div class="line">cmake --build --preset windows-msys-release-qt-build</div>
 <div class="line">cmake --install build/windows-msys-release-qt --prefix dist/staging</div>
 <div class="line">cd build/windows-msys-release-qt &amp;&amp; cpack --config CPackConfig.cmake</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md27"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md28"></a>
 Troubleshooting</h1>
 <p><b>Qt not found:</b> </p><div class="fragment"><div class="line"># macOS — pass the prefix explicitly</div>
 <div class="line">export CMAKE_PREFIX_PATH=&quot;$(brew --prefix qt@6)&quot;</div>
@@ -398,7 +401,7 @@ Troubleshooting</h1>
 </div><!-- fragment --><p><b>AI timeout errors:</b> Increase timeout in Settings &gt; AI &gt; Timeout. Use local providers (Ollama/LM Studio) for better performance.</p>
 <p><b>Plugin config panel not visible:</b> Ensure the plugin is enabled in Settings &gt; Plugins. The panel appears as a separate tab in the left dock alongside "Filters". Check application logs for <code>[plugin]</code> messages.</p>
 <p>**Qt initialization crash (<code>getcwd</code> failed):** Occurs when the working directory is deleted or unmounted after launch. The application falls back gracefully to <code>/etc</code> for config discovery since v1.0.0.</p>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Documentation</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -422,7 +425,7 @@ Documentation</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a class="el" href="d5/d22/md_docs_2CPPCHECK.html">docs/CPPCHECK.md</a>   </td><td class="markdownTableBodyNone">Static analysis setup   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Contributing</h1>
 <ol type="1">
 <li>Fork the repository</li>
@@ -432,14 +435,14 @@ Contributing</h1>
 <li>Ensure all tests pass: <code>ctest --preset macos-debug-test-qt</code></li>
 <li>Open a Pull Request</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 License</h1>
 <p>MIT License — see <code>license.md</code> for details.</p>
 <p><b>Third-party libraries:</b></p><ul>
 <li>Qt 6: LGPL v3 (dynamically linked)</li>
 <li>nlohmann/json, spdlog, fmt, CURL, Google Test: MIT / BSD</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md31"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 Support</h1>
 <ul>
 <li><b>Issues</b>: <a href="https://github.com/bula173/LogViewer/issues">https://github.com/bula173/LogViewer/issues</a></li>

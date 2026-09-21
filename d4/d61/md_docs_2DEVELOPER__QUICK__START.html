@@ -93,12 +93,12 @@ $(document).ready(function(){initNavTree('d4/d61/md_docs_2DEVELOPER__QUICK__STAR
   <div class="headertitle"><div class="title">LogViewer: Developer Quick Reference Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md385"></a> <b>For:</b> Implementing architectural fixes and AI enhancements <br  />
+<div class="textblock"><p><a class="anchor" id="autotoc_md386"></a> <b>For:</b> Implementing architectural fixes and AI enhancements <br  />
  <b>Last Updated:</b> 2026-06-15</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md387"></a>
+<h1><a class="anchor" id="autotoc_md388"></a>
 Quick Navigation</h1>
-<h2><a class="anchor" id="autotoc_md388"></a>
+<h2><a class="anchor" id="autotoc_md389"></a>
 I Just Want To... 🎯</h2>
 <ul>
 <li><b>Fix the TODO in MainWindow</b> → #1</li>
@@ -108,13 +108,13 @@ I Just Want To... 🎯</h2>
 <li><b>See all 7 issues</b> → See <code>ARCHITECTURE_ANALYSIS.md</code></li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md390"></a>
+<h1><a class="anchor" id="autotoc_md391"></a>
 Issue #1: Fix Service Interface TODO</h1>
 <p><b>File:</b> <code><a class="el" href="../../da/d6e/MainWindow_8hpp.html">src/application/ui/qt/MainWindow.hpp</a>:50</code></p>
 <p><b>Current (Bad):</b> </p><div class="fragment"><div class="line">std::shared_ptr&lt;ai::IAIService&gt; m_pluginService;  <span class="comment">// TODO: Generalize beyond AI</span></div>
 </div><!-- fragment --><p><b>Target (Good):</b> </p><div class="fragment"><div class="line">std::shared_ptr&lt;services::IService&gt; m_currentService;</div>
 </div><!-- fragment --><p><b>Implementation Steps:</b></p>
-<h2><a class="anchor" id="autotoc_md391"></a>
+<h2><a class="anchor" id="autotoc_md392"></a>
 Step A: Create base service interface</h2>
 <div class="fragment"><div class="line"># Create new file</div>
 <div class="line">touch src/application/services/IService.hpp</div>
@@ -137,7 +137,7 @@ Step A: Create base service interface</h2>
 <div class="ttc" id="aclassservices_1_1IService_html_ad888cd18152ce1924c2ce971adec88fd"><div class="ttname"><a href="../../d2/d99/classservices_1_1IService.html#ad888cd18152ce1924c2ce971adec88fd">services::IService::GetServiceType</a></div><div class="ttdeci">virtual std::string GetServiceType() const =0</div><div class="ttdoc">Type of service (&quot;ai&quot;, &quot;analyzer&quot;, &quot;exporter&quot;, etc.)</div></div>
 <div class="ttc" id="aclassservices_1_1IService_html_ae14d76c054a8c05ffaf830946e7b6d26"><div class="ttname"><a href="../../d2/d99/classservices_1_1IService.html#ae14d76c054a8c05ffaf830946e7b6d26">services::IService::~IService</a></div><div class="ttdeci">virtual ~IService()=default</div></div>
 <div class="ttc" id="anamespaceservices_html"><div class="ttname"><a href="../../db/d91/namespaceservices.html">services</a></div><div class="ttdef"><b>Definition</b> IService.hpp:6</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md392"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md393"></a>
 Step B: Update IAIService</h2>
 <div class="fragment"><div class="line"><span class="comment">// src/application/ai/IAIService.hpp (MODIFY)</span></div>
 <div class="line"><span class="preprocessor">#pragma once</span></div>
@@ -173,7 +173,7 @@ Step B: Update IAIService</h2>
 <div class="ttc" id="aclassai_1_1IAIService_html_ad5b49db25dda390b11aeff83f20a2fe0"><div class="ttname"><a href="../../df/d97/classai_1_1IAIService.html#ad5b49db25dda390b11aeff83f20a2fe0">ai::IAIService::GetModelName</a></div><div class="ttdeci">virtual std::string GetModelName() const =0</div><div class="ttdoc">Get the name of the model being used.</div></div>
 <div class="ttc" id="aclassservices_1_1IService_html"><div class="ttname"><a href="../../d2/d99/classservices_1_1IService.html">services::IService</a></div><div class="ttdoc">Base interface for all pluggable services (AI, analyzer, exporter, etc.)</div><div class="ttdef"><b>Definition</b> IService.hpp:9</div></div>
 <div class="ttc" id="anamespaceai_html"><div class="ttname"><a href="../../de/d58/namespaceai.html">ai</a></div><div class="ttdef"><b>Definition</b> GemmaInferenceEngine.cpp:18</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md393"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md394"></a>
 Step C: Update MainWindow</h2>
 <div class="fragment"><div class="line"><span class="comment">// src/application/ui/qt/MainWindow.hpp (MODIFY)</span></div>
 <div class="line"><span class="preprocessor">#pragma once</span></div>
@@ -192,7 +192,7 @@ Step C: Update MainWindow</h2>
 <div class="line">        <span class="keywordflow">return</span> std::dynamic_pointer_cast&lt;ai::IAIService&gt;(m_currentService);</div>
 <div class="line">    }</div>
 <div class="ttc" id="aIService_8hpp_html"><div class="ttname"><a href="../../da/d0c/IService_8hpp.html">IService.hpp</a></div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md394"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md395"></a>
 Step D: Update usages in MainWindow.cpp</h2>
 <div class="fragment"><div class="line"><span class="comment">// src/application/ui/qt/MainWindow.cpp (FIND &amp; REPLACE)</span></div>
 <div class="line"> </div>
@@ -213,14 +213,14 @@ Step D: Update usages in MainWindow.cpp</h2>
 <div class="line">    <span class="keywordflow">return</span>;</div>
 <div class="line">}</div>
 <div class="line">aiService-&gt;SendPrompt(...);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md395"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md396"></a>
 Step E: Update CMakeLists.txt (if needed)</h2>
 <div class="fragment"><div class="line"># src/CMakeLists.txt</div>
 <div class="line">target_sources(application_core PUBLIC</div>
 <div class="line">    # ... existing files ...</div>
 <div class="line">    application/services/IService.hpp  # ADD THIS LINE</div>
 <div class="line">)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md396"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md397"></a>
 Step F: Test</h2>
 <div class="fragment"><div class="line">cd /Users/Marcin/workspace/cpp/LogViewer</div>
 <div class="line">cmake --build build/macos-debug-qt --target LogViewer_tests -j4</div>
@@ -233,7 +233,7 @@ Step F: Test</h2>
 </ul>
 <p><b>Time:</b> ~30 minutes</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md398"></a>
+<h1><a class="anchor" id="autotoc_md399"></a>
 Issue #2: Enable Actual Gemma Inference</h1>
 <p><b>Why:</b> Currently loads model but never runs it—returns only heuristics.</p>
 <p><b>File:</b> <code><a class="el" href="../../da/def/GemmaInferenceEngine_8cpp.html">src/application/ai/GemmaInferenceEngine.cpp</a>:134</code></p>
@@ -241,7 +241,7 @@ Issue #2: Enable Actual Gemma Inference</h1>
 <div class="line"><span class="comment">// Never actually calls llama inference</span></div>
 <div class="ttc" id="aclassutil_1_1Logger_html_af0bb6dc60a9e76313f300067bc555f30"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30">util::Logger::Info</a></div><div class="ttdeci">static void Info(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:291</div></div>
 </div><!-- fragment --><p><b>Target:</b> Actually run inference on sample messages</p>
-<h2><a class="anchor" id="autotoc_md399"></a>
+<h2><a class="anchor" id="autotoc_md400"></a>
 Step A: Create inference utility</h2>
 <div class="fragment"><div class="line">touch src/application/ai/GemmaInference.hpp</div>
 <div class="line">touch src/application/ai/GemmaInference.cpp</div>
@@ -351,7 +351,7 @@ Step A: Create inference utility</h2>
 <div class="ttc" id="aLogger_8hpp_html"><div class="ttname"><a href="../../d9/d11/Logger_8hpp.html">Logger.hpp</a></div><div class="ttdoc">Logging facade for application-wide logging.</div></div>
 <div class="ttc" id="aclassutil_1_1Logger_html_a1da0c45ed0b206fa66817ed595e60306"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306">util::Logger::Warn</a></div><div class="ttdeci">static void Warn(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:297</div></div>
 <div class="ttc" id="anamespaceai_html_a1706b46ac0630d4844b9f10352c30726"><div class="ttname"><a href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">ai::result</a></div><div class="ttdeci">std::string result</div><div class="ttdef"><b>Definition</b> OllamaClient.cpp:144</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md400"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md401"></a>
 Step B: Update GemmaInferenceEngine</h2>
 <div class="fragment"><div class="line"><span class="comment">// src/application/ai/GemmaInferenceEngine.cpp (MODIFY)</span></div>
 <div class="line"> </div>
@@ -391,7 +391,7 @@ Step B: Update GemmaInferenceEngine</h2>
 <div class="line">    <span class="keywordflow">return</span> <a class="code hl_variable" href="../../de/d58/namespaceai.html#a1706b46ac0630d4844b9f10352c30726">result</a>;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassutil_1_1Logger_html_adc5d0d890aa7e2891002cae35e5b2e8f"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f">util::Logger::Debug</a></div><div class="ttdeci">static void Debug(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:285</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md401"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md402"></a>
 Step C: Update CMakeLists</h2>
 <div class="fragment"><div class="line"># src/application/ai/CMakeLists.txt (or src/CMakeLists.txt)</div>
 <div class="line">target_sources(application_core PUBLIC</div>
@@ -399,7 +399,7 @@ Step C: Update CMakeLists</h2>
 <div class="line">    application/ai/GemmaInference.hpp</div>
 <div class="line">    application/ai/GemmaInference.cpp</div>
 <div class="line">)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md402"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md403"></a>
 Step D: Test</h2>
 <div class="fragment"><div class="line">cd /Users/Marcin/workspace/cpp/LogViewer</div>
 <div class="line">cmake --build build/macos-debug-qt -j4</div>
@@ -412,7 +412,7 @@ Step D: Test</h2>
 </ul>
 <p><b>Time:</b> ~6 hours (4 hours coding + 2 hours testing)</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md404"></a>
+<h1><a class="anchor" id="autotoc_md405"></a>
 Issue #3: Implement Anomaly Detection</h1>
 <p><b>Why:</b> Users need "find unusual patterns" feature</p>
 <p><b>Files to Create:</b></p><ul>
@@ -494,7 +494,7 @@ Issue #3: Implement Anomaly Detection</h1>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Time:</b> ~10 hours (6 hours code + 4 hours UI integration + testing)</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md406"></a>
+<h1><a class="anchor" id="autotoc_md407"></a>
 Issue #4: Build Filter Assistant</h1>
 <p><b>Why:</b> Users don't know regex; need "ask AI" to filter</p>
 <p><b>Basic Structure:</b> </p><div class="fragment"><div class="line"><span class="comment">// src/application/ai/FilterAssistant.hpp</span></div>
@@ -520,7 +520,7 @@ Issue #4: Build Filter Assistant</h1>
 </div><!-- fragment --><p><b>For full implementation, see:</b> <code>IMPLEMENTATION_ROADMAP.md</code> → Phase 4 section</p>
 <p><b>Time:</b> ~7 hours</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md408"></a>
+<h1><a class="anchor" id="autotoc_md409"></a>
 Compilation Cheat Sheet</h1>
 <div class="fragment"><div class="line"># Navigate to project</div>
 <div class="line">cd /Users/Marcin/workspace/cpp/LogViewer</div>
@@ -544,9 +544,9 @@ Compilation Cheat Sheet</h1>
 <div class="line"># Check clang-tidy</div>
 <div class="line">cmake --build build/macos-debug-qt --target tidy</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md410"></a>
+<h1><a class="anchor" id="autotoc_md411"></a>
 Testing Your Changes</h1>
-<h2><a class="anchor" id="autotoc_md411"></a>
+<h2><a class="anchor" id="autotoc_md412"></a>
 Add Unit Test</h2>
 <div class="fragment"><div class="line"><span class="comment">// tests/YourNewFeatureTest.cpp</span></div>
 <div class="line"><span class="preprocessor">#include &lt;gtest/gtest.h&gt;</span></div>
@@ -566,13 +566,13 @@ Add Unit Test</h2>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line">}  <span class="comment">// namespace</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md412"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md413"></a>
 Run Specific Test</h2>
 <div class="fragment"><div class="line">ctest --preset macos-debug-test -R &quot;YourNewFeature&quot; --verbose</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md414"></a>
+<h1><a class="anchor" id="autotoc_md415"></a>
 Common Patterns in LogViewer</h1>
-<h2><a class="anchor" id="autotoc_md415"></a>
+<h2><a class="anchor" id="autotoc_md416"></a>
 Return Result&lt;T, E&gt; Instead of Exceptions</h2>
 <div class="fragment"><div class="line"><span class="comment">// GOOD:</span></div>
 <div class="line"><a class="code hl_class" href="../../dd/d2d/classutil_1_1Result.html">util::Result&lt;std::string, error::Error&gt;</a> MyFunction() {</div>
@@ -591,7 +591,7 @@ Return Result&lt;T, E&gt; Instead of Exceptions</h2>
 <div class="line">}</div>
 <div class="ttc" id="aclasserror_1_1Error_html"><div class="ttname"><a href="../../d7/d0d/classerror_1_1Error.html">error::Error</a></div><div class="ttdef"><b>Definition</b> Error.hpp:62</div></div>
 <div class="ttc" id="aclassutil_1_1Result_html"><div class="ttname"><a href="../../dd/d2d/classutil_1_1Result.html">util::Result</a></div><div class="ttdef"><b>Definition</b> Result.hpp:15</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md416"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md417"></a>
 Logging (Structured)</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="../../d9/d11/Logger_8hpp.html">Logger.hpp</a>&quot;</span></div>
 <div class="line"> </div>
@@ -600,7 +600,7 @@ Logging (Structured)</h2>
 <div class="line"><a class="code hl_function" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306">util::Logger::Warn</a>(<span class="stringliteral">&quot;Warning: {}&quot;</span>, reason);</div>
 <div class="line"><a class="code hl_function" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a>(<span class="stringliteral">&quot;Error: {}&quot;</span>, problem);</div>
 <div class="ttc" id="aclassutil_1_1Logger_html_ae7bdc34da771cb8878c176743e68ed17"><div class="ttname"><a href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17">util::Logger::Error</a></div><div class="ttdeci">static void Error(fmt::format_string&lt; Args... &gt; fmt, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition</b> Logger.hpp:303</div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md417"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md418"></a>
 Thread Safety in EventsContainer</h2>
 <div class="fragment"><div class="line">{</div>
 <div class="line">    std::shared_lock&lt;std::shared_mutex&gt; lock(m_mutex);  <span class="comment">// Read</span></div>
@@ -612,9 +612,9 @@ Thread Safety in EventsContainer</h2>
 <div class="line">    AddEvent(std::move(event));</div>
 <div class="line">}</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md419"></a>
+<h1><a class="anchor" id="autotoc_md420"></a>
 Common Build Issues &amp; Fixes</h1>
-<h2><a class="anchor" id="autotoc_md420"></a>
+<h2><a class="anchor" id="autotoc_md421"></a>
 Issue: "cannot find llama.h"</h2>
 <div class="fragment"><div class="line"># Make sure llama.cpp is in thirdparty/</div>
 <div class="line">ls thirdparty/llama.cpp/</div>
@@ -622,21 +622,21 @@ Issue: "cannot find llama.h"</h2>
 <div class="line"># If missing, install it:</div>
 <div class="line">cd thirdparty</div>
 <div class="line">git clone https://github.com/ggerganov/llama.cpp.git</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md421"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md422"></a>
 Issue: "undefined reference to Qt symbols"</h2>
 <div class="fragment"><div class="line"># Qt not found - check CMakeLists.txt</div>
 <div class="line">grep -r &quot;Qt6::&quot; CMakeLists.txt</div>
 <div class="line"> </div>
 <div class="line"># Make sure Qt 6.5+ is installed:</div>
 <div class="line">brew install qt6@6.5  # macOS</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md422"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md423"></a>
 Issue: "compilation errors in third-party"</h2>
 <div class="fragment"><div class="line"># Clean and rebuild thirdparty</div>
 <div class="line">rm -rf build/</div>
 <div class="line">cmake -B build/macos-debug-qt --preset macos-debug-qt</div>
 <div class="line">cmake --build build/macos-debug-qt -j4</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md424"></a>
+<h1><a class="anchor" id="autotoc_md425"></a>
 Where to Find Things</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -663,7 +663,7 @@ Where to Find Things</h1>
 <td class="markdownTableBodyNone">Plugins   </td><td class="markdownTableBodyNone"><code><a class="el" href="../../da/daa/PluginManager_8hpp.html" title="Plugin management and registration system.">src/application/plugins/PluginManager.hpp</a></code>   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md426"></a>
+<h1><a class="anchor" id="autotoc_md427"></a>
 Making a Commit</h1>
 <div class="fragment"><div class="line">git status                          # Check what changed</div>
 <div class="line">git diff src/file.cpp              # Review changes</div>
@@ -681,14 +681,14 @@ Making a Commit</h1>
 <li>Reference issues: <code>Fixes #123</code></li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md428"></a>
+<h1><a class="anchor" id="autotoc_md429"></a>
 Performance Tips</h1>
-<h2><a class="anchor" id="autotoc_md429"></a>
+<h2><a class="anchor" id="autotoc_md430"></a>
 Profile with Instruments</h2>
 <div class="fragment"><div class="line"># macOS only:</div>
 <div class="line">xcrun xctrace record --template &quot;System Trace&quot; \</div>
 <div class="line">  ./build/macos-debug-qt/bin/LogViewer</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md430"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md431"></a>
 Check Thread Safety</h2>
 <div class="fragment"><div class="line"># Rebuild with ThreadSanitizer</div>
 <div class="line">rm -rf build/</div>
@@ -699,7 +699,7 @@ Check Thread Safety</h2>
 <div class="line"># Run tests - will report thread safety issues</div>
 <div class="line">ctest --preset macos-debug-test</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md432"></a>
+<h1><a class="anchor" id="autotoc_md433"></a>
 Resources</h1>
 <ul>
 <li><b>Code:</b> See <code>ARCHITECTURE_ANALYSIS.md</code> for full analysis</li>
@@ -707,7 +707,7 @@ Resources</h1>
 <li><b>Planning:</b> See <code>ANALYSIS_SUMMARY.md</code> for priorities</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md434"></a>
+<h1><a class="anchor" id="autotoc_md435"></a>
 Questions?</h1>
 <p>Check these first:</p><ol type="1">
 <li><code>src/application/CMakeLists.txt</code> - build structure</li>

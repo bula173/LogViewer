@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('df/dd1/md_docs_2ARCHITECTURE__IMPROVEM
   <div class="headertitle"><div class="title">Architecture Analysis &amp; Improvement Proposals</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md166"></a> </p>
-<h1><a class="anchor" id="autotoc_md167"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md167"></a> </p>
+<h1><a class="anchor" id="autotoc_md168"></a>
 Executive Summary</h1>
 <p>LogViewer's architecture is well-structured with clean separation of concerns, but the <b>plugin system</b> and <b>MVC observer pattern</b> can be significantly improved using modern C++20 features. This document proposes targeted improvements that maintain backward compatibility while enhancing safety, type-safety, and maintainability.</p>
 <p><b>Key Findings:</b></p><ul>
@@ -106,9 +106,9 @@ Executive Summary</h1>
 </ul>
 <p><b>Status note (2026-08-14):</b> The safe replacement types proposed in Parts 1 and 3 below (<code>PluginFunctionRegistry</code>, <code>PluginDependencyGraph</code>, <code>PluginEventBus</code>) exist under <code>src/application/plugins/</code> and have test coverage, but <code>PluginManager</code> does not yet use them — they're built but not integrated. Part 2 (MVC observer pattern) is fully resolved and integrated. See status markers on each issue below.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md169"></a>
+<h1><a class="anchor" id="autotoc_md170"></a>
 Part 1: Plugin System Issues</h1>
-<h2><a class="anchor" id="autotoc_md170"></a>
+<h2><a class="anchor" id="autotoc_md171"></a>
 Issue 1.1: Type-Unsafe Function Pointer Management</h2>
 <p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../d3/d9a/PluginFunctionRegistry_8hpp.html" title="Type-safe registry for dynamically loaded plugin functions.">PluginFunctionRegistry.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
 <p><b>Current Approach</b> (<code>PluginLoadInfo</code> struct): </p><div class="fragment"><div class="line"><span class="keyword">struct </span>PluginLoadInfo {</div>
@@ -172,7 +172,7 @@ Issue 1.1: Type-Unsafe Function Pointer Management</h2>
 <li>✅ No manual reinterpret_cast</li>
 <li>✅ Clear intent and error messages</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md171"></a>
+<h2><a class="anchor" id="autotoc_md172"></a>
 Issue 1.2: Duplicate Panel Creation Functions</h2>
 <p><b>Status:</b> ⚠️ Open — <code>PluginManager</code> still probes the four panel-type symbols individually.</p>
 <p><b>Current Approach:</b> </p><div class="fragment"><div class="line">info.pluginCreateLeftPanel = probe_sym(<span class="stringliteral">&quot;Plugin_CreateLeftPanel&quot;</span>);</div>
@@ -212,7 +212,7 @@ Issue 1.2: Duplicate Panel Creation Functions</h2>
 <li>✅ Cleaner PluginManager code</li>
 <li>✅ Less duplication</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md172"></a>
+<h2><a class="anchor" id="autotoc_md173"></a>
 Issue 1.3: Mixed C++ and C-ABI Abstractions</h2>
 <p><b>Status:</b> ✅ Resolved — but via the opposite of the solution proposed below. Rather than consolidating around <code>IPlugin</code>, the codebase removed <code>IPlugin</code> entirely and standardized on C-ABI exports only (see <code><a class="el" href="../../df/d71/PLUGIN__SYSTEM_8md.html">docs/PLUGIN_SYSTEM.md</a></code>). The proposed code sample under "Solution" is historical only.</p>
 <p><b>Current State:</b></p><ul>
@@ -259,9 +259,9 @@ Issue 1.3: Mixed C++ and C-ABI Abstractions</h2>
 <li>✅ Type-safe by default</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md174"></a>
+<h1><a class="anchor" id="autotoc_md175"></a>
 Part 2: MVC Observer Pattern Issues</h1>
-<h2><a class="anchor" id="autotoc_md175"></a>
+<h2><a class="anchor" id="autotoc_md176"></a>
 Issue 2.1: Raw Pointer Observer Pattern</h2>
 <p><b>Status:</b> ✅ Resolved and integrated — <code>IModelObservable</code> (weak_ptr-based) is implemented in <code><a class="el" href="../../d9/dfd/IModelObservable_8hpp.html" title="Modern C++20 observer pattern with automatic lifetime management.">src/application/mvc/IModelObservable.hpp</a></code> and used by <code>EventsContainer</code>.</p>
 <p><b>Current Code</b> (<code><a class="el" href="../../d1/d03/IModel_8hpp.html">IModel.hpp</a></code>): </p><div class="fragment"><div class="line"><span class="keyword">class </span>IModel {</div>
@@ -352,7 +352,7 @@ Issue 2.1: Raw Pointer Observer Pattern</h2>
 <li>✅ Thread-safe with shared_mutex</li>
 <li>✅ Zero-overhead (compared to raw pointer + null checks)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md176"></a>
+<h2><a class="anchor" id="autotoc_md177"></a>
 Issue 2.2: No Observer Lifecycle Events</h2>
 <p><b>Status:</b> ✅ Resolved and integrated — <code>IView::OnAttachedToModel()</code> / <code>OnDetachedFromModel()</code> are implemented in <code><a class="el" href="../../d2/d7e/IView_8hpp.html" title="Interface for view components in the MVC architecture.">src/application/mvc/IView.hpp</a></code>.</p>
 <p><b>Current Problem:</b> Views can't react to being attached/detached from model</p>
@@ -396,9 +396,9 @@ Issue 2.2: No Observer Lifecycle Events</h2>
 <li>✅ Testability improvements</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md178"></a>
+<h1><a class="anchor" id="autotoc_md179"></a>
 Part 3: Plugin Dependency Management</h1>
-<h2><a class="anchor" id="autotoc_md179"></a>
+<h2><a class="anchor" id="autotoc_md180"></a>
 Issue 3.1: No Dependency Resolution</h2>
 <p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../de/d40/PluginDependencyGraph_8hpp.html" title="Plugin dependency validation and topological sorting.">PluginDependencyGraph.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
 <p><b>Problem:</b></p><ul>
@@ -481,10 +481,10 @@ Issue 3.1: No Dependency Resolution</h2>
 <li>✅ Improves reliability</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md181"></a>
+<h1><a class="anchor" id="autotoc_md182"></a>
 Part 4: Plugin Event System</h1>
 <p><b>Status:</b> ⚠️ Partially resolved — <code><a class="el" href="../../d2/da4/PluginEventBus_8hpp.html" title="Enhanced plugin event system with fine-grained lifecycle notifications.">PluginEventBus.hpp</a></code> implements this proposal and is unit-tested, but <code>PluginManager</code> has not been migrated to use it yet.</p>
-<h2><a class="anchor" id="autotoc_md182"></a>
+<h2><a class="anchor" id="autotoc_md183"></a>
 Enhancement: Fine-Grained Events</h2>
 <p><b>Current:</b> </p><div class="fragment"><div class="line"><span class="keyword">enum class</span> PluginEvent {</div>
 <div class="line">    Loaded, Unloaded, Enabled, Disabled, Errored</div>
@@ -546,9 +546,9 @@ Enhancement: Fine-Grained Events</h2>
 <li>✅ Error resilience</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md184"></a>
+<h1><a class="anchor" id="autotoc_md185"></a>
 Implementation Priority &amp; Roadmap</h1>
-<h2><a class="anchor" id="autotoc_md185"></a>
+<h2><a class="anchor" id="autotoc_md186"></a>
 Phase 1: Core Safety (v1.1.0)</h2>
 <p><b>Priority:</b> Critical <b>Timeline:</b> 1-2 weeks <b>Items:</b></p><ol type="1">
 <li>Implement weak_ptr observer pattern for MVC</li>
@@ -556,7 +556,7 @@ Phase 1: Core Safety (v1.1.0)</h2>
 <li>Migrate tests to use shared_ptr</li>
 </ol>
 <p><b>Impact:</b> Eliminates dangling pointer bugs <b>Risk:</b> LOW (new interfaces alongside existing ones)</p>
-<h2><a class="anchor" id="autotoc_md186"></a>
+<h2><a class="anchor" id="autotoc_md187"></a>
 Phase 2: Plugin System (v1.1.0)</h2>
 <p><b>Priority:</b> High <b>Timeline:</b> 2 weeks <b>Items:</b></p><ol type="1">
 <li>Implement type-safe function registry</li>
@@ -564,7 +564,7 @@ Phase 2: Plugin System (v1.1.0)</h2>
 <li>Implement safe initialization/shutdown order</li>
 </ol>
 <p><b>Impact:</b> Prevents plugin loading crashes <b>Risk:</b> LOW (backward compatible C-ABI)</p>
-<h2><a class="anchor" id="autotoc_md187"></a>
+<h2><a class="anchor" id="autotoc_md188"></a>
 Phase 3: Enhanced Events &amp; Extensibility (v1.2.0)</h2>
 <p><b>Priority:</b> Medium <b>Timeline:</b> 1-2 weeks <b>Items:</b></p><ol type="1">
 <li>Enhance plugin event system</li>
@@ -572,7 +572,7 @@ Phase 3: Enhanced Events &amp; Extensibility (v1.2.0)</h2>
 <li>Create unified plugin panel interface</li>
 </ol>
 <p><b>Impact:</b> Better plugin developer experience <b>Risk:</b> VERY LOW (Optional new features)</p>
-<h2><a class="anchor" id="autotoc_md188"></a>
+<h2><a class="anchor" id="autotoc_md189"></a>
 Phase 4: Deprecation Removal (v2.0.0)</h2>
 <p><b>Priority:</b> Low <b>Timeline:</b> Future <b>Items:</b></p><ol type="1">
 <li>Remove deprecated raw pointer observer API</li>
@@ -581,7 +581,7 @@ Phase 4: Deprecation Removal (v2.0.0)</h2>
 </ol>
 <p><b>Impact:</b> Cleaner codebase <b>Risk:</b> MEDIUM (Breaking change for major version)</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md190"></a>
+<h1><a class="anchor" id="autotoc_md191"></a>
 Risk Assessment &amp; Mitigation</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -603,9 +603,9 @@ Risk Assessment &amp; Mitigation</h1>
 <li><a class="el" href="../../d4/d46/structVersion.html" title="Represents application version information with semantic versioning support.">Version</a> plugin API (currently 1.0.0)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md192"></a>
+<h1><a class="anchor" id="autotoc_md193"></a>
 Success Criteria</h1>
-<h2><a class="anchor" id="autotoc_md193"></a>
+<h2><a class="anchor" id="autotoc_md194"></a>
 Code Quality</h2>
 <ul>
 <li>✅ Zero dangling pointer bugs</li>
@@ -613,14 +613,14 @@ Code Quality</h2>
 <li>✅ All function pointers wrapped in type-safe registry</li>
 <li>✅ 95%+ test coverage for new code</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md194"></a>
+<h2><a class="anchor" id="autotoc_md195"></a>
 Performance</h2>
 <ul>
 <li>✅ &lt;1% overhead from weak_ptr (shared_ptr already used elsewhere)</li>
 <li>✅ No performance regression in hot paths</li>
 <li>✅ Build time unchanged</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md195"></a>
+<h2><a class="anchor" id="autotoc_md196"></a>
 Documentation</h2>
 <ul>
 <li>✅ Migration guide for plugin developers</li>
@@ -628,7 +628,7 @@ Documentation</h2>
 <li>✅ Architecture diagrams updated</li>
 <li>✅ Doxygen comments for all new APIs</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md196"></a>
+<h2><a class="anchor" id="autotoc_md197"></a>
 Developer Experience</h2>
 <ul>
 <li>✅ New plugins easier to write (type-safe by default)</li>
@@ -637,7 +637,7 @@ Developer Experience</h2>
 <li>✅ Better IDE support (type information)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md198"></a>
+<h1><a class="anchor" id="autotoc_md199"></a>
 Conclusion</h1>
 <p>The proposed improvements modernize LogViewer's architecture using C++20 features while maintaining full backward compatibility. The phased approach allows gradual adoption and minimal disruption.</p>
 <p><b>Key Benefits:</b></p><ul>

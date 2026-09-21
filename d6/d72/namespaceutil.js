@@ -1,5 +1,6 @@
 var namespaceutil =
 [
+    [ "portable", "d8/d0b/namespaceutil_1_1portable.html", "d8/d0b/namespaceutil_1_1portable" ],
     [ "ILogger", "d3/dc4/classutil_1_1ILogger.html", "d3/dc4/classutil_1_1ILogger" ],
     [ "KeyEncryption", "dc/d46/classutil_1_1KeyEncryption.html", "dc/d46/classutil_1_1KeyEncryption" ],
     [ "Logger", "d2/d44/classutil_1_1Logger.html", "d2/d44/classutil_1_1Logger" ],
