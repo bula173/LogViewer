@@ -57,6 +57,7 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: cpp
+          build-mode: manual   # the job builds explicitly; avoids the "overlay-base database" fallback warning
           # Use extended security queries for more thorough analysis
           queries: security-extended
 
@@ -373,4 +374,5 @@ jobs:
         with:
           name: windows-av-scan-binaries
           path: ${{ github.workspace }}/dist/**/*.exe
+          if-no-files-found: ignore
           retention-days: 7

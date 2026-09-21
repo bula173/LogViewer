@@ -4,6 +4,10 @@ All notable changes to LogViewer are documented here.
 
 ## [Unreleased]
 
+### New features
+
+- **Portable mode** — an empty `portable.txt` next to the executable makes LogViewer keep all its files (config, themes, plugins, session, search history, window layout, logs) in a `data/` folder beside it instead of `%APPDATA%` / the registry / `~/.config`. The Windows release now includes `LogViewer-<version>-win64-portable.zip` (unzip and run, no installation) with the marker already in place.
+
 ### Release process
 
 - GitHub Actions moved to Node 24 based versions (checkout v5, cache v5, upload-artifact v6, download-artifact v7, attest-build-provenance v3, action-gh-release v3, gitleaks v3, CodeQL v4), removing the "Node.js 20 is deprecated" warnings. `actions/dependency-review-action` has no Node 24 release yet.

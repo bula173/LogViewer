@@ -4,6 +4,7 @@
 
 #include <QSettings>
 #include <QStandardPaths>
+#include "utils/AppDataDir.hpp"
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -210,7 +211,7 @@ void MainWindowFileOpsHelper::HandleDroppedFile(const QString& path)
 
 QString MainWindowFileOpsHelper::GetSessionFilePath() const
 {
-    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString appDataPath = utils::AppDataDir();
     return appDataPath + "/session.json";
 }
 

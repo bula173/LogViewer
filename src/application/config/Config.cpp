@@ -1,4 +1,5 @@
 #include "Config.hpp"
+#include "PortableMode.hpp"
 #include "BuiltinConversionPlugins.hpp"
 //#include "StringReversePlugin.hpp"
 #include "Logger.hpp"
@@ -592,6 +593,13 @@ std::filesystem::path Config::GetDefaultAppPath()
 {
     std::filesystem::path configPath;
 
+    if (util::portable::IsPortable())
+    {
+        // Portable copy: everything lives next to the executable.
+        configPath = util::portable::DataDir();
+    }
+    else
+    {
 #ifdef _WIN32
     const char* appData = std::getenv("APPDATA");
     if (appData)
@@ -617,6 +625,7 @@ std::filesystem::path Config::GetDefaultAppPath()
         configPath = std::filesystem::path(home) / ".config" / appName;
     }
 #endif
+    }
 
     if (!configPath.empty())
     {

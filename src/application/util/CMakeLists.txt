@@ -4,14 +4,17 @@
 target_sources(application_core
     PRIVATE
         KeyEncryption.cpp
+        PortableMode.cpp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/KeyEncryption.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Logger.hpp>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/PortableMode.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Result.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/ThirdPartyWarnings.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/WxWidgetsUtils.hpp>
         $<INSTALL_INTERFACE:KeyEncryption.hpp>
         $<INSTALL_INTERFACE:Logger.hpp>
+        $<INSTALL_INTERFACE:PortableMode.hpp>
         $<INSTALL_INTERFACE:Result.hpp>
         $<INSTALL_INTERFACE:ThirdPartyWarnings.hpp>
         $<INSTALL_INTERFACE:WxWidgetsUtils.hpp>

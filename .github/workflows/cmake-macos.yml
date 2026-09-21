@@ -159,7 +159,7 @@ jobs:
         with:
           name: macos-${{ matrix.build_type }}-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
-          if-no-files-found: warn
+          if-no-files-found: ignore
 
       - name: Upload artifacts
         if: always()

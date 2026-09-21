@@ -10,6 +10,7 @@
 #include <QCompleter>
 #include <QStringListModel>
 #include <QSettings>
+#include "utils/AppDataDir.hpp"
 #include <QStandardPaths>
 #include <QStyle>
 #include <QIcon>
@@ -25,7 +26,7 @@ UnifiedSearchBar::UnifiedSearchBar(QWidget* parent)
     // Initialize settings for search history
     try
     {
-        QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        QString configPath = utils::AppDataDir();
         if (configPath.isEmpty())
         {
             // Fallback to home directory if AppDataLocation is not available

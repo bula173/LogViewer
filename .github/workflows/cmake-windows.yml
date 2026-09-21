@@ -183,7 +183,7 @@ jobs:
         with:
           name: windows-${{ matrix.build_type }}-plugins
           path: ${{ env.BUILD_DIR }}/plugins/*.zip
-          if-no-files-found: warn
+          if-no-files-found: ignore
 
       - name: Upload tests artifact
         if: always()
@@ -210,7 +210,7 @@ jobs:
         with:
           name: windows-${{ matrix.build_type }}-installer
           path: dist/packages/*.exe
-          if-no-files-found: warn
+          if-no-files-found: ignore
 
       - name: Upload build logs
         if: always()

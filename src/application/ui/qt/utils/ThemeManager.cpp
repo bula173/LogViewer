@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 #include <QFont>
 #include <QStandardPaths>
+#include "AppDataDir.hpp"
 #include <nlohmann/json.hpp>
 
 #include <fstream>
@@ -211,7 +212,7 @@ void ThemeManager::saveTheme(const QString& name)
 
         // Save to ~/.logviewer/themes/
         auto themesDir = std::filesystem::path(
-            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString()
+            AppDataDir().toStdString()
         ) / "themes";
         std::filesystem::create_directories(themesDir);
 
@@ -232,7 +233,7 @@ bool ThemeManager::loadTheme(const QString& name)
     try
     {
         auto themesDir = std::filesystem::path(
-            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString()
+            AppDataDir().toStdString()
         ) / "themes";
 
         std::ifstream file(themesDir / (name.toStdString() + ".json"));
@@ -287,7 +288,7 @@ std::vector<QString> ThemeManager::getAvailableThemes() const
     try
     {
         auto themesDir = std::filesystem::path(
-            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString()
+            AppDataDir().toStdString()
         ) / "themes";
 
         if (std::filesystem::exists(themesDir))

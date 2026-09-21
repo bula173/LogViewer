@@ -209,6 +209,10 @@ Example configuration:
 }
 ```
 
+### Portable mode (no installation)
+
+The Windows release ships `LogViewer-<version>-win64-portable.zip`: unzip it anywhere and run `LogViewer.exe`. It contains an empty `portable.txt` next to the executable; while that file exists, LogViewer keeps everything in a `data/` folder beside the executable (config, themes, plugins, session, search history, window layout, logs) and writes nothing to `%APPDATA%` or the registry. Delete `portable.txt` to switch back to the normal per-user profile. The same marker works for any other build of the app.
+
 ## AI Setup
 
 ### Local AI (Recommended for Privacy)

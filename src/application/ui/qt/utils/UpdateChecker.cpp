@@ -16,6 +16,7 @@
 #include <QJsonObject>
 #include <QNetworkRequest>
 #include <QStandardPaths>
+#include "AppDataDir.hpp"
 
 #ifdef _WIN32
   #define LOGVIEWER_PLATFORM "windows"
@@ -377,7 +378,7 @@ void UpdateChecker::DoPluginDownload(const updates::PluginUpdateInfo& info,
     // AppLocalDataLocation is the app's own sandbox directory which AV
     // vendors explicitly recognise as a safe staging area for self-updates.
     const QString downloadDir =
-        QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) +
+        utils::AppDataDir(QStandardPaths::AppLocalDataLocation) +
         QStringLiteral("/plugin_downloads");
     QDir().mkpath(downloadDir);
 
