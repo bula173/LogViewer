@@ -90,6 +90,7 @@
 #include <QTimer>
 #include <QKeySequence>
 #include <QDockWidget>
+#include "utils/TabVisibility.hpp"
 #include <QShortcut>
 #include <QToolTip>
 #include <QHelpEvent>
@@ -1194,11 +1195,7 @@ void MainWindow::SetupMenus()
         action->setCheckable(true);
         action->setChecked(true);
         action->setToolTip(m_contentTabs->tabToolTip(i));
-        const int idx = i;
-        connect(action, &QAction::toggled, this, [this, idx](bool visible) {
-            if (m_contentTabs)
-                m_contentTabs->tabBar()->setTabVisible(idx, visible);
-        });
+        utils::BindTabVisibilityAction(action, m_contentTabs, m_contentTabs->widget(i));
     }
 
     viewMenu->addSeparator();

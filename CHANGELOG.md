@@ -4,6 +4,10 @@ All notable changes to LogViewer are documented here.
 
 ## [1.13.3] — 2026-09-21
 
+### Fixes
+
+- **Tabs menu** — hiding a content tab from View → Tabs hid whichever tab had been at that position when the menu was built, so after tabs were sorted or removed another tab disappeared. Each menu entry now follows its own tab.
+
 ### New features
 
 - **Portable mode** — an empty `portable.txt` next to the executable makes LogViewer keep all its files (config, themes, plugins, session, search history, window layout, logs) in a `data/` folder beside it instead of `%APPDATA%` / the registry / `~/.config`. The Windows release now includes `LogViewer-<version>-win64-portable.zip` (unzip and run, no installation) with the marker already in place.
