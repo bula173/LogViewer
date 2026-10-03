@@ -152,6 +152,8 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a6b2dea68c122a6b1127d4f333f11eeca" id="r_a6b2dea68c122a6b1127d4f333f11eeca"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">AppDataDir</a> (QStandardPaths::StandardLocation location=QStandardPaths::AppDataLocation)</td></tr>
 <tr class="separator:a6b2dea68c122a6b1127d4f333f11eeca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16e4bbb81bade5ba66a5caa8f90c8c8f" id="r_a16e4bbb81bade5ba66a5caa8f90c8c8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">BindTabVisibilityAction</a> (QAction *action, QTabWidget *tabs, <a class="el" href="../../d8/ded/classQWidget.html">QWidget</a> *page)</td></tr>
+<tr class="separator:a16e4bbb81bade5ba66a5caa8f90c8c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a2f196d948f5ed289b60918dd594dd74d" name="a2f196d948f5ed289b60918dd594dd74d"></a>
@@ -264,6 +266,50 @@ Here is the caller graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="191,28,158,28,158,23,191,23"/>
 </map>
 </div>
+
+</div>
+</div>
+<a id="a16e4bbb81bade5ba66a5caa8f90c8c8f" name="a16e4bbb81bade5ba66a5caa8f90c8c8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16e4bbb81bade5ba66a5caa8f90c8c8f">&#9670;&#160;</a></span>BindTabVisibilityAction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::utils::BindTabVisibilityAction </td>
+          <td>(</td>
+          <td class="paramtype">QAction *&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QTabWidget *&#160;</td>
+          <td class="paramname"><em>tabs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/ded/classQWidget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>page</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Makes <code>action</code> show/hide the tab that holds <code>page</code>.</p>
+<p>The tab is looked up by its widget each time the action fires. A tab position captured when the menu is built goes stale as soon as tabs are sorted or removed, and then hides a different tab. </p>
 
 </div>
 </div>

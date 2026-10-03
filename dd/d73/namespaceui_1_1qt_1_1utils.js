@@ -19,5 +19,6 @@ var namespaceui_1_1qt_1_1utils =
       [ "Regex", "dd/d73/namespaceui_1_1qt_1_1utils.html#ae384296ecf488dc3d5f196f33ce8875ca86f600672d32a7be1dd6cb035ac61577", null ],
       [ "Advanced", "dd/d73/namespaceui_1_1qt_1_1utils.html#ae384296ecf488dc3d5f196f33ce8875ca9b6545e4cea9b4ad4979d41bb9170e2b", null ]
     ] ],
-    [ "AppDataDir", "dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca", null ]
+    [ "AppDataDir", "dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca", null ],
+    [ "BindTabVisibilityAction", "dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f", null ]
 ];
