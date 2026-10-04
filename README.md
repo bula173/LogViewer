@@ -12,6 +12,7 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 - **High Performance**: Virtual list architecture handles millions of log entries
 - **Advanced Filtering**: Text search, regex, time-range, and type-based filters with configurable field selection
 - **Filter Profiles**: Save and restore named filter states for quick context switching
+- **Quick Filters**: Right-click a cell in the events table to **Show Only** or **Exclude** its value (a column filter, combined with any filter the column already has), **Show Events Around This One** (±2/5/10/30 s around its timestamp, on top of the current filter) or show the **Conversation** of its sender and receiver (both directions, comma lists included); undo with **Clear All Column Filters** and **Clear Time Window**
 - **Flexible UI**: Dock-based layout — move, float, or hide panels as needed
 - **Named Layouts**: Save and restore complete dock arrangements under custom names
 - **Persistent Settings**: JSON-based configuration with platform-specific storage

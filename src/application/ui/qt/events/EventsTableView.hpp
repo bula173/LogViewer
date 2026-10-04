@@ -6,7 +6,10 @@
 #include <QTableView>
 #include <QString>
 #include <cstdint>
+#include <memory>
 #include <vector>
+
+class QMenu;
 
 namespace db
 {
@@ -16,6 +19,7 @@ class EventsContainer;
 namespace ui::qt
 {
 
+class DrillDownFilter;
 class EventsTableModel;
 class FilterHeaderView;
 
@@ -27,6 +31,7 @@ class EventsTableView : public QTableView,
 
   public:
     EventsTableView(db::EventsContainer& events, QWidget* parent = nullptr);
+    ~EventsTableView() override;
 
     void RefreshColumns() override;
     void RefreshView() override;
@@ -49,6 +54,21 @@ class EventsTableView : public QTableView,
     /// filter set through SetFilteredEvents()/ClearFilter().
     bool HasColumnFilters() const;
     void ClearColumnFilters();
+
+    /// Adds the quick filters for the clicked @p cell to @p menu: show only /
+    /// exclude its value, a time window around its event and the conversation
+    /// of its sender and receiver (see QuickFilters.hpp).
+    void AddQuickFilterActions(QMenu& menu, const QModelIndex& cell);
+    /// Narrows the rows to the events within ±@p seconds of @p actualRow's
+    /// timestamp, on top of the filter set by the rest of the application
+    /// (a new window replaces the previous one). False if the event has no
+    /// parseable timestamp.
+    bool ShowTimeWindow(int actualRow, int seconds);
+    /// True while the rows are narrowed by ShowTimeWindow() and nobody replaced
+    /// that filter since.
+    bool HasTimeWindow() const;
+    /// Puts back the filter that was set before ShowTimeWindow().
+    void ClearTimeWindow();
 
     void OnDataUpdated() override;
     void OnCurrentIndexUpdated(const int index) override;
@@ -115,6 +135,7 @@ class EventsTableView : public QTableView,
     db::EventsContainer& m_events;
     EventsTableModel* m_model {nullptr};
     FilterHeaderView* m_filterHeader {nullptr};
+    std::unique_ptr<DrillDownFilter> m_timeWindow; ///< see ShowTimeWindow()
     int m_currentMatchIndex {-1};
     int m_currentMatchActual {-1}; ///< event of the current search match
 

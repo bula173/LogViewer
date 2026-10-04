@@ -511,6 +511,18 @@ ColumnDistinctValues EventsTableModel::DistinctColumnValues(int column,
     return out;
 }
 
+QSet<QString> EventsTableModel::AllColumnValues(int column) const
+{
+    QSet<QString> out;
+    std::string name;
+    bool        mergeSource = false;
+    if (!ResolveColumn(column, name, mergeSource))
+        return out;
+    for (std::size_t idx = 0; idx < m_events.Size(); ++idx)
+        out.insert(ComposeCellText(m_events.GetEvent(idx), name, mergeSource));
+    return out;
+}
+
 bool EventsTableModel::HasColumnFilter(int column) const
 {
     std::string name;

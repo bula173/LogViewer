@@ -5,6 +5,8 @@
 #include "ColumnFilterPopup.hpp"
 #include "EventsTableModel.hpp"
 #include "FilterHeaderView.hpp"
+#include "QuickFilters.hpp"
+#include "panels/DrillDownFilter.hpp"
 
 #include <QHeaderView>
 #include <QInputDialog>
@@ -36,6 +38,7 @@ EventsTableView::EventsTableView(
     db::EventsContainer& events, QWidget* parent)
     : QTableView(parent)
     , m_events(events)
+    , m_timeWindow(std::make_unique<DrillDownFilter>())
 {
     m_filterHeader = new FilterHeaderView(Qt::Horizontal, this);
     setHorizontalHeader(m_filterHeader);
@@ -59,6 +62,8 @@ EventsTableView::EventsTableView(
     InitializeView();
     ConnectSelectionSignals();
 }
+
+EventsTableView::~EventsTableView() = default;
 
 void EventsTableView::InitializeView()
 {
@@ -633,11 +638,22 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
     auto* scenarioAction = menu.addAction(tr("Add to Scenario…"));
     scenarioAction->setEnabled(row >= 0);
 
-    QAction* clearColumnFiltersAction = nullptr;
-    if (HasColumnFilters())
+    const QModelIndex cell = indexAt(pos);
+    if (cell.isValid())
     {
         menu.addSeparator();
-        clearColumnFiltersAction = menu.addAction(tr("Clear All Column Filters"));
+        AddQuickFilterActions(menu, cell);
+    }
+
+    QAction* clearColumnFiltersAction = nullptr;
+    QAction* clearTimeWindowAction    = nullptr;
+    if (HasColumnFilters() || HasTimeWindow())
+    {
+        menu.addSeparator();
+        if (HasColumnFilters())
+            clearColumnFiltersAction = menu.addAction(tr("Clear All Column Filters"));
+        if (HasTimeWindow())
+            clearTimeWindowAction = menu.addAction(tr("Clear Time Window"));
     }
 
     QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
@@ -668,6 +684,95 @@ void EventsTableView::ShowContextMenu(const QPoint& pos)
     {
         ClearColumnFilters();
     }
+    else if (chosen == clearTimeWindowAction)
+    {
+        ClearTimeWindow();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Quick filters (context menu)
+// ---------------------------------------------------------------------------
+
+void EventsTableView::AddQuickFilterActions(QMenu& menu, const QModelIndex& cell)
+{
+    if (!m_model || !cell.isValid())
+        return;
+
+    const int     column = cell.column();
+    const QString value  = m_model->data(cell, Qt::DisplayRole).toString();
+    const QString header = quick_filters::MenuText(
+        m_model->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString(), 30);
+    const QString shown  = quick_filters::MenuText(value);
+
+    connect(menu.addAction(tr("Show Only %1 = \"%2\"").arg(header, shown)), &QAction::triggered,
+            this, [this, column, value] { quick_filters::ApplyShowOnly(*m_model, column, {value}); });
+    connect(menu.addAction(tr("Exclude %1 = \"%2\"").arg(header, shown)), &QAction::triggered,
+            this, [this, column, value] { quick_filters::ApplyExclude(*m_model, column, value); });
+
+    const int actualRow = m_model->ResolveToActualIndex(cell.row());
+    const bool hasTime  = actualRow >= 0 && actualRow < static_cast<int>(m_events.Size())
+        && quick_filters::FindTimeAnchor(m_events.GetEvent(static_cast<std::size_t>(actualRow)));
+    auto* windowMenu = menu.addMenu(tr("Show Events Around This One"));
+    windowMenu->setEnabled(hasTime);
+    if (!hasTime)
+        windowMenu->setToolTip(tr("This event has no timestamp"));
+    for (const int seconds : {2, 5, 10, 30})
+        connect(windowMenu->addAction(tr("±%1 s").arg(seconds)), &QAction::triggered,
+                this, [this, actualRow, seconds] { ShowTimeWindow(actualRow, seconds); });
+
+    // Conversation of the row's sender and receiver (the dynamic merge-source
+    // and original-id columns are not actor columns).
+    std::vector<QString> names;
+    for (int c = 0; c < m_model->columnCount(); ++c)
+        names.push_back(m_model->ConfigIndexForColumn(c) >= 0
+            ? m_model->headerData(c, Qt::Horizontal, Qt::DisplayRole).toString() : QString());
+    const auto actorColumns = quick_filters::FindActorColumns(names);
+    if (!actorColumns)
+        return;
+    const auto cellText = [this, &cell](int c) {
+        return m_model->data(m_model->index(cell.row(), c), Qt::DisplayRole).toString();
+    };
+    constexpr std::size_t kMaxConversations = 5;
+    const auto pairs = quick_filters::ConversationPairs(cellText(actorColumns->sender),
+                                                        cellText(actorColumns->receiver));
+    for (std::size_t i = 0; i < pairs.size() && i < kMaxConversations; ++i)
+    {
+        const auto& [a, b] = pairs[i];
+        connect(menu.addAction(tr("Conversation %1 ↔ %2")
+                                   .arg(quick_filters::MenuText(a, 30), quick_filters::MenuText(b, 30))),
+                &QAction::triggered, this, [this, columns = *actorColumns, a, b] {
+                    quick_filters::ApplyConversation(*m_model, columns, a, b);
+                });
+    }
+}
+
+bool EventsTableView::ShowTimeWindow(int actualRow, int seconds)
+{
+    if (!m_model || actualRow < 0 || actualRow >= static_cast<int>(m_events.Size()))
+        return false;
+    const auto anchor =
+        quick_filters::FindTimeAnchor(m_events.GetEvent(static_cast<std::size_t>(actualRow)));
+    if (!anchor)
+        return false;
+
+    // A new window replaces the previous one instead of narrowing it.
+    m_timeWindow->Restore(*this, m_events);
+    const auto indices = quick_filters::EventsInTimeWindow(
+        m_events, GetBaseFilteredIndices(), *anchor, seconds);
+    m_timeWindow->Apply(*this, m_events, indices, {});
+    ScrollToActualRow(actualRow, false);
+    return true;
+}
+
+bool EventsTableView::HasTimeWindow() const
+{
+    return m_timeWindow->IsActive(*this, m_events);
+}
+
+void EventsTableView::ClearTimeWindow()
+{
+    m_timeWindow->Restore(*this, m_events);
 }
 
 // ---------------------------------------------------------------------------

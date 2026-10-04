@@ -51,6 +51,7 @@ target_sources(application_core
         events/EventsTableModel.cpp
         events/EventsTableView.cpp
         events/FilterHeaderView.cpp
+        events/QuickFilters.cpp
         utils/EventGroupManager.cpp
         utils/EventTagManager.cpp
         utils/ExportManager.cpp

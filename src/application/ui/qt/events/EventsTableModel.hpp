@@ -86,6 +86,8 @@ class EventsTableModel : public QAbstractTableModel
     /// *except* this column's own (so the list narrows as other columns are
     /// filtered, like Excel). At most @p maxValues values are returned.
     ColumnDistinctValues DistinctColumnValues(int column, std::size_t maxValues) const;
+    /// Distinct cell texts of @p column among all events, ignoring every filter.
+    QSet<QString> AllColumnValues(int column) const;
     bool HasColumnFilter(int column) const;
     bool HasAnyColumnFilter() const { return !m_columnFilters.empty(); }
     /// True if a column filter of a *visible* column restricts the rows
