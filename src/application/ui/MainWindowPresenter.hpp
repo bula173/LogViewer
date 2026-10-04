@@ -43,12 +43,15 @@ class MainWindowPresenter : public parser::IDataParserObserver
                      const std::filesystem::path& path);
 
     /** @brief Parses and merges a log file with existing data, sorted by timestamp. 
+     *  @param parser Parser for the file (built by the caller, like LoadLogFile,
+     *         so .txt/.log/.asc/.evl and user-chosen types are honoured)
      *  @param path Path to the log file to merge
      *  @param existingAlias User-friendly name for existing log data
      *  @param newFileAlias User-friendly name for new log file
      *  @param timestampField Name of the field containing timestamps
      */
-    void MergeLogFile(const std::filesystem::path& path, 
+    void MergeLogFile(std::unique_ptr<parser::IDataParser> parser,
+                      const std::filesystem::path& path,
                       const std::string& existingAlias,
                       const std::string& newFileAlias,
                       const std::string& timestampField = "timestamp");

@@ -148,6 +148,15 @@ class MainWindow : public QMainWindow,
     // Public file loading method (called by file operations helper)
     void HandleDroppedFile(const QString& path);
 
+    /// One entry of the "Select File Type" prompt shown for unknown extensions.
+    struct FileTypeChoice
+    {
+        QString label;
+        QString ext;  ///< extension handed to CreateParserFor(), e.g. ".json"
+    };
+    /// The formats offered by PromptForFileType().
+    [[nodiscard]] static std::vector<FileTypeChoice> FileTypeChoices();
+
   private slots:
     void OnSearchRequested();
     void OnApplyFilterClicked();
@@ -225,6 +234,9 @@ class MainWindow : public QMainWindow,
     /// Show a file-type picker when the extension is unknown; returns the chosen
     /// extension (e.g. ".evl") or an empty string if the user cancelled.
     QString PromptForFileType(const std::filesystem::path& path);
+    /// Stop following the current file and uncheck File > Follow File.
+    /// Called before any load/merge replaces the container contents.
+    void StopTailing();
     bool ShouldCheckForUpdates() const;
     void setupPluginManager();
     void loadPlugins();

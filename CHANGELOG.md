@@ -14,6 +14,19 @@ All notable changes to LogViewer are documented here.
 - **Portable mode on macOS** — never activates inside a `.app` bundle (writing there breaks the code signature).
 - **Item details** — a very long key is capped at 40 % of the panel width so values keep room to wrap.
 - **Dashboard time range** — only time-like columns (`timestamp`, `time`, `ts`, `date`, `*_time`, `*_timestamp`) are used, not any key containing "time".
+- **CSV with Windows line endings** — opening a CRLF `.csv` file no longer hangs the application.
+- **CSV header detection** — a UTF-8 BOM no longer ends up in the first column name, and blank lines before the header row no longer turn the header into a data row.
+- **JSON files with a UTF-8 BOM** — no longer rejected with "unexpected first character".
+- **Pretty-printed JSON object** — a single object spread over several lines is loaded as one event instead of silently producing an empty log; large JSON Lines files now update the progress bar while loading.
+- **Crash while loading** — events read by background panels no longer become dangling when the parser appends more events (event storage no longer relocates on append).
+- **Follow File after opening another file** — loading, merging, reloading or opening a session now stops following the previous file; before, its new lines were appended to the newly loaded log.
+- **Stuck "A file is already being processed"** — an error or a data clear during the final filter pass of a load no longer leaves the app refusing every later load.
+- **Load DBC** — a failure while reloading the current ASC file is reported in an error dialog instead of escaping the menu action.
+- **Merge** — the merged file is parsed with the same parser as Open (correct handling of `.txt`/`.log`, ASC with DBC, evlog templates and the file-type prompt) instead of falling back to XML.
+- **Repeated merges** — merging a third file keeps each event's `original_id` from the first merge instead of overwriting it.
+- **File-type prompt** — "JSON / JSON Lines" is offered for files with an unknown extension.
+- **Follow File with partial lines** — a line still being written is read once it is complete instead of being parsed as a fragment and lost.
+- **Plugin parsers** — a parser registered by a plugin before the first file is opened no longer hides the built-in XML/CSV/JSON/... parsers.
 
 ### New features
 

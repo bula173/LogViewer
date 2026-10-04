@@ -1660,7 +1660,10 @@ void MainWindow::UpdateProgressValue(int value)
 
 void MainWindow::ProcessPendingEvents()
 {
-    QCoreApplication::processEvents();
+    // Exclude user input: the presenter pumps events from inside long loops
+    // over the container, and a re-entrant Clear/Open would pull the data out
+    // from under them. Deferred input is delivered by the next normal loop.
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void MainWindow::RefreshLayout()
@@ -2025,6 +2028,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     // Replace existing data
                     auto parser = CreateParserFor(filePath);
                     if (!parser) return; // user cancelled type selection
+                    StopTailing();
                     const QString message = QString("Loading %1 ...").arg(path);
                     UpdateStatusText(message.toStdString());
                     if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
@@ -2041,9 +2045,12 @@ void MainWindow::HandleDroppedFile(const QString& path)
                 {
                     const std::string existingAlias = dialog.GetExistingFileAlias().toStdString();
                     const std::string newFileAlias = dialog.GetNewFileAlias().toStdString();
+                    auto parser = CreateParserFor(filePath);
+                    if (!parser) return; // user cancelled type selection
+                    StopTailing();
                     const QString mergingMsg = QString("Merging %1 ...").arg(path);
                     UpdateStatusText(mergingMsg.toStdString());
-                    m_presenter->MergeLogFile(filePath, existingAlias, newFileAlias);
+                    m_presenter->MergeLogFile(std::move(parser), filePath, existingAlias, newFileAlias);
                     m_presenter->SetItemDetailsVisible(true);
                     const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
                     UpdateStatusText(completeMsg.toStdString());
@@ -2065,6 +2072,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             // No existing data, just load normally
             auto parser = CreateParserFor(filePath);
             if (!parser) return; // user cancelled type selection
+            StopTailing();
             const QString message = QString("Loading %1 ...").arg(path);
             UpdateStatusText(message.toStdString());
             if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
@@ -2184,17 +2192,22 @@ std::unique_ptr<parser::IDataParser> MainWindow::CreateParserFor(
     throw result.error();
 }
 
-QString MainWindow::PromptForFileType(const std::filesystem::path& path)
+std::vector<MainWindow::FileTypeChoice> MainWindow::FileTypeChoices()
 {
-    struct FileType { QString label; QString ext; };
-    static const std::array<FileType, 6> kTypes = {{
+    return {
         { tr("XML"),                          ".xml" },
         { tr("CSV"),                          ".csv" },
+        { tr("JSON / JSON Lines"),            ".json" },
         { tr("CAN/ASC (Vector CANalyzer)"),   ".asc" },
         { tr("AUTOSAR DLT"),                  ".dlt" },
         { tr("Evlog binary (POSIX 1003.25)"), ".evl" },
         { tr("safeAPI merged test log"),      ".sapilog" },
-    }};
+    };
+}
+
+QString MainWindow::PromptForFileType(const std::filesystem::path& path)
+{
+    const auto kTypes = FileTypeChoices();
 
     QStringList labels;
     for (const auto& t : kTypes) labels << t.label;
@@ -2257,11 +2270,23 @@ void MainWindow::OnLoadDbcRequested()
         m_currentLogFilePath.toLower().endsWith(".asc"))
     {
         const std::filesystem::path ascPath(m_currentLogFilePath.toStdString());
-        auto parser = CreateParserFor(ascPath);
-        if (parser)
+        try
         {
-            UpdateStatusText(tr("Reloading ASC with DBC signal names…").toStdString());
-            m_presenter->LoadLogFile(std::move(parser), ascPath);
+            auto parser = CreateParserFor(ascPath);
+            if (parser)
+            {
+                StopTailing();
+                UpdateStatusText(tr("Reloading ASC with DBC signal names…").toStdString());
+                m_presenter->LoadLogFile(std::move(parser), ascPath);
+            }
+        }
+        catch (const std::exception& ex)
+        {
+            util::Logger::Error("[MainWindow] Failed to reload ASC '{}' with DBC: {}",
+                ascPath.string(), ex.what());
+            ShowError(tr("DBC Load"),
+                tr("Unable to reload %1\n%2").arg(m_currentLogFilePath, QString::fromUtf8(ex.what())));
+            return;
         }
     }
 
@@ -2419,6 +2444,7 @@ void MainWindow::OnOpenSession()
             const std::filesystem::path fp(logFile);
             auto parser = CreateParserFor(fp);
             if (!parser) return; // user cancelled type selection
+            StopTailing();
             UpdateStatusText(tr("Loading %1 …").arg(QString::fromStdString(logFile)).toStdString());
             m_presenter->LoadLogFile(std::move(parser), fp);
             m_presenter->SetItemDetailsVisible(true);
@@ -2486,6 +2512,14 @@ void MainWindow::OnToggleTailRequested()
         if (m_tailer) m_tailer->Stop();
         UpdateStatusText("Tailing stopped");
     }
+}
+
+void MainWindow::StopTailing()
+{
+    // A tailer left running after a new file replaced the data would append
+    // the old file's new lines into the new container.
+    if (m_tailer) m_tailer->Stop();
+    if (m_tailAction) m_tailAction->setChecked(false);
 }
 
 void MainWindow::OnTailNewEvents(std::size_t count)

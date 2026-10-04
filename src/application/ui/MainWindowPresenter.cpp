@@ -22,6 +22,47 @@ namespace ui
 namespace
 {
 constexpr std::size_t kProgressYieldInterval = 500;
+
+/// Resets the presenter's parsing flags when a load leaves scope, including
+/// when an exception escapes, so IsParsing() can never stay stuck at true
+/// (which would reject every later load). On an exception it also restores
+/// the progress bar and search controls.
+class ParsingStateGuard
+{
+  public:
+    ParsingStateGuard(bool& isParsing, bool& progressConfigured, IMainWindowView& view)
+        : m_isParsing(isParsing)
+        , m_progressConfigured(progressConfigured)
+        , m_view(view)
+        , m_uncaught(std::uncaught_exceptions())
+    {
+    }
+    ParsingStateGuard(const ParsingStateGuard&) = delete;
+    ParsingStateGuard& operator=(const ParsingStateGuard&) = delete;
+
+    ~ParsingStateGuard()
+    {
+        m_isParsing = false;
+        m_progressConfigured = false;
+        if (std::uncaught_exceptions() > m_uncaught)
+        {
+            try
+            {
+                m_view.ToggleProgressVisibility(false);
+                m_view.SetSearchControlsEnabled(true);
+            }
+            catch (...)
+            {
+            }
+        }
+    }
+
+  private:
+    bool& m_isParsing;
+    bool& m_progressConfigured;
+    IMainWindowView& m_view;
+    int m_uncaught;
+};
 }
 
 MainWindowPresenter::MainWindowPresenter(IMainWindowView& view,
@@ -120,6 +161,7 @@ void MainWindowPresenter::LoadLogFile(const std::filesystem::path& path)
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
+    const ParsingStateGuard parsingGuard(m_isParsing, m_progressConfigured, m_view);
 
     m_view.UpdateStatusText("Clear...");
     clearAllData();
@@ -162,6 +204,7 @@ void MainWindowPresenter::LoadLogFile(std::unique_ptr<parser::IDataParser> parse
     const std::string previousStatus = m_view.CurrentStatusText();
     m_isParsing = true;
     m_progressConfigured = false;
+    const ParsingStateGuard parsingGuard(m_isParsing, m_progressConfigured, m_view);
 
     m_view.UpdateStatusText("Clear...");
     clearAllData();
@@ -291,7 +334,8 @@ void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> pa
     m_progressConfigured = false;
 }
 
-void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
+void MainWindowPresenter::MergeLogFile(std::unique_ptr<parser::IDataParser> parser,
+                                       const std::filesystem::path& path,
                                        const std::string& existingAlias,
                                        const std::string& newFileAlias,
                                        const std::string& timestampField)
@@ -320,19 +364,8 @@ void MainWindowPresenter::MergeLogFile(const std::filesystem::path& path,
 
     try
     {
-        // Parse into temporary container using a temporary observer
-        // For now, we'll use a simpler approach: parse and collect events manually
-        util::Logger::Debug("MergeLogFile: creating parser for extension '{}'",
-            path.extension().string());
-        auto parserResult = parser::ParserFactory::CreateFromFile(path);
-        if (!parserResult.isOk())
-        {
-            util::Logger::Warn("MergeLogFile: no parser available for '{}' — {}",
-                path.string(), parserResult.error().what());
-            throw parserResult.error();
-        }
-
-        auto parser = parserResult.unwrap();
+        if (!parser)
+            throw error::Error("MergeLogFile: no parser for " + path.string());
 
         // Register a simple observer that adds events to tempEvents
         class TempObserver : public parser::IDataParserObserver
@@ -488,8 +521,9 @@ void MainWindowPresenter::UpdateTypeFilters()
     }
 
     std::set<std::string> types;
-    const std::size_t total = m_events.Size();
-    for (std::size_t i = 0; i < total; ++i)
+    // Re-check Size() every iteration: ProcessPendingEvents() below may run a
+    // handler that clears or replaces the container.
+    for (std::size_t i = 0; i < m_events.Size(); ++i)
     {
         const auto& event = m_events.GetEvent(i);
         types.insert(event.findByKey(config.typeFilterField));
@@ -538,8 +572,10 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
     std::vector<unsigned long> filteredIndices;
     filteredIndices.reserve(m_events.Size());
 
+    // Re-check Size() every iteration: ProcessPendingEvents() below may run a
+    // handler that clears or replaces the container.
     const std::size_t total = m_events.Size();
-    for (std::size_t i = 0; i < total; ++i)
+    for (std::size_t i = 0; i < total && i < m_events.Size(); ++i)
     {
         const auto& event = m_events.GetEvent(i);
         const std::string eventType = event.findByKey(config.typeFilterField);
@@ -551,6 +587,15 @@ void MainWindowPresenter::ApplySelectedTypeFilters()
 
         if ((i % kProgressYieldInterval) == 0)
             m_view.ProcessPendingEvents();
+    }
+
+    if (m_events.Size() < total)
+    {
+        // The container was cleared/replaced while we yielded; the collected
+        // indices are stale. Whoever replaced the data re-applies the filters.
+        util::Logger::Debug("ApplySelectedTypeFilters: container changed during filtering; aborting");
+        m_view.UpdateStatusText(previousStatus);
+        return;
     }
 
     if (filteredIndices.empty())
