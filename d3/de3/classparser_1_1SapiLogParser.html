@@ -109,9 +109,9 @@ Inheritance diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/d5a/classparser_1_1SapiLogParser__inherit__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1SapiLogParser_inherit__map" id="aparser_1_1SapiLogParser_inherit__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="17,299,183,544"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="13,299,187,584"/>
 <area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,251"/>
-<area shape="poly" title=" " alt="" coords="103,265,103,298,97,298,97,265"/>
+<area shape="poly" title=" " alt="" coords="103,264,103,299,97,299,97,264"/>
 </map>
 </div>
 <div class="dynheader">
@@ -119,13 +119,13 @@ Collaboration diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/dce/classparser_1_1SapiLogParser__coll__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_coll__map" alt="Collaboration graph"/></div>
 <map name="aparser_1_1SapiLogParser_coll__map" id="aparser_1_1SapiLogParser_coll__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="133,471,299,696"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="129,471,303,736"/>
 <area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,393"/>
-<area shape="poly" title=" " alt="" coords="154,405,178,469,173,471,149,407"/>
+<area shape="poly" title=" " alt="" coords="151,406,173,469,168,471,146,407"/>
 <area shape="rect" title=" " alt="" coords="5,5,200,85"/>
 <area shape="poly" title=" " alt="" coords="105,85,105,131,100,131,100,85"/>
 <area shape="rect" title=" " alt="" coords="221,238,288,303"/>
-<area shape="poly" title=" " alt="" coords="253,304,235,455,229,454,248,303"/>
+<area shape="poly" title=" " alt="" coords="254,304,236,455,231,454,248,303"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -165,6 +165,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a17951a3f572bb285742e556383e10af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a623a4a450acda308c5a253314bc97fbb" id="r_a623a4a450acda308c5a253314bc97fbb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb">ParseLine</a> (std::string_view line, <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &amp;out)</td></tr>
 <tr class="separator:a623a4a450acda308c5a253314bc97fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9881b76696d5bf8296ba5b1ef77414ef" id="r_a9881b76696d5bf8296ba5b1ef77414ef"><td class="memItemLeft" align="right" valign="top">static std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef">ExtractUnit</a> (std::string_view info)</td></tr>
+<tr class="separator:a9881b76696d5bf8296ba5b1ef77414ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a866d906009881f88e3f8d6cdcb264d88" id="r_a866d906009881f88e3f8d6cdcb264d88"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88">ExtractPayloadFields</a> (std::string_view payload, <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &amp;out)</td></tr>
+<tr class="separator:a866d906009881f88e3f8d6cdcb264d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -185,7 +189,7 @@ Private Attributes</h2></td></tr>
 <p>File layout: a <code>#</code>-prefixed header block, then one event per line, each field wrapped in square brackets:</p>
 <div class="fragment"><div class="line">[timestamp] [category] [source] [destination] [level] [<span class="keyword">event</span> type] [info] [payload]</div>
 </div><!-- fragment --><p>Brackets may nest inside <code>info</code> and <code>payload</code> (e.g. <code>[[ 419310003] [GW-IL EAST] starting]</code>), so fields are split by bracket depth, not by a fixed regex. <code>payload</code> is everything after the 7th field; it may hold several bracket groups (<code>[train_id=1] [P0] [cycle=1 ...]</code>) — those are kept verbatim.</p>
-<p>Parsed LogEvent fields: timestamp — ISO-8601 UTC string, unchanged (e.g. "2026-09-19T06:46:46.456779Z") category — "GENERAL" or "IO" source — emitting component (e.g. "a-west", "robot", "il-multi") destination — target component(s) or "internal" level — INFO / DEBUG / ERROR / FAIL event_type — LOG, STEP, ENVELOPE, CMD_RESP, ... info — short description payload — trailing data (omitted when empty)</p>
+<p>Parsed LogEvent fields: timestamp — ISO-8601 UTC string, unchanged (e.g. "2026-09-19T06:46:46.456779Z") category — "GENERAL" or "IO" source — emitting component (e.g. "a-west", "robot", "il-multi") destination — target component(s) or "internal" level — INFO / DEBUG / ERROR / FAIL event_type — LOG, STEP, ENVELOPE, CMD_RESP, ... info — short description payload — trailing data (omitted when empty) unit — 2oo2 channel from an <code>info</code> prefix like <code>[a-west | GP] …</code> (optional) p.&lt;key&gt; — structured payload content, see <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88">ExtractPayloadFields()</a> (optional)</p>
 <p>Lines that do not match the layout are skipped. If no line matches at all, <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path.">ParseData()</a> throws <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error(ParseError)</a> so a wrong file-type choice is reported instead of silently producing an empty view. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3e3a0b72d66654bf80ac633a10b2c723" name="a3e3a0b72d66654bf80ac633a10b2c723"></a>
@@ -239,6 +243,113 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a866d906009881f88e3f8d6cdcb264d88" name="a866d906009881f88e3f8d6cdcb264d88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a866d906009881f88e3f8d6cdcb264d88">&#9670;&#160;</a></span>ExtractPayloadFields()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void parser::SapiLogParser::ExtractPayloadFields </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>payload</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &amp;&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Appends the structured content of <code>payload</code> to <code>out</code> as <code>p.&lt;key&gt;</code> fields. The raw payload is never modified. Recognised shapes:</p><ul>
+<li>a JSON object: top-level values become <code>p.&lt;key&gt;</code>, members of a nested object <code>p.&lt;key&gt;.&lt;member&gt;</code>; strings are unquoted, anything deeper is kept as compact JSON text;</li>
+<li>whitespace-separated <code>key=value</code> tokens (values may be quoted or hold balanced <code>[...]</code>/<code>{...}</code>); bracket groups of such tokens are unwrapped and single-word label groups (<code>[P0]</code>) are ignored. Anything else — free text, a single non-<code>key=value</code> token, invalid JSON, unbalanced brackets — yields no fields. Bounded per event: payloads over 4 KiB are skipped, at most 32 fields, over-long keys/values and repeated keys are dropped (first occurrence wins). </li>
+</ul>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_cgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,171,45"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="219,13,317,38"/>
+<area shape="poly" title=" " alt="" coords="171,23,205,23,205,28,171,28"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph">
+<area shape="rect" title=" " alt="" coords="216,5,381,45"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="5,5,168,45"/>
+<area shape="poly" title=" " alt="" coords="202,28,168,28,168,23,202,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9881b76696d5bf8296ba5b1ef77414ef" name="a9881b76696d5bf8296ba5b1ef77414ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9881b76696d5bf8296ba5b1ef77414ef">&#9670;&#160;</a></span>ExtractUnit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string_view parser::SapiLogParser::ExtractUnit </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the unit of an <code>info</code> field that starts with a <code>[unit | partition]</code> marker (e.g. "a-west" for <code>[a-west | GP] Log message</code>), else an empty view. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_cgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,168,45"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="216,13,315,38"/>
+<area shape="poly" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph">
+<area shape="rect" title=" " alt="" coords="216,5,379,45"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="5,5,168,45"/>
+<area shape="poly" title=" " alt="" coords="202,28,168,28,168,23,202,23"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="ab843a84f0f7d8c578c83f5bb87269cb3" name="ab843a84f0f7d8c578c83f5bb87269cb3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab843a84f0f7d8c578c83f5bb87269cb3">&#9670;&#160;</a></span>GetCurrentProgress()</h2>
 
@@ -416,40 +527,34 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph.png" border="0" usemap="#ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" alt=""/></div>
 <map name="ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph" id="ad3/d8b/classparser_1_1IDataParser_ac66a6d032e95fb5c0f26695e2c1c5db9_icgraph">
-<area shape="rect" title=" " alt="" coords="464,202,636,242"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a0e019323b587d204f1c323b648e49069" title=" " alt="" coords="216,5,416,31"/>
-<area shape="poly" title=" " alt="" coords="530,191,483,121,451,84,415,52,375,33,378,28,417,48,455,80,488,118,534,188"/>
-<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="14,19,159,59"/>
-<area shape="poly" title=" " alt="" coords="524,193,477,142,447,117,415,96,350,71,283,55,217,46,159,42,160,37,218,40,284,50,352,66,417,92,451,112,481,138,528,189"/>
-<area shape="rect" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3" title="Parses CSV data from an input stream." alt="" coords="245,106,387,146"/>
-<area shape="poly" title=" " alt="" coords="497,198,415,160,383,149,385,144,417,156,500,193"/>
-<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9" title="Parses data from an input stream." alt="" coords="247,170,385,210"/>
-<area shape="poly" title=" " alt="" coords="450,211,385,202,386,197,451,206"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#adb883204ef138bff70eae039bddc9c0b" title=" " alt="" coords="245,234,387,274"/>
-<area shape="poly" title=" " alt="" coords="450,238,388,247,387,242,450,233"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#a783871417b4713a44d11c92478c2b698" title=" " alt="" coords="247,298,385,338"/>
-<area shape="poly" title=" " alt="" coords="500,251,417,288,385,300,383,295,415,284,497,246"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#abb543f2a312adf9a5e03995a07d5555a" title=" " alt="" coords="243,394,389,434"/>
-<area shape="poly" title=" " alt="" coords="523,254,475,302,418,352,353,396,350,392,414,348,471,298,519,250"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116" title=" " alt="" coords="235,522,397,562"/>
-<area shape="poly" title=" " alt="" coords="535,256,487,345,454,397,418,448,380,490,343,524,340,520,376,486,414,444,450,394,482,342,531,253"/>
-<area shape="poly" title=" " alt="" coords="203,31,160,35,159,30,202,26"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b" title="Parses data from a file path." alt="" coords="15,138,158,178"/>
-<area shape="poly" title=" " alt="" coords="231,231,215,224,190,209,167,192,141,180,144,176,169,188,193,204,217,220,233,227"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530" title="Parses data from an input stream." alt="" coords="15,202,158,242"/>
-<area shape="poly" title=" " alt="" coords="230,245,158,235,158,229,231,240"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52" title="Parses data from a file path." alt="" coords="17,266,156,306"/>
-<area shape="poly" title=" " alt="" coords="233,309,156,298,157,293,234,304"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b" title="Parses data from an input stream." alt="" coords="17,330,156,370"/>
-<area shape="poly" title=" " alt="" coords="234,332,157,343,156,338,233,327"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9" title="Parses data from a file path." alt="" coords="13,394,160,434"/>
-<area shape="poly" title=" " alt="" coords="228,417,160,417,160,411,228,411"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2" title="Parses data from an input stream." alt="" coords="13,458,160,498"/>
-<area shape="poly" title=" " alt="" coords="231,440,160,461,158,455,230,435"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path." alt="" coords="5,522,168,562"/>
-<area shape="poly" title=" " alt="" coords="220,545,168,545,168,539,220,539"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a12496b2ed14960a3116c6bf3002aa95b" title="Parses data from an input stream." alt="" coords="5,586,168,626"/>
-<area shape="poly" title=" " alt="" coords="231,568,160,589,158,583,230,563"/>
+<area shape="rect" title=" " alt="" coords="448,170,620,210"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a0e019323b587d204f1c323b648e49069" title=" " alt="" coords="200,5,400,31"/>
+<area shape="poly" title=" " alt="" coords="509,161,462,105,432,77,399,52,356,33,358,28,401,48,435,73,466,102,513,157"/>
+<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="6,23,151,63"/>
+<area shape="poly" title=" " alt="" coords="500,163,454,127,399,96,336,75,270,61,152,48,152,43,271,56,337,70,401,92,457,123,503,159"/>
+<area shape="rect" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3" title="Parses CSV data from an input stream." alt="" coords="229,106,371,146"/>
+<area shape="poly" title=" " alt="" coords="446,169,371,148,372,143,448,164"/>
+<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9" title="Parses data from an input stream." alt="" coords="231,170,369,210"/>
+<area shape="poly" title=" " alt="" coords="434,193,370,193,370,187,434,187"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#adb883204ef138bff70eae039bddc9c0b" title=" " alt="" coords="229,234,371,274"/>
+<area shape="poly" title=" " alt="" coords="448,216,372,237,371,232,446,211"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#a783871417b4713a44d11c92478c2b698" title=" " alt="" coords="231,298,369,338"/>
+<area shape="poly" title=" " alt="" coords="501,221,455,255,401,288,370,302,368,297,399,284,452,251,498,216"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#abb543f2a312adf9a5e03995a07d5555a" title=" " alt="" coords="227,426,373,466"/>
+<area shape="poly" title=" " alt="" coords="511,223,462,283,402,352,325,428,322,424,398,348,457,280,506,219"/>
+<area shape="poly" title=" " alt="" coords="186,34,152,38,152,32,186,28"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b" title="Parses data from a file path." alt="" coords="7,170,150,210"/>
+<area shape="poly" title=" " alt="" coords="216,233,148,213,149,207,218,228"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530" title="Parses data from an input stream." alt="" coords="7,234,150,274"/>
+<area shape="poly" title=" " alt="" coords="215,257,150,257,150,251,215,251"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52" title="Parses data from a file path." alt="" coords="9,298,148,338"/>
+<area shape="poly" title=" " alt="" coords="216,321,148,321,148,315,216,315"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b" title="Parses data from an input stream." alt="" coords="9,362,148,402"/>
+<area shape="poly" title=" " alt="" coords="218,344,149,365,148,359,216,339"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9" title="Parses data from a file path." alt="" coords="5,426,152,466"/>
+<area shape="poly" title=" " alt="" coords="213,449,152,449,152,443,213,443"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2" title="Parses data from an input stream." alt="" coords="5,490,152,530"/>
+<area shape="poly" title=" " alt="" coords="218,472,149,493,148,487,216,467"/>
 </map>
 </div>
 
@@ -482,40 +587,34 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph.png" border="0" usemap="#ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" alt=""/></div>
 <map name="ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph" id="ad3/d8b/classparser_1_1IDataParser_a596df39e4d90cad4eb364aa5382ab51c_icgraph">
-<area shape="rect" title=" " alt="" coords="480,202,660,242"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#a2ca85c636838cb16234df98c7518de5e" title=" " alt="" coords="216,5,432,31"/>
-<area shape="poly" title=" " alt="" coords="549,191,501,121,468,84,431,52,390,33,392,28,433,48,472,80,505,117,553,188"/>
-<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="14,19,159,59"/>
-<area shape="poly" title=" " alt="" coords="543,193,495,142,464,117,431,96,381,81,310,67,159,48,160,43,311,62,382,75,433,92,467,112,498,138,547,189"/>
-<area shape="rect" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3" title="Parses CSV data from an input stream." alt="" coords="253,106,395,146"/>
-<area shape="poly" title=" " alt="" coords="516,198,431,160,395,148,397,143,433,156,519,193"/>
-<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9" title="Parses data from an input stream." alt="" coords="255,170,393,210"/>
-<area shape="poly" title=" " alt="" coords="466,211,393,202,394,196,467,206"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#adb883204ef138bff70eae039bddc9c0b" title=" " alt="" coords="253,234,395,274"/>
-<area shape="poly" title=" " alt="" coords="466,238,396,247,395,242,466,233"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#a783871417b4713a44d11c92478c2b698" title=" " alt="" coords="255,298,393,338"/>
-<area shape="poly" title=" " alt="" coords="519,251,433,288,394,302,393,297,431,284,516,246"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#abb543f2a312adf9a5e03995a07d5555a" title=" " alt="" coords="251,394,397,434"/>
-<area shape="poly" title=" " alt="" coords="542,254,493,302,434,352,365,396,362,392,430,348,490,298,539,250"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116" title=" " alt="" coords="243,522,405,562"/>
-<area shape="poly" title=" " alt="" coords="555,256,505,345,472,398,434,448,393,490,354,524,350,520,390,486,430,444,467,395,501,343,550,253"/>
-<area shape="poly" title=" " alt="" coords="203,32,160,35,159,30,202,26"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b" title="Parses data from a file path." alt="" coords="15,138,158,178"/>
-<area shape="poly" title=" " alt="" coords="238,234,215,224,190,209,167,192,141,180,144,176,169,188,193,204,217,220,240,229"/>
-<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530" title="Parses data from an input stream." alt="" coords="15,202,158,242"/>
-<area shape="poly" title=" " alt="" coords="238,245,158,234,159,229,239,240"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52" title="Parses data from a file path." alt="" coords="17,266,156,306"/>
-<area shape="poly" title=" " alt="" coords="240,309,156,298,157,293,241,304"/>
-<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b" title="Parses data from an input stream." alt="" coords="17,330,156,370"/>
-<area shape="poly" title=" " alt="" coords="241,332,157,343,156,338,240,327"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9" title="Parses data from a file path." alt="" coords="13,394,160,434"/>
-<area shape="poly" title=" " alt="" coords="237,417,160,417,160,411,237,411"/>
-<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2" title="Parses data from an input stream." alt="" coords="13,458,160,498"/>
-<area shape="poly" title=" " alt="" coords="238,440,161,461,159,456,237,435"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path." alt="" coords="5,522,168,562"/>
-<area shape="poly" title=" " alt="" coords="229,545,168,545,168,539,229,539"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a12496b2ed14960a3116c6bf3002aa95b" title="Parses data from an input stream." alt="" coords="5,586,168,626"/>
-<area shape="poly" title=" " alt="" coords="237,568,162,589,161,583,235,563"/>
+<area shape="rect" title=" " alt="" coords="464,170,644,210"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#a2ca85c636838cb16234df98c7518de5e" title=" " alt="" coords="200,5,416,31"/>
+<area shape="poly" title=" " alt="" coords="528,161,480,105,449,77,415,52,370,33,372,28,417,48,452,72,483,101,532,157"/>
+<area shape="rect" href="../../db/d5c/classparser_1_1XmlParser.html#aee2be66af3c95e746abd98d2d6ba856e" title="Parse XML data from an arbitrary input stream." alt="" coords="6,23,151,63"/>
+<area shape="poly" title=" " alt="" coords="519,163,472,127,415,96,347,75,277,60,210,52,152,47,152,42,211,46,278,55,349,70,417,92,475,123,522,159"/>
+<area shape="rect" href="../../d9/dd2/classparser_1_1CsvParser.html#a6f8265ee9c250e5a4f39afc6d233f5c3" title="Parses CSV data from an input stream." alt="" coords="237,106,379,146"/>
+<area shape="poly" title=" " alt="" coords="463,169,379,147,380,142,464,164"/>
+<area shape="rect" href="../../d1/d10/classparser_1_1JsonParser.html#a91ff19cea8253d2d172062ca7210b1f9" title="Parses data from an input stream." alt="" coords="239,170,377,210"/>
+<area shape="poly" title=" " alt="" coords="450,193,377,193,377,187,450,187"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#adb883204ef138bff70eae039bddc9c0b" title=" " alt="" coords="237,234,379,274"/>
+<area shape="poly" title=" " alt="" coords="464,216,380,238,379,233,463,211"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#a783871417b4713a44d11c92478c2b698" title=" " alt="" coords="239,298,377,338"/>
+<area shape="poly" title=" " alt="" coords="520,221,473,256,417,288,379,304,377,299,415,284,470,251,517,217"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#abb543f2a312adf9a5e03995a07d5555a" title=" " alt="" coords="235,426,381,466"/>
+<area shape="poly" title=" " alt="" coords="530,223,480,284,418,352,335,428,332,424,414,348,476,280,526,220"/>
+<area shape="poly" title=" " alt="" coords="187,34,152,38,152,33,186,29"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a988fcb6bdde6cb765948b52ce7b0bb2b" title="Parses data from a file path." alt="" coords="7,170,150,210"/>
+<area shape="poly" title=" " alt="" coords="222,233,149,212,151,207,224,228"/>
+<area shape="rect" href="../../dd/dfa/classparser_1_1AscParser.html#a1093b0c4adcb2e18dc95c613afc0b530" title="Parses data from an input stream." alt="" coords="7,234,150,274"/>
+<area shape="poly" title=" " alt="" coords="223,257,150,257,150,251,223,251"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#ae793d376bf1ff0f31f1a39e719e2ff52" title="Parses data from a file path." alt="" coords="9,298,148,338"/>
+<area shape="poly" title=" " alt="" coords="225,321,148,321,148,315,225,315"/>
+<area shape="rect" href="../../db/de9/classparser_1_1DltParser.html#aa8e59e80106dc988f9ed15cc55dc570b" title="Parses data from an input stream." alt="" coords="9,362,148,402"/>
+<area shape="poly" title=" " alt="" coords="226,343,149,365,148,360,225,338"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9" title="Parses data from a file path." alt="" coords="5,426,152,466"/>
+<area shape="poly" title=" " alt="" coords="220,449,152,449,152,443,220,443"/>
+<area shape="rect" href="../../d1/d55/classparser_1_1EvlogParser.html#a0e011fc12e0fc51115258d8806c211a2" title="Parses data from an input stream." alt="" coords="5,490,152,530"/>
+<area shape="poly" title=" " alt="" coords="223,472,152,493,150,487,222,467"/>
 </map>
 </div>
 
@@ -566,33 +665,13 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a4b7440bd083d5dcae903e94e20ab1027_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a4b7440bd083d5dcae903e94e20ab1027_cgraph" alt=""/></div>
 <map name="ad3/de3/classparser_1_1SapiLogParser_a4b7440bd083d5dcae903e94e20ab1027_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a4b7440bd083d5dcae903e94e20ab1027_cgraph">
-<area shape="rect" title="Parses data from a file path." alt="" coords="5,147,168,187"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="225,53,370,78"/>
-<area shape="poly" title=" " alt="" coords="128,144,256,82,259,87,130,149"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116" title=" " alt="" coords="216,175,379,215"/>
-<area shape="poly" title=" " alt="" coords="169,175,203,180,202,185,168,180"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="655,121,836,146"/>
-<area shape="poly" title=" " alt="" coords="325,50,378,30,449,11,488,5,529,3,569,6,608,16,644,34,677,59,727,108,723,112,674,63,642,39,606,21,568,12,529,8,489,10,450,16,380,35,327,55"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="884,121,1043,146"/>
-<area shape="poly" title=" " alt="" coords="836,131,870,131,870,136,836,136"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="453,31,581,57"/>
-<area shape="poly" title=" " alt="" coords="312,173,359,120,390,92,425,67,442,59,444,64,428,72,394,96,362,124,316,176"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="431,81,603,121"/>
-<area shape="poly" title=" " alt="" coords="337,172,426,131,443,124,445,129,428,136,339,177"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="427,145,607,185"/>
-<area shape="poly" title=" " alt="" coords="378,181,413,177,413,182,379,187"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="435,309,598,349"/>
-<area shape="poly" title=" " alt="" coords="321,213,368,254,428,295,441,302,438,306,425,300,365,258,318,217"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="696,345,795,370"/>
-<area shape="poly" title=" " alt="" coords="309,214,326,248,352,289,386,329,406,346,428,359,460,372,493,380,563,385,629,381,686,371,687,376,630,386,563,391,492,385,458,377,425,364,403,350,382,333,347,292,321,251,304,216"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="448,210,585,235"/>
-<area shape="poly" title=" " alt="" coords="379,202,434,210,434,215,378,208"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="449,259,585,285"/>
-<area shape="poly" title=" " alt="" coords="346,213,428,244,455,253,453,258,426,249,344,217"/>
-<area shape="poly" title=" " alt="" coords="569,54,608,67,709,112,707,117,606,72,567,59"/>
-<area shape="poly" title=" " alt="" coords="599,337,682,347,682,352,598,342"/>
-<area shape="poly" title=" " alt="" coords="567,208,606,195,707,150,709,155,608,200,569,213"/>
-<area shape="poly" title=" " alt="" coords="575,257,605,244,639,224,671,200,721,154,725,158,674,204,642,228,608,249,577,262"/>
+<area shape="rect" title="Parses data from a file path." alt="" coords="5,5,168,45"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="216,13,361,38"/>
+<area shape="poly" title=" " alt="" coords="169,23,202,23,202,28,169,28"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="409,13,591,38"/>
+<area shape="poly" title=" " alt="" coords="362,23,396,23,396,28,362,28"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="639,13,797,38"/>
+<area shape="poly" title=" " alt="" coords="591,23,625,23,625,28,591,28"/>
 </map>
 </div>
 
@@ -638,37 +717,6 @@ Here is the call graph for this function:</div>
 <dl class="section note"><dt>Note</dt><dd>This method enables parsing from various sources (files, network, memory) </dd></dl>
 
 <p>Implements <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#adfce47886f1b6d071a8e8b051512b1d5">parser::IDataParser</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a12496b2ed14960a3116c6bf3002aa95b_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a12496b2ed14960a3116c6bf3002aa95b_cgraph" alt=""/></div>
-<map name="ad3/de3/classparser_1_1SapiLogParser_a12496b2ed14960a3116c6bf3002aa95b_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a12496b2ed14960a3116c6bf3002aa95b_cgraph">
-<area shape="rect" title="Parses data from an input stream." alt="" coords="5,177,168,217"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116" title=" " alt="" coords="216,177,379,217"/>
-<area shape="poly" title=" " alt="" coords="168,194,202,194,202,199,168,199"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="453,5,581,31"/>
-<area shape="poly" title=" " alt="" coords="308,175,353,109,387,72,425,41,439,34,441,38,428,46,390,76,357,112,312,178"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="431,55,603,95"/>
-<area shape="poly" title=" " alt="" coords="322,174,369,140,425,105,439,98,442,103,428,110,372,144,325,179"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="427,119,607,159"/>
-<area shape="poly" title=" " alt="" coords="374,174,426,160,427,165,375,179"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="435,283,598,323"/>
-<area shape="poly" title=" " alt="" coords="332,214,428,268,447,276,445,281,425,272,329,219"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="696,319,795,344"/>
-<area shape="poly" title=" " alt="" coords="312,216,331,244,357,277,389,309,428,333,459,344,493,352,561,357,626,353,682,344,683,349,627,358,561,362,492,357,458,349,426,338,386,313,353,281,326,247,308,219"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="448,184,585,209"/>
-<area shape="poly" title=" " alt="" coords="379,194,434,194,434,199,379,199"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="449,233,585,259"/>
-<area shape="poly" title=" " alt="" coords="379,212,447,228,446,233,378,217"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="655,184,836,209"/>
-<area shape="poly" title=" " alt="" coords="581,28,608,41,647,71,681,106,731,171,727,174,677,109,644,75,605,46,578,33"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="884,184,1043,209"/>
-<area shape="poly" title=" " alt="" coords="836,194,870,194,870,199,836,199"/>
-<area shape="poly" title=" " alt="" coords="599,311,682,321,682,326,598,316"/>
-<area shape="poly" title=" " alt="" coords="586,194,641,194,641,199,586,199"/>
-<area shape="poly" title=" " alt="" coords="576,231,672,210,673,215,577,236"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -711,23 +759,15 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_cgraph" alt=""/></div>
 <map name="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,168,45"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="216,13,315,38"/>
-<area shape="poly" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph" alt=""/></div>
-<map name="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph">
-<area shape="rect" title=" " alt="" coords="427,37,589,77"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116" title=" " alt="" coords="216,37,379,77"/>
-<area shape="poly" title=" " alt="" coords="413,60,379,60,379,55,413,55"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path." alt="" coords="5,5,168,45"/>
-<area shape="poly" title=" " alt="" coords="202,46,168,40,169,35,203,40"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a12496b2ed14960a3116c6bf3002aa95b" title="Parses data from an input stream." alt="" coords="5,69,168,109"/>
-<area shape="poly" title=" " alt="" coords="203,74,169,80,168,74,202,69"/>
+<area shape="rect" title=" " alt="" coords="5,63,168,103"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88" title=" " alt="" coords="216,5,381,45"/>
+<area shape="poly" title=" " alt="" coords="161,60,210,46,212,52,162,65"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="429,70,528,95"/>
+<area shape="poly" title=" " alt="" coords="168,80,415,80,415,85,168,85"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef" title=" " alt="" coords="217,120,380,160"/>
+<area shape="poly" title=" " alt="" coords="162,100,212,114,210,119,161,105"/>
+<area shape="poly" title=" " alt="" coords="363,43,426,63,424,68,361,48"/>
+<area shape="poly" title=" " alt="" coords="361,117,424,97,426,102,363,122"/>
 </map>
 </div>
 
@@ -761,40 +801,19 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_cgraph" alt=""/></div>
 <map name="ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_cgraph">
-<area shape="rect" title=" " alt="" coords="5,177,168,217"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="242,5,370,31"/>
-<area shape="poly" title=" " alt="" coords="97,175,143,109,176,72,215,41,228,34,231,38,217,46,180,76,147,112,102,178"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9" title=" " alt="" coords="220,55,392,95"/>
-<area shape="poly" title=" " alt="" coords="111,174,158,140,215,105,229,98,231,103,217,110,161,144,114,179"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c" title=" " alt="" coords="216,119,396,159"/>
-<area shape="poly" title=" " alt="" coords="163,174,215,160,217,165,164,179"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="225,283,387,323"/>
-<area shape="poly" title=" " alt="" coords="121,214,217,268,236,276,234,281,215,272,119,219"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="485,319,584,344"/>
-<area shape="poly" title=" " alt="" coords="102,216,120,244,146,277,179,309,217,333,249,344,282,352,350,357,416,353,472,344,473,349,416,358,350,362,281,357,247,349,215,338,175,313,142,281,116,247,97,219"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="237,184,375,209"/>
-<area shape="poly" title=" " alt="" coords="168,194,223,194,223,199,168,199"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="238,233,374,259"/>
-<area shape="poly" title=" " alt="" coords="169,212,236,228,235,233,167,217"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="444,184,625,209"/>
-<area shape="poly" title=" " alt="" coords="370,28,397,41,436,71,471,106,520,171,516,174,467,109,433,75,395,46,368,33"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="673,184,832,209"/>
-<area shape="poly" title=" " alt="" coords="625,194,660,194,660,199,625,199"/>
-<area shape="poly" title=" " alt="" coords="388,311,472,321,471,326,387,316"/>
-<area shape="poly" title=" " alt="" coords="375,194,430,194,430,199,375,199"/>
-<area shape="poly" title=" " alt="" coords="365,231,461,210,462,215,366,236"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_icgraph" alt=""/></div>
-<map name="ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a8aca282a9893539fafd3657b51329116_icgraph">
-<area shape="rect" title=" " alt="" coords="216,37,379,77"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path." alt="" coords="5,5,168,45"/>
-<area shape="poly" title=" " alt="" coords="202,46,168,40,169,35,203,40"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a12496b2ed14960a3116c6bf3002aa95b" title="Parses data from an input stream." alt="" coords="5,69,168,109"/>
-<area shape="poly" title=" " alt="" coords="203,74,169,80,168,74,202,69"/>
+<area shape="rect" title=" " alt="" coords="5,47,168,87"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="221,5,349,31"/>
+<area shape="poly" title=" " alt="" coords="167,45,219,31,221,37,168,50"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="216,55,353,80"/>
+<area shape="poly" title=" " alt="" coords="168,65,202,65,202,70,168,70"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="217,104,353,129"/>
+<area shape="poly" title=" " alt="" coords="168,85,221,98,219,103,167,90"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="401,55,583,80"/>
+<area shape="poly" title=" " alt="" coords="339,28,425,49,424,54,338,33"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="631,55,789,80"/>
+<area shape="poly" title=" " alt="" coords="583,65,617,65,617,70,583,70"/>
+<area shape="poly" title=" " alt="" coords="354,65,388,65,388,70,354,70"/>
+<area shape="poly" title=" " alt="" coords="338,101,424,81,425,86,339,107"/>
 </map>
 </div>
 

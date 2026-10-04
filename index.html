@@ -100,6 +100,7 @@ Features</h1>
 Core</h2>
 <ul>
 <li><b>Multiple Log Formats</b>: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (<code>.dlt</code>), POSIX Evlog (<code>.evl</code>), and safeAPI RBC 2oo2 merged test logs (<code>.txt</code> with the merged-log header)</li>
+<li><b>safeAPI Payload Fields</b>: Structured payloads of safeAPI merged test logs become extra fields — <code>key=value</code> lists and JSON objects as <code>p.&lt;key&gt;</code> (e.g. <code>p.cycle</code>, <code>p.role</code>, <code>p.status</code>, <code>p.cmd</code>, <code>p.fields.route_len</code>), the <code>[a-west | GP]</code> channel marker in <code>info</code> as <code>unit</code>. Add them as columns in <b>Tools &gt; Settings &gt; Columns</b> to filter them, or use them in Statistics and Traces; the raw <code>payload</code> stays unchanged</li>
 <li><b>DBC Signal Decoding</b>: Load a <code>.dbc</code> file alongside an ASC log to decode raw CAN frames into named signals</li>
 <li><b>Evlog Template Decoding</b>: Load a directory of <code>.t</code>/<code>.tmpl</code>/<code>.template</code> files to decode structured BINARY evlog payloads into named fields</li>
 <li><b>High Performance</b>: Virtual list architecture handles millions of log entries</li>

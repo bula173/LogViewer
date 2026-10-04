@@ -2,6 +2,8 @@ var classparser_1_1SapiLogParser =
 [
     [ "SapiLogParser", "d3/de3/classparser_1_1SapiLogParser.html#a3e3a0b72d66654bf80ac633a10b2c723", null ],
     [ "~SapiLogParser", "d3/de3/classparser_1_1SapiLogParser.html#a06c54b637ca52e9b41c8b8b5af37ed3e", null ],
+    [ "ExtractPayloadFields", "d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88", null ],
+    [ "ExtractUnit", "d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef", null ],
     [ "GetCurrentProgress", "d3/de3/classparser_1_1SapiLogParser.html#ab843a84f0f7d8c578c83f5bb87269cb3", null ],
     [ "GetTotalProgress", "d3/de3/classparser_1_1SapiLogParser.html#a38406b615a4119876be21c6d374a00bf", null ],
     [ "LooksLikeSapiLog", "d3/de3/classparser_1_1SapiLogParser.html#a17951a3f572bb285742e556383e10af9", null ],
