@@ -18,6 +18,7 @@
 #include <QMessageBox>
 #include <QPoint>
 #include <QScreen>
+#include <QSignalBlocker>
 #include <QTableWidget>
 #include <QVBoxLayout>
 
@@ -26,6 +27,7 @@
 #include <limits>
 #include <optional>
 #include <unordered_map>
+#include <utility>
 
 namespace ui::qt
 {
@@ -47,6 +49,12 @@ EventsTableView::EventsTableView(
             this, &EventsTableView::ShowColumnFilterPopup);
     connect(m_model, &EventsTableModel::ColumnFiltersChanged, this,
             [this] { m_filterHeader->viewport()->update(); });
+    connect(m_model, &EventsTableModel::SearchMatchesChanged,
+            this, &EventsTableView::OnSearchMatchesChanged);
+    connect(m_model, &QAbstractItemModel::modelAboutToBeReset,
+            this, &EventsTableView::CaptureSelectionBeforeReset);
+    connect(m_model, &QAbstractItemModel::modelReset,
+            this, &EventsTableView::RestoreSelectionAfterReset);
 
     InitializeView();
     ConnectSelectionSignals();
@@ -63,6 +71,10 @@ void EventsTableView::InitializeView()
     horizontalHeader()->setSectionsClickable(true);
     horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);  // Allow manual resizing
     verticalHeader()->setVisible(false);
+    // Enabling sorting applies the header's current indicator (Qt 6: column 0,
+    // descending), which would sort every load and keep a filter active all
+    // session. Start unsorted; the user sorts by clicking a header.
+    horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
     setSortingEnabled(true);
     ResizeColumnsToConfiguration();
 
@@ -130,6 +142,9 @@ void EventsTableView::ConnectSelectionSignals()
     connect(selectionModel(), &QItemSelectionModel::currentRowChanged, this,
         [this](const QModelIndex& current, const QModelIndex&)
         {
+            if (m_restoringSelection)
+                return; // same event as before the model reset
+
             if (!current.isValid())
             {
                 util::Logger::Debug("[EventsTableView] currentRowChanged: invalid -> -1");
@@ -167,7 +182,14 @@ void EventsTableView::RefreshColumns()
 
     m_model->RefreshColumns();
     ResizeColumnsToConfiguration();
-    
+
+    // The sort follows its column by name; move the header arrow with it
+    // (blocked: the indicator change must not trigger another sort).
+    {
+        const QSignalBlocker blocker(horizontalHeader());
+        horizontalHeader()->setSortIndicator(m_model->ActiveSortColumn(), m_model->ActiveSortOrder());
+    }
+
     // Force header to recalculate stretch section
     horizontalHeader()->setStretchLastSection(false);
     horizontalHeader()->setStretchLastSection(true);
@@ -178,28 +200,8 @@ void EventsTableView::RefreshView()
     if (!m_model)
         return;
 
-    // CRITICAL: Before syncing with container, validate that any active
-    // filtering doesn't reference stale indices (e.g., after merge).
-    // This prevents segfaults when merge invalidates cached indices.
-    const auto& filteredIndices = m_model->GetFilteredIndices();
-    if (!filteredIndices.empty())
-    {
-        const size_t containerSize = m_events.Size();
-        bool hasStaleIndices = false;
-        for (const auto idx : filteredIndices)
-        {
-            if (idx >= containerSize)
-            {
-                hasStaleIndices = true;
-                break;
-            }
-        }
-        if (hasStaleIndices)
-        {
-            util::Logger::Warn("[EventsTableView] RefreshView: Detected stale indices after merge; clearing filter");
-            m_model->ClearFilter();
-        }
-    }
+    // Stale indices after a merge / reload (upstream filter or sorted rows)
+    // are detected and rebuilt by the model itself during SyncWithContainer().
 
     // Data was cleared: value filters chosen for the old data no longer apply.
     if (m_events.Size() == 0)
@@ -236,6 +238,11 @@ const std::vector<unsigned long>* EventsTableView::GetFilteredIndices() const
     return &m_model->GetFilteredIndices();
 }
 
+const std::vector<unsigned long>* EventsTableView::GetBaseFilteredIndices() const
+{
+    return m_model ? m_model->GetBaseFilteredIndices() : nullptr;
+}
+
 bool EventsTableView::IsFilterActive() const
 {
     return m_model && m_model->IsFilteringActive();
@@ -243,7 +250,7 @@ bool EventsTableView::IsFilterActive() const
 
 bool EventsTableView::HasColumnFilters() const
 {
-    return m_model && m_model->HasAnyColumnFilter();
+    return m_model && m_model->HasActiveColumnFilter();
 }
 
 void EventsTableView::ClearColumnFilters()
@@ -283,15 +290,39 @@ void EventsTableView::ShowColumnFilterPopup(int column)
     auto* popup = new ColumnFilterPopup(title, distinct, allowed, this);
     popup->setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(popup, &ColumnFilterPopup::Applied, this, [this, column](const QSet<QString>& values) {
-        m_model->SetColumnFilter(column, values);
-        viewport()->update();
-    });
-    connect(popup, &ColumnFilterPopup::AppliedExcluding, this,
-        [this, column](const QSet<QString>& values) {
+    // The list only shows values of rows that pass the other filters. Values it
+    // could not show keep their previous allowed / excluded state, so pressing
+    // OK never silently drops or widens the filter.
+    QSet<QString> listed;
+    for (const auto& v : distinct.values)
+        listed.insert(v.value);
+    const bool          hadFilter  = m_model->HasColumnFilter(column);
+    const bool          exclude    = hadFilter ? m_model->IsColumnFilterExclusion(column)
+                                               : distinct.truncated;
+    const QSet<QString> oldValues  = hadFilter ? m_model->ColumnFilterValues(column) : QSet<QString>{};
+    const QSet<QString> unlistedOld = oldValues - listed;
+    // A whitelist hides every value it does not name, including unlisted ones.
+    const bool restrictsUnlisted = hadFilter && !exclude && (distinct.narrowed || !unlistedOld.isEmpty());
+
+    auto applyChoice = [this, column, listed, hadFilter, exclude, oldValues, unlistedOld,
+                        restrictsUnlisted](const QSet<QString>& unchecked) {
+        const QSet<QString> values = exclude ? (unchecked | unlistedOld)
+                                             : ((listed - unchecked) | unlistedOld);
+        const bool noRestriction = exclude ? values.isEmpty()
+                                           : (unchecked.isEmpty() && !restrictsUnlisted);
+        if (noRestriction)
+            m_model->ClearColumnFilter(column);
+        else if (hadFilter && values == oldValues)
+            return; // unchanged
+        else if (exclude)
             m_model->SetColumnFilterExcluding(column, values);
-            viewport()->update();
-        });
+        else
+            m_model->SetColumnFilter(column, values);
+        viewport()->update();
+    };
+    connect(popup, &ColumnFilterPopup::Applied, this,
+        [applyChoice, listed](const QSet<QString>& checked) { applyChoice(listed - checked); });
+    connect(popup, &ColumnFilterPopup::AppliedExcluding, this, applyChoice);
     connect(popup, &ColumnFilterPopup::Cleared, this, [this, column] {
         m_model->ClearColumnFilter(column);
         viewport()->update();
@@ -440,7 +471,8 @@ void EventsTableView::SyncScrollTo(int actualRow)
 void EventsTableView::SetSearchTerm(const QString& term, bool caseSensitive)
 {
     m_model->SetSearchTerm(term, caseSensitive);
-    m_currentMatchIndex = -1;
+    m_currentMatchIndex  = -1;
+    m_currentMatchActual = -1;
 
     const int total = m_model->MatchCount();
     if (total > 0)
@@ -479,10 +511,105 @@ void EventsTableView::ScrollToMatchIndex(int matchIndex)
     const QModelIndex idx = m_model->index(rows[static_cast<size_t>(matchIndex)], 0);
     if (!idx.isValid()) return;
 
+    m_currentMatchActual = m_model->ResolveToActualIndex(idx.row());
     scrollTo(idx, QAbstractItemView::PositionAtCenter);
     if (selectionModel())
         selectionModel()->setCurrentIndex(
             idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}
+
+void EventsTableView::OnSearchMatchesChanged()
+{
+    const auto& rows  = m_model->MatchedRows();
+    const int   total = static_cast<int>(rows.size());
+    const int   previous = m_currentMatchIndex;
+    m_currentMatchIndex = -1;
+
+    if (total > 0)
+    {
+        // Stay on the same event if it still matches, else at the same position.
+        const int row = m_model->RowFromActualIndex(m_currentMatchActual);
+        const auto it = std::lower_bound(rows.begin(), rows.end(), row);
+        if (row >= 0 && it != rows.end() && *it == row)
+            m_currentMatchIndex = static_cast<int>(it - rows.begin());
+        else if (previous >= 0)
+            m_currentMatchIndex = std::min(previous, total - 1);
+    }
+    m_currentMatchActual = m_currentMatchIndex >= 0
+        ? m_model->ResolveToActualIndex(rows[static_cast<std::size_t>(m_currentMatchIndex)])
+        : -1;
+    emit MatchInfoChanged(m_currentMatchIndex + 1, total);
+}
+
+void EventsTableView::CaptureSelectionBeforeReset()
+{
+    // The model still has its old rows here (it calls beginResetModel()
+    // before changing them), so rows map to the events the user selected.
+    m_resetGeneration    = m_events.Generation();
+    m_resetCurrentActual = CurrentActualRow();
+    m_resetSelectedActual.clear();
+    if (!selectionModel())
+        return;
+
+    // Re-selecting a huge selection on every tail batch would stall the UI;
+    // beyond this only the current row is kept.
+    constexpr qsizetype kMaxRestoredRows = 10000;
+    const QItemSelection selection = selectionModel()->selection();
+    qsizetype rows = 0;
+    for (const auto& range : selection)
+        rows += range.height();
+    if (rows > kMaxRestoredRows)
+        return;
+    for (const auto& range : selection)
+        for (int row = range.top(); row <= range.bottom(); ++row)
+            m_resetSelectedActual.push_back(m_model->ResolveToActualIndex(row));
+}
+
+void EventsTableView::RestoreSelectionAfterReset()
+{
+    if (!selectionModel())
+        return;
+    const int previousCurrent = std::exchange(m_resetCurrentActual, -1);
+    auto      previousSelected = std::exchange(m_resetSelectedActual, {});
+
+    // After Clear()/MergeEvents() the same index is a different event.
+    if (m_resetGeneration != m_events.Generation())
+    {
+        if (previousCurrent >= 0)
+            emit CurrentActualRowChanged(-1);
+        return;
+    }
+
+    std::vector<int> rows;
+    rows.reserve(previousSelected.size());
+    for (const int actual : previousSelected)
+        if (const int row = m_model->RowFromActualIndex(actual); row >= 0)
+            rows.push_back(row);
+    std::sort(rows.begin(), rows.end());
+    rows.erase(std::unique(rows.begin(), rows.end()), rows.end());
+
+    const int lastColumn = m_model->columnCount() - 1;
+    QItemSelection selection;
+    for (std::size_t i = 0; i < rows.size() && lastColumn >= 0;)
+    {
+        std::size_t end = i;
+        while (end + 1 < rows.size() && rows[end + 1] == rows[end] + 1)
+            ++end;
+        selection.select(m_model->index(rows[i], 0), m_model->index(rows[end], lastColumn));
+        i = end + 1;
+    }
+
+    const int currentRow = m_model->RowFromActualIndex(previousCurrent);
+    m_restoringSelection = true;
+    if (currentRow >= 0)
+        selectionModel()->setCurrentIndex(m_model->index(currentRow, 0), QItemSelectionModel::NoUpdate);
+    if (!selection.isEmpty())
+        selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
+    m_restoringSelection = false;
+
+    // The event shown in Item Details is no longer in the table.
+    if (previousCurrent >= 0 && currentRow < 0)
+        emit CurrentActualRowChanged(-1);
 }
 
 void EventsTableView::ShowContextMenu(const QPoint& pos)
@@ -737,14 +864,16 @@ void EventsTableView::RestoreColumnOrder()
     std::vector<int> logicalIndices;
     logicalIndices.reserve(savedOrder.size());
 
-    // Map saved column names to their current logical indices
+    // Map saved column names to the model columns showing them (header
+    // logical index == model column; hidden columns are not in the model)
     for (const auto& savedName : savedOrder)
     {
-        for (int i = 0; i < static_cast<int>(columns.size()); ++i)
+        for (int column = 0; column < m_model->columnCount(); ++column)
         {
-            if (columns[static_cast<size_t>(i)].name == savedName)
+            const int configIndex = m_model->ConfigIndexForColumn(column);
+            if (configIndex >= 0 && columns[static_cast<size_t>(configIndex)].name == savedName)
             {
-                logicalIndices.push_back(i);
+                logicalIndices.push_back(column);
                 break;
             }
         }
@@ -775,10 +904,10 @@ void EventsTableView::SaveColumnOrder() const
     // Read current column order from header
     for (int visualIndex = 0; visualIndex < horizontalHeader()->count(); ++visualIndex)
     {
-        const int logicalIndex = horizontalHeader()->logicalIndex(visualIndex);
-        if (logicalIndex >= 0 && logicalIndex < static_cast<int>(columns.size()))
+        const int configIndex = m_model->ConfigIndexForColumn(horizontalHeader()->logicalIndex(visualIndex));
+        if (configIndex >= 0 && configIndex < static_cast<int>(columns.size()))
         {
-            order.push_back(columns[static_cast<size_t>(logicalIndex)].name);
+            order.push_back(columns[static_cast<size_t>(configIndex)].name);
         }
     }
 
@@ -800,14 +929,18 @@ void EventsTableView::RestoreColumnWidths()
     const auto& columns = config.GetColumns();
     const auto& widths = config.columnWidths;
 
-    for (size_t i = 0; i < columns.size(); ++i)
+    for (int column = 0; column < m_model->columnCount(); ++column)
     {
-        auto it = widths.find(columns[i].name);
+        const int configIndex = m_model->ConfigIndexForColumn(column);
+        if (configIndex < 0 || configIndex >= static_cast<int>(columns.size()))
+            continue; // dynamic source / original_id column
+        const auto& name = columns[static_cast<size_t>(configIndex)].name;
+        auto it = widths.find(name);
         if (it != widths.end() && it->second > 0)
         {
-            horizontalHeader()->resizeSection(static_cast<int>(i), it->second);
+            horizontalHeader()->resizeSection(column, it->second);
             util::Logger::Debug("[EventsTableView] Restored width for column '{}': {} px",
-                columns[i].name, it->second);
+                name, it->second);
         }
     }
 }
@@ -818,15 +951,19 @@ void EventsTableView::SaveColumnWidths() const
         return;
 
     const auto& columns = config::GetConfig().GetColumns();
-    std::map<std::string, int> widths;
+    // Hidden columns are not in the header: keep their saved widths.
+    std::map<std::string, int> widths = config::GetConfig().columnWidths;
 
-    // Save width of each column
-    for (size_t i = 0; i < columns.size(); ++i)
+    // Save width of each visible configured column
+    for (int column = 0; column < m_model->columnCount(); ++column)
     {
-        int width = horizontalHeader()->sectionSize(static_cast<int>(i));
+        const int configIndex = m_model->ConfigIndexForColumn(column);
+        if (configIndex < 0 || configIndex >= static_cast<int>(columns.size()))
+            continue;
+        const int width = horizontalHeader()->sectionSize(column);
         if (width > 0)
         {
-            widths[columns[i].name] = width;
+            widths[columns[static_cast<size_t>(configIndex)].name] = width;
         }
     }
 

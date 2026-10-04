@@ -181,13 +181,12 @@ void ColumnFilterPopup::UpdateSelectAllState()
 
 void ColumnFilterPopup::Accept()
 {
-    const QSet<QString> checked = CheckedValues();
-    if (checked.size() == m_list->count())
-        emit Cleared(); // everything allowed = no filter
-    else if (m_truncated)
+    // Whether "everything checked" means "no filter" depends on values the list
+    // could not show; the receiver decides (see EventsTableView).
+    if (m_truncated)
         emit AppliedExcluding(UncheckedValues()); // unlisted values must stay visible
     else
-        emit Applied(checked);
+        emit Applied(CheckedValues());
     accept();
 }
 

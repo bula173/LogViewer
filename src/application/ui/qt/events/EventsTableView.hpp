@@ -5,6 +5,7 @@
 
 #include <QTableView>
 #include <QString>
+#include <cstdint>
 #include <vector>
 
 namespace db
@@ -37,6 +38,9 @@ class EventsTableView : public QTableView,
     /// (possibly empty) filtered indices — callers must not treat a non-null
     /// empty result the same as "no filter" (see IsFilterActive()).
     const std::vector<unsigned long>* GetFilteredIndices() const;
+    /// The indices last passed to SetFilteredEvents() (nullptr after
+    /// ClearFilter()), without column filters or sorting applied.
+    const std::vector<unsigned long>* GetBaseFilteredIndices() const;
     /// True if a filter is active, even if it currently matches zero events.
     bool IsFilterActive() const;
 
@@ -96,6 +100,12 @@ class EventsTableView : public QTableView,
     void SaveColumnOrder() const;
     void RestoreColumnWidths();
     void SaveColumnWidths() const;
+    /// A model reset drops the selection: remember it by event (before the
+    /// reset) and select the same events again afterwards.
+    void CaptureSelectionBeforeReset();
+    void RestoreSelectionAfterReset();
+    /// Keeps the "n of m" search position on the same match after the rows change.
+    void OnSearchMatchesChanged();
 
     /// Returns actual event indices for all currently selected table rows.
     std::vector<int> SelectedActualIndices() const;
@@ -106,6 +116,13 @@ class EventsTableView : public QTableView,
     EventsTableModel* m_model {nullptr};
     FilterHeaderView* m_filterHeader {nullptr};
     int m_currentMatchIndex {-1};
+    int m_currentMatchActual {-1}; ///< event of the current search match
+
+    // Selection carried across a model reset (see CaptureSelectionBeforeReset)
+    int              m_resetCurrentActual {-1};
+    std::vector<int> m_resetSelectedActual;
+    std::uint64_t    m_resetGeneration {0};
+    bool             m_restoringSelection {false};
 };
 
 } // namespace ui::qt

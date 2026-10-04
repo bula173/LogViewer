@@ -27,6 +27,16 @@ All notable changes to LogViewer are documented here.
 - **File-type prompt** — "JSON / JSON Lines" is offered for files with an unknown extension.
 - **Follow File with partial lines** — a line still being written is read once it is complete instead of being parsed as a fragment and lost.
 - **Plugin parsers** — a parser registered by a plugin before the first file is opened no longer hides the built-in XML/CSV/JSON/... parsers.
+- **Events tab empty after loading a file** — after a side-by-side comparison, opening, merging or reloading a file (or a session) left the Events tab on the comparison page, so it showed no rows while other tabs showed data. Every normal load, and Go To on a bookmark, now shows the events table (bookmark Go To also no longer selects whichever tab happens to be first).
+- **No implicit sort at startup** — the events table no longer sorts by the first column (descending) when it is created; it starts in file order until a header is clicked. Before, every session ran with a filter active, which disabled the "no filter" fast paths.
+- **Stale filter after a reload or merge** — a filter computed for the previous data set (or pointing past its end) is now dropped instead of selecting unrelated events or showing zero rows; a sorted table is fully re-sorted after the log is replaced or merged instead of keeping the old order.
+- **Actors filter after loading another file** — the Actors tab no longer keeps the previous file's actors after its own filter, and checking/unchecking an actor (or loading a filter profile) never applies the previous file's event positions to the new file.
+- **Sort of a removed column** — removing the sorted column from the column configuration restores file order instead of freezing the rows (new events stopped appearing); the header sort arrow now follows its column when columns are reordered, hidden or removed.
+- **Filters of hidden columns** — a suspended filter on a hidden column no longer counts as active ("Clear All Column Filters", full re-filter on every follow-file batch).
+- **Column widths and order** — saved and restored per column name; with hidden columns or the merge "Source" column the widths and order were written to and read from the wrong columns.
+- **Selection survives filter changes** — the selected rows and current event are kept when filters change or new events are appended; if the current event is filtered out, Item Details is cleared instead of showing a hidden event.
+- **Search counter** — "n of m" and Next/Previous follow the current match when the rows change instead of keeping stale counts.
+- **Column filter OK** — pressing OK in a column filter whose value list was narrowed by other filters no longer drops or widens the filter for values the list could not show.
 
 ### New features
 

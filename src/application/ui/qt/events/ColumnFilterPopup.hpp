@@ -21,10 +21,11 @@ namespace ui::qt
 /// Excel-style value filter for one table column: a search box, a
 /// "Select all" check box and one check box per distinct value.
 ///
-/// Emits Applied(allowed) on OK, or Cleared() when OK is pressed with every
-/// value checked (nothing to filter) or "Clear filter" is pressed. When the
-/// value list was truncated, OK emits AppliedExcluding(unchecked) instead: the
-/// values that could not be listed must stay visible.
+/// Emits Applied(checked) on OK (even with every value checked: only the
+/// receiver knows whether the old filter restricts values the list could not
+/// show), or Cleared() when "Clear filter" is pressed. When the value list was
+/// truncated, OK emits AppliedExcluding(unchecked) instead: the values that
+/// could not be listed must stay visible.
 class ColumnFilterPopup : public QDialog
 {
     Q_OBJECT

@@ -108,11 +108,13 @@ void ActorsPanel::BuildLayout()
 void ActorsPanel::Refresh()
 {
     // If we triggered this reset ourselves (actor checkbox filter), don't rebuild
-    // the tree — the cache and check states are still valid.
+    // the tree — the cache and check states are still valid. Only while nothing
+    // else changed since: a new file or another filter needs a real rebuild.
     if (m_ignoreNextRefresh)
     {
         m_ignoreNextRefresh = false;
-        return;
+        if (ViewShowsOwnFilter())
+            return;
     }
 
     const auto vis = VisibleIndices();
@@ -150,6 +152,7 @@ void ActorsPanel::Refresh()
     }
 
     m_groupedCache.clear();
+    m_cacheGeneration = m_events.Generation();
 
     const bool hasDefinitions = !m_definitions.empty() &&
         std::any_of(m_definitions.begin(), m_definitions.end(),
@@ -605,6 +608,17 @@ void ActorsPanel::ApplyCheckedFilter()
 {
     if (!m_eventsView) return;
 
+    // The tree and cache describe a container that has since been cleared or
+    // merged: their indices would select unrelated events. Rebuild first
+    // (Refresh keeps the check states and re-applies the filter).
+    if (m_cacheGeneration != m_events.Generation())
+    {
+        util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: actor cache is from a previous data set, refreshing");
+        m_ignoreNextRefresh = false;
+        Refresh();
+        return;
+    }
+
     // Keep m_uncheckedActors in sync so Refresh() can restore check states
     m_uncheckedActors.clear();
 
@@ -670,16 +684,14 @@ void ActorsPanel::ApplyCheckedFilter()
         {
             // No actor data at all to filter by — nothing to apply.
             util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: no actors present, clearing filter");
-            m_ignoreNextRefresh = true;
-            m_eventsView->ClearFilter();
+            ApplyToView(nullptr);
         }
         else
         {
             // Actors exist but the user unchecked every one of them —
             // that means "show nothing", not "no filter is active".
             util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: all actors unchecked, showing zero events");
-            m_ignoreNextRefresh = true;
-            m_eventsView->SetFilteredEvents(combined);
+            ApplyToView(&combined);
         }
         return;
     }
@@ -691,16 +703,35 @@ void ActorsPanel::ApplyCheckedFilter()
     if (m_uncheckedActors.empty())
     {
         util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: all actors checked, clearing filter");
-        m_ignoreNextRefresh = true;
-        m_eventsView->ClearFilter();
+        ApplyToView(nullptr);
         return;
     }
 
     util::Logger::Debug("[ActorsPanel] ApplyCheckedFilter: {} event(s) pass actor filter "
                         "({} actor(s) unchecked)",
                         combined.size(), m_uncheckedActors.size());
-    m_ignoreNextRefresh = true;
-    m_eventsView->SetFilteredEvents(combined);
+    ApplyToView(&combined);
+}
+
+void ActorsPanel::ApplyToView(const std::vector<unsigned long>* indices)
+{
+    m_ignoreNextRefresh   = true;
+    m_ownFilterCleared    = (indices == nullptr);
+    m_ownFilter           = indices ? *indices : std::vector<unsigned long>{};
+    m_ownFilterSize       = m_events.Size();
+    m_ownFilterGeneration = m_events.Generation();
+    if (indices)
+        m_eventsView->SetFilteredEvents(*indices);
+    else
+        m_eventsView->ClearFilter();
+}
+
+bool ActorsPanel::ViewShowsOwnFilter() const
+{
+    if (m_events.Size() != m_ownFilterSize || m_events.Generation() != m_ownFilterGeneration)
+        return false;
+    const std::vector<unsigned long>* base = m_eventsView->GetBaseFilteredIndices();
+    return m_ownFilterCleared ? base == nullptr : (base && *base == m_ownFilter);
 }
 
 std::vector<unsigned long> ActorsPanel::VisibleIndices() const

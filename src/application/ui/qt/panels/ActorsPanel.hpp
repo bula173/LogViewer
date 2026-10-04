@@ -8,6 +8,8 @@
 #include <QTreeWidget>
 #include <QWidget>
 
+#include <cstddef>
+#include <cstdint>
 #include <map>
 #include <set>
 #include <string>
@@ -98,6 +100,12 @@ class ActorsPanel : public QWidget
                                      const std::vector<unsigned long>& vis);
     void PopulateActorTree(size_t totalVisible);
     void ApplyCheckedFilter();
+    /// Passes the actor filter to the events view (nullptr clears it) and
+    /// remembers it, so the refresh caused by it can be told apart.
+    void ApplyToView(const std::vector<unsigned long>* indices);
+    /// True while the events view still shows exactly the filter of the last
+    /// ApplyToView() on the same data.
+    [[nodiscard]] bool ViewShowsOwnFilter() const;
     void ShowActorContextMenu(const QPoint& pos);
     void ShowSequenceDiagram();
     [[nodiscard]] std::vector<unsigned long> VisibleIndices() const;
@@ -113,6 +121,14 @@ class ActorsPanel : public QWidget
     std::map<std::string, GroupedActorData>        m_groupedCache;
     std::set<std::string>                          m_uncheckedActors;
     bool                                           m_ignoreNextRefresh {false};
+    /// Container generation m_groupedCache was built for (indices are stale
+    /// once the container is cleared or merged).
+    std::uint64_t                                  m_cacheGeneration {0};
+    // The filter last applied by this panel and the data it was applied to.
+    bool                                           m_ownFilterCleared {false};
+    std::vector<unsigned long>                     m_ownFilter;
+    std::size_t                                    m_ownFilterSize {0};
+    std::uint64_t                                  m_ownFilterGeneration {0};
 };
 
 } // namespace ui::qt

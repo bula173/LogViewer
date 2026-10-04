@@ -9,6 +9,7 @@
 #include "EventsContainer.hpp"
 #include "utils/SearchEngine.hpp"
 
+#include <cstdint>
 #include <map>
 #include <set>
 #include <unordered_set>
@@ -31,6 +32,7 @@ struct ColumnDistinctValues
 {
     std::vector<ColumnValueCount> values; ///< Sorted (numeric-aware, case-insensitive)
     bool truncated {false};               ///< More distinct values exist than were listed
+    bool narrowed {false};                ///< Other filters hid rows, so values may be missing
 };
 
 class EventsTableModel : public QAbstractTableModel
@@ -55,6 +57,12 @@ class EventsTableModel : public QAbstractTableModel
     void SetFilteredIndices(const std::vector<unsigned long>& indices);
     void ClearFilter(); // Clear filtering and show all events
     const std::vector<unsigned long>& GetFilteredIndices() const { return m_filteredIndices; }
+    /// The rows chosen by the rest of the application (SetFilteredIndices),
+    /// before column filters and sorting; nullptr when no such filter is set.
+    const std::vector<unsigned long>* GetBaseFilteredIndices() const
+    {
+        return m_baseFilterActive ? &m_baseFilteredIndices : nullptr;
+    }
     /// True if a filter is active — distinguishes "no filter" from "filter active, zero matches".
     bool IsFilteringActive() const { return m_filteringActive; }
 
@@ -80,6 +88,9 @@ class EventsTableModel : public QAbstractTableModel
     ColumnDistinctValues DistinctColumnValues(int column, std::size_t maxValues) const;
     bool HasColumnFilter(int column) const;
     bool HasAnyColumnFilter() const { return !m_columnFilters.empty(); }
+    /// True if a column filter of a *visible* column restricts the rows
+    /// (filters of hidden columns are kept but not applied).
+    bool HasActiveColumnFilter() const;
     /// Values of @p column's filter (empty set if none): the allowed values, or
     /// the excluded ones when IsColumnFilterExclusion().
     QSet<QString> ColumnFilterValues(int column) const;
@@ -96,9 +107,17 @@ class EventsTableModel : public QAbstractTableModel
     int ResolveToActualIndex(int row) const;
     int RowFromActualIndex(int actualIndex) const;
     std::vector<int> ColumnWidths() const;
+    /// Index into Config::GetColumns() shown by model @p column; -1 for the
+    /// dynamic source / original_id columns or an invalid column.
+    int ConfigIndexForColumn(int column) const;
+    /// Model column of the active sort, or -1 if there is none or its column is hidden.
+    int ActiveSortColumn() const;
+    Qt::SortOrder ActiveSortOrder() const { return m_sortOrder; }
 
   signals:
     void ColumnFiltersChanged();
+    /// Search matches were recomputed after the row set changed.
+    void SearchMatchesChanged();
 
   private:
     struct ColumnFilter
@@ -138,10 +157,23 @@ class EventsTableModel : public QAbstractTableModel
     /// (O(k log k + n) instead of a full re-sort). Falls back to a full
     /// re-filter when the sorted list does not cover the previous events.
     void AppendSortedRows(std::size_t total);
-    /// Drops column filters and the sort whose column is no longer visible
-    /// (renamed / hidden in the column configuration). Returns true if a
-    /// column filter was dropped.
-    bool PruneStaleColumnState();
+    /// Drops column filters and the sort whose column is gone from the column
+    /// configuration (renamed / removed) and reports what was dropped.
+    struct PrunedColumnState
+    {
+        bool filters {false};
+        bool sort {false};
+    };
+    PrunedColumnState PruneStaleColumnState();
+    /// True if the upstream filter belongs to an older container generation
+    /// or points past the container's end.
+    bool BaseFilterIsStale() const;
+    /// True if the upstream filter or the effective row list is stale.
+    bool HasStaleIndices() const;
+    /// Ends a model reset begun with beginResetModel(): repairs stale row
+    /// state, then re-applies search highlighting. Row-set changes must be made
+    /// after beginResetModel() so views can still map their selection to events.
+    void EndReset();
     void StoreColumnFilter(int column, const QSet<QString>& values, bool exclude);
 
     void RebuildVisibleColumns();
@@ -159,6 +191,8 @@ class EventsTableModel : public QAbstractTableModel
     std::vector<unsigned long> m_filteredIndices;  ///< Effective rows (upstream ∩ column filters, sorted if m_hasSort)
     std::vector<unsigned long> m_baseFilteredIndices; ///< Rows chosen by the rest of the app
     bool m_baseFilterActive {false};
+    std::uint64_t m_baseGeneration {0};    ///< container generation the upstream filter was set for
+    std::uint64_t m_indicesGeneration {0}; ///< container generation m_filteredIndices was built for
     std::map<std::string, ColumnFilter> m_columnFilters;
     std::set<std::string> m_visibleFilterKeys; ///< Keys of the visible columns; only their filters apply
     bool          m_hasSort {false};

@@ -10,6 +10,7 @@
 #include "IModel.hpp"
 #include "IModelObservable.hpp"
 #include <atomic>
+#include <cstdint>
 #include <deque>
 #include <shared_mutex>
 #include <vector>
@@ -191,6 +192,18 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     size_t Size() const override;
 
     /**
+     * @brief Counter bumped whenever existing indices stop referring to the
+     *        same events: Clear() of a non-empty container and MergeEvents().
+     *
+     * Appending events does not change it, so index caches can tell
+     * "more events" from "a different data set".
+     */
+    [[nodiscard]] std::uint64_t Generation() const noexcept
+    {
+        return m_generation.load(std::memory_order_acquire);
+    }
+
+    /**
      * @brief Sets the currently selected item index.
      *
      * Updates the internal current item index for virtual list control
@@ -291,6 +304,8 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     /// When false, AddEvent/AddEventBatch skip NotifyDataChanged so that
     /// Qt widget calls are not made from a background parser thread.
     std::atomic<bool> m_notificationsEnabled{true};
+    /// See Generation().
+    std::atomic<std::uint64_t> m_generation {0};
 };
 
 } // namespace db

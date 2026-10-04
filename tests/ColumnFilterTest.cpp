@@ -233,7 +233,7 @@ TEST_F(ColumnFilterPopupTest, SearchNarrowsSelectAllToVisibleRows)
     EXPECT_EQ(p.CheckedValues(), (QSet<QString>{"banana"}));
 }
 
-TEST_F(ColumnFilterPopupTest, OkEmitsAppliedOrClearedWhenEverythingChecked)
+TEST_F(ColumnFilterPopupTest, OkEmitsTheCheckedValuesAndClearButtonEmitsCleared)
 {
     ColumnFilterPopup p("col", d, std::nullopt);
     QSignalSpy applied(&p, &ColumnFilterPopup::Applied);
@@ -243,11 +243,20 @@ TEST_F(ColumnFilterPopupTest, OkEmitsAppliedOrClearedWhenEverythingChecked)
     p.findChild<QPushButton*>("columnFilterOk")->click();
     ASSERT_EQ(applied.count(), 1);
     EXPECT_EQ(applied.takeFirst().at(0).value<QSet<QString>>(), (QSet<QString>{"banana", "cherry"}));
+    EXPECT_EQ(cleared.count(), 0);
 
+    // Everything checked is still reported as such: whether that clears the
+    // filter depends on values the list could not show (EventsTableView decides).
     ColumnFilterPopup all("col", d, std::nullopt);
-    QSignalSpy cleared2(&all, &ColumnFilterPopup::Cleared);
+    QSignalSpy applied2(&all, &ColumnFilterPopup::Applied);
     all.findChild<QPushButton*>("columnFilterOk")->click();
-    EXPECT_EQ(cleared2.count(), 1);
+    ASSERT_EQ(applied2.count(), 1);
+    EXPECT_EQ(applied2.takeFirst().at(0).value<QSet<QString>>(), (QSet<QString>{"apple", "banana", "cherry"}));
+
+    ColumnFilterPopup clear("col", d, QSet<QString>{"apple"});
+    QSignalSpy cleared3(&clear, &ColumnFilterPopup::Cleared);
+    clear.findChild<QPushButton*>("columnFilterClear")->click();
+    EXPECT_EQ(cleared3.count(), 1);
 }
 
 // ---------------------------------------------------------------------------

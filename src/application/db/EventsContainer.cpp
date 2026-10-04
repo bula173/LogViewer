@@ -131,6 +131,7 @@ void EventsContainer::Clear()
         }
 
         m_data.clear();
+        m_generation.fetch_add(1, std::memory_order_acq_rel);
         m_currentItem = -1; // Reset to no selection since container is empty
     } // Release lock before notifying views
 
@@ -303,6 +304,7 @@ void EventsContainer::MergeEvents(EventsContainer& other,
 
         // Replace internal data while still holding the locks to avoid races.
         m_data = std::move(mergedEvents);
+        m_generation.fetch_add(1, std::memory_order_acq_rel);
         m_currentItem = -1; // Reset selection after merge
     }
 

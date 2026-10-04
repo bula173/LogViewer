@@ -176,17 +176,21 @@ void EventsTableModel::SyncWithContainer()
     // must be tested against the column filters and slotted into the active
     // sort; otherwise the view stays frozen on the old snapshot. (With an
     // upstream filter the row set is fixed by the rest of the application.)
-    if (!m_columnFilters.empty())
+    beginResetModel();
+    if (HasActiveColumnFilter())
         ApplyEffectiveFilter();
     else if (m_hasSort && !m_baseFilterActive)
         AppendSortedRows(m_events.Size());
-    RefreshAll();
+    EndReset();
 }
 
 void EventsTableModel::AppendSortedRows(std::size_t total)
 {
+    // Only a pure append keeps the sorted prefix valid; Clear()/MergeEvents()
+    // (a new generation) reorder or replace the events behind the indices.
     const bool coversPrefix = m_fullSortedCount > 0 && m_fullSortedCount <= total
-        && m_filteredIndices.size() == m_fullSortedCount;
+        && m_filteredIndices.size() == m_fullSortedCount
+        && m_indicesGeneration == m_events.Generation();
     if (!coversPrefix)
     {
         ApplyEffectiveFilter();
@@ -215,43 +219,57 @@ void EventsTableModel::AppendSortedRows(std::size_t total)
 
 void EventsTableModel::RefreshAll()
 {
-    // CRITICAL FIX: After a merge operation, cached sorted/filtered indices
-    // become invalid because EventsContainer reassigns all event IDs.
-    // Validate that all cached indices are still in range. If any are out of range,
-    // clear filtering to prevent crashes when accessing events.
-    //
-    // See: merge_sort_crash_bug.md for detailed explanation
-    if (m_filteringActive && !m_filteredIndices.empty())
+    beginResetModel();
+    EndReset();
+}
+
+bool EventsTableModel::BaseFilterIsStale() const
+{
+    if (!m_baseFilterActive)
+        return false;
+    if (m_baseGeneration != m_events.Generation())
+        return true;
+    const std::size_t total = m_events.Size();
+    return std::any_of(m_baseFilteredIndices.begin(), m_baseFilteredIndices.end(),
+        [total](unsigned long idx) { return idx >= total; });
+}
+
+bool EventsTableModel::HasStaleIndices() const
+{
+    if (BaseFilterIsStale())
+        return true;
+    if (!m_filteringActive)
+        return false;
+    if (m_indicesGeneration != m_events.Generation())
+        return true;
+    const std::size_t total = m_events.Size();
+    return std::any_of(m_filteredIndices.begin(), m_filteredIndices.end(),
+        [total](unsigned long idx) { return idx >= total; });
+}
+
+void EventsTableModel::EndReset()
+{
+    // After Clear()/MergeEvents() cached indices point at other events or past
+    // the end (see merge_sort_crash_bug.md). Rebuild the rows; a stale upstream
+    // filter is dropped by ApplyEffectiveFilter().
+    if (HasStaleIndices())
     {
-        const size_t containerSize = m_events.Size();
-        bool hasInvalidIndices = false;
-
-        for (const auto& idx : m_filteredIndices)
-        {
-            if (idx >= containerSize)
-            {
-                hasInvalidIndices = true;
-                break;
-            }
-        }
-
-        if (hasInvalidIndices)
-        {
-            util::Logger::Warn(
-                "[EventsTableModel] RefreshAll: Detected stale filtered indices after merge "
-                "(size mismatch); clearing filter to prevent crashes");
-            ClearFilter();
-        }
+        util::Logger::Warn(
+            "[EventsTableModel] Detected stale filtered indices (container cleared or merged); "
+            "rebuilding the rows");
+        ApplyEffectiveFilter();
     }
 
     util::Logger::Debug("[EventsTableModel] RefreshAll: {} rows (filtering={})",
         m_filteringActive ? m_filteredIndices.size() : m_events.Size(),
         m_filteringActive);
-    beginResetModel();
     endResetModel();
     // Re-apply search highlighting after the model reset
     if (!m_searchTerm.isEmpty())
+    {
         RebuildSearchMatches();
+        emit SearchMatchesChanged();
+    }
 }
 
 void EventsTableModel::RefreshColumns()
@@ -259,35 +277,25 @@ void EventsTableModel::RefreshColumns()
     util::Logger::Debug("[EventsTableModel] RefreshColumns called");
     // Store old column count
     const int oldColumnCount = static_cast<int>(m_visibleColumnIndices.size());
-    
+    beginResetModel();
+
     // Rebuild the visible columns list based on current config
     const auto appliedBefore = m_visibleFilterKeys;
     RebuildVisibleColumns();
 
     // Filters / sort of a column that is gone would hide every row (renamed
     // column reads as empty) with no header cue, so drop them.
-    const bool droppedFilters = PruneStaleColumnState();
-    if (droppedFilters || appliedBefore != m_visibleFilterKeys)
+    const PrunedColumnState pruned = PruneStaleColumnState();
+    if (pruned.filters || pruned.sort || appliedBefore != m_visibleFilterKeys)
         ApplyEffectiveFilter();
 
     const int newColumnCount = static_cast<int>(m_visibleColumnIndices.size());
-    
-    // If column count changed, notify the view properly
     if (newColumnCount != oldColumnCount)
-    {
-        util::Logger::Debug("[EventsTableModel] RefreshColumns: column count changed {} -> {}; full reset",
+        util::Logger::Debug("[EventsTableModel] RefreshColumns: column count changed {} -> {}",
             oldColumnCount, newColumnCount);
-        // Model structure changed - need to reset
-        beginResetModel();
-        endResetModel();
-    }
-    else
-    {
-        // Just refresh the data
-        RefreshAll();
-    }
+    EndReset();
 
-    if (droppedFilters)
+    if (pruned.filters)
         emit ColumnFiltersChanged();
 }
 
@@ -309,22 +317,25 @@ void EventsTableModel::SetFilteredIndices(
 {
     util::Logger::Debug("[EventsTableModel] SetFilteredIndices: {} filtered rows (of {} total)",
         indices.size(), m_events.Size());
+    beginResetModel();
     m_baseFilteredIndices = indices;
     m_baseFilterActive    = true; // Mark that filtering is now active
+    m_baseGeneration      = m_events.Generation();
 
     ApplyEffectiveFilter();
-    RefreshAll();
+    EndReset();
 }
 
 void EventsTableModel::ClearFilter()
 {
     util::Logger::Debug("[EventsTableModel] ClearFilter: showing all {} events",
         m_events.Size());
+    beginResetModel();
     m_baseFilteredIndices.clear();
     m_baseFilterActive = false; // Mark that filtering is no longer active
 
     ApplyEffectiveFilter();
-    RefreshAll();
+    EndReset();
 }
 
 // ---------------------------------------------------------------------------
@@ -382,8 +393,19 @@ bool EventsTableModel::PassesColumnFilters(const db::LogEvent& event,
 
 void EventsTableModel::ApplyEffectiveFilter()
 {
+    // An upstream filter computed for a cleared / merged / shorter container
+    // would select unrelated events (or none): drop it.
+    if (BaseFilterIsStale())
+    {
+        util::Logger::Warn("[EventsTableModel] Dropping an upstream filter of {} rows that "
+            "refers to a previous data set", m_baseFilteredIndices.size());
+        m_baseFilteredIndices.clear();
+        m_baseFilterActive = false;
+    }
+
     std::vector<unsigned long> result;
-    const bool needsWork = !m_columnFilters.empty() || m_hasSort;
+    const bool activeColumnFilters = HasActiveColumnFilter();
+    const bool needsWork = activeColumnFilters || m_hasSort;
 
     if (!needsWork)
     {
@@ -421,8 +443,9 @@ void EventsTableModel::ApplyEffectiveFilter()
             SortIndices(result, m_sortName, m_sortMergeSource, m_sortOrder);
     }
 
-    m_filteredIndices = std::move(result);
-    m_fullSortedCount = (!m_baseFilterActive && m_columnFilters.empty() && m_hasSort)
+    m_filteredIndices   = std::move(result);
+    m_indicesGeneration = m_events.Generation();
+    m_fullSortedCount = (!m_baseFilterActive && !activeColumnFilters && m_hasSort)
         ? m_events.Size() : 0;
     m_reverseFilteredIndices.clear();
     m_reverseFilteredIndices.reserve(m_filteredIndices.size());
@@ -447,7 +470,10 @@ ColumnDistinctValues EventsTableModel::DistinctColumnValues(int column,
             return;
         const auto& ev = m_events.GetEvent(idx);
         if (!PassesColumnFilters(ev, &key))
+        {
+            out.narrowed = true;
             return;
+        }
         const QString text = ComposeCellText(ev, name, mergeSource);
         auto it = counts.find(text);
         if (it != counts.end())
@@ -459,8 +485,11 @@ ColumnDistinctValues EventsTableModel::DistinctColumnValues(int column,
     };
 
     if (m_baseFilterActive)
+    {
+        out.narrowed = m_baseFilteredIndices.size() < total;
         for (const auto idx : m_baseFilteredIndices)
             visit(idx);
+    }
     else
         for (unsigned long idx = 0; idx < total; ++idx)
             visit(idx);
@@ -517,10 +546,17 @@ void EventsTableModel::StoreColumnFilter(int column, const QSet<QString>& values
     if (!ResolveColumn(column, name, mergeSource))
         return;
 
+    beginResetModel();
     m_columnFilters[ColumnFilterKey(name, mergeSource)] = {name, mergeSource, values, exclude};
     ApplyEffectiveFilter();
-    RefreshAll();
+    EndReset();
     emit ColumnFiltersChanged();
+}
+
+bool EventsTableModel::HasActiveColumnFilter() const
+{
+    return std::any_of(m_columnFilters.begin(), m_columnFilters.end(),
+        [this](const auto& entry) { return m_visibleFilterKeys.count(entry.first) > 0; });
 }
 
 bool EventsTableModel::IsColumnFilterExclusion(int column) const
@@ -533,7 +569,7 @@ bool EventsTableModel::IsColumnFilterExclusion(int column) const
     return it != m_columnFilters.end() && it->second.exclude;
 }
 
-bool EventsTableModel::PruneStaleColumnState()
+EventsTableModel::PrunedColumnState EventsTableModel::PruneStaleColumnState()
 {
     // A column is stale only when it is gone from the configuration (renamed or
     // removed). Hidden columns keep their filter and sort.
@@ -545,21 +581,24 @@ bool EventsTableModel::PruneStaleColumnState()
     for (const auto& column : m_config.GetColumns())
         configuredKeys.insert(ColumnFilterKey(column.name, false));
 
+    PrunedColumnState pruned;
     if (m_hasSort && configuredKeys.count(ColumnFilterKey(m_sortName, m_sortMergeSource)) == 0)
-        m_hasSort = false;
+    {
+        m_hasSort   = false;
+        pruned.sort = true;
+    }
 
-    bool dropped = false;
     for (auto it = m_columnFilters.begin(); it != m_columnFilters.end();)
     {
         if (configuredKeys.count(it->first) == 0)
         {
             it = m_columnFilters.erase(it);
-            dropped = true;
+            pruned.filters = true;
         }
         else
             ++it;
     }
-    return dropped;
+    return pruned;
 }
 
 void EventsTableModel::ClearColumnFilter(int column)
@@ -568,11 +607,14 @@ void EventsTableModel::ClearColumnFilter(int column)
     bool        mergeSource = false;
     if (!ResolveColumn(column, name, mergeSource))
         return;
-    if (m_columnFilters.erase(ColumnFilterKey(name, mergeSource)) == 0)
+    const auto it = m_columnFilters.find(ColumnFilterKey(name, mergeSource));
+    if (it == m_columnFilters.end())
         return;
 
+    beginResetModel();
+    m_columnFilters.erase(it);
     ApplyEffectiveFilter();
-    RefreshAll();
+    EndReset();
     emit ColumnFiltersChanged();
 }
 
@@ -580,9 +622,10 @@ void EventsTableModel::ClearColumnFilters()
 {
     if (m_columnFilters.empty())
         return;
+    beginResetModel();
     m_columnFilters.clear();
     ApplyEffectiveFilter();
-    RefreshAll();
+    EndReset();
     emit ColumnFiltersChanged();
 }
 
@@ -640,6 +683,29 @@ std::vector<int> EventsTableModel::ColumnWidths() const
         }
     }
     return widths;
+}
+
+int EventsTableModel::ConfigIndexForColumn(int column) const
+{
+    if (column < 0 || column >= static_cast<int>(m_visibleColumnIndices.size()))
+        return -1;
+    const int configIndex = m_visibleColumnIndices[static_cast<std::size_t>(column)];
+    return configIndex >= 0 ? configIndex : -1;
+}
+
+int EventsTableModel::ActiveSortColumn() const
+{
+    if (!m_hasSort)
+        return -1;
+    for (int column = 0; column < static_cast<int>(m_visibleColumnIndices.size()); ++column)
+    {
+        std::string name;
+        bool        mergeSource = false;
+        if (ResolveColumn(column, name, mergeSource)
+            && name == m_sortName && mergeSource == m_sortMergeSource)
+            return column;
+    }
+    return -1;
 }
 
 // ---------------------------------------------------------------------------
@@ -935,31 +1001,10 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
         return;
 
     // CRITICAL FIX: Validate cached indices before sorting
-    // After merge, stale indices can cause segfault when accessing events
-    if (m_filteringActive && !m_filteredIndices.empty())
-    {
-        const size_t containerSize = m_events.Size();
-        bool hasInvalidIndices = false;
-
-        for (const auto& idx : m_filteredIndices)
-        {
-            if (idx >= containerSize)
-            {
-                hasInvalidIndices = true;
-                break;
-            }
-        }
-
-        if (hasInvalidIndices)
-        {
-            util::Logger::Warn(
-                "[EventsTableModel] sort: Detected stale filtered indices before sort "
-                "(size mismatch after merge); clearing filter to prevent crashes");
-            ClearFilter();
-            // Don't proceed with sort - return to avoid using invalid indices
-            return;
-        }
-    }
+    // After merge, stale indices can cause segfault when accessing events.
+    // RefreshAll() rebuilds the rows (and resets the model) before we sort them.
+    if (HasStaleIndices())
+        RefreshAll();
 
     std::string columnName;
     bool        isMergeSource = false;
@@ -1005,7 +1050,8 @@ void EventsTableModel::sort(int column, Qt::SortOrder order)
     m_sortName        = columnName;
     m_sortMergeSource = isMergeSource;
     m_sortOrder       = order;
-    m_fullSortedCount = (!m_baseFilterActive && m_columnFilters.empty()) ? m_events.Size() : 0;
+    m_fullSortedCount = (!m_baseFilterActive && !HasActiveColumnFilter()) ? m_events.Size() : 0;
+    m_indicesGeneration = m_events.Generation();
 
     // Update the filtered indices with sorted order
     // CRITICAL: Check m_filteringActive (not empty!) to determine if we should activate filtering
