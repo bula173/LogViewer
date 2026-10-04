@@ -123,6 +123,7 @@ void EventsContainer::Clear()
     util::Logger::Debug("EventsContainer::Clear called");
     
     {
+        std::unique_lock<std::shared_mutex> keepGuard(m_invalidationMutex);
         std::unique_lock<std::shared_mutex> lock(m_mutex);
         if (m_data.empty())
         {
@@ -196,6 +197,7 @@ void EventsContainer::MergeEvents(EventsContainer& other,
     std::deque<LogEvent> mergedEvents;
 
     {
+        std::unique_lock<std::shared_mutex> keepGuard(m_invalidationMutex);
         std::scoped_lock lock(m_mutex, other.m_mutex);
 
         // Set source on existing events (only if not set)

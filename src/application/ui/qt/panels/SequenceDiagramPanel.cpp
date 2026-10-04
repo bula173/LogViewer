@@ -33,6 +33,7 @@
 #include <cmath>
 #include <map>
 #include <set>
+#include <utility>
 #include <vector>
 
 // ---------------------------------------------------------------------------
@@ -312,14 +313,21 @@ SequenceDiagramPanel::~SequenceDiagramPanel()
 
 void SequenceDiagramPanel::Refresh()
 {
-    // Prevent re-entrant calls while discovery or rendering is in progress.
-    if (m_watcher && m_watcher->isRunning()) return;
+    // A discovery is still running: run another one once it finishes, so the
+    // newer data is not lost.
+    if (m_watcher && m_watcher->isRunning())
+    {
+        m_refreshPending = true;
+        return;
+    }
 
-    m_scene->clear();
-    m_pattern.reset();
-
+    // The previous diagram (and m_pattern, used to keep the zoom of an
+    // unchanged diagram) stays until the new discovery finishes.
     if (m_events.Size() == 0)
     {
+        m_scene->clear();
+        m_scene->setSceneRect(QRectF());
+        m_pattern.reset();
         m_statusLabel->setText(tr("No events loaded"));
         m_statusLabel->setStyleSheet("color: gray;");
         return;
@@ -338,6 +346,9 @@ void SequenceDiagramPanel::Refresh()
     }
     m_watcher->setFuture(
         QtConcurrent::run([this]() {
+            // Keeps the GUI thread from clearing or merging the container
+            // (which would free the events being scanned) until this returns.
+            const auto keepEvents = m_events.LockAgainstInvalidation();
             return analyzer::ActorDiscoverer::Discover(m_events);
         }));
 }
@@ -381,9 +392,16 @@ void SequenceDiagramPanel::OnDiscoveryFinished()
 {
     if (m_refreshBtn) m_refreshBtn->setEnabled(true);
 
+    // Refresh() was requested while this discovery ran: discover again.
+    if (std::exchange(m_refreshPending, false))
+        QMetaObject::invokeMethod(this, &SequenceDiagramPanel::Refresh, Qt::QueuedConnection);
+
     const auto result = m_watcher->result();
     if (result.patterns.empty())
     {
+        m_scene->clear();
+        m_scene->setSceneRect(QRectF());
+        m_pattern.reset();
         m_statusLabel->setText(
             tr("No exchange pattern detected. "
                "Try a log with sender/receiver/source/dest or actor/direction fields."));

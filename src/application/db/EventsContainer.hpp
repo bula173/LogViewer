@@ -204,6 +204,20 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     }
 
     /**
+     * @brief Keeps the stored events in place while the returned lock is held.
+     *
+     * Clear() and MergeEvents() wait until every such lock is released;
+     * reading and appending (AddEvent / AddEventBatch) are not blocked. Meant
+     * for a background reader that scans the container with GetEvent() while
+     * the GUI thread may clear or merge it. Never call Clear() or
+     * MergeEvents() on a thread that holds this lock.
+     */
+    [[nodiscard]] std::shared_lock<std::shared_mutex> LockAgainstInvalidation() const
+    {
+        return std::shared_lock<std::shared_mutex>(m_invalidationMutex);
+    }
+
+    /**
      * @brief Sets the currently selected item index.
      *
      * Updates the internal current item index for virtual list control
@@ -301,6 +315,8 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     /// are safe without acquiring m_mutex.
     std::atomic<int> m_currentItem {-1};
     mutable std::shared_mutex m_mutex; ///< Reader-writer lock for thread safety
+    /// See LockAgainstInvalidation(). Taken before m_mutex, never after it.
+    mutable std::shared_mutex m_invalidationMutex;
     /// When false, AddEvent/AddEventBatch skip NotifyDataChanged so that
     /// Qt widget calls are not made from a background parser thread.
     std::atomic<bool> m_notificationsEnabled{true};

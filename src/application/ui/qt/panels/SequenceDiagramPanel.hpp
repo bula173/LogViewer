@@ -70,6 +70,7 @@ private:
 
     std::optional<analyzer::ExchangePattern>        m_pattern {std::nullopt};
     QFutureWatcher<analyzer::ActorDiscoveryResult>* m_watcher {nullptr};
+    bool m_refreshPending {false}; ///< Refresh() was called while discovery ran
 
     // Derived from actor definitions; rebuilt on SetDefinitions().
     std::string                        m_selfActor;   ///< Raw value of the "self" actor (empty = none)
