@@ -4,8 +4,12 @@
 #include "LogEvent.hpp"
 #include "Logger.hpp"
 
+#include <nlohmann/json.hpp>
+
+#include <algorithm>
 #include <cctype>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <utility>
 #include <vector>
@@ -22,6 +26,15 @@ constexpr std::string_view kHeaderMarker = "# FULL MERGED TEST STEPS";
 constexpr int              kHeaderProbeLines = 5;
 constexpr size_t           kSniffBytes       = 4096;
 constexpr std::string_view kUtf8Bom          = "\xEF\xBB\xBF";
+
+// Payload field extraction bounds (memory stays bounded per event).
+constexpr std::string_view kPayloadPrefix       = "p.";
+constexpr size_t           kMaxPayloadLength    = 4096;
+constexpr size_t           kMaxPayloadFields    = 32;
+constexpr size_t           kMaxFieldKeyLength   = 64;
+constexpr size_t           kMaxFieldValueLength = 512;
+
+using Pairs = std::vector<std::pair<std::string, std::string>>;
 
 /// Reads the balanced `[...]` group starting at line[pos] (which must be '[').
 /// On success @p content is the text between the outer brackets and @p pos
@@ -62,7 +75,203 @@ bool LooksLikeIsoTimestamp(std::string_view ts)
            ts[4] == '-' && ts[7] == '-';
 }
 
+bool IsBlank(char c) { return c == ' ' || c == '\t'; }
+
+/// Splits @p s at whitespace outside `[...]`/`{...}` and outside a quoted
+/// value (a quote right after '='). False on unbalanced brackets or an
+/// unterminated quote.
+bool SplitTokens(std::string_view s, std::vector<std::string_view>& tokens)
+{
+    size_t i = 0;
+    while (i < s.size())
+    {
+        while (i < s.size() && IsBlank(s[i]))
+            ++i;
+        if (i >= s.size())
+            break;
+
+        const size_t start = i;
+        int          depth = 0;
+        char         quote = 0;
+        for (; i < s.size(); ++i)
+        {
+            const char c = s[i];
+            if (quote != 0)
+            {
+                if (c == '\\')
+                    ++i;
+                else if (c == quote)
+                    quote = 0;
+            }
+            else if ((c == '"' || c == '\'') && depth == 0 && i > start && s[i - 1] == '=')
+                quote = c;
+            else if (c == '[' || c == '{')
+                ++depth;
+            else if (c == ']' || c == '}')
+            {
+                if (--depth < 0)
+                    return false;
+            }
+            else if (depth == 0 && IsBlank(c))
+                break;
+        }
+        if (depth != 0 || quote != 0)
+            return false;
+        tokens.push_back(s.substr(start, i - start));
+    }
+    return true;
+}
+
+bool IsValidKey(std::string_view key)
+{
+    if (key.empty() || !(std::isalpha(static_cast<unsigned char>(key[0])) || key[0] == '_'))
+        return false;
+    return std::all_of(key.begin(), key.end(), [](char c) {
+        return std::isalnum(static_cast<unsigned char>(c)) || c == '_' || c == '.' || c == '-';
+    });
+}
+
+/// Parses one `key=value` token; a value wrapped in matching quotes is unquoted
+/// (backslash escapes the next character).
+bool ParseKeyValue(std::string_view token, Pairs& pairs)
+{
+    const size_t eq = token.find('=');
+    if (eq == std::string_view::npos || !IsValidKey(token.substr(0, eq)))
+        return false;
+    std::string_view value = token.substr(eq + 1);
+    if (value.empty())
+        return false;
+
+    std::string text;
+    if (value.front() == '"' || value.front() == '\'')
+    {
+        // SplitTokens guarantees the quote is closed; it must end the token.
+        size_t j = 1;
+        for (; j < value.size() && value[j] != value.front(); ++j)
+        {
+            if (value[j] == '\\' && j + 1 < value.size())
+                ++j;
+            text += value[j];
+        }
+        if (j != value.size() - 1)
+            return false;
+    }
+    else
+    {
+        text = value;
+    }
+    pairs.emplace_back(std::string{token.substr(0, eq)}, std::move(text));
+    return true;
+}
+
+/// `key=value` tokens, optionally inside bracket groups (one level). A group
+/// holding a single word without '=' is a label (`[P0]`) and is skipped.
+bool ExtractKeyValues(std::string_view payload, Pairs& pairs)
+{
+    std::vector<std::string_view> tokens;
+    if (!SplitTokens(payload, tokens))
+        return false;
+
+    for (const auto token : tokens)
+    {
+        if (token.front() != '[')
+        {
+            if (!ParseKeyValue(token, pairs))
+                return false;
+            continue;
+        }
+        if (token.back() != ']')
+            return false;
+
+        std::vector<std::string_view> inner;
+        if (!SplitTokens(token.substr(1, token.size() - 2), inner))
+            return false;
+        if (inner.size() == 1 && inner[0].find_first_of("=[{") == std::string_view::npos)
+            continue; // label
+        for (const auto t : inner)
+        {
+            if (t.front() == '[' || !ParseKeyValue(t, pairs))
+                return false;
+        }
+    }
+    return !pairs.empty();
+}
+
+std::string JsonText(const nlohmann::ordered_json& v)
+{
+    if (v.is_string())
+        return v.get<std::string>();
+    return v.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace);
+}
+
+/// Flat or one-level-deep JSON object; deeper values stay compact JSON text.
+bool ExtractJson(std::string_view payload, Pairs& pairs)
+{
+    const auto doc = nlohmann::ordered_json::parse(payload, nullptr, /*allow_exceptions=*/false);
+    if (!doc.is_object())
+        return false; // also covers a parse failure (discarded value)
+
+    for (const auto& [key, value] : doc.items())
+    {
+        if (!value.is_object())
+        {
+            pairs.emplace_back(key, JsonText(value));
+            continue;
+        }
+        for (const auto& [member, inner] : value.items())
+            pairs.emplace_back(key + "." + member, JsonText(inner));
+    }
+    return true;
+}
+
 } // namespace
+
+std::string_view SapiLogParser::ExtractUnit(std::string_view info)
+{
+    size_t           pos = 0;
+    std::string_view marker;
+    if (info.empty() || info.front() != '[' || !ReadGroup(info, pos, marker))
+        return {};
+
+    const size_t bar = marker.find('|');
+    if (bar == std::string_view::npos)
+        return {};
+    const std::string_view unit      = Trim(marker.substr(0, bar));
+    const std::string_view partition = Trim(marker.substr(bar + 1));
+    const auto isWord = [](std::string_view w) {
+        return !w.empty() && w.find_first_of(" \t|[]") == std::string_view::npos;
+    };
+    return isWord(unit) && isWord(partition) ? unit : std::string_view{};
+}
+
+void SapiLogParser::ExtractPayloadFields(std::string_view payload, db::LogEvent::EventItems& out)
+{
+    payload = Trim(payload);
+    if (payload.empty() || payload.size() > kMaxPayloadLength)
+        return;
+
+    Pairs      pairs;
+    const bool ok = payload.front() == '{' && payload.back() == '}'
+                        ? ExtractJson(payload, pairs)
+                        : ExtractKeyValues(payload, pairs);
+    if (!ok)
+        return;
+
+    const size_t first = out.size();
+    for (auto& [key, value] : pairs)
+    {
+        if (out.size() - first >= kMaxPayloadFields)
+            break;
+        if (key.empty() || key.size() > kMaxFieldKeyLength || value.size() > kMaxFieldValueLength)
+            continue;
+
+        std::string name = std::string{kPayloadPrefix} + key;
+        const bool  seen = std::any_of(out.begin() + static_cast<std::ptrdiff_t>(first), out.end(),
+            [&](const auto& item) { return item.first == name; });
+        if (!seen)
+            out.emplace_back(std::move(name), std::move(value));
+    }
+}
 
 bool SapiLogParser::LooksLikeSapiLog(const std::filesystem::path& filepath)
 {
@@ -133,7 +342,11 @@ bool SapiLogParser::ParseLine(std::string_view line, db::LogEvent::EventItems& o
             payload = inner;
     }
 
-    out.reserve(8);
+    const std::string_view   unit = ExtractUnit(fields[6]);
+    db::LogEvent::EventItems extra;
+    ExtractPayloadFields(payload, extra);
+
+    out.reserve(out.size() + 8 + (unit.empty() ? 0 : 1) + extra.size());
     out.emplace_back("timestamp",   std::string{fields[0]});
     out.emplace_back("category",    std::string{fields[1]});
     out.emplace_back("source",      std::string{fields[2]});
@@ -143,6 +356,9 @@ bool SapiLogParser::ParseLine(std::string_view line, db::LogEvent::EventItems& o
     out.emplace_back("info",        std::string{fields[6]});
     if (!payload.empty())
         out.emplace_back("payload", std::string{payload});
+    if (!unit.empty())
+        out.emplace_back("unit", std::string{unit});
+    std::move(extra.begin(), extra.end(), std::back_inserter(out));
     return true;
 }
 

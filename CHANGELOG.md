@@ -2,6 +2,12 @@
 
 All notable changes to LogViewer are documented here.
 
+## [Unreleased]
+
+### New features
+
+- **safeAPI payload fields** — structured payloads of safeAPI merged test logs are now also exposed as event fields, so they can be shown as columns, column-filtered and used in Statistics and Traces. `key=value` payloads (`cycle=415 level=INFO site=WEST up=1`) and JSON objects (`{"cmd": "getMessage", "nidEngine": 1}`, one nested level as `p.fields.route_len`) become `p.<key>` fields; the 2oo2 channel marker in `info` (`[a-west | GP] …`) becomes a `unit` field, so channel A and B of one RBC can finally be told apart. Free text, invalid JSON and malformed payloads yield no extra fields, the raw `payload` is unchanged, and extraction is capped (32 fields, 4 KiB payload) per event.
+
 ## [1.13.3] — 2026-10-04
 
 ### Fixes

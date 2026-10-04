@@ -6,6 +6,7 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 
 ### Core
 - **Multiple Log Formats**: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (`.dlt`), POSIX Evlog (`.evl`), and safeAPI RBC 2oo2 merged test logs (`.txt` with the merged-log header)
+- **safeAPI Payload Fields**: Structured payloads of safeAPI merged test logs become extra fields — `key=value` lists and JSON objects as `p.<key>` (e.g. `p.cycle`, `p.role`, `p.status`, `p.cmd`, `p.fields.route_len`), the `[a-west | GP]` channel marker in `info` as `unit`. Add them as columns in **Tools > Settings > Columns** to filter them, or use them in Statistics and Traces; the raw `payload` stays unchanged
 - **DBC Signal Decoding**: Load a `.dbc` file alongside an ASC log to decode raw CAN frames into named signals
 - **Evlog Template Decoding**: Load a directory of `.t`/`.tmpl`/`.template` files to decode structured BINARY evlog payloads into named fields
 - **High Performance**: Virtual list architecture handles millions of log entries

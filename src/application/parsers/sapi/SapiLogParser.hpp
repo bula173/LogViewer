@@ -35,6 +35,8 @@ namespace parser
  *   event_type  — LOG, STEP, ENVELOPE, CMD_RESP, ...
  *   info        — short description
  *   payload     — trailing data (omitted when empty)
+ *   unit        — 2oo2 channel from an `info` prefix like `[a-west | GP] …` (optional)
+ *   p.<key>     — structured payload content, see ExtractPayloadFields() (optional)
  *
  * Lines that do not match the layout are skipped. If no line matches at all,
  * ParseData() throws error::Error(ParseError) so a wrong file-type choice is
@@ -60,6 +62,24 @@ class SapiLogParser : public IDataParser
     /// Parses one line into @p out. Returns false for header, blank and
     /// malformed lines. Exposed for tests.
     static bool ParseLine(std::string_view line, db::LogEvent::EventItems& out);
+
+    /// Returns the unit of an `info` field that starts with a `[unit | partition]`
+    /// marker (e.g. "a-west" for `[a-west | GP] Log message`), else an empty view.
+    static std::string_view ExtractUnit(std::string_view info);
+
+    /// Appends the structured content of @p payload to @p out as `p.<key>` fields.
+    /// The raw payload is never modified. Recognised shapes:
+    ///  - a JSON object: top-level values become `p.<key>`, members of a nested
+    ///    object `p.<key>.<member>`; strings are unquoted, anything deeper is
+    ///    kept as compact JSON text;
+    ///  - whitespace-separated `key=value` tokens (values may be quoted or hold
+    ///    balanced `[...]`/`{...}`); bracket groups of such tokens are unwrapped
+    ///    and single-word label groups (`[P0]`) are ignored.
+    /// Anything else — free text, a single non-`key=value` token, invalid JSON,
+    /// unbalanced brackets — yields no fields. Bounded per event: payloads over
+    /// 4 KiB are skipped, at most 32 fields, over-long keys/values and repeated
+    /// keys are dropped (first occurrence wins).
+    static void ExtractPayloadFields(std::string_view payload, db::LogEvent::EventItems& out);
 
   private:
     void ParseStream(std::istream& input);
