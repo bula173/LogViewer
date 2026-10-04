@@ -11,6 +11,9 @@
 #endif
 
 #include "Config.hpp"
+#include "qt/utils/AppDataDir.hpp"
+
+#include <QSettings>
 
 namespace
 {
@@ -41,6 +44,12 @@ void IsolateUserProfile()
     const auto appDir = cfg.GetDefaultAppPath();
     cfg.SetConfigFilePath((appDir / "config.json").string());
     cfg.SetDictionaryFilePath((appDir / "field_dictionary.json").string());
+    // QSettings (layouts, scenarios, window state): an INI file in the temp
+    // profile instead of the real registry / plist. Code that persists
+    // settings uses ui::qt::utils::AppSettings, which follows the default format.
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope,
+                       ui::qt::utils::PathToQString(appDir / "settings"));
 }
 } // namespace
 

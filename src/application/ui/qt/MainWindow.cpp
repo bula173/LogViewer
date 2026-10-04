@@ -91,6 +91,8 @@
 #include <QKeySequence>
 #include <QDockWidget>
 #include "utils/TabVisibility.hpp"
+#include "utils/TrackedTabs.hpp"
+#include "utils/AppDataDir.hpp"
 #include <QShortcut>
 #include <QToolTip>
 #include <QHelpEvent>
@@ -200,7 +202,7 @@ MainWindow::MainWindow(mvc::IController& controller,
         util::Logger::Info("[MainWindow] Main window initialized successfully");
 
         // Restore window layout disabled due to crashes with corrupted/legacy settings
-        QSettings settings("LogViewer", "LogViewer");
+        utils::AppSettings settings;
         const QByteArray geom = settings.value("windowGeometry").toByteArray();
         if (!geom.isEmpty()) {
             restoreGeometry(geom);
@@ -246,7 +248,7 @@ MainWindow::~MainWindow()
     m_presenter.reset();
 
     // Save window layout
-    QSettings settings("LogViewer", "LogViewer");
+    utils::AppSettings settings;
     settings.setValue("windowGeometry", saveGeometry());
     settings.setValue("windowState", saveState());
 }
@@ -1200,16 +1202,7 @@ void MainWindow::SetupMenus()
     // Layouts and tab sorting change visibility outside this menu; re-read the
     // real state every time the menu opens so the ticks match the tabs.
     connect(tabsMenu, &QMenu::aboutToShow, this, [this, tabsMenu]() {
-        if (!m_contentTabs)
-            return;
-        for (QAction* action : tabsMenu->actions()) {
-            for (int i = 0; i < m_contentTabs->count(); ++i) {
-                if (m_contentTabs->tabText(i) == action->text()) {
-                    action->setChecked(m_contentTabs->tabBar()->isTabVisible(i));
-                    break;
-                }
-            }
-        }
+        utils::SyncTabVisibilityActions(tabsMenu->actions(), m_contentTabs);
     });
 
     viewMenu->addSeparator();
@@ -2805,13 +2798,13 @@ void MainWindow::ShowError(const QString& title, const QString& message)
 
 QString MainWindow::LastDir(const QString& key, const QString& fallback)
 {
-    QSettings s("LogViewer", "LogViewer");
+    utils::AppSettings s;
     return s.value("lastDir/" + key, fallback).toString();
 }
 
 void MainWindow::SaveLastDir(const QString& key, const QString& filePath)
 {
-    QSettings s("LogViewer", "LogViewer");
+    utils::AppSettings s;
     s.setValue("lastDir/" + key, QFileInfo(filePath).absolutePath());
 }
 
@@ -2950,13 +2943,21 @@ void MainWindow::loadPlugins() {
                  std::filesystem::directory_iterator(installedPlugins, ec))
             {
                 if (entry.path().extension() != ".zip") continue;
-                // Skip if already discovered (user copied the same ZIP to %APPDATA%\plugins)
+                // Skip if already discovered: the same ZIP was copied to
+                // %APPDATA%\plugins, or an earlier run extracted it there.
+                // Re-extracting would delete the files of the plugin loaded
+                // from that folder (a loaded DLL cannot be deleted).
                 const auto canonical =
                     std::filesystem::weakly_canonical(entry.path(), ec);
+                const auto extracted = std::filesystem::weakly_canonical(
+                    pluginManager.GetPluginsDirectory() / entry.path().stem(), ec);
                 bool already = false;
                 for (const auto& p : discoveredPlugins)
-                    if (std::filesystem::weakly_canonical(p, ec) == canonical)
+                {
+                    const auto known = std::filesystem::weakly_canonical(p, ec);
+                    if (known == canonical || known == extracted)
                     { already = true; break; }
+                }
                 if (!already)
                 {
                     discoveredPlugins.push_back(entry.path());
@@ -2973,7 +2974,15 @@ void MainWindow::loadPlugins() {
         m_splash->Step(tr("Loading %1 plugin(s)…").arg(discoveredPlugins.size()));
 
     for (const auto& pluginPath : discoveredPlugins) {
-        auto loadResult = pluginManager.LoadPlugin(pluginPath);
+        // One broken plugin (e.g. a filesystem error while extracting it) must
+        // not abort startup: this runs from the MainWindow constructor.
+        auto loadResult = [&]() -> util::Result<std::string, error::Error> {
+            try {
+                return pluginManager.LoadPlugin(pluginPath);
+            } catch (const std::exception& ex) {
+                return util::Result<std::string, error::Error>::Err(error::Error(std::string(ex.what()), false));
+            }
+        }();
         if (loadResult.isErr()) {
             const QString name =
                 QString::fromStdString(pluginPath.stem().string());
@@ -3525,20 +3534,13 @@ void MainWindow::reloadPlugins() {
     RemoveRightPanel();
     RemoveAllPluginBottomPanels();
 
-    // Clear plugin tab tracking (RemoveLeftPanel/RemoveRightPanel/
-    // RemoveAllPluginBottomPanels already erased their own map entries above)
-    m_pluginTabIndices.clear();
+    // Remove only the plugin content tabs and clear their tracking. The
+    // built-in tabs (Events, Statistics, ...) are referenced by members and
+    // must survive. RemoveLeftPanel/RemoveRightPanel/RemoveAllPluginBottomPanels
+    // already erased their own map entries above.
+    utils::RemoveTrackedTabs(m_contentTabs, m_pluginTabIndices);
     m_pluginFilterTabIndices.clear();
-    
-    // Remove all plugin tabs (keep the Events tab at index 0)
-    while (m_contentTabs->count() > 1) {
-        QWidget* widget = m_contentTabs->widget(1);
-        m_contentTabs->removeTab(1);
-        if (widget) {
-            widget->deleteLater();
-        }
-    }
-    
+
     // Unload all plugins
     auto& pluginManager = plugin::PluginManager::GetInstance();
     const auto& loadedPlugins = pluginManager.GetLoadedPlugins();
@@ -3812,16 +3814,18 @@ void MainWindow::OnApplyPluginUpdate(QString pluginId, QString tempZipPath)
 
     auto& pm = plugin::PluginManager::GetInstance();
 
-    // 1. Disable (unload) — triggers OnPluginEvent(Disabled) which removes tabs
-    auto disResult = pm.DisablePlugin(id);
-    if (disResult.isErr())
+    // 1. Unload — triggers OnPluginEvent(Unloaded) which removes tabs. Merely
+    //    disabling keeps the old library loaded, and RegisterPlugin() then
+    //    rejects the new version as "already loaded".
+    if (pm.GetLoadedPlugins().contains(id))
     {
-        util::Logger::Warn("[MainWindow] Could not disable plugin {} before update: {}",
-                           id, disResult.error().what());
-        // Continue anyway — RegisterPlugin will overwrite files even if loaded
+        auto unloadResult = pm.UnloadPlugin(id);
+        if (unloadResult.isErr())
+            util::Logger::Warn("[MainWindow] Could not unload plugin {} before update: {}",
+                               id, unloadResult.error().what());
     }
 
-    // 2. Extract/replace the plugin files
+    // 2. Extract/replace the plugin files (the superseded folder is removed)
     const std::filesystem::path zipPath(tempZipPath.toStdString());
     auto regResult = pm.RegisterPlugin(zipPath);
     if (regResult.isErr())
@@ -3831,6 +3835,7 @@ void MainWindow::OnApplyPluginUpdate(QString pluginId, QString tempZipPath)
                 .arg(pluginId,
                      QString::fromStdString(regResult.error().what()));
         util::Logger::Error("[MainWindow] {}", errMsg.toStdString());
+        pm.EnablePlugin(id); // reload the installed version, if it is still there
         QMessageBox::critical(this, tr("Plugin Update Failed"), errMsg);
         return;
     }

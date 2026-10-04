@@ -2,6 +2,7 @@
 
 #include "Logger.hpp"
 #include "utils/PanelUtils.hpp"
+#include "utils/AppDataDir.hpp"
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -708,14 +709,14 @@ void ScenariosPanel::LoadSessionData(const nlohmann::json& data)
 
 void ScenariosPanel::SaveToSettings() const
 {
-    QSettings s("LogViewer", "LogViewer");
+    utils::AppSettings s;
     s.setValue("scenarios/data",
                QString::fromStdString(GetSessionData().dump()));
 }
 
 void ScenariosPanel::LoadFromSettings()
 {
-    QSettings s("LogViewer", "LogViewer");
+    utils::AppSettings s;
     const QString raw = s.value("scenarios/data").toString();
     if (raw.isEmpty()) return;
     try {

@@ -37,8 +37,15 @@ All notable changes to LogViewer are documented here.
 - **Selection survives filter changes** — the selected rows and current event are kept when filters change or new events are appended; if the current event is filtered out, Item Details is cleared instead of showing a hidden event.
 - **Search counter** — "n of m" and Next/Previous follow the current match when the rows change instead of keeping stale counts.
 - **Column filter OK** — pressing OK in a column filter whose value list was narrowed by other filters no longer drops or widens the filter for values the list could not show.
+- **Reload Plugins crash** — Tools → Reload Plugins removes only the plugin tabs; it used to delete the built-in Statistics, Timeline, … tabs as well, crashing on their next use. Reloading also loads the plugins again instead of rejecting each one as "already loaded".
+- **Plugin update** — applying a plugin update unloads the old version first, so the new one is no longer rejected as "already loaded"; the folder of the old version is removed so only one copy is found at the next start, and the installed version is reloaded if the update fails. A plugin library found twice is no longer loaded (and leaked) a second time.
+- **Windows: installed plugins on the second start** — a plugin ZIP from the installation folder is no longer re-extracted over the copy already loaded from `%APPDATA%`, which could abort startup; a plugin that throws while loading no longer stops the application from starting.
 - **Config reload duplicated columns** — saving in Edit Config or loading a config file appended the columns, colours and highlights a second time (and the duplicated columns were saved back); a reload now replaces them.
 - **Broken config.json overwritten** — if `config.json` is not valid JSON, it is copied to `config.json.bak` before the next save replaces it, instead of being silently overwritten with defaults. Config files are now written atomically (temporary file + rename), so a crash during a save cannot leave a truncated file.
+- **Portable mode settings** — window state, saved layouts and scenarios are stored in `data/settings` in portable mode; they were still written to the registry / macOS preferences.
+- **Saved layouts with `/` in the name** — layouts whose name (or a tab label) contains `/` or `\`, or that differ only in letter case, no longer disappear after a restart.
+- **Non-ASCII folder names** — the portable data folder and portable settings folder are passed to Qt without loss when the path contains characters outside the Windows ANSI code page.
+- **View → Tabs with duplicate tab names** — a plugin tab named like a built-in tab no longer copies its visibility tick onto the built-in tab's menu entry.
 
 ### New features
 

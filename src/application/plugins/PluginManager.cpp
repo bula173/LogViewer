@@ -296,12 +296,20 @@ namespace {
 
     bool ExtractZipPlugin(const std::filesystem::path& zipPath, 
                          const std::filesystem::path& extractDir) {
-        // Create extraction directory
-        if (std::filesystem::exists(extractDir)) {
-            std::filesystem::remove_all(extractDir);
+        // Create extraction directory. Report failure instead of throwing: on
+        // Windows a loaded plugin's DLL in extractDir cannot be deleted.
+        std::error_code ec;
+        if (std::filesystem::exists(extractDir, ec)) {
+            std::filesystem::remove_all(extractDir, ec);
         }
-        std::filesystem::create_directories(extractDir);
-        
+        if (!ec) {
+            std::filesystem::create_directories(extractDir, ec);
+        }
+        if (ec) {
+            util::Logger::Error("ExtractZipPlugin: cannot prepare {}: {}", extractDir.string(), ec.message());
+            return false;
+        }
+
         struct archive* a = archive_read_new();
         archive_read_support_format_zip(a);
         
@@ -536,6 +544,14 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
             error::Error("config.json field 'id' must be string"));
     }
 
+    // Same plugin already loaded (e.g. found in two folders): stop before a
+    // second copy of its library is mapped and leaked.
+    if (manifest->contains("id") && m_plugins.contains((*manifest)["id"].get<std::string>())) {
+        return util::Result<std::string, error::Error>::Err(
+            error::Error(error::ErrorCode::RuntimeError,
+                "Plugin already loaded: " + (*manifest)["id"].get<std::string>()));
+    }
+
     util::Logger::Info("PluginManager: Loading plugin from: {}", actualPluginPath.string());
 
     if (!std::filesystem::exists(actualPluginPath))
@@ -572,10 +588,18 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     auto plugin = result.unwrap();
     auto metadata = plugin->GetMetadata();
 
+    // Rejected after loading: destroy the instance while its library is still
+    // mapped, then release the library instead of leaking the handle.
+    auto rejectLoaded = [&](error::Error err) {
+        plugin.reset();
+        UnloadLibrary(libHandle);
+        return util::Result<std::string, error::Error>::Err(std::move(err));
+    };
+
     if (metadata.apiVersion != manifestApiVersion) {
         util::Logger::Warn("PluginManager: Plugin binary API version '{}' does not match manifest '{}' for plugin: {}",
             metadata.apiVersion, manifestApiVersion, actualPluginPath.string());
-        return util::Result<std::string, error::Error>::Err(
+        return rejectLoaded(
             error::Error("Plugin binary API version does not match manifest: " + metadata.apiVersion +
                 " vs " + manifestApiVersion));
     }
@@ -583,14 +607,14 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     if (!IsApiVersionCompatible(metadata.apiVersion)) {
         util::Logger::Warn("PluginManager: Plugin API version '{}' incompatible with application for: {}",
             metadata.apiVersion, actualPluginPath.string());
-        return util::Result<std::string, error::Error>::Err(
+        return rejectLoaded(
             error::Error("Plugin API version incompatible with application. Expected 1.x minor (1.0-1.1), got " + metadata.apiVersion));
     }
 
     // Check if plugin already loaded
     if (m_plugins.find(metadata.id) != m_plugins.end())
     {
-        return util::Result<std::string, error::Error>::Err(
+        return rejectLoaded(
             error::Error(error::ErrorCode::RuntimeError,
                 "Plugin already loaded: " + metadata.id));
     }
@@ -601,7 +625,7 @@ util::Result<std::string, error::Error> PluginManager::LoadPlugin(
     {
         util::Logger::Error("PluginManager: Plugin initialization failed for '{}': {}",
             metadata.id, plugin->GetLastError());
-        return util::Result<std::string, error::Error>::Err(
+        return rejectLoaded(
             error::Error(error::ErrorCode::RuntimeError,
                 "Plugin initialization failed: " + plugin->GetLastError()));
     }
@@ -1068,6 +1092,12 @@ util::Result<bool, error::Error> PluginManager::UnloadPlugin(const std::string& 
         info.libraryHandle = nullptr;
     }
 
+    // Drop the entry. A leftover entry without an instance made the next
+    // LoadPlugin() of this plugin fail with "already loaded" (Reload Plugins,
+    // plugin update) and EnablePlugin() "re-enable" a plugin that is gone.
+    m_configCache[pluginId] = {info.enabled, info.autoLoad};
+    m_plugins.erase(it);
+
     util::Logger::Info("PluginManager: Plugin unloaded: {}", pluginId);
     return util::Result<bool, error::Error>::Ok(true);
 }
@@ -1116,6 +1146,7 @@ util::Result<std::string, error::Error> PluginManager::RegisterPlugin(
         // the archive itself into the working dir to avoid unnecessary files.
         if (sourcePath.extension() == ".zip") {
             std::filesystem::path targetDir = m_pluginsDirectory / sourcePath.stem();
+            const auto previouslyRegistered = m_registeredPlugins;
             // Remove any stale content before extracting
             if (std::filesystem::exists(targetDir)) {
                 std::filesystem::remove_all(targetDir);
@@ -1141,6 +1172,21 @@ util::Result<std::string, error::Error> PluginManager::RegisterPlugin(
 
                 pluginId = loadResult.unwrap();
                 m_registeredPlugins[pluginId] = targetDir;
+
+                // An update arrives under another archive name: delete the
+                // folder the previous version was extracted to, otherwise both
+                // copies are discovered at the next start.
+                if (auto prev = previouslyRegistered.find(pluginId); prev != previouslyRegistered.end()) {
+                    const std::filesystem::path& oldDir = prev->second;
+                    std::error_code ec;
+                    if (std::filesystem::is_directory(oldDir, ec)
+                        && !std::filesystem::equivalent(oldDir, targetDir, ec)
+                        && std::filesystem::equivalent(oldDir.parent_path(), m_pluginsDirectory, ec)) {
+                        std::filesystem::remove_all(oldDir, ec);
+                        util::Logger::Info("PluginManager: Removed superseded plugin folder {}{}",
+                            oldDir.string(), ec ? " (failed: " + ec.message() + ")" : std::string());
+                    }
+                }
         } else {
             // Non-zip source: assume it's already a prepared plugin directory
             if (!std::filesystem::is_directory(sourcePath)) {

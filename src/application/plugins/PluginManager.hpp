@@ -115,7 +115,9 @@ public:
         const std::filesystem::path& pluginPath);
 
     /**
-     * @brief Unloads a plugin
+     * @brief Unloads a plugin and removes it from GetLoadedPlugins()
+     *
+     * It stays registered, so EnablePlugin() or LoadPlugin() can load it again.
      * @param pluginId Plugin identifier
      * @return Result with success or error
      */
@@ -123,6 +125,10 @@ public:
 
     /**
      * @brief Registers a plugin file (copies to user plugins directory)
+     *
+     * Fails if a plugin with the same id is loaded (unload it first to update).
+     * If the id was registered from another folder of the user plugins
+     * directory, that superseded folder is deleted once the new copy loads.
      * @param sourcePath Path to plugin file to register
      * @return Result with plugin ID or error
      */

@@ -31,7 +31,7 @@ struct LayoutDescriptor {
 /// Manages named window layouts.
 ///
 /// Built-in layouts are static and computed on demand.
-/// User layouts are persisted in QSettings under the "userLayouts" group
+/// User layouts are persisted in QSettings as the "userLayouts/layouts" array
 /// and loaded at construction time.
 class LayoutManager {
 public:

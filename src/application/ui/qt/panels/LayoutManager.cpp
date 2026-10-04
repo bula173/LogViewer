@@ -1,6 +1,7 @@
 #include "LayoutManager.hpp"
 
 #include "Logger.hpp"
+#include "utils/AppDataDir.hpp"
 
 #include <QSettings>
 #include <algorithm>
@@ -129,26 +130,28 @@ void LayoutManager::SaveToSettings() const
     util::Logger::Debug("[LayoutManager] SaveToSettings: persisting {} layout(s)",
                         m_userLayouts.size());
 
-    QSettings s("LogViewer", "LogViewer");
+    // Names are stored as values, never as keys: '/' or '\' in a key nests
+    // groups, and keys are case-insensitive in the Windows registry.
+    utils::AppSettings s;
     s.beginGroup("userLayouts");
-    s.remove("");   // wipe stale entries
+    s.remove("");   // wipe stale entries (including the old name-keyed format)
 
-    QStringList names;
-    for (const auto& d : m_userLayouts) {
-        names << d.name;
-        s.beginGroup(d.name);
-        s.setValue("windowState",       d.windowState);
-        s.setValue("activeTab",         d.activeTab);
+    s.beginWriteArray("layouts", static_cast<int>(m_userLayouts.size()));
+    for (int i = 0; i < static_cast<int>(m_userLayouts.size()); ++i) {
+        const auto& d = m_userLayouts[static_cast<std::size_t>(i)];
+        s.setArrayIndex(i);
+        s.setValue("name",               d.name);
+        s.setValue("windowState",        d.windowState);
+        s.setValue("activeTab",          d.activeTab);
         s.setValue("filtersDockVisible", d.filtersDockVisible);
         s.setValue("detailsDockVisible", d.detailsDockVisible);
         s.setValue("bottomDockVisible",  d.bottomDockVisible);
-        s.beginGroup("tabs");
+        QVariantMap tabs;
         for (auto it = d.tabVisibility.constBegin(); it != d.tabVisibility.constEnd(); ++it)
-            s.setValue(it.key(), it.value());
-        s.endGroup(); // tabs
-        s.endGroup(); // <name>
+            tabs.insert(it.key(), it.value());
+        s.setValue("tabs", tabs);
     }
-    s.setValue("names", names);
+    s.endArray();
     s.endGroup(); // userLayouts
 }
 
@@ -157,31 +160,53 @@ void LayoutManager::LoadFromSettings()
     util::Logger::Debug("[LayoutManager] LoadFromSettings: reading user layouts");
 
     m_userLayouts.clear();
-    QSettings s("LogViewer", "LogViewer");
+    utils::AppSettings s;
     s.beginGroup("userLayouts");
-    const QStringList names = s.value("names").toStringList();
-    for (const QString& name : names) {
-        if (!s.childGroups().contains(name))
-        {
-            util::Logger::Warn("[LayoutManager] Layout '{}' listed in names but has no settings group — skipping",
-                               name.toStdString());
-            continue;
-        }
-        s.beginGroup(name);
+    const int count = s.beginReadArray("layouts");
+    for (int i = 0; i < count; ++i) {
+        s.setArrayIndex(i);
         LayoutDescriptor d;
-        d.name               = name;
+        d.name               = s.value("name").toString();
         d.isBuiltIn          = false;
         d.windowState        = s.value("windowState").toByteArray();
         d.activeTab          = s.value("activeTab").toString();
         d.filtersDockVisible = s.value("filtersDockVisible", true).toBool();
         d.detailsDockVisible = s.value("detailsDockVisible", true).toBool();
         d.bottomDockVisible  = s.value("bottomDockVisible",  false).toBool();
-        s.beginGroup("tabs");
-        for (const QString& k : s.childKeys())
-            d.tabVisibility[k] = s.value(k).toBool();
-        s.endGroup(); // tabs
-        s.endGroup(); // <name>
-        m_userLayouts.push_back(std::move(d));
+        const QVariantMap tabs = s.value("tabs").toMap();
+        for (auto it = tabs.constBegin(); it != tabs.constEnd(); ++it)
+            d.tabVisibility[it.key()] = it.value().toBool();
+        if (!d.name.isEmpty())
+            m_userLayouts.push_back(std::move(d));
+    }
+    s.endArray();
+
+    // Layouts saved by older versions: one group per name, listed in "names".
+    if (count == 0) {
+        const QStringList names = s.value("names").toStringList();
+        for (const QString& name : names) {
+            if (!s.childGroups().contains(name))
+            {
+                util::Logger::Warn("[LayoutManager] Layout '{}' listed in names but has no settings group — skipping",
+                                   name.toStdString());
+                continue;
+            }
+            s.beginGroup(name);
+            LayoutDescriptor d;
+            d.name               = name;
+            d.isBuiltIn          = false;
+            d.windowState        = s.value("windowState").toByteArray();
+            d.activeTab          = s.value("activeTab").toString();
+            d.filtersDockVisible = s.value("filtersDockVisible", true).toBool();
+            d.detailsDockVisible = s.value("detailsDockVisible", true).toBool();
+            d.bottomDockVisible  = s.value("bottomDockVisible",  false).toBool();
+            s.beginGroup("tabs");
+            for (const QString& k : s.childKeys())
+                d.tabVisibility[k] = s.value(k).toBool();
+            s.endGroup(); // tabs
+            s.endGroup(); // <name>
+            m_userLayouts.push_back(std::move(d));
+        }
     }
     s.endGroup(); // userLayouts
 

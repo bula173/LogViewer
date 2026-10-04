@@ -6,12 +6,11 @@
 #include "qt/MainWindow.hpp"
 #include "qt/StartupSplash.hpp"
 #include "qt/utils/ThemeSwitcher.hpp"
+#include "qt/utils/AppDataDir.hpp"
 #include "Logger.hpp"
-#include "PortableMode.hpp"
 
 #include <QApplication>
 #include <QDir>
-#include <QSettings>
 #include <QStandardPaths>
 #include <QLibraryInfo>
 #include <QPalette>
@@ -20,8 +19,6 @@
 #include <QFile>
 #include <QFont>
 #include <cstdlib>
-#include <filesystem>
-#include <system_error>
 #include <string>
 
 #ifdef _WIN32
@@ -53,15 +50,7 @@ int main(int argc, char** argv)
 
         // Portable copy (portable.txt next to the exe): keep QSettings (window
         // layout, recent files, ...) in data/settings instead of the registry / plist.
-        if (util::portable::IsPortable())
-        {
-            const auto settingsDir = util::portable::DataDir() / "settings";
-            std::error_code ec;
-            std::filesystem::create_directories(settingsDir, ec);
-            QSettings::setDefaultFormat(QSettings::IniFormat);
-            QSettings::setPath(QSettings::IniFormat, QSettings::UserScope,
-                               QString::fromStdString(settingsDir.string()));
-        }
+        ui::qt::utils::UsePortableSettingsIfPortable();
 
         app.setApplicationName(kQtAppName);
         app.setApplicationVersion(

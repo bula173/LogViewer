@@ -60,4 +60,31 @@ TEST(TabVisibilityTest, HidesTheBoundTabAfterAnEarlierTabIsRemoved)
     EXPECT_TRUE(tabs.tabBar()->isTabVisible(tabs.indexOf(b)));
 }
 
+// Opening View > Tabs re-reads each tab's visibility. A plugin tab with the
+// same label as a built-in tab must not copy its state onto the built-in one.
+TEST(TabVisibilityTest, MenuSyncMatchesTabsByPageNotByLabel)
+{
+    EnsureQApplication();
+    QTabWidget tabs;
+    auto* builtIn = new QWidget;
+    auto* plugin = new QWidget;
+    tabs.addTab(builtIn, "Statistics");
+    tabs.addTab(plugin, "Statistics");
+    tabs.tabBar()->moveTab(1, 0);                              // plugin tab first
+    tabs.tabBar()->setTabVisible(tabs.indexOf(plugin), false); // plugin tab hidden
+
+    QAction action("Statistics");
+    action.setCheckable(true);
+    action.setChecked(true);
+    utils::BindTabVisibilityAction(&action, &tabs, builtIn);
+
+    action.setChecked(false); // stale tick from an earlier menu state
+    tabs.tabBar()->setTabVisible(tabs.indexOf(builtIn), true);
+    utils::SyncTabVisibilityActions({&action}, &tabs);
+
+    EXPECT_TRUE(action.isChecked());
+    EXPECT_TRUE(tabs.tabBar()->isTabVisible(tabs.indexOf(builtIn)));
+    EXPECT_FALSE(tabs.tabBar()->isTabVisible(tabs.indexOf(plugin)));
+}
+
 } // namespace ui::qt::test
