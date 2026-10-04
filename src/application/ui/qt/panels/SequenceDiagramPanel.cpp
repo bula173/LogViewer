@@ -330,6 +330,7 @@ void SequenceDiagramPanel::Refresh()
         m_pattern.reset();
         m_statusLabel->setText(tr("No events loaded"));
         m_statusLabel->setStyleSheet("color: gray;");
+        if (m_refreshBtn) m_refreshBtn->setEnabled(true);
         return;
     }
 
@@ -390,11 +391,16 @@ void SequenceDiagramPanel::SetDefinitions(const std::vector<ActorDefinition>& de
 
 void SequenceDiagramPanel::OnDiscoveryFinished()
 {
-    if (m_refreshBtn) m_refreshBtn->setEnabled(true);
-
-    // Refresh() was requested while this discovery ran: discover again.
+    // Refresh() was requested while this discovery ran: its result describes
+    // outdated data, so discover again right away instead of showing it (and
+    // stay "busy" so nobody sees the stale diagram as the finished one).
     if (std::exchange(m_refreshPending, false))
-        QMetaObject::invokeMethod(this, &SequenceDiagramPanel::Refresh, Qt::QueuedConnection);
+    {
+        Refresh();
+        return;
+    }
+
+    if (m_refreshBtn) m_refreshBtn->setEnabled(true);
 
     const auto result = m_watcher->result();
     if (result.patterns.empty())
