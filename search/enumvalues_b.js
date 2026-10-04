@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['manual_0',['Manual',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#af4da4bc2b7bbc56e946ed754afb50b9cae1ba155a9f2e8c3be94020eef32a0301',1,'ui::qt::SideBySidePanel']]],
-  ['markdown_1',['markdown',['../d3/de3/classui_1_1qt_1_1ExportDialog.html#ac0b3f74fffef8b254486f92cb8df64b4a2182a74bab7188d959e795d9301e87ff',1,'ui::qt::ExportDialog::Markdown'],['../d3/dbb/classui_1_1qt_1_1utils_1_1ReportGenerator.html#aafd28a6c28d6aab2a774fd66bb02f2f4a2182a74bab7188d959e795d9301e87ff',1,'ui::qt::utils::ReportGenerator::Markdown']]],
-  ['merge_2',['Merge',['../d2/d11/classui_1_1qt_1_1LogFileLoadDialog.html#a3c4fa71adcc6cac004045a698376e2f3a68be4837f6c739877233e527a996dd00',1,'ui::qt::LogFileLoadDialog']]]
+  ['light_0',['light',['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a3d73bac8ac6bdb55135ab02782330130a9914a0ce04a7b7b6a8e39bec55064b82',1,'ui::qt::utils::ThemeManager::Light'],['../d8/d5b/ThemeSwitcher_8hpp.html#ac04feb2012983293f293a8151c69a074a9914a0ce04a7b7b6a8e39bec55064b82',1,'Light:&#160;ThemeSwitcher.hpp']]],
+  ['lmstudio_1',['LMStudio',['../de/d58/namespaceai.html#a7a7a34c0e22549675ce3e3bab2196e46aebfdf422db2bae1725dac011bc557d79',1,'ai']]],
+  ['loaded_2',['loaded',['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#aa62897b11b06b98e8f3233e4ed656b61a7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#a8bc987aaa6b6c653887ab7dc7df4474ba7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6',1,'plugin::Loaded'],['../d3/d7e/namespaceplugin.html#a3e2a18d6b06f75dea3229ce1949167afa7381d487d18845b379422325c0a768d6',1,'plugin::Loaded']]]
 ];

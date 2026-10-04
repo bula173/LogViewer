@@ -43,9 +43,10 @@ var searchData=
   ['hasmultipleconditions_40',['hasMultipleConditions',['../d9/d12/classfilters_1_1Filter.html#a54da5ec20c57d3887b6121ac862ccc74',1,'filters::Filter']]],
   ['hasprofile_41',['HasProfile',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680',1,'ui::qt::FilterProfilesPanel']]],
   ['hasstaleindices_42',['HasStaleIndices',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac506ae2c12ad097fe34c4e3127bbea4a',1,'ui::qt::EventsTableModel']]],
-  ['hastranslation_43',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
-  ['headerdata_44',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
-  ['hexbyte_45',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
-  ['hexdump_46',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
-  ['hextocolor_47',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
+  ['hastest_43',['HasTest',['../d8/d05/structanalyzer_1_1TestOutline.html#a898b343bb4713a79801be69e2d83bc4c',1,'analyzer::TestOutline']]],
+  ['hastranslation_44',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
+  ['headerdata_45',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
+  ['hexbyte_46',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
+  ['hexdump_47',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
+  ['hextocolor_48',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
 ];

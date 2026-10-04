@@ -1,6 +1,7 @@
 var classparser_1_1DltParser =
 [
     [ "GetCurrentProgress", "db/de9/classparser_1_1DltParser.html#acc85b3dc6170334460695b31765e0d8f", null ],
+    [ "GetFileMetadata", "db/de9/classparser_1_1DltParser.html#ab9ccbd310bf0aca0964e312717217f54", null ],
     [ "GetTotalProgress", "db/de9/classparser_1_1DltParser.html#adecf0f90fbc1a2038a4581d39db47830", null ],
     [ "NotifyNewEvent", "db/de9/classparser_1_1DltParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "db/de9/classparser_1_1DltParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],

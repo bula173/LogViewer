@@ -18,10 +18,18 @@ var annotated_dup =
       [ "OpenAIClient", "d8/d14/classai_1_1OpenAIClient.html", "d8/d14/classai_1_1OpenAIClient" ]
     ] ],
     [ "analyzer", "dd/d3e/namespaceanalyzer.html", [
+      [ "anonymous_namespace{TestOutline.cpp}", "d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03.html", [
+        [ "Failure", "dc/d84/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Failure.html", "dc/d84/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Failure" ],
+        [ "Keyword", "d4/d5a/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Keyword.html", "d4/d5a/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Keyword" ],
+        [ "Marker", "da/dc4/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Marker.html", "da/dc4/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Marker" ]
+      ] ],
       [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
       [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
       [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ],
-      [ "SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", "d1/da6/structanalyzer_1_1SequenceMessage" ]
+      [ "SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", "d1/da6/structanalyzer_1_1SequenceMessage" ],
+      [ "TestMarkerRules", "d7/d10/structanalyzer_1_1TestMarkerRules.html", "d7/d10/structanalyzer_1_1TestMarkerRules" ],
+      [ "TestOutline", "d8/d05/structanalyzer_1_1TestOutline.html", "d8/d05/structanalyzer_1_1TestOutline" ],
+      [ "TestStep", "d5/d48/structanalyzer_1_1TestStep.html", "d5/d48/structanalyzer_1_1TestStep" ]
     ] ],
     [ "config", "d6/d7f/namespaceconfig.html", [
       [ "ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", "da/dc9/structconfig_1_1ColumnColor" ],
@@ -203,6 +211,7 @@ var annotated_dup =
         [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
         [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
         [ "TabBadgeManager", "d8/dab/classui_1_1qt_1_1TabBadgeManager.html", "d8/dab/classui_1_1qt_1_1TabBadgeManager" ],
+        [ "TestStepsPanel", "d5/de7/classui_1_1qt_1_1TestStepsPanel.html", "d5/de7/classui_1_1qt_1_1TestStepsPanel" ],
         [ "ThemeCustomizationDialog", "d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html", "d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog" ],
         [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
         [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],

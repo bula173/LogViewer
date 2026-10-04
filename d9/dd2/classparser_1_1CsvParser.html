@@ -108,9 +108,9 @@ Inheritance diagram for parser::CsvParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d05/classparser_1_1CsvParser__inherit__graph.png" border="0" usemap="#aparser_1_1CsvParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1CsvParser_inherit__map" id="aparser_1_1CsvParser_inherit__map">
-<area shape="rect" title="Parses CSV formatted log files." alt="" coords="5,299,195,644"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,251"/>
-<area shape="poly" title=" " alt="" coords="103,264,103,299,97,299,97,264"/>
+<area shape="rect" title="Parses CSV formatted log files." alt="" coords="5,319,195,664"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,271"/>
+<area shape="poly" title=" " alt="" coords="103,284,103,318,97,318,97,284"/>
 </map>
 </div>
 <div class="dynheader">
@@ -118,17 +118,17 @@ Collaboration diagram for parser::CsvParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/dda/classparser_1_1CsvParser__coll__graph.png" border="0" usemap="#aparser_1_1CsvParser_coll__map" alt="Collaboration graph"/></div>
 <map name="aparser_1_1CsvParser_coll__map" id="aparser_1_1CsvParser_coll__map">
-<area shape="rect" title="Parses CSV formatted log files." alt="" coords="208,471,397,756"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,393"/>
-<area shape="poly" title=" " alt="" coords="183,404,222,469,217,472,179,407"/>
+<area shape="rect" title="Parses CSV formatted log files." alt="" coords="208,491,397,776"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,413"/>
+<area shape="poly" title=" " alt="" coords="187,424,224,489,219,492,182,427"/>
 <area shape="rect" title=" " alt="" coords="5,5,200,85"/>
-<area shape="poly" title=" " alt="" coords="105,85,105,131,100,131,100,85"/>
-<area shape="rect" title=" " alt="" coords="221,238,264,303"/>
-<area shape="poly" title=" " alt="" coords="242,304,240,370,247,446,248,454,243,455,241,447,235,370,237,304"/>
-<area shape="rect" title=" " alt="" coords="341,238,384,303"/>
-<area shape="poly" title=" " alt="" coords="360,304,336,447,335,455,329,454,331,446,355,303"/>
-<area shape="rect" title=" " alt="" coords="467,238,533,303"/>
-<area shape="poly" title=" " alt="" coords="498,305,482,372,469,411,452,448,410,509,405,506,447,445,464,409,477,371,493,303"/>
+<area shape="poly" title=" " alt="" coords="105,86,105,132,100,132,100,86"/>
+<area shape="rect" title=" " alt="" coords="221,248,264,313"/>
+<area shape="poly" title=" " alt="" coords="242,314,240,384,247,466,248,474,243,475,241,467,235,384,237,314"/>
+<area shape="rect" title=" " alt="" coords="341,248,384,313"/>
+<area shape="poly" title=" " alt="" coords="361,314,336,467,335,475,329,474,331,466,355,313"/>
+<area shape="rect" title=" " alt="" coords="467,248,533,313"/>
+<area shape="poly" title=" " alt="" coords="498,314,483,386,470,428,452,468,410,529,406,526,447,465,465,426,478,385,493,313"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -158,6 +158,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afbce260be354405feca91958e1d2612d" id="r_afbce260be354405feca91958e1d2612d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#afbce260be354405feca91958e1d2612d">SetHasHeaders</a> (bool hasHeaders)</td></tr>
 <tr class="memdesc:afbce260be354405feca91958e1d2612d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the first line contains headers.  <br /></td></tr>
 <tr class="separator:afbce260be354405feca91958e1d2612d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ccbd310bf0aca0964e312717217f54" id="r_ab9ccbd310bf0aca0964e312717217f54"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#ab9ccbd310bf0aca0964e312717217f54">GetFileMetadata</a> () const</td></tr>
+<tr class="memdesc:ab9ccbd310bf0aca0964e312717217f54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ordered <code>key → value</code> pairs read from the file header during the last <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a31fd56f340c1d0adb872f3ef93e76d96" title="Parses data from a file path.">ParseData()</a> call (see <a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it.">db::EventsContainer::SetFileMetadata</a>).  <br /></td></tr>
+<tr class="separator:ab9ccbd310bf0aca0964e312717217f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abda83b8d68f9be83f416f7ae685cea6f" id="r_abda83b8d68f9be83f416f7ae685cea6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#abda83b8d68f9be83f416f7ae685cea6f">RegisterObserver</a> (<a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> *observer)</td></tr>
 <tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive parsing notifications.  <br /></td></tr>
 <tr class="separator:abda83b8d68f9be83f416f7ae685cea6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -451,6 +454,36 @@ Here is the caller graph for this function:</div>
 <dl class="section return"><dt>Returns</dt><dd>Current number of bytes processed </dd></dl>
 
 <p>Implements <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a714468ed0e54516b4405a17c604c1dbc">parser::IDataParser</a>.</p>
+
+</div>
+</div>
+<a id="ab9ccbd310bf0aca0964e312717217f54" name="ab9ccbd310bf0aca0964e312717217f54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ccbd310bf0aca0964e312717217f54">&#9670;&#160;</a></span>GetFileMetadata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; parser::IDataParser::GetFileMetadata </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ordered <code>key → value</code> pairs read from the file header during the last <a class="el" href="../../d9/dd2/classparser_1_1CsvParser.html#a80cb8fb7bf441dade1c628bfd2057d7d" title="Parses CSV data from a file.">ParseData()</a> call (see <a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it.">db::EventsContainer::SetFileMetadata</a>). </p>
+<dl class="section return"><dt>Returns</dt><dd>Empty for formats without a header (the default). </dd></dl>
+
+<p>Reimplemented in <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a0bd5c4a271f065b7260904ff7a5a1383">parser::SapiLogParser</a>.</p>
 
 </div>
 </div>

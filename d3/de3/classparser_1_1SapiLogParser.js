@@ -5,6 +5,7 @@ var classparser_1_1SapiLogParser =
     [ "ExtractPayloadFields", "d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88", null ],
     [ "ExtractUnit", "d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef", null ],
     [ "GetCurrentProgress", "d3/de3/classparser_1_1SapiLogParser.html#ab843a84f0f7d8c578c83f5bb87269cb3", null ],
+    [ "GetFileMetadata", "d3/de3/classparser_1_1SapiLogParser.html#a0bd5c4a271f065b7260904ff7a5a1383", null ],
     [ "GetTotalProgress", "d3/de3/classparser_1_1SapiLogParser.html#a38406b615a4119876be21c6d374a00bf", null ],
     [ "LooksLikeSapiLog", "d3/de3/classparser_1_1SapiLogParser.html#a17951a3f572bb285742e556383e10af9", null ],
     [ "NotifyNewEvent", "d3/de3/classparser_1_1SapiLogParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
@@ -17,6 +18,7 @@ var classparser_1_1SapiLogParser =
     [ "RegisterObserver", "d3/de3/classparser_1_1SapiLogParser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],
     [ "UnregisterObserver", "d3/de3/classparser_1_1SapiLogParser.html#ac2b109cb3475dc7dec15198f1a184963", null ],
     [ "m_currentProgress", "d3/de3/classparser_1_1SapiLogParser.html#a7b375c2c7906d27555b5faef830e33e4", null ],
+    [ "m_metadata", "d3/de3/classparser_1_1SapiLogParser.html#a523f6e93aeaa8c75990fef773d34bd69", null ],
     [ "m_totalProgress", "d3/de3/classparser_1_1SapiLogParser.html#a5d5e4f594e4454259ec0e8757915d516", null ],
     [ "observers", "d3/de3/classparser_1_1SapiLogParser.html#a85fc1a7ee1778b5c8cbaf144886b362f", null ]
 ];

@@ -63,6 +63,23 @@ var namespaceui_1_1qt =
     [ "anonymous_namespace{ShortcutsDialog.cpp}", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html", [
       [ "CaptureShortcut", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html#aefc30fa7503a19121e6907ccba2fb515", null ]
     ] ],
+    [ "anonymous_namespace{TestStepsPanel.cpp}", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html", [
+      [ "Column", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435", [
+        [ "kStepColumn", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435a513d62228860f818f615336801fe3b27", null ],
+        [ "kStartColumn", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435ab03931de2784baeff40b6e59983d0ec5", null ],
+        [ "kDurationColumn", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435a83387d9dd085f6f03dca75e7b501e4d7", null ],
+        [ "kEventsColumn", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435a3ba3ee19f3a1d296c86f504974cc576d", null ],
+        [ "kDetailsColumn", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435adf0dae8ad7b26370cd4b16e7090114c6", null ],
+        [ "kColumnCount", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a3cb67713a47e52b7ff192ea861756435a05eabe9eca231dcc044dc130e6e254de", null ]
+      ] ],
+      [ "Details", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#aa92c49544b1f6170b74a458a4d0ba9aa", null ],
+      [ "FormatDuration", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a4a72d82cce35112a70b770e654d0a08a", null ],
+      [ "FormatStart", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a741456f6270b3caef4abf61aab5a52b3", null ],
+      [ "MakeItem", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a417a26c5d72ae3ae6793cfcd750e8114", null ],
+      [ "StatusColor", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a9fa7b061d04f5417d48ab36a78694d41", null ],
+      [ "StatusSymbol", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a714cc2bfa1551241c679661457f421b1", null ],
+      [ "kMaxBannerMessage", "d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#a89cab1c5ec94c2aebd2278545ad866cb", null ]
+    ] ],
     [ "anonymous_namespace{TimeRangeFilterPanel.cpp}", "df/d32/namespaceui_1_1qt_1_1anonymous__namespace_02TimeRangeFilterPanel_8cpp_03.html", [
       [ "NormalizeTimestamp", "df/d32/namespaceui_1_1qt_1_1anonymous__namespace_02TimeRangeFilterPanel_8cpp_03.html#a25cf9b604ecc029b055d442f28cb12d6", null ]
     ] ],
@@ -139,6 +156,7 @@ var namespaceui_1_1qt =
     [ "StatsSummaryPanel", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html", "d6/da4/classui_1_1qt_1_1StatsSummaryPanel" ],
     [ "StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog" ],
     [ "TabBadgeManager", "d8/dab/classui_1_1qt_1_1TabBadgeManager.html", "d8/dab/classui_1_1qt_1_1TabBadgeManager" ],
+    [ "TestStepsPanel", "d5/de7/classui_1_1qt_1_1TestStepsPanel.html", "d5/de7/classui_1_1qt_1_1TestStepsPanel" ],
     [ "ThemeCustomizationDialog", "d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html", "d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog" ],
     [ "TimelineChartPanel", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel" ],
     [ "TimeRangeFilterPanel", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html", "d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel" ],

@@ -7,6 +7,7 @@ var classparser_1_1EvlogParser =
       [ "PRINTF", "d1/d55/classparser_1_1EvlogParser.html#a4ee0e5fe8995d80d7971bf3f5a736fdfac63f55f5769127472be7ea907fc83dc6", null ]
     ] ],
     [ "GetCurrentProgress", "d1/d55/classparser_1_1EvlogParser.html#aaa048906b5c63cf4530fb43997ac538b", null ],
+    [ "GetFileMetadata", "d1/d55/classparser_1_1EvlogParser.html#ab9ccbd310bf0aca0964e312717217f54", null ],
     [ "GetTotalProgress", "d1/d55/classparser_1_1EvlogParser.html#a7a9e67e23c711c2017a3919c6c7e32f3", null ],
     [ "NotifyNewEvent", "d1/d55/classparser_1_1EvlogParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "d1/d55/classparser_1_1EvlogParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],

@@ -1,5 +1,6 @@
 var classdb_1_1EventsContainer =
 [
+    [ "FileMetadata", "dd/dc2/classdb_1_1EventsContainer.html#a82cbe19e06ef495d2084b43f58041f47", null ],
     [ "ViewPtr", "dd/dc2/classdb_1_1EventsContainer.html#aad040bba908aac23d9f30971989815cf", null ],
     [ "EventsContainer", "dd/dc2/classdb_1_1EventsContainer.html#ad0c0ae27055a4b711fad53e95e592166", null ],
     [ "~EventsContainer", "dd/dc2/classdb_1_1EventsContainer.html#a8df14cfc9ac8e78ae73931216b79b798", null ],
@@ -12,6 +13,7 @@ var classdb_1_1EventsContainer =
     [ "Generation", "dd/dc2/classdb_1_1EventsContainer.html#ae8c2cfbd2c6fe11ac3b9a400fa5dcda1", null ],
     [ "GetCurrentItemIndex", "dd/dc2/classdb_1_1EventsContainer.html#a34b0c189a736adb5886b59acb0dea9ca", null ],
     [ "GetEvent", "dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04", null ],
+    [ "GetFileMetadata", "dd/dc2/classdb_1_1EventsContainer.html#a2defa04b33bc4829da8d0cbcff42a2c2", null ],
     [ "GetItem", "dd/dc2/classdb_1_1EventsContainer.html#a7b610be4a225684aaf699e7abbef1f5f", null ],
     [ "GetItem", "dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0", null ],
     [ "GetViewCount", "dd/dc2/classdb_1_1EventsContainer.html#a0a72fcf8bae9078b3c99929bf6148324", null ],
@@ -23,11 +25,13 @@ var classdb_1_1EventsContainer =
     [ "RegisterView", "dd/dc2/classdb_1_1EventsContainer.html#aadd4d7a1f3888b80e1185c85e66915c6", null ],
     [ "ResumeNotifications", "dd/dc2/classdb_1_1EventsContainer.html#a8065e169779734d58ea1c38b7d60f654", null ],
     [ "SetCurrentItem", "dd/dc2/classdb_1_1EventsContainer.html#a3fc32ef754405956b1d385968266639c", null ],
+    [ "SetFileMetadata", "dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38", null ],
     [ "Size", "dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664", null ],
     [ "SuspendNotifications", "dd/dc2/classdb_1_1EventsContainer.html#a15c2bf78cbdfa732a52a7db0078abfec", null ],
     [ "UnregisterView", "dd/dc2/classdb_1_1EventsContainer.html#a434a35a1044343fb8ef0d641d355243d", null ],
     [ "m_currentItem", "dd/dc2/classdb_1_1EventsContainer.html#acef32ebcec29e674e21d49aa4ccc7941", null ],
     [ "m_data", "dd/dc2/classdb_1_1EventsContainer.html#abfded5d998cfe26acd4035e2c1195c56", null ],
+    [ "m_fileMetadata", "dd/dc2/classdb_1_1EventsContainer.html#a5226502c8ef999ff5d92380317c581cf", null ],
     [ "m_generation", "dd/dc2/classdb_1_1EventsContainer.html#aa4c49baffd5acef549e846b5e0ae90f3", null ],
     [ "m_invalidationMutex", "dd/dc2/classdb_1_1EventsContainer.html#a40e6b9df203fa5f10939bd491b4aa870", null ],
     [ "m_mutex", "dd/dc2/classdb_1_1EventsContainer.html#ab65d87924a1501344a9c6b5cf13e34e0", null ],

@@ -41,6 +41,8 @@ var dir_130743ba506c8567cd5ed797a70ce3c3 =
     [ "SignalPlotPanel.hpp", "dc/d4a/SignalPlotPanel_8hpp.html", "dc/d4a/SignalPlotPanel_8hpp" ],
     [ "StatsSummaryPanel.cpp", "df/d30/StatsSummaryPanel_8cpp.html", null ],
     [ "StatsSummaryPanel.hpp", "d0/d13/StatsSummaryPanel_8hpp.html", "d0/d13/StatsSummaryPanel_8hpp" ],
+    [ "TestStepsPanel.cpp", "d0/d01/TestStepsPanel_8cpp.html", "d0/d01/TestStepsPanel_8cpp" ],
+    [ "TestStepsPanel.hpp", "dd/d9e/TestStepsPanel_8hpp.html", "dd/d9e/TestStepsPanel_8hpp" ],
     [ "TimelineChartPanel.cpp", "dc/d3d/TimelineChartPanel_8cpp.html", null ],
     [ "TimelineChartPanel.hpp", "d8/dc9/TimelineChartPanel_8hpp.html", "d8/dc9/TimelineChartPanel_8hpp" ],
     [ "TimeRangeFilterPanel.cpp", "da/d47/TimeRangeFilterPanel_8cpp.html", "da/d47/TimeRangeFilterPanel_8cpp" ],

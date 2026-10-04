@@ -12,5 +12,6 @@ var searchData=
   ['length_9',['length',['../d3/dc2/structparser_1_1dbc_1_1DbcSignal.html#a6069f2a840b1ec83c6282718f64893b1',1,'parser::dbc::DbcSignal']]],
   ['leveldistribution_10',['levelDistribution',['../d1/d31/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportStatistics.html#a39777c6e8dc3b368eb3f49d93524fe7e',1,'ui::qt::utils::ReportGenerator::ReportStatistics']]],
   ['libraryhandle_11',['libraryHandle',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#ac685faa09e99caef266217b3747337d3',1,'plugin::PluginLoadInfo']]],
-  ['loglevel_12',['logLevel',['../d2/d5e/classconfig_1_1Config.html#ac55f71159fe016525e5a277903b3c526',1,'config::Config']]]
+  ['log_12',['log',['../d7/d10/structanalyzer_1_1TestMarkerRules.html#a5439ca06cfc4817955c9176517fb9555',1,'analyzer::TestMarkerRules']]],
+  ['loglevel_13',['logLevel',['../d2/d5e/classconfig_1_1Config.html#ac55f71159fe016525e5a277903b3c526',1,'config::Config']]]
 ];

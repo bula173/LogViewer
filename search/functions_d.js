@@ -5,7 +5,7 @@ var searchData=
   ['navigatenext_2',['NavigateNext',['../dd/d79/classui_1_1qt_1_1SearchBar.html#a2c1b2361775596e7846567a9a3d8d212',1,'ui::qt::SearchBar']]],
   ['navigateprev_3',['NavigatePrev',['../dd/d79/classui_1_1qt_1_1SearchBar.html#a09b70bfff358af7941119f1e11f234ae',1,'ui::qt::SearchBar']]],
   ['navigateright_4',['navigateRight',['../dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a0e2b7ae3dd013bb49af7bc7dade0e949',1,'ui::qt::utils::KeyboardNavigationManager']]],
-  ['navigatetoevent_5',['NavigateToEvent',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#ad76f441747ba06ec8d81ad908a581900',1,'ui::qt::BookmarksPanel']]],
+  ['navigatetoevent_5',['navigatetoevent',['../d0/d5d/classui_1_1qt_1_1BookmarksPanel.html#ad76f441747ba06ec8d81ad908a581900',1,'ui::qt::BookmarksPanel::NavigateToEvent()'],['../d5/de7/classui_1_1qt_1_1TestStepsPanel.html#a23b3bce4f6749c8f5ba61ce0659ae24b',1,'ui::qt::TestStepsPanel::NavigateToEvent()']]],
   ['navigatetonextmatch_6',['NavigateToNextMatch',['../d6/d26/classui_1_1qt_1_1EventsTableView.html#ac54853109ef31b29099f6f2733deae48',1,'ui::qt::EventsTableView']]],
   ['navigatetonextpanel_7',['navigateToNextPanel',['../dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#a0fa86c4a2cd99d0692d881c63fff8e6a',1,'ui::qt::utils::KeyboardNavigationManager']]],
   ['navigatetopreviouspanel_8',['navigateToPreviousPanel',['../dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#ab0a5c63b54aa49f9f54e86e526e7a30e',1,'ui::qt::utils::KeyboardNavigationManager']]],

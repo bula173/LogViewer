@@ -100,44 +100,52 @@ $(document).ready(function(){initNavTree('da/d37/SapiLogParser_8hpp.html','../..
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 <code>#include &lt;istream&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;string_view&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for SapiLogParser.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/d91/SapiLogParser_8hpp__incl.png" border="0" usemap="#asrc_2application_2parsers_2sapi_2SapiLogParser_8hpp" alt=""/></div>
 <map name="asrc_2application_2parsers_2sapi_2SapiLogParser_8hpp" id="asrc_2application_2parsers_2sapi_2SapiLogParser_8hpp">
-<area shape="rect" title=" " alt="" coords="400,5,575,45"/>
-<area shape="rect" href="../../d9/dfc/IDataParser_8hpp.html" title="Interface definitions for data parsing components." alt="" coords="325,93,449,119"/>
-<area shape="poly" title=" " alt="" coords="465,48,415,87,412,82,461,43"/>
-<area shape="rect" title=" " alt="" coords="5,240,103,265"/>
-<area shape="poly" title=" " alt="" coords="401,46,333,63,258,89,182,124,113,169,86,198,67,229,63,226,82,195,110,165,180,119,256,84,332,58,399,41"/>
-<area shape="rect" title=" " alt="" coords="419,167,486,192"/>
-<area shape="poly" title=" " alt="" coords="486,46,461,154,456,152,480,45"/>
-<area shape="rect" title=" " alt="" coords="510,167,601,192"/>
-<area shape="poly" title=" " alt="" coords="498,45,547,153,542,155,494,47"/>
-<area shape="rect" title=" " alt="" coords="625,167,697,192"/>
-<area shape="poly" title=" " alt="" coords="511,44,639,155,635,159,507,48"/>
-<area shape="rect" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="124,167,235,192"/>
-<area shape="poly" title=" " alt="" coords="355,121,227,165,225,160,353,116"/>
-<area shape="rect" title=" " alt="" coords="349,240,412,265"/>
-<area shape="poly" title=" " alt="" coords="389,119,384,226,379,226,384,119"/>
-<area shape="rect" title=" " alt="" coords="259,167,345,192"/>
-<area shape="poly" title=" " alt="" coords="375,121,328,160,325,156,372,117"/>
-<area shape="poly" title=" " alt="" coords="400,117,435,155,431,158,396,121"/>
-<area shape="poly" title=" " alt="" coords="415,116,516,159,514,164,413,121"/>
-<area shape="poly" title=" " alt="" coords="432,116,612,163,611,168,431,121"/>
-<area shape="rect" title=" " alt="" coords="262,240,321,265"/>
-<area shape="poly" title=" " alt="" coords="199,190,263,230,260,235,196,194"/>
-<area shape="poly" title=" " alt="" coords="213,190,337,233,336,238,211,195"/>
-<area shape="poly" title=" " alt="" coords="161,194,88,235,85,231,158,190"/>
-<area shape="rect" href="../../d3/d84/Concepts_8hpp.html" title="C++20 concept definitions for LogViewer." alt="" coords="127,240,237,265"/>
-<area shape="poly" title=" " alt="" coords="182,192,184,226,178,227,177,192"/>
-<area shape="rect" title=" " alt="" coords="47,313,127,339"/>
-<area shape="poly" title=" " alt="" coords="168,267,115,307,112,303,165,263"/>
-<area shape="rect" title=" " alt="" coords="152,313,212,339"/>
-<area shape="poly" title=" " alt="" coords="185,266,185,300,179,300,179,266"/>
-<area shape="rect" title=" " alt="" coords="237,313,383,339"/>
-<area shape="poly" title=" " alt="" coords="204,263,278,304,276,309,201,268"/>
+<area shape="rect" title=" " alt="" coords="499,5,673,45"/>
+<area shape="rect" href="../../d9/dfc/IDataParser_8hpp.html" title="Interface definitions for data parsing components." alt="" coords="360,93,484,119"/>
+<area shape="poly" title=" " alt="" coords="548,48,459,90,457,85,546,43"/>
+<area shape="rect" title=" " alt="" coords="93,240,151,265"/>
+<area shape="poly" title=" " alt="" coords="499,34,416,45,323,69,276,87,231,109,189,136,152,168,135,197,127,227,122,226,130,195,148,165,186,132,228,104,274,82,321,64,415,40,498,28"/>
+<area shape="rect" title=" " alt="" coords="5,240,68,265"/>
+<area shape="poly" title=" " alt="" coords="499,34,433,40,359,52,281,70,207,96,176,111,153,126,107,169,78,200,55,230,50,227,74,196,103,165,150,122,173,106,205,91,280,65,358,47,432,35,498,28"/>
+<area shape="rect" title=" " alt="" coords="311,240,408,265"/>
+<area shape="poly" title=" " alt="" coords="640,43,700,70,757,105,778,125,791,147,793,170,780,194,755,212,719,226,674,236,623,244,516,253,422,255,422,249,515,247,622,239,673,231,717,221,753,207,776,190,787,169,786,149,774,128,754,109,698,74,638,48"/>
+<area shape="rect" title=" " alt="" coords="416,313,476,339"/>
+<area shape="poly" title=" " alt="" coords="674,40,726,60,750,74,772,91,795,115,811,139,815,165,804,193,773,229,735,258,693,280,649,297,562,318,490,326,489,321,561,313,648,292,691,275,733,253,769,225,800,191,810,165,806,141,791,118,768,95,747,79,723,65,673,45"/>
+<area shape="rect" title=" " alt="" coords="489,167,555,192"/>
+<area shape="poly" title=" " alt="" coords="580,47,535,155,530,153,575,45"/>
+<area shape="rect" title=" " alt="" coords="579,167,670,192"/>
+<area shape="poly" title=" " alt="" coords="593,45,621,153,616,154,588,46"/>
+<area shape="rect" title=" " alt="" coords="694,167,766,192"/>
+<area shape="poly" title=" " alt="" coords="606,44,712,155,708,158,602,48"/>
+<area shape="rect" href="../../d8/d87/LogEvent_8hpp.html" title="Defines the LogEvent class for representing structured log entries." alt="" coords="193,167,304,192"/>
+<area shape="poly" title=" " alt="" coords="395,121,291,164,289,159,393,116"/>
+<area shape="poly" title=" " alt="" coords="360,113,318,119,271,129,225,146,182,169,154,197,135,228,131,225,150,194,179,165,223,141,270,124,317,114,359,108"/>
+<area shape="poly" title=" " alt="" coords="360,116,260,134,204,149,151,169,101,199,60,232,57,228,98,195,149,164,203,144,258,128,359,111"/>
+<area shape="poly" title=" " alt="" coords="407,121,391,135,377,152,368,171,370,191,380,206,393,215,408,223,422,239,436,269,444,299,439,300,431,271,417,241,404,227,390,219,377,210,365,193,363,170,372,149,388,131,404,117"/>
+<area shape="rect" title=" " alt="" coords="379,167,465,192"/>
+<area shape="poly" title=" " alt="" coords="425,119,425,153,419,153,419,119"/>
+<area shape="poly" title=" " alt="" coords="440,117,496,156,493,161,437,121"/>
+<area shape="poly" title=" " alt="" coords="455,116,580,160,578,165,454,121"/>
+<area shape="poly" title=" " alt="" coords="473,116,681,164,680,169,472,121"/>
+<area shape="poly" title=" " alt="" coords="230,194,156,235,153,231,227,190"/>
+<area shape="poly" title=" " alt="" coords="215,195,82,239,80,234,214,189"/>
+<area shape="poly" title=" " alt="" coords="268,190,331,230,328,235,265,194"/>
+<area shape="rect" href="../../d3/d84/Concepts_8hpp.html" title="C++20 concept definitions for LogViewer." alt="" coords="176,240,287,265"/>
+<area shape="poly" title=" " alt="" coords="248,193,240,228,235,226,243,192"/>
+<area shape="rect" title=" " alt="" coords="98,313,178,339"/>
+<area shape="poly" title=" " alt="" coords="218,267,166,307,162,303,215,263"/>
+<area shape="poly" title=" " alt="" coords="267,263,404,308,402,313,265,268"/>
+<area shape="rect" title=" " alt="" coords="202,313,349,339"/>
+<area shape="poly" title=" " alt="" coords="241,264,263,300,259,303,236,267"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

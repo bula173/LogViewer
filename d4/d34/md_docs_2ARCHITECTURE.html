@@ -166,7 +166,7 @@ Key Components</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Subdirectory   </th><th class="markdownTableHeadNone">Contents    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>panels/</code>   </td><td class="markdownTableBodyNone">All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …)    </td></tr>
+<td class="markdownTableBodyNone"><code>panels/</code>   </td><td class="markdownTableBodyNone">All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, TestStepsPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>dialogs/</code>   </td><td class="markdownTableBodyNone">Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …)    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -177,7 +177,7 @@ Key Components</h1>
 <p><b>MainWindow</b>: Central orchestrator</p><ul>
 <li>Qt 6-based <a class="el" href="../../df/d90/classQMainWindow.html">QMainWindow</a> with dock widget system</li>
 <li>Left docks: <b>Filters</b> + <b>Signal Browser</b> (tabbed, <code>QDockWidget</code> each); right dock: Details; bottom dock: AI chat / plugin panels</li>
-<li>Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors</li>
+<li>Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Test Steps, Bookmarks, Scenarios, Actors</li>
 <li>Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)</li>
 <li>Implements <code>ConfigObserver</code> and <code>IPluginObserver</code> for configuration and plugin lifecycle changes</li>
 <li>Menu system: File (Open, Load DBC, Load Evlog Templates, Export, …), View (Tabs, Layouts, …), Tools, Help</li>
@@ -195,6 +195,7 @@ Key Components</h1>
 <li><b>LayoutManager</b>: Serialises and restores named dock layouts. Built-in presets (XML log, CAN analysis) plus user-saved layouts; persisted across sessions.</li>
 <li><b>TimelineChartPanel</b>: Interactive event-volume bar histogram with zoom and brush</li>
 <li><b>TraceViewerPanel</b>: Sequence-diagram-style actor/event view</li>
+<li><b>TestStepsPanel</b>: "Test Steps" tab — <code><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a8c10b24b04e711cf99492a080aa74d21">analyzer::BuildTestOutline()</a></code> as a <code><a class="el" href="../../d3/d5f/classQTreeWidget.html">QTreeWidget</a></code> (sections → keywords/expectations: status, start, duration, events) under a PASS/FAIL banner with the failing step, its message and <b>Go to failure</b>. Double-click/Enter or the button emit <code>NavigateToEvent(row)</code>, which <code>MainWindow</code> routes like a bookmark (Events page + <code>ScrollToActualRow</code>). Refreshed lazily like the other analysis panels, but re-analyses only when the data changes (container generation, size, file metadata) — the outline covers the whole log, not the filtered rows. Logs without <code>TEST_START</code> show a hint.</li>
 <li><b>PatternAnalysisPanel</b>: Template clustering of structurally similar log lines</li>
 <li><b>BookmarksPanel</b>, <b>ScenariosPanel</b>, <b>ActorsPanel</b>, <b>ActorDefinitionsPanel</b>: Event annotation, scenario matching, and actor attribution</li>
 <li><b>SideBySidePanel</b>: Loads two independent log files and displays them in a split view with three synchronisation modes (see below)</li>
@@ -271,7 +272,7 @@ Key Components</h1>
 <li>Emitted fields: <code>timestamp</code>, <code>level</code> (Off/Fatal/Error/Warn/Info/Debug/Verbose), <code>type</code> (Log/AppTrace/NwTrace/Control), <code>AppID</code>, <code>ContextID</code>, <code>EcuID</code>, <code>MsgCtr</code>, optional <code>SessionID</code>, <code>info</code>.</li>
 </ul>
 <p><b>SapiLogParser</b> (<code>parsers/sapi/</code>): Parses merged test-run logs from the safeAPI RBC 2oo2 test environment (robot steps + container + simulator logs).</p><ul>
-<li>Header block of <code>#</code> lines, then one event per line: <code>[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]</code>.</li>
+<li>Header block of <code>#</code> lines (its <code># Key : Value</code> lines — Test Case, Status, Timestamp, Sources, Entries — are returned by <code>GetFileMetadata()</code>, an <code>IDataParser</code> virtual that is empty for other formats; <code>MainWindowPresenter::RunParserAsync</code> stores them with <code>EventsContainer::SetFileMetadata()</code>), then one event per line: <code>[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]</code>.</li>
 <li>Fields are split by bracket depth (brackets nest inside <code>info</code>/<code>payload</code>); <code>payload</code> is the remainder after the 7th field, multiple groups kept verbatim. Malformed lines are skipped; a file with no matching line throws <code>ParseError</code>.</li>
 <li>Emitted fields: <code>timestamp</code> (ISO-8601 string), <code>category</code>, <code>source</code>, <code>destination</code>, <code>level</code>, <code>event_type</code>, <code>info</code>, optional <code>payload</code>, optional <code>unit</code>, optional <code>p.&lt;key&gt;</code> payload fields.</li>
 <li><code>unit</code>: the 2oo2 channel from an <code>info</code> prefix <code>[unit | partition]</code> (<code>[a-west | GP] …</code> → <code>a-west</code>, also <code>| RTE</code>); <code>source</code> alone says <code>RBC West</code> for both channels. Extracted by <code>SapiLogParser::ExtractUnit()</code>.</li>
@@ -307,6 +308,12 @@ Key Components</h1>
 <div class="line">    ├── CanStatisticsStrategy   — for ASC/CAN data (detects CAN_ID field)</div>
 <div class="line">    └── GenericStatisticsStrategy — fallback, returns no sections (panel hides extra group)</div>
 </div><!-- fragment --><p><code>SelectStrategy()</code> probes the first 20 events for <code>CAN_ID</code> to pick the right implementation. Adding a new format requires only implementing <code>IStatisticsStrategy::Matches()</code> and <code>Compute()</code>.</p>
+<p><b>TestOutline</b> (<code>analyzers/TestOutline.{hpp,cpp}</code>, no Qt): <code>analyzer::BuildTestOutline(events, TestMarkerRules)</code> turns a test-harness log into steps, the verdict and the decisive failure. <code>TestMarkerRules</code> holds the event vocabulary (defaults: the Robot Framework listener lines of safeAPI merged logs — <code>TEST_START</code>/<code>TEST_END</code>, <code>STEP</code>, <code>STEP_FAIL</code>, <code>LOG</code> markers <code>TestStep N:</code>/<code>TestExpectation …</code>, <code>Control command sent</code>).</p><ul>
+<li>Sections: Setup (before the first <code>TestStep</code> marker), one per <code>TestStep</code> marker, Teardown (keywords after the last marker when it is a <code>TestExpectation</code>); children are the keywords (one per <code>STEP</code>) and expectations. Durations run until the next step starts (the listener logs no keyword end or nesting depth).</li>
+<li>A <code>STEP_FAIL</code> belongs to the latest not-yet-failed <code>STEP</code> of that keyword; it is <em>recovered</em> when the same keyword with the same arguments starts again later (retry) or the test passed. In real logs 1,610 of 2,003 <code>STEP_FAIL</code>s are in PASS logs.</li>
+<li>Verdict: header <code>Status</code>, else <code>(PASS)</code>/<code>(FAIL)</code> in <code>TEST_END</code>. Decisive failure: the first unrecovered <code>STEP_FAIL</code> (the innermost keyword of the failing chain, not a later teardown failure), else <code>TEST_END</code> (suite-setup failures leave only <code>TEST_START</code>/<code>TEST_END</code>).</li>
+<li><em>Probably not run</em> (heuristic): after the decisive failure, sections without a command, expectations, and keywords that neither failed nor sent a command although the same keyword sends one elsewhere.</li>
+</ul>
 <p><b>FilterManager</b>: Coordinates filtering operations</p><ul>
 <li>Applies multiple filters in sequence</li>
 <li>Supports complex filter combinations</li>
@@ -331,6 +338,7 @@ Key Components</h1>
 <li>Supports filter indices for efficient filtered views</li>
 <li>Implements <code>IModel</code> interface</li>
 <li>Observable updates for UI refresh</li>
+<li>File metadata: <code>SetFileMetadata()</code>/<code>GetFileMetadata()</code> keep the parser's header pairs (cleared by <code>Clear()</code>, kept by <code>MergeEvents()</code>)</li>
 </ul>
 <p><b>LogEvent</b>: Immutable event representation</p><ul>
 <li>ID + key-value pairs (flexible schema)</li>

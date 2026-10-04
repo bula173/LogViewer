@@ -7,5 +7,6 @@ var searchData=
   ['mainwindowfilteropshelper_4',['MainWindowFilterOpsHelper',['../d3/d3b/classui_1_1qt_1_1MainWindowFilterOpsHelper.html',1,'ui::qt']]],
   ['mainwindowpluginopshelper_5',['MainWindowPluginOpsHelper',['../d1/d98/classui_1_1qt_1_1MainWindowPluginOpsHelper.html',1,'ui::qt']]],
   ['mainwindowpresenter_6',['MainWindowPresenter',['../d5/dc9/classui_1_1MainWindowPresenter.html',1,'ui']]],
-  ['modelinfo_7',['ModelInfo',['../df/db7/structai_1_1ModelInfo.html',1,'ai']]]
+  ['marker_7',['Marker',['../da/dc4/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Marker.html',1,'analyzer::anonymous_namespace{TestOutline.cpp}']]],
+  ['modelinfo_8',['ModelInfo',['../df/db7/structai_1_1ModelInfo.html',1,'ai']]]
 ];

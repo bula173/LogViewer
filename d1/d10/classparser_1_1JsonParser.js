@@ -4,6 +4,7 @@ var classparser_1_1JsonParser =
     [ "~JsonParser", "d1/d10/classparser_1_1JsonParser.html#a3ebba8be5ead13ecd87ccebb1d36428d", null ],
     [ "Flatten", "d1/d10/classparser_1_1JsonParser.html#a71dec0fe1aa9ba5cf937b986cea53747", null ],
     [ "GetCurrentProgress", "d1/d10/classparser_1_1JsonParser.html#a9ed2f038d6ac82ea2c38469da5b6c876", null ],
+    [ "GetFileMetadata", "d1/d10/classparser_1_1JsonParser.html#ab9ccbd310bf0aca0964e312717217f54", null ],
     [ "GetTotalProgress", "d1/d10/classparser_1_1JsonParser.html#a4c0da4b7da65b4adf0cf70368dea0672", null ],
     [ "NotifyNewEvent", "d1/d10/classparser_1_1JsonParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "d1/d10/classparser_1_1JsonParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],

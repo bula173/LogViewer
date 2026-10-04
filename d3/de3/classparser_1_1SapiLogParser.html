@@ -109,9 +109,9 @@ Inheritance diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/d5a/classparser_1_1SapiLogParser__inherit__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1SapiLogParser_inherit__map" id="aparser_1_1SapiLogParser_inherit__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="13,299,187,584"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,251"/>
-<area shape="poly" title=" " alt="" coords="103,264,103,299,97,299,97,264"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="13,319,187,644"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,271"/>
+<area shape="poly" title=" " alt="" coords="103,285,103,318,97,318,97,285"/>
 </map>
 </div>
 <div class="dynheader">
@@ -119,13 +119,15 @@ Collaboration diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/dce/classparser_1_1SapiLogParser__coll__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_coll__map" alt="Collaboration graph"/></div>
 <map name="aparser_1_1SapiLogParser_coll__map" id="aparser_1_1SapiLogParser_coll__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="129,471,303,736"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,393"/>
-<area shape="poly" title=" " alt="" coords="151,406,173,469,168,471,146,407"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="168,491,341,776"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,413"/>
+<area shape="poly" title=" " alt="" coords="168,425,196,489,191,491,163,427"/>
 <area shape="rect" title=" " alt="" coords="5,5,200,85"/>
-<area shape="poly" title=" " alt="" coords="105,85,105,131,100,131,100,85"/>
-<area shape="rect" title=" " alt="" coords="221,238,288,303"/>
-<area shape="poly" title=" " alt="" coords="254,304,236,455,231,454,248,303"/>
+<area shape="poly" title=" " alt="" coords="105,86,105,132,100,132,100,86"/>
+<area shape="rect" title=" " alt="" coords="221,248,288,313"/>
+<area shape="poly" title=" " alt="" coords="257,314,257,474,252,474,252,314"/>
+<area shape="rect" title=" " alt="" coords="324,241,511,321"/>
+<area shape="poly" title=" " alt="" coords="420,321,412,391,404,430,390,468,374,500,354,530,349,527,369,497,386,466,399,429,407,390,414,320"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -147,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a38406b615a4119876be21c6d374a00bf" id="r_a38406b615a4119876be21c6d374a00bf"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a38406b615a4119876be21c6d374a00bf">GetTotalProgress</a> () const override</td></tr>
 <tr class="memdesc:a38406b615a4119876be21c6d374a00bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the total expected progress value.  <br /></td></tr>
 <tr class="separator:a38406b615a4119876be21c6d374a00bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bd5c4a271f065b7260904ff7a5a1383" id="r_a0bd5c4a271f065b7260904ff7a5a1383"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a0bd5c4a271f065b7260904ff7a5a1383">GetFileMetadata</a> () const override</td></tr>
+<tr class="separator:a0bd5c4a271f065b7260904ff7a5a1383"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abda83b8d68f9be83f416f7ae685cea6f" id="r_abda83b8d68f9be83f416f7ae685cea6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#abda83b8d68f9be83f416f7ae685cea6f">RegisterObserver</a> (<a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> *observer)</td></tr>
 <tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive parsing notifications.  <br /></td></tr>
 <tr class="separator:abda83b8d68f9be83f416f7ae685cea6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +185,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7b375c2c7906d27555b5faef830e33e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d5e4f594e4454259ec0e8757915d516" id="r_a5d5e4f594e4454259ec0e8757915d516"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a5d5e4f594e4454259ec0e8757915d516">m_totalProgress</a> {0}</td></tr>
 <tr class="separator:a5d5e4f594e4454259ec0e8757915d516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a523f6e93aeaa8c75990fef773d34bd69" id="r_a523f6e93aeaa8c75990fef773d34bd69"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a523f6e93aeaa8c75990fef773d34bd69">m_metadata</a></td></tr>
+<tr class="separator:a523f6e93aeaa8c75990fef773d34bd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85fc1a7ee1778b5c8cbaf144886b362f" id="r_a85fc1a7ee1778b5c8cbaf144886b362f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a85fc1a7ee1778b5c8cbaf144886b362f">observers</a></td></tr>
 <tr class="separator:a85fc1a7ee1778b5c8cbaf144886b362f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -190,6 +196,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line">[timestamp] [category] [source] [destination] [level] [<span class="keyword">event</span> type] [info] [payload]</div>
 </div><!-- fragment --><p>Brackets may nest inside <code>info</code> and <code>payload</code> (e.g. <code>[[ 419310003] [GW-IL EAST] starting]</code>), so fields are split by bracket depth, not by a fixed regex. <code>payload</code> is everything after the 7th field; it may hold several bracket groups (<code>[train_id=1] [P0] [cycle=1 ...]</code>) — those are kept verbatim.</p>
 <p>Parsed LogEvent fields: timestamp — ISO-8601 UTC string, unchanged (e.g. "2026-09-19T06:46:46.456779Z") category — "GENERAL" or "IO" source — emitting component (e.g. "a-west", "robot", "il-multi") destination — target component(s) or "internal" level — INFO / DEBUG / ERROR / FAIL event_type — LOG, STEP, ENVELOPE, CMD_RESP, ... info — short description payload — trailing data (omitted when empty) unit — 2oo2 channel from an <code>info</code> prefix like <code>[a-west | GP] …</code> (optional) p.&lt;key&gt; — structured payload content, see <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88">ExtractPayloadFields()</a> (optional)</p>
+<p>The header's <code># Key : Value</code> lines are not events; they are available through <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a0bd5c4a271f065b7260904ff7a5a1383">GetFileMetadata()</a> after parsing.</p>
 <p>Lines that do not match the layout are skipped. If no line matches at all, <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027" title="Parses data from a file path.">ParseData()</a> throws <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error(ParseError)</a> so a wrong file-type choice is reported instead of silently producing an empty view. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3e3a0b72d66654bf80ac633a10b2c723" name="a3e3a0b72d66654bf80ac633a10b2c723"></a>
@@ -378,6 +385,34 @@ Here is the caller graph for this function:</div>
 <dl class="section note"><dt>Note</dt><dd>Progress values should be used with <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a38406b615a4119876be21c6d374a00bf" title="Gets the total expected progress value.">GetTotalProgress()</a> for percentage calculations </dd></dl>
 
 <p>Implements <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a714468ed0e54516b4405a17c604c1dbc">parser::IDataParser</a>.</p>
+
+</div>
+</div>
+<a id="a0bd5c4a271f065b7260904ff7a5a1383" name="a0bd5c4a271f065b7260904ff7a5a1383"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bd5c4a271f065b7260904ff7a5a1383">&#9670;&#160;</a></span>GetFileMetadata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; parser::SapiLogParser::GetFileMetadata </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The <code># Key : Value</code> lines of the header block (before the first event), in file order, e.g. {"Test Case", "IL Grants A Movement Authority"}, {"Status", "PASS"}, {"Timestamp", …}, {"Sources", …}, {"Entries", "1129"}. </p>
+
+<p>Reimplemented from <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#ab9ccbd310bf0aca0964e312717217f54">parser::IDataParser</a>.</p>
 
 </div>
 </div>
@@ -894,6 +929,28 @@ Duplicate observers are automatically prevented </dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">uint32_t parser::SapiLogParser::m_currentProgress {0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a523f6e93aeaa8c75990fef773d34bd69" name="a523f6e93aeaa8c75990fef773d34bd69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a523f6e93aeaa8c75990fef773d34bd69">&#9670;&#160;</a></span>m_metadata</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::pair&lt;std::string, std::string&gt; &gt; parser::SapiLogParser::m_metadata</td>
         </tr>
       </table>
   </td>

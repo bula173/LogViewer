@@ -32,9 +32,13 @@ var classui_1_1qt_1_1DashboardPanel =
     [ "m_fileSizeLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a287cdb792488373eebb6cb9c0cd7b710", null ],
     [ "m_reportButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ad4b5155642fec3583823b44de9ed2be6", null ],
     [ "m_scrollArea", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a1a73bc53345d0f96106528d56aff65c9", null ],
+    [ "m_testCaseLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ae0e25ed8abda62939b9bc70ce502758a", null ],
+    [ "m_testCaseTitleLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a1ee565a1a9a252ab61d1b89c8acd72a2", null ],
     [ "m_timeRangeLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a76b981df786fc715d3045297b9bd42f5", null ],
     [ "m_topActorsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aa53fa444b1e6196b8d7d934b223cb06f", null ],
     [ "m_totalEventsLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a07647488695249f0ac7709c2d8b682ee", null ],
     [ "m_typeBreakdownLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a805dfc2ef613c8a8aaf431c4c88d5a47", null ],
-    [ "m_typeBreakdownTitleLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#af233dc5f18a48f99a1f7cf5b3b9af43e", null ]
+    [ "m_typeBreakdownTitleLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#af233dc5f18a48f99a1f7cf5b3b9af43e", null ],
+    [ "m_verdictLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a6046eb69125b7fadeda55067c01efea1", null ],
+    [ "m_verdictTitleLabel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aa211fd33aec0b5377215ff2435414bbe", null ]
 ];

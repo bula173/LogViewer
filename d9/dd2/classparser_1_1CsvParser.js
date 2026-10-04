@@ -5,6 +5,7 @@ var classparser_1_1CsvParser =
     [ "CreateEventFromFields", "d9/dd2/classparser_1_1CsvParser.html#ab7ce010d20a53a9aba0cb83c965392f6", null ],
     [ "FindHeaderIndex", "d9/dd2/classparser_1_1CsvParser.html#a682706f16c16eaf60fa1d1c80f6eb0fa", null ],
     [ "GetCurrentProgress", "d9/dd2/classparser_1_1CsvParser.html#a5ef5b41b121c679c37fbae6617f39848", null ],
+    [ "GetFileMetadata", "d9/dd2/classparser_1_1CsvParser.html#ab9ccbd310bf0aca0964e312717217f54", null ],
     [ "GetTotalProgress", "d9/dd2/classparser_1_1CsvParser.html#ae2186e50eccf01e0e3fa28110bb0875a", null ],
     [ "NotifyNewEvent", "d9/dd2/classparser_1_1CsvParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "d9/dd2/classparser_1_1CsvParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],

@@ -106,9 +106,9 @@ Inheritance diagram for parser::EvlogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d31/classparser_1_1EvlogParser__inherit__graph.png" border="0" usemap="#aparser_1_1EvlogParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1EvlogParser_inherit__map" id="aparser_1_1EvlogParser_inherit__map">
-<area shape="rect" title=" " alt="" coords="10,299,190,544"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,251"/>
-<area shape="poly" title=" " alt="" coords="103,265,103,298,97,298,97,265"/>
+<area shape="rect" title=" " alt="" coords="10,319,190,564"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,271"/>
+<area shape="poly" title=" " alt="" coords="103,284,103,318,97,318,97,284"/>
 </map>
 </div>
 <div class="dynheader">
@@ -116,17 +116,17 @@ Collaboration diagram for parser::EvlogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/d9d/classparser_1_1EvlogParser__coll__graph.png" border="0" usemap="#aparser_1_1EvlogParser_coll__map" alt="Collaboration graph"/></div>
 <map name="aparser_1_1EvlogParser_coll__map" id="aparser_1_1EvlogParser_coll__map">
-<area shape="rect" title=" " alt="" coords="246,471,426,656"/>
-<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,393"/>
-<area shape="poly" title=" " alt="" coords="208,399,264,469,260,472,204,402"/>
+<area shape="rect" title=" " alt="" coords="246,491,426,676"/>
+<area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,413"/>
+<area shape="poly" title=" " alt="" coords="208,417,245,465,263,489,259,492,241,468,203,420"/>
 <area shape="rect" title=" " alt="" coords="5,5,200,85"/>
-<area shape="poly" title=" " alt="" coords="105,85,105,131,100,131,100,85"/>
-<area shape="rect" title=" " alt="" coords="221,238,288,303"/>
-<area shape="poly" title=" " alt="" coords="252,304,248,371,251,409,259,446,262,455,257,457,253,447,245,409,243,371,247,304"/>
-<area shape="rect" title=" " alt="" coords="402,238,433,303"/>
-<area shape="poly" title=" " alt="" coords="417,304,408,371,391,447,388,456,383,454,385,446,403,370,412,303"/>
-<area shape="rect" title=" " alt="" coords="457,231,644,311"/>
-<area shape="poly" title=" " alt="" coords="543,312,520,378,502,414,481,448,441,492,437,488,477,445,498,412,515,376,538,310"/>
+<area shape="poly" title=" " alt="" coords="105,86,105,132,100,132,100,86"/>
+<area shape="rect" title=" " alt="" coords="221,248,288,313"/>
+<area shape="poly" title=" " alt="" coords="252,314,247,385,250,426,259,466,262,475,257,477,253,467,245,427,242,385,247,313"/>
+<area shape="rect" title=" " alt="" coords="402,248,433,313"/>
+<area shape="poly" title=" " alt="" coords="418,314,409,385,391,467,388,476,383,474,385,466,403,384,412,314"/>
+<area shape="rect" title=" " alt="" coords="457,241,644,321"/>
+<area shape="poly" title=" " alt="" coords="544,322,520,393,502,432,479,468,440,511,436,507,475,465,497,429,515,391,539,320"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -159,6 +159,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0a048c722609e75931d696661e90b6b0" id="r_a0a048c722609e75931d696661e90b6b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a0a048c722609e75931d696661e90b6b0">SetTemplateFile</a> (const std::filesystem::path &amp;path)</td></tr>
 <tr class="memdesc:a0a048c722609e75931d696661e90b6b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a single template file. May be called multiple times.  <br /></td></tr>
 <tr class="separator:a0a048c722609e75931d696661e90b6b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ccbd310bf0aca0964e312717217f54" id="r_ab9ccbd310bf0aca0964e312717217f54"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#ab9ccbd310bf0aca0964e312717217f54">GetFileMetadata</a> () const</td></tr>
+<tr class="memdesc:ab9ccbd310bf0aca0964e312717217f54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ordered <code>key → value</code> pairs read from the file header during the last <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a31fd56f340c1d0adb872f3ef93e76d96" title="Parses data from a file path.">ParseData()</a> call (see <a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it.">db::EventsContainer::SetFileMetadata</a>).  <br /></td></tr>
+<tr class="separator:ab9ccbd310bf0aca0964e312717217f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abda83b8d68f9be83f416f7ae685cea6f" id="r_abda83b8d68f9be83f416f7ae685cea6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#abda83b8d68f9be83f416f7ae685cea6f">RegisterObserver</a> (<a class="el" href="../../df/d79/classparser_1_1IDataParserObserver.html">IDataParserObserver</a> *observer)</td></tr>
 <tr class="memdesc:abda83b8d68f9be83f416f7ae685cea6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers an observer to receive parsing notifications.  <br /></td></tr>
 <tr class="separator:abda83b8d68f9be83f416f7ae685cea6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,6 +262,36 @@ Emitted event fields</h2>
 <dl class="section note"><dt>Note</dt><dd>Progress values should be used with <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a7a9e67e23c711c2017a3919c6c7e32f3" title="Gets the total expected progress value.">GetTotalProgress()</a> for percentage calculations </dd></dl>
 
 <p>Implements <a class="el" href="../../d3/d8b/classparser_1_1IDataParser.html#a714468ed0e54516b4405a17c604c1dbc">parser::IDataParser</a>.</p>
+
+</div>
+</div>
+<a id="ab9ccbd310bf0aca0964e312717217f54" name="ab9ccbd310bf0aca0964e312717217f54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ccbd310bf0aca0964e312717217f54">&#9670;&#160;</a></span>GetFileMetadata()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; parser::IDataParser::GetFileMetadata </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ordered <code>key → value</code> pairs read from the file header during the last <a class="el" href="../../d1/d55/classparser_1_1EvlogParser.html#a1209d08fc0b44e6ba0d6bb9ceb04c4d9" title="Parses data from a file path.">ParseData()</a> call (see <a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it.">db::EventsContainer::SetFileMetadata</a>). </p>
+<dl class="section return"><dt>Returns</dt><dd>Empty for formats without a header (the default). </dd></dl>
+
+<p>Reimplemented in <a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a0bd5c4a271f065b7260904ff7a5a1383">parser::SapiLogParser</a>.</p>
 
 </div>
 </div>

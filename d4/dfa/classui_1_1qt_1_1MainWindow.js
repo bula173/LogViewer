@@ -169,6 +169,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "m_tabBadgeManager", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ada111b74c070b66e13d92fc15148c3a0", null ],
     [ "m_tailAction", "d4/dfa/classui_1_1qt_1_1MainWindow.html#afcdd580919f615f02cf80728a76a2217", null ],
     [ "m_tailer", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ab76e0df4d190e421b1a124ed5b72c89e", null ],
+    [ "m_testStepsPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a133e5f76b61bd44fe25febccb323ef45", null ],
     [ "m_timelinePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a1c8a7efd650e417fc96668e023b5453d", null ],
     [ "m_timeRangePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a7eb0555b10273f5f4812bf421f961813", null ],
     [ "m_tracePanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a2aefac379d645bc07df836d11917fef5", null ],

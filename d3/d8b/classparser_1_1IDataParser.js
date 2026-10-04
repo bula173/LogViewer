@@ -2,6 +2,7 @@ var classparser_1_1IDataParser =
 [
     [ "~IDataParser", "d3/d8b/classparser_1_1IDataParser.html#a9b39377303663519b50e33e44ca20418", null ],
     [ "GetCurrentProgress", "d3/d8b/classparser_1_1IDataParser.html#a714468ed0e54516b4405a17c604c1dbc", null ],
+    [ "GetFileMetadata", "d3/d8b/classparser_1_1IDataParser.html#ab9ccbd310bf0aca0964e312717217f54", null ],
     [ "GetTotalProgress", "d3/d8b/classparser_1_1IDataParser.html#a49135d85a8459410ff91c24a892f88d1", null ],
     [ "NotifyNewEvent", "d3/d8b/classparser_1_1IDataParser.html#a7eb5f01158daf2c64c0e9d7e45ba4d5e", null ],
     [ "NotifyNewEventBatch", "d3/d8b/classparser_1_1IDataParser.html#ac66a6d032e95fb5c0f26695e2c1c5db9", null ],

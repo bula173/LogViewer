@@ -9,10 +9,14 @@ var namespaceanalyzer =
       [ "Trim", "d6/d1b/namespaceanalyzer_1_1anonymous__namespace_02SequenceMessages_8cpp_03.html#a42cef22dc829c46dd810e284a9256066", null ],
       [ "kPlaceholders", "d6/d1b/namespaceanalyzer_1_1anonymous__namespace_02SequenceMessages_8cpp_03.html#a5224c2002bbea2ee502bd9df96dcd9f7", null ]
     ] ],
+    [ "anonymous_namespace{TestOutline.cpp}", "d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03.html", "d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03" ],
     [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
     [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
     [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ],
     [ "SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", "d1/da6/structanalyzer_1_1SequenceMessage" ],
+    [ "TestMarkerRules", "d7/d10/structanalyzer_1_1TestMarkerRules.html", "d7/d10/structanalyzer_1_1TestMarkerRules" ],
+    [ "TestOutline", "d8/d05/structanalyzer_1_1TestOutline.html", "d8/d05/structanalyzer_1_1TestOutline" ],
+    [ "TestStep", "d5/d48/structanalyzer_1_1TestStep.html", "d5/d48/structanalyzer_1_1TestStep" ],
     [ "ExchangeMode", "dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8eff", [
       [ "Pair", "dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effad0bd662806a73209a1c6fbe55591fbff", null ],
       [ "DirectionField", "dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effa142b1bc2eb9d2d7614c776aa12e5a733", null ],
@@ -20,6 +24,18 @@ var namespaceanalyzer =
       [ "SenderOnly", "dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5", null ],
       [ "PatternField", "dd/d3e/namespaceanalyzer.html#a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02", null ]
     ] ],
+    [ "StepStatus", "dd/d3e/namespaceanalyzer.html#a4ad9e170d046ad3c13bb0eba07575045", [
+      [ "Passed", "dd/d3e/namespaceanalyzer.html#a4ad9e170d046ad3c13bb0eba07575045aa0d0628f6b4e4d78d2ffef4d4d1c4b15", null ],
+      [ "Recovered", "dd/d3e/namespaceanalyzer.html#a4ad9e170d046ad3c13bb0eba07575045a5c4c4cf7bbab0d76fe61420aee14a5ca", null ],
+      [ "Failed", "dd/d3e/namespaceanalyzer.html#a4ad9e170d046ad3c13bb0eba07575045ad7c8c85bf79bbe1b7188497c32c3b0ca", null ],
+      [ "NotRun", "dd/d3e/namespaceanalyzer.html#a4ad9e170d046ad3c13bb0eba07575045a74fabe97ee9218565bedba910ea8934b", null ]
+    ] ],
+    [ "TestVerdict", "dd/d3e/namespaceanalyzer.html#ac130d684b216c727fb9dd3b9e0acdcbb", [
+      [ "Unknown", "dd/d3e/namespaceanalyzer.html#ac130d684b216c727fb9dd3b9e0acdcbba88183b946cc5f0e8c96b2e66e1c74a7e", null ],
+      [ "Pass", "dd/d3e/namespaceanalyzer.html#ac130d684b216c727fb9dd3b9e0acdcbbab9b57aae83585e17ede4570dcede353c", null ],
+      [ "Fail", "dd/d3e/namespaceanalyzer.html#ac130d684b216c727fb9dd3b9e0acdcbbaceaa0734f0b3c738120c67344d8f3ec1", null ]
+    ] ],
+    [ "BuildTestOutline", "dd/d3e/namespaceanalyzer.html#a8c10b24b04e711cf99492a080aa74d21", null ],
     [ "CollectSequenceMessages", "dd/d3e/namespaceanalyzer.html#af4f842bd6e3b29034590461d1c53f122", null ],
     [ "IsPlaceholderActor", "dd/d3e/namespaceanalyzer.html#aee5bf03158adf9cf7387d4d5b39a6916", null ],
     [ "ScoreAgainst", "dd/d3e/namespaceanalyzer.html#a7f5247563fd3f8ccceccc72addf60468", null ],
@@ -27,6 +43,8 @@ var namespaceanalyzer =
     [ "kActorWords", "dd/d3e/namespaceanalyzer.html#ad6f772cb0546635a3c47b9f3766033bf", null ],
     [ "kIncomingWords", "dd/d3e/namespaceanalyzer.html#a7bf7738acf6fb60b136f888d3e732060", null ],
     [ "kLabelWords", "dd/d3e/namespaceanalyzer.html#af500209b91f794190efb0f9ede84f890", null ],
+    [ "kMetaStatus", "dd/d3e/namespaceanalyzer.html#a02fc1a5fe0105c4136ae914d78a75695", null ],
+    [ "kMetaTestCase", "dd/d3e/namespaceanalyzer.html#af6e4069700f7be684cfc5d3e34da1e60", null ],
     [ "kOutgoingWords", "dd/d3e/namespaceanalyzer.html#a8b58b197bae393b8ece5e9352a70fa53", null ],
     [ "kProtocolPatterns", "dd/d3e/namespaceanalyzer.html#a7064057c8cefc4255594ecdd2f7ebed6", null ],
     [ "kReceiverWords", "dd/d3e/namespaceanalyzer.html#a1988ca5bfcd631c0146be3118662b636", null ],
