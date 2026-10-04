@@ -161,6 +161,54 @@ TEST(SapiLogParserTest, EmptyInputYieldsNoEvents)
 }
 
 // ---------------------------------------------------------------------------
+// Header block → file metadata
+// ---------------------------------------------------------------------------
+
+TEST(SapiLogParserTest, HeaderKeyValueLinesBecomeFileMetadataInOrder)
+{
+    const std::string text =
+        "# ================================================================================\n"
+        "# FULL MERGED TEST STEPS, CONTAINER & SIMULATOR LOGS\n"
+        "# Test Case   : IL Grants A Movement Authority\n"
+        "# Status      : FAIL\n"
+        "# Timestamp   : 2026-10-04T01:55:06.402978+00:00\n"
+        "# Sources     : robot, c-west, il, ctc\n"
+        "# Entries     : 2\r\n" // CRLF file
+        "# ================================================================================\n" +
+        Line("[IO] [robot] [internal] [INFO] [TEST_START] [Test execution started] [name=IL Grants]") +
+        "# Note : comments after the first event are not header\n" +
+        Line("[IO] [robot] [internal] [INFO] [TEST_END] [Test finished (FAIL)] [name=IL Grants status=FAIL]");
+
+    SapiCollector col;
+    SapiLogParser parser;
+    parser.RegisterObserver(&col);
+    std::istringstream ss(text);
+    parser.ParseData(ss);
+
+    EXPECT_EQ(col.events.size(), 2u); // header lines are not events
+    const std::vector<std::pair<std::string, std::string>> expected{
+        {"Test Case", "IL Grants A Movement Authority"},
+        {"Status", "FAIL"},
+        {"Timestamp", "2026-10-04T01:55:06.402978+00:00"}, // value keeps its own colons
+        {"Sources", "robot, c-west, il, ctc"},
+        {"Entries", "2"}};
+    EXPECT_EQ(parser.GetFileMetadata(), expected);
+}
+
+TEST(SapiLogParserTest, FileMetadataIsResetByTheNextParse)
+{
+    SapiLogParser parser;
+    std::istringstream withHeader("# Status : PASS\n" +
+                                  Line("[IO] [robot] [internal] [INFO] [STEP] [Log] []"));
+    parser.ParseData(withHeader);
+    ASSERT_EQ(parser.GetFileMetadata().size(), 1u);
+
+    std::istringstream withoutHeader(Line("[IO] [robot] [internal] [INFO] [STEP] [Log] []"));
+    parser.ParseData(withoutHeader);
+    EXPECT_TRUE(parser.GetFileMetadata().empty());
+}
+
+// ---------------------------------------------------------------------------
 // File-based: sample data, sniffing and factory dispatch
 // ---------------------------------------------------------------------------
 

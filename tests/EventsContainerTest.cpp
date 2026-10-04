@@ -826,3 +826,22 @@ TEST(EventsContainerTest, SecondMergeKeepsOriginalId)
     EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "20");
     EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "30");
 }
+
+TEST(EventsContainerTest, FileMetadataIsClearedWithTheEvents)
+{
+    db::EventsContainer container;
+    EXPECT_TRUE(container.GetFileMetadata().empty());
+
+    container.AddEvent({1, {{"msg", "A"}}});
+    container.SetFileMetadata({{"Test Case", "IL Grants"}, {"Status", "PASS"}});
+    const db::EventsContainer::FileMetadata expected{{"Test Case", "IL Grants"}, {"Status", "PASS"}};
+    EXPECT_EQ(container.GetFileMetadata(), expected);
+
+    container.Clear();
+    EXPECT_TRUE(container.GetFileMetadata().empty());
+
+    // Also when there are no events to clear (a header-only file).
+    container.SetFileMetadata({{"Status", "FAIL"}});
+    container.Clear();
+    EXPECT_TRUE(container.GetFileMetadata().empty());
+}

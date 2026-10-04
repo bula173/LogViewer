@@ -125,6 +125,7 @@ void EventsContainer::Clear()
     {
         std::unique_lock<std::shared_mutex> keepGuard(m_invalidationMutex);
         std::unique_lock<std::shared_mutex> lock(m_mutex);
+        m_fileMetadata.clear();
         if (m_data.empty())
         {
             util::Logger::Debug("EventsContainer::Clear: m_data already empty");
@@ -157,6 +158,18 @@ size_t EventsContainer::Size() const
      */
     std::shared_lock<std::shared_mutex> lock(m_mutex);
     return m_data.size();
+}
+
+void EventsContainer::SetFileMetadata(FileMetadata metadata)
+{
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
+    m_fileMetadata = std::move(metadata);
+}
+
+EventsContainer::FileMetadata EventsContainer::GetFileMetadata() const
+{
+    std::shared_lock<std::shared_mutex> lock(m_mutex);
+    return m_fileMetadata;
 }
 
 void EventsContainer::MergeEvents(EventsContainer& other, 

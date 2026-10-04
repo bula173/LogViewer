@@ -74,7 +74,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 
 | Subdirectory | Contents |
 |---|---|
-| `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …) |
+| `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, TestStepsPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …) |
 | `dialogs/` | Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …) |
 | `events/` | Event table model and view (EventsTableModel, EventsTableView), Excel-style column value filters (ColumnFilterPopup, FilterHeaderView) |
 | `utils/` | Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker) |
@@ -82,7 +82,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 **MainWindow**: Central orchestrator
 - Qt 6-based QMainWindow with dock widget system
 - Left docks: **Filters** + **Signal Browser** (tabbed, `QDockWidget` each); right dock: Details; bottom dock: AI chat / plugin panels
-- Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Bookmarks, Scenarios, Actors
+- Tab-based content area: Events, Statistics, Signal Plot, Timeline, Pattern Analysis, Trace Viewer, Test Steps, Bookmarks, Scenarios, Actors
 - Drag-and-drop file loading; lazy dirty-flag panel refresh (panels only recompute when visible)
 - Implements `ConfigObserver` and `IPluginObserver` for configuration and plugin lifecycle changes
 - Menu system: File (Open, Load DBC, Load Evlog Templates, Export, …), View (Tabs, Layouts, …), Tools, Help
@@ -100,6 +100,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 - **LayoutManager**: Serialises and restores named dock layouts. Built-in presets (XML log, CAN analysis) plus user-saved layouts; persisted across sessions.
 - **TimelineChartPanel**: Interactive event-volume bar histogram with zoom and brush
 - **TraceViewerPanel**: Sequence-diagram-style actor/event view
+- **TestStepsPanel**: "Test Steps" tab — `analyzer::BuildTestOutline()` as a `QTreeWidget` (sections → keywords/expectations: status, start, duration, events) under a PASS/FAIL banner with the failing step, its message and **Go to failure**. Double-click/Enter or the button emit `NavigateToEvent(row)`, which `MainWindow` routes like a bookmark (Events page + `ScrollToActualRow`). Refreshed lazily like the other analysis panels, but re-analyses only when the data changes (container generation, size, file metadata) — the outline covers the whole log, not the filtered rows. Logs without `TEST_START` show a hint.
 - **PatternAnalysisPanel**: Template clustering of structurally similar log lines
 - **BookmarksPanel**, **ScenariosPanel**, **ActorsPanel**, **ActorDefinitionsPanel**: Event annotation, scenario matching, and actor attribution
 - **SideBySidePanel**: Loads two independent log files and displays them in a split view with three synchronisation modes (see below)
@@ -176,7 +177,7 @@ Registered parsers (extension → class):
 - Emitted fields: `timestamp`, `level` (Off/Fatal/Error/Warn/Info/Debug/Verbose), `type` (Log/AppTrace/NwTrace/Control), `AppID`, `ContextID`, `EcuID`, `MsgCtr`, optional `SessionID`, `info`.
 
 **SapiLogParser** (`parsers/sapi/`): Parses merged test-run logs from the safeAPI RBC 2oo2 test environment (robot steps + container + simulator logs).
-- Header block of `#` lines, then one event per line: `[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]`.
+- Header block of `#` lines (its `# Key : Value` lines — Test Case, Status, Timestamp, Sources, Entries — are returned by `GetFileMetadata()`, an `IDataParser` virtual that is empty for other formats; `MainWindowPresenter::RunParserAsync` stores them with `EventsContainer::SetFileMetadata()`), then one event per line: `[timestamp] [category] [source] [destination] [level] [event type] [info] [payload]`.
 - Fields are split by bracket depth (brackets nest inside `info`/`payload`); `payload` is the remainder after the 7th field, multiple groups kept verbatim. Malformed lines are skipped; a file with no matching line throws `ParseError`.
 - Emitted fields: `timestamp` (ISO-8601 string), `category`, `source`, `destination`, `level`, `event_type`, `info`, optional `payload`, optional `unit`, optional `p.<key>` payload fields.
 - `unit`: the 2oo2 channel from an `info` prefix `[unit | partition]` (`[a-west | GP] …` → `a-west`, also `| RTE`); `source` alone says `RBC West` for both channels. Extracted by `SapiLogParser::ExtractUnit()`.
@@ -217,6 +218,12 @@ IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()
 
 `SelectStrategy()` probes the first 20 events for `CAN_ID` to pick the right implementation. Adding a new format requires only implementing `IStatisticsStrategy::Matches()` and `Compute()`.
 
+**TestOutline** (`analyzers/TestOutline.{hpp,cpp}`, no Qt): `analyzer::BuildTestOutline(events, TestMarkerRules)` turns a test-harness log into steps, the verdict and the decisive failure. `TestMarkerRules` holds the event vocabulary (defaults: the Robot Framework listener lines of safeAPI merged logs — `TEST_START`/`TEST_END`, `STEP`, `STEP_FAIL`, `LOG` markers `TestStep N:`/`TestExpectation …`, `Control command sent`).
+- Sections: Setup (before the first `TestStep` marker), one per `TestStep` marker, Teardown (keywords after the last marker when it is a `TestExpectation`); children are the keywords (one per `STEP`) and expectations. Durations run until the next step starts (the listener logs no keyword end or nesting depth).
+- A `STEP_FAIL` belongs to the latest not-yet-failed `STEP` of that keyword; it is *recovered* when the same keyword with the same arguments starts again later (retry) or the test passed. In real logs 1,610 of 2,003 `STEP_FAIL`s are in PASS logs.
+- Verdict: header `Status`, else `(PASS)`/`(FAIL)` in `TEST_END`. Decisive failure: the first unrecovered `STEP_FAIL` (the innermost keyword of the failing chain, not a later teardown failure), else `TEST_END` (suite-setup failures leave only `TEST_START`/`TEST_END`).
+- *Probably not run* (heuristic): after the decisive failure, sections without a command, expectations, and keywords that neither failed nor sent a command although the same keyword sends one elsewhere.
+
 **FilterManager**: Coordinates filtering operations
 - Applies multiple filters in sequence
 - Supports complex filter combinations
@@ -239,6 +246,7 @@ IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()
 - Supports filter indices for efficient filtered views
 - Implements `IModel` interface
 - Observable updates for UI refresh
+- File metadata: `SetFileMetadata()`/`GetFileMetadata()` keep the parser's header pairs (cleared by `Clear()`, kept by `MergeEvents()`)
 
 **LogEvent**: Immutable event representation
 - ID + key-value pairs (flexible schema)

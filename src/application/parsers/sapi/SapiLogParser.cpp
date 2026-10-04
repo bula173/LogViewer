@@ -224,6 +224,22 @@ bool ExtractJson(std::string_view payload, Pairs& pairs)
     return true;
 }
 
+/// Appends `# Test Case   : IL Grants …` as {"Test Case", "IL Grants …"};
+/// other comment lines (rulers, the title line) are ignored.
+void ParseHeaderLine(std::string_view line, Pairs& metadata)
+{
+    line.remove_prefix(1); // '#'
+    const size_t colon = line.find(':');
+    if (colon == std::string_view::npos)
+        return;
+    const std::string_view key = Trim(line.substr(0, colon));
+    const bool keyIsWords = !key.empty() && std::all_of(key.begin(), key.end(), [](char c) {
+        return std::isalnum(static_cast<unsigned char>(c)) || c == ' ' || c == '_' || c == '-';
+    });
+    if (keyIsWords)
+        metadata.emplace_back(std::string{key}, std::string{Trim(line.substr(colon + 1))});
+}
+
 } // namespace
 
 std::string_view SapiLogParser::ExtractUnit(std::string_view info)
@@ -402,6 +418,8 @@ void SapiLogParser::ParseStream(std::istream& input)
         batch.reserve(kBatchSize);
     };
 
+    m_metadata.clear();
+
     std::string line;
     int         id        = 0;
     size_t      dataLines = 0;
@@ -421,8 +439,14 @@ void SapiLogParser::ParseStream(std::istream& input)
         }
 
         const std::string_view trimmed = Trim(content);
-        if (trimmed.empty() || trimmed.front() == '#')
+        if (trimmed.empty())
             continue;
+        if (trimmed.front() == '#')
+        {
+            if (dataLines == 0) // header block only; later comments are ignored
+                ParseHeaderLine(trimmed, m_metadata);
+            continue;
+        }
         ++dataLines;
 
         db::LogEvent::EventItems items;

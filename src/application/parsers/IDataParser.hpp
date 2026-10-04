@@ -11,6 +11,8 @@
 #include <cstdint>
 #include <filesystem>
 #include <istream>
+#include <string>
+#include <utility>
 #include <vector>
 
 /**
@@ -149,6 +151,14 @@ class IDataParser
      * @note Return 0 if total progress cannot be determined in advance
      */
     virtual uint32_t GetTotalProgress() const = 0;
+
+    /**
+     * @brief Ordered `key → value` pairs read from the file header during the
+     *        last ParseData() call (see db::EventsContainer::SetFileMetadata).
+     *
+     * @return Empty for formats without a header (the default).
+     */
+    virtual std::vector<std::pair<std::string, std::string>> GetFileMetadata() const { return {}; }
 
     /**
      * @brief Registers an observer to receive parsing notifications.

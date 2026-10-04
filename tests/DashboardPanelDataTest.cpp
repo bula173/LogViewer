@@ -70,4 +70,35 @@ TEST(DashboardPanelDataTest, ShowsFileInfoTimeRangeTypesAndActorsForSourceDestin
     EXPECT_FALSE(text.contains("No events have"));
 }
 
+TEST(DashboardPanelDataTest, ShowsTestCaseAndVerdictFromFileHeader)
+{
+    EnsureQApplication();
+
+    db::EventsContainer events;
+    events.AddEvent(db::LogEvent(1, {{"timestamp", "2026-10-04T01:55:00Z"}, {"event_type", "TEST_START"}}));
+
+    DashboardPanel panel;
+    panel.SetEventsSource(&events);
+    auto* testCase = panel.findChild<QLabel*>("dashboardTestCaseLabel");
+    auto* verdict  = panel.findChild<QLabel*>("dashboardVerdictLabel");
+    ASSERT_NE(testCase, nullptr);
+    ASSERT_NE(verdict, nullptr);
+    EXPECT_TRUE(testCase->isHidden()); // no header → no test rows
+    EXPECT_TRUE(verdict->isHidden());
+
+    events.SetFileMetadata({{"Test Case", "IL Grants A Movement Authority"},
+                            {"Status", "FAIL"},
+                            {"Entries", "1"}});
+    panel.UpdateStats();
+    EXPECT_FALSE(testCase->isHidden());
+    EXPECT_EQ(testCase->text(), "IL Grants A Movement Authority");
+    EXPECT_FALSE(verdict->isHidden());
+    EXPECT_TRUE(verdict->text().contains("FAIL")) << verdict->text().toStdString();
+
+    events.Clear(); // another file without a header
+    panel.UpdateStats();
+    EXPECT_TRUE(testCase->isHidden());
+    EXPECT_TRUE(verdict->isHidden());
+}
+
 } // namespace ui::qt::test

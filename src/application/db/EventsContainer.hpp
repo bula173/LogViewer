@@ -13,6 +13,8 @@
 #include <cstdint>
 #include <deque>
 #include <shared_mutex>
+#include <string>
+#include <utility>
 #include <vector>
 
 /**
@@ -191,6 +193,15 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
      */
     size_t Size() const override;
 
+    /// Ordered `key → value` pairs a parser read from the file header (e.g. the
+    /// `# Test Case : …` block of a safeAPI merged log). Empty when the format
+    /// has no header.
+    using FileMetadata = std::vector<std::pair<std::string, std::string>>;
+
+    /// Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it.
+    void SetFileMetadata(FileMetadata metadata);
+    [[nodiscard]] FileMetadata GetFileMetadata() const;
+
     /**
      * @brief Counter bumped whenever existing indices stop referring to the
      *        same events: Clear() of a non-empty container and MergeEvents().
@@ -310,6 +321,8 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     /// never relocates existing events: references returned by GetEvent()
     /// to readers on other threads stay valid while a parser appends.
     std::deque<LogEvent> m_data;
+    /// See GetFileMetadata(). Guarded by m_mutex.
+    FileMetadata m_fileMetadata;
     /// Currently selected item index (-1 = no selection).
     /// Declared atomic so that GetCurrentItemIndex() / SetCurrentItem()
     /// are safe without acquiring m_mutex.

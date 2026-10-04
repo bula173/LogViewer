@@ -35,6 +35,7 @@ target_sources(application_core
         panels/TimelineChartPanel.cpp
         panels/TraceViewerPanel.cpp
         panels/SequenceDiagramPanel.cpp
+        panels/TestStepsPanel.cpp
         dialogs/ConfigEditorDialog.cpp
         dialogs/ExportDialog.cpp
         dialogs/FilterEditorDialog.cpp

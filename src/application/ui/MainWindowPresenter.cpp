@@ -312,6 +312,9 @@ void MainWindowPresenter::RunParserAsync(std::unique_ptr<parser::IDataParser> pa
         std::rethrow_exception(parseException);
     }
 
+    // Before the view refresh below, so panels refreshed by it see the header.
+    m_events.SetFileMetadata(parser->GetFileMetadata());
+
     const std::size_t eventCount = m_events.Size();
     util::Logger::Info("RunParserAsync: parse complete — '{}', {} event(s) loaded",
         path.string(), eventCount);

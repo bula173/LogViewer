@@ -19,7 +19,8 @@ namespace ui::qt {
  * @brief Dashboard panel showing log file overview and quick statistics.
  *
  * Displays:
- * - File info (name, format, size, time range)
+ * - File info (name, format, size, time range; test case and verdict when the
+ *   file header has them, see db::EventsContainer::GetFileMetadata())
  * - Event statistics (total count, breakdown by the configured type filter
  *   field — config::GetConfig().typeFilterField, e.g. "level" — shown as
  *   whatever distinct values actually occur in that column, not a fixed
@@ -87,6 +88,10 @@ class DashboardPanel : public QWidget
     QLabel* m_fileFormatLabel = nullptr;
     QLabel* m_fileSizeLabel = nullptr;
     QLabel* m_timeRangeLabel = nullptr;
+    QLabel* m_testCaseTitleLabel = nullptr;
+    QLabel* m_testCaseLabel = nullptr;
+    QLabel* m_verdictTitleLabel = nullptr;
+    QLabel* m_verdictLabel = nullptr;
 
     QLabel* m_totalEventsLabel = nullptr;
     QLabel* m_typeBreakdownTitleLabel = nullptr;

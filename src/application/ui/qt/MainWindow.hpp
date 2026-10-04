@@ -83,6 +83,7 @@ class SignalPlotPanel;
 class TimelineChartPanel;
 class TraceViewerPanel;
 class SequenceDiagramPanel;
+class TestStepsPanel;
 class BookmarksPanel;
 class ScenariosPanel;
 class ActorsPanel;
@@ -332,6 +333,7 @@ class MainWindow : public QMainWindow,
     TimelineChartPanel*     m_timelinePanel   {nullptr};
     TraceViewerPanel*       m_tracePanel      {nullptr};
     SequenceDiagramPanel*   m_sequencePanel   {nullptr};
+    TestStepsPanel*         m_testStepsPanel  {nullptr};
     BookmarksPanel*         m_bookmarksPanel{nullptr};
     ScenariosPanel*         m_scenariosPanel{nullptr};
     ActorsPanel*            m_actorsPanel   {nullptr};

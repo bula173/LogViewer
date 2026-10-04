@@ -3,6 +3,7 @@
 #include "Config.hpp"
 #include "analyzers/ActorDiscoverer.hpp"
 #include "analyzers/SequenceMessages.hpp"
+#include "analyzers/TestOutline.hpp"
 #include <QFileInfo>
 #include <QLocale>
 #include <algorithm>
@@ -89,6 +90,28 @@ void DashboardPanel::CreateLayout()
     timeRangeRow->addWidget(m_timeRangeLabel);
     timeRangeRow->addStretch();
     fileInfoLayout->addLayout(timeRangeRow);
+
+    // Test case and verdict from the file header (safeAPI merged logs only).
+    auto* testCaseRow = new QHBoxLayout();
+    m_testCaseTitleLabel = new QLabel("Test Case:");
+    testCaseRow->addWidget(m_testCaseTitleLabel);
+    m_testCaseLabel = new QLabel();
+    m_testCaseLabel->setObjectName("dashboardTestCaseLabel");
+    m_testCaseLabel->setStyleSheet("font-weight: bold;");
+    testCaseRow->addWidget(m_testCaseLabel);
+    testCaseRow->addStretch();
+    fileInfoLayout->addLayout(testCaseRow);
+
+    auto* verdictRow = new QHBoxLayout();
+    m_verdictTitleLabel = new QLabel("Verdict:");
+    verdictRow->addWidget(m_verdictTitleLabel);
+    m_verdictLabel = new QLabel();
+    m_verdictLabel->setObjectName("dashboardVerdictLabel");
+    verdictRow->addWidget(m_verdictLabel);
+    verdictRow->addStretch();
+    fileInfoLayout->addLayout(verdictRow);
+    for (auto* label : {m_testCaseTitleLabel, m_testCaseLabel, m_verdictTitleLabel, m_verdictLabel})
+        label->setVisible(false);
 
     scrollLayout->addWidget(fileInfoGroup);
 
@@ -286,6 +309,27 @@ void DashboardPanel::UpdateFileInfo()
         }
     }
     m_timeRangeLabel->setText(range);
+
+    QString testCase;
+    QString verdict;
+    for (const auto& [key, value] : m_events->GetFileMetadata())
+    {
+        if (key == analyzer::kMetaTestCase)
+            testCase = QString::fromStdString(value);
+        else if (key == analyzer::kMetaStatus)
+            verdict = QString::fromStdString(value);
+    }
+    m_testCaseLabel->setText(testCase);
+    m_testCaseTitleLabel->setVisible(!testCase.isEmpty());
+    m_testCaseLabel->setVisible(!testCase.isEmpty());
+
+    const QString upper = verdict.toUpper();
+    const QString color = upper == "PASS" ? "#2e7d32" : upper == "FAIL" ? "#d32f2f" : QString();
+    m_verdictLabel->setText(upper == "PASS" ? "✓ " + verdict : upper == "FAIL" ? "✗ " + verdict : verdict);
+    m_verdictLabel->setStyleSheet(color.isEmpty() ? QString("font-weight: bold;")
+                                                  : QString("font-weight: bold; color: %1;").arg(color));
+    m_verdictTitleLabel->setVisible(!verdict.isEmpty());
+    m_verdictLabel->setVisible(!verdict.isEmpty());
 }
 
 void DashboardPanel::UpdateEventStats()

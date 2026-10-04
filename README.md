@@ -22,6 +22,7 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 - **Timeline Chart**: Interactive bar histogram of event volume over time with zoom and brush selection
 - **Pattern Analysis**: Template clustering that groups structurally similar log lines
 - **Trace Viewer**: Sequence-diagram-style view grouped by actor
+- **Test Steps**: Outline of a test log (safeAPI merged logs: `TEST_START` … `TEST_END`) — sections from the author's `TestStep N` / `TestExpectation` markers with every keyword, start offset, duration and status (passed, failed but recovered by a retry, failed, probably not run); a PASS/FAIL banner names the step and message that failed the test, with **Go to failure**; double-click or Enter jumps to a step in the Events tab. The Dashboard shows the test case and verdict from the file header
 - **Bookmarks**: Annotate and navigate to important events
 - **Scenarios**: Define multi-step event sequences and export matches as JSON Lines
 - **Actors**: Event attribution tree built from configurable actor definitions

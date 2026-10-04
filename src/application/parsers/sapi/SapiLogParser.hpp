@@ -5,7 +5,10 @@
 #include <cstdint>
 #include <filesystem>
 #include <istream>
+#include <string>
 #include <string_view>
+#include <utility>
+#include <vector>
 
 namespace parser
 {
@@ -38,6 +41,9 @@ namespace parser
  *   unit        — 2oo2 channel from an `info` prefix like `[a-west | GP] …` (optional)
  *   p.<key>     — structured payload content, see ExtractPayloadFields() (optional)
  *
+ * The header's `# Key : Value` lines are not events; they are available
+ * through GetFileMetadata() after parsing.
+ *
  * Lines that do not match the layout are skipped. If no line matches at all,
  * ParseData() throws error::Error(ParseError) so a wrong file-type choice is
  * reported instead of silently producing an empty view.
@@ -53,6 +59,14 @@ class SapiLogParser : public IDataParser
 
     uint32_t GetCurrentProgress() const override { return m_currentProgress; }
     uint32_t GetTotalProgress()   const override { return m_totalProgress; }
+
+    /// The `# Key : Value` lines of the header block (before the first event),
+    /// in file order, e.g. {"Test Case", "IL Grants A Movement Authority"},
+    /// {"Status", "PASS"}, {"Timestamp", …}, {"Sources", …}, {"Entries", "1129"}.
+    std::vector<std::pair<std::string, std::string>> GetFileMetadata() const override
+    {
+        return m_metadata;
+    }
 
     /// True when the first lines of @p filepath carry the merged-log header
     /// (`# FULL MERGED TEST STEPS, CONTAINER & SIMULATOR LOGS`). Used to
@@ -86,6 +100,7 @@ class SapiLogParser : public IDataParser
 
     uint32_t m_currentProgress {0};
     uint32_t m_totalProgress   {0};
+    std::vector<std::pair<std::string, std::string>> m_metadata;
 };
 
 } // namespace parser
