@@ -173,6 +173,7 @@ var hierarchy =
     [ "plugin::PluginManager", "d3/d67/classplugin_1_1PluginManager.html", null ],
     [ "plugin::PluginMetadata", "de/d25/structplugin_1_1PluginMetadata.html", null ],
     [ "updates::PluginUpdateInfo", "db/da4/structupdates_1_1PluginUpdateInfo.html", null ],
+    [ "ui::qt::EventsTableModel::PrunedColumnState", "d5/d3c/structui_1_1qt_1_1EventsTableModel_1_1PrunedColumnState.html", null ],
     [ "QAbstractTableModel", "d7/d33/classQAbstractTableModel.html", [
       [ "ui::qt::EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", null ]
     ] ],

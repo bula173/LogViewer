@@ -178,7 +178,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Excel-style value filter for one table column: a search box, a "Select all" check box and one check box per distinct value.</p>
-<p>Emits Applied(allowed) on OK, or <a class="el" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a643a7de7abc2ce82ebec49aaddd2a277">Cleared()</a> when OK is pressed with every value checked (nothing to filter) or "Clear filter" is pressed. When the value list was truncated, OK emits AppliedExcluding(unchecked) instead: the values that could not be listed must stay visible. </p>
+<p>Emits Applied(checked) on OK (even with every value checked: only the receiver knows whether the old filter restricts values the list could not show), or <a class="el" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a643a7de7abc2ce82ebec49aaddd2a277">Cleared()</a> when "Clear filter" is pressed. When the value list was truncated, OK emits AppliedExcluding(unchecked) instead: the values that could not be listed must stay visible. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3956924510eb9847e270b13cb923aaed" name="a3956924510eb9847e270b13cb923aaed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3956924510eb9847e270b13cb923aaed">&#9670;&#160;</a></span>ColumnFilterPopup()</h2>
@@ -228,31 +228,30 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup_a3956924510eb9847e270b13cb923aaed_cgraph.png" border="0" usemap="#ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a3956924510eb9847e270b13cb923aaed_cgraph" alt=""/></div>
 <map name="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a3956924510eb9847e270b13cb923aaed_cgraph" id="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a3956924510eb9847e270b13cb923aaed_cgraph">
-<area shape="rect" title=" " alt="" coords="5,303,192,343"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a2d8889efb6bb383088c9b5bfdf8fd662" title=" " alt="" coords="240,149,427,189"/>
-<area shape="poly" title=" " alt="" coords="123,300,175,259,239,215,277,193,279,198,241,220,178,264,126,304"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a643a7de7abc2ce82ebec49aaddd2a277" title=" " alt="" coords="475,261,661,301"/>
-<area shape="poly" title=" " alt="" coords="134,300,183,277,239,259,296,251,354,249,461,258,461,263,354,255,296,256,241,264,185,282,136,305"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#adc4f1dc46374ed121e3a284b67f11c2f" title=" " alt="" coords="240,273,427,313"/>
-<area shape="poly" title=" " alt="" coords="192,308,226,304,227,309,192,314"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#af647e78f24af058ef62f060c0216da7a" title=" " alt="" coords="475,348,661,388"/>
-<area shape="poly" title=" " alt="" coords="192,329,461,355,461,360,192,334"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a605a19b0103f2a48856023ca59fe4799" title=" " alt="" coords="240,388,427,428"/>
-<area shape="poly" title=" " alt="" coords="155,340,266,381,264,386,153,345"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a0a5f8598d5a1c21e0ba03c8cd618ab19" title=" " alt="" coords="240,452,427,492"/>
-<area shape="poly" title=" " alt="" coords="121,341,173,389,206,415,241,438,254,444,251,449,239,442,203,419,169,393,117,345"/>
+<area shape="rect" title=" " alt="" coords="5,243,192,283"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a2d8889efb6bb383088c9b5bfdf8fd662" title=" " alt="" coords="240,85,427,125"/>
+<area shape="poly" title=" " alt="" coords="116,241,168,189,202,160,239,135,251,129,253,133,241,140,205,164,171,193,119,244"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a643a7de7abc2ce82ebec49aaddd2a277" title=" " alt="" coords="240,149,427,189"/>
+<area shape="poly" title=" " alt="" coords="143,240,239,199,258,192,260,197,241,204,145,245"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#adc4f1dc46374ed121e3a284b67f11c2f" title=" " alt="" coords="240,213,427,253"/>
+<area shape="poly" title=" " alt="" coords="192,248,226,244,227,249,192,254"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#af647e78f24af058ef62f060c0216da7a" title=" " alt="" coords="475,287,661,327"/>
+<area shape="poly" title=" " alt="" coords="192,269,461,294,461,299,192,274"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a605a19b0103f2a48856023ca59fe4799" title=" " alt="" coords="240,328,427,368"/>
+<area shape="poly" title=" " alt="" coords="155,280,266,321,264,326,153,285"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a0a5f8598d5a1c21e0ba03c8cd618ab19" title=" " alt="" coords="240,392,427,432"/>
+<area shape="poly" title=" " alt="" coords="121,281,173,329,206,355,241,378,254,384,251,389,239,382,203,359,169,333,117,285"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a710ddb1e41780506813df75cd917c816" title=" " alt="" coords="475,5,661,45"/>
-<area shape="poly" title=" " alt="" coords="354,147,406,101,473,55,486,48,489,53,476,60,409,106,357,151"/>
+<area shape="poly" title=" " alt="" coords="392,83,495,47,497,52,394,88"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a37b883659adee99a3056059eb6454346" title=" " alt="" coords="475,69,661,109"/>
-<area shape="poly" title=" " alt="" coords="392,147,495,111,497,116,394,152"/>
+<area shape="poly" title=" " alt="" coords="427,96,461,94,461,99,427,102"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a14059f743869c251df1c121e14e46394" title="Raw values of every checked entry (including ones hidden by the search)." alt="" coords="475,133,661,173"/>
-<area shape="poly" title=" " alt="" coords="427,160,461,158,461,163,427,166"/>
-<area shape="poly" title=" " alt="" coords="377,187,428,215,452,232,476,247,490,254,488,258,473,252,449,236,425,220,374,192"/>
+<area shape="poly" title=" " alt="" coords="427,122,462,129,460,134,426,127"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#ac662f782670b4ebfae1929f02f30a48b" title="Raw values of every listed entry that is not checked." alt="" coords="475,197,661,237"/>
-<area shape="poly" title=" " alt="" coords="427,186,462,193,460,198,426,191"/>
-<area shape="poly" title=" " alt="" coords="398,311,492,341,491,346,396,316"/>
-<area shape="poly" title=" " alt="" coords="426,390,461,384,461,389,427,395"/>
-<area shape="poly" title=" " alt="" coords="396,449,426,438,518,392,521,397,428,442,397,454"/>
+<area shape="poly" title=" " alt="" coords="405,123,428,135,443,147,453,160,462,171,476,183,487,189,484,194,473,188,458,175,449,163,439,151,425,140,402,128"/>
+<area shape="poly" title=" " alt="" coords="399,251,491,280,490,285,397,256"/>
+<area shape="poly" title=" " alt="" coords="426,329,461,323,461,328,427,334"/>
+<area shape="poly" title=" " alt="" coords="396,389,426,378,519,331,521,336,428,382,397,394"/>
 </map>
 </div>
 
@@ -286,17 +285,15 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup_a2d8889efb6bb383088c9b5bfdf8fd662_cgraph.png" border="0" usemap="#ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a2d8889efb6bb383088c9b5bfdf8fd662_cgraph" alt=""/></div>
 <map name="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a2d8889efb6bb383088c9b5bfdf8fd662_cgraph" id="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a2d8889efb6bb383088c9b5bfdf8fd662_cgraph">
-<area shape="rect" title=" " alt="" coords="5,133,192,173"/>
+<area shape="rect" title=" " alt="" coords="5,101,192,141"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a710ddb1e41780506813df75cd917c816" title=" " alt="" coords="240,5,427,45"/>
-<area shape="poly" title=" " alt="" coords="123,131,175,93,239,55,254,48,256,53,241,60,178,98,127,135"/>
+<area shape="poly" title=" " alt="" coords="140,99,239,55,258,47,260,52,241,60,142,104"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a37b883659adee99a3056059eb6454346" title=" " alt="" coords="240,69,427,109"/>
-<area shape="poly" title=" " alt="" coords="172,131,246,110,247,115,173,136"/>
+<area shape="poly" title=" " alt="" coords="192,106,226,101,227,107,192,111"/>
 <area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a14059f743869c251df1c121e14e46394" title="Raw values of every checked entry (including ones hidden by the search)." alt="" coords="240,133,427,173"/>
-<area shape="poly" title=" " alt="" coords="192,151,226,151,226,156,192,156"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a643a7de7abc2ce82ebec49aaddd2a277" title=" " alt="" coords="240,197,427,237"/>
-<area shape="poly" title=" " alt="" coords="173,171,247,191,246,196,172,176"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#ac662f782670b4ebfae1929f02f30a48b" title="Raw values of every listed entry that is not checked." alt="" coords="240,261,427,301"/>
-<area shape="poly" title=" " alt="" coords="127,171,178,209,241,247,256,254,254,259,239,252,175,213,123,176"/>
+<area shape="poly" title=" " alt="" coords="192,131,227,136,226,141,192,137"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#ac662f782670b4ebfae1929f02f30a48b" title="Raw values of every listed entry that is not checked." alt="" coords="240,197,427,237"/>
+<area shape="poly" title=" " alt="" coords="142,139,241,183,260,190,258,195,239,188,140,144"/>
 </map>
 </div>
 <div class="dynheader">
@@ -454,16 +451,13 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup_a643a7de7abc2ce82ebec49aaddd2a277_icgraph.png" border="0" usemap="#ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a643a7de7abc2ce82ebec49aaddd2a277_icgraph" alt=""/></div>
 <map name="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a643a7de7abc2ce82ebec49aaddd2a277_icgraph" id="ad2/df6/classui_1_1qt_1_1ColumnFilterPopup_a643a7de7abc2ce82ebec49aaddd2a277_icgraph">
-<area shape="rect" title=" " alt="" coords="476,63,663,103"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a2d8889efb6bb383088c9b5bfdf8fd662" title=" " alt="" coords="241,5,427,45"/>
-<area shape="poly" title=" " alt="" coords="473,62,416,48,417,43,474,57"/>
-<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a3956924510eb9847e270b13cb923aaed" title=" " alt="" coords="5,31,192,71"/>
-<area shape="poly" title=" " alt="" coords="462,78,192,60,192,54,462,73"/>
-<area shape="rect" href="../../d6/d26/classui_1_1qt_1_1EventsTableView.html#a26fdf075db5d0c74afd18bb7a5e828cc" title=" " alt="" coords="240,120,428,160"/>
-<area shape="poly" title=" " alt="" coords="474,109,417,123,416,117,473,103"/>
-<area shape="poly" title=" " alt="" coords="227,40,192,43,192,38,227,34"/>
-<area shape="rect" href="../../d6/d26/classui_1_1qt_1_1EventsTableView.html#a1236d6317442e8eba476faced5e006a7" title=" " alt="" coords="12,120,185,160"/>
-<area shape="poly" title=" " alt="" coords="226,143,186,143,186,137,226,137"/>
+<area shape="rect" title=" " alt="" coords="463,37,649,77"/>
+<area shape="rect" href="../../d2/df6/classui_1_1qt_1_1ColumnFilterPopup.html#a3956924510eb9847e270b13cb923aaed" title=" " alt="" coords="227,5,414,45"/>
+<area shape="poly" title=" " alt="" coords="449,45,414,41,415,35,449,40"/>
+<area shape="rect" href="../../d6/d26/classui_1_1qt_1_1EventsTableView.html#a26fdf075db5d0c74afd18bb7a5e828cc" title=" " alt="" coords="227,69,415,109"/>
+<area shape="poly" title=" " alt="" coords="449,74,415,79,415,74,449,69"/>
+<area shape="rect" href="../../d6/d26/classui_1_1qt_1_1EventsTableView.html#a1236d6317442e8eba476faced5e006a7" title=" " alt="" coords="5,69,179,109"/>
+<area shape="poly" title=" " alt="" coords="212,92,179,92,179,87,212,87"/>
 </map>
 </div>
 

@@ -89,6 +89,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "setupPluginManager", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a3d4078f9f144fc591e61f252f0990ac4", null ],
     [ "ShouldCheckForUpdates", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af7b6e8acbdbf33f4dfbeadaa2c815e8d", null ],
     [ "ShowError", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af6f2aca904ff6652ce6e265f14314555", null ],
+    [ "ShowEventsTablePage", "d4/dfa/classui_1_1qt_1_1MainWindow.html#adc8a5c2dbd514b77b56e84236829dd9c", null ],
     [ "ShowTabContextMenu", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a3b092c9906635b4fd3e4ad0f42793e89", null ],
     [ "StopTailing", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ada3e7b256ccf1b7602ad0c883caa93cb", null ],
     [ "ToggleProgressVisibility", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aac2910da54baa2889506b51142246c2f", null ],

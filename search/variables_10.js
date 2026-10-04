@@ -20,11 +20,12 @@ var searchData=
   ['signaldefs_17',['signalDefs',['../d9/d4f/structparser_1_1dbc_1_1DbcMessage.html#a80a34e3b35897281348b1372ce89426b',1,'parser::dbc::DbcMessage']]],
   ['signalkeys_18',['signalKeys',['../da/d91/structui_1_1qt_1_1FrameSignals.html#a4a5c6dbde107a7eb99f2989275176cf5',1,'ui::qt::FrameSignals']]],
   ['size_19',['size',['../df/db7/structai_1_1ModelInfo.html#a2bf16ed69a063fa8d57b963942cf9f39',1,'ai::ModelInfo']]],
-  ['startbit_20',['startBit',['../d3/dc2/structparser_1_1dbc_1_1DbcSignal.html#a9beb276883504876fe217146fb9fad01',1,'parser::dbc::DbcSignal']]],
-  ['startpos_21',['startPos',['../db/d1c/structui_1_1qt_1_1utils_1_1SearchMatch.html#aadab941d19761223e7152c6812e6442e',1,'ui::qt::utils::SearchMatch']]],
-  ['strategy_22',['strategy',['../dc/d53/structfilters_1_1FilterCondition.html#ac2478a414bdca0a6fe440519ee664af1',1,'filters::FilterCondition::strategy'],['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#a47c1a672d4ab9dc2e4b415006d78a0ed',1,'ui::qt::utils::EventGroupManager::EventGroup::strategy']]],
-  ['subactordirectedto_23',['subActorDirectedTo',['../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197',1,'ui::qt::ActorDefinition']]],
-  ['successcolor_24',['successColor',['../dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html#a132200c84d8f25bd48d03544754d7a4a',1,'ui::qt::utils::ThemeManager::ColorScheme']]],
-  ['sum_25',['sum',['../d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html#a905a29f84d5c7e641d1e904f647470df',1,'ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum']]],
-  ['summary_26',['summary',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#a51a82029fe74aa70379cd28c780ccd82',1,'ui::qt::BookmarksPanel::Bookmark::summary'],['../d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html#ab30aa4edde1126ceb86ab5c7f41929b5',1,'ui::qt::ScenariosPanel::ScenarioEvent::summary']]]
+  ['sort_20',['sort',['../d5/d3c/structui_1_1qt_1_1EventsTableModel_1_1PrunedColumnState.html#aca6b8cf0925797880e6d8718beaf78ed',1,'ui::qt::EventsTableModel::PrunedColumnState']]],
+  ['startbit_21',['startBit',['../d3/dc2/structparser_1_1dbc_1_1DbcSignal.html#a9beb276883504876fe217146fb9fad01',1,'parser::dbc::DbcSignal']]],
+  ['startpos_22',['startPos',['../db/d1c/structui_1_1qt_1_1utils_1_1SearchMatch.html#aadab941d19761223e7152c6812e6442e',1,'ui::qt::utils::SearchMatch']]],
+  ['strategy_23',['strategy',['../dc/d53/structfilters_1_1FilterCondition.html#ac2478a414bdca0a6fe440519ee664af1',1,'filters::FilterCondition::strategy'],['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#a47c1a672d4ab9dc2e4b415006d78a0ed',1,'ui::qt::utils::EventGroupManager::EventGroup::strategy']]],
+  ['subactordirectedto_24',['subActorDirectedTo',['../de/db8/structui_1_1qt_1_1ActorDefinition.html#a36ca5056f756929d32e93f8370c26197',1,'ui::qt::ActorDefinition']]],
+  ['successcolor_25',['successColor',['../dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html#a132200c84d8f25bd48d03544754d7a4a',1,'ui::qt::utils::ThemeManager::ColorScheme']]],
+  ['sum_26',['sum',['../d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html#a905a29f84d5c7e641d1e904f647470df',1,'ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum']]],
+  ['summary_27',['summary',['../da/d03/structui_1_1qt_1_1BookmarksPanel_1_1Bookmark.html#a51a82029fe74aa70379cd28c780ccd82',1,'ui::qt::BookmarksPanel::Bookmark::summary'],['../d8/d71/structui_1_1qt_1_1ScenariosPanel_1_1ScenarioEvent.html#ab30aa4edde1126ceb86ab5c7f41929b5',1,'ui::qt::ScenariosPanel::ScenarioEvent::summary']]]
 ];

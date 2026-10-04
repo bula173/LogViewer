@@ -17,5 +17,6 @@ var searchData=
   ['pluginmetadata_14',['PluginMetadata',['../de/d25/structplugin_1_1PluginMetadata.html',1,'plugin']]],
   ['pluginspreferencespanel_15',['PluginsPreferencesPanel',['../d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel.html',1,'ui::qt']]],
   ['pluginupdateinfo_16',['PluginUpdateInfo',['../db/da4/structupdates_1_1PluginUpdateInfo.html',1,'updates']]],
-  ['preferencesdialog_17',['PreferencesDialog',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html',1,'ui::qt']]]
+  ['preferencesdialog_17',['PreferencesDialog',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html',1,'ui::qt']]],
+  ['prunedcolumnstate_18',['PrunedColumnState',['../d5/d3c/structui_1_1qt_1_1EventsTableModel_1_1PrunedColumnState.html',1,'ui::qt::EventsTableModel']]]
 ];
