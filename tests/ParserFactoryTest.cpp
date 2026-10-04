@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
 
 namespace fs = std::filesystem;
 
@@ -184,4 +185,30 @@ TEST(ParserFactoryTest, GetSupportedExtensionsContainsXml)
     EXPECT_FALSE(exts.empty());
     auto it = std::find(exts.begin(), exts.end(), ".xml");
     EXPECT_NE(it, exts.end());
+}
+
+/**
+ * @brief Regression: registering a custom parser before the first lookup must
+ * not suppress the built-in parsers (EnsureInitialized used to check
+ * s_creators.empty()).
+ *
+ * Runs in a fresh child process (threadsafe death-test style re-executes the
+ * binary) so the factory's static registry starts empty.
+ */
+TEST(ParserFactoryTest, RegisterBeforeFirstLookupKeepsDefaults)
+{
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    EXPECT_EXIT(
+        {
+            parser::ParserFactory::Register(".early",
+                []() -> std::unique_ptr<parser::IDataParser> {
+                    return std::make_unique<NullParser>();
+                });
+            const bool ok = parser::ParserFactory::IsRegistered(".early")
+                && parser::ParserFactory::IsRegistered(".xml")
+                && parser::ParserFactory::IsRegistered(".csv")
+                && parser::ParserFactory::IsRegistered(".json");
+            std::_Exit(ok ? 0 : 1);
+        },
+        ::testing::ExitedWithCode(0), "");
 }

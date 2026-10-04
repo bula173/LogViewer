@@ -10,6 +10,7 @@
 #include "IModel.hpp"
 #include "IModelObservable.hpp"
 #include <atomic>
+#include <deque>
 #include <shared_mutex>
 #include <vector>
 
@@ -166,6 +167,8 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
      * @param index The zero-based index of the event to retrieve
     * @return const LogEvent& Reference to the event at the specified index
     * @throws std::out_of_range if index is >= Size()
+    * @note The reference stays valid while events are appended (AddEvent /
+    *       AddEventBatch); it is invalidated only by Clear() and MergeEvents().
     * @par Complexity
     * O(1)
      */
@@ -276,7 +279,10 @@ class EventsContainer : public mvc::IModel, public mvc::IModelObservable
     /// Calls both old (raw pointer) and new (weak_ptr) notification patterns
     void NotifyDataChanged() override;
 
-    std::vector<LogEvent> m_data; ///< Internal storage for events
+    /// Internal storage for events. A deque (not a vector) so that appending
+    /// never relocates existing events: references returned by GetEvent()
+    /// to readers on other threads stay valid while a parser appends.
+    std::deque<LogEvent> m_data;
     /// Currently selected item index (-1 = no selection).
     /// Declared atomic so that GetCurrentItemIndex() / SetCurrentItem()
     /// are safe without acquiring m_mutex.

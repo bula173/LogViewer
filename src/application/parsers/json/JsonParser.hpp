@@ -41,7 +41,6 @@ public:
     uint32_t GetTotalProgress()   const override { return m_totalProgress; }
 
 private:
-    void EmitObject(const nlohmann::json& obj, int id);
     void Flatten(const nlohmann::json& node,
                  const std::string& prefix,
                  db::LogEvent::EventItems& out) const;

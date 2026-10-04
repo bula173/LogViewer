@@ -6,6 +6,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 namespace parser
@@ -40,6 +41,15 @@ void JsonParser::ParseData(const std::filesystem::path& filepath)
 
 void JsonParser::ParseData(std::istream& input)
 {
+    // Skip a UTF-8 BOM (EF BB BF) so the format sniff below sees the first
+    // real character.
+    for (const int bomByte : {0xEF, 0xBB, 0xBF})
+    {
+        if (input.peek() != bomByte)
+            break;
+        input.get();
+    }
+
     // Peek at the first non-whitespace character to decide the format.
     char first = '\0';
     while (input.get(first) && (first == ' ' || first == '\t' ||
@@ -112,10 +122,31 @@ void JsonParser::ParseData(std::istream& input)
     {
         // ── NDJSON format ────────────────────────────────────────────────────
         util::Logger::Debug("JsonParser: detected NDJSON format");
+        const std::streampos start = input.tellg();
         std::string line;
         int id = 0;
+        size_t lineCount = 0;
+        size_t malformed = 0;
+        constexpr size_t BATCH_SIZE = 5000; // events / lines between notifications
+        std::vector<std::pair<int, db::LogEvent::EventItems>> eventBatch;
+        eventBatch.reserve(BATCH_SIZE);
+
+        auto flushBatch = [&]() {
+            if (!eventBatch.empty())
+            {
+                NotifyNewEventBatch(std::move(eventBatch));
+                eventBatch.clear();
+                eventBatch.reserve(BATCH_SIZE);
+            }
+            NotifyProgressUpdated();
+        };
+
         while (std::getline(input, line))
         {
+            m_currentProgress += static_cast<uint32_t>(line.size() + 1);
+            if ((++lineCount % BATCH_SIZE) == 0)
+                flushBatch();
+
             // Strip \r in case of CRLF files.
             if (!line.empty() && line.back() == '\r')
                 line.pop_back();
@@ -125,14 +156,43 @@ void JsonParser::ParseData(std::istream& input)
             try {
                 auto obj = nlohmann::json::parse(line);
                 if (obj.is_object())
-                    EmitObject(obj, ++id);
+                {
+                    db::LogEvent::EventItems items;
+                    Flatten(obj, "", items);
+                    eventBatch.emplace_back(++id, std::move(items));
+                }
             } catch (const nlohmann::json::exception& ex) {
+                ++malformed;
                 util::Logger::Warn("JsonParser: skipping malformed line {}: {}",
                     id + 1, ex.what());
             }
-
-            m_currentProgress += static_cast<uint32_t>(line.size() + 1);
         }
+
+        if (id == 0 && malformed > 0)
+        {
+            // Not line-delimited — typically one pretty-printed object spread
+            // over many lines. Re-read it as a single document instead of
+            // silently reporting zero events.
+            util::Logger::Debug("JsonParser: no JSON Lines found; parsing as one document");
+            input.clear();
+            input.seekg(start);
+            nlohmann::json doc;
+            try {
+                if (!input)
+                    throw std::runtime_error("stream is not seekable");
+                doc = nlohmann::json::parse(input);
+            } catch (const std::exception& ex) {
+                throw error::Error(error::ErrorCode::ParseError,
+                    std::string("JsonParser: JSON parse error: ") + ex.what());
+            }
+            db::LogEvent::EventItems items;
+            Flatten(doc, "", items);
+            eventBatch.emplace_back(++id, std::move(items));
+        }
+
+        flushBatch();
+        m_currentProgress = m_totalProgress;
+        NotifyProgressUpdated();
         util::Logger::Debug("JsonParser: parsed {} events (NDJSON format)", id);
     }
     else
@@ -146,13 +206,6 @@ void JsonParser::ParseData(std::istream& input)
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-void JsonParser::EmitObject(const nlohmann::json& obj, int id)
-{
-    db::LogEvent::EventItems items;
-    Flatten(obj, "", items);
-    NotifyNewEvent(db::LogEvent(id, std::move(items)));
-}
 
 void JsonParser::Flatten(const nlohmann::json& node,
                          const std::string& prefix,

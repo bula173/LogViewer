@@ -253,4 +253,33 @@ TEST_F(FileTailerTest, SecondStartReplacesPreviousWatcher)
     EXPECT_EQ(ev.GetEvent(0).findByKey("v"), "b");
 }
 
+TEST_F(FileTailerTest, PartialTrailingLineIsKeptUntilComplete)
+{
+    // Regression: a line still being written was parsed as a fragment and its
+    // bytes consumed, so the event was lost and the rest raised a parse error.
+    auto p = MakeTemp("partial.jsonl", "");
+    db::EventsContainer ev;
+    FileTailer t;
+
+    int errCount = 0;
+    QObject::connect(&t, &FileTailer::TailingError,
+                     [&errCount](const QString&){ ++errCount; });
+
+    t.Start(p, std::make_unique<parser::JsonParser>(), ev);
+    ASSERT_TRUE(t.IsActive());
+
+    AppendFile(p, "{\"n\":\"1\"}\n{\"x\":\"pa");
+    FireChanged(t, p);
+    ASSERT_EQ(ev.Size(), 1u);
+    EXPECT_EQ(ev.GetEvent(0).findByKey("n"), "1");
+
+    AppendFile(p, "rt\"}\n");
+    FireChanged(t, p);
+
+    EXPECT_EQ(errCount, 0);
+    EXPECT_TRUE(t.IsActive());
+    ASSERT_EQ(ev.Size(), 2u);
+    EXPECT_EQ(ev.GetEvent(1).findByKey("x"), "part");
+}
+
 } // namespace ui::qt::test

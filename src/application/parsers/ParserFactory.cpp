@@ -15,34 +15,45 @@
 #include "sapi/SapiLogParser.hpp"
 #include "Logger.hpp"
 #include <algorithm>
+#include <mutex>
 
 namespace parser {
 
 // Static member initialization
 std::map<std::string, ParserFactory::CreatorFunc> ParserFactory::s_creators;
 
+namespace {
+std::once_flag s_defaultsOnce;
+}
+
 void ParserFactory::InitializeDefaults()
 {
     util::Logger::Debug("ParserFactory::InitializeDefaults - Registering default parsers");
 
+    // Insert directly: Register() calls EnsureInitialized(), and re-entering
+    // std::call_once from inside its own callable would deadlock.
+    auto add = [](const std::string& extension, CreatorFunc creator) {
+        s_creators[extension] = std::move(creator);
+    };
+
     // Register XML parser
-    Register(".xml", []() {
+    add(".xml", []() {
         util::Logger::Debug("Creating XmlParser instance");
         return std::make_unique<XmlParser>();
     });
 
     // Register CSV parser
-    Register(".csv", []() {
+    add(".csv", []() {
         util::Logger::Debug("Creating CsvParser instance");
         return std::make_unique<CsvParser>();
     });
 
     // Register JSON parser (array and NDJSON/JSONL formats).
-    Register(".json", []() {
+    add(".json", []() {
         util::Logger::Debug("Creating JsonParser instance");
         return std::make_unique<JsonParser>();
     });
-    Register(".jsonl", []() {
+    add(".jsonl", []() {
         util::Logger::Debug("Creating JsonParser instance (JSONL)");
         return std::make_unique<JsonParser>();
     });
@@ -50,19 +61,19 @@ void ParserFactory::InitializeDefaults()
     // Register ASC (Vector CANalyzer) parser — no DBC by default; callers that
     // need DBC decoding should create AscParser directly and pass it to the
     // presenter's LoadLogFile(parser) overload.
-    Register(".asc", []() {
+    add(".asc", []() {
         util::Logger::Debug("Creating AscParser instance");
         return std::make_unique<AscParser>();
     });
 
     // Register DLT (AUTOSAR Diagnostic Log and Trace) parser.
-    Register(".dlt", []() {
+    add(".dlt", []() {
         util::Logger::Debug("Creating DltParser instance");
         return std::make_unique<DltParser>();
     });
 
     // Register Evlog (POSIX 1003.25 Enterprise Event Logging) parser.
-    Register(".evl", []() {
+    add(".evl", []() {
         util::Logger::Debug("Creating EvlogParser instance");
         return std::make_unique<EvlogParser>();
     });
@@ -71,7 +82,7 @@ void ParserFactory::InitializeDefaults()
     // plain `.txt` (too generic to claim), so this synthetic ".sapilog" key is
     // reached via MainWindow::CreateParserFor() header sniffing or the
     // file-type prompt.
-    Register(".sapilog", []() {
+    add(".sapilog", []() {
         util::Logger::Debug("Creating SapiLogParser instance");
         return std::make_unique<SapiLogParser>();
     });
@@ -79,9 +90,9 @@ void ParserFactory::InitializeDefaults()
 
 void ParserFactory::EnsureInitialized()
 {
-    if (s_creators.empty()) {
-        InitializeDefaults();
-    }
+    // Run exactly once, independent of s_creators being empty: a parser
+    // registered before the first lookup must not suppress the defaults.
+    std::call_once(s_defaultsOnce, InitializeDefaults);
 }
 
 util::Result<std::unique_ptr<IDataParser>, error::Error> ParserFactory::CreateFromFile(
@@ -172,6 +183,8 @@ std::optional<error::Error> ParserFactory::Register(const std::string& extension
         util::Logger::Error("ParserFactory::Register - Null creator function provided");
         return error::Error(error::ErrorCode::InvalidArgument, "Creator function cannot be null");
     }
+
+    EnsureInitialized();
 
     std::string lowerExtension = extension;
     std::transform(lowerExtension.begin(), lowerExtension.end(),

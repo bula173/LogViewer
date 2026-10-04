@@ -179,5 +179,66 @@ TEST(CsvParserTest, ProgressTracking)
     EXPECT_EQ(parser.GetCurrentProgress(), parser.GetTotalProgress());
 }
 
+/**
+ * @brief CRLF line endings must not hang the parser (trailing '\r' after an
+ *        unquoted field, an empty field, or a quoted field).
+ */
+TEST(CsvParserTest, ParseCrlfLineEndings)
+{
+    std::stringstream input;
+    input << "id,level,info\r\n";
+    input << "1,INFO,plain\r\n";
+    input << "2,WARN,\r\n";
+    input << "3,ERROR,\"quoted, text\"\r\n";
+
+    CsvParser parser;
+    TestObserver observer;
+    parser.RegisterObserver(&observer);
+
+    EXPECT_NO_THROW(parser.ParseData(input));
+    ASSERT_EQ(observer.events.size(), 3u);
+    EXPECT_EQ(observer.events[0].findByKey("info"), "plain");
+    EXPECT_EQ(observer.events[1].findByKey("level"), "WARN");
+    EXPECT_EQ(observer.events[2].findByKey("info"), "quoted, text");
+}
+
+/**
+ * @brief A UTF-8 BOM must not become part of the first header name.
+ */
+TEST(CsvParserTest, ParseUtf8BomHeader)
+{
+    std::stringstream input;
+    input << "\xEF\xBB\xBFid,level,info\n";
+    input << "7,INFO,hello\n";
+
+    CsvParser parser;
+    TestObserver observer;
+    parser.RegisterObserver(&observer);
+
+    EXPECT_NO_THROW(parser.ParseData(input));
+    ASSERT_EQ(observer.events.size(), 1u);
+    EXPECT_EQ(observer.events[0].findByKey("id"), "7");
+    EXPECT_EQ(observer.events[0].findByKey("info"), "hello");
+}
+
+/**
+ * @brief Leading blank lines must not cause the header row to be read as data.
+ */
+TEST(CsvParserTest, HeaderAfterLeadingBlankLines)
+{
+    std::stringstream input;
+    input << "\n   \n";
+    input << "id,level,info\n";
+    input << "1,INFO,first\n";
+
+    CsvParser parser;
+    TestObserver observer;
+    parser.RegisterObserver(&observer);
+
+    EXPECT_NO_THROW(parser.ParseData(input));
+    ASSERT_EQ(observer.events.size(), 1u);
+    EXPECT_EQ(observer.events[0].findByKey("info"), "first");
+}
+
 } // namespace test
 } // namespace parser

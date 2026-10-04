@@ -8,6 +8,7 @@
 #include "EventsContainer.hpp"
 #include "Logger.hpp"
 
+#include <deque>
 #include <utility>
 #include <vector>
 
@@ -49,8 +50,6 @@ void EventsContainer::AddEventBatch(
     // Thread-safe: Use exclusive lock for batch modification
     {
         std::unique_lock<std::shared_mutex> lock(m_mutex);
-        m_data.reserve(m_data.size() + eventBatch.size());
-
         for (auto& item : eventBatch)
         {
             m_data.emplace_back(item.first, std::move(item.second));
@@ -193,8 +192,7 @@ void EventsContainer::MergeEvents(EventsContainer& other,
     // Acquire the locks only for the merge and release them before
     // invoking any callbacks.
 
-    std::vector<LogEvent> mergedEvents;
-    mergedEvents.reserve(m_data.size() + other.m_data.size());
+    std::deque<LogEvent> mergedEvents;
 
     {
         std::scoped_lock lock(m_mutex, other.m_mutex);
@@ -290,8 +288,11 @@ void EventsContainer::MergeEvents(EventsContainer& other,
         {
             auto& event = mergedEvents[static_cast<size_t>(i)];
             
-            // Store the original ID before reassignment
-            event.SetOriginalId(event.getId());
+            // Store the original ID before reassignment. Keep an existing
+            // original_id so a second merge does not overwrite it with the
+            // sequential ID assigned by the first merge.
+            if (event.findByKey("original_id").empty())
+                event.SetOriginalId(event.getId());
             
             // Update ID to sequential index in merged list
             event.SetId(i);

@@ -63,6 +63,8 @@ void FileTailer::Start(const std::filesystem::path& path,
     m_events     = &events;
     m_lastOffset = size;
     m_active     = true;
+    // Binary formats have no line structure; text formats are fed whole lines.
+    m_lineBased  = (ext != ".dlt" && ext != ".evl");
 
     m_observer = std::make_unique<TailObserver>(*m_events);
     m_parser->RegisterObserver(m_observer.get());
@@ -137,8 +139,21 @@ void FileTailer::OnFileChanged(const QString& changedPath)
     file.close();
 
     if (bytesRead == 0) return;
+    newBytes.resize(static_cast<size_t>(bytesRead));
 
-    m_lastOffset += bytesRead;
+    if (m_lineBased)
+    {
+        // The writer may not have finished the last line yet. Parse only up
+        // to the last '\n' and leave the partial line in the file: the offset
+        // stays before it, so the next change re-reads it once complete
+        // (instead of parsing a fragment and losing the event).
+        const auto lastNewline = newBytes.rfind('\n');
+        if (lastNewline == std::string::npos)
+            return;
+        newBytes.resize(lastNewline + 1);
+    }
+
+    m_lastOffset += newBytes.size();
 
     m_observer->added = 0;
 

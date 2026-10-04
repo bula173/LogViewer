@@ -100,11 +100,20 @@ void CsvParser::ParseData(std::istream& input)
     size_t bytesConsumed = 0;
     constexpr size_t kProgressReportEvery = 5000; // update every N events
 
+    // The header row is the first non-empty line, not literally line 1.
+    bool headerPending = m_hasHeaders;
+
     // Read and parse each line
     while (std::getline(input, line))
     {
         lineNumber++;
         bytesConsumed += line.size() + 1; // +1 for stripped newline
+
+        // Strip a UTF-8 BOM so it does not end up in the first header name
+        if (lineNumber == 1 && line.starts_with("\xEF\xBB\xBF"))
+        {
+            line.erase(0, 3);
+        }
 
         // Skip empty lines
         if (line.empty() || line.find_first_not_of(" \t\r\n") == std::string::npos)
@@ -120,9 +129,10 @@ void CsvParser::ParseData(std::istream& input)
             continue;
         }
 
-        // First line might be headers
-        if (lineNumber == 1 && m_hasHeaders)
+        // First non-empty line might be headers
+        if (headerPending)
         {
+            headerPending = false;
             headers = fields;
 
             // Normalize header names (trim and lowercase)
@@ -206,6 +216,11 @@ std::vector<std::string> CsvParser::ParseLine(const std::string& line)
 {
     std::vector<std::string> fields;
     std::string_view lineView(line);
+    // CRLF input: drop the trailing '\r' left by getline on binary streams
+    if (!lineView.empty() && lineView.back() == '\r')
+    {
+        lineView.remove_suffix(1);
+    }
     size_t pos = 0;
     bool inQuotes = false;
     
@@ -276,12 +291,6 @@ std::vector<std::string> CsvParser::ParseLine(const std::string& line)
                 ++pos; // Skip delimiter
                 break;
             }
-            else if (c == '\r' && pos + 1 == lineView.length())
-            {
-                // Skip trailing \r
-                break;
-            }
-            
             ++pos;
         }
         

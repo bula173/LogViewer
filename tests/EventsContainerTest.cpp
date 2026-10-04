@@ -774,3 +774,55 @@ TEST(EventsContainerTest, MergePreservesSortedOrder)
             << "Event at index " << i << " should be " << expectedOrder[i];
     }
 }
+
+/**
+ * @test Regression: a reference returned by GetEvent() must survive appends.
+ *
+ * Background readers (e.g. actor discovery) hold GetEvent(i) references while
+ * the parser appends batches. With vector storage a reallocation left those
+ * references dangling (use-after-free).
+ */
+TEST(EventsContainerTest, AppendKeepsEventReferencesValid)
+{
+    db::EventsContainer container;
+    container.AddEvent({1, {{"timestamp", "2025-01-01T10:00:00"}, {"msg", "first"}}});
+
+    const db::LogEvent& first = container.GetEvent(0);
+    const db::LogEvent* firstAddress = &first;
+
+    for (int batchNo = 0; batchNo < 10; ++batchNo)
+    {
+        std::vector<std::pair<int, db::LogEvent::EventItems>> batch;
+        for (int i = 0; i < 1000; ++i)
+            batch.push_back({batchNo * 1000 + i + 2, {{"msg", "more"}}});
+        container.AddEventBatch(std::move(batch));
+        container.AddEvent({-1, {{"msg", "single"}}});
+    }
+
+    ASSERT_EQ(container.Size(), 10011u);
+    EXPECT_EQ(&container.GetEvent(0), firstAddress);
+    EXPECT_EQ(first.findByKey("msg"), "first");
+}
+
+/**
+ * @test Regression: merging a third file must keep the original_id recorded
+ * by the first merge instead of overwriting it with the sequential ID.
+ */
+TEST(EventsContainerTest, SecondMergeKeepsOriginalId)
+{
+    db::EventsContainer container1;
+    db::EventsContainer container2;
+    db::EventsContainer container3;
+
+    container1.AddEvent({10, {{"timestamp", "2025-01-01T10:00:00"}, {"msg", "A"}}});
+    container2.AddEvent({20, {{"timestamp", "2025-01-01T10:01:00"}, {"msg", "B"}}});
+    container3.AddEvent({30, {{"timestamp", "2025-01-01T10:02:00"}, {"msg", "C"}}});
+
+    container1.MergeEvents(container2, "one", "two", "timestamp");
+    container1.MergeEvents(container3, "merged", "three", "timestamp");
+
+    ASSERT_EQ(container1.Size(), 3u);
+    EXPECT_EQ(container1.GetEvent(0).findByKey("original_id"), "10");
+    EXPECT_EQ(container1.GetEvent(1).findByKey("original_id"), "20");
+    EXPECT_EQ(container1.GetEvent(2).findByKey("original_id"), "30");
+}

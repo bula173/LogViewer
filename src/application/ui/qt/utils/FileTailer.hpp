@@ -90,6 +90,7 @@ private:
     std::filesystem::path                m_path;
     uintmax_t                            m_lastOffset {0};
     bool                                 m_active  {false};
+    bool                                 m_lineBased {true};
 };
 
 } // namespace ui::qt

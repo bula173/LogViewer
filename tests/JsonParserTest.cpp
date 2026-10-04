@@ -178,6 +178,73 @@ TEST(JsonParserTest, NdjsonFormat_NestedObjectFlattened)
 }
 
 // ---------------------------------------------------------------------------
+// UTF-8 BOM / pretty-printed documents / NDJSON notifications (regressions)
+// ---------------------------------------------------------------------------
+
+TEST(JsonParserTest, Utf8Bom_ArrayFormat)
+{
+    const auto events = Parse("\xEF\xBB\xBF[{\"level\":\"INFO\"}]");
+    ASSERT_EQ(events.size(), 1u);
+    EXPECT_EQ(events[0].findByKey("level"), "INFO");
+}
+
+TEST(JsonParserTest, Utf8Bom_NdjsonFormat)
+{
+    const auto events = Parse("\xEF\xBB\xBF{\"x\":\"1\"}\n{\"x\":\"2\"}\n");
+    ASSERT_EQ(events.size(), 2u);
+    EXPECT_EQ(events[0].findByKey("x"), "1");
+    EXPECT_EQ(events[1].findByKey("x"), "2");
+}
+
+TEST(JsonParserTest, PrettyPrintedObject_ParsedAsOneDocument)
+{
+    const auto events = Parse(
+        "{\n"
+        "  \"level\": \"ERROR\",\n"
+        "  \"ctx\": { \"host\": \"db\" }\n"
+        "}\n");
+    ASSERT_EQ(events.size(), 1u);
+    EXPECT_EQ(events[0].findByKey("level"), "ERROR");
+    EXPECT_EQ(events[0].findByKey("ctx.host"), "db");
+}
+
+TEST(JsonParserTest, PrettyPrintedMalformed_Throws)
+{
+    JsonParser parser;
+    std::istringstream ss("{\n  \"level\": \n");
+    EXPECT_THROW(parser.ParseData(ss), error::Error);
+}
+
+TEST(JsonParserTest, NdjsonFormat_BatchesEventsAndReportsProgress)
+{
+    struct Counting : IDataParserObserver
+    {
+        int progress = 0, single = 0;
+        size_t batched = 0;
+        void ProgressUpdated() override { ++progress; }
+        void NewEventFound(db::LogEvent&&) override { ++single; }
+        void NewEventBatchFound(
+            std::vector<std::pair<int, db::LogEvent::EventItems>>&& b) override
+        {
+            batched += b.size();
+        }
+    } obs;
+
+    std::string text;
+    for (int i = 0; i < 12000; ++i)
+        text += "{\"n\":" + std::to_string(i) + "}\n";
+
+    JsonParser parser;
+    parser.RegisterObserver(&obs);
+    std::istringstream ss(text);
+    parser.ParseData(ss);
+
+    EXPECT_EQ(obs.single, 0);
+    EXPECT_EQ(obs.batched, 12000u);
+    EXPECT_GE(obs.progress, 3);
+}
+
+// ---------------------------------------------------------------------------
 // Error cases
 // ---------------------------------------------------------------------------
 

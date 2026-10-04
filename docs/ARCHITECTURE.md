@@ -476,7 +476,7 @@ watcher->setFuture(future);
 class EventsContainer {
 private:
     mutable std::mutex m_mutex;
-    std::vector<LogEvent> m_data;
+    std::deque<LogEvent> m_data;  // deque: appends never relocate stored events
     std::vector<unsigned long> m_filteredIndices;
     
 public:
