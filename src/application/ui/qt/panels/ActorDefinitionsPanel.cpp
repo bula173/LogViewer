@@ -588,14 +588,14 @@ void ActorDefinitionsPanel::HandleDiscover()
                   analyzer::ActorDiscoverer::ScoreSender(field) +
                   analyzer::ActorDiscoverer::ScoreReceiver(field);
 
-        // Collect up to 5 sample values from the first 500 events
+        // Count the distinct values of the first 500 events; keep up to 5 as samples
         std::set<std::string> seen;
         const size_t probe = (std::min)(m_events->Size(), size_t(500));
-        for (size_t i = 0; i < probe && static_cast<int>(c.samples.size()) < 5; ++i)
+        for (size_t i = 0; i < probe; ++i)
         {
             try {
                 const std::string v = m_events->GetEvent(i).findByKey(field);
-                if (!v.empty() && seen.insert(v).second)
+                if (!v.empty() && seen.insert(v).second && c.samples.size() < 5)
                     c.samples.push_back(v);
             } catch (const std::out_of_range&) { break; }
         }

@@ -147,8 +147,9 @@ void TraceViewerPanel::BuildLayout()
                     RebuildTree(field);
             });
 
+    // Restores the filter the trace double-click replaced (not every filter).
     connect(m_clearBtn, &QPushButton::clicked, this, [this]() {
-        m_eventsView->ClearFilter();
+        m_traceFilter.Restore(*m_eventsView, m_events);
         m_clearBtn->setEnabled(false);
     });
 
@@ -165,7 +166,7 @@ void TraceViewerPanel::BuildLayout()
                 {
                     util::Logger::Debug("[TraceViewer] Filtering to trace '{}' ({} events)",
                         key, it->second.size());
-                    m_eventsView->SetFilteredEvents(it->second);
+                    m_traceFilter.Apply(*m_eventsView, m_events, it->second, m_shownIndices);
                     m_clearBtn->setEnabled(true);
                 }
             });
@@ -223,7 +224,15 @@ void TraceViewerPanel::RebuildTree(const QString& field)
     m_tree->clear();
     m_traceEvents.clear();
 
-    const std::vector<unsigned long> vis = panel_utils::VisibleIndices(m_eventsView, m_events);
+    // While a trace picked here filters the view, keep listing the traces it
+    // was picked from (so another one can be picked or the pick undone).
+    const bool tracePicked = m_traceFilter.IsActive(*m_eventsView, m_events);
+    if (!tracePicked)
+        m_traceFilter.Reset();
+    m_clearBtn->setEnabled(tracePicked);
+    m_shownIndices = tracePicked ? m_traceFilter.Shown()
+                                 : panel_utils::VisibleIndices(m_eventsView, m_events);
+    const std::vector<unsigned long>& vis = m_shownIndices;
     const std::string fieldStr = field.toStdString();
 
     static const std::vector<std::string> kErrFields{"level", "severity", "type"};

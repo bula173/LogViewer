@@ -72,6 +72,14 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
 
 void ItemDetailsView::RefreshView()
 {
+    // An explicit refresh (config change, reload, merge) redraws the event
+    // even if it is the one already shown.
+    m_currentlyDisplayedRow = -1;
+    ShowCurrentEvent();
+}
+
+void ItemDetailsView::ShowCurrentEvent()
+{
     const int currentIndex = m_events.GetCurrentItemIndex();
     // Only display if we have data and a valid index
     if (m_events.Size() > 0 && currentIndex >= 0)
@@ -83,6 +91,7 @@ void ItemDetailsView::RefreshView()
         // Clear the display if no data or invalid index
         if (m_details)
             m_details->setRowCount(0);
+        m_currentlyDisplayedRow = -1;
     }
 }
 
@@ -93,7 +102,8 @@ void ItemDetailsView::ShowControl(bool show)
 
 void ItemDetailsView::OnDataUpdated()
 {
-    RefreshView();
+    // Appended events leave the shown event as it is.
+    ShowCurrentEvent();
 }
 
 void ItemDetailsView::OnCurrentIndexUpdated(const int index)

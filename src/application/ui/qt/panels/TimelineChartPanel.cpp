@@ -74,8 +74,9 @@ void TimelineChartPanel::BuildLayout()
     connect(m_bucketSpin, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &TimelineChartPanel::Refresh);
 
+    // Restores the filter the bucket click replaced (not every filter).
     connect(m_clearBtn, &QPushButton::clicked, this, [this]() {
-        m_eventsView->ClearFilter();
+        m_bucketFilter.Restore(*m_eventsView, m_events);
         m_clearBtn->setEnabled(false);
     });
 }
@@ -91,7 +92,13 @@ void TimelineChartPanel::Refresh()
     chart->setMargins(QMargins(4, 4, 4, 4));
     m_bucketEvents.clear();
 
-    const auto vis = panel_utils::VisibleIndices(m_eventsView, m_events);
+    // While a bucket picked here filters the view, keep showing the histogram
+    // it was picked from (so another bucket can be picked or the pick undone).
+    const bool bucketPicked = m_bucketFilter.IsActive(*m_eventsView, m_events);
+    if (!bucketPicked)
+        m_bucketFilter.Reset();
+    const auto vis = bucketPicked ? m_bucketFilter.Shown()
+                                  : panel_utils::VisibleIndices(m_eventsView, m_events);
 
     if (vis.empty())
     {
@@ -242,15 +249,15 @@ void TimelineChartPanel::Refresh()
 
     // Click → filter to events in that bucket
     connect(series, &QAbstractBarSeries::clicked,
-            this, [this](int index, QBarSet*) {
+            this, [this, vis](int index, QBarSet*) {
                 const int sz = static_cast<int>(m_bucketEvents.size());
                 if (index >= 0 && index < sz &&
                     !m_bucketEvents[static_cast<size_t>(index)].empty())
                 {
                     util::Logger::Debug("[TimelineChart] Filtering to bucket {} ({} events)",
                         index, m_bucketEvents[static_cast<size_t>(index)].size());
-                    m_eventsView->SetFilteredEvents(
-                        m_bucketEvents[static_cast<size_t>(index)]);
+                    m_bucketFilter.Apply(*m_eventsView, m_events,
+                        m_bucketEvents[static_cast<size_t>(index)], vis);
                     m_clearBtn->setEnabled(true);
                 }
             });
@@ -264,7 +271,7 @@ void TimelineChartPanel::Refresh()
             .arg(timed.size())
             .arg(tMin.toString("yyyy-MM-dd HH:mm:ss"))
             .arg(tMax.toString("yyyy-MM-dd HH:mm:ss")));
-    m_clearBtn->setEnabled(false);
+    m_clearBtn->setEnabled(bucketPicked);
 }
 
 // ---------------------------------------------------------------------------

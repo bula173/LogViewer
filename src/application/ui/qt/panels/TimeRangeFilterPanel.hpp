@@ -7,7 +7,9 @@
  * field (or types a custom one), optionally fills in ISO-format from/to bounds,
  * and clicks **Apply**.  The filter is evaluated by lexicographic string
  * comparison — correct for any timestamp representation that sorts
- * lexicographically (ISO 8601, epoch strings, etc.).
+ * lexicographically (ISO 8601, epoch strings, etc.). A 'T' and a space
+ * between date and time compare alike, and the "to" bound is inclusive at its
+ * own precision (a date covers that whole day, a time its fractions).
  *
  * The complete state can be serialised into a @c TimeRangeFilterPanel::State
  * value and round-tripped through @c FilterProfilesPanel for save/restore.

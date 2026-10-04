@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DrillDownFilter.hpp"
+
 #include <QComboBox>
 #include <QSpinBox>
 #include <QSplitter>
@@ -24,8 +26,8 @@ namespace ui::qt {
  *
  * @par 1. Message Templates
  * Extracts the common skeleton of log messages: constant tokens are kept as-is,
- * variable tokens are replaced with @c {*}.  Clicking a template row highlights
- * matching events in the events table.
+ * variable tokens are replaced with @c {*}.  Clicking a template row filters
+ * the events table to the matching events.
  *
  * Algorithm (simplified Drain-inspired):
  *  - Events are grouped by their type-field value.
@@ -59,8 +61,8 @@ class PatternAnalysisPanel : public QWidget
     void Refresh();
 
   signals:
-    /// Emitted when the user clicks a template row; contains the indices of
-    /// matching events so MainWindow can forward them to SetFilteredEvents().
+    /// Emitted when the user clicks a template row, after the events view
+    /// was filtered to the matching events (their indices).
     void TemplateSelected(std::vector<unsigned long> matchingIndices);
 
   private:
@@ -107,6 +109,8 @@ class PatternAnalysisPanel : public QWidget
 
     // Per-template index map: table-row → matching event indices
     std::vector<std::vector<unsigned long>> m_templateMatches;
+    /// The events-view filter set by the last template click.
+    DrillDownFilter m_templateFilter;
 };
 
 } // namespace ui::qt

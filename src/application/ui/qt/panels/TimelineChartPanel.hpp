@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DrillDownFilter.hpp"
+
 #include <QChartView>
 #include <QLabel>
 #include <QPushButton>
@@ -63,6 +65,8 @@ class TimelineChartPanel : public QWidget
 
     /// Per-bucket event indices populated during Refresh; consumed by click handlers.
     std::vector<std::vector<unsigned long>> m_bucketEvents;
+    /// The bucket filter set by a click, and the filter it replaced.
+    DrillDownFilter m_bucketFilter;
 };
 
 } // namespace ui::qt

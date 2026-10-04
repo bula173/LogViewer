@@ -526,11 +526,13 @@ void StatsSummaryPanel::RefreshTopNTable(const std::vector<unsigned long>& indic
     const int    topN  = m_topNSpin->value();
     const size_t total = indices.size();
 
+    // indices come from VisibleIndices(): the model's rows in row order, so
+    // the position (not the container index) is the model row.
     std::map<QString, int> counts;
-    for (unsigned long idx : indices)
+    for (size_t row = 0; row < total; ++row)
     {
         const QString val = model->data(
-            model->index(static_cast<int>(idx), col), Qt::DisplayRole).toString();
+            model->index(static_cast<int>(row), col), Qt::DisplayRole).toString();
         counts[val]++;
     }
 
@@ -610,10 +612,11 @@ void StatsSummaryPanel::RefreshFieldStats(const std::vector<unsigned long>& indi
         std::set<QString> uniqueVals;
         int filled = 0;
 
+        // Position si is model row si (see RefreshTopNTable).
         for (size_t si = 0; si < total; si += step)
         {
             const QString val = model->data(
-                model->index(static_cast<int>(indices[si]), c),
+                model->index(static_cast<int>(si), c),
                 Qt::DisplayRole).toString();
             if (!val.isEmpty())
             {

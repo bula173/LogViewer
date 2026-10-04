@@ -37,6 +37,8 @@ class ItemDetailsView : public QWidget,
 
   private:
     void DisplayEvent(int actualRow);
+    /// Shows the container's current event (or nothing).
+    void ShowCurrentEvent();
 
     db::EventsContainer& m_events;
     QTableWidget* m_details {nullptr};

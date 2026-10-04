@@ -160,6 +160,7 @@ void DashboardPanel::CreateLayout()
 void DashboardPanel::SetEventsSource(db::EventsContainer* events)
 {
     m_events = events;
+    m_actorFields.clear(); // discovered for the previous container
 
     if (m_events)
     {
@@ -367,11 +368,14 @@ void DashboardPanel::UpdateTopActors()
     }
 
     std::map<QString, qint64> actorCounts;
-    // Discovery scans the whole log, so it runs once per log size, not per refresh.
-    if (m_actorFields.empty() || m_actorFieldsEventCount != m_events->Size())
+    // Discovery scans the whole log, so it runs once per log, not per refresh.
+    // A new file of the same size is a different log: compare the generation too.
+    if (m_actorFields.empty() || m_actorFieldsEventCount != m_events->Size()
+        || m_actorFieldsGeneration != m_events->Generation())
     {
         m_actorFields = ResolveActorFields(*m_events);
         m_actorFieldsEventCount = m_events->Size();
+        m_actorFieldsGeneration = m_events->Generation();
     }
     const std::vector<std::string>& actorFields = m_actorFields;
 

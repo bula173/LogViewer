@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DrillDownFilter.hpp"
+
 #include <QComboBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -73,6 +75,10 @@ class TraceViewerPanel : public QWidget
 
     /// Maps trace-ID key → event indices (top-level items).
     std::map<std::string, std::vector<unsigned long>> m_traceEvents;
+    /// The trace filter set by a double-click, and the filter it replaced.
+    DrillDownFilter m_traceFilter;
+    /// The events the tree was last built from.
+    std::vector<unsigned long> m_shownIndices;
 };
 
 } // namespace ui::qt

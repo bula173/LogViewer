@@ -46,6 +46,17 @@ All notable changes to LogViewer are documented here.
 - **Saved layouts with `/` in the name** — layouts whose name (or a tab label) contains `/` or `\`, or that differ only in letter case, no longer disappear after a restart.
 - **Non-ASCII folder names** — the portable data folder and portable settings folder are passed to Qt without loss when the path contains characters outside the Windows ANSI code page.
 - **View → Tabs with duplicate tab names** — a plugin tab named like a built-in tab no longer copies its visibility tick onto the built-in tab's menu entry.
+- **Sequence diagram crash on load/merge** — opening, clearing or merging a log while the Sequence tab was still discovering actors in the background could free the events being scanned; clearing and merging now wait for the scan to finish.
+- **Sequence diagram refresh** — a refresh requested while discovery was running (e.g. new events while following a file) is no longer lost, and re-discovering the same actors keeps the zoom and scroll position and the current diagram until the new one is ready.
+- **Actors tab without definitions** — the auto-discovered group lists every actor instead of only the first one; an event counts under each of its senders and receivers, comma lists name several actors and placeholders such as `internal` are ignored (also in the PlantUML export).
+- **Statistics with a filter or sort** — Top Values and Field Statistics read the visible rows instead of empty or unrelated rows.
+- **Item details after a config change** — changed highlights or translations are shown for the current event right away instead of after selecting another one.
+- **Dashboard top actors** — a new log with the same number of events no longer reuses the actor columns of the previous log.
+- **Timeline / Trace drill-down** — after clicking a time bucket or double-clicking a trace, the panel keeps showing the histogram / trace list it was picked from and "Clear Selection" / "Clear Filter" stays enabled; clearing restores the filter that was set before (e.g. a type filter or time range) instead of removing every filter.
+- **Actor filter keeps other filters** — checking every actor again restores the type filter / time range that was set before instead of clearing all filters, the actor filter never shows events those filters hide, and loading a filter profile without unchecked actors no longer drops the profile's time range.
+- **Time range filter bounds** — the "To" bound is inclusive at its own precision (a date covers that whole day, `10:00:00` includes `10:00:00.250`), and `T` or a space between date and time compare alike.
+- **Pattern analysis** — clicking a message template now filters the events table to the matching events (it did nothing); a visible sequence of exactly *n* events yields its n-gram.
+- **Discover actors dialog** — "Unique values" counts every distinct value instead of stopping at 5.
 
 ### New features
 

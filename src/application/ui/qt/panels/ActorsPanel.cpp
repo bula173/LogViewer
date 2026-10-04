@@ -3,6 +3,7 @@
 #include "ActorDefinition.hpp"
 #include "Config.hpp"
 #include "Logger.hpp"
+#include "analyzers/SequenceMessages.hpp"
 #include "utils/PanelUtils.hpp"
 
 #include <QClipboard>
@@ -27,7 +28,9 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <iterator>
 #include <sstream>
+#include <unordered_set>
 
 namespace ui::qt {
 
@@ -238,6 +241,12 @@ void ActorsPanel::RestoreUncheckedActors(const std::set<std::string>& unchecked)
         }
     }
 
+    // Nothing unchecked and no actor filter of this panel on the view: there
+    // is nothing to apply, and applying would replace the filter just set
+    // (e.g. the time range of the same filter profile).
+    if (m_uncheckedActors.empty() && !(m_ownActorFilter && ViewShowsOwnFilterOf(m_events.Generation())))
+        return;
+
     ApplyCheckedFilter();
 }
 
@@ -400,6 +409,9 @@ void ActorsPanel::RefreshFromDiscoveredActors(const analyzer::ActorDiscoveryResu
     {
         const auto& pattern = discovered.patterns.front();
         const size_t totalEvents = m_events.Size();
+        // One child row per discovered actor (a flat group shows only one).
+        auto& group = m_groupedCache["Auto-Discovered"];
+        group.useCaptures = true;
 
         for (unsigned long idx : vis)
         {
@@ -413,27 +425,29 @@ void ActorsPanel::RefreshFromDiscoveredActors(const analyzer::ActorDiscoveryResu
             try {
                 const db::LogEvent& ev = m_events.GetEvent(idx);
 
-                // Extract actor based on pattern type
-                std::string actorName;
+                // Every actor the event names: each sender and each receiver
+                // (Pair / SenderOnly / ReceiverOnly) or the actor field
+                // (DirectionField). Comma lists name several actors;
+                // placeholders such as "internal" name none.
+                std::set<std::string> actorNames;
+                auto addActors = [&](const std::string& field) {
+                    if (field.empty()) return;
+                    for (auto& name : analyzer::SplitActorList(ev.findByKey(field)))
+                        if (!analyzer::IsPlaceholderActor(name))
+                            actorNames.insert(std::move(name));
+                };
                 if (!pattern.senderField.empty() || !pattern.receiverField.empty())
                 {
-                    // Pair or SenderOnly/ReceiverOnly mode
-                    if (!pattern.senderField.empty())
-                        actorName = ev.findByKey(pattern.senderField);
-                    if (actorName.empty() && !pattern.receiverField.empty())
-                        actorName = ev.findByKey(pattern.receiverField);
+                    addActors(pattern.senderField);
+                    addActors(pattern.receiverField);
                 }
-                else if (!pattern.actorField.empty())
+                else
                 {
-                    // DirectionField mode
-                    actorName = ev.findByKey(pattern.actorField);
+                    addActors(pattern.actorField);
                 }
 
-                if (!actorName.empty())
-                {
-                    AccumulateEventStats(m_groupedCache["Auto-Discovered"].actors[actorName],
-                                       ev, idx);
-                }
+                for (const auto& actorName : actorNames)
+                    AccumulateEventStats(group.actors[actorName], ev, idx);
             } catch (const std::exception& e) {
                 util::Logger::Warn("[ActorsPanel] Error processing event {}: {}", idx, e.what());
                 continue;
@@ -715,23 +729,56 @@ void ActorsPanel::ApplyCheckedFilter()
 
 void ActorsPanel::ApplyToView(const std::vector<unsigned long>* indices)
 {
+    // The filter set elsewhere (type filter, time range, …) before the actor
+    // filter: "no actor filter" goes back to it instead of clearing every
+    // filter, and the actor filter never shows events it hides.
+    if (!ViewShowsOwnFilterOf(m_events.Generation()))
+    {
+        const std::vector<unsigned long>* base = m_eventsView->GetBaseFilteredIndices();
+        m_upstreamFilter = base ? std::optional(*base) : std::nullopt;
+    }
+    std::vector<unsigned long> target;
+    if (indices && m_upstreamFilter)
+    {
+        const std::unordered_set<unsigned long> allowed(m_upstreamFilter->begin(),
+                                                        m_upstreamFilter->end());
+        std::copy_if(indices->begin(), indices->end(), std::back_inserter(target),
+                     [&allowed](unsigned long idx) { return allowed.count(idx) > 0; });
+    }
+    else if (indices)
+    {
+        target = *indices;
+    }
+    else if (m_upstreamFilter)
+    {
+        target = *m_upstreamFilter;
+    }
+    const bool clear = !indices && !m_upstreamFilter;
+
     m_ignoreNextRefresh   = true;
-    m_ownFilterCleared    = (indices == nullptr);
-    m_ownFilter           = indices ? *indices : std::vector<unsigned long>{};
+    m_ownFilterApplied    = true;
+    m_ownActorFilter      = (indices != nullptr);
+    m_ownFilterCleared    = clear;
+    m_ownFilter           = clear ? std::vector<unsigned long>{} : target;
     m_ownFilterSize       = m_events.Size();
     m_ownFilterGeneration = m_events.Generation();
-    if (indices)
-        m_eventsView->SetFilteredEvents(*indices);
-    else
+    if (clear)
         m_eventsView->ClearFilter();
+    else
+        m_eventsView->SetFilteredEvents(target);
+}
+
+bool ActorsPanel::ViewShowsOwnFilterOf(std::uint64_t generation) const
+{
+    if (!m_ownFilterApplied || m_ownFilterGeneration != generation)
+        return false;
+    const std::vector<unsigned long>* base = m_eventsView->GetBaseFilteredIndices();
+    return m_ownFilterCleared ? base == nullptr : (base && *base == m_ownFilter);
 }
 
 bool ActorsPanel::ViewShowsOwnFilter() const
 {
-    if (m_events.Size() != m_ownFilterSize || m_events.Generation() != m_ownFilterGeneration)
-        return false;
-    const std::vector<unsigned long>* base = m_eventsView->GetBaseFilteredIndices();
-    return m_ownFilterCleared ? base == nullptr : (base && *base == m_ownFilter);
+    return m_events.Size() == m_ownFilterSize && ViewShowsOwnFilterOf(m_events.Generation());
 }
 
 std::vector<unsigned long> ActorsPanel::VisibleIndices() const
@@ -1172,12 +1219,24 @@ void ActorsPanel::ShowSequenceDiagram()
             const db::LogEvent& ev =
                 m_events.GetEvent(idx);
 
-            const std::string from = ev.findByKey(senderField);
-            const std::string to   = ev.findByKey(receiverField);
-
-            if (from.empty() || to.empty()) continue;
+            // A comma list names several actors (one arrow each); placeholders
+            // such as "internal" are not actors.
+            auto actorsIn = [&ev](const std::string& field) {
+                auto names = analyzer::SplitActorList(ev.findByKey(field));
+                std::erase_if(names, [](const std::string& n) {
+                    return analyzer::IsPlaceholderActor(n);
+                });
+                return names;
+            };
+            const auto senders   = actorsIn(senderField);
+            const auto receivers = actorsIn(receiverField);
             // Only draw arrows where at least one side is a selected actor
-            if (!actors.count(from) && !actors.count(to)) continue;
+            std::vector<std::pair<std::string, std::string>> arrows;
+            for (const auto& from : senders)
+                for (const auto& to : receivers)
+                    if (actors.count(from) || actors.count(to))
+                        arrows.emplace_back(from, to);
+            if (arrows.empty()) continue;
 
             // Pick first non-empty label field
             std::string label;
@@ -1204,13 +1263,16 @@ void ActorsPanel::ShowSequenceDiagram()
             for (char& c : label)
                 if (c == '\n' || c == '\r') c = ' ';
 
-            // Self-message or regular arrow
-            const QString arrow = (from == to) ? "->" : "->>";
-            puml += QString("\"%1\" %2 \"%3\" : %4\n")
-                        .arg(QString::fromStdString(from),
-                             arrow,
-                             QString::fromStdString(to),
-                             QString::fromStdString(label));
+            for (const auto& [from, to] : arrows)
+            {
+                // Self-message or regular arrow
+                const QString arrow = (from == to) ? "->" : "->>";
+                puml += QString("\"%1\" %2 \"%3\" : %4\n")
+                            .arg(QString::fromStdString(from),
+                                 arrow,
+                                 QString::fromStdString(to),
+                                 QString::fromStdString(label));
+            }
             ++written;
         }
 

@@ -89,7 +89,7 @@ void PatternAnalysisPanel::BuildLayout()
         m_templateTable->setAlternatingRowColors(true);
         m_templateTable->setWordWrap(false);
         m_templateTable->setToolTip(
-            tr("Click a row to highlight matching events in the event table"));
+            tr("Click a row to show only the matching events in the event table"));
         vl->addWidget(m_templateTable);
 
         connect(m_templateTable, &QTableWidget::cellClicked,
@@ -97,7 +97,10 @@ void PatternAnalysisPanel::BuildLayout()
                     if (row >= 0 &&
                         row < static_cast<int>(m_templateMatches.size()))
                     {
-                        emit TemplateSelected(m_templateMatches[static_cast<size_t>(row)]);
+                        const auto& matches = m_templateMatches[static_cast<size_t>(row)];
+                        if (m_eventsView)
+                            m_templateFilter.Apply(*m_eventsView, m_events, matches, {});
+                        emit TemplateSelected(matches);
                     }
                 });
 
@@ -199,6 +202,12 @@ void PatternAnalysisPanel::BuildLayout()
 
 void PatternAnalysisPanel::Refresh()
 {
+    // The refresh caused by a template pick keeps the analysis of the events
+    // the template was picked from, so another template can be picked.
+    if (m_eventsView && m_templateFilter.IsActive(*m_eventsView, m_events))
+        return;
+    m_templateFilter.Reset();
+
     util::Logger::Debug("[PatternAnalysis] Refresh started: {} total events", m_events.Size());
     if (m_events.Size() == 0)
         util::Logger::Warn("[PatternAnalysis] Refresh called with empty container");
@@ -639,7 +648,7 @@ void PatternAnalysisPanel::RefreshNgrams(
     }
 
     // Count n-grams
-    const size_t total = typeSeq.size() > static_cast<size_t>(n)
+    const size_t total = typeSeq.size() >= static_cast<size_t>(n)
         ? typeSeq.size() - static_cast<size_t>(n) + 1
         : 0;
 

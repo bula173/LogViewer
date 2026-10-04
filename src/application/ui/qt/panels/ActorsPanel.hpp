@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -106,6 +107,8 @@ class ActorsPanel : public QWidget
     /// True while the events view still shows exactly the filter of the last
     /// ApplyToView() on the same data.
     [[nodiscard]] bool ViewShowsOwnFilter() const;
+    /// Like ViewShowsOwnFilter(), but events appended since do not count.
+    [[nodiscard]] bool ViewShowsOwnFilterOf(std::uint64_t generation) const;
     void ShowActorContextMenu(const QPoint& pos);
     void ShowSequenceDiagram();
     [[nodiscard]] std::vector<unsigned long> VisibleIndices() const;
@@ -129,6 +132,11 @@ class ActorsPanel : public QWidget
     std::vector<unsigned long>                     m_ownFilter;
     std::size_t                                    m_ownFilterSize {0};
     std::uint64_t                                  m_ownFilterGeneration {0};
+    bool                                           m_ownFilterApplied {false};
+    /// The last ApplyToView() set an actor filter (not "no actor filter").
+    bool                                           m_ownActorFilter {false};
+    /// The filter that was set before the actor filter (none: no filter).
+    std::optional<std::vector<unsigned long>>      m_upstreamFilter;
 };
 
 } // namespace ui::qt

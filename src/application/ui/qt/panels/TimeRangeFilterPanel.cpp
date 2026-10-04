@@ -239,12 +239,23 @@ void TimeRangeFilterPanel::HandleClear()
 // Private helpers
 // ---------------------------------------------------------------------------
 
+namespace
+{
+/// ISO 8601 allows 'T' or a space between date and time; compare them alike.
+std::string NormalizeTimestamp(std::string ts)
+{
+    if (ts.size() > 10 && ts[10] == 'T')
+        ts[10] = ' ';
+    return ts;
+}
+} // namespace
+
 std::vector<unsigned long> TimeRangeFilterPanel::ComputeMatchingIndices() const
 {
     const std::string field =
         m_fieldCombo->currentText().trimmed().toStdString();
-    const std::string from = m_fromEdit->text().trimmed().toStdString();
-    const std::string to   = m_toEdit->text().trimmed().toStdString();
+    const std::string from = NormalizeTimestamp(m_fromEdit->text().trimmed().toStdString());
+    const std::string to   = NormalizeTimestamp(m_toEdit->text().trimmed().toStdString());
 
     std::vector<unsigned long> result;
     const size_t total = m_events.Size();
@@ -253,14 +264,16 @@ std::vector<unsigned long> TimeRangeFilterPanel::ComputeMatchingIndices() const
     for (size_t i = 0; i < total; ++i)
     {
         const std::string ts =
-            m_events.GetEvent(i).findByKey(field);
+            NormalizeTimestamp(m_events.GetEvent(i).findByKey(field));
 
         // Events with no timestamp in the specified field are excluded when
         // any bound is set, because their position in the timeline is unknown.
         if (ts.empty()) continue;
 
         if (!from.empty() && ts < from) continue;
-        if (!to.empty()   && ts > to)   continue;
+        // "To" is inclusive at its own precision: "10:00:00" keeps
+        // "10:00:00.250", a bare date keeps that whole day.
+        if (!to.empty() && ts > to && ts.compare(0, to.size(), to) != 0) continue;
 
         result.push_back(static_cast<unsigned long>(i));
     }

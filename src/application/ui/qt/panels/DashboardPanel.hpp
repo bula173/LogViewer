@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <cstdint>
 #include <memory>
 
 class QLabel;
@@ -77,9 +78,11 @@ class DashboardPanel : public QWidget
 
     // UI components
     QString m_filePath;
-    /// Actor columns found by discovery; re-discovered only when the log size changes.
+    /// Actor columns found by discovery; re-discovered only when the log
+    /// changes (size, or a clear / merge: container generation).
     std::vector<std::string> m_actorFields;
     std::size_t              m_actorFieldsEventCount {0};
+    std::uint64_t            m_actorFieldsGeneration {0};
     QLabel* m_fileNameLabel = nullptr;
     QLabel* m_fileFormatLabel = nullptr;
     QLabel* m_fileSizeLabel = nullptr;
