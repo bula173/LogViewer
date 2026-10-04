@@ -142,10 +142,10 @@ bool ReadXunitFailures(const fs::path& path, std::unordered_map<std::string, std
         if (xml.isStartElement())
         {
             if (xml.name() == u"testcase")
-                testName = xml.attributes().value(u"name").toString();
+                testName = xml.attributes().value(QStringLiteral("name")).toString();
             else if (xml.name() == u"failure" || xml.name() == u"error")
             {
-                QString message = xml.attributes().value(u"message").toString();
+                QString message = xml.attributes().value(QStringLiteral("message")).toString();
                 if (message.isEmpty())
                     message = xml.readElementText(QXmlStreamReader::IncludeChildElements);
                 AddFailure(failures, testName, message);
@@ -179,11 +179,11 @@ void ReadOutputXmlFailures(const fs::path& path, std::unordered_map<std::string,
             ++depth;
             if (xml.name() == u"test")
             {
-                testName  = xml.attributes().value(u"name").toString();
+                testName  = xml.attributes().value(QStringLiteral("name")).toString();
                 testDepth = depth;
             }
             else if (xml.name() == u"status" && depth == testDepth + 1 &&
-                     xml.attributes().value(u"status") == u"FAIL")
+                     xml.attributes().value(QStringLiteral("status")) == u"FAIL")
             {
                 AddFailure(failures, testName, xml.readElementText());
                 --depth; // readElementText() consumed the end element
