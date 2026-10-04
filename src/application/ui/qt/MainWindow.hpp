@@ -100,6 +100,7 @@ class FilterStatusBar;
 class TabBadgeManager;
 class PreferencesDialog;
 class ShortcutsDialog;
+class RunExplorerDialog;
 struct FilterProfile;
 
 class MainWindow : public QMainWindow,
@@ -241,6 +242,18 @@ class MainWindow : public QMainWindow,
     /// Stop following the current file and uncheck File > Follow File.
     /// Called before any load/merge replaces the container contents.
     void StopTailing();
+    /// File > Open Results Folder: pick a folder and show it in the Run Explorer.
+    void OnOpenResultsFolderRequested();
+    /// Shows the Run Explorer (created on first use) scanning @p folder.
+    void OpenResultsFolder(const QString& folder);
+    /// The normal load path for one file, replacing the current data. Returns
+    /// false when no parser was chosen; throws like MainWindowPresenter::LoadLogFile.
+    bool ReplaceWithFile(const QString& path);
+    /// Run Explorer: load one test log, or @p previousPath merged with @p path
+    /// (aliases = test names) to see what the previous test left behind.
+    void OpenTestLog(const QString& path);
+    void OpenTestLogWithPrevious(const QString& previousPath, const QString& previousName,
+                                 const QString& path, const QString& name);
     bool ShouldCheckForUpdates() const;
     void setupPluginManager();
     void loadPlugins();
@@ -347,6 +360,7 @@ class MainWindow : public QMainWindow,
     FilterProfilesPanel*    m_profilesPanel {nullptr};
     CanSignalTreePanel*     m_canSignalTree    {nullptr};
     SideBySidePanel*        m_sideBySidePanel  {nullptr};
+    RunExplorerDialog*      m_runExplorer      {nullptr};
     FilterStatusBar*        m_filterStatusBar  {nullptr};
     TabBadgeManager*        m_tabBadgeManager  {nullptr};
     QLabel*            m_updateBadge   {nullptr};

@@ -75,7 +75,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 | Subdirectory | Contents |
 |---|---|
 | `panels/` | All dock and content panels (FiltersPanel, StatsSummaryPanel, SignalPlotPanel, TimelineChartPanel, TraceViewerPanel, TestStepsPanel, BookmarksPanel, ScenariosPanel, ActorsPanel, PatternAnalysisPanel, SideBySidePanel, …) |
-| `dialogs/` | Modal dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …) |
+| `dialogs/` | Dialogs (ConfigEditorDialog, FilterEditorDialog, LogFileLoadDialog, UpdateDialog, …; RunExplorerDialog is non-modal) |
 | `events/` | Event table model and view (EventsTableModel, EventsTableView), Excel-style column value filters (ColumnFilterPopup, FilterHeaderView) |
 | `utils/` | Shared utilities (PanelUtils, ThemeSwitcher, ExportManager, TypeFilterView, UpdateChecker) |
 
@@ -101,6 +101,7 @@ The Qt UI layer is structured into four subdirectories under `src/application/ui
 - **TimelineChartPanel**: Interactive event-volume bar histogram with zoom and brush
 - **TraceViewerPanel**: Sequence-diagram-style actor/event view
 - **TestStepsPanel**: "Test Steps" tab — `analyzer::BuildTestOutline()` as a `QTreeWidget` (sections → keywords/expectations: status, start, duration, events) under a PASS/FAIL banner with the failing step, its message and **Go to failure**. Double-click/Enter or the button emit `NavigateToEvent(row)`, which `MainWindow` routes like a bookmark (Events page + `ScrollToActualRow`). Refreshed lazily like the other analysis panels, but re-analyses only when the data changes (container generation, size, file metadata) — the outline covers the whole log, not the filtered rows. Logs without `TEST_START` show a hint.
+- **RunExplorerDialog** (`dialogs/`): non-modal window opened by File → Open Results Folder… (Ctrl+Alt+O) or by dropping a folder (`MainWindow::OpenResultsFolder`). A dialog rather than a dock: the table needs width for the failure messages, it stays open beside the main window while logs are opened from it, and no dock layout/state changes. It runs `analyzer::ScanResultsFolder()` through `QtConcurrent::run` with a `QPromise` (progress bar, Cancel, a new folder cancels the running scan) and shows the entries in a `QTreeWidget`: sortable columns, a verdict filter, and "Group failures by message" (`analyzer::GroupFailures`, groups as parent rows). Activating a test emits `OpenTestRequested(path)` → `MainWindow::OpenTestLog` → `ReplaceWithFile()` (the same path as Open: `CreateParserFor`, `StopTailing`, `LoadLogFile`, recent files). "Open with Previous Test" emits `OpenWithPreviousRequested` with entry i − 1 (entries are in run order, whatever the view's sort) → `ReplaceWithFile(previous)` + `MergeLogFile(test)` with the test names as aliases.
 - **PatternAnalysisPanel**: Template clustering of structurally similar log lines
 - **BookmarksPanel**, **ScenariosPanel**, **ActorsPanel**, **ActorDefinitionsPanel**: Event annotation, scenario matching, and actor attribution
 - **SideBySidePanel**: Loads two independent log files and displays them in a split view with three synchronisation modes (see below)
@@ -223,6 +224,12 @@ IStatisticsStrategy  ◄────  StatsSummaryPanel::SelectStrategy()
 - A `STEP_FAIL` belongs to the latest not-yet-failed `STEP` of that keyword; it is *recovered* when the same keyword with the same arguments starts again later (retry) or the test passed. In real logs 1,610 of 2,003 `STEP_FAIL`s are in PASS logs.
 - Verdict: header `Status`, else `(PASS)`/`(FAIL)` in `TEST_END`. Decisive failure: the first unrecovered `STEP_FAIL` (the innermost keyword of the failing chain, not a later teardown failure), else `TEST_END` (suite-setup failures leave only `TEST_START`/`TEST_END`).
 - *Probably not run* (heuristic): after the decisive failure, sections without a command, expectations, and keywords that neither failed nor sent a command although the same keyword sends one elsewhere.
+
+**TestRunIndex** (`analyzers/TestRunIndex.{hpp,cpp}`, no widgets; QtCore only for `QXmlStreamReader`): the tests of one results folder (`*__merged_logs.txt`, not recursive) for the Run Explorer.
+- `ReadTestLogSummary()`: the `#` header (decoded line by line with `SapiLogParser::ParseHeaderLine`, so the keys match the file metadata of a loaded log: `Test Case`, `Status`, `Timestamp`, `Entries`), the first event line and the last 64 KiB of the file for the first/last timestamps (duration). Events are never parsed.
+- `FindDecisiveFailureMessage()` (FAIL logs only): one line scan that parses only lines carrying `[TEST_START]`, `[TEST_END]`, `[STEP]` or `[STEP_FAIL]` and feeds them to `BuildTestOutline`, so the message is the one the Test Steps banner shows. About 0.9 s for a run of 49 failed logs (55 MB); PASS logs cost a few ms.
+- `ReadRobotFailures()`: for FAIL logs without a failing step (suite-setup failures) — `xunit.xml` `<testcase name>` → `<failure message>`/`<error message>`, or when there is no readable `xunit.xml`, `output.xml` (the FAIL `<status>` text that is a direct child of `<test>`). Names are matched by `TestNameKey()` (lower-case letters and digits), so header names, Robot names and file names agree.
+- `ScanResultsFolder()`: all of the above with a progress/cancel callback; the result is sorted by header `Timestamp` (else first event), so the test before entry i is entry i − 1. `GroupFailures()` groups FAIL messages by `NormalizeFailureMessage()` (whitespace collapsed, digit runs → `N`), largest group first.
 
 **FilterManager**: Coordinates filtering operations
 - Applies multiple filters in sequence

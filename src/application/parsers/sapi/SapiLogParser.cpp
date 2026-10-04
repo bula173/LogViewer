@@ -224,9 +224,9 @@ bool ExtractJson(std::string_view payload, Pairs& pairs)
     return true;
 }
 
-/// Appends `# Test Case   : IL Grants …` as {"Test Case", "IL Grants …"};
-/// other comment lines (rulers, the title line) are ignored.
-void ParseHeaderLine(std::string_view line, Pairs& metadata)
+} // namespace
+
+void SapiLogParser::ParseHeaderLine(std::string_view line, std::vector<std::pair<std::string, std::string>>& metadata)
 {
     line.remove_prefix(1); // '#'
     const size_t colon = line.find(':');
@@ -239,8 +239,6 @@ void ParseHeaderLine(std::string_view line, Pairs& metadata)
     if (keyIsWords)
         metadata.emplace_back(std::string{key}, std::string{Trim(line.substr(colon + 1))});
 }
-
-} // namespace
 
 std::string_view SapiLogParser::ExtractUnit(std::string_view info)
 {

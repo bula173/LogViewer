@@ -48,6 +48,7 @@
 #include "dialogs/GemmaDownloadDialog.hpp"
 #include "dialogs/PluginManagerDialog.hpp"
 #include "dialogs/PreferencesDialog.hpp"
+#include "dialogs/RunExplorerDialog.hpp"
 #include "dialogs/ShortcutsDialog.hpp"
 #include "utils/ShortcutManager.hpp"
 #include "dialogs/StructuredConfigDialog.hpp"
@@ -959,6 +960,12 @@ void MainWindow::SetupMenus()
         OnOpenFileRequested();
     });
 
+    auto* openFolderAction = fileMenu->addAction(tr("Open &Results Folder…"));
+    openFolderAction->setShortcut(QKeySequence(tr("Ctrl+Alt+O")));
+    openFolderAction->setToolTip(tr("List the tests of a test-run results folder (one safeAPI merged log per test)"));
+    ShortcutManager::getInstance().Register("file.openResultsFolder", tr("File"), tr("Open Results Folder"), openFolderAction);
+    connect(openFolderAction, &QAction::triggered, this, &MainWindow::OnOpenResultsFolderRequested);
+
     // Add Recent Files submenu
     m_recentFilesMenu = fileMenu->addMenu(tr("Recent &Files"));
     if (m_fileOpsHelper) {
@@ -1869,7 +1876,12 @@ void MainWindow::dropEvent(QDropEvent* event)
     if (localFiles.isEmpty())
         return;
 
-    if (localFiles.size() >= 2)
+    if (localFiles.size() == 1 && QFileInfo(localFiles[0]).isDir())
+    {
+        util::Logger::Info("[MainWindow] Dropped folder: {}", localFiles[0].toStdString());
+        OpenResultsFolder(localFiles[0]);
+    }
+    else if (localFiles.size() >= 2)
     {
         // Two files dropped: open directly in side-by-side panel.
         util::Logger::Info("[MainWindow] Two files dropped — opening side by side");
@@ -2038,21 +2050,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
             {
                 if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Replace)
                 {
-                    // Replace existing data
-                    auto parser = CreateParserFor(filePath);
-                    if (!parser) return; // user cancelled type selection
-                    StopTailing();
-                    const QString message = QString("Loading %1 ...").arg(path);
-                    UpdateStatusText(message.toStdString());
-                    if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
-                    m_presenter->LoadLogFile(std::move(parser), filePath);
-                    m_presenter->SetItemDetailsVisible(true);
-                    m_currentLogFilePath = path;
-                    if (m_tailAction) m_tailAction->setEnabled(true);
-                    AutoSwitchViewForFile(path);
-                    const QString readyMsg = QString("Data ready. Path: %1").arg(path);
-                    UpdateStatusText(readyMsg.toStdString());
-                    AddToRecentFiles(path);
+                    ReplaceWithFile(path);
                 }
                 else if (dialog.GetLoadMode() == LogFileLoadDialog::LoadMode::Merge)
                 {
@@ -2084,20 +2082,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
         else
         {
             // No existing data, just load normally
-            auto parser = CreateParserFor(filePath);
-            if (!parser) return; // user cancelled type selection
-            StopTailing();
-            const QString message = QString("Loading %1 ...").arg(path);
-            UpdateStatusText(message.toStdString());
-            if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
-                    m_presenter->LoadLogFile(std::move(parser), filePath);
-            m_presenter->SetItemDetailsVisible(true);
-            m_currentLogFilePath = path;
-            if (m_tailAction) m_tailAction->setEnabled(true);
-            AutoSwitchViewForFile(path);
-            const QString readyMsg = QString("Data ready. Path: %1").arg(path);
-            UpdateStatusText(readyMsg.toStdString());
-            AddToRecentFiles(path);
+            ReplaceWithFile(path);
         }
     }
     catch (const std::exception& ex)
@@ -2108,6 +2093,100 @@ void MainWindow::HandleDroppedFile(const QString& path)
         UpdateStatusText(failedMsg.toStdString());
         const QString errorMsg = QString("Unable to load %1\n%2").arg(path).arg(ex.what());
         QMessageBox::critical(this, "File Drop Error", errorMsg);
+    }
+}
+
+bool MainWindow::ReplaceWithFile(const QString& path)
+{
+    const std::filesystem::path filePath(path.toStdString());
+    auto parser = CreateParserFor(filePath);
+    if (!parser) return false; // user cancelled type selection
+    StopTailing();
+    const QString message = QString("Loading %1 ...").arg(path);
+    UpdateStatusText(message.toStdString());
+    if (m_eventsView) m_eventsView->ClearColumnFilters(); // values of the old file
+    m_presenter->LoadLogFile(std::move(parser), filePath);
+    m_presenter->SetItemDetailsVisible(true);
+    m_currentLogFilePath = path;
+    if (m_tailAction) m_tailAction->setEnabled(true);
+    AutoSwitchViewForFile(path);
+    const QString readyMsg = QString("Data ready. Path: %1").arg(path);
+    UpdateStatusText(readyMsg.toStdString());
+    AddToRecentFiles(path);
+    return true;
+}
+
+void MainWindow::OnOpenResultsFolderRequested()
+{
+    QFileDialog dialog(this, tr("Open Results Folder"));
+    #ifdef __APPLE__
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    #endif
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+    dialog.setDirectory(LastDir("resultsFolder",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    const QString folder = dialog.selectedFiles().value(0);
+    if (folder.isEmpty())
+        return;
+
+    SaveLastDir("resultsFolder", folder); // its parent: the next pick starts next to this run
+    OpenResultsFolder(folder);
+}
+
+void MainWindow::OpenResultsFolder(const QString& folder)
+{
+    if (!m_runExplorer)
+    {
+        m_runExplorer = new RunExplorerDialog(this);
+        connect(m_runExplorer, &RunExplorerDialog::OpenTestRequested, this, &MainWindow::OpenTestLog);
+        connect(m_runExplorer, &RunExplorerDialog::OpenWithPreviousRequested,
+                this, &MainWindow::OpenTestLogWithPrevious);
+    }
+    util::Logger::Info("[MainWindow] Opening results folder {}", folder.toStdString());
+    m_runExplorer->OpenFolder(folder);
+    m_runExplorer->show();
+    m_runExplorer->raise();
+    m_runExplorer->activateWindow();
+}
+
+void MainWindow::OpenTestLog(const QString& path)
+{
+    if (!m_presenter) return;
+    try
+    {
+        ReplaceWithFile(path);
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("[MainWindow] Failed to load test log '{}': {}", path.toStdString(), ex.what());
+        ShowError(tr("Run Explorer"), tr("Unable to load %1\n%2").arg(path, QString::fromUtf8(ex.what())));
+    }
+}
+
+void MainWindow::OpenTestLogWithPrevious(const QString& previousPath, const QString& previousName,
+                                         const QString& path, const QString& name)
+{
+    if (!m_presenter) return;
+    try
+    {
+        if (!ReplaceWithFile(previousPath))
+            return;
+        const std::filesystem::path filePath(path.toStdString());
+        auto parser = CreateParserFor(filePath);
+        if (!parser) return;
+        UpdateStatusText(QString("Merging %1 ...").arg(path).toStdString());
+        m_presenter->MergeLogFile(std::move(parser), filePath, previousName.toStdString(), name.toStdString());
+        ShowEventsTablePage(m_eventsStack);
+        UpdateStatusText(QString("Merge complete. Path: %1").arg(path).toStdString());
+    }
+    catch (const std::exception& ex)
+    {
+        util::Logger::Error("[MainWindow] Failed to open '{}' with the previous test: {}",
+            path.toStdString(), ex.what());
+        ShowError(tr("Run Explorer"), tr("Unable to load %1\n%2").arg(path, QString::fromUtf8(ex.what())));
     }
 }
 

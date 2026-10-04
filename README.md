@@ -7,6 +7,7 @@ A modern, cross-platform log viewer built with Qt 6 and C++20, featuring AI-assi
 ### Core
 - **Multiple Log Formats**: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (`.dlt`), POSIX Evlog (`.evl`), and safeAPI RBC 2oo2 merged test logs (`.txt` with the merged-log header)
 - **safeAPI Payload Fields**: Structured payloads of safeAPI merged test logs become extra fields — `key=value` lists and JSON objects as `p.<key>` (e.g. `p.cycle`, `p.role`, `p.status`, `p.cmd`, `p.fields.route_len`), the `[a-west | GP]` channel marker in `info` as `unit`. Add them as columns in **Tools > Settings > Columns** to filter them, or use them in Statistics and Traces; the raw `payload` stays unchanged
+- **Run Explorer**: File > Open Results Folder… (Ctrl+Alt+O) or dropping a folder lists the tests of a test-run results folder (one safeAPI `*__merged_logs.txt` per test) with verdict, duration, entry count and failure message — the decisive step failure, or Robot Framework's `xunit.xml`/`output.xml` message when the log records none. Filter by verdict, group failures by message, double-click to open a test, or **Open with Previous Test** to merge it with the test that ran before it
 - **DBC Signal Decoding**: Load a `.dbc` file alongside an ASC log to decode raw CAN frames into named signals
 - **Evlog Template Decoding**: Load a directory of `.t`/`.tmpl`/`.template` files to decode structured BINARY evlog payloads into named fields
 - **High Performance**: Virtual list architecture handles millions of log entries
@@ -242,7 +243,7 @@ Configure in Settings > AI with an API key:
 
 ## Usage
 
-1. **Open Log File** — File > Open (Ctrl+O); supports XML, CSV, `.asc` CAN, `.dlt` DLT, `.evl` Evlog, and safeAPI merged test logs (`.txt`, auto-detected by header); drag and drop also works
+1. **Open Log File** — File > Open (Ctrl+O); supports XML, CSV, `.asc` CAN, `.dlt` DLT, `.evl` Evlog, and safeAPI merged test logs (`.txt`, auto-detected by header); drag and drop also works. File > Open Results Folder… (Ctrl+Alt+O) — or dropping a folder — opens a test-run results folder in the Run Explorer
 2. **Load DBC** — File > Load DBC… to decode CAN signals from a `.dbc` database (optional, ASC only)
 3. **Load Evlog Templates** — File > Load Evlog Templates… to select a directory of template files for `.evl` BINARY payload decoding
 4. **Filter** — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles

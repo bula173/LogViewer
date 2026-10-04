@@ -11,11 +11,6 @@
 namespace analyzer
 {
 
-namespace
-{
-
-/// "YYYY-MM-DDTHH:MM:SS[.fraction]…" → µs since the epoch. Any zone suffix is
-/// ignored: only differences between timestamps of one log are used.
 std::optional<std::int64_t> ParseIsoMicros(std::string_view ts)
 {
     if (ts.size() < 19 || ts[4] != '-' || ts[7] != '-' || ts[13] != ':' || ts[16] != ':')
@@ -56,6 +51,9 @@ std::optional<std::int64_t> ParseIsoMicros(std::string_view ts)
     const std::int64_t days = std::chrono::sys_days{ymd}.time_since_epoch().count();
     return ((days * 24 + h) * 60 + mi) * 60'000'000LL + s * 1'000'000LL + micros;
 }
+
+namespace
+{
 
 /// True for "TestStep 3: …" / "TestStep: …" given the prefix "TestStep".
 bool IsMarker(std::string_view text, std::string_view prefix)

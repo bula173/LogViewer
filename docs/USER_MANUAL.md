@@ -115,6 +115,8 @@ If you open a file with an unknown or missing extension, LogViewer prompts you t
 
 Merging multiple files into one view is possible by opening them one after another — subsequent opens append events to the current dataset. Use **File > Clear** to start fresh.
 
+**File > Open Results Folder…** (Ctrl+Alt+O), or dropping a folder on the window, opens the **Run Explorer** for a test-run results folder (one safeAPI `*__merged_logs.txt` per test, with Robot Framework's `xunit.xml` / `output.xml`). It lists every test in run order with its verdict, duration, entry count and failure message: the step failure that failed the test, or — when the log records no failing step, e.g. a failed suite setup — the message from `xunit.xml` (else `output.xml`). Filter by verdict, sort by any column, and tick **Group failures by message** to collapse failures that differ only in numbers. Double-click a test to load its log; **Open with Previous Test** (button or right-click) loads it merged with the test that ran just before it, to check whether that test's teardown left the system in a bad state. The folder is scanned in the background; **Cancel** stops the scan.
+
 ### 3.3 Following a Live File (Tail Mode)
 
 **File > Follow File (Tail)** (Ctrl+T) watches the currently loaded log file and automatically appends new events as they are written to disk. This is useful for monitoring a running service without reopening the file manually.
@@ -577,6 +579,7 @@ The plugins directory is shown at the top of the dialog. Use **Tools > Reload Pl
 | Shortcut | Action |
 |----------|--------|
 | **Ctrl+O** | Open log file |
+| **Ctrl+Alt+O** | Open results folder (Run Explorer) |
 | **Ctrl+F** | Focus search bar |
 | **Enter** (in search bar) | Run search |
 | **Ctrl+G** | Jump to timestamp |

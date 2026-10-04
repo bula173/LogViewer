@@ -43,6 +43,7 @@ target_sources(application_core
         dialogs/LogFileLoadDialog.cpp
         dialogs/PluginManagerDialog.cpp
         dialogs/PreferencesDialog.cpp
+        dialogs/RunExplorerDialog.cpp
         dialogs/ShortcutsDialog.cpp
         dialogs/StructuredConfigDialog.cpp
         dialogs/ThemeCustomizationDialog.cpp

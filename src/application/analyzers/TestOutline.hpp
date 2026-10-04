@@ -99,6 +99,10 @@ struct TestOutline
     [[nodiscard]] bool HasTest() const { return testStartRow.has_value(); }
 };
 
+/// "YYYY-MM-DDTHH:MM:SS[.fraction]…" → µs since the epoch. Any zone suffix is
+/// ignored: only differences between timestamps of one log are meaningful.
+[[nodiscard]] std::optional<std::int64_t> ParseIsoMicros(std::string_view ts);
+
 /// Builds the step outline of the first test in @p events.
 ///
 /// - Sections: "Setup" up to the first `TestStep` marker, one section per

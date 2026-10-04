@@ -77,6 +77,12 @@ class SapiLogParser : public IDataParser
     /// malformed lines. Exposed for tests.
     static bool ParseLine(std::string_view line, db::LogEvent::EventItems& out);
 
+    /// Appends a header line such as `# Test Case   : IL Grants …` (starting
+    /// with '#') to @p metadata as {"Test Case", "IL Grants …"}; other comment
+    /// lines (rulers, the title line) are ignored.
+    static void ParseHeaderLine(std::string_view line,
+                                std::vector<std::pair<std::string, std::string>>& metadata);
+
     /// Returns the unit of an `info` field that starts with a `[unit | partition]`
     /// marker (e.g. "a-west" for `[a-west | GP] Log message`), else an empty view.
     static std::string_view ExtractUnit(std::string_view info);
