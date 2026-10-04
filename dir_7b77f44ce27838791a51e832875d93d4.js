@@ -26,6 +26,7 @@ var dir_7b77f44ce27838791a51e832875d93d4 =
     [ "ThemeManager.cpp", "d9/dfc/ThemeManager_8cpp.html", null ],
     [ "ThemeManager.hpp", "d8/ddf/ThemeManager_8hpp.html", "d8/ddf/ThemeManager_8hpp" ],
     [ "ThemeSwitcher.hpp", "d8/d5b/ThemeSwitcher_8hpp.html", "d8/d5b/ThemeSwitcher_8hpp" ],
+    [ "TrackedTabs.hpp", "dd/d17/TrackedTabs_8hpp.html", "dd/d17/TrackedTabs_8hpp" ],
     [ "TypeFilterView.cpp", "d1/d5a/TypeFilterView_8cpp.html", null ],
     [ "TypeFilterView.hpp", "d1/d0e/TypeFilterView_8hpp.html", "d1/d0e/TypeFilterView_8hpp" ],
     [ "UpdateChecker.cpp", "da/d4f/UpdateChecker_8cpp.html", "da/d4f/UpdateChecker_8cpp" ],

@@ -3,6 +3,7 @@ var namespaceui_1_1qt_1_1utils =
     [ "anonymous_namespace{SessionManager.cpp}", "d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html", [
       [ "kSupportedSessionVersion", "d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html#aa6743fbf252352210a0209813f657918", null ]
     ] ],
+    [ "AppSettings", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings" ],
     [ "EventGroupManager", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager" ],
     [ "EventTagManager", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager" ],
     [ "KeyboardNavigationManager", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager" ],
@@ -20,5 +21,9 @@ var namespaceui_1_1qt_1_1utils =
       [ "Advanced", "dd/d73/namespaceui_1_1qt_1_1utils.html#ae384296ecf488dc3d5f196f33ce8875ca9b6545e4cea9b4ad4979d41bb9170e2b", null ]
     ] ],
     [ "AppDataDir", "dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca", null ],
-    [ "BindTabVisibilityAction", "dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f", null ]
+    [ "BindTabVisibilityAction", "dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f", null ],
+    [ "PathToQString", "dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2", null ],
+    [ "RemoveTrackedTabs", "dd/d73/namespaceui_1_1qt_1_1utils.html#ad9f5f81ddb7766d06d089c70c6c1a6d8", null ],
+    [ "SyncTabVisibilityActions", "dd/d73/namespaceui_1_1qt_1_1utils.html#a055e6e4fa253c8d0c97bbe8df2ac600d", null ],
+    [ "UsePortableSettingsIfPortable", "dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093", null ]
 ];

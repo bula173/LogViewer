@@ -18,7 +18,8 @@ var searchData=
   ['aiservicefactory_15',['AIServiceFactory',['../d9/deb/classai_1_1AIServiceFactory.html',1,'ai']]],
   ['aiservicewrapper_16',['AIServiceWrapper',['../df/dca/classai_1_1AIServiceWrapper.html',1,'ai']]],
   ['anthropicclient_17',['AnthropicClient',['../dc/d89/classai_1_1AnthropicClient.html',1,'ai']]],
-  ['appupdateinfo_18',['AppUpdateInfo',['../d5/d29/structupdates_1_1AppUpdateInfo.html',1,'updates']]],
-  ['arrowitem_19',['ArrowItem',['../df/d2a/classArrowItem.html',1,'']]],
-  ['ascparser_20',['AscParser',['../dd/dfa/classparser_1_1AscParser.html',1,'parser']]]
+  ['appsettings_18',['AppSettings',['../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html',1,'ui::qt::utils']]],
+  ['appupdateinfo_19',['AppUpdateInfo',['../d5/d29/structupdates_1_1AppUpdateInfo.html',1,'updates']]],
+  ['arrowitem_20',['ArrowItem',['../df/d2a/classArrowItem.html',1,'']]],
+  ['ascparser_21',['AscParser',['../dd/dfa/classparser_1_1AscParser.html',1,'parser']]]
 ];

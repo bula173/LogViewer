@@ -1,7 +1,8 @@
 var namespaceconfig =
 [
     [ "anonymous_namespace{Config.cpp}", "d6/d48/namespaceconfig_1_1anonymous__namespace_02Config_8cpp_03.html", [
-      [ "GetInstalledEtcDir", "d6/d48/namespaceconfig_1_1anonymous__namespace_02Config_8cpp_03.html#a46ebee397342239bc3e1c57e469907d4", null ]
+      [ "GetInstalledEtcDir", "d6/d48/namespaceconfig_1_1anonymous__namespace_02Config_8cpp_03.html#a46ebee397342239bc3e1c57e469907d4", null ],
+      [ "WriteFileAtomically", "d6/d48/namespaceconfig_1_1anonymous__namespace_02Config_8cpp_03.html#aff6978fd66c6799ac8c071a738e2756c", null ]
     ] ],
     [ "ColumnColor", "da/dc9/structconfig_1_1ColumnColor.html", "da/dc9/structconfig_1_1ColumnColor" ],
     [ "ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", "db/deb/structconfig_1_1ColumnConfig" ],

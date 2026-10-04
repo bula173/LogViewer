@@ -107,6 +107,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html">AppSettings</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html">EventGroupManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Event grouping and clustering system for v1.10.0 Phase 10.  <a href="../../dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,10 +152,18 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:aca904baf143f4c25fadb8a1043ff57a2" id="r_aca904baf143f4c25fadb8a1043ff57a2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">PathToQString</a> (const std::filesystem::path &amp;path)</td></tr>
+<tr class="separator:aca904baf143f4c25fadb8a1043ff57a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b2dea68c122a6b1127d4f333f11eeca" id="r_a6b2dea68c122a6b1127d4f333f11eeca"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">AppDataDir</a> (QStandardPaths::StandardLocation location=QStandardPaths::AppDataLocation)</td></tr>
 <tr class="separator:a6b2dea68c122a6b1127d4f333f11eeca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2486e3b5ccc5d83c6a3d55eb9c816093" id="r_a2486e3b5ccc5d83c6a3d55eb9c816093"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093">UsePortableSettingsIfPortable</a> ()</td></tr>
+<tr class="separator:a2486e3b5ccc5d83c6a3d55eb9c816093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16e4bbb81bade5ba66a5caa8f90c8c8f" id="r_a16e4bbb81bade5ba66a5caa8f90c8c8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">BindTabVisibilityAction</a> (QAction *action, QTabWidget *tabs, <a class="el" href="../../d8/ded/classQWidget.html">QWidget</a> *page)</td></tr>
 <tr class="separator:a16e4bbb81bade5ba66a5caa8f90c8c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a055e6e4fa253c8d0c97bbe8df2ac600d" id="r_a055e6e4fa253c8d0c97bbe8df2ac600d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a055e6e4fa253c8d0c97bbe8df2ac600d">SyncTabVisibilityActions</a> (const QList&lt; QAction * &gt; &amp;actions, QTabWidget *tabs)</td></tr>
+<tr class="separator:a055e6e4fa253c8d0c97bbe8df2ac600d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9f5f81ddb7766d06d089c70c6c1a6d8" id="r_ad9f5f81ddb7766d06d089c70c6c1a6d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#ad9f5f81ddb7766d06d089c70c6c1a6d8">RemoveTrackedTabs</a> (QTabWidget *tabs, std::map&lt; std::string, <a class="el" href="../../d8/ded/classQWidget.html">QWidget</a> * &gt; &amp;tracked)</td></tr>
+<tr class="separator:ad9f5f81ddb7766d06d089c70c6c1a6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a2f196d948f5ed289b60918dd594dd74d" name="a2f196d948f5ed289b60918dd594dd74d"></a>
@@ -229,13 +239,15 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d73/namespaceui_1_1qt_1_1utils_a6b2dea68c122a6b1127d4f333f11eeca_cgraph.png" border="0" usemap="#add/d73/namespaceui_1_1qt_1_1utils_a6b2dea68c122a6b1127d4f333f11eeca_cgraph" alt=""/></div>
 <map name="add/d73/namespaceui_1_1qt_1_1utils_a6b2dea68c122a6b1127d4f333f11eeca_cgraph" id="add/d73/namespaceui_1_1qt_1_1utils_a6b2dea68c122a6b1127d4f333f11eeca_cgraph">
-<area shape="rect" title=" " alt="" coords="5,31,180,56"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="251,5,384,31"/>
-<area shape="poly" title=" " alt="" coords="180,31,236,24,237,30,181,36"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="228,55,407,80"/>
-<area shape="poly" title=" " alt="" coords="181,50,215,54,214,59,180,55"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="455,55,657,80"/>
-<area shape="poly" title=" " alt="" coords="407,65,441,65,441,70,407,70"/>
+<area shape="rect" title=" " alt="" coords="5,55,180,80"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="256,5,389,31"/>
+<area shape="poly" title=" " alt="" coords="152,52,249,31,250,36,153,57"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="233,55,412,80"/>
+<area shape="poly" title=" " alt="" coords="181,65,220,65,220,70,181,70"/>
+<area shape="rect" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2" title=" " alt="" coords="228,104,417,129"/>
+<area shape="poly" title=" " alt="" coords="153,77,250,98,249,104,152,83"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="465,55,668,80"/>
+<area shape="poly" title=" " alt="" coords="412,65,451,65,451,70,412,70"/>
 </map>
 </div>
 <div class="dynheader">
@@ -310,6 +322,196 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>Makes <code>action</code> show/hide the tab that holds <code>page</code>.</p>
 <p>The tab is looked up by its widget each time the action fires. A tab position captured when the menu is built goes stale as soon as tabs are sorted or removed, and then hides a different tab. </p>
+
+</div>
+</div>
+<a id="aca904baf143f4c25fadb8a1043ff57a2" name="aca904baf143f4c25fadb8a1043ff57a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca904baf143f4c25fadb8a1043ff57a2">&#9670;&#160;</a></span>PathToQString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString ui::qt::utils::PathToQString </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Lossless path -&gt; QString. path::string() converts to the ANSI code page on Windows, which garbles or throws on non-ASCII user / folder names. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d73/namespaceui_1_1qt_1_1utils_aca904baf143f4c25fadb8a1043ff57a2_icgraph.png" border="0" usemap="#add/d73/namespaceui_1_1qt_1_1utils_aca904baf143f4c25fadb8a1043ff57a2_icgraph" alt=""/></div>
+<map name="add/d73/namespaceui_1_1qt_1_1utils_aca904baf143f4c25fadb8a1043ff57a2_icgraph" id="add/d73/namespaceui_1_1qt_1_1utils_aca904baf143f4c25fadb8a1043ff57a2_icgraph">
+<area shape="rect" title=" " alt="" coords="1339,298,1528,323"/>
+<area shape="rect" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca" title=" " alt="" coords="1114,205,1289,230"/>
+<area shape="poly" title=" " alt="" coords="1387,295,1233,233,1235,228,1389,290"/>
+<area shape="rect" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093" title=" " alt="" coords="1112,319,1291,359"/>
+<area shape="poly" title=" " alt="" coords="1325,326,1291,331,1291,325,1324,321"/>
+<area shape="rect" href="../../de/d35/classui_1_1qt_1_1UpdateChecker.html#a7feace3d0a279854731e6adea5dab18e" title=" " alt="" coords="882,5,1045,45"/>
+<area shape="poly" title=" " alt="" coords="1183,195,1135,127,1101,91,1063,60,1041,48,1043,43,1065,55,1105,87,1139,124,1188,191"/>
+<area shape="rect" href="../../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a6fb5f81222fbb727cbb91f8de86fe7a9" title="Get available theme names." alt="" coords="863,69,1064,109"/>
+<area shape="poly" title=" " alt="" coords="1173,198,1123,161,1063,124,1035,112,1037,107,1065,119,1126,156,1176,194"/>
+<area shape="rect" href="../../da/d39/classui_1_1qt_1_1MainWindowFileOpsHelper.html#a29f24f99011b27a94d7629c3f994ee50" title=" " alt="" coords="865,133,1062,173"/>
+<area shape="poly" title=" " alt="" coords="1139,204,1038,176,1039,171,1140,198"/>
+<area shape="rect" href="../../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a7c06c4eeabbc41cdf7962be3c6340a07" title="Load theme from file." alt="" coords="863,197,1064,237"/>
+<area shape="poly" title=" " alt="" coords="1100,220,1064,220,1064,215,1100,215"/>
+<area shape="rect" href="../../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#abd4092cafc1ec44c8ec1f8725ce54f5c" title="Save theme to file." alt="" coords="863,261,1064,301"/>
+<area shape="poly" title=" " alt="" coords="1140,236,1039,264,1038,259,1139,231"/>
+<area shape="rect" href="../../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#aed8df6a8b23a6045461a153aea3006b6" title=" " alt="" coords="876,325,1051,365"/>
+<area shape="poly" title=" " alt="" coords="1176,241,1126,279,1065,316,1037,328,1035,323,1063,311,1123,274,1173,237"/>
+<area shape="rect" href="../../de/d35/classui_1_1qt_1_1UpdateChecker.html#ab6094b1176b6b70412964f3907ee3ef0" title="Download a plugin ZIP to a temp location then verify its checksum." alt="" coords="652,5,815,45"/>
+<area shape="poly" title=" " alt="" coords="868,28,815,28,815,23,868,23"/>
+<area shape="rect" href="../../d5/d32/classui_1_1qt_1_1UpdateDialog.html#afe6d09cbf10e82e0c1367fae42617243" title=" " alt="" coords="405,5,604,45"/>
+<area shape="poly" title=" " alt="" coords="638,28,604,28,604,23,638,23"/>
+<area shape="rect" href="../../d5/d32/classui_1_1qt_1_1UpdateDialog.html#a1d1d5ded66f6e6dd8fddf5aabb5b4617" title=" " alt="" coords="205,5,357,45"/>
+<area shape="poly" title=" " alt="" coords="392,28,358,28,358,23,392,23"/>
+<area shape="rect" href="../../d5/d32/classui_1_1qt_1_1UpdateDialog.html#ab33d0b5526b4498596c639f9e1cb453d" title=" " alt="" coords="5,5,157,45"/>
+<area shape="poly" title=" " alt="" coords="191,28,158,28,158,23,191,23"/>
+<area shape="rect" href="../../d3/d44/MyAppQt_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="936,390,991,415"/>
+<area shape="poly" title=" " alt="" coords="1118,365,1065,380,992,399,990,394,1063,375,1117,360"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad9f5f81ddb7766d06d089c70c6c1a6d8" name="ad9f5f81ddb7766d06d089c70c6c1a6d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9f5f81ddb7766d06d089c70c6c1a6d8">&#9670;&#160;</a></span>RemoveTrackedTabs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::utils::RemoveTrackedTabs </td>
+          <td>(</td>
+          <td class="paramtype">QTabWidget *&#160;</td>
+          <td class="paramname"><em>tabs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::map&lt; std::string, <a class="el" href="../../d8/ded/classQWidget.html">QWidget</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tracked</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Removes every page listed in <code>tracked</code> (id -&gt; page) from <code>tabs</code>, schedules it for deletion and clears <code>tracked</code>.</p>
+<p>Pages are looked up by widget, so tabs that are not tracked (the built-in Events, Statistics, ... tabs) stay untouched wherever they sit, even after the tabs were reordered. </p>
+
+</div>
+</div>
+<a id="a055e6e4fa253c8d0c97bbe8df2ac600d" name="a055e6e4fa253c8d0c97bbe8df2ac600d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a055e6e4fa253c8d0c97bbe8df2ac600d">&#9670;&#160;</a></span>SyncTabVisibilityActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::utils::SyncTabVisibilityActions </td>
+          <td>(</td>
+          <td class="paramtype">const QList&lt; QAction * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QTabWidget *&#160;</td>
+          <td class="paramname"><em>tabs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Ticks each action bound by <a class="el" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">BindTabVisibilityAction()</a> according to whether its own tab is visible. Matched by page, not by tab text: a plugin tab may carry the same label as a built-in one. </p>
+
+</div>
+</div>
+<a id="a2486e3b5ccc5d83c6a3d55eb9c816093" name="a2486e3b5ccc5d83c6a3d55eb9c816093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2486e3b5ccc5d83c6a3d55eb9c816093">&#9670;&#160;</a></span>UsePortableSettingsIfPortable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ui::qt::utils::UsePortableSettingsIfPortable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Portable copy (portable.txt next to the exe): keep <a class="el" href="../../dc/dc8/classQSettings.html">QSettings</a> (window layout, layouts, scenarios, recent files, ...) in data/settings instead of the registry / plist. Call once at startup, before any <a class="el" href="../../dc/dc8/classQSettings.html">QSettings</a> is created. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_cgraph.png" border="0" usemap="#add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_cgraph" alt=""/></div>
+<map name="add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_cgraph" id="add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_cgraph">
+<area shape="rect" title=" " alt="" coords="5,49,184,89"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="245,5,408,31"/>
+<area shape="poly" title=" " alt="" coords="183,47,254,31,255,36,185,52"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="469,56,648,81"/>
+<area shape="poly" title=" " alt="" coords="184,66,455,66,455,71,184,71"/>
+<area shape="rect" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2" title=" " alt="" coords="232,107,421,132"/>
+<area shape="poly" title=" " alt="" coords="185,86,255,101,254,106,183,91"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="696,31,899,56"/>
+<area shape="poly" title=" " alt="" coords="409,20,683,35,682,40,408,25"/>
+<area shape="poly" title=" " alt="" coords="386,28,487,50,486,56,385,33"/>
+<area shape="poly" title=" " alt="" coords="648,57,682,53,683,58,648,62"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_icgraph.png" border="0" usemap="#add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_icgraph" alt=""/></div>
+<map name="add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_icgraph" id="add/d73/namespaceui_1_1qt_1_1utils_a2486e3b5ccc5d83c6a3d55eb9c816093_icgraph">
+<area shape="rect" title=" " alt="" coords="108,5,287,45"/>
+<area shape="rect" href="../../d3/d44/MyAppQt_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>
+</div>
 
 </div>
 </div>

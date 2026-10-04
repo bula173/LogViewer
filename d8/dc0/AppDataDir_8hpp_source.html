@@ -103,28 +103,72 @@ $(document).ready(function(){initNavTree('d8/dc0/AppDataDir_8hpp_source.html','.
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;Config.hpp&quot;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="../../d6/df9/PortableMode_8hpp.html">PortableMode.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;QStandardPaths&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;QString&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="foldopen" id="foldopen00009" data-start="{" data-end="}">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">    9</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="}">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">   14</a></span><span class="keyword">inline</span> QString <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">AppDataDir</a>(QStandardPaths::StandardLocation location = QStandardPaths::AppDataLocation)</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a">util::portable::IsPortable</a>())</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keywordflow">return</span> QString::fromStdString(<a class="code hl_function" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab">config::GetConfig</a>().GetDefaultAppPath().<span class="keywordtype">string</span>());</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">return</span> QStandardPaths::writableLocation(location);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;QSettings&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;QStandardPaths&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;system_error&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="}">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">   13</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>{</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">   18</a></span><span class="keyword">inline</span> QString <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">PathToQString</a>(<span class="keyword">const</span> std::filesystem::path&amp; path)</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>{</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">return</span> QString::fromStdU16String(path.u16string());</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
 </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>} <span class="comment">// namespace ui::qt::utils</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">   25</a></span><span class="keyword">inline</span> QString <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">AppDataDir</a>(QStandardPaths::StandardLocation location = QStandardPaths::AppDataLocation)</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>{</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a">util::portable::IsPortable</a>())</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">PathToQString</a>(<a class="code hl_function" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab">config::GetConfig</a>().GetDefaultAppPath());</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordflow">return</span> QStandardPaths::writableLocation(location);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>}</div>
+</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="}">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093">   35</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093">UsePortableSettingsIfPortable</a>()</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>{</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a">util::portable::IsPortable</a>())</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">const</span> <span class="keyword">auto</span> settingsDir = <a class="code hl_function" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7">util::portable::DataDir</a>() / <span class="stringliteral">&quot;settings&quot;</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::error_code ec;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::filesystem::create_directories(settingsDir, ec);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    QSettings::setDefaultFormat(QSettings::IniFormat);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">PathToQString</a>(settingsDir));</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>}</div>
+</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="};">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html">   51</a></span><span class="keyword">class </span><a class="code hl_class" href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html">AppSettings</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../dc/dc8/classQSettings.html">QSettings</a></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>{</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html#ae9bcb5ce620bedc947920b7d44617fa7">   54</a></span>    <a class="code hl_function" href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html#ae9bcb5ce620bedc947920b7d44617fa7">AppSettings</a>()</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        : <a class="code hl_class" href="../../dc/dc8/classQSettings.html">QSettings</a>(<a class="code hl_class" href="../../dc/dc8/classQSettings.html">QSettings</a>::defaultFormat(), <a class="code hl_class" href="../../dc/dc8/classQSettings.html">QSettings</a>::UserScope,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                    QStringLiteral(<span class="stringliteral">&quot;LogViewer&quot;</span>), QStringLiteral(<span class="stringliteral">&quot;LogViewer&quot;</span>))</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    {</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
+</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
+</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>} <span class="comment">// namespace ui::qt::utils</span></div>
 </div>
 <div class="ttc" id="aPortableMode_8hpp_html"><div class="ttname"><a href="../../d6/df9/PortableMode_8hpp.html">PortableMode.hpp</a></div></div>
-<div class="ttc" id="anamespaceconfig_html_ab663d5ad12e8df0dd19bf1c6b8857fab"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab">config::GetConfig</a></div><div class="ttdeci">Config &amp; GetConfig()</div><div class="ttdef"><b>Definition</b> Config.cpp:111</div></div>
-<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:10</div></div>
-<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_a6b2dea68c122a6b1127d4f333f11eeca"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">ui::qt::utils::AppDataDir</a></div><div class="ttdeci">QString AppDataDir(QStandardPaths::StandardLocation location=QStandardPaths::AppDataLocation)</div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:14</div></div>
+<div class="ttc" id="aclassQSettings_html"><div class="ttname"><a href="../../dc/dc8/classQSettings.html">QSettings</a></div></div>
+<div class="ttc" id="aclassui_1_1qt_1_1utils_1_1AppSettings_html"><div class="ttname"><a href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html">ui::qt::utils::AppSettings</a></div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:52</div></div>
+<div class="ttc" id="aclassui_1_1qt_1_1utils_1_1AppSettings_html_ae9bcb5ce620bedc947920b7d44617fa7"><div class="ttname"><a href="../../d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html#ae9bcb5ce620bedc947920b7d44617fa7">ui::qt::utils::AppSettings::AppSettings</a></div><div class="ttdeci">AppSettings()</div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:54</div></div>
+<div class="ttc" id="anamespaceconfig_html_ab663d5ad12e8df0dd19bf1c6b8857fab"><div class="ttname"><a href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab">config::GetConfig</a></div><div class="ttdeci">Config &amp; GetConfig()</div><div class="ttdef"><b>Definition</b> Config.cpp:142</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:14</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_a2486e3b5ccc5d83c6a3d55eb9c816093"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a2486e3b5ccc5d83c6a3d55eb9c816093">ui::qt::utils::UsePortableSettingsIfPortable</a></div><div class="ttdeci">void UsePortableSettingsIfPortable()</div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:35</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_a6b2dea68c122a6b1127d4f333f11eeca"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a6b2dea68c122a6b1127d4f333f11eeca">ui::qt::utils::AppDataDir</a></div><div class="ttdeci">QString AppDataDir(QStandardPaths::StandardLocation location=QStandardPaths::AppDataLocation)</div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:25</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_aca904baf143f4c25fadb8a1043ff57a2"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#aca904baf143f4c25fadb8a1043ff57a2">ui::qt::utils::PathToQString</a></div><div class="ttdeci">QString PathToQString(const std::filesystem::path &amp;path)</div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:18</div></div>
+<div class="ttc" id="anamespaceutil_1_1portable_html_a2e7e47b706576c3cd579d2348e957de7"><div class="ttname"><a href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7">util::portable::DataDir</a></div><div class="ttdeci">std::filesystem::path DataDir()</div><div class="ttdoc">&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here.</div><div class="ttdef"><b>Definition</b> PortableMode.cpp:76</div></div>
 <div class="ttc" id="anamespaceutil_1_1portable_html_abde936a2f89a8df74aeaa9dd2219298a"><div class="ttname"><a href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a">util::portable::IsPortable</a></div><div class="ttdeci">bool IsPortable()</div><div class="ttdoc">True when the marker file exists next to the executable.</div><div class="ttdef"><b>Definition</b> PortableMode.cpp:61</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

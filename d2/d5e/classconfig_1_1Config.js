@@ -46,6 +46,7 @@ var classconfig_1_1Config =
     [ "m_configVersion", "d2/d5e/classconfig_1_1Config.html#a44a9b517c4c8c3c359ca503ef29bb899", null ],
     [ "m_dictionaryFilePath", "d2/d5e/classconfig_1_1Config.html#ae4f0b6a9a55441c42a60fe1940ab1afc", null ],
     [ "m_fieldTranslator", "d2/d5e/classconfig_1_1Config.html#ad191f2c5325600142bd2d0f0acc90195", null ],
+    [ "m_loadFailed", "d2/d5e/classconfig_1_1Config.html#af2daa52fefada3298e952e5ae7985ece", null ],
     [ "m_logPath", "d2/d5e/classconfig_1_1Config.html#af67b2640145b4c20eb9a401a51421b57", null ],
     [ "typeFilterField", "d2/d5e/classconfig_1_1Config.html#a163a9f5e859fad135fb4e0e66403177e", null ],
     [ "updates", "d2/d5e/classconfig_1_1Config.html#a7fa30bf526d61877ae555a0c8ea55bde", null ]

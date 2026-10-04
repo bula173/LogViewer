@@ -1,7 +1,7 @@
 var searchData=
 [
   ['observer_0',['Observer',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a0c1aa33634a5d0188cc3971213b29261',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
-  ['ok_1',['ok',['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok(T value)'],['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok() const'],['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#a94889c5220fd99db72e3cc1037d685b2',1,'util::Result&lt; void, E &gt;::Ok()']]],
+  ['ok_1',['ok',['../dd/d2d/classutil_1_1Result.html#a196965825d330d63b727f62b96e91b0a',1,'util::Result::ok()'],['../d2/de6/classutil_1_1Result_3_01void_00_01E_01_4.html#a94889c5220fd99db72e3cc1037d685b2',1,'util::Result&lt; void, E &gt;::Ok()'],['../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448',1,'util::Result::Ok()']]],
   ['ollamaclient_2',['OllamaClient',['../d1/d63/classai_1_1OllamaClient.html#a700e9e6b6ca44d9d7faaa6e3c3f9b6c5',1,'ai::OllamaClient']]],
   ['ollamasetupdialog_3',['OllamaSetupDialog',['../db/dd2/classui_1_1qt_1_1OllamaSetupDialog.html#a7eefe627beb574768c04b942391c1be8',1,'ui::qt::OllamaSetupDialog']]],
   ['onaboutrequested_4',['OnAboutRequested',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a4795b9da13a0d7ea2fc2e99b4752fd6b',1,'ui::qt::MainWindow']]],
@@ -146,7 +146,7 @@ var searchData=
   ['onremoveevent_143',['OnRemoveEvent',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#ad9075ad1499235e5f8e7b32713806af5',1,'ui::qt::ScenariosPanel']]],
   ['onrenamescenario_144',['OnRenameScenario',['../dc/dff/classui_1_1qt_1_1ScenariosPanel.html#a12ad3099adbd16433f8908e1f04d492f',1,'ui::qt::ScenariosPanel']]],
   ['onreportclicked_145',['OnReportClicked',['../d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a7167b0589db4f0d59a1c9f17f1990df1',1,'ui::qt::DashboardPanel']]],
-  ['onreset_146',['onreset',['../d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html#a292b3743f3d28aaeb894694fc7daaf8d',1,'ui::qt::ThemeCustomizationDialog::OnReset()'],['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html#afa387626727781114aec058c13dc03a2',1,'ui::qt::PreferencesDialog::onReset()']]],
+  ['onreset_146',['onreset',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html#afa387626727781114aec058c13dc03a2',1,'ui::qt::PreferencesDialog::onReset()'],['../d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html#a292b3743f3d28aaeb894694fc7daaf8d',1,'ui::qt::ThemeCustomizationDialog::OnReset()']]],
   ['onrightloadfinished_147',['OnRightLoadFinished',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a04ab46722378e7e787b8072e205c722c',1,'ui::qt::SideBySidePanel']]],
   ['onrightselectionchanged_148',['OnRightSelectionChanged',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a642621dd90fd267325d221906fbc4588',1,'ui::qt::SideBySidePanel']]],
   ['onsaveclicked_149',['onsaveclicked',['../d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html#ad7f447bf70d953efca40ae16cfe32e7b',1,'ui::qt::ConfigEditorDialog::OnSaveClicked()'],['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a4a639a7c8d4ca879ea299f9f362aad6b',1,'ui::qt::StructuredConfigDialog::OnSaveClicked()']]],

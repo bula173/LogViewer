@@ -158,7 +158,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7a036803ace53f0afda078a138cec22d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a plugin from file.  <br /></td></tr>
 <tr class="separator:a7a036803ace53f0afda078a138cec22d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eb8900b644f10ebf0f73695fc9421be" id="r_a7eb8900b644f10ebf0f73695fc9421be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; bool, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be">UnloadPlugin</a> (const std::string &amp;pluginId)</td></tr>
-<tr class="memdesc:a7eb8900b644f10ebf0f73695fc9421be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a plugin.  <br /></td></tr>
+<tr class="memdesc:a7eb8900b644f10ebf0f73695fc9421be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a plugin and removes it from <a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#a355a71e39f4da1a3643fbfdad820ffcd" title="Gets all loaded plugins.">GetLoadedPlugins()</a>  <br /></td></tr>
 <tr class="separator:a7eb8900b644f10ebf0f73695fc9421be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b077a2d307471707c12e524fe7fe570" id="r_a7b077a2d307471707c12e524fe7fe570"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d2d/classutil_1_1Result.html">util::Result</a>&lt; std::string, <a class="el" href="../../d7/d0d/classerror_1_1Error.html">error::Error</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#a7b077a2d307471707c12e524fe7fe570">RegisterPlugin</a> (const std::filesystem::path &amp;sourcePath)</td></tr>
 <tr class="memdesc:a7b077a2d307471707c12e524fe7fe570"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a plugin file (copies to user plugins directory)  <br /></td></tr>
@@ -521,89 +521,90 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_ab0e32cb7dc522ce685da6b770bf48800_cgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_ab0e32cb7dc522ce685da6b770bf48800_cgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_ab0e32cb7dc522ce685da6b770bf48800_cgraph" id="ad3/d67/classplugin_1_1PluginManager_ab0e32cb7dc522ce685da6b770bf48800_cgraph">
-<area shape="rect" title="Enables a plugin (loads and initializes it)" alt="" coords="5,857,172,897"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="1001,310,1146,335"/>
-<area shape="poly" title=" " alt="" coords="89,856,109,723,131,625,163,516,207,402,235,345,266,291,301,239,341,190,384,146,433,107,500,64,564,32,625,12,686,4,746,7,809,21,875,48,945,86,973,106,996,131,1016,159,1033,189,1056,248,1069,296,1064,297,1051,250,1028,192,1012,162,992,134,969,110,943,90,873,53,807,27,746,12,686,9,626,17,566,37,503,68,436,111,388,150,345,194,305,242,271,294,240,348,212,404,168,517,136,627,114,724,94,857"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="767,756,886,782"/>
-<area shape="poly" title=" " alt="" coords="158,854,286,821,434,792,606,774,753,767,753,773,606,779,435,797,287,827,159,860"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1009,655,1137,680"/>
-<area shape="poly" title=" " alt="" coords="104,896,123,925,149,959,183,992,221,1017,325,1066,421,1105,512,1132,599,1144,641,1144,683,1140,725,1131,767,1117,810,1098,853,1073,897,1043,942,1007,961,987,972,967,977,947,978,926,978,879,981,853,989,824,1023,751,1055,691,1060,694,1027,753,995,826,987,854,984,880,983,926,982,948,977,969,965,990,946,1011,900,1048,856,1078,812,1103,769,1122,727,1136,684,1145,641,1149,598,1149,511,1137,420,1110,323,1071,219,1022,179,996,145,962,118,928,99,899"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,622,387,662"/>
-<area shape="poly" title=" " alt="" coords="106,855,272,671,276,675,110,859"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,972,631,1012"/>
-<area shape="poly" title=" " alt="" coords="171,895,454,966,453,971,169,900"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="767,971,886,996"/>
-<area shape="poly" title=" " alt="" coords="120,895,167,925,221,953,325,997,373,1010,435,1021,498,1029,548,1031,661,1021,718,1011,771,998,773,1003,719,1016,662,1026,548,1037,498,1035,434,1026,372,1015,324,1002,219,958,164,929,117,900"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a1592730dc899150cff4ea7aaa310788f" title="Saves plugin configuration." alt="" coords="465,857,631,897"/>
-<area shape="poly" title=" " alt="" coords="172,874,451,874,451,880,172,880"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1203,428,1384,454"/>
-<area shape="poly" title=" " alt="" coords="1099,333,1258,419,1255,424,1097,338"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1454,428,1613,454"/>
-<area shape="poly" title=" " alt="" coords="1384,438,1440,438,1440,444,1384,444"/>
-<area shape="poly" title=" " alt="" coords="1085,653,1268,462,1272,466,1089,657"/>
-<area shape="poly" title=" " alt="" coords="306,622,320,570,345,501,382,426,406,390,433,358,497,300,527,280,557,264,623,242,709,221,775,204,830,193,857,192,884,196,913,206,946,222,964,240,972,261,978,281,994,301,994,301,991,305,990,304,973,284,966,262,960,243,942,226,911,211,883,202,856,198,831,198,777,209,710,226,625,247,559,269,530,284,501,304,437,362,410,393,387,429,350,503,325,572,312,623"/>
-<area shape="poly" title=" " alt="" coords="360,660,435,684,607,725,755,754,754,759,606,730,434,689,358,665"/>
-<area shape="poly" title=" " alt="" coords="387,645,709,660,995,665,995,670,709,665,387,650"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1006,403,1141,428"/>
-<area shape="poly" title=" " alt="" coords="306,622,319,575,343,514,360,483,380,453,405,427,433,406,470,386,509,371,591,351,675,344,758,345,837,354,910,367,1023,396,1022,402,909,372,837,359,757,351,675,349,592,357,511,376,473,391,436,410,408,431,384,456,364,486,348,516,324,576,311,623"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,554,944,579"/>
-<area shape="poly" title=" " alt="" coords="354,620,434,596,568,576,696,566,696,572,569,581,435,601,355,625"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1005,503,1141,528"/>
-<area shape="poly" title=" " alt="" coords="387,635,706,614,857,601,943,588,998,563,1043,534,1046,539,1000,568,945,593,858,606,706,619,387,640"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,420,631,460"/>
-<area shape="poly" title=" " alt="" coords="327,620,510,467,514,471,330,624"/>
-<area shape="poly" title=" " alt="" coords="310,662,321,719,343,797,360,838,381,879,406,917,436,951,454,964,451,968,433,955,402,921,376,882,355,840,338,798,316,720,305,663"/>
-<area shape="poly" title=" " alt="" coords="311,662,323,713,346,780,363,815,383,849,408,880,436,907,481,923,564,940,754,971,753,976,563,945,479,928,433,911,404,884,379,852,358,818,341,782,318,714,306,663"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,121,649,161"/>
-<area shape="poly" title=" " alt="" coords="301,622,304,541,310,485,320,423,336,358,359,293,391,232,433,178,446,166,450,171,437,182,396,235,364,295,341,360,325,424,315,486,309,542,307,622"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,807,661,832"/>
-<area shape="poly" title=" " alt="" coords="334,661,519,797,516,801,331,665"/>
-<area shape="poly" title=" " alt="" coords="1141,421,1189,426,1189,432,1141,426"/>
-<area shape="poly" title=" " alt="" coords="854,551,898,525,921,507,942,487,958,462,966,440,974,416,990,389,1014,363,1040,341,1043,345,1018,367,994,392,979,418,971,441,963,465,946,491,925,511,901,529,857,556"/>
-<area shape="poly" title=" " alt="" coords="860,577,1030,648,1028,652,858,582"/>
-<area shape="poly" title=" " alt="" coords="889,551,997,529,998,534,890,556"/>
-<area shape="poly" title=" " alt="" coords="1113,501,1154,487,1242,456,1244,461,1156,492,1114,506"/>
-<area shape="poly" title=" " alt="" coords="631,419,1002,336,1003,341,632,424"/>
-<area shape="poly" title=" " alt="" coords="567,458,625,523,665,559,711,588,783,619,859,640,932,653,996,661,995,666,931,658,857,645,781,624,708,593,662,563,621,527,563,462"/>
-<area shape="poly" title=" " alt="" coords="631,433,992,417,992,422,632,439"/>
-<area shape="poly" title=" " alt="" coords="605,457,655,473,710,487,784,498,859,506,992,512,992,518,859,511,783,503,709,492,654,478,603,462"/>
-<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,452,882,478"/>
-<area shape="poly" title=" " alt="" coords="632,445,758,456,757,462,631,450"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="758,135,895,160"/>
-<area shape="poly" title=" " alt="" coords="559,418,617,328,660,273,708,222,747,190,787,165,790,170,750,195,711,226,664,277,622,331,563,421"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,236,910,276"/>
-<area shape="poly" title=" " alt="" coords="578,418,783,281,785,286,581,422"/>
-<area shape="poly" title=" " alt="" coords="849,450,1037,340,1040,345,851,455"/>
-<area shape="poly" title=" " alt="" coords="852,476,896,503,946,539,1006,594,1053,643,1050,647,1002,597,942,543,893,508,849,480"/>
-<area shape="poly" title=" " alt="" coords="882,452,995,429,996,434,883,457"/>
-<area shape="poly" title=" " alt="" coords="883,474,998,498,997,503,882,479"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="999,452,1148,478"/>
-<area shape="poly" title=" " alt="" coords="882,462,985,462,985,468,882,468"/>
-<area shape="poly" title=" " alt="" coords="1148,454,1188,450,1189,455,1149,460"/>
-<area shape="poly" title=" " alt="" coords="886,158,945,177,1056,227,1101,255,1156,295,1225,358,1276,416,1272,420,1221,362,1153,299,1098,259,1053,231,943,182,884,163"/>
-<area shape="poly" title=" " alt="" coords="902,273,1013,304,1012,309,901,278"/>
-<area shape="poly" title=" " alt="" coords="605,119,677,100,764,88,811,87,857,91,903,102,945,120,970,137,992,157,1027,205,1052,255,1067,296,1062,298,1047,257,1022,208,988,161,967,141,943,125,901,107,857,97,811,92,765,93,678,105,606,124"/>
-<area shape="poly" title=" " alt="" coords="649,141,745,143,745,149,649,146"/>
-<area shape="poly" title=" " alt="" coords="618,804,754,780,755,785,619,810"/>
-<area shape="poly" title=" " alt="" coords="636,830,663,843,680,858,689,873,697,889,711,906,751,937,791,962,788,967,748,941,707,910,693,892,684,876,676,861,660,847,634,835"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,806,893,831"/>
-<area shape="poly" title=" " alt="" coords="662,817,746,816,746,822,662,822"/>
-<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,856,921,896"/>
-<area shape="poly" title=" " alt="" coords="612,830,719,851,718,857,611,835"/>
-<area shape="poly" title=" " alt="" coords="920,858,942,841,960,815,972,790,979,766,982,741,977,692,966,642,954,592,949,542,952,516,959,490,971,464,990,438,993,435,997,438,994,441,976,467,964,492,957,517,955,542,959,591,971,641,983,691,987,741,984,767,977,792,965,818,946,844,923,862"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="992,838,1155,863"/>
-<area shape="poly" title=" " alt="" coords="921,863,978,858,979,863,922,869"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="1204,888,1383,914"/>
-<area shape="poly" title=" " alt="" coords="921,878,1190,893,1190,898,921,884"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1432,863,1635,888"/>
-<area shape="poly" title=" " alt="" coords="1155,852,1419,867,1418,872,1155,858"/>
-<area shape="poly" title=" " alt="" coords="1130,861,1225,883,1224,888,1129,866"/>
-<area shape="poly" title=" " alt="" coords="1382,889,1418,885,1419,891,1383,894"/>
-<area shape="poly" title=" " alt="" coords="630,856,660,842,674,829,683,817,692,803,708,791,753,774,755,779,711,795,696,807,687,820,678,833,663,846,633,861"/>
-<area shape="poly" title=" " alt="" coords="632,892,716,906,806,917,888,919,919,914,942,906,960,879,992,819,1057,691,1062,694,997,822,964,881,946,910,921,919,888,924,806,922,715,912,631,897"/>
-<area shape="poly" title=" " alt="" coords="619,895,663,914,687,932,711,949,755,966,753,971,708,954,684,936,660,918,617,900"/>
-<area shape="poly" title=" " alt="" coords="631,857,752,831,753,837,632,862"/>
-<area shape="poly" title=" " alt="" coords="631,874,718,874,718,879,631,879"/>
+<area shape="rect" title="Enables a plugin (loads and initializes it)" alt="" coords="5,895,172,935"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="1001,268,1146,293"/>
+<area shape="poly" title=" " alt="" coords="89,895,105,755,125,651,156,534,200,413,227,354,259,296,295,241,336,190,382,143,433,103,501,60,564,30,625,11,684,3,745,7,807,22,874,47,945,82,970,99,991,119,1026,165,1051,214,1067,254,1062,256,1046,216,1021,168,987,122,966,103,943,87,871,52,806,27,744,12,684,9,626,16,566,34,503,65,436,107,386,147,340,193,300,244,264,299,232,356,205,416,161,536,130,652,110,756,94,896"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="767,752,886,777"/>
+<area shape="poly" title=" " alt="" coords="128,893,261,834,346,803,434,780,519,766,605,759,753,758,753,764,605,765,520,771,435,785,348,808,263,839,131,898"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1009,549,1137,575"/>
+<area shape="poly" title=" " alt="" coords="111,934,158,975,188,996,221,1012,428,1091,520,1121,607,1139,649,1142,690,1141,732,1136,773,1125,814,1108,856,1085,899,1055,942,1018,953,1003,961,984,970,934,971,874,969,807,966,740,966,677,973,624,980,603,990,586,996,580,1000,583,994,589,985,605,978,625,971,677,971,740,974,807,977,874,975,935,966,986,958,1006,946,1021,902,1059,859,1089,817,1112,775,1130,733,1141,691,1147,649,1148,606,1144,519,1126,426,1096,219,1017,186,1000,155,979,107,938"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,585,387,625"/>
+<area shape="poly" title=" " alt="" coords="102,894,278,635,283,638,106,897"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,895,631,935"/>
+<area shape="poly" title=" " alt="" coords="172,913,451,913,451,918,172,918"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="767,916,886,941"/>
+<area shape="poly" title=" " alt="" coords="137,933,233,968,295,987,363,1003,436,1016,512,1022,587,1020,661,1009,698,997,734,981,794,947,797,951,737,986,700,1002,662,1014,588,1026,511,1027,436,1021,362,1008,293,992,231,973,135,938"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a1592730dc899150cff4ea7aaa310788f" title="Saves plugin configuration." alt="" coords="465,959,631,999"/>
+<area shape="poly" title=" " alt="" coords="173,924,451,963,451,969,172,930"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1203,473,1384,499"/>
+<area shape="poly" title=" " alt="" coords="1090,292,1270,462,1267,466,1086,296"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1454,473,1613,499"/>
+<area shape="poly" title=" " alt="" coords="1384,483,1440,483,1440,489,1384,489"/>
+<area shape="poly" title=" " alt="" coords="1113,547,1154,533,1243,501,1245,506,1156,538,1114,552"/>
+<area shape="poly" title=" " alt="" coords="303,584,311,521,331,434,348,387,370,342,398,300,433,264,476,239,536,220,606,207,682,198,759,195,832,197,896,205,945,217,961,226,971,237,980,248,993,259,997,260,995,265,991,263,976,252,966,241,957,230,943,222,895,210,832,203,759,201,683,204,607,212,537,225,478,244,436,268,402,303,374,344,352,389,336,435,316,522,308,585"/>
+<area shape="poly" title=" " alt="" coords="338,623,383,648,436,672,520,699,605,722,754,751,753,757,604,727,518,704,434,677,381,653,335,627"/>
+<area shape="poly" title=" " alt="" coords="387,602,636,598,790,591,944,579,995,573,996,578,944,585,790,596,637,603,387,608"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1006,600,1141,625"/>
+<area shape="poly" title=" " alt="" coords="386,622,535,654,622,669,710,679,828,693,879,692,943,680,997,658,1042,631,1045,636,1000,663,945,685,880,697,828,698,709,685,622,674,534,659,384,627"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,397,944,423"/>
+<area shape="poly" title=" " alt="" coords="312,583,330,550,356,510,391,471,433,440,467,424,502,413,575,398,647,393,714,394,714,399,648,398,576,403,504,418,469,429,436,444,395,475,360,513,334,553,316,586"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1005,448,1141,473"/>
+<area shape="poly" title=" " alt="" coords="359,582,514,531,611,505,709,484,783,473,859,465,992,459,992,464,859,471,784,478,710,489,612,510,516,536,360,587"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,333,631,373"/>
+<area shape="poly" title=" " alt="" coords="309,584,326,543,352,491,387,437,409,412,433,389,452,377,455,381,436,394,413,415,392,440,356,494,330,545,314,586"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,231,910,271"/>
+<area shape="poly" title=" " alt="" coords="305,584,316,530,338,458,355,419,376,382,402,348,433,319,467,296,503,279,581,255,659,244,730,242,730,247,660,250,582,261,505,284,469,301,436,323,406,351,381,385,360,422,343,460,321,532,310,585"/>
+<area shape="poly" title=" " alt="" coords="311,624,324,675,348,742,385,813,409,846,436,875,453,887,450,891,433,879,405,849,381,816,344,744,319,676,306,626"/>
+<area shape="poly" title=" " alt="" coords="313,624,327,667,352,723,388,781,411,807,436,829,465,848,492,859,542,866,596,868,627,872,662,881,710,901,754,913,753,918,708,906,660,886,626,877,596,873,542,871,491,864,463,852,433,834,407,811,384,784,348,726,322,669,308,626"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,117,649,157"/>
+<area shape="poly" title=" " alt="" coords="302,584,306,509,324,399,340,339,363,280,394,223,433,174,447,162,450,166,437,177,398,226,368,282,345,341,329,400,312,509,307,585"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,795,661,820"/>
+<area shape="poly" title=" " alt="" coords="327,623,436,723,518,785,515,789,433,727,323,627"/>
+<area shape="poly" title=" " alt="" coords="1120,598,1153,584,1216,545,1266,505,1269,510,1219,549,1156,589,1122,603"/>
+<area shape="poly" title=" " alt="" coords="851,395,1035,298,1037,302,854,400"/>
+<area shape="poly" title=" " alt="" coords="852,421,897,448,946,484,969,510,979,522,993,533,1010,542,1008,547,991,538,975,526,965,514,942,488,894,453,849,425"/>
+<area shape="poly" title=" " alt="" coords="890,420,998,443,997,448,889,426"/>
+<area shape="poly" title=" " alt="" coords="1142,466,1189,471,1189,477,1141,471"/>
+<area shape="poly" title=" " alt="" coords="631,339,987,290,987,295,632,344"/>
+<area shape="poly" title=" " alt="" coords="562,372,585,409,618,454,660,498,684,517,711,533,745,548,782,559,858,571,932,573,996,570,996,575,932,579,858,576,781,564,744,553,708,538,681,522,656,502,613,457,580,412,558,375"/>
+<area shape="poly" title=" " alt="" coords="559,372,578,417,610,475,654,534,681,559,711,580,744,596,780,608,855,622,928,625,992,622,992,627,928,631,854,628,779,614,742,601,708,584,677,563,650,537,606,478,573,419,554,374"/>
+<area shape="poly" title=" " alt="" coords="632,346,700,346,779,351,863,362,945,382,1001,408,1047,438,1044,442,998,412,943,387,862,368,779,356,700,352,632,351"/>
+<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,499,882,524"/>
+<area shape="poly" title=" " alt="" coords="586,371,793,490,790,494,583,375"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="758,131,895,156"/>
+<area shape="poly" title=" " alt="" coords="570,330,631,278,708,217,791,161,794,166,711,222,635,282,574,335"/>
+<area shape="poly" title=" " alt="" coords="598,330,708,288,749,273,751,278,710,293,600,335"/>
+<area shape="poly" title=" " alt="" coords="850,496,894,469,942,432,1006,365,1053,303,1057,307,1010,368,946,436,897,473,853,501"/>
+<area shape="poly" title=" " alt="" coords="883,520,998,544,997,549,882,525"/>
+<area shape="poly" title=" " alt="" coords="855,522,993,584,1019,593,1017,598,991,589,853,527"/>
+<area shape="poly" title=" " alt="" coords="882,498,997,474,998,479,883,503"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="999,499,1148,524"/>
+<area shape="poly" title=" " alt="" coords="882,509,985,509,985,514,882,514"/>
+<area shape="poly" title=" " alt="" coords="1148,500,1188,496,1189,501,1149,506"/>
+<area shape="poly" title=" " alt="" coords="896,149,956,162,1025,182,1094,212,1126,231,1156,253,1203,303,1240,360,1268,415,1286,459,1281,461,1263,418,1236,363,1199,307,1153,257,1123,236,1091,217,1023,187,955,167,895,155"/>
+<area shape="poly" title=" " alt="" coords="911,259,987,268,986,273,910,264"/>
+<area shape="poly" title=" " alt="" coords="609,114,681,97,767,86,812,86,858,90,903,99,945,116,986,144,1020,182,1046,221,1063,254,1059,257,1041,223,1016,185,983,148,943,120,901,105,857,95,812,91,767,92,682,102,611,119"/>
+<area shape="poly" title=" " alt="" coords="649,137,745,139,745,144,649,142"/>
+<area shape="poly" title=" " alt="" coords="631,792,753,773,754,778,632,797"/>
+<area shape="poly" title=" " alt="" coords="622,818,663,837,679,854,687,871,695,887,711,901,732,912,755,919,753,924,730,917,708,906,691,890,683,873,675,857,660,842,619,823"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,801,893,827"/>
+<area shape="poly" title=" " alt="" coords="662,808,747,810,746,815,662,813"/>
+<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,851,921,891"/>
+<area shape="poly" title=" " alt="" coords="605,818,726,846,725,851,604,823"/>
+<area shape="poly" title=" " alt="" coords="920,849,942,836,966,814,987,790,1022,735,1046,681,1062,638,1067,639,1051,683,1026,737,991,793,970,818,946,840,923,854"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="992,833,1155,859"/>
+<area shape="poly" title=" " alt="" coords="921,859,978,853,979,859,922,864"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="1204,884,1383,909"/>
+<area shape="poly" title=" " alt="" coords="921,874,1190,889,1190,894,921,879"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1432,859,1635,884"/>
+<area shape="poly" title=" " alt="" coords="1155,848,1419,863,1418,868,1155,853"/>
+<area shape="poly" title=" " alt="" coords="1130,856,1225,878,1224,884,1129,862"/>
+<area shape="poly" title=" " alt="" coords="1382,885,1418,881,1419,886,1383,890"/>
+<area shape="poly" title=" " alt="" coords="630,964,660,946,674,927,681,907,682,867,684,827,692,806,708,787,729,773,753,765,755,770,731,778,711,791,696,809,689,828,687,867,686,908,679,929,663,949,633,969"/>
+<area shape="poly" title=" " alt="" coords="625,997,700,1009,785,1010,828,1005,870,994,908,976,942,951,961,930,974,909,981,888,984,866,981,821,971,776,959,729,954,682,956,658,962,634,973,610,990,586,996,580,1000,584,994,589,978,612,967,635,961,659,960,682,965,728,976,775,987,821,990,866,986,889,978,911,965,933,946,955,911,981,871,999,829,1010,786,1016,699,1014,624,1002"/>
+<area shape="poly" title=" " alt="" coords="631,962,753,939,754,945,632,967"/>
+<area shape="poly" title=" " alt="" coords="630,963,660,945,671,933,677,920,682,892,688,865,695,851,708,837,726,826,746,818,748,823,728,831,711,842,699,854,693,866,688,893,682,922,675,936,663,950,633,968"/>
+<area shape="poly" title=" " alt="" coords="631,958,660,945,674,935,683,924,693,912,708,901,722,894,724,899,711,906,697,916,687,927,678,939,663,950,633,963"/>
 </map>
 </div>
 
@@ -1078,75 +1079,76 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_a7a036803ace53f0afda078a138cec22d_cgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_a7a036803ace53f0afda078a138cec22d_cgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_a7a036803ace53f0afda078a138cec22d_cgraph" id="ad3/d67/classplugin_1_1PluginManager_a7a036803ace53f0afda078a138cec22d_cgraph">
-<area shape="rect" title="Loads a plugin from file." alt="" coords="5,520,172,560"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="786,311,931,337"/>
-<area shape="poly" title=" " alt="" coords="172,538,286,533,428,518,504,504,581,486,656,463,728,434,761,415,790,391,836,345,840,349,794,395,764,419,731,438,658,468,583,491,505,510,429,523,287,539,173,543"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="553,693,671,718"/>
-<area shape="poly" title=" " alt="" coords="104,559,123,587,149,620,183,652,221,678,261,693,302,705,387,717,469,718,539,713,539,719,469,723,387,722,301,710,259,698,219,682,179,657,145,624,119,590,99,562"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="791,477,926,502"/>
-<area shape="poly" title=" " alt="" coords="173,554,284,570,424,582,500,583,577,579,654,571,729,556,783,535,828,508,831,512,785,539,730,561,655,576,578,585,500,588,424,587,284,576,172,559"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="795,211,923,237"/>
-<area shape="poly" title=" " alt="" coords="90,519,100,459,122,375,139,329,160,284,186,241,218,203,278,148,337,104,396,73,455,53,517,46,583,50,654,67,730,95,747,105,758,117,779,145,835,199,832,203,775,148,754,120,744,109,728,100,652,72,582,56,518,51,457,59,398,78,340,109,282,152,222,207,191,244,165,286,144,331,127,376,105,460,95,520"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="495,110,729,135"/>
-<area shape="poly" title=" " alt="" coords="93,519,108,472,134,410,170,344,193,312,218,283,252,254,290,227,371,185,452,155,525,136,526,141,454,160,373,190,293,232,255,258,222,287,197,315,175,346,139,413,113,474,98,521"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="791,110,927,135"/>
-<area shape="poly" title=" " alt="" coords="87,520,90,443,96,391,106,333,122,274,146,215,177,160,218,113,279,63,338,30,396,11,454,3,515,6,581,16,730,52,785,73,830,100,827,104,782,78,729,57,579,22,515,11,455,9,397,16,340,35,282,68,222,116,181,163,150,217,127,275,111,334,101,392,95,444,92,520"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="250,361,417,401"/>
-<area shape="poly" title=" " alt="" coords="119,518,288,407,291,411,122,522"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="250,628,417,668"/>
-<area shape="poly" title=" " alt="" coords="125,558,221,607,256,621,254,626,219,612,123,562"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="553,743,671,769"/>
-<area shape="poly" title=" " alt="" coords="100,559,116,596,142,642,177,687,198,707,221,723,260,741,301,755,343,764,386,769,468,770,539,765,540,770,469,776,386,774,342,769,300,760,258,746,219,728,195,711,173,691,137,645,111,598,95,561"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="232,297,435,337"/>
-<area shape="poly" title=" " alt="" coords="96,519,113,482,139,435,175,388,218,347,227,341,230,346,222,351,179,391,144,438,118,484,101,521"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="220,794,447,819"/>
-<area shape="poly" title=" " alt="" coords="98,559,113,604,138,661,174,721,196,749,222,772,245,786,242,791,218,777,192,752,169,724,133,664,108,605,93,561"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="988,237,1169,262"/>
-<area shape="poly" title=" " alt="" coords="898,309,939,295,1028,264,1029,269,941,300,900,314"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1239,237,1398,262"/>
-<area shape="poly" title=" " alt="" coords="1169,247,1225,247,1225,252,1169,252"/>
-<area shape="poly" title=" " alt="" coords="870,475,1054,270,1058,274,874,478"/>
-<area shape="poly" title=" " alt="" coords="923,229,975,235,974,240,923,234"/>
-<area shape="poly" title=" " alt="" coords="715,133,731,145,747,163,755,182,757,221,759,259,766,277,779,295,787,302,784,306,775,299,761,280,754,260,752,221,749,184,742,166,728,149,712,138"/>
-<area shape="poly" title=" " alt="" coords="694,133,730,144,785,171,831,201,828,205,782,176,728,149,692,138"/>
-<area shape="poly" title=" " alt="" coords="730,120,777,120,777,125,730,125"/>
-<area shape="poly" title=" " alt="" coords="898,133,941,152,1002,189,1052,226,1049,230,999,194,939,157,896,138"/>
-<area shape="poly" title=" " alt="" coords="401,399,470,414,553,426,642,427,686,421,728,411,759,398,787,381,833,344,837,348,790,385,761,403,730,416,687,426,642,432,552,431,469,420,399,404"/>
-<area shape="poly" title=" " alt="" coords="386,399,495,433,645,462,778,479,777,484,644,467,494,438,385,404"/>
-<area shape="poly" title=" " alt="" coords="416,364,445,347,456,335,462,323,467,296,473,270,480,257,493,246,528,226,565,213,604,204,644,199,720,199,787,206,786,212,720,204,644,204,605,209,567,218,530,231,496,250,484,261,478,272,472,298,467,325,460,338,448,351,418,369"/>
-<area shape="poly" title=" " alt="" coords="415,367,431,359,445,347,465,316,472,284,470,252,464,219,458,187,458,155,468,124,493,95,531,72,574,59,619,55,664,57,709,65,751,76,819,102,817,107,749,82,708,70,664,63,619,60,575,64,533,76,496,99,473,127,464,156,464,186,469,218,475,251,477,285,470,318,449,351,434,363,418,372"/>
-<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="557,261,667,286"/>
-<area shape="poly" title=" " alt="" coords="410,359,446,347,514,318,573,290,575,295,516,323,448,352,412,364"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="543,159,681,185"/>
-<area shape="poly" title=" " alt="" coords="415,366,445,347,458,330,465,313,468,276,471,239,478,220,493,202,510,189,529,181,531,185,512,194,497,206,483,223,476,240,473,277,471,314,463,333,448,351,418,370"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="529,361,695,401"/>
-<area shape="poly" title=" " alt="" coords="417,379,515,379,515,384,417,384"/>
-<area shape="poly" title=" " alt="" coords="668,282,783,306,782,311,667,287"/>
-<area shape="poly" title=" " alt="" coords="638,284,682,311,731,347,793,408,841,464,837,467,789,412,728,351,679,316,635,288"/>
-<area shape="poly" title=" " alt="" coords="667,260,781,237,782,242,668,265"/>
-<area shape="poly" title=" " alt="" coords="633,258,823,140,826,145,636,263"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="784,261,933,286"/>
-<area shape="poly" title=" " alt="" coords="667,271,770,271,770,276,667,276"/>
-<area shape="poly" title=" " alt="" coords="933,262,974,258,974,263,934,268"/>
-<area shape="poly" title=" " alt="" coords="681,169,803,176,872,184,941,196,992,211,1038,229,1036,234,990,216,939,201,871,189,802,181,681,175"/>
-<area shape="poly" title=" " alt="" coords="695,359,790,337,791,342,696,365"/>
-<area shape="poly" title=" " alt="" coords="435,316,772,320,772,325,435,321"/>
-<area shape="poly" title=" " alt="" coords="356,295,416,248,454,223,494,201,535,186,537,191,496,206,456,228,419,253,359,299"/>
-<area shape="poly" title=" " alt="" coords="357,791,418,761,494,729,538,717,540,722,496,734,420,766,359,796"/>
-<area shape="poly" title=" " alt="" coords="403,791,539,766,540,772,404,796"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="545,793,679,818"/>
-<area shape="poly" title=" " alt="" coords="447,803,532,803,532,808,447,809"/>
-<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="517,843,707,883"/>
-<area shape="poly" title=" " alt="" coords="398,817,504,838,503,843,397,822"/>
-<area shape="poly" title=" " alt="" coords="705,843,728,829,760,793,786,752,807,709,823,664,844,579,853,515,858,516,849,580,828,665,812,711,791,755,764,796,731,833,708,848"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="777,825,940,850"/>
-<area shape="poly" title=" " alt="" coords="707,850,763,844,764,850,707,855"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="989,875,1168,901"/>
-<area shape="poly" title=" " alt="" coords="707,865,976,880,976,885,707,870"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1217,850,1420,875"/>
-<area shape="poly" title=" " alt="" coords="940,839,1204,854,1204,859,940,844"/>
-<area shape="poly" title=" " alt="" coords="915,847,1010,870,1009,875,914,853"/>
-<area shape="poly" title=" " alt="" coords="1168,876,1203,872,1204,877,1168,881"/>
+<area shape="rect" title="Loads a plugin from file." alt="" coords="5,543,172,583"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="786,362,931,388"/>
+<area shape="poly" title=" " alt="" coords="172,572,311,587,474,597,554,597,626,592,685,581,728,563,741,552,749,540,756,513,761,483,775,449,801,419,828,394,831,398,805,423,780,452,766,484,761,514,754,542,745,555,731,568,687,586,626,597,554,602,474,602,310,592,172,577"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="553,793,671,818"/>
+<area shape="poly" title=" " alt="" coords="100,582,117,619,143,665,178,710,198,730,221,747,246,758,279,768,363,783,455,793,539,799,539,805,455,799,362,788,277,773,244,763,219,752,195,735,174,714,138,668,112,622,95,584"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="791,464,926,489"/>
+<area shape="poly" title=" " alt="" coords="135,580,176,596,221,607,365,636,425,647,480,655,535,656,593,650,656,634,728,607,765,585,796,557,822,526,841,499,845,502,826,529,800,560,768,590,730,612,658,639,594,655,536,661,480,660,424,653,364,641,219,612,174,601,133,585"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="795,261,923,286"/>
+<area shape="poly" title=" " alt="" coords="94,542,110,499,136,442,172,382,218,328,284,272,344,238,409,215,494,195,560,181,612,176,665,180,730,195,759,206,787,220,833,250,830,255,784,224,757,210,729,200,664,185,612,181,561,187,495,200,411,220,346,242,287,276,222,331,177,385,141,445,115,501,99,544"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="495,109,729,134"/>
+<area shape="poly" title=" " alt="" coords="87,542,89,467,94,415,105,359,121,302,144,246,176,194,218,151,256,127,297,111,340,100,384,94,470,94,544,104,543,109,470,100,385,99,341,105,298,116,258,132,222,156,180,198,149,248,126,303,110,360,100,416,94,467,92,542"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="791,109,927,134"/>
+<area shape="poly" title=" " alt="" coords="90,542,106,449,133,317,151,249,171,188,193,138,218,105,280,57,339,25,396,8,455,3,516,7,581,19,730,55,783,74,829,99,826,104,781,79,729,60,580,24,515,13,455,8,397,13,341,30,283,61,222,109,198,141,176,190,156,251,138,318,111,450,96,543"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="250,406,417,446"/>
+<area shape="poly" title=" " alt="" coords="124,540,283,450,286,455,127,545"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="529,514,695,554"/>
+<area shape="poly" title=" " alt="" coords="172,556,515,536,515,542,173,561"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="250,864,417,904"/>
+<area shape="poly" title=" " alt="" coords="96,583,109,635,132,705,169,779,194,813,222,844,240,856,236,861,218,848,189,817,165,782,127,707,104,636,91,584"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="553,842,671,868"/>
+<area shape="poly" title=" " alt="" coords="97,582,111,628,135,688,171,749,195,775,221,798,245,810,278,820,362,835,455,845,539,850,539,855,454,850,361,840,277,825,243,815,219,802,191,779,167,752,130,690,106,630,92,584"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="232,342,435,382"/>
+<area shape="poly" title=" " alt="" coords="98,541,116,509,143,468,177,427,218,391,228,385,231,390,222,396,181,430,147,471,121,511,102,544"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="220,713,447,738"/>
+<area shape="poly" title=" " alt="" coords="117,581,221,658,297,704,295,708,219,662,114,585"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="988,286,1169,312"/>
+<area shape="poly" title=" " alt="" coords="898,360,939,346,1029,314,1031,319,941,351,900,365"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1239,286,1398,312"/>
+<area shape="poly" title=" " alt="" coords="1169,296,1225,296,1225,302,1169,302"/>
+<area shape="poly" title=" " alt="" coords="874,461,1049,319,1052,323,877,466"/>
+<area shape="poly" title=" " alt="" coords="923,278,975,284,974,290,923,284"/>
+<area shape="poly" title=" " alt="" coords="645,132,690,157,712,175,731,196,744,217,750,237,753,275,758,311,765,328,779,346,787,353,784,357,775,350,761,331,752,312,748,275,745,238,739,219,727,199,708,179,687,162,642,137"/>
+<area shape="poly" title=" " alt="" coords="682,132,731,151,764,173,794,199,840,248,837,252,790,203,760,178,728,156,680,137"/>
+<area shape="poly" title=" " alt="" coords="730,119,777,119,777,124,730,124"/>
+<area shape="poly" title=" " alt="" coords="877,132,1052,275,1049,279,874,136"/>
+<area shape="poly" title=" " alt="" coords="417,415,772,380,772,386,417,420"/>
+<area shape="poly" title=" " alt="" coords="417,431,778,466,778,471,417,436"/>
+<area shape="poly" title=" " alt="" coords="416,408,445,391,455,380,461,369,467,344,473,319,481,307,493,297,527,278,564,264,603,255,642,250,717,249,783,256,783,261,717,255,642,256,603,261,566,269,530,283,496,301,485,311,478,321,472,345,466,371,460,383,448,396,418,413"/>
+<area shape="poly" title=" " alt="" coords="416,412,431,403,445,392,458,373,468,355,475,317,471,279,463,240,455,202,454,165,465,129,476,111,493,94,531,70,574,57,619,53,664,56,709,64,751,75,819,101,818,106,749,80,708,69,664,61,619,58,575,62,533,75,496,98,480,114,469,131,459,166,461,202,468,239,477,278,480,317,473,356,463,376,449,395,435,408,418,416"/>
+<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="557,312,667,337"/>
+<area shape="poly" title=" " alt="" coords="409,403,446,391,570,340,572,345,448,396,411,408"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="543,210,681,236"/>
+<area shape="poly" title=" " alt="" coords="415,410,445,392,458,375,465,359,468,324,471,288,479,270,493,253,510,240,529,232,531,237,513,245,497,257,483,273,476,290,473,324,470,360,463,378,448,396,418,414"/>
+<area shape="poly" title=" " alt="" coords="379,443,496,492,535,507,534,512,494,497,377,448"/>
+<area shape="poly" title=" " alt="" coords="668,333,783,357,782,362,667,338"/>
+<area shape="poly" title=" " alt="" coords="635,335,826,454,824,458,632,339"/>
+<area shape="poly" title=" " alt="" coords="667,310,782,286,783,292,668,316"/>
+<area shape="poly" title=" " alt="" coords="634,309,678,281,728,245,787,191,834,143,838,146,791,195,731,249,681,285,637,314"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="784,312,933,337"/>
+<area shape="poly" title=" " alt="" coords="667,322,770,322,770,327,667,327"/>
+<area shape="poly" title=" " alt="" coords="933,313,974,308,974,314,934,318"/>
+<area shape="poly" title=" " alt="" coords="681,220,803,226,872,234,941,246,992,260,1038,278,1036,283,990,265,939,251,871,239,802,231,681,225"/>
+<area shape="poly" title=" " alt="" coords="643,511,824,393,827,398,646,516"/>
+<area shape="poly" title=" " alt="" coords="435,361,772,370,772,375,435,367"/>
+<area shape="poly" title=" " alt="" coords="358,339,417,296,494,252,536,237,538,242,496,257,420,300,361,344"/>
+<area shape="poly" title=" " alt="" coords="387,736,448,755,496,778,540,790,538,795,494,783,446,760,385,741"/>
+<area shape="poly" title=" " alt="" coords="351,736,412,782,453,807,496,828,539,842,538,847,494,833,450,812,409,786,348,741"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="545,744,679,769"/>
+<area shape="poly" title=" " alt="" coords="447,735,532,745,532,750,447,741"/>
+<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="517,679,707,719"/>
+<area shape="poly" title=" " alt="" coords="447,712,503,707,504,712,447,717"/>
+<area shape="poly" title=" " alt="" coords="695,676,728,658,767,621,800,578,826,535,844,500,849,503,831,538,805,581,771,625,731,662,697,681"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="777,661,940,686"/>
+<area shape="poly" title=" " alt="" coords="707,686,763,681,764,686,707,692"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="989,712,1168,737"/>
+<area shape="poly" title=" " alt="" coords="707,701,976,716,976,721,707,707"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1217,686,1420,712"/>
+<area shape="poly" title=" " alt="" coords="940,675,1204,690,1204,695,940,681"/>
+<area shape="poly" title=" " alt="" coords="915,684,1010,706,1009,711,914,689"/>
+<area shape="poly" title=" " alt="" coords="1168,712,1203,708,1204,714,1168,717"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1338,7 +1340,7 @@ Here is the caller graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="993,200,893,240,891,235,991,195"/>
 <area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7b077a2d307471707c12e524fe7fe570" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="525,281,691,321"/>
 <area shape="poly" title=" " alt="" coords="1033,205,987,252,957,274,925,292,866,309,805,317,745,319,691,316,692,310,745,314,804,312,865,304,923,287,955,270,983,248,1029,201"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin." alt="" coords="757,123,924,163"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin and removes it from GetLoadedPlugins()" alt="" coords="757,123,924,163"/>
 <area shape="poly" title=" " alt="" coords="958,161,924,157,925,151,958,156"/>
 <area shape="rect" href="../../da/d9c/classui_1_1qt_1_1PluginManagerDialog.html#a3fc9f4b1df8f41f3e9cb82bbe6a5b007" title=" " alt="" coords="507,5,709,45"/>
 <area shape="poly" title=" " alt="" coords="743,30,710,29,710,24,743,24"/>
@@ -1516,7 +1518,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Registers a plugin file (copies to user plugins directory) </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Fails if a plugin with the same id is loaded (unload it first to update). If the id was registered from another folder of the user plugins directory, that superseded folder is deleted once the new copy loads. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sourcePath</td><td>Path to plugin file to register </td></tr>
   </table>
@@ -1528,81 +1530,82 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_a7b077a2d307471707c12e524fe7fe570_cgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_a7b077a2d307471707c12e524fe7fe570_cgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_a7b077a2d307471707c12e524fe7fe570_cgraph" id="ad3/d67/classplugin_1_1PluginManager_a7b077a2d307471707c12e524fe7fe570_cgraph">
-<area shape="rect" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="5,607,172,647"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="767,617,886,642"/>
-<area shape="poly" title=" " alt="" coords="172,625,754,627,754,632,172,630"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1009,98,1137,124"/>
-<area shape="poly" title=" " alt="" coords="94,606,129,510,159,442,196,368,243,291,297,216,361,147,396,117,433,90,501,51,563,24,621,9,678,3,736,6,798,15,945,47,997,65,1042,89,1040,94,995,70,943,52,797,20,735,11,678,8,622,14,564,29,503,55,436,95,399,121,364,151,301,219,247,294,201,370,163,444,134,512,99,608"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,527,387,567"/>
-<area shape="poly" title=" " alt="" coords="143,604,235,569,237,574,144,609"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,816,631,856"/>
-<area shape="poly" title=" " alt="" coords="128,645,262,714,436,795,472,809,470,814,434,800,260,719,125,649"/>
-<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="767,716,886,741"/>
-<area shape="poly" title=" " alt="" coords="105,646,152,709,185,744,222,776,276,812,322,836,371,851,435,866,500,880,552,890,576,891,601,888,629,880,660,866,677,853,685,838,693,821,707,802,748,771,788,745,791,750,751,775,711,806,698,824,690,841,681,857,663,871,631,885,602,893,576,896,551,895,499,886,434,871,369,857,320,841,273,817,218,780,181,748,148,712,101,649"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1203,274,1384,300"/>
-<area shape="poly" title=" " alt="" coords="1092,122,1267,263,1264,268,1089,126"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1454,274,1613,300"/>
-<area shape="poly" title=" " alt="" coords="1384,284,1440,284,1440,290,1384,290"/>
-<area shape="poly" title=" " alt="" coords="388,557,754,616,753,621,387,563"/>
-<area shape="poly" title=" " alt="" coords="302,527,308,456,326,355,342,301,365,247,395,198,433,154,465,128,500,107,537,90,576,77,658,60,741,55,822,58,897,67,1017,92,1016,97,896,73,821,63,741,60,658,65,578,82,539,95,503,112,468,133,437,158,399,201,370,250,347,303,331,357,313,457,308,527"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="1001,350,1146,376"/>
-<area shape="poly" title=" " alt="" coords="387,546,524,546,686,541,837,527,898,516,943,501,979,477,1011,446,1037,415,1056,386,1060,389,1041,418,1015,450,983,481,945,505,899,521,838,533,686,547,524,552,387,551"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1006,566,1141,592"/>
-<area shape="poly" title=" " alt="" coords="313,567,328,608,353,659,389,710,411,731,436,749,482,766,542,779,613,787,689,789,764,787,835,780,896,768,943,751,965,738,984,721,1018,681,1043,639,1060,603,1065,606,1048,642,1022,684,988,725,968,742,945,756,898,773,836,785,765,792,689,795,613,792,541,784,480,772,433,753,407,735,384,713,348,662,323,610,308,568"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,149,944,174"/>
-<area shape="poly" title=" " alt="" coords="309,526,325,483,352,428,387,369,433,316,467,287,505,262,585,222,665,194,737,175,739,180,667,199,587,227,507,267,470,292,437,320,392,372,356,430,330,485,314,528"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1005,198,1141,224"/>
-<area shape="poly" title=" " alt="" coords="305,526,317,471,340,394,357,353,378,312,403,274,433,240,494,186,552,147,609,119,668,104,729,98,794,102,865,114,945,134,974,144,1001,158,1047,188,1044,192,998,162,971,149,943,139,864,120,793,107,729,103,669,109,611,124,554,151,497,191,437,244,407,277,382,315,362,355,345,396,322,472,310,527"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,394,631,434"/>
-<area shape="poly" title=" " alt="" coords="340,524,497,438,500,443,343,529"/>
-<area shape="poly" title=" " alt="" coords="315,566,370,689,405,754,437,796,454,808,451,812,433,800,400,757,365,691,310,568"/>
-<area shape="poly" title=" " alt="" coords="317,566,335,598,361,635,395,672,436,701,475,717,516,729,602,742,683,743,753,737,754,743,684,748,601,747,515,734,473,722,433,705,392,676,357,639,330,600,312,569"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,330,649,370"/>
-<area shape="poly" title=" " alt="" coords="313,525,358,454,393,414,433,379,443,373,446,378,436,384,396,418,363,457,317,528"/>
-<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,665,661,690"/>
-<area shape="poly" title=" " alt="" coords="343,565,512,656,510,661,341,569"/>
-<area shape="poly" title=" " alt="" coords="1113,348,1154,334,1243,302,1245,307,1156,339,1114,353"/>
-<area shape="poly" title=" " alt="" coords="1082,564,1272,309,1277,312,1086,568"/>
-<area shape="poly" title=" " alt="" coords="889,146,997,124,998,129,890,151"/>
-<area shape="poly" title=" " alt="" coords="929,172,946,184,961,202,969,221,972,260,974,298,980,316,994,334,1002,341,999,345,990,338,976,319,968,299,966,260,964,223,957,205,942,188,926,177"/>
-<area shape="poly" title=" " alt="" coords="891,172,996,193,995,198,890,177"/>
-<area shape="poly" title=" " alt="" coords="1112,221,1243,267,1242,272,1110,226"/>
-<area shape="poly" title=" " alt="" coords="631,399,646,391,659,380,679,350,686,319,685,288,680,256,675,225,675,194,684,163,708,134,742,110,780,94,820,84,862,79,943,82,1012,93,1012,98,943,87,862,85,821,89,781,99,744,115,711,138,689,166,680,195,680,224,685,255,690,287,691,319,684,352,663,383,649,395,633,404"/>
-<area shape="poly" title=" " alt="" coords="631,403,987,369,987,374,632,408"/>
-<area shape="poly" title=" " alt="" coords="581,432,639,467,710,501,783,524,859,543,993,567,992,572,857,548,782,529,708,505,637,472,578,436"/>
-<area shape="poly" title=" " alt="" coords="630,396,660,380,670,369,676,357,682,333,689,309,696,296,708,285,743,274,815,258,991,223,992,229,817,263,744,279,711,289,700,300,694,311,688,334,681,359,674,372,663,384,633,401"/>
-<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,300,882,325"/>
-<area shape="poly" title=" " alt="" coords="624,391,660,379,785,328,787,333,662,384,625,396"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="758,198,895,224"/>
-<area shape="poly" title=" " alt="" coords="630,398,660,380,673,363,680,347,683,312,686,277,693,259,707,241,725,229,744,220,746,225,727,233,711,245,698,261,691,278,688,312,685,348,677,366,663,384,633,403"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,451,910,491"/>
-<area shape="poly" title=" " alt="" coords="632,428,731,449,730,454,631,433"/>
-<area shape="poly" title=" " alt="" coords="848,297,893,269,942,233,967,209,990,184,1046,131,1049,135,994,188,971,213,946,237,896,274,851,302"/>
-<area shape="poly" title=" " alt="" coords="883,321,998,345,997,350,882,326"/>
-<area shape="poly" title=" " alt="" coords="842,323,946,437,1053,555,1049,558,942,441,838,327"/>
-<area shape="poly" title=" " alt="" coords="882,297,943,278,994,254,1039,228,1042,233,997,258,945,283,883,303"/>
-<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="999,300,1148,325"/>
-<area shape="poly" title=" " alt="" coords="882,310,985,310,985,315,882,315"/>
-<area shape="poly" title=" " alt="" coords="1148,301,1188,296,1189,302,1149,306"/>
-<area shape="poly" title=" " alt="" coords="896,219,1201,269,1200,275,895,225"/>
-<area shape="poly" title=" " alt="" coords="894,448,943,430,1039,380,1041,385,945,435,896,453"/>
-<area shape="poly" title=" " alt="" coords="650,350,987,358,986,363,649,355"/>
-<area shape="poly" title=" " alt="" coords="572,327,632,284,708,241,751,225,753,230,710,245,635,288,575,332"/>
-<area shape="poly" title=" " alt="" coords="622,662,753,640,754,645,623,668"/>
-<area shape="poly" title=" " alt="" coords="619,688,755,713,754,718,618,693"/>
-<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,666,893,692"/>
-<area shape="poly" title=" " alt="" coords="662,676,746,676,746,681,662,681"/>
-<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,816,921,856"/>
-<area shape="poly" title=" " alt="" coords="573,688,780,807,777,812,570,693"/>
-<area shape="poly" title=" " alt="" coords="912,814,942,796,986,750,1020,697,1045,646,1061,604,1066,606,1050,648,1024,700,990,753,946,800,914,818"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="992,849,1155,874"/>
-<area shape="poly" title=" " alt="" coords="922,843,979,849,978,855,921,849"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="1204,798,1383,824"/>
-<area shape="poly" title=" " alt="" coords="921,829,1190,814,1190,819,921,834"/>
-<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1432,824,1635,849"/>
-<area shape="poly" title=" " alt="" coords="1155,855,1418,840,1419,845,1155,860"/>
-<area shape="poly" title=" " alt="" coords="1129,846,1224,824,1225,829,1130,851"/>
-<area shape="poly" title=" " alt="" coords="1383,818,1419,822,1418,827,1382,823"/>
+<area shape="rect" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="5,254,172,294"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="767,110,886,135"/>
+<area shape="poly" title=" " alt="" coords="135,252,268,201,350,174,434,153,519,138,605,129,753,120,754,126,606,134,520,144,435,158,352,179,270,206,137,257"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="1009,400,1137,426"/>
+<area shape="poly" title=" " alt="" coords="109,252,157,212,187,191,219,173,418,77,506,39,590,14,632,6,674,3,716,4,759,11,803,23,849,40,896,64,946,95,958,110,973,138,1007,220,1066,386,1061,388,1002,222,968,141,953,113,942,99,894,69,847,45,802,28,758,16,716,10,674,8,633,12,592,19,508,44,420,82,221,178,190,195,160,216,112,256"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,469,387,509"/>
+<area shape="poly" title=" " alt="" coords="112,293,274,457,270,461,108,296"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#aa5f053bf60a8ff8c12bc3c875a3ae9b0" title="Notifies all observers of a plugin event." alt="" coords="465,954,631,994"/>
+<area shape="poly" title=" " alt="" coords="97,294,127,407,154,489,190,582,235,678,291,774,358,863,396,904,436,940,454,951,451,956,433,944,392,907,354,867,287,777,230,681,185,584,149,491,122,408,92,295"/>
+<area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a117ccc497f5110b1a28c3921cc8e2448" title=" " alt="" coords="767,274,886,299"/>
+<area shape="poly" title=" " alt="" coords="172,273,754,282,754,288,172,278"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1203,602,1384,627"/>
+<area shape="poly" title=" " alt="" coords="1091,424,1270,590,1266,594,1087,428"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1454,602,1613,627"/>
+<area shape="poly" title=" " alt="" coords="1384,612,1440,612,1440,617,1384,617"/>
+<area shape="poly" title=" " alt="" coords="305,468,315,413,338,339,355,300,376,262,402,226,433,196,479,179,563,161,753,130,754,135,564,167,481,184,436,200,406,230,380,264,360,302,343,341,321,415,310,469"/>
+<area shape="poly" title=" " alt="" coords="355,466,434,440,574,399,686,373,741,367,800,365,866,369,944,377,1021,394,1020,399,944,382,866,374,800,371,741,372,687,379,575,404,435,445,357,471"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f" title=" " alt="" coords="1001,730,1146,755"/>
+<area shape="poly" title=" " alt="" coords="309,509,318,567,339,645,356,686,377,726,404,763,436,793,479,816,538,833,608,844,683,851,760,852,832,849,895,841,943,829,958,822,968,813,990,791,1037,760,1040,764,994,795,971,817,961,826,945,834,896,846,832,854,760,858,683,856,607,850,537,838,477,821,433,798,400,766,373,729,351,689,334,647,313,568,304,510"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1006,627,1141,652"/>
+<area shape="poly" title=" " alt="" coords="317,508,335,540,361,577,395,614,436,641,512,669,592,685,673,692,754,692,831,686,902,676,1014,653,1015,658,902,681,831,691,754,697,673,698,591,691,510,674,433,646,391,618,357,581,330,543,312,511"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ac4107d846ce01de9a5ea2964f3832225" title=" " alt="" coords="709,426,944,451"/>
+<area shape="poly" title=" " alt="" coords="386,474,434,468,695,444,696,450,435,473,387,479"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="1005,527,1141,552"/>
+<area shape="poly" title=" " alt="" coords="387,492,991,532,991,537,387,497"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="465,592,631,632"/>
+<area shape="poly" title=" " alt="" coords="346,507,496,583,494,588,343,512"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a23319242d32457100c893cd1636311b3" title="Unloads dynamic library." alt="" coords="743,780,910,820"/>
+<area shape="poly" title=" " alt="" coords="313,508,328,551,353,605,389,661,411,686,436,708,470,730,506,747,583,773,660,789,730,796,729,801,659,794,582,779,504,752,467,734,433,712,407,690,385,664,349,608,323,553,308,510"/>
+<area shape="poly" title=" " alt="" coords="315,509,348,607,389,739,396,771,398,799,399,849,401,872,406,894,418,917,437,940,454,954,451,958,433,944,413,919,401,896,395,873,393,849,393,800,391,771,384,740,343,609,310,510"/>
+<area shape="poly" title=" " alt="" coords="316,467,363,410,396,380,433,355,473,336,515,321,601,300,683,288,753,284,754,289,684,294,602,305,517,326,475,341,436,359,399,384,367,414,320,470"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#ab8681ef7809bd7ae84d6570e6fe928a1" title=" " alt="" coords="447,890,649,930"/>
+<area shape="poly" title=" " alt="" coords="314,508,382,716,437,870,451,881,447,885,432,873,377,718,309,510"/>
+<area shape="rect" href="../../d3/d7e/namespaceplugin.html#a76c2152181a880a1266e373177522f62" title=" " alt="" coords="435,211,661,236"/>
+<area shape="poly" title=" " alt="" coords="314,467,362,392,395,347,433,304,473,270,512,242,515,246,476,274,437,308,399,350,366,395,318,470"/>
+<area shape="poly" title=" " alt="" coords="1095,727,1257,632,1260,636,1098,732"/>
+<area shape="poly" title=" " alt="" coords="1141,629,1189,624,1189,629,1141,634"/>
+<area shape="poly" title=" " alt="" coords="944,423,995,418,996,423,945,429"/>
+<area shape="poly" title=" " alt="" coords="844,449,892,497,946,563,961,591,970,614,979,636,994,662,1020,693,1047,718,1044,722,1016,696,990,665,974,638,965,615,957,593,942,566,888,501,840,453"/>
+<area shape="poly" title=" " alt="" coords="885,448,945,468,997,492,1042,517,1039,522,994,497,943,473,883,454"/>
+<area shape="poly" title=" " alt="" coords="1117,550,1156,562,1246,594,1244,599,1154,567,1115,555"/>
+<area shape="poly" title=" " alt="" coords="556,590,577,550,609,499,653,449,679,427,708,410,746,396,786,386,868,379,945,384,1010,395,1009,400,945,389,868,385,787,391,748,401,710,415,682,432,657,453,614,502,581,552,560,593"/>
+<area shape="poly" title=" " alt="" coords="631,629,1008,724,1007,729,629,634"/>
+<area shape="poly" title=" " alt="" coords="632,613,992,633,992,638,631,619"/>
+<area shape="poly" title=" " alt="" coords="606,589,656,574,709,562,783,551,859,544,992,538,992,543,859,549,784,557,710,568,657,579,608,594"/>
+<area shape="rect" href="../../da/dc5/PluginManager_8cpp.html#a60ba386eb4a3edc7cbb72a02fee6dce7" title=" " alt="" coords="771,578,882,603"/>
+<area shape="poly" title=" " alt="" coords="631,603,757,593,758,598,632,608"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="758,895,895,920"/>
+<area shape="poly" title=" " alt="" coords="563,630,621,722,663,777,711,830,750,861,790,886,787,890,747,865,708,834,659,781,616,725,558,633"/>
+<area shape="poly" title=" " alt="" coords="568,630,627,693,667,728,711,759,737,772,735,777,708,763,664,732,623,697,564,634"/>
+<area shape="poly" title=" " alt="" coords="844,575,1041,432,1044,436,847,580"/>
+<area shape="poly" title=" " alt="" coords="850,601,1041,720,1038,724,847,605"/>
+<area shape="poly" title=" " alt="" coords="883,599,996,622,995,627,882,604"/>
+<area shape="poly" title=" " alt="" coords="882,576,997,552,998,558,883,582"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a51ddf1fd715b55004429f0d10db0ae65" title=" " alt="" coords="999,578,1148,603"/>
+<area shape="poly" title=" " alt="" coords="882,588,985,588,985,593,882,593"/>
+<area shape="poly" title=" " alt="" coords="1149,596,1189,600,1188,605,1148,601"/>
+<area shape="poly" title=" " alt="" coords="882,892,943,873,1054,829,1099,804,1153,765,1189,734,1223,699,1273,637,1277,640,1227,702,1193,738,1156,770,1102,808,1056,834,945,878,884,897"/>
+<area shape="poly" title=" " alt="" coords="910,778,1004,755,1006,761,911,783"/>
+<area shape="poly" title=" " alt="" coords="650,925,731,936,816,943,891,943,921,938,943,930,966,915,986,897,1021,852,1045,806,1061,767,1066,769,1050,808,1025,855,990,900,969,920,945,935,922,943,892,948,816,948,731,941,649,930"/>
+<area shape="poly" title=" " alt="" coords="649,907,745,906,745,911,649,912"/>
+<area shape="poly" title=" " alt="" coords="612,208,660,189,674,179,683,168,693,156,708,145,753,129,755,134,711,150,696,160,687,171,678,183,663,194,614,213"/>
+<area shape="poly" title=" " alt="" coords="604,234,710,258,754,268,753,273,709,263,602,239"/>
+<area shape="rect" href="../../d6/d7f/namespaceconfig.html#ab663d5ad12e8df0dd19bf1c6b8857fab" title=" " alt="" coords="760,224,893,250"/>
+<area shape="poly" title=" " alt="" coords="662,226,747,230,746,236,661,232"/>
+<area shape="rect" href="../../d2/d5e/classconfig_1_1Config.html#a812eef62bc23e9f09142cda2a2d35893" title="Get the default application path." alt="" coords="732,160,921,200"/>
+<area shape="poly" title=" " alt="" coords="628,208,718,194,719,199,629,214"/>
+<area shape="poly" title=" " alt="" coords="923,192,946,210,965,236,978,261,985,287,988,313,983,363,972,413,960,462,955,512,958,537,964,562,976,587,994,613,998,617,994,621,990,616,972,590,959,564,952,538,950,512,955,461,966,411,978,362,982,313,980,288,973,263,960,238,942,213,920,196"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7" title="&lt;executable dir&gt;/data in portable mode, empty otherwise. Not created here." alt="" coords="992,142,1155,167"/>
+<area shape="poly" title=" " alt="" coords="921,167,978,161,979,167,922,172"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#abde936a2f89a8df74aeaa9dd2219298a" title="True when the marker file exists next to the executable." alt="" coords="1204,192,1383,218"/>
+<area shape="poly" title=" " alt="" coords="921,182,1190,197,1190,202,921,187"/>
+<area shape="rect" href="../../d8/d0b/namespaceutil_1_1portable.html#a7e3cfe7acef88558c281fa45365ca075" title="Directory containing the running executable (empty if it cannot be found)." alt="" coords="1432,167,1635,192"/>
+<area shape="poly" title=" " alt="" coords="1155,156,1419,171,1418,176,1155,161"/>
+<area shape="poly" title=" " alt="" coords="1130,164,1225,187,1224,192,1129,170"/>
+<area shape="poly" title=" " alt="" coords="1382,193,1418,189,1419,194,1383,198"/>
 </map>
 </div>
 
@@ -1997,21 +2000,22 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_a23319242d32457100c893cd1636311b3_icgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_a23319242d32457100c893cd1636311b3_icgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_a23319242d32457100c893cd1636311b3_icgraph" id="ad3/d67/classplugin_1_1PluginManager_a23319242d32457100c893cd1636311b3_icgraph">
-<area shape="rect" title="Unloads dynamic library." alt="" coords="649,101,816,141"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="435,37,601,77"/>
-<area shape="poly" title=" " alt="" coords="651,100,585,80,586,75,652,95"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin." alt="" coords="435,101,601,141"/>
-<area shape="poly" title=" " alt="" coords="635,124,602,124,602,119,635,119"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70" title=" " alt="" coords="435,165,601,205"/>
-<area shape="poly" title=" " alt="" coords="652,148,586,168,585,163,651,143"/>
+<area shape="rect" title="Unloads dynamic library." alt="" coords="649,97,816,137"/>
 <area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file." alt="" coords="220,37,387,77"/>
-<area shape="poly" title=" " alt="" coords="421,60,387,60,387,55,421,55"/>
+<area shape="poly" title=" " alt="" coords="688,93,647,72,601,56,546,47,490,44,387,48,387,43,490,38,547,42,602,51,649,67,690,88"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a540612c07b00efd1aa67aa6f2cbb2090" title="Loads plugin from dynamic library." alt="" coords="435,65,601,105"/>
+<area shape="poly" title=" " alt="" coords="635,105,601,100,602,95,636,100"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin and removes it from GetLoadedPlugins()" alt="" coords="435,129,601,169"/>
+<area shape="poly" title=" " alt="" coords="636,134,602,140,601,134,635,129"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70" title=" " alt="" coords="435,193,601,233"/>
+<area shape="poly" title=" " alt="" coords="682,146,602,184,574,196,572,191,600,179,679,141"/>
 <area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#ab0e32cb7dc522ce685da6b770bf48800" title="Enables a plugin (loads and initializes it)" alt="" coords="5,5,172,45"/>
 <area shape="poly" title=" " alt="" coords="205,45,172,40,173,35,206,40"/>
 <area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7b077a2d307471707c12e524fe7fe570" title="Registers a plugin file (copies to user plugins directory)" alt="" coords="5,69,172,109"/>
 <area shape="poly" title=" " alt="" coords="206,74,173,80,172,74,205,69"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#ad3ccdc5fc9235080e6015568d84b0eb3" title="Unregisters a plugin (removes from user plugins directory)" alt="" coords="220,101,387,141"/>
-<area shape="poly" title=" " alt="" coords="421,124,387,124,387,119,421,119"/>
+<area shape="poly" title=" " alt="" coords="420,75,387,71,387,66,421,70"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#ad3ccdc5fc9235080e6015568d84b0eb3" title="Unregisters a plugin (removes from user plugins directory)" alt="" coords="220,129,387,169"/>
+<area shape="poly" title=" " alt="" coords="421,152,387,152,387,147,421,147"/>
 </map>
 </div>
 
@@ -2033,8 +2037,8 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Unloads a plugin. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Unloads a plugin and removes it from <a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#a355a71e39f4da1a3643fbfdad820ffcd" title="Gets all loaded plugins.">GetLoadedPlugins()</a> </p>
+<p>It stays registered, so <a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#ab0e32cb7dc522ce685da6b770bf48800" title="Enables a plugin (loads and initializes it)">EnablePlugin()</a> or <a class="el" href="../../d3/d67/classplugin_1_1PluginManager.html#a7a036803ace53f0afda078a138cec22d" title="Loads a plugin from file.">LoadPlugin()</a> can load it again. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pluginId</td><td>Plugin identifier </td></tr>
   </table>
@@ -2046,7 +2050,7 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_cgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_cgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_cgraph" id="ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_cgraph">
-<area shape="rect" title="Unloads a plugin." alt="" coords="5,106,172,146"/>
+<area shape="rect" title="Unloads a plugin and removes it from GetLoadedPlugins()" alt="" coords="5,106,172,146"/>
 <area shape="rect" href="../../dd/d2d/classutil_1_1Result.html#a8b6a3b9550ab82f2b4d23d34ff57289a" title=" " alt="" coords="244,5,363,31"/>
 <area shape="poly" title=" " alt="" coords="120,104,219,48,252,33,254,38,221,52,123,108"/>
 <area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="443,87,571,112"/>
@@ -2071,7 +2075,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_icgraph.png" border="0" usemap="#ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_icgraph" alt=""/></div>
 <map name="ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_icgraph" id="ad3/d67/classplugin_1_1PluginManager_a7eb8900b644f10ebf0f73695fc9421be_icgraph">
-<area shape="rect" title="Unloads a plugin." alt="" coords="220,5,387,45"/>
+<area shape="rect" title="Unloads a plugin and removes it from GetLoadedPlugins()" alt="" coords="220,5,387,45"/>
 <area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#ad3ccdc5fc9235080e6015568d84b0eb3" title="Unregisters a plugin (removes from user plugins directory)" alt="" coords="5,5,172,45"/>
 <area shape="poly" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
 </map>
@@ -2165,7 +2169,7 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="97,316,114,282,141,240,176,199,219,166,273,146,348,131,436,121,532,115,727,112,887,116,887,121,727,118,532,121,436,126,348,136,275,151,221,171,179,203,145,244,119,285,101,319"/>
 <area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306" title=" " alt="" coords="450,160,586,185"/>
 <area shape="poly" title=" " alt="" coords="101,316,147,258,180,227,219,202,273,182,330,170,385,165,436,164,436,170,386,170,330,176,274,187,221,207,184,231,151,261,105,320"/>
-<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin." alt="" coords="435,477,601,517"/>
+<area shape="rect" href="../../d3/d67/classplugin_1_1PluginManager.html#a7eb8900b644f10ebf0f73695fc9421be" title="Unloads a plugin and removes it from GetLoadedPlugins()" alt="" coords="435,477,601,517"/>
 <area shape="poly" title=" " alt="" coords="107,356,154,408,186,434,221,456,270,474,322,486,373,493,421,496,421,501,373,498,321,491,269,479,219,460,183,439,150,412,103,360"/>
 <area shape="poly" title=" " alt="" coords="387,345,667,377,666,382,387,350"/>
 <area shape="poly" title=" " alt="" coords="314,357,331,395,356,442,391,489,412,509,436,526,487,549,541,562,596,568,647,568,647,573,596,573,540,567,485,554,433,531,409,514,387,493,352,445,326,398,309,360"/>

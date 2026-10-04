@@ -215,6 +215,9 @@ var hierarchy =
       [ "ui::qt::utils::KeyboardNavigationManager", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html", null ],
       [ "ui::qt::utils::NotificationManager", "d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html", null ]
     ] ],
+    [ "QSettings", "dc/dc8/classQSettings.html", [
+      [ "ui::qt::utils::AppSettings", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html", null ]
+    ] ],
     [ "QTableView", "d8/d5e/classQTableView.html", [
       [ "ui::qt::EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", null ]
     ] ],

@@ -16,6 +16,7 @@ var searchData=
   ['timerangefilterpanel_2ehpp_13',['TimeRangeFilterPanel.hpp',['../d4/dda/TimeRangeFilterPanel_8hpp.html',1,'']]],
   ['traceviewerpanel_2ecpp_14',['TraceViewerPanel.cpp',['../d2/db4/TraceViewerPanel_8cpp.html',1,'']]],
   ['traceviewerpanel_2ehpp_15',['TraceViewerPanel.hpp',['../d7/d4a/TraceViewerPanel_8hpp.html',1,'']]],
-  ['typefilterview_2ecpp_16',['TypeFilterView.cpp',['../d1/d5a/TypeFilterView_8cpp.html',1,'']]],
-  ['typefilterview_2ehpp_17',['TypeFilterView.hpp',['../d1/d0e/TypeFilterView_8hpp.html',1,'']]]
+  ['trackedtabs_2ehpp_16',['TrackedTabs.hpp',['../dd/d17/TrackedTabs_8hpp.html',1,'']]],
+  ['typefilterview_2ecpp_17',['TypeFilterView.cpp',['../d1/d5a/TypeFilterView_8cpp.html',1,'']]],
+  ['typefilterview_2ehpp_18',['TypeFilterView.hpp',['../d1/d0e/TypeFilterView_8hpp.html',1,'']]]
 ];

@@ -125,6 +125,7 @@ var annotated_dup =
           [ "TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem" ]
         ] ],
         [ "utils", "dd/d73/namespaceui_1_1qt_1_1utils.html", [
+          [ "AppSettings", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings" ],
           [ "EventGroupManager", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager" ],
           [ "EventTagManager", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager.html", "da/d36/classui_1_1qt_1_1utils_1_1EventTagManager" ],
           [ "KeyboardNavigationManager", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html", "dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager" ],
@@ -248,6 +249,7 @@ var annotated_dup =
     [ "QHeaderView", "de/dd3/classQHeaderView.html", null ],
     [ "QMainWindow", "df/d90/classQMainWindow.html", null ],
     [ "QObject", "d9/d5b/classQObject.html", null ],
+    [ "QSettings", "dc/dc8/classQSettings.html", null ],
     [ "QTableView", "d8/d5e/classQTableView.html", null ],
     [ "QTreeWidget", "d3/d5f/classQTreeWidget.html", null ],
     [ "QTreeWidgetItem", "d1/d15/classQTreeWidgetItem.html", null ],

@@ -110,20 +110,38 @@ $(document).ready(function(){initNavTree('d0/dc7/TabVisibility_8hpp_source.html'
 <div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">   15</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">BindTabVisibilityAction</a>(QAction* action, QTabWidget* tabs, <a class="code hl_class" href="../../d8/ded/classQWidget.html">QWidget</a>* page)</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    QObject::connect(action, &amp;QAction::toggled, action, [tabs = QPointer&lt;QTabWidget&gt;(tabs),</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                                                          page = QPointer&lt;QWidget&gt;(page)](<span class="keywordtype">bool</span> visible) {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">if</span> (!tabs || !page)</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keyword">const</span> <span class="keywordtype">int</span> index = tabs-&gt;indexOf(page);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordflow">if</span> (index &gt;= 0)</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            tabs-&gt;tabBar()-&gt;setTabVisible(index, visible);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    });</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>}</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    action-&gt;setData(QVariant::fromValue&lt;QObject*&gt;(page));</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    QObject::connect(action, &amp;QAction::toggled, action, [tabs = QPointer&lt;QTabWidget&gt;(tabs),</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                                                          page = QPointer&lt;QWidget&gt;(page)](<span class="keywordtype">bool</span> visible) {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordflow">if</span> (!tabs || !page)</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">const</span> <span class="keywordtype">int</span> index = tabs-&gt;indexOf(page);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordflow">if</span> (index &gt;= 0)</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            tabs-&gt;tabBar()-&gt;setTabVisible(index, visible);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    });</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
 </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>} <span class="comment">// namespace ui::qt::utils</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="foldopen" id="foldopen00031" data-start="{" data-end="}">
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a055e6e4fa253c8d0c97bbe8df2ac600d">   31</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a055e6e4fa253c8d0c97bbe8df2ac600d">SyncTabVisibilityActions</a>(<span class="keyword">const</span> QList&lt;QAction*&gt;&amp; actions, QTabWidget* tabs)</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>{</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordflow">if</span> (!tabs)</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordflow">for</span> (QAction* action : actions)</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keyword">auto</span>* page = qobject_cast&lt;QWidget*&gt;(action-&gt;data().value&lt;<a class="code hl_class" href="../../d9/d5b/classQObject.html">QObject</a>*&gt;());</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">const</span> <span class="keywordtype">int</span> index = page ? tabs-&gt;indexOf(page) : -1;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordflow">if</span> (index &gt;= 0)</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            action-&gt;setChecked(tabs-&gt;tabBar()-&gt;isTabVisible(index));</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}</div>
+</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>} <span class="comment">// namespace ui::qt::utils</span></div>
+<div class="ttc" id="aclassQObject_html"><div class="ttname"><a href="../../d9/d5b/classQObject.html">QObject</a></div></div>
 <div class="ttc" id="aclassQWidget_html"><div class="ttname"><a href="../../d8/ded/classQWidget.html">QWidget</a></div></div>
-<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:10</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html">ui::qt::utils</a></div><div class="ttdef"><b>Definition</b> AppDataDir.hpp:14</div></div>
+<div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_a055e6e4fa253c8d0c97bbe8df2ac600d"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a055e6e4fa253c8d0c97bbe8df2ac600d">ui::qt::utils::SyncTabVisibilityActions</a></div><div class="ttdeci">void SyncTabVisibilityActions(const QList&lt; QAction * &gt; &amp;actions, QTabWidget *tabs)</div><div class="ttdef"><b>Definition</b> TabVisibility.hpp:31</div></div>
 <div class="ttc" id="anamespaceui_1_1qt_1_1utils_html_a16e4bbb81bade5ba66a5caa8f90c8c8f"><div class="ttname"><a href="../../dd/d73/namespaceui_1_1qt_1_1utils.html#a16e4bbb81bade5ba66a5caa8f90c8c8f">ui::qt::utils::BindTabVisibilityAction</a></div><div class="ttdeci">void BindTabVisibilityAction(QAction *action, QTabWidget *tabs, QWidget *page)</div><div class="ttdef"><b>Definition</b> TabVisibility.hpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
