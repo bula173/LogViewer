@@ -19,11 +19,12 @@ var searchData=
   ['shortcutsdialog_16',['ShortcutsDialog',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html',1,'ui::qt']]],
   ['sidebysidepanel_17',['SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html',1,'ui::qt']]],
   ['signalplotpanel_18',['SignalPlotPanel',['../d5/d5c/classui_1_1qt_1_1SignalPlotPanel.html',1,'ui::qt']]],
-  ['spdlogger_19',['SpdLogger',['../dd/d6b/classutil_1_1SpdLogger.html',1,'util']]],
-  ['startupsplash_20',['StartupSplash',['../d7/dda/classui_1_1qt_1_1StartupSplash.html',1,'ui::qt']]],
-  ['state_21',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
-  ['statrow_22',['StatRow',['../d9/d3b/structui_1_1qt_1_1StatRow.html',1,'ui::qt']]],
-  ['statssection_23',['StatsSection',['../d2/d71/structui_1_1qt_1_1StatsSection.html',1,'ui::qt']]],
-  ['statssummarypanel_24',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
-  ['structuredconfigdialog_25',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
+  ['sortkey_19',['SortKey',['../d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html',1,'ui::qt::EventsTableModel']]],
+  ['spdlogger_20',['SpdLogger',['../dd/d6b/classutil_1_1SpdLogger.html',1,'util']]],
+  ['startupsplash_21',['StartupSplash',['../d7/dda/classui_1_1qt_1_1StartupSplash.html',1,'ui::qt']]],
+  ['state_22',['State',['../d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html',1,'ui::qt::TimeRangeFilterPanel']]],
+  ['statrow_23',['StatRow',['../d9/d3b/structui_1_1qt_1_1StatRow.html',1,'ui::qt']]],
+  ['statssection_24',['StatsSection',['../d2/d71/structui_1_1qt_1_1StatsSection.html',1,'ui::qt']]],
+  ['statssummarypanel_25',['StatsSummaryPanel',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html',1,'ui::qt']]],
+  ['structuredconfigdialog_26',['StructuredConfigDialog',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html',1,'ui::qt']]]
 ];

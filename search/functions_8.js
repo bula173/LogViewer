@@ -6,7 +6,7 @@ var searchData=
   ['imodel_3',['IModel',['../dc/d2d/classmvc_1_1IModel.html#a963d85634e490774da38d178bb464994',1,'mvc::IModel']]],
   ['importfilters_4',['ImportFilters',['../d5/d8f/classfilters_1_1FilterSerializer.html#aaed47f67e77c9d44faa6cdf85ff625b4',1,'filters::FilterSerializer']]],
   ['indicatorrect_5',['IndicatorRect',['../d2/ddc/classui_1_1qt_1_1FilterHeaderView.html#a4375c180ae5dc09cdc18d1189c9351ff',1,'ui::qt::FilterHeaderView']]],
-  ['info_6',['info',['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()'],['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()'],['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()']]],
+  ['info_6',['info',['../d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30',1,'util::Logger::Info()'],['../d3/dc4/classutil_1_1ILogger.html#a165ef65a6ae146adcec5d06e3af66ce8',1,'util::ILogger::info()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9faeb01a323d97351fc40880077e4ade',1,'util::SpdLogger::info()']]],
   ['initcolorstab_7',['InitColorsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#acaf9ac5e19e0aef3e4e08d4b19b1d5c6',1,'ui::qt::StructuredConfigDialog']]],
   ['initcolumnstab_8',['InitColumnsTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a0d65ae5a699de44cc24395a4f73f541a',1,'ui::qt::StructuredConfigDialog']]],
   ['initdictionarytab_9',['InitDictionaryTab',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a765ca581f174717d96aa46043af628b6',1,'ui::qt::StructuredConfigDialog']]],

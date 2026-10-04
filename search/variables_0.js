@@ -21,11 +21,13 @@ var searchData=
   ['app_18',['app',['../dd/d5c/structupdates_1_1UpdateCheckResult.html#aa1b5f4e76e37727f728a324653bf3885',1,'updates::UpdateCheckResult']]],
   ['applicationscount_19',['applicationsCount',['../df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#af634ee33a80c675ef7c476b549ff6cc7',1,'filters::FilterOptimizer::FilterStats']]],
   ['appname_20',['appName',['../d2/d5e/classconfig_1_1Config.html#a6587a9c60b9523546e0d2490a92886cf',1,'config::Config']]],
-  ['author_21',['author',['../de/d25/structplugin_1_1PluginMetadata.html#a8dbb4b1294a0456e143cf2e4a4d4e095',1,'plugin::PluginMetadata']]],
-  ['autoload_22',['autoload',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#a698b4c470bd5f842225f0dcc7335703e',1,'plugin::PluginLoadInfo::autoLoad'],['../de/d59/structplugin_1_1PluginManager_1_1PluginConfigCache.html#aec1ba4da1f2fbe5680607cb009bc5baa',1,'plugin::PluginManager::PluginConfigCache::autoLoad']]],
-  ['autorecoveryenabled_23',['autoRecoveryEnabled',['../d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#a20791b22f2261485d98ffe29ac070486',1,'ui::qt::utils::SessionManager::SessionState']]],
-  ['available_24',['available',['../d2/d36/structai_1_1GemmaInferenceEngine_1_1Impl.html#a3957680c9d5ad07c010772754bc0c1c2',1,'ai::GemmaInferenceEngine::Impl']]],
-  ['availableversion_25',['availableVersion',['../db/da4/structupdates_1_1PluginUpdateInfo.html#a4fe3b4f2261b6a97aac98e8dbbf1f41e',1,'updates::PluginUpdateInfo']]],
-  ['averageinputsize_26',['averageInputSize',['../df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#a442e84d621ea7d2902942c5caaa6a8d0',1,'filters::FilterOptimizer::FilterStats']]],
-  ['averageoutputsize_27',['averageOutputSize',['../df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#aeabc8e6db41c949aba7adbf9f3312f47',1,'filters::FilterOptimizer::FilterStats']]]
+  ['asdouble_21',['asDouble',['../d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html#a095aa384f37d6ec22015b285f4b2d9e3',1,'ui::qt::EventsTableModel::SortKey']]],
+  ['asint_22',['asInt',['../d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html#a23fe3f597e742e825cdb8068225ee938',1,'ui::qt::EventsTableModel::SortKey']]],
+  ['author_23',['author',['../de/d25/structplugin_1_1PluginMetadata.html#a8dbb4b1294a0456e143cf2e4a4d4e095',1,'plugin::PluginMetadata']]],
+  ['autoload_24',['autoload',['../d4/dfa/structplugin_1_1PluginLoadInfo.html#a698b4c470bd5f842225f0dcc7335703e',1,'plugin::PluginLoadInfo::autoLoad'],['../de/d59/structplugin_1_1PluginManager_1_1PluginConfigCache.html#aec1ba4da1f2fbe5680607cb009bc5baa',1,'plugin::PluginManager::PluginConfigCache::autoLoad']]],
+  ['autorecoveryenabled_25',['autoRecoveryEnabled',['../d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html#a20791b22f2261485d98ffe29ac070486',1,'ui::qt::utils::SessionManager::SessionState']]],
+  ['available_26',['available',['../d2/d36/structai_1_1GemmaInferenceEngine_1_1Impl.html#a3957680c9d5ad07c010772754bc0c1c2',1,'ai::GemmaInferenceEngine::Impl']]],
+  ['availableversion_27',['availableVersion',['../db/da4/structupdates_1_1PluginUpdateInfo.html#a4fe3b4f2261b6a97aac98e8dbbf1f41e',1,'updates::PluginUpdateInfo']]],
+  ['averageinputsize_28',['averageInputSize',['../df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#a442e84d621ea7d2902942c5caaa6a8d0',1,'filters::FilterOptimizer::FilterStats']]],
+  ['averageoutputsize_29',['averageOutputSize',['../df/d09/structfilters_1_1FilterOptimizer_1_1FilterStats.html#aeabc8e6db41c949aba7adbf9f3312f47',1,'filters::FilterOptimizer::FilterStats']]]
 ];

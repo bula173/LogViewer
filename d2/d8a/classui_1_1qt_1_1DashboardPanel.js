@@ -20,6 +20,8 @@ var classui_1_1qt_1_1DashboardPanel =
     [ "UpdateFileInfo", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a26a3881f4dab2b9be4207da1c73b6c01", null ],
     [ "UpdateStats", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a8c8dd7f04c104e0893cfddd187307d31", null ],
     [ "UpdateTopActors", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a771dc02f8e6d41c06c35a2bb1f5c94e6", null ],
+    [ "m_actorFields", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a212a8c0b56e2abdc4fb2787a1fc351bb", null ],
+    [ "m_actorFieldsEventCount", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aad0d214cce1998ebe70d0882b842df8b", null ],
     [ "m_bookmarkButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a8a6d2bed57633c0283abd34b563f0c04", null ],
     [ "m_events", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a05eaf0e5c3e8204e496e9371659135c5", null ],
     [ "m_exportButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ae71e3dcb1032dca7cb5853ccc5e17d26", null ],

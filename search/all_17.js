@@ -49,7 +49,7 @@ var searchData=
   ['not_20available_20status_46',['&quot;Ollama not available&quot; status',['../d0/d7d/md_docs_2AI__ANALYSIS__GUIDE.html#autotoc_md46',1,'']]],
   ['not_20found_47',['not found',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md379',1,'&quot;cppcheck not found&quot;'],['../da/dc6/md_docs_2CLOUD__AI__INTEGRATION.html#autotoc_md340',1,'&quot;Model not found&quot;'],['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md264',1,'Qt Not Found']]],
   ['not_20generated_48',['Report Not Generated',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md381',1,'']]],
-  ['not_20loading_49',['not loading',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md71',1,'Plugin Not Loading'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md626',1,'Plugin Not Loading']]],
+  ['not_20loading_49',['not loading',['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md626',1,'Plugin Not Loading'],['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md71',1,'Plugin Not Loading']]],
   ['not_20recognized_50',['C++20 Features Not Recognized',['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md266',1,'']]],
   ['not_20visible_51',['Configuration Panel Not Visible',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md72',1,'']]],
   ['not_20working_52',['Logger Not Working',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md73',1,'']]],
@@ -59,7 +59,7 @@ var searchData=
   ['notificationaction_56',['NotificationAction',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a7402a395cd8cfd2043693aa092afca8e',1,'ui::qt::utils::NotificationManager']]],
   ['notificationhistory_57',['notificationHistory',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a2605dfe550dcf9d7917a6047a3f73cd3',1,'ui::qt::utils::NotificationManager']]],
   ['notificationhistorychanged_58',['NotificationHistoryChanged',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#afde9d6f8c237c3c2ea4153f6d112cbdc',1,'ui::qt::utils::NotificationManager']]],
-  ['notificationmanager_59',['notificationmanager',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a246a97c66312e076584889f83db56d92',1,'ui::qt::utils::NotificationManager::NotificationManager()'],['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html',1,'ui::qt::utils::NotificationManager']]],
+  ['notificationmanager_59',['notificationmanager',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html',1,'ui::qt::utils::NotificationManager'],['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a246a97c66312e076584889f83db56d92',1,'ui::qt::utils::NotificationManager::NotificationManager()']]],
   ['notificationmanager_2ecpp_60',['NotificationManager.cpp',['../d9/d54/NotificationManager_8cpp.html',1,'']]],
   ['notificationmanager_2ehpp_61',['NotificationManager.hpp',['../d5/da5/NotificationManager_8hpp.html',1,'']]],
   ['notificationreceived_62',['NotificationReceived',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a6737be7c7c389f78d3f8d460b42e577d',1,'ui::qt::utils::NotificationManager']]],
@@ -74,5 +74,6 @@ var searchData=
   ['notifyprogressupdated_71',['NotifyProgressUpdated',['../d3/d8b/classparser_1_1IDataParser.html#a596df39e4d90cad4eb364aa5382ab51c',1,'parser::IDataParser']]],
   ['notimplemented_72',['NotImplemented',['../da/d7e/namespaceerror.html#ac1e56f1d20af4ead715f13a35f4f73f2a997ca4ce119685f40f03a9a8a6c5346e',1,'error']]],
   ['notterms_73',['notTerms',['../de/dd6/structui_1_1qt_1_1utils_1_1SearchEngine_1_1AdvancedQuery.html#a7feabd20f2a487f7dc653efdf652741e',1,'ui::qt::utils::SearchEngine::AdvancedQuery']]],
-  ['nsis_20windows_74',['Example Installation Script (NSIS - Windows)',['../de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md536',1,'']]]
+  ['nsis_20windows_74',['Example Installation Script (NSIS - Windows)',['../de/d6a/md_docs_2INSTALLATION__MANIFEST.html#autotoc_md536',1,'']]],
+  ['numeric_75',['numeric',['../d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html#a44778da143ae05c70274412a60460176',1,'ui::qt::EventsTableModel::SortKey']]]
 ];

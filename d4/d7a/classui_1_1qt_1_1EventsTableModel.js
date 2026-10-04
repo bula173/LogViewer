@@ -1,7 +1,9 @@
 var classui_1_1qt_1_1EventsTableModel =
 [
     [ "ColumnFilter", "d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html", "d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter" ],
+    [ "SortKey", "d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html", "d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey" ],
     [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a9607a1a9a9a386c8708b5d0ef24bdef2", null ],
+    [ "AppendSortedRows", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#aada700f592bb9f49d4dd1513a147899c", null ],
     [ "ApplyEffectiveFilter", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#af20a78ddc10221983269417c9929805e", null ],
     [ "ClearColumnFilter", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#afc68c7aad5cfca2ebf7f6026ad579cf9", null ],
     [ "ClearColumnFilters", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a4d2daa1b8e7ee46620eb741a8868c5dc", null ],
@@ -11,6 +13,7 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "ColumnFiltersChanged", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a88be7742c9bfcd8ed76af6e060b16f6f", null ],
     [ "ColumnFilterValues", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a5b38b8b571e264b27565db48c6ad43bf", null ],
     [ "ColumnWidths", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#aa6372acf73c898db5280effa2a82039a", null ],
+    [ "CompareSortKeys", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a5ff33072356eeb38334b28b462712aae", null ],
     [ "ComposeCellText", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a30bbf5764883f206e6b73226e6600248", null ],
     [ "data", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496", null ],
     [ "DistinctColumnValues", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3b26511183135c527afd3aea8f2700e5", null ],
@@ -22,6 +25,7 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "headerData", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4", null ],
     [ "IsColumnFilterExclusion", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3f42036491a0a8d5a0efb15a566ecbf3", null ],
     [ "IsFilteringActive", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a860b41d15c88fe8820f216def1d8caec", null ],
+    [ "MakeSortKey", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a1619c129f0005b6de1cc890b5a9d93fe", null ],
     [ "MatchCount", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a0f0222e7436f9c94bc58df368523c75c", null ],
     [ "MatchedRows", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac32511ef2268583db6f7f0a37d652f17", null ],
     [ "PassesColumnFilters", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#af8d8a5007a453fcbe38fb7b3723d677c", null ],
@@ -43,6 +47,7 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "ShouldShowOriginalIdColumn", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab6eab7b06ebf9411b1ba015786b2883b", null ],
     [ "ShouldShowSourceColumn", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac45a40b6de581a04ecca19b80c690f66", null ],
     [ "sort", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab68e437007182da65aff5bd588d88b8e", null ],
+    [ "SortBefore", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a7a128e17e65bc8fc4ce24bd6b448e403", null ],
     [ "SortIndices", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a88095522d02a3c21a4f05c9714437e38", null ],
     [ "StoreColumnFilter", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#aea38b0f7b9d1bfd6892eb81eaed7fab3", null ],
     [ "SyncWithContainer", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a18fa92b450a80bd058e6ec52c18f10c4", null ],
@@ -54,6 +59,7 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "m_events", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a5ea02718fe7a1ce8c5bdb206ddd775f3", null ],
     [ "m_filteredIndices", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a0ad3cf5f0c16f3661ac9428ec7b98ece", null ],
     [ "m_filteringActive", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a3089850fc78e758cd5e0c2f17c2dcf10", null ],
+    [ "m_fullSortedCount", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a27efc8934fea6332b61a644919ed93a0", null ],
     [ "m_hasSort", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#af364c4fd1311efc400948ca4f22d44ba", null ],
     [ "m_hasSourceColumn", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#aa3cbd5b31c988dbaa53a30321e8b6292", null ],
     [ "m_matchedRows", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a19a9319e5c276a8c8084efeb32b3e8cd", null ],
@@ -65,5 +71,6 @@ var classui_1_1qt_1_1EventsTableModel =
     [ "m_sortMergeSource", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ab0ad72ab2aea95ba658b169ba4110aca", null ],
     [ "m_sortName", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a1471d6aa27bce45d38196acb108a2884", null ],
     [ "m_sortOrder", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6b4e92ce7ecfbd2dafd7fc399f3d89fc", null ],
-    [ "m_visibleColumnIndices", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a91b3c0fae90ee2b60e08651f3eadd895", null ]
+    [ "m_visibleColumnIndices", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a91b3c0fae90ee2b60e08651f3eadd895", null ],
+    [ "m_visibleFilterKeys", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a91667801facf6239561f7d3bed22aee2", null ]
 ];

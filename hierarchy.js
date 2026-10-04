@@ -272,6 +272,7 @@ var hierarchy =
     [ "ui::qt::utils::SessionManager::SessionState", "d9/d8b/structui_1_1qt_1_1utils_1_1SessionManager_1_1SessionState.html", null ],
     [ "ui::qt::ShortcutInfo", "d3/da1/structui_1_1qt_1_1ShortcutInfo.html", null ],
     [ "ui::qt::ShortcutManager", "db/d66/classui_1_1qt_1_1ShortcutManager.html", null ],
+    [ "ui::qt::EventsTableModel::SortKey", "d0/d8f/structui_1_1qt_1_1EventsTableModel_1_1SortKey.html", null ],
     [ "ui::qt::TimeRangeFilterPanel::State", "d7/d4c/structui_1_1qt_1_1TimeRangeFilterPanel_1_1State.html", null ],
     [ "ui::qt::StatRow", "d9/d3b/structui_1_1qt_1_1StatRow.html", null ],
     [ "ui::qt::StatsSection", "d2/d71/structui_1_1qt_1_1StatsSection.html", null ],
