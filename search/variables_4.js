@@ -17,7 +17,7 @@ var searchData=
   ['eventssincelastnotify_14',['eventsSinceLastNotify',['../de/d53/structparser_1_1ParserState.html#a7eb153e36625b35cd82669facc0e24e9',1,'parser::ParserState']]],
   ['eventtype_15',['eventType',['../dc/d0f/structparser_1_1EvlogTemplate.html#a8126711a25349c5396a8f21bdace6929',1,'parser::EvlogTemplate']]],
   ['exception_16',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
-  ['exclude_17',['exclude',['../d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html#ad3b316384d5db564c2a6a3a20fa7bf4d',1,'ui::qt::EventsTableModel::ColumnFilter']]],
+  ['exclude_17',['exclude',['../d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html#ad3b316384d5db564c2a6a3a20fa7bf4d',1,'ui::qt::EventsTableModel::ColumnFilter::exclude'],['../d1/d43/structui_1_1qt_1_1quick__filters_1_1ColumnFilterSpec.html#af34531b3599df5e59aef7d9ed2ea6527',1,'ui::qt::quick_filters::ColumnFilterSpec::exclude']]],
   ['expanded_18',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
   ['expectationmarker_19',['expectationMarker',['../d7/d10/structanalyzer_1_1TestMarkerRules.html#ae90ead8440054d021e7f89203bcf0323',1,'analyzer::TestMarkerRules']]],
   ['ext_20',['ext',['../db/d5c/structui_1_1qt_1_1MainWindow_1_1FileTypeChoice.html#a18a709ae8e5033715b29b50e5201da14',1,'ui::qt::MainWindow::FileTypeChoice']]],

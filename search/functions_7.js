@@ -23,7 +23,7 @@ var searchData=
   ['handleremove_20',['handleremove',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a21bce09e541db33e7c4d53f969964611',1,'ui::qt::ActorDefinitionsPanel::HandleRemove()'],['../d8/db0/classui_1_1qt_1_1FiltersPanel.html#a140e1c44f5d2529913cc06e89c440ccd',1,'ui::qt::FiltersPanel::HandleRemove()']]],
   ['handleresetall_21',['HandleResetAll',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a203811f940845fede43b71ab6dba19a8',1,'ui::qt::ShortcutsDialog']]],
   ['handleresetselected_22',['HandleResetSelected',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#a91e3ebecdfd9e6f4b96ede2b36f98acc',1,'ui::qt::ShortcutsDialog']]],
-  ['handlesave_23',['handlesave',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631',1,'ui::qt::FilterProfilesPanel::HandleSave()'],['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aca52edd7302be021fba38058b2ff38a3',1,'ui::qt::ActorDefinitionsPanel::HandleSave()']]],
+  ['handlesave_23',['handlesave',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#aca52edd7302be021fba38058b2ff38a3',1,'ui::qt::ActorDefinitionsPanel::HandleSave()'],['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#aac8e7576b9ae48cbb8d287a0b28db631',1,'ui::qt::FilterProfilesPanel::HandleSave()']]],
   ['handlesaveas_24',['handlesaveas',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#a856446ae8b57c389ce142f516ba72a2f',1,'ui::qt::ActorDefinitionsPanel::HandleSaveAs()'],['../d8/db0/classui_1_1qt_1_1FiltersPanel.html#a4f5a113882ab9832ab32596c55b3fc02',1,'ui::qt::FiltersPanel::HandleSaveAs()']]],
   ['handleselectionchanged_25',['handleselectionchanged',['../dc/ddc/classui_1_1qt_1_1ActorDefinitionsPanel.html#affe4b683084b7c5c49f60727743664bb',1,'ui::qt::ActorDefinitionsPanel::HandleSelectionChanged()'],['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a590b404581956bd05da916946aac11b4',1,'ui::qt::FilterProfilesPanel::HandleSelectionChanged()'],['../d8/db0/classui_1_1qt_1_1FiltersPanel.html#aad4d9b1b3d553ca387f080323819748b',1,'ui::qt::FiltersPanel::HandleSelectionChanged()']]],
   ['handlestandardbindings_26',['handleStandardBindings',['../dd/ddc/classui_1_1qt_1_1utils_1_1KeyboardNavigationManager.html#ac359189fb1c26cc3dac560c811c41e97',1,'ui::qt::utils::KeyboardNavigationManager']]],
@@ -44,9 +44,10 @@ var searchData=
   ['hasprofile_41',['HasProfile',['../da/d47/classui_1_1qt_1_1FilterProfilesPanel.html#a783d3129a4eef46c22020c9f4b209680',1,'ui::qt::FilterProfilesPanel']]],
   ['hasstaleindices_42',['HasStaleIndices',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#ac506ae2c12ad097fe34c4e3127bbea4a',1,'ui::qt::EventsTableModel']]],
   ['hastest_43',['HasTest',['../d8/d05/structanalyzer_1_1TestOutline.html#a898b343bb4713a79801be69e2d83bc4c',1,'analyzer::TestOutline']]],
-  ['hastranslation_44',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
-  ['headerdata_45',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
-  ['hexbyte_46',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
-  ['hexdump_47',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
-  ['hextocolor_48',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
+  ['hastimewindow_44',['HasTimeWindow',['../d6/d26/classui_1_1qt_1_1EventsTableView.html#a1c4dcc42e890446b1e2aa7ed4effd813',1,'ui::qt::EventsTableView']]],
+  ['hastranslation_45',['HasTranslation',['../d9/da7/classconfig_1_1FieldTranslator.html#ae8a082c2d57114ca2a49bd0da43736c0',1,'config::FieldTranslator']]],
+  ['headerdata_46',['headerData',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a779cb429863558ebce4a71b45c1da3e4',1,'ui::qt::EventsTableModel']]],
+  ['hexbyte_47',['HexByte',['../d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a564223e084af2eab006f40b37f13e7f2',1,'parser::anonymous_namespace{AscParser.cpp}']]],
+  ['hexdump_48',['hexdump',['../d0/dd5/namespaceparser.html#a9d2944ff978360bff17dbd32fca00e5c',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=16)'],['../d0/dd5/namespaceparser.html#a53cd301dc67cfe802c870fe58ce034c2',1,'parser::HexDump(const uint8_t *data, size_t size, size_t maxBytes=32)']]],
+  ['hextocolor_49',['HexToColor',['../d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html#a278df8762cc939558d09df58a27c932c',1,'ui::qt::StructuredConfigDialog']]]
 ];

@@ -7,5 +7,7 @@ var dir_83482f495c8c3021c8e3b2cb0c8bb7f9 =
     [ "EventsTableView.cpp", "d5/dff/EventsTableView_8cpp.html", "d5/dff/EventsTableView_8cpp" ],
     [ "EventsTableView.hpp", "da/dc1/EventsTableView_8hpp.html", "da/dc1/EventsTableView_8hpp" ],
     [ "FilterHeaderView.cpp", "d2/dbc/FilterHeaderView_8cpp.html", "d2/dbc/FilterHeaderView_8cpp" ],
-    [ "FilterHeaderView.hpp", "da/d06/FilterHeaderView_8hpp.html", "da/d06/FilterHeaderView_8hpp" ]
+    [ "FilterHeaderView.hpp", "da/d06/FilterHeaderView_8hpp.html", "da/d06/FilterHeaderView_8hpp" ],
+    [ "QuickFilters.cpp", "d7/d9a/QuickFilters_8cpp.html", "d7/d9a/QuickFilters_8cpp" ],
+    [ "QuickFilters.hpp", "dc/d28/QuickFilters_8hpp.html", "dc/d28/QuickFilters_8hpp" ]
 ];

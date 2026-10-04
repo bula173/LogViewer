@@ -27,8 +27,10 @@ var searchData=
   ['quick_20navigation_24',['Quick Navigation',['../d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md388',1,'']]],
   ['quick_20reference_25',['LogViewer SDK Quick Reference',['../da/d87/md_docs_2SDK__QUICK__REFERENCE.html',1,'']]],
   ['quick_20reference_20guide_26',['LogViewer: Developer Quick Reference Guide',['../d4/d61/md_docs_2DEVELOPER__QUICK__START.html',1,'']]],
-  ['quick_20start_27',['quick start',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md351',1,'Quick Start'],['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md443',1,'Quick Start'],['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236',1,'Quick Start'],['../index.html#autotoc_md9',1,'Quick Start'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md601',1,'Quick Start']]],
+  ['quick_20start_27',['quick start',['../d5/d22/md_docs_2CPPCHECK.html#autotoc_md351',1,'Quick Start'],['../d8/ddc/md_docs_2BUILD__GUIDE.html#autotoc_md236',1,'Quick Start'],['../d8/d7b/md_docs_2DEVELOPMENT.html#autotoc_md443',1,'Quick Start'],['../index.html#autotoc_md9',1,'Quick Start'],['../d1/d53/md_docs_2PLUGIN__SYSTEM.html#autotoc_md601',1,'Quick Start']]],
   ['quick_20start_205_20minutes_28',['Quick Start (5 Minutes)',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md683',1,'']]],
-  ['quotecsvfield_29',['QuoteCsvField',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html#a2e225de5c983c19212c9b5209df9575a',1,'ui::qt::ExportManager::anonymous_namespace{ExportManager.cpp}']]],
-  ['qwidget_30',['QWidget',['../d8/ded/classQWidget.html',1,'']]]
+  ['quickfilters_2ecpp_29',['QuickFilters.cpp',['../d7/d9a/QuickFilters_8cpp.html',1,'']]],
+  ['quickfilters_2ehpp_30',['QuickFilters.hpp',['../dc/d28/QuickFilters_8hpp.html',1,'']]],
+  ['quotecsvfield_31',['QuoteCsvField',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html#a2e225de5c983c19212c9b5209df9575a',1,'ui::qt::ExportManager::anonymous_namespace{ExportManager.cpp}']]],
+  ['qwidget_32',['QWidget',['../d8/ded/classQWidget.html',1,'']]]
 ];

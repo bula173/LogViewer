@@ -132,6 +132,11 @@ var annotated_dup =
         [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", [
           [ "TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem" ]
         ] ],
+        [ "quick_filters", "d4/d63/namespaceui_1_1qt_1_1quick__filters.html", [
+          [ "ActorColumns", "dd/d5f/structui_1_1qt_1_1quick__filters_1_1ActorColumns.html", "dd/d5f/structui_1_1qt_1_1quick__filters_1_1ActorColumns" ],
+          [ "ColumnFilterSpec", "d1/d43/structui_1_1qt_1_1quick__filters_1_1ColumnFilterSpec.html", "d1/d43/structui_1_1qt_1_1quick__filters_1_1ColumnFilterSpec" ],
+          [ "TimeAnchor", "db/d40/structui_1_1qt_1_1quick__filters_1_1TimeAnchor.html", "db/d40/structui_1_1qt_1_1quick__filters_1_1TimeAnchor" ]
+        ] ],
         [ "utils", "dd/d73/namespaceui_1_1qt_1_1utils.html", [
           [ "AppSettings", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings.html", "d9/df0/classui_1_1qt_1_1utils_1_1AppSettings" ],
           [ "EventGroupManager", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager.html", "dd/d37/classui_1_1qt_1_1utils_1_1EventGroupManager" ],

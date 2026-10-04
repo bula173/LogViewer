@@ -1,11 +1,14 @@
 var classui_1_1qt_1_1EventsTableView =
 [
     [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a1236d6317442e8eba476faced5e006a7", null ],
+    [ "~EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a6c71c5b2b82f1b3a1dcc4b29b8825901", null ],
+    [ "AddQuickFilterActions", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a3978bf155b43da69632d562a5b72e5f3", null ],
     [ "AddToScenarioRequested", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a9e3c265f4df320d9c953f028603c3592", null ],
     [ "BookmarkRequested", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a437d78877878f4be619411e2e2a954b0", null ],
     [ "CaptureSelectionBeforeReset", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aaa2f3bfb79e6f1d2d776aea5f6fc0671", null ],
     [ "ClearColumnFilters", "d6/d26/classui_1_1qt_1_1EventsTableView.html#af108ffcf117730d0d6a48c5161d15bde", null ],
     [ "ClearFilter", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aca2687c5a3c9afb99c99c18154cf537c", null ],
+    [ "ClearTimeWindow", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a888603fc9345cc96a146be9f247f246e", null ],
     [ "ConnectSelectionSignals", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a1a677a95e7674a8f12c30642fd340b16", null ],
     [ "CopySelectedRowsAsCsv", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ad935b090ba82bc045a13ed5e8b07d5ca", null ],
     [ "CopySelectedRowsAsJson", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a4501b1ef99ca38cd83102c5503f86374", null ],
@@ -15,6 +18,7 @@ var classui_1_1qt_1_1EventsTableView =
     [ "GetBaseFilteredIndices", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ac7470526e3d1dea8b6941693e1d53de0", null ],
     [ "GetFilteredIndices", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a409eade5a30a8decff92f33539f2e0e4", null ],
     [ "HasColumnFilters", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ad052011ad51de818bd5a6e0620d02774", null ],
+    [ "HasTimeWindow", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a1c4dcc42e890446b1e2aa7ed4effd813", null ],
     [ "InitializeView", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a13b0d98e213448d3f4a2fe4e5572f890", null ],
     [ "IsFilterActive", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a214a51fd382ae0d5a80c4525ac7f04b8", null ],
     [ "JumpToTimestamp", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a5f3eb6a67d149d861d4a95ebdfc5686e", null ],
@@ -43,6 +47,7 @@ var classui_1_1qt_1_1EventsTableView =
     [ "SetSearchTerm", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a14ed4ff1d49eeec7709cad19154f4f75", null ],
     [ "ShowColumnFilterPopup", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a26fdf075db5d0c74afd18bb7a5e828cc", null ],
     [ "ShowContextMenu", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a9431d9fa28cc1148dccdbd8e1741f28b", null ],
+    [ "ShowTimeWindow", "d6/d26/classui_1_1qt_1_1EventsTableView.html#af9ce19799c24c540ea1001331c1dc384", null ],
     [ "SyncScrollTo", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a8d23e065172b9232d098251ab93f3e32", null ],
     [ "UpdateColors", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a12913201ba2ec7d3a7c97d4fa9bd30a9", null ],
     [ "m_currentMatchActual", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a00c64392fc68587e5d0e8641565a95fa", null ],
@@ -53,5 +58,6 @@ var classui_1_1qt_1_1EventsTableView =
     [ "m_resetCurrentActual", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ac335dc2fe2e2ee2b1416a58ae146ee89", null ],
     [ "m_resetGeneration", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ab29938af63ffaf2ba504b5dbf4cc8194", null ],
     [ "m_resetSelectedActual", "d6/d26/classui_1_1qt_1_1EventsTableView.html#a5e1c9e16c45eb7dfebd7c027e079badb", null ],
-    [ "m_restoringSelection", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aa3b476d9edb679b7e8a6edd02883776b", null ]
+    [ "m_restoringSelection", "d6/d26/classui_1_1qt_1_1EventsTableView.html#aa3b476d9edb679b7e8a6edd02883776b", null ],
+    [ "m_timeWindow", "d6/d26/classui_1_1qt_1_1EventsTableView.html#ae469a1ee42659a266389477053702c1d", null ]
 ];

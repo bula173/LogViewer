@@ -1,7 +1,7 @@
 var searchData=
 [
   ['want_20to_20🎯_0',['I Just Want To... 🎯',['../d4/d61/md_docs_2DEVELOPER__QUICK__START.html#autotoc_md389',1,'']]],
-  ['warn_1',['warn',['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a9dbf647322b1659fbaac669150ae9d87',1,'ui::qt::StartupSplash::Warn()'],['../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306',1,'util::Logger::Warn()'],['../d3/dc4/classutil_1_1ILogger.html#af97d064f78d61461c67e070128039700',1,'util::ILogger::warn()'],['../dd/d6b/classutil_1_1SpdLogger.html#a1ecb66fe1e01fd7cad9c598a1c725440',1,'util::SpdLogger::warn()']]],
+  ['warn_1',['warn',['../d3/dc4/classutil_1_1ILogger.html#af97d064f78d61461c67e070128039700',1,'util::ILogger::warn()'],['../dd/d6b/classutil_1_1SpdLogger.html#a1ecb66fe1e01fd7cad9c598a1c725440',1,'util::SpdLogger::warn()'],['../d7/dda/classui_1_1qt_1_1StartupSplash.html#a9dbf647322b1659fbaac669150ae9d87',1,'ui::qt::StartupSplash::Warn()'],['../d2/d44/classutil_1_1Logger.html#a1da0c45ed0b206fa66817ed595e60306',1,'util::Logger::Warn()']]],
   ['warning_2',['warning',['../d4/df3/classui_1_1qt_1_1utils_1_1NotificationManager.html#a561e0f9b1ba38dd23aaff0c4ab124e34a0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'ui::qt::utils::NotificationManager::Warning'],['../d6/d72/namespaceutil.html#ad3d734b58f65579c0f948cc72df43eb7a0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'util::Warning']]],
   ['warningcolor_3',['warningColor',['../dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html#a0369ae5862f0f80742fc03c1abc3c8de',1,'ui::qt::utils::ThemeManager::ColorScheme']]],
   ['warningcount_4',['warningCount',['../d1/d31/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportStatistics.html#ad36dffb4ae4785dbbc0ee76a86d74a7f',1,'ui::qt::utils::ReportGenerator::ReportStatistics']]],

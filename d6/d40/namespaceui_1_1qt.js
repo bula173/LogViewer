@@ -91,6 +91,7 @@ var namespaceui_1_1qt =
       [ "kMsgFields", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aec6290a54fa4dbb87977f185c71dbeb2", null ],
       [ "kTsFields", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html#aa30f57968bd4b4c632f8c9fa7968faa6", null ]
     ] ],
+    [ "quick_filters", "d4/d63/namespaceui_1_1qt_1_1quick__filters.html", "d4/d63/namespaceui_1_1qt_1_1quick__filters" ],
     [ "utils", "dd/d73/namespaceui_1_1qt_1_1utils.html", "dd/d73/namespaceui_1_1qt_1_1utils" ],
     [ "widgets", "d0/d00/namespaceui_1_1qt_1_1widgets.html", "d0/d00/namespaceui_1_1qt_1_1widgets" ],
     [ "ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", "de/db8/structui_1_1qt_1_1ActorDefinition" ],

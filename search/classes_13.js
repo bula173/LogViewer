@@ -10,11 +10,12 @@ var searchData=
   ['teststepspanel_7',['TestStepsPanel',['../d5/de7/classui_1_1qt_1_1TestStepsPanel.html',1,'ui::qt']]],
   ['themecustomizationdialog_8',['ThemeCustomizationDialog',['../d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html',1,'ui::qt']]],
   ['thememanager_9',['ThemeManager',['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html',1,'ui::qt::utils']]],
-  ['timelinechartpanel_10',['TimelineChartPanel',['../d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html',1,'ui::qt']]],
-  ['timerangefilterpanel_11',['TimeRangeFilterPanel',['../d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html',1,'ui::qt']]],
-  ['tracetreeitem_12',['TraceTreeItem',['../d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html',1,'ui::qt::anonymous_namespace{TraceViewerPanel.cpp}']]],
-  ['traceviewerpanel_13',['TraceViewerPanel',['../dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html',1,'ui::qt']]],
-  ['trackconditionplugin_14',['TrackConditionPlugin',['../d4/d6b/classconfig_1_1TrackConditionPlugin.html',1,'config']]],
-  ['translationresult_15',['TranslationResult',['../dd/d7c/structconfig_1_1TranslationResult.html',1,'config']]],
-  ['typefilterview_16',['TypeFilterView',['../d3/df9/classui_1_1qt_1_1TypeFilterView.html',1,'ui::qt']]]
+  ['timeanchor_10',['TimeAnchor',['../db/d40/structui_1_1qt_1_1quick__filters_1_1TimeAnchor.html',1,'ui::qt::quick_filters']]],
+  ['timelinechartpanel_11',['TimelineChartPanel',['../d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html',1,'ui::qt']]],
+  ['timerangefilterpanel_12',['TimeRangeFilterPanel',['../d1/d76/classui_1_1qt_1_1TimeRangeFilterPanel.html',1,'ui::qt']]],
+  ['tracetreeitem_13',['TraceTreeItem',['../d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html',1,'ui::qt::anonymous_namespace{TraceViewerPanel.cpp}']]],
+  ['traceviewerpanel_14',['TraceViewerPanel',['../dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html',1,'ui::qt']]],
+  ['trackconditionplugin_15',['TrackConditionPlugin',['../d4/d6b/classconfig_1_1TrackConditionPlugin.html',1,'config']]],
+  ['translationresult_16',['TranslationResult',['../dd/d7c/structconfig_1_1TranslationResult.html',1,'config']]],
+  ['typefilterview_17',['TypeFilterView',['../d3/df9/classui_1_1qt_1_1TypeFilterView.html',1,'ui::qt']]]
 ];

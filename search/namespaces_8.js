@@ -23,11 +23,13 @@ var searchData=
   ['ui_3a_3aqt_3a_3aexportmanager_20',['ExportManager',['../dd/d0e/namespaceui_1_1qt_1_1ExportManager.html',1,'ui::qt']]],
   ['ui_3a_3aqt_3a_3aexportmanager_3a_3aanonymous_5fnamespace_7bexportmanager_2ecpp_7d_21',['anonymous_namespace{ExportManager.cpp}',['../d3/d4c/namespaceui_1_1qt_1_1ExportManager_1_1anonymous__namespace_02ExportManager_8cpp_03.html',1,'ui::qt::ExportManager']]],
   ['ui_3a_3aqt_3a_3apanel_5futils_22',['panel_utils',['../da/d7a/namespaceui_1_1qt_1_1panel__utils.html',1,'ui::qt']]],
-  ['ui_3a_3aqt_3a_3autils_23',['utils',['../dd/d73/namespaceui_1_1qt_1_1utils.html',1,'ui::qt']]],
-  ['ui_3a_3aqt_3a_3autils_3a_3aanonymous_5fnamespace_7bsessionmanager_2ecpp_7d_24',['anonymous_namespace{SessionManager.cpp}',['../d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html',1,'ui::qt::utils']]],
-  ['ui_3a_3aqt_3a_3awidgets_25',['widgets',['../d0/d00/namespaceui_1_1qt_1_1widgets.html',1,'ui::qt']]],
-  ['updates_26',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
-  ['util_27',['util',['../d6/d72/namespaceutil.html',1,'']]],
-  ['util_3a_3aportable_28',['portable',['../d8/d0b/namespaceutil_1_1portable.html',1,'util']]],
-  ['util_3a_3aportable_3a_3aanonymous_5fnamespace_7bportablemode_2ecpp_7d_29',['anonymous_namespace{PortableMode.cpp}',['../d8/d6e/namespaceutil_1_1portable_1_1anonymous__namespace_02PortableMode_8cpp_03.html',1,'util::portable']]]
+  ['ui_3a_3aqt_3a_3aquick_5ffilters_23',['quick_filters',['../d4/d63/namespaceui_1_1qt_1_1quick__filters.html',1,'ui::qt']]],
+  ['ui_3a_3aqt_3a_3aquick_5ffilters_3a_3aanonymous_5fnamespace_7bquickfilters_2ecpp_7d_24',['anonymous_namespace{QuickFilters.cpp}',['../dd/dc2/namespaceui_1_1qt_1_1quick__filters_1_1anonymous__namespace_02QuickFilters_8cpp_03.html',1,'ui::qt::quick_filters']]],
+  ['ui_3a_3aqt_3a_3autils_25',['utils',['../dd/d73/namespaceui_1_1qt_1_1utils.html',1,'ui::qt']]],
+  ['ui_3a_3aqt_3a_3autils_3a_3aanonymous_5fnamespace_7bsessionmanager_2ecpp_7d_26',['anonymous_namespace{SessionManager.cpp}',['../d6/d5d/namespaceui_1_1qt_1_1utils_1_1anonymous__namespace_02SessionManager_8cpp_03.html',1,'ui::qt::utils']]],
+  ['ui_3a_3aqt_3a_3awidgets_27',['widgets',['../d0/d00/namespaceui_1_1qt_1_1widgets.html',1,'ui::qt']]],
+  ['updates_28',['updates',['../d5/d16/namespaceupdates.html',1,'']]],
+  ['util_29',['util',['../d6/d72/namespaceutil.html',1,'']]],
+  ['util_3a_3aportable_30',['portable',['../d8/d0b/namespaceutil_1_1portable.html',1,'util']]],
+  ['util_3a_3aportable_3a_3aanonymous_5fnamespace_7bportablemode_2ecpp_7d_31',['anonymous_namespace{PortableMode.cpp}',['../d8/d6e/namespaceutil_1_1portable_1_1anonymous__namespace_02PortableMode_8cpp_03.html',1,'util::portable']]]
 ];

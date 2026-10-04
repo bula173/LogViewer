@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "ui::qt::anonymous_namespace{CanStatisticsStrategy.cpp}::Accum", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html", null ],
+    [ "ui::qt::quick_filters::ActorColumns", "dd/d5f/structui_1_1qt_1_1quick__filters_1_1ActorColumns.html", null ],
     [ "ui::qt::ActorsPanel::ActorData", "d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html", null ],
     [ "ui::qt::ActorDefinition", "de/db8/structui_1_1qt_1_1ActorDefinition.html", null ],
     [ "analyzer::ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", null ],
@@ -18,6 +19,7 @@ var hierarchy =
     [ "config::ColumnConfig", "db/deb/structconfig_1_1ColumnConfig.html", null ],
     [ "ui::qt::ColumnDistinctValues", "d2/d83/structui_1_1qt_1_1ColumnDistinctValues.html", null ],
     [ "ui::qt::EventsTableModel::ColumnFilter", "d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html", null ],
+    [ "ui::qt::quick_filters::ColumnFilterSpec", "d1/d43/structui_1_1qt_1_1quick__filters_1_1ColumnFilterSpec.html", null ],
     [ "ui::qt::ColumnValueCount", "d1/d7c/structui_1_1qt_1_1ColumnValueCount.html", null ],
     [ "ai::Config", "db/de8/structai_1_1Config.html", null ],
     [ "config::Config", "d2/d5e/classconfig_1_1Config.html", null ],
@@ -292,6 +294,7 @@ var hierarchy =
     [ "analyzer::TestOutline", "d8/d05/structanalyzer_1_1TestOutline.html", null ],
     [ "analyzer::TestStep", "d5/d48/structanalyzer_1_1TestStep.html", null ],
     [ "ui::qt::utils::ThemeManager", "d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html", null ],
+    [ "ui::qt::quick_filters::TimeAnchor", "db/d40/structui_1_1qt_1_1quick__filters_1_1TimeAnchor.html", null ],
     [ "config::TranslationResult", "dd/d7c/structconfig_1_1TranslationResult.html", null ],
     [ "ui::UiServices", "da/dab/classui_1_1UiServices.html", null ],
     [ "updates::UpdateCheckResult", "dd/d5c/structupdates_1_1UpdateCheckResult.html", null ],
