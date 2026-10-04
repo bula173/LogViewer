@@ -76,6 +76,37 @@ std::filesystem::path GetInstalledEtcDir()
     }
 }
 
+// Writes @p content to a sibling temporary file and renames it over @p path,
+// so a crash or a full disk never leaves a truncated config.json behind.
+bool WriteFileAtomically(const std::filesystem::path& path, const std::string& content)
+{
+    std::filesystem::path tmp = path;
+    tmp += ".tmp";
+    std::error_code ec;
+    {
+        std::ofstream out(tmp, std::ios::trunc);
+        if (out.is_open())
+        {
+            out << content;
+            out.flush();
+        }
+        if (!out.is_open() || !out)
+        {
+            out.close();
+            std::filesystem::remove(tmp, ec);
+            return false;
+        }
+    }
+    std::filesystem::rename(tmp, path, ec);
+    if (ec)
+    {
+        util::Logger::Error("Cannot replace '{}': {}", path.string(), ec.message());
+        std::filesystem::remove(tmp, ec);
+        return false;
+    }
+    return true;
+}
+
 } // namespace (anonymous)
 
 // Public: directory that holds plugin ZIPs bundled with the installer.
@@ -228,8 +259,7 @@ void Config::LoadConfig()
                         };
 
                         // Save merged config back
-                        std::ofstream outFile(m_configFilePath);
-                        if (!outFile.is_open())
+                        if (!WriteFileAtomically(m_configFilePath, merged.dump(4)))
                         {
                             util::Logger::Error(
                                 "Config migration: cannot write merged config to '{}'",
@@ -237,8 +267,6 @@ void Config::LoadConfig()
                         }
                         else
                         {
-                            outFile << merged.dump(4);
-                            outFile.close();
                             util::Logger::Info("Config migrated from {} to {} with new fields",
                                 userVersion.asShortStr(), currentVersion.asShortStr());
                         }
@@ -262,15 +290,35 @@ void Config::LoadConfig()
     if (configFile.is_open())
     {
         json j;
-        configFile >> j;
+        try
+        {
+            configFile >> j;
+        }
+        catch (const json::parse_error& e)
+        {
+            // Keep the in-memory settings; SaveConfig() backs the file up
+            // before it writes, so the user's broken file is not lost.
+            m_loadFailed = true;
+            util::Logger::Error("Config file '{}' is not valid JSON: {}", m_configFilePath, e.what());
+            throw;
+        }
         util::Logger::Info("Loaded config from: {}", m_configFilePath);
 
         // Check if the JSON data is valid
         if (j.is_null())
         {
+            m_loadFailed = true;
             util::Logger::Error("Invalid JSON data in config file.");
             return;
         }
+        m_loadFailed = false;
+
+        // A reload must replace, not append to, what the previous load read.
+        columns.clear();
+        columnColors.clear();
+        itemHighlights.clear();
+        columnOrder.clear();
+        columnWidths.clear();
 
         GetColorConfig(j);
         GetLoggingConfig(j);
@@ -400,9 +448,29 @@ void Config::SetupLogPath()
 
 void Config::SaveConfig()
 {
-    // Save the configuration to the file
-    std::ofstream configFile(m_configFilePath);
-    if (configFile.is_open())
+    // The file on disk could not be parsed when it was loaded, so memory holds
+    // defaults. Keep a copy of the user's file before replacing it.
+    if (m_loadFailed)
+    {
+        std::error_code ec;
+        const std::filesystem::path backup = m_configFilePath + ".bak";
+        if (std::filesystem::exists(m_configFilePath, ec))
+        {
+            std::filesystem::copy_file(m_configFilePath, backup,
+                std::filesystem::copy_options::overwrite_existing, ec);
+            if (ec)
+            {
+                util::Logger::Error("Not saving config: cannot back up unreadable '{}' to '{}': {}",
+                    m_configFilePath, backup.string(), ec.message());
+                return;
+            }
+            util::Logger::Warn("Backed up unreadable config '{}' to '{}'",
+                m_configFilePath, backup.string());
+        }
+        m_loadFailed = false;
+    }
+
+    // Build the JSON, then replace the file in one step.
     {
         json j;
 
@@ -474,14 +542,15 @@ void Config::SaveConfig()
             j["ui"]["columnWidths"] = columnWidths;
         }
 
-        configFile << j.dump(4); // Pretty print with 4 spaces
-        configFile.close();
-        util::Logger::Info("Saved config to: {}", m_configFilePath);
-    }
-    else
-    {
-        util::Logger::Error(
-            "Could not open config file for writing: {}", m_configFilePath);
+        if (WriteFileAtomically(m_configFilePath, j.dump(4))) // Pretty print with 4 spaces
+        {
+            util::Logger::Info("Saved config to: {}", m_configFilePath);
+        }
+        else
+        {
+            util::Logger::Error(
+                "Could not write config file: {}", m_configFilePath);
+        }
     }
 }
 

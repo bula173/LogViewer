@@ -37,6 +37,8 @@ All notable changes to LogViewer are documented here.
 - **Selection survives filter changes** — the selected rows and current event are kept when filters change or new events are appended; if the current event is filtered out, Item Details is cleared instead of showing a hidden event.
 - **Search counter** — "n of m" and Next/Previous follow the current match when the rows change instead of keeping stale counts.
 - **Column filter OK** — pressing OK in a column filter whose value list was narrowed by other filters no longer drops or widens the filter for values the list could not show.
+- **Config reload duplicated columns** — saving in Edit Config or loading a config file appended the columns, colours and highlights a second time (and the duplicated columns were saved back); a reload now replaces them.
+- **Broken config.json overwritten** — if `config.json` is not valid JSON, it is copied to `config.json.bak` before the next save replaces it, instead of being silently overwritten with defaults. Config files are now written atomically (temporary file + rename), so a crash during a save cannot leave a truncated file.
 
 ### New features
 

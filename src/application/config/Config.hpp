@@ -50,7 +50,10 @@ class Config
     Config& operator=(Config&&) = delete;
     virtual ~Config() = default;
 
+    /// Throws if the config file is not valid JSON (in-memory settings are kept).
     void LoadConfig();
+    /// Replaces the file atomically. If the last load failed to parse it, the
+    /// file is first copied to "<config>.bak" (nothing is written if that fails).
     void SaveConfig();
 
     /**
@@ -139,6 +142,7 @@ class Config
     std::string m_dictionaryFilePath {"field_dictionary.json"}; // Dictionary config path
     FieldTranslator m_fieldTranslator;                // Field value translator
     Version::Version m_configVersion;                 // Version of the config file
+    bool m_loadFailed {false};                        // Config file existed but was not valid JSON
 
   public: // xml config
     std::string appName {"LogViewer"};
