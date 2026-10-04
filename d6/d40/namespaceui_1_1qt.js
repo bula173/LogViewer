@@ -50,6 +50,7 @@ var namespaceui_1_1qt =
       [ "kColVersion", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#a03c0d88e614dd1407ba89ce84b785b15", null ],
       [ "kNumCols", "d9/dd1/namespaceui_1_1qt_1_1anonymous__namespace_02PluginManagerDialog_8cpp_03.html#aa33c5bc7fd30dee57a8fe2a0771f2c62", null ]
     ] ],
+    [ "anonymous_namespace{RunExplorerDialog.cpp}", "dd/d44/namespaceui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03.html", "dd/d44/namespaceui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03" ],
     [ "anonymous_namespace{SequenceDiagramPanel.cpp}", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html", [
       [ "kActorBoxH", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a90f8c8d194c3663ae6c6af8a8d45ac2a", null ],
       [ "kActorBoxW", "d9/d61/namespaceui_1_1qt_1_1anonymous__namespace_02SequenceDiagramPanel_8cpp_03.html#a0daafc93c7e58208d1148021204dbf49", null ],
@@ -142,6 +143,7 @@ var namespaceui_1_1qt =
     [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
     [ "PluginsPreferencesPanel", "d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel.html", "d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel" ],
     [ "PreferencesDialog", "dd/ddf/classui_1_1qt_1_1PreferencesDialog.html", "dd/ddf/classui_1_1qt_1_1PreferencesDialog" ],
+    [ "RunExplorerDialog", "d1/d14/classui_1_1qt_1_1RunExplorerDialog.html", "d1/d14/classui_1_1qt_1_1RunExplorerDialog" ],
     [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
     [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
     [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],

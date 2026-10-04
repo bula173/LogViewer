@@ -127,8 +127,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a83cf2bfb48f3c2c4176fc94580fdda86" id="r_a83cf2bfb48f3c2c4176fc94580fdda86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a83cf2bfb48f3c2c4176fc94580fdda86">ExtractJson</a> (std::string_view payload, <a class="el" href="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#ab4c7af0bd0e012a85b77f87a26f23e87">Pairs</a> &amp;pairs)</td></tr>
 <tr class="memdesc:a83cf2bfb48f3c2c4176fc94580fdda86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flat or one-level-deep JSON object; deeper values stay compact JSON text.  <br /></td></tr>
 <tr class="separator:a83cf2bfb48f3c2c4176fc94580fdda86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a620a47352f64cbf84ee5aafeca091eec" id="r_a620a47352f64cbf84ee5aafeca091eec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a620a47352f64cbf84ee5aafeca091eec">ParseHeaderLine</a> (std::string_view line, <a class="el" href="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#ab4c7af0bd0e012a85b77f87a26f23e87">Pairs</a> &amp;metadata)</td></tr>
-<tr class="separator:a620a47352f64cbf84ee5aafeca091eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -437,55 +435,6 @@ Here is the caller graph for this function:</div>
 <map name="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a51d6c73bd7e23e4c1f8a2e2f2bc68283_icgraph" id="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a51d6c73bd7e23e4c1f8a2e2f2bc68283_icgraph">
 <area shape="rect" title="Cheap sanity check that a field looks like &quot;YYYY&#45;MM&#45;DD…&quot;." alt="" coords="5,29,237,84"/>
 <area shape="poly" title=" " alt="" coords="160,18,146,11,121,8,101,10,87,15,81,21,81,29,76,29,76,19,84,10,99,5,121,3,148,6,163,14"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a620a47352f64cbf84ee5aafeca091eec" name="a620a47352f64cbf84ee5aafeca091eec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a620a47352f64cbf84ee5aafeca091eec">&#9670;&#160;</a></span>ParseHeaderLine()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void parser::anonymous_namespace{SapiLogParser.cpp}::ParseHeaderLine </td>
-          <td>(</td>
-          <td class="paramtype">std::string_view&#160;</td>
-          <td class="paramname"><em>line</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#ab4c7af0bd0e012a85b77f87a26f23e87">Pairs</a> &amp;&#160;</td>
-          <td class="paramname"><em>metadata</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Appends <code># Test Case : IL Grants …</code> as {"Test Case", "IL Grants …"}; other comment lines (rulers, the title line) are ignored. </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_cgraph.png" border="0" usemap="#ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_cgraph" alt=""/></div>
-<map name="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_cgraph" id="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_cgraph">
-<area shape="rect" title=" " alt="" coords="5,29,283,69"/>
-<area shape="poly" title=" " alt="" coords="100,30,98,20,105,10,120,5,144,3,171,6,186,13,184,18,170,11,144,8,121,10,108,15,103,21,105,28"/>
-<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="331,37,429,62"/>
-<area shape="poly" title=" " alt="" coords="283,47,317,47,317,52,283,52"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_icgraph.png" border="0" usemap="#ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_icgraph" alt=""/></div>
-<map name="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_icgraph" id="ad5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03_a620a47352f64cbf84ee5aafeca091eec_icgraph">
-<area shape="rect" title=" " alt="" coords="5,29,283,69"/>
-<area shape="poly" title=" " alt="" coords="192,18,175,11,144,8,117,10,101,15,95,21,98,28,93,30,90,20,98,10,116,5,144,3,176,5,194,13"/>
 </map>
 </div>
 

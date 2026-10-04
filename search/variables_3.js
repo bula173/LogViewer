@@ -17,5 +17,5 @@ var searchData=
   ['dlc_14',['dlc',['../d9/d4f/structparser_1_1dbc_1_1DbcMessage.html#a55f57fea209dc08d1dc17494d9b793fd',1,'parser::dbc::DbcMessage']]],
   ['dlt_5ftype_5flog_15',['DLT_TYPE_LOG',['../d0/dd5/namespaceparser.html#a30d9bde4a70ae43ab8518e2559078a63',1,'parser']]],
   ['downloadurl_16',['downloadUrl',['../db/da4/structupdates_1_1PluginUpdateInfo.html#a4fefca35d3f2ff62247a4ef87cffae81',1,'updates::PluginUpdateInfo']]],
-  ['durationus_17',['durationUs',['../d5/d48/structanalyzer_1_1TestStep.html#ae5906a8e18281cf78f92d205dc11127e',1,'analyzer::TestStep']]]
+  ['durationus_17',['durationus',['../d5/d48/structanalyzer_1_1TestStep.html#ae5906a8e18281cf78f92d205dc11127e',1,'analyzer::TestStep::durationUs'],['../d8/db4/structanalyzer_1_1TestRunEntry.html#a52a11fb84da33ba9c0b12536fec35eb3',1,'analyzer::TestRunEntry::durationUs']]]
 ];

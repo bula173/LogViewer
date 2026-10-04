@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['observerptr_0',['ObserverPtr',['../da/d30/classplugin_1_1PluginEventBus.html#a175c255e5096e88349606f6ba355587b',1,'plugin::PluginEventBus']]]
+  ['metadata_0',['Metadata',['../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a4e8059382918b4594414bf85b7ae93c9',1,'analyzer::anonymous_namespace{TestRunIndex.cpp}']]]
 ];

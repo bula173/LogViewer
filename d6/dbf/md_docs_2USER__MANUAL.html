@@ -219,6 +219,7 @@ JSON log format</h3>
 3.2 Opening a File</h2>
 <p><b>File &gt; Open</b> (Ctrl+O) opens a file-picker dialog. The dialog filters by all supported extensions. After you select a file, the application parses it in the background and displays a progress indicator in the status bar. The UI remains interactive during loading.</p>
 <p>Merging multiple files into one view is possible by opening them one after another — subsequent opens append events to the current dataset. Use <b>File &gt; Clear</b> to start fresh.</p>
+<p><b>File &gt; Open Results Folder…</b> (Ctrl+Alt+O), or dropping a folder on the window, opens the <b>Run Explorer</b> for a test-run results folder (one safeAPI <code>*__merged_logs.txt</code> per test, with Robot Framework's <code>xunit.xml</code> / <code>output.xml</code>). It lists every test in run order with its verdict, duration, entry count and failure message: the step failure that failed the test, or — when the log records no failing step, e.g. a failed suite setup — the message from <code>xunit.xml</code> (else <code>output.xml</code>). Filter by verdict, sort by any column, and tick <b>Group failures by message</b> to collapse failures that differ only in numbers. Double-click a test to load its log; <b>Open with Previous Test</b> (button or right-click) loads it merged with the test that ran just before it, to check whether that test's teardown left the system in a bad state. The folder is scanned in the background; <b>Cancel</b> stops the scan.</p>
 <h2><a class="anchor" id="autotoc_md786"></a>
 3.3 Following a Live File (Tail Mode)</h2>
 <p><b>File &gt; Follow File (Tail)</b> (Ctrl+T) watches the currently loaded log file and automatically appends new events as they are written to disk. This is useful for monitoring a running service without reopening the file manually.</p>
@@ -675,22 +676,24 @@ Plugin Details</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Ctrl+O</b>   </td><td class="markdownTableBodyNone">Open log file    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Ctrl+Alt+O</b>   </td><td class="markdownTableBodyNone">Open results folder (Run Explorer)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Ctrl+F</b>   </td><td class="markdownTableBodyNone">Focus search bar    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Enter</b> (in search bar)   </td><td class="markdownTableBodyNone">Run search    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Ctrl+G</b>   </td><td class="markdownTableBodyNone">Jump to timestamp    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Ctrl+C</b>   </td><td class="markdownTableBodyNone">Copy selected events (plain text)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Ctrl+Shift+S</b>   </td><td class="markdownTableBodyNone">Switch to Side by Side tab    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Ctrl+Z</b>   </td><td class="markdownTableBodyNone">Undo last filter change    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Ctrl+S</b>   </td><td class="markdownTableBodyNone">Save session    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Ctrl+Q</b>   </td><td class="markdownTableBodyNone">Quit application    </td></tr>
+<td class="markdownTableBodyNone"><b>Ctrl+S</b>   </td><td class="markdownTableBodyNone">Save session    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Ctrl+Q</b>   </td><td class="markdownTableBodyNone">Quit application    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>F5</b>   </td><td class="markdownTableBodyNone">Refresh / re-apply all filters   </td></tr>
 </table>
 <p>Context-menu actions (right-click on the events table):</p>

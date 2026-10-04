@@ -13,6 +13,7 @@ var classparser_1_1SapiLogParser =
     [ "NotifyProgressUpdated", "d3/de3/classparser_1_1SapiLogParser.html#a596df39e4d90cad4eb364aa5382ab51c", null ],
     [ "ParseData", "d3/de3/classparser_1_1SapiLogParser.html#a4b7440bd083d5dcae903e94e20ab1027", null ],
     [ "ParseData", "d3/de3/classparser_1_1SapiLogParser.html#a12496b2ed14960a3116c6bf3002aa95b", null ],
+    [ "ParseHeaderLine", "d3/de3/classparser_1_1SapiLogParser.html#a3580c6337439048a5f87bc5071e3c97b", null ],
     [ "ParseLine", "d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb", null ],
     [ "ParseStream", "d3/de3/classparser_1_1SapiLogParser.html#a8aca282a9893539fafd3657b51329116", null ],
     [ "RegisterObserver", "d3/de3/classparser_1_1SapiLogParser.html#abda83b8d68f9be83f416f7ae685cea6f", null ],

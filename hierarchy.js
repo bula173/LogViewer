@@ -43,6 +43,7 @@ var hierarchy =
     [ "analyzer::ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", null ],
     [ "ui::qt::ExportDialog::ExportOptions", "d1/dab/structui_1_1qt_1_1ExportDialog_1_1ExportOptions.html", null ],
     [ "analyzer::anonymous_namespace{TestOutline.cpp}::Failure", "dc/d84/structanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03_1_1Failure.html", null ],
+    [ "analyzer::FailureGroup", "db/dbe/structanalyzer_1_1FailureGroup.html", null ],
     [ "config::FieldDictionary", "d1/de4/structconfig_1_1FieldDictionary.html", null ],
     [ "config::FieldTranslator", "d9/da7/classconfig_1_1FieldTranslator.html", null ],
     [ "ui::qt::MainWindow::FileTypeChoice", "db/d5c/structui_1_1qt_1_1MainWindow_1_1FileTypeChoice.html", null ],
@@ -193,6 +194,7 @@ var hierarchy =
       [ "ui::qt::OllamaSetupDialog", "db/dd2/classui_1_1qt_1_1OllamaSetupDialog.html", null ],
       [ "ui::qt::PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", null ],
       [ "ui::qt::PreferencesDialog", "dd/ddf/classui_1_1qt_1_1PreferencesDialog.html", null ],
+      [ "ui::qt::RunExplorerDialog", "d1/d14/classui_1_1qt_1_1RunExplorerDialog.html", null ],
       [ "ui::qt::ShortcutsDialog", "d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html", null ],
       [ "ui::qt::StructuredConfigDialog", "d7/dcb/classui_1_1qt_1_1StructuredConfigDialog.html", null ],
       [ "ui::qt::ThemeCustomizationDialog", "d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html", null ],
@@ -232,6 +234,7 @@ var hierarchy =
     ] ],
     [ "QTreeWidgetItem", "d1/d15/classQTreeWidgetItem.html", [
       [ "ui::qt::anonymous_namespace{ActorsPanel.cpp}::ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", null ],
+      [ "ui::qt::anonymous_namespace{RunExplorerDialog.cpp}::Item", "dd/d9b/classui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03_1_1Item.html", null ],
       [ "ui::qt::anonymous_namespace{TraceViewerPanel.cpp}::TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", null ]
     ] ],
     [ "QWidget", "d8/ded/classQWidget.html", [
@@ -292,6 +295,7 @@ var hierarchy =
     [ "ui::qt::utils::EventTagManager::Tag", "d3/d12/structui_1_1qt_1_1utils_1_1EventTagManager_1_1Tag.html", null ],
     [ "analyzer::TestMarkerRules", "d7/d10/structanalyzer_1_1TestMarkerRules.html", null ],
     [ "analyzer::TestOutline", "d8/d05/structanalyzer_1_1TestOutline.html", null ],
+    [ "analyzer::TestRunEntry", "d8/db4/structanalyzer_1_1TestRunEntry.html", null ],
     [ "analyzer::TestStep", "d5/d48/structanalyzer_1_1TestStep.html", null ],
     [ "ui::qt::utils::ThemeManager", "d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html", null ],
     [ "ui::qt::quick_filters::TimeAnchor", "db/d40/structui_1_1qt_1_1quick__filters_1_1TimeAnchor.html", null ],

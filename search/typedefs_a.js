@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['valuecolormap_0',['ValueColorMap',['../d6/d7f/namespaceconfig.html#acf60dfb1f88cc7c69929f68dae4c10f3',1,'config']]],
-  ['viewptr_1',['ViewPtr',['../da/d80/classmvc_1_1IModelObservable.html#aad040bba908aac23d9f30971989815cf',1,'mvc::IModelObservable']]]
+  ['scanprogress_0',['ScanProgress',['../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4',1,'analyzer']]],
+  ['shortcutresult_1',['ShortcutResult',['../d6/d40/namespaceui_1_1qt.html#aa3d2c05ca70db059b3052f9f4d64a4a8',1,'ui::qt']]]
 ];

@@ -23,8 +23,9 @@ var searchData=
   ['iservice_20',['IService',['../d2/d99/classservices_1_1IService.html',1,'services']]],
   ['isolatinplugin_21',['IsoLatinPlugin',['../d9/df3/classconfig_1_1IsoLatinPlugin.html',1,'config']]],
   ['istatisticsstrategy_22',['IStatisticsStrategy',['../df/dae/classui_1_1qt_1_1IStatisticsStrategy.html',1,'ui::qt']]],
-  ['itemdetailsview_23',['ItemDetailsView',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html',1,'ui::qt']]],
-  ['itemhighlight_24',['ItemHighlight',['../de/d64/structconfig_1_1ItemHighlight.html',1,'config']]],
-  ['itypefilterview_25',['ITypeFilterView',['../df/d7e/classui_1_1ITypeFilterView.html',1,'ui']]],
-  ['iview_26',['IView',['../d3/dba/classmvc_1_1IView.html',1,'mvc']]]
+  ['item_23',['Item',['../dd/d9b/classui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03_1_1Item.html',1,'ui::qt::anonymous_namespace{RunExplorerDialog.cpp}']]],
+  ['itemdetailsview_24',['ItemDetailsView',['../d0/d5c/classui_1_1qt_1_1ItemDetailsView.html',1,'ui::qt']]],
+  ['itemhighlight_25',['ItemHighlight',['../de/d64/structconfig_1_1ItemHighlight.html',1,'config']]],
+  ['itypefilterview_26',['ITypeFilterView',['../df/d7e/classui_1_1ITypeFilterView.html',1,'ui']]],
+  ['iview_27',['IView',['../d3/dba/classmvc_1_1IView.html',1,'mvc']]]
 ];

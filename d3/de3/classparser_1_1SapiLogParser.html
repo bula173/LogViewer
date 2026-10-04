@@ -109,9 +109,9 @@ Inheritance diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/d5a/classparser_1_1SapiLogParser__inherit__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aparser_1_1SapiLogParser_inherit__map" id="aparser_1_1SapiLogParser_inherit__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="13,319,187,644"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="13,319,187,664"/>
 <area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="5,5,195,271"/>
-<area shape="poly" title=" " alt="" coords="103,285,103,318,97,318,97,285"/>
+<area shape="poly" title=" " alt="" coords="103,284,103,318,97,318,97,284"/>
 </map>
 </div>
 <div class="dynheader">
@@ -119,15 +119,15 @@ Collaboration diagram for parser::SapiLogParser:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dc/dce/classparser_1_1SapiLogParser__coll__graph.png" border="0" usemap="#aparser_1_1SapiLogParser_coll__map" alt="Collaboration graph"/></div>
 <map name="aparser_1_1SapiLogParser_coll__map" id="aparser_1_1SapiLogParser_coll__map">
-<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="168,491,341,776"/>
+<area shape="rect" title="Parses merged test&#45;run logs produced by the safeAPI RBC 2oo2 test environment (robot steps + containe..." alt="" coords="168,491,341,796"/>
 <area shape="rect" href="../../d3/d8b/classparser_1_1IDataParser.html" title="Abstract base class for all data parsing implementations." alt="" coords="8,148,197,413"/>
-<area shape="poly" title=" " alt="" coords="168,425,196,489,191,491,163,427"/>
+<area shape="poly" title=" " alt="" coords="166,425,193,489,188,491,161,427"/>
 <area shape="rect" title=" " alt="" coords="5,5,200,85"/>
 <area shape="poly" title=" " alt="" coords="105,86,105,132,100,132,100,86"/>
 <area shape="rect" title=" " alt="" coords="221,248,288,313"/>
 <area shape="poly" title=" " alt="" coords="257,314,257,474,252,474,252,314"/>
 <area shape="rect" title=" " alt="" coords="324,241,511,321"/>
-<area shape="poly" title=" " alt="" coords="420,321,412,391,404,430,390,468,374,500,354,530,349,527,369,497,386,466,399,429,407,390,414,320"/>
+<area shape="poly" title=" " alt="" coords="419,321,412,391,403,430,390,468,374,501,353,533,349,531,369,499,386,466,398,429,407,390,414,321"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -169,6 +169,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a17951a3f572bb285742e556383e10af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a623a4a450acda308c5a253314bc97fbb" id="r_a623a4a450acda308c5a253314bc97fbb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb">ParseLine</a> (std::string_view line, <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &amp;out)</td></tr>
 <tr class="separator:a623a4a450acda308c5a253314bc97fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3580c6337439048a5f87bc5071e3c97b" id="r_a3580c6337439048a5f87bc5071e3c97b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a3580c6337439048a5f87bc5071e3c97b">ParseHeaderLine</a> (std::string_view line, std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; &amp;metadata)</td></tr>
+<tr class="separator:a3580c6337439048a5f87bc5071e3c97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9881b76696d5bf8296ba5b1ef77414ef" id="r_a9881b76696d5bf8296ba5b1ef77414ef"><td class="memItemLeft" align="right" valign="top">static std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef">ExtractUnit</a> (std::string_view info)</td></tr>
 <tr class="separator:a9881b76696d5bf8296ba5b1ef77414ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a866d906009881f88e3f8d6cdcb264d88" id="r_a866d906009881f88e3f8d6cdcb264d88"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88">ExtractPayloadFields</a> (std::string_view payload, <a class="el" href="../../d1/d00/classdb_1_1LogEvent.html#affe5a0ef68b68583c1c7e3e440fa12c2">db::LogEvent::EventItems</a> &amp;out)</td></tr>
@@ -302,9 +304,21 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph" alt=""/></div>
 <map name="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a866d906009881f88e3f8d6cdcb264d88_icgraph">
-<area shape="rect" title=" " alt="" coords="216,5,381,45"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="5,5,168,45"/>
-<area shape="poly" title=" " alt="" coords="202,28,168,28,168,23,202,23"/>
+<area shape="rect" title=" " alt="" coords="963,73,1128,113"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="752,73,915,113"/>
+<area shape="poly" title=" " alt="" coords="949,95,915,95,915,90,949,90"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a3523aee772d42ba366c158c4e7a6a136" title=" " alt="" coords="499,29,697,84"/>
+<area shape="poly" title=" " alt="" coords="738,81,697,75,698,69,739,76"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="492,109,704,149"/>
+<area shape="poly" title=" " alt="" coords="739,110,705,115,704,110,738,105"/>
+<area shape="poly" title=" " alt="" coords="637,18,623,11,598,8,577,10,564,15,557,21,558,29,552,29,552,19,561,10,576,5,598,3,625,6,640,14"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a290d664570ac1b60b3003d3d21cc7c4e" title="Timestamp of the last event line, read from the end of the file." alt="" coords="237,29,444,84"/>
+<area shape="poly" title=" " alt="" coords="485,59,444,59,444,54,485,54"/>
+<area shape="poly" title=" " alt="" coords="381,18,367,11,341,8,319,10,305,15,299,21,299,29,293,29,294,19,302,10,318,5,341,3,368,6,384,14"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="238,116,443,141"/>
+<area shape="poly" title=" " alt="" coords="478,131,443,131,443,126,478,126"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,109,189,149"/>
+<area shape="poly" title=" " alt="" coords="224,131,190,131,190,126,224,126"/>
 </map>
 </div>
 
@@ -349,9 +363,21 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph" alt=""/></div>
 <map name="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a9881b76696d5bf8296ba5b1ef77414ef_icgraph">
-<area shape="rect" title=" " alt="" coords="216,5,379,45"/>
-<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="5,5,168,45"/>
-<area shape="poly" title=" " alt="" coords="202,28,168,28,168,23,202,23"/>
+<area shape="rect" title=" " alt="" coords="963,73,1125,113"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="752,73,915,113"/>
+<area shape="poly" title=" " alt="" coords="949,95,915,95,915,90,949,90"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a3523aee772d42ba366c158c4e7a6a136" title=" " alt="" coords="499,29,697,84"/>
+<area shape="poly" title=" " alt="" coords="738,81,697,75,698,69,739,76"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="492,109,704,149"/>
+<area shape="poly" title=" " alt="" coords="739,110,705,115,704,110,738,105"/>
+<area shape="poly" title=" " alt="" coords="637,18,623,11,598,8,577,10,564,15,557,21,558,29,552,29,552,19,561,10,576,5,598,3,625,6,640,14"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a290d664570ac1b60b3003d3d21cc7c4e" title="Timestamp of the last event line, read from the end of the file." alt="" coords="237,29,444,84"/>
+<area shape="poly" title=" " alt="" coords="485,59,444,59,444,54,485,54"/>
+<area shape="poly" title=" " alt="" coords="381,18,367,11,341,8,319,10,305,15,299,21,299,29,293,29,294,19,302,10,318,5,341,3,368,6,384,14"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="238,116,443,141"/>
+<area shape="poly" title=" " alt="" coords="478,131,443,131,443,126,478,126"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,109,189,149"/>
+<area shape="poly" title=" " alt="" coords="224,131,190,131,190,126,224,126"/>
 </map>
 </div>
 
@@ -755,6 +781,64 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="a3580c6337439048a5f87bc5071e3c97b" name="a3580c6337439048a5f87bc5071e3c97b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3580c6337439048a5f87bc5071e3c97b">&#9670;&#160;</a></span>ParseHeaderLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void parser::SapiLogParser::ParseHeaderLine </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>metadata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Appends a header line such as <code># Test Case : IL Grants …</code> (starting with '#') to <code>metadata</code> as {"Test Case", "IL Grants …"}; other comment lines (rulers, the title line) are ignored. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_cgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_cgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_cgraph" id="ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,168,45"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="216,13,315,38"/>
+<area shape="poly" title=" " alt="" coords="168,23,202,23,202,28,168,28"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_icgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a3580c6337439048a5f87bc5071e3c97b_icgraph">
+<area shape="rect" title=" " alt="" coords="252,37,415,77"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a60d0e043f9d45b730139b2abbc4fa1bb" title=" " alt="" coords="5,29,204,84"/>
+<area shape="poly" title=" " alt="" coords="238,59,204,59,204,54,238,54"/>
+<area shape="poly" title=" " alt="" coords="142,18,129,11,105,8,84,10,72,15,66,21,66,29,60,29,61,19,69,10,83,5,105,3,130,6,145,14"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a623a4a450acda308c5a253314bc97fbb" name="a623a4a450acda308c5a253314bc97fbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a623a4a450acda308c5a253314bc97fbb">&#9670;&#160;</a></span>ParseLine()</h2>
 
@@ -803,6 +887,26 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="162,100,212,114,210,119,161,105"/>
 <area shape="poly" title=" " alt="" coords="363,43,426,63,424,68,361,48"/>
 <area shape="poly" title=" " alt="" coords="361,117,424,97,426,102,363,122"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph.png" border="0" usemap="#ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph" alt=""/></div>
+<map name="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph" id="ad3/de3/classparser_1_1SapiLogParser_a623a4a450acda308c5a253314bc97fbb_icgraph">
+<area shape="rect" title=" " alt="" coords="752,73,915,113"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a3523aee772d42ba366c158c4e7a6a136" title=" " alt="" coords="499,29,697,84"/>
+<area shape="poly" title=" " alt="" coords="738,81,697,75,698,69,739,76"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="492,109,704,149"/>
+<area shape="poly" title=" " alt="" coords="739,110,705,115,704,110,738,105"/>
+<area shape="poly" title=" " alt="" coords="637,18,623,11,598,8,577,10,564,15,557,21,558,29,552,29,552,19,561,10,576,5,598,3,625,6,640,14"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a290d664570ac1b60b3003d3d21cc7c4e" title="Timestamp of the last event line, read from the end of the file." alt="" coords="237,29,444,84"/>
+<area shape="poly" title=" " alt="" coords="485,59,444,59,444,54,485,54"/>
+<area shape="poly" title=" " alt="" coords="381,18,367,11,341,8,319,10,305,15,299,21,299,29,293,29,294,19,302,10,318,5,341,3,368,6,384,14"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="238,116,443,141"/>
+<area shape="poly" title=" " alt="" coords="478,131,443,131,443,126,478,126"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,109,189,149"/>
+<area shape="poly" title=" " alt="" coords="224,131,190,131,190,126,224,126"/>
 </map>
 </div>
 

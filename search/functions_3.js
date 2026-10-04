@@ -3,7 +3,7 @@ var searchData=
   ['dashboardpanel_0',['DashboardPanel',['../d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a680a88f0b29dfed0ea539a818ea9b7fc',1,'ui::qt::DashboardPanel']]],
   ['data_1',['data',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496',1,'ui::qt::EventsTableModel']]],
   ['datadir_2',['DataDir',['../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7',1,'util::portable']]],
-  ['debug_3',['debug',['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()']]],
+  ['debug_3',['debug',['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()'],['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()']]],
   ['decode_4',['Decode',['../d4/d72/structui_1_1qt_1_1ActorKey.html#a096151ec96264829cee20153c2c4a4e8',1,'ui::qt::ActorKey']]],
   ['decodearg_5',['DecodeArg',['../d0/dd5/namespaceparser.html#ab92c1d5521bca63732d884cbe495f41f',1,'parser']]],
   ['decodeframe_6',['DecodeFrame',['../d8/d04/namespaceparser_1_1dbc.html#a83fdb618e738dda45a4fd29940ae5dab',1,'parser::dbc']]],
@@ -19,7 +19,7 @@ var searchData=
   ['details_16',['Details',['../d7/d42/namespaceui_1_1qt_1_1anonymous__namespace_02TestStepsPanel_8cpp_03.html#aa92c49544b1f6170b74a458a4d0ba9aa',1,'ui::qt::anonymous_namespace{TestStepsPanel.cpp}']]],
   ['detectdirections_17',['DetectDirections',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a85b5f49f053c402d802076615f3c5197',1,'ai::GemmaInferenceEngine']]],
   ['detectseparatorpattern_18',['DetectSeparatorPattern',['../d9/d49/classanalyzer_1_1ActorDiscoverer.html#abb7552691c643aeb0a3248e1fe36ac9e',1,'analyzer::ActorDiscoverer']]],
-  ['detecttimestampfield_19',['detecttimestampfield',['../d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf',1,'ui::qt::TimelineChartPanel::DetectTimestampField()'],['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a7d1a6447d788dd74aeaa55c57ac424b4',1,'ui::qt::StatsSummaryPanel::DetectTimestampField()']]],
+  ['detecttimestampfield_19',['detecttimestampfield',['../d6/da4/classui_1_1qt_1_1StatsSummaryPanel.html#a7d1a6447d788dd74aeaa55c57ac424b4',1,'ui::qt::StatsSummaryPanel::DetectTimestampField()'],['../d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf',1,'ui::qt::TimelineChartPanel::DetectTimestampField()']]],
   ['dialogsenabledflag_20',['DialogsEnabledFlag',['../da/d7e/namespaceerror.html#a6d3b63a59df2d9bff0d9c40d525a7eaa',1,'error']]],
   ['disableplugin_21',['DisablePlugin',['../d3/d67/classplugin_1_1PluginManager.html#a8d94e355f12e935e9001ddb7e99cfdfd',1,'plugin::PluginManager']]],
   ['discover_22',['Discover',['../d9/d49/classanalyzer_1_1ActorDiscoverer.html#adb44e1de745d846041d168f69eed4bfe',1,'analyzer::ActorDiscoverer']]],
@@ -33,5 +33,6 @@ var searchData=
   ['downloadmodel_30',['DownloadModel',['../d2/d47/classai_1_1GemmaInferenceEngine.html#a2280416bf0765c53f219ddbd0b4ba2a0',1,'ai::GemmaInferenceEngine']]],
   ['downloadplugin_31',['DownloadPlugin',['../de/d35/classui_1_1qt_1_1UpdateChecker.html#ab6094b1176b6b70412964f3907ee3ef0',1,'ui::qt::UpdateChecker']]],
   ['dragenterevent_32',['dragEnterEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#a802d975b13ea0e462b29a1fd4153aa75',1,'ui::qt::MainWindow']]],
-  ['dropevent_33',['dropEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad372ea3ca18de3862e388f2c150e0096',1,'ui::qt::MainWindow']]]
+  ['dropevent_33',['dropEvent',['../d4/dfa/classui_1_1qt_1_1MainWindow.html#ad372ea3ca18de3862e388f2c150e0096',1,'ui::qt::MainWindow']]],
+  ['durationtext_34',['DurationText',['../dd/d44/namespaceui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03.html#a27320bac4e14b8a50740d4b23fe6142b',1,'ui::qt::anonymous_namespace{RunExplorerDialog.cpp}']]]
 ];

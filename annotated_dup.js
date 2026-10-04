@@ -26,9 +26,11 @@ var annotated_dup =
       [ "ActorDiscoverer", "d9/d49/classanalyzer_1_1ActorDiscoverer.html", "d9/d49/classanalyzer_1_1ActorDiscoverer" ],
       [ "ActorDiscoveryResult", "d8/d24/structanalyzer_1_1ActorDiscoveryResult.html", "d8/d24/structanalyzer_1_1ActorDiscoveryResult" ],
       [ "ExchangePattern", "d8/d76/structanalyzer_1_1ExchangePattern.html", "d8/d76/structanalyzer_1_1ExchangePattern" ],
+      [ "FailureGroup", "db/dbe/structanalyzer_1_1FailureGroup.html", "db/dbe/structanalyzer_1_1FailureGroup" ],
       [ "SequenceMessage", "d1/da6/structanalyzer_1_1SequenceMessage.html", "d1/da6/structanalyzer_1_1SequenceMessage" ],
       [ "TestMarkerRules", "d7/d10/structanalyzer_1_1TestMarkerRules.html", "d7/d10/structanalyzer_1_1TestMarkerRules" ],
       [ "TestOutline", "d8/d05/structanalyzer_1_1TestOutline.html", "d8/d05/structanalyzer_1_1TestOutline" ],
+      [ "TestRunEntry", "d8/db4/structanalyzer_1_1TestRunEntry.html", "d8/db4/structanalyzer_1_1TestRunEntry" ],
       [ "TestStep", "d5/d48/structanalyzer_1_1TestStep.html", "d5/d48/structanalyzer_1_1TestStep" ]
     ] ],
     [ "config", "d6/d7f/namespaceconfig.html", [
@@ -129,6 +131,9 @@ var annotated_dup =
         [ "anonymous_namespace{CanStatisticsStrategy.cpp}", "d9/d9d/namespaceui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03.html", [
           [ "Accum", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum.html", "d4/d33/structui_1_1qt_1_1anonymous__namespace_02CanStatisticsStrategy_8cpp_03_1_1Accum" ]
         ] ],
+        [ "anonymous_namespace{RunExplorerDialog.cpp}", "dd/d44/namespaceui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03.html", [
+          [ "Item", "dd/d9b/classui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03_1_1Item.html", "dd/d9b/classui_1_1qt_1_1anonymous__namespace_02RunExplorerDialog_8cpp_03_1_1Item" ]
+        ] ],
         [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", [
           [ "TraceTreeItem", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem.html", "d2/dc6/classui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03_1_1TraceTreeItem" ]
         ] ],
@@ -201,6 +206,7 @@ var annotated_dup =
         [ "PluginManagerDialog", "da/d9c/classui_1_1qt_1_1PluginManagerDialog.html", "da/d9c/classui_1_1qt_1_1PluginManagerDialog" ],
         [ "PluginsPreferencesPanel", "d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel.html", "d8/daf/classui_1_1qt_1_1PluginsPreferencesPanel" ],
         [ "PreferencesDialog", "dd/ddf/classui_1_1qt_1_1PreferencesDialog.html", "dd/ddf/classui_1_1qt_1_1PreferencesDialog" ],
+        [ "RunExplorerDialog", "d1/d14/classui_1_1qt_1_1RunExplorerDialog.html", "d1/d14/classui_1_1qt_1_1RunExplorerDialog" ],
         [ "ScenariosPanel", "dc/dff/classui_1_1qt_1_1ScenariosPanel.html", "dc/dff/classui_1_1qt_1_1ScenariosPanel" ],
         [ "SearchBar", "dd/d79/classui_1_1qt_1_1SearchBar.html", "dd/d79/classui_1_1qt_1_1SearchBar" ],
         [ "SearchResultsView", "d9/dfd/classui_1_1qt_1_1SearchResultsView.html", "d9/dfd/classui_1_1qt_1_1SearchResultsView" ],

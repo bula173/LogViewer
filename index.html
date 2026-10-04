@@ -101,6 +101,7 @@ Core</h2>
 <ul>
 <li><b>Multiple Log Formats</b>: XML, CSV, CAN/ASC (Vector CANalyzer), AUTOSAR DLT (<code>.dlt</code>), POSIX Evlog (<code>.evl</code>), and safeAPI RBC 2oo2 merged test logs (<code>.txt</code> with the merged-log header)</li>
 <li><b>safeAPI Payload Fields</b>: Structured payloads of safeAPI merged test logs become extra fields — <code>key=value</code> lists and JSON objects as <code>p.&lt;key&gt;</code> (e.g. <code>p.cycle</code>, <code>p.role</code>, <code>p.status</code>, <code>p.cmd</code>, <code>p.fields.route_len</code>), the <code>[a-west | GP]</code> channel marker in <code>info</code> as <code>unit</code>. Add them as columns in <b>Tools &gt; Settings &gt; Columns</b> to filter them, or use them in Statistics and Traces; the raw <code>payload</code> stays unchanged</li>
+<li><b>Run Explorer</b>: File &gt; Open Results Folder… (Ctrl+Alt+O) or dropping a folder lists the tests of a test-run results folder (one safeAPI <code>*__merged_logs.txt</code> per test) with verdict, duration, entry count and failure message — the decisive step failure, or Robot Framework's <code>xunit.xml</code>/<code>output.xml</code> message when the log records none. Filter by verdict, group failures by message, double-click to open a test, or <b>Open with Previous Test</b> to merge it with the test that ran before it</li>
 <li><b>DBC Signal Decoding</b>: Load a <code>.dbc</code> file alongside an ASC log to decode raw CAN frames into named signals</li>
 <li><b>Evlog Template Decoding</b>: Load a directory of <code>.t</code>/<code>.tmpl</code>/<code>.template</code> files to decode structured BINARY evlog payloads into named fields</li>
 <li><b>High Performance</b>: Virtual list architecture handles millions of log entries</li>
@@ -320,7 +321,7 @@ Cloud Providers</h2>
 <h1><a class="anchor" id="autotoc_md25"></a>
 Usage</h1>
 <ol type="1">
-<li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, <code>.evl</code> Evlog, and safeAPI merged test logs (<code>.txt</code>, auto-detected by header); drag and drop also works</li>
+<li><b>Open Log File</b> — File &gt; Open (Ctrl+O); supports XML, CSV, <code>.asc</code> CAN, <code>.dlt</code> DLT, <code>.evl</code> Evlog, and safeAPI merged test logs (<code>.txt</code>, auto-detected by header); drag and drop also works. File &gt; Open Results Folder… (Ctrl+Alt+O) — or dropping a folder — opens a test-run results folder in the Run Explorer</li>
 <li><b>Load DBC</b> — File &gt; Load DBC… to decode CAN signals from a <code>.dbc</code> database (optional, ASC only)</li>
 <li><b>Load Evlog Templates</b> — File &gt; Load Evlog Templates… to select a directory of template files for <code>.evl</code> BINARY payload decoding</li>
 <li><b>Filter</b> — Use the Filters panel; filter by type, text, regex, or time range; save filter states as named profiles</li>

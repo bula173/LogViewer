@@ -7,7 +7,6 @@ var SapiLogParser_8cpp =
     [ "IsValidKey", "df/d5d/SapiLogParser_8cpp.html#ae493baffafa9cf5505a54a978769e587", null ],
     [ "JsonText", "df/d5d/SapiLogParser_8cpp.html#ab949b5a939a8b414c239132e49a5d354", null ],
     [ "LooksLikeIsoTimestamp", "df/d5d/SapiLogParser_8cpp.html#a51d6c73bd7e23e4c1f8a2e2f2bc68283", null ],
-    [ "ParseHeaderLine", "df/d5d/SapiLogParser_8cpp.html#a620a47352f64cbf84ee5aafeca091eec", null ],
     [ "ParseKeyValue", "df/d5d/SapiLogParser_8cpp.html#aefccd51b568dc0d1d9ca4d478ba7f5d2", null ],
     [ "ReadGroup", "df/d5d/SapiLogParser_8cpp.html#a9a5c0bc1e596c023737b9ab5f59cdc4a", null ],
     [ "SplitTokens", "df/d5d/SapiLogParser_8cpp.html#a794b68009f1240034ade5b7a0cbb05fd", null ],

@@ -50,12 +50,13 @@ var searchData=
   ['_7eparsingstateguard_47',['~ParsingStateGuard',['../d9/d49/classui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03_1_1ParsingStateGuard.html#a09849f870695a019647ccb61b8635355',1,'ui::anonymous_namespace{MainWindowPresenter.cpp}::ParsingStateGuard']]],
   ['_7epluginmanager_48',['~PluginManager',['../d3/d67/classplugin_1_1PluginManager.html#a0bf55a68caaeae71a08482ac7d342b70',1,'plugin::PluginManager']]],
   ['_7epreferencesdialog_49',['~PreferencesDialog',['../dd/ddf/classui_1_1qt_1_1PreferencesDialog.html#af93f614586954bf54009832fbf845933',1,'ui::qt::PreferencesDialog']]],
-  ['_7esapilogparser_50',['~SapiLogParser',['../d3/de3/classparser_1_1SapiLogParser.html#a06c54b637ca52e9b41c8b8b5af37ed3e',1,'parser::SapiLogParser']]],
-  ['_7esequencediagrampanel_51',['~SequenceDiagramPanel',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9740611f2e0262fbf9f0beb96f04374a',1,'ui::qt::SequenceDiagramPanel']]],
-  ['_7eshortcutmanager_52',['~ShortcutManager',['../db/d66/classui_1_1qt_1_1ShortcutManager.html#a070acd6f5452bec05081785af809fa5e',1,'ui::qt::ShortcutManager']]],
-  ['_7eshortcutsdialog_53',['~ShortcutsDialog',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#abd98b169ae9b4c66ab471424334b822d',1,'ui::qt::ShortcutsDialog']]],
-  ['_7esidebysidepanel_54',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
-  ['_7etabbadgemanager_55',['~TabBadgeManager',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#adbeb681af60720add6674345696bada4',1,'ui::qt::TabBadgeManager']]],
-  ['_7eunifiedsearchbar_56',['~UnifiedSearchBar',['../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#a5ecb799695f3adbc075d8df7c731c7b3',1,'ui::qt::UnifiedSearchBar']]],
-  ['_7exmlparser_57',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
+  ['_7erunexplorerdialog_50',['~RunExplorerDialog',['../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a139783da9cd3f22484c030d2726c4ea8',1,'ui::qt::RunExplorerDialog']]],
+  ['_7esapilogparser_51',['~SapiLogParser',['../d3/de3/classparser_1_1SapiLogParser.html#a06c54b637ca52e9b41c8b8b5af37ed3e',1,'parser::SapiLogParser']]],
+  ['_7esequencediagrampanel_52',['~SequenceDiagramPanel',['../d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a9740611f2e0262fbf9f0beb96f04374a',1,'ui::qt::SequenceDiagramPanel']]],
+  ['_7eshortcutmanager_53',['~ShortcutManager',['../db/d66/classui_1_1qt_1_1ShortcutManager.html#a070acd6f5452bec05081785af809fa5e',1,'ui::qt::ShortcutManager']]],
+  ['_7eshortcutsdialog_54',['~ShortcutsDialog',['../d2/d1f/classui_1_1qt_1_1ShortcutsDialog.html#abd98b169ae9b4c66ab471424334b822d',1,'ui::qt::ShortcutsDialog']]],
+  ['_7esidebysidepanel_55',['~SideBySidePanel',['../df/dbf/classui_1_1qt_1_1SideBySidePanel.html#a552ef43a89825bf3a1d501d3ff6b4054',1,'ui::qt::SideBySidePanel']]],
+  ['_7etabbadgemanager_56',['~TabBadgeManager',['../d8/dab/classui_1_1qt_1_1TabBadgeManager.html#adbeb681af60720add6674345696bada4',1,'ui::qt::TabBadgeManager']]],
+  ['_7eunifiedsearchbar_57',['~UnifiedSearchBar',['../d4/da3/classui_1_1qt_1_1UnifiedSearchBar.html#a5ecb799695f3adbc075d8df7c731c7b3',1,'ui::qt::UnifiedSearchBar']]],
+  ['_7exmlparser_58',['~XmlParser',['../db/d5c/classparser_1_1XmlParser.html#aa4ea1623744ab2015154dbd0eb766c88',1,'parser::XmlParser']]]
 ];

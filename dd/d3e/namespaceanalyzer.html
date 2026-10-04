@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('dd/d3e/namespaceanalyzer.html','../../
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -108,6 +109,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03" id="r_d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d4f/namespaceanalyzer_1_1anonymous__namespace_02TestOutline_8cpp_03.html">anonymous_namespace{TestOutline.cpp}</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03" id="r_d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html">anonymous_namespace{TestRunIndex.cpp}</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -118,6 +121,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how actor-to-actor message flow can be read from the log events.  <a href="../../d8/d76/structanalyzer_1_1ExchangePattern.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/dbe/structanalyzer_1_1FailureGroup.html">FailureGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Failing tests sharing one normalised message.  <a href="../../db/dbe/structanalyzer_1_1FailureGroup.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/da6/structanalyzer_1_1SequenceMessage.html">SequenceMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One arrow of a sequence diagram: a message from one actor to another.  <a href="../../d1/da6/structanalyzer_1_1SequenceMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,8 +131,17 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d05/structanalyzer_1_1TestOutline.html">TestOutline</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One test of a results folder, read without loading the whole log.  <a href="../../d8/db4/structanalyzer_1_1TestRunEntry.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d48/structanalyzer_1_1TestStep.html">TestStep</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a3dd0dc24b8a1d4781e04dc472ff0bec4" id="r_a3dd0dc24b8a1d4781e04dc472ff0bec4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">ScanProgress</a> = std::function&lt; bool(std::size_t done, std::size_t total)&gt;</td></tr>
+<tr class="memdesc:a3dd0dc24b8a1d4781e04dc472ff0bec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called after each scanned log with (done, total); return false to cancel.  <br /></td></tr>
+<tr class="separator:a3dd0dc24b8a1d4781e04dc472ff0bec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -152,6 +167,12 @@ Enumerations</h2></td></tr>
 , <a class="el" href="../../dd/d3e/namespaceanalyzer.html#ac130d684b216c727fb9dd3b9e0acdcbbaceaa0734f0b3c738120c67344d8f3ec1">Fail</a>
  }</td></tr>
 <tr class="separator:ac130d684b216c727fb9dd3b9e0acdcbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73084cd68626dfc89472f6e3fb017696" id="r_a73084cd68626dfc89472f6e3fb017696"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696">FailureSource</a> { <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696a6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696acb66279f4746944657fe98910a8c7f57">StepFail</a>
+, <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696a6480e4837fae77110b78ff1baeeacd9f">RobotXml</a>
+ }</td></tr>
+<tr class="memdesc:a73084cd68626dfc89472f6e3fb017696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where TestRunEntry::failureMessage came from.  <a href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696">More...</a><br /></td></tr>
+<tr class="separator:a73084cd68626dfc89472f6e3fb017696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -163,8 +184,35 @@ Functions</h2></td></tr>
 <tr class="separator:ae71368228077c9a25d7d3e6c75d8952e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4f842bd6e3b29034590461d1c53f122" id="r_af4f842bd6e3b29034590461d1c53f122"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d1/da6/structanalyzer_1_1SequenceMessage.html">SequenceMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#af4f842bd6e3b29034590461d1c53f122">CollectSequenceMessages</a> (<a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html">db::EventsContainer</a> &amp;events, const <a class="el" href="../../d8/d76/structanalyzer_1_1ExchangePattern.html">ExchangePattern</a> &amp;pattern, std::size_t limit)</td></tr>
 <tr class="separator:af4f842bd6e3b29034590461d1c53f122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c72e13bf382d273bd99932fb6e8e325" id="r_a4c72e13bf382d273bd99932fb6e8e325"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::int64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a4c72e13bf382d273bd99932fb6e8e325">ParseIsoMicros</a> (std::string_view ts)</td></tr>
+<tr class="separator:a4c72e13bf382d273bd99932fb6e8e325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c10b24b04e711cf99492a080aa74d21" id="r_a8c10b24b04e711cf99492a080aa74d21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d05/structanalyzer_1_1TestOutline.html">TestOutline</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a8c10b24b04e711cf99492a080aa74d21">BuildTestOutline</a> (<a class="el" href="../../dd/dc2/classdb_1_1EventsContainer.html">db::EventsContainer</a> &amp;events, const <a class="el" href="../../d7/d10/structanalyzer_1_1TestMarkerRules.html">TestMarkerRules</a> &amp;r)</td></tr>
 <tr class="separator:a8c10b24b04e711cf99492a080aa74d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3613e0f924207acb1e8c40856e76ea95" id="r_a3613e0f924207acb1e8c40856e76ea95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3613e0f924207acb1e8c40856e76ea95">ReadTestLogSummary</a> (const fs::path &amp;file)</td></tr>
+<tr class="separator:a3613e0f924207acb1e8c40856e76ea95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8553e4ee8659f6dd0fe0aabd134e0579" id="r_a8553e4ee8659f6dd0fe0aabd134e0579"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579">FindDecisiveFailureMessage</a> (const fs::path &amp;file)</td></tr>
+<tr class="separator:a8553e4ee8659f6dd0fe0aabd134e0579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24040532246691a9f2b17b444123be94" id="r_a24040532246691a9f2b17b444123be94"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a24040532246691a9f2b17b444123be94">ReadRobotFailures</a> (const fs::path &amp;folder)</td></tr>
+<tr class="separator:a24040532246691a9f2b17b444123be94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f03328a1e717800f895cbda938113b4" id="r_a2f03328a1e717800f895cbda938113b4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a2f03328a1e717800f895cbda938113b4">TestNameKey</a> (std::string_view name)</td></tr>
+<tr class="separator:a2f03328a1e717800f895cbda938113b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8c37d7caa75184f38c5df9fdcb3db65" id="r_ad8c37d7caa75184f38c5df9fdcb3db65"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#ad8c37d7caa75184f38c5df9fdcb3db65">CollapseWhitespace</a> (std::string_view text)</td></tr>
+<tr class="memdesc:ad8c37d7caa75184f38c5df9fdcb3db65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collapses whitespace runs (including newlines) to one space and trims.  <br /></td></tr>
+<tr class="separator:ad8c37d7caa75184f38c5df9fdcb3db65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0cf616c7571a1d00a23aeaca3a65ad3" id="r_ac0cf616c7571a1d00a23aeaca3a65ad3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#ac0cf616c7571a1d00a23aeaca3a65ad3">NormalizeFailureMessage</a> (std::string_view message)</td></tr>
+<tr class="separator:ac0cf616c7571a1d00a23aeaca3a65ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a206c1a22a3e01e2fb263c42fccfc53e2" id="r_a206c1a22a3e01e2fb263c42fccfc53e2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2">ScanResultsFolder</a> (const fs::path &amp;folder, const <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">ScanProgress</a> &amp;progress)</td></tr>
+<tr class="separator:a206c1a22a3e01e2fb263c42fccfc53e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a763190ecb6c1032b588854dc9d352581" id="r_a763190ecb6c1032b588854dc9d352581"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../db/dbe/structanalyzer_1_1FailureGroup.html">FailureGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a763190ecb6c1032b588854dc9d352581">GroupFailures</a> (const std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt; &amp;entries)</td></tr>
+<tr class="separator:a763190ecb6c1032b588854dc9d352581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9c70b0a9bd3344bbed6ecc0fe2437bb" id="r_ad9c70b0a9bd3344bbed6ecc0fe2437bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#ad9c70b0a9bd3344bbed6ecc0fe2437bb">ReadTestLogSummary</a> (const std::filesystem::path &amp;file)</td></tr>
+<tr class="separator:ad9c70b0a9bd3344bbed6ecc0fe2437bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22208982d7b89e02fea9460dc14adf7b" id="r_a22208982d7b89e02fea9460dc14adf7b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a22208982d7b89e02fea9460dc14adf7b">FindDecisiveFailureMessage</a> (const std::filesystem::path &amp;file)</td></tr>
+<tr class="separator:a22208982d7b89e02fea9460dc14adf7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b0b23d14b4a8a9734351c4183ff64bc" id="r_a4b0b23d14b4a8a9734351c4183ff64bc"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a4b0b23d14b4a8a9734351c4183ff64bc">ReadRobotFailures</a> (const std::filesystem::path &amp;folder)</td></tr>
+<tr class="separator:a4b0b23d14b4a8a9734351c4183ff64bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae73922adcf55de3a2d6df33df6a3298f" id="r_ae73922adcf55de3a2d6df33df6a3298f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#ae73922adcf55de3a2d6df33df6a3298f">ScanResultsFolder</a> (const std::filesystem::path &amp;folder, const <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">ScanProgress</a> &amp;progress={})</td></tr>
+<tr class="separator:ae73922adcf55de3a2d6df33df6a3298f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -187,7 +235,27 @@ Variables</h2></td></tr>
 <tr class="separator:af6e4069700f7be684cfc5d3e34da1e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02fc1a5fe0105c4136ae914d78a75695" id="r_a02fc1a5fe0105c4136ae914d78a75695"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a02fc1a5fe0105c4136ae914d78a75695">kMetaStatus</a> = &quot;Status&quot;</td></tr>
 <tr class="separator:a02fc1a5fe0105c4136ae914d78a75695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14a2959357584625f2d531caded2d96e" id="r_a14a2959357584625f2d531caded2d96e"><td class="memItemLeft" align="right" valign="top">constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d3e/namespaceanalyzer.html#a14a2959357584625f2d531caded2d96e">kMergedLogSuffix</a> = &quot;__merged_logs.txt&quot;</td></tr>
+<tr class="memdesc:a14a2959357584625f2d531caded2d96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">File-name suffix of a safeAPI merged test log inside a results folder.  <br /></td></tr>
+<tr class="separator:a14a2959357584625f2d531caded2d96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a3dd0dc24b8a1d4781e04dc472ff0bec4" name="a3dd0dc24b8a1d4781e04dc472ff0bec4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dd0dc24b8a1d4781e04dc472ff0bec4">&#9670;&#160;</a></span>ScanProgress</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">analyzer::ScanProgress</a> = typedef std::function&lt;bool(std::size_t done, std::size_t total)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Called after each scanned log with (done, total); return false to cancel. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a67f641cb69dc9893d4b5aaeb9dfb8eff" name="a67f641cb69dc9893d4b5aaeb9dfb8eff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67f641cb69dc9893d4b5aaeb9dfb8eff">&#9670;&#160;</a></span>ExchangeMode</h2>
@@ -220,6 +288,38 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5" name="a67f641cb69dc9893d4b5aaeb9dfb8effa7cf5e3a421d8ac44b9798450adaa5ef5"></a>SenderOnly&#160;</td><td class="fielddoc"><p>Only a sender field is present; the receiver is always the self actor. Example: from=A — the log generator is always the one receiving </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02" name="a67f641cb69dc9893d4b5aaeb9dfb8effaf6b2c0c639ea1cc8886543363f61dc02"></a>PatternField&#160;</td><td class="fielddoc"><p>Actor names are embedded in a single field using a separator pattern. Example: "RBC: message", "Train T001: info" — extract prefix before ":" </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a73084cd68626dfc89472f6e3fb017696" name="a73084cd68626dfc89472f6e3fb017696"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73084cd68626dfc89472f6e3fb017696">&#9670;&#160;</a></span>FailureSource</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a73084cd68626dfc89472f6e3fb017696">analyzer::FailureSource</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html#a11110f6ba3012e212ba9dcbd7e81ad0d" title="FAIL only, on one line (whitespace collapsed)">TestRunEntry::failureMessage</a> came from. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a73084cd68626dfc89472f6e3fb017696a6adf97f83acf6453d4a6a4b1070f3754" name="a73084cd68626dfc89472f6e3fb017696a6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"><p>no message found (or the test did not fail) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73084cd68626dfc89472f6e3fb017696acb66279f4746944657fe98910a8c7f57" name="a73084cd68626dfc89472f6e3fb017696acb66279f4746944657fe98910a8c7f57"></a>StepFail&#160;</td><td class="fielddoc"><p>the decisive STEP_FAIL of the log (see BuildTestOutline) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73084cd68626dfc89472f6e3fb017696a6480e4837fae77110b78ff1baeeacd9f" name="a73084cd68626dfc89472f6e3fb017696a6480e4837fae77110b78ff1baeeacd9f"></a>RobotXml&#160;</td><td class="fielddoc"><p><code>xunit.xml</code> <code>&lt;failure message&gt;</code> or <code>output.xml</code> test status text </p>
 </td></tr>
 </table>
 
@@ -341,9 +441,72 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d3e/namespaceanalyzer_a8c10b24b04e711cf99492a080aa74d21_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a8c10b24b04e711cf99492a080aa74d21_icgraph" alt=""/></div>
 <map name="add/d3e/namespaceanalyzer_a8c10b24b04e711cf99492a080aa74d21_icgraph" id="add/d3e/namespaceanalyzer_a8c10b24b04e711cf99492a080aa74d21_icgraph">
-<area shape="rect" title=" " alt="" coords="213,13,405,38"/>
-<area shape="rect" href="../../d5/de7/classui_1_1qt_1_1TestStepsPanel.html#adce3eb2deb860b83a0351c258d39b7a8" title="Re&#45;analyses the events if they changed since the last call." alt="" coords="5,5,165,45"/>
-<area shape="poly" title=" " alt="" coords="199,28,165,28,165,23,199,23"/>
+<area shape="rect" title=" " alt="" coords="751,45,943,70"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="491,5,703,45"/>
+<area shape="poly" title=" " alt="" coords="737,46,703,42,703,36,738,41"/>
+<area shape="rect" href="../../d5/de7/classui_1_1qt_1_1TestStepsPanel.html#adce3eb2deb860b83a0351c258d39b7a8" title="Re&#45;analyses the events if they changed since the last call." alt="" coords="517,69,677,109"/>
+<area shape="poly" title=" " alt="" coords="737,74,677,82,677,76,736,69"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="237,13,443,38"/>
+<area shape="poly" title=" " alt="" coords="477,28,443,28,443,23,477,23"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad8c37d7caa75184f38c5df9fdcb3db65" name="ad8c37d7caa75184f38c5df9fdcb3db65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8c37d7caa75184f38c5df9fdcb3db65">&#9670;&#160;</a></span>CollapseWhitespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::CollapseWhitespace </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Collapses whitespace runs (including newlines) to one space and trims. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_ad8c37d7caa75184f38c5df9fdcb3db65_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_ad8c37d7caa75184f38c5df9fdcb3db65_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_ad8c37d7caa75184f38c5df9fdcb3db65_icgraph" id="add/d3e/namespaceanalyzer_ad8c37d7caa75184f38c5df9fdcb3db65_icgraph">
+<area shape="rect" title="Collapses whitespace runs (including newlines) to one space and trims." alt="" coords="1485,215,1704,240"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a80333346a110643792bc59582a7c38dd" title=" " alt="" coords="1232,128,1431,183"/>
+<area shape="poly" title=" " alt="" coords="1534,214,1430,185,1432,180,1535,208"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="1225,207,1437,247"/>
+<area shape="poly" title=" " alt="" coords="1471,230,1438,230,1438,225,1471,225"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ac0cf616c7571a1d00a23aeaca3a65ad3" title=" " alt="" coords="1233,271,1429,311"/>
+<area shape="poly" title=" " alt="" coords="1529,246,1415,274,1414,269,1527,241"/>
+<area shape="poly" title=" " alt="" coords="1375,117,1359,110,1331,107,1308,109,1293,113,1286,120,1286,128,1281,128,1281,118,1290,109,1307,103,1331,101,1361,104,1377,112"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a86aa5d36a553620fba21f8345a1ced9b" title=" " alt="" coords="955,29,1177,84"/>
+<area shape="poly" title=" " alt="" coords="1248,125,1176,98,1146,87,1148,82,1178,93,1250,120"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a03fbec1fba7545bde7bccb36c15dae26" title="xunit.xml: &lt;testcase name=…&gt; holding &lt;failure message=…&gt; / &lt;error message=…&gt;." alt="" coords="967,132,1165,187"/>
+<area shape="poly" title=" " alt="" coords="1218,160,1165,161,1165,155,1218,154"/>
+<area shape="poly" title=" " alt="" coords="1110,18,1094,11,1066,8,1043,10,1027,15,1020,21,1021,29,1015,29,1016,19,1025,10,1042,5,1066,3,1095,6,1112,14"/>
+<area shape="poly" title=" " alt="" coords="1110,121,1094,114,1066,111,1043,113,1027,117,1020,124,1021,132,1015,132,1016,122,1025,113,1042,107,1066,105,1095,108,1112,116"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="701,216,907,241"/>
+<area shape="poly" title=" " alt="" coords="1211,230,907,231,907,226,1211,225"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="469,209,653,249"/>
+<area shape="poly" title=" " alt="" coords="688,231,653,231,653,226,688,226"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a763190ecb6c1032b588854dc9d352581" title=" " alt="" coords="979,276,1153,301"/>
+<area shape="poly" title=" " alt="" coords="1220,293,1153,292,1153,287,1220,288"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a9a0e2cb1c2cddb2c3d0ea420db2b9db7" title=" " alt="" coords="712,267,896,307"/>
+<area shape="poly" title=" " alt="" coords="964,291,896,290,896,285,965,285"/>
+<area shape="poly" title=" " alt="" coords="707,267,644,251,645,246,708,261"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a2a116aa6eb3ba375396f4b3189969f35" title=" " alt="" coords="5,295,189,335"/>
+<area shape="poly" title=" " alt="" coords="698,294,189,314,189,309,698,289"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#ac5f8b098f03ed0d70a8b4c4c9bf3c232" title="Shows entries, which must be in run order (as ScanResultsFolder returns them)." alt="" coords="469,323,653,363"/>
+<area shape="poly" title=" " alt="" coords="704,313,649,326,648,321,703,308"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a7f1cb07dc17439616ea9aa322a588fea" title=" " alt="" coords="237,323,421,363"/>
+<area shape="poly" title=" " alt="" coords="455,346,422,346,422,341,455,341"/>
+<area shape="poly" title=" " alt="" coords="223,333,189,329,190,324,223,328"/>
 </map>
 </div>
 
@@ -423,6 +586,158 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a8553e4ee8659f6dd0fe0aabd134e0579" name="a8553e4ee8659f6dd0fe0aabd134e0579"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8553e4ee8659f6dd0fe0aabd134e0579">&#9670;&#160;</a></span>FindDecisiveFailureMessage() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::FindDecisiveFailureMessage </td>
+          <td>(</td>
+          <td class="paramtype">const fs::path &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_cgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_cgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_cgraph" id="add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_cgraph">
+<area shape="rect" title=" " alt="" coords="5,269,217,309"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#aa2ad44074f50410d379fa0d620235857" title="Adds a batch of new events to the container." alt="" coords="298,91,451,131"/>
+<area shape="poly" title=" " alt="" coords="141,266,331,137,334,141,144,271"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8c10b24b04e711cf99492a080aa74d21" title=" " alt="" coords="279,216,471,241"/>
+<area shape="poly" title=" " alt="" coords="199,266,304,242,305,247,200,271"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ad8c37d7caa75184f38c5df9fdcb3db65" title="Collapses whitespace runs (including newlines) to one space and trims." alt="" coords="265,276,484,301"/>
+<area shape="poly" title=" " alt="" coords="218,286,252,286,252,291,218,291"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="293,337,456,377"/>
+<area shape="poly" title=" " alt="" coords="190,306,284,331,283,336,189,311"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it." alt="" coords="298,401,451,441"/>
+<area shape="poly" title=" " alt="" coords="140,307,196,347,267,386,286,394,284,399,264,391,193,351,137,311"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#ab9f69c41adcbd8bda08ed3150a04e9e6" title=" " alt="" coords="543,30,700,70"/>
+<area shape="poly" title=" " alt="" coords="451,90,529,70,530,75,453,95"/>
+<area shape="rect" href="../../dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="759,5,996,31"/>
+<area shape="poly" title=" " alt="" coords="700,38,762,30,762,35,700,43"/>
+<area shape="rect" href="../../da/d80/classmvc_1_1IModelObservable.html#afb9b84e8d2dc525ac24407b4a6487112" title="Notifies all registered views that data has changed." alt="" coords="789,55,965,95"/>
+<area shape="poly" title=" " alt="" coords="700,55,776,63,775,68,700,60"/>
+<area shape="rect" href="../../da/d80/classmvc_1_1IModelObservable.html#ab0047bdfb7e8f0e6ff7fca9f911d4d99" title="Internal method to clean up expired weak pointers." alt="" coords="1044,27,1220,67"/>
+<area shape="poly" title=" " alt="" coords="965,63,1030,56,1031,61,966,68"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1269,88,1404,113"/>
+<area shape="poly" title=" " alt="" coords="966,77,1256,94,1255,99,965,83"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="1268,37,1405,63"/>
+<area shape="poly" title=" " alt="" coords="1220,46,1254,46,1254,52,1220,51"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1453,64,1635,89"/>
+<area shape="poly" title=" " alt="" coords="1406,56,1440,61,1439,66,1405,61"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1683,64,1841,89"/>
+<area shape="poly" title=" " alt="" coords="1635,74,1669,74,1669,79,1635,79"/>
+<area shape="poly" title=" " alt="" coords="1404,90,1439,86,1440,91,1405,96"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="532,95,711,120"/>
+<area shape="poly" title=" " alt="" coords="392,214,452,173,531,130,553,122,555,127,533,135,454,178,395,218"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="545,145,698,185"/>
+<area shape="poly" title=" " alt="" coords="424,213,531,185,532,190,425,218"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a2defa04b33bc4829da8d0cbcff42a2c2" title=" " alt="" coords="545,209,698,249"/>
+<area shape="poly" title=" " alt="" coords="471,226,531,226,531,231,471,231"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="545,273,698,313"/>
+<area shape="poly" title=" " alt="" coords="425,239,532,267,531,272,424,244"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="801,145,954,185"/>
+<area shape="poly" title=" " alt="" coords="698,162,787,162,787,167,698,167"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88" title=" " alt="" coords="539,337,704,377"/>
+<area shape="poly" title=" " alt="" coords="456,354,525,354,525,359,456,359"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="828,401,927,427"/>
+<area shape="poly" title=" " alt="" coords="457,373,532,386,684,402,814,409,814,415,684,407,532,391,456,378"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef" title=" " alt="" coords="540,451,703,491"/>
+<area shape="poly" title=" " alt="" coords="457,373,485,386,501,397,510,408,534,431,556,443,553,448,530,435,506,412,497,401,483,391,455,378"/>
+<area shape="poly" title=" " alt="" coords="705,373,815,398,814,403,704,378"/>
+<area shape="poly" title=" " alt="" coords="702,451,814,425,815,431,703,456"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_icgraph" id="add/d3e/namespaceanalyzer_a8553e4ee8659f6dd0fe0aabd134e0579_icgraph">
+<area shape="rect" title=" " alt="" coords="491,5,703,45"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="237,13,443,38"/>
+<area shape="poly" title=" " alt="" coords="477,28,443,28,443,23,477,23"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a22208982d7b89e02fea9460dc14adf7b" name="a22208982d7b89e02fea9460dc14adf7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22208982d7b89e02fea9460dc14adf7b">&#9670;&#160;</a></span>FindDecisiveFailureMessage() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::FindDecisiveFailureMessage </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Message of the decisive STEP_FAIL of a failing merged log (empty when the log records none, e.g. a suite-setup failure). Reads every line but parses only the robot marker lines (TEST_START / TEST_END / STEP / STEP_FAIL) and hands them to BuildTestOutline, so the choice matches the Test Steps tab. </p>
+
+</div>
+</div>
+<a id="a763190ecb6c1032b588854dc9d352581" name="a763190ecb6c1032b588854dc9d352581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a763190ecb6c1032b588854dc9d352581">&#9670;&#160;</a></span>GroupFailures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="../../db/dbe/structanalyzer_1_1FailureGroup.html">FailureGroup</a> &gt; analyzer::GroupFailures </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>entries</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Groups the FAIL entries that have a message by NormalizeFailureMessage; largest group first, ties in order of first appearance. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_cgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_cgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_cgraph" id="add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_cgraph">
+<area shape="rect" title=" " alt="" coords="5,13,180,38"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ac0cf616c7571a1d00a23aeaca3a65ad3" title=" " alt="" coords="228,5,424,45"/>
+<area shape="poly" title=" " alt="" coords="181,23,215,23,215,28,181,28"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ad8c37d7caa75184f38c5df9fdcb3db65" title="Collapses whitespace runs (including newlines) to one space and trims." alt="" coords="472,13,691,38"/>
+<area shape="poly" title=" " alt="" coords="424,23,459,23,459,28,424,28"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_icgraph" id="add/d3e/namespaceanalyzer_a763190ecb6c1032b588854dc9d352581_icgraph">
+<area shape="rect" title=" " alt="" coords="933,70,1108,95"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a9a0e2cb1c2cddb2c3d0ea420db2b9db7" title=" " alt="" coords="701,63,885,103"/>
+<area shape="poly" title=" " alt="" coords="919,85,886,85,886,80,919,80"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="469,5,653,45"/>
+<area shape="poly" title=" " alt="" coords="698,62,642,48,643,43,699,57"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a2a116aa6eb3ba375396f4b3189969f35" title=" " alt="" coords="5,92,189,132"/>
+<area shape="poly" title=" " alt="" coords="688,90,190,111,190,105,687,84"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#ac5f8b098f03ed0d70a8b4c4c9bf3c232" title="Shows entries, which must be in run order (as ScanResultsFolder returns them)." alt="" coords="469,120,653,160"/>
+<area shape="poly" title=" " alt="" coords="699,109,643,123,642,117,698,103"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a7f1cb07dc17439616ea9aa322a588fea" title=" " alt="" coords="237,120,421,160"/>
+<area shape="poly" title=" " alt="" coords="455,143,422,143,422,137,455,137"/>
+<area shape="poly" title=" " alt="" coords="223,130,189,126,190,120,223,125"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="aee5bf03158adf9cf7387d4d5b39a6916" name="aee5bf03158adf9cf7387d4d5b39a6916"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee5bf03158adf9cf7387d4d5b39a6916">&#9670;&#160;</a></span>IsPlaceholderActor()</h2>
 
@@ -490,6 +805,329 @@ Here is the caller graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="438,596,367,575,368,570,440,590"/>
 </map>
 </div>
+
+</div>
+</div>
+<a id="ac0cf616c7571a1d00a23aeaca3a65ad3" name="ac0cf616c7571a1d00a23aeaca3a65ad3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0cf616c7571a1d00a23aeaca3a65ad3">&#9670;&#160;</a></span>NormalizeFailureMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::NormalizeFailureMessage </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Grouping signature of a failure message: whitespace collapsed and every run of digits replaced by <code>N</code>, so "not received within 20s" and "not received within 40s" fall into one group. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_cgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_cgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_cgraph" id="add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,201,45"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ad8c37d7caa75184f38c5df9fdcb3db65" title="Collapses whitespace runs (including newlines) to one space and trims." alt="" coords="249,13,468,38"/>
+<area shape="poly" title=" " alt="" coords="202,23,236,23,236,28,202,28"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_icgraph" id="add/d3e/namespaceanalyzer_ac0cf616c7571a1d00a23aeaca3a65ad3_icgraph">
+<area shape="rect" title=" " alt="" coords="1156,63,1352,103"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a763190ecb6c1032b588854dc9d352581" title=" " alt="" coords="933,70,1108,95"/>
+<area shape="poly" title=" " alt="" coords="1142,85,1108,85,1108,80,1142,80"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a9a0e2cb1c2cddb2c3d0ea420db2b9db7" title=" " alt="" coords="701,63,885,103"/>
+<area shape="poly" title=" " alt="" coords="919,85,886,85,886,80,919,80"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="469,5,653,45"/>
+<area shape="poly" title=" " alt="" coords="698,62,642,48,643,43,699,57"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a2a116aa6eb3ba375396f4b3189969f35" title=" " alt="" coords="5,92,189,132"/>
+<area shape="poly" title=" " alt="" coords="688,90,190,111,190,105,687,84"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#ac5f8b098f03ed0d70a8b4c4c9bf3c232" title="Shows entries, which must be in run order (as ScanResultsFolder returns them)." alt="" coords="469,120,653,160"/>
+<area shape="poly" title=" " alt="" coords="699,109,643,123,642,117,698,103"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a7f1cb07dc17439616ea9aa322a588fea" title=" " alt="" coords="237,120,421,160"/>
+<area shape="poly" title=" " alt="" coords="455,143,422,143,422,137,455,137"/>
+<area shape="poly" title=" " alt="" coords="223,130,189,126,190,120,223,125"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4c72e13bf382d273bd99932fb6e8e325" name="a4c72e13bf382d273bd99932fb6e8e325"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c72e13bf382d273bd99932fb6e8e325">&#9670;&#160;</a></span>ParseIsoMicros()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::int64_t &gt; analyzer::ParseIsoMicros </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>ts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>"YYYY-MM-DDTHH:MM:SS[.fraction]…" → µs since the epoch. Any zone suffix is ignored: only differences between timestamps of one log are meaningful. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a4c72e13bf382d273bd99932fb6e8e325_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a4c72e13bf382d273bd99932fb6e8e325_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a4c72e13bf382d273bd99932fb6e8e325_icgraph" id="add/d3e/namespaceanalyzer_a4c72e13bf382d273bd99932fb6e8e325_icgraph">
+<area shape="rect" title=" " alt="" coords="769,13,952,38"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a3613e0f924207acb1e8c40856e76ea95" title=" " alt="" coords="491,13,721,38"/>
+<area shape="poly" title=" " alt="" coords="756,28,722,28,722,23,756,23"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="237,13,443,38"/>
+<area shape="poly" title=" " alt="" coords="477,28,443,28,443,23,477,23"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a24040532246691a9f2b17b444123be94" name="a24040532246691a9f2b17b444123be94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24040532246691a9f2b17b444123be94">&#9670;&#160;</a></span>ReadRobotFailures() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, std::string &gt; analyzer::ReadRobotFailures </td>
+          <td>(</td>
+          <td class="paramtype">const fs::path &amp;&#160;</td>
+          <td class="paramname"><em>folder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a24040532246691a9f2b17b444123be94_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a24040532246691a9f2b17b444123be94_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a24040532246691a9f2b17b444123be94_icgraph" id="add/d3e/namespaceanalyzer_a24040532246691a9f2b17b444123be94_icgraph">
+<area shape="rect" title=" " alt="" coords="491,13,697,38"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="237,13,443,38"/>
+<area shape="poly" title=" " alt="" coords="477,28,443,28,443,23,477,23"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4b0b23d14b4a8a9734351c4183ff64bc" name="a4b0b23d14b4a8a9734351c4183ff64bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b0b23d14b4a8a9734351c4183ff64bc">&#9670;&#160;</a></span>ReadRobotFailures() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, std::string &gt; analyzer::ReadRobotFailures </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>folder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Failure messages Robot Framework wrote next to the logs: test name (see TestNameKey) → message. <code>xunit.xml</code> (<code>&lt;testcase name&gt;</code> / <code>&lt;failure message&gt;</code> or <code>&lt;error message&gt;</code>) is used when it exists, else <code>output.xml</code> (the text of a <code>&lt;test&gt;</code>'s own FAIL <code>&lt;status&gt;</code>). Missing or broken files give an empty map. </p>
+
+</div>
+</div>
+<a id="a3613e0f924207acb1e8c40856e76ea95" name="a3613e0f924207acb1e8c40856e76ea95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3613e0f924207acb1e8c40856e76ea95">&#9670;&#160;</a></span>ReadTestLogSummary() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> analyzer::ReadTestLogSummary </td>
+          <td>(</td>
+          <td class="paramtype">const fs::path &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_cgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_cgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_cgraph" id="add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,236,31"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a4c72e13bf382d273bd99932fb6e8e325" title=" " alt="" coords="284,5,467,31"/>
+<area shape="poly" title=" " alt="" coords="236,15,270,15,270,21,236,21"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_icgraph" id="add/d3e/namespaceanalyzer_a3613e0f924207acb1e8c40856e76ea95_icgraph">
+<area shape="rect" title=" " alt="" coords="491,13,721,38"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="237,13,443,38"/>
+<area shape="poly" title=" " alt="" coords="477,28,443,28,443,23,477,23"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad9c70b0a9bd3344bbed6ecc0fe2437bb" name="ad9c70b0a9bd3344bbed6ecc0fe2437bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c70b0a9bd3344bbed6ecc0fe2437bb">&#9670;&#160;</a></span>ReadTestLogSummary() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> analyzer::ReadTestLogSummary </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Header and time span of one merged log: reads the <code>#</code> header block, the first event line and the last 64 KiB of the file. Never parses the events. </p>
+
+</div>
+</div>
+<a id="a206c1a22a3e01e2fb263c42fccfc53e2" name="a206c1a22a3e01e2fb263c42fccfc53e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a206c1a22a3e01e2fb263c42fccfc53e2">&#9670;&#160;</a></span>ScanResultsFolder() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt; analyzer::ScanResultsFolder </td>
+          <td>(</td>
+          <td class="paramtype">const fs::path &amp;&#160;</td>
+          <td class="paramname"><em>folder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">ScanProgress</a> &amp;&#160;</td>
+          <td class="paramname"><em>progress</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_cgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_cgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_cgraph" id="add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_cgraph">
+<area shape="rect" title=" " alt="" coords="5,435,211,460"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8553e4ee8659f6dd0fe0aabd134e0579" title=" " alt="" coords="268,309,480,349"/>
+<area shape="poly" title=" " alt="" coords="136,432,315,352,317,357,139,437"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a24040532246691a9f2b17b444123be94" title=" " alt="" coords="271,409,477,435"/>
+<area shape="poly" title=" " alt="" coords="211,435,257,430,257,436,211,440"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a3613e0f924207acb1e8c40856e76ea95" title=" " alt="" coords="259,459,489,484"/>
+<area shape="poly" title=" " alt="" coords="211,454,245,457,245,462,211,459"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a2f03328a1e717800f895cbda938113b4" title=" " alt="" coords="287,508,461,533"/>
+<area shape="poly" title=" " alt="" coords="147,458,259,493,298,502,296,507,258,498,145,463"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#aa2ad44074f50410d379fa0d620235857" title="Adds a batch of new events to the container." alt="" coords="570,91,723,131"/>
+<area shape="poly" title=" " alt="" coords="399,307,608,138,611,142,402,311"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a8c10b24b04e711cf99492a080aa74d21" title=" " alt="" coords="551,216,743,241"/>
+<area shape="poly" title=" " alt="" coords="429,306,597,244,599,249,431,311"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#ad8c37d7caa75184f38c5df9fdcb3db65" title="Collapses whitespace runs (including newlines) to one space and trims." alt="" coords="537,287,756,312"/>
+<area shape="poly" title=" " alt="" coords="480,315,523,310,524,315,480,320"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a623a4a450acda308c5a253314bc97fbb" title=" " alt="" coords="565,337,728,377"/>
+<area shape="poly" title=" " alt="" coords="480,337,552,344,552,350,480,342"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#ae7640d84c0da86022786293fc0645d38" title="Replaces the file metadata. Cleared by Clear(); MergeEvents() keeps it." alt="" coords="570,401,723,441"/>
+<area shape="poly" title=" " alt="" coords="428,346,538,386,563,394,561,399,536,391,426,351"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#ab9f69c41adcbd8bda08ed3150a04e9e6" title=" " alt="" coords="815,30,972,70"/>
+<area shape="poly" title=" " alt="" coords="723,90,801,70,802,75,725,95"/>
+<area shape="rect" href="../../dc/d2d/classmvc_1_1IModel.html#aecc89af25b0685af5395062d6c9b2adb" title=" " alt="" coords="1031,5,1268,31"/>
+<area shape="poly" title=" " alt="" coords="972,38,1034,30,1034,35,972,43"/>
+<area shape="rect" href="../../da/d80/classmvc_1_1IModelObservable.html#afb9b84e8d2dc525ac24407b4a6487112" title="Notifies all registered views that data has changed." alt="" coords="1061,55,1237,95"/>
+<area shape="poly" title=" " alt="" coords="972,55,1048,63,1047,68,972,60"/>
+<area shape="rect" href="../../da/d80/classmvc_1_1IModelObservable.html#ab0047bdfb7e8f0e6ff7fca9f911d4d99" title="Internal method to clean up expired weak pointers." alt="" coords="1316,27,1492,67"/>
+<area shape="poly" title=" " alt="" coords="1237,63,1302,56,1303,61,1238,68"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ae7bdc34da771cb8878c176743e68ed17" title=" " alt="" coords="1541,88,1676,113"/>
+<area shape="poly" title=" " alt="" coords="1238,77,1528,94,1527,99,1237,83"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#ab219048f3c627c62fa41e3b0f0745993" title=" " alt="" coords="1540,37,1677,63"/>
+<area shape="poly" title=" " alt="" coords="1492,46,1526,46,1526,52,1492,51"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="1725,64,1907,89"/>
+<area shape="poly" title=" " alt="" coords="1678,56,1712,61,1711,66,1677,61"/>
+<area shape="rect" href="../../d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="1955,64,2113,89"/>
+<area shape="poly" title=" " alt="" coords="1907,74,1941,74,1941,79,1907,79"/>
+<area shape="poly" title=" " alt="" coords="1676,90,1711,86,1712,91,1677,96"/>
+<area shape="rect" href="../../d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="804,95,983,120"/>
+<area shape="poly" title=" " alt="" coords="664,214,724,173,803,130,825,122,827,127,805,135,726,178,667,218"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="817,145,970,185"/>
+<area shape="poly" title=" " alt="" coords="696,213,803,185,804,190,697,218"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a2defa04b33bc4829da8d0cbcff42a2c2" title=" " alt="" coords="817,209,970,249"/>
+<area shape="poly" title=" " alt="" coords="743,226,803,226,803,231,743,231"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="817,273,970,313"/>
+<area shape="poly" title=" " alt="" coords="697,239,804,267,803,272,696,244"/>
+<area shape="rect" href="../../dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="1073,145,1226,185"/>
+<area shape="poly" title=" " alt="" coords="970,162,1059,162,1059,167,970,167"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a866d906009881f88e3f8d6cdcb264d88" title=" " alt="" coords="811,337,976,377"/>
+<area shape="poly" title=" " alt="" coords="728,354,797,354,797,359,728,359"/>
+<area shape="rect" href="../../d0/dd5/namespaceparser.html#aa8c4ebd6d5a8b924a3bb9a02e685432c" title=" " alt="" coords="1100,401,1199,427"/>
+<area shape="poly" title=" " alt="" coords="729,373,804,386,956,402,1086,409,1086,415,956,407,804,391,728,378"/>
+<area shape="rect" href="../../d3/de3/classparser_1_1SapiLogParser.html#a9881b76696d5bf8296ba5b1ef77414ef" title=" " alt="" coords="812,451,975,491"/>
+<area shape="poly" title=" " alt="" coords="729,373,757,386,773,397,782,408,806,431,828,443,825,448,802,435,778,412,769,401,755,391,727,378"/>
+<area shape="poly" title=" " alt="" coords="977,373,1087,398,1086,403,976,378"/>
+<area shape="poly" title=" " alt="" coords="974,451,1086,425,1087,431,975,456"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a4c72e13bf382d273bd99932fb6e8e325" title=" " alt="" coords="555,465,738,491"/>
+<area shape="poly" title=" " alt="" coords="490,471,542,473,541,478,489,477"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_icgraph" id="add/d3e/namespaceanalyzer_a206c1a22a3e01e2fb263c42fccfc53e2_icgraph">
+<area shape="rect" title=" " alt="" coords="237,13,443,38"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="5,5,189,45"/>
+<area shape="poly" title=" " alt="" coords="224,28,189,28,189,23,224,23"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae73922adcf55de3a2d6df33df6a3298f" name="ae73922adcf55de3a2d6df33df6a3298f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae73922adcf55de3a2d6df33df6a3298f">&#9670;&#160;</a></span>ScanResultsFolder() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="../../d8/db4/structanalyzer_1_1TestRunEntry.html">TestRunEntry</a> &gt; analyzer::ScanResultsFolder </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>folder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../dd/d3e/namespaceanalyzer.html#a3dd0dc24b8a1d4781e04dc472ff0bec4">ScanProgress</a> &amp;&#160;</td>
+          <td class="paramname"><em>progress</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Scans every <code>*__merged_logs.txt</code> of <code>folder</code> (not recursive): ReadTestLogSummary for each, FindDecisiveFailureMessage for FAIL logs only, ReadRobotFailures for FAIL logs still without a message.</p>
+<p>The result is in run order: by <code>timestamp</code> (ISO-8601 strings of one run share a time zone, so they compare as text), then by file name. The test that ran before entry i is therefore entry i − 1.</p>
+<p>Returns an empty vector when <code>progress</code> cancels. </p>
 
 </div>
 </div>
@@ -671,6 +1309,46 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a2f03328a1e717800f895cbda938113b4" name="a2f03328a1e717800f895cbda938113b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f03328a1e717800f895cbda938113b4">&#9670;&#160;</a></span>TestNameKey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string analyzer::TestNameKey </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matching key for test names: lower-case letters and digits only, so the header name "No Container Is Crash-Looping", the xunit name and the file name "No_Container_Is_Crash-Looping" all match. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dd/d3e/namespaceanalyzer_a2f03328a1e717800f895cbda938113b4_icgraph.png" border="0" usemap="#add/d3e/namespaceanalyzer_a2f03328a1e717800f895cbda938113b4_icgraph" alt=""/></div>
+<map name="add/d3e/namespaceanalyzer_a2f03328a1e717800f895cbda938113b4_icgraph" id="add/d3e/namespaceanalyzer_a2f03328a1e717800f895cbda938113b4_icgraph">
+<area shape="rect" title=" " alt="" coords="529,183,704,208"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a80333346a110643792bc59582a7c38dd" title=" " alt="" coords="279,132,478,187"/>
+<area shape="poly" title=" " alt="" coords="519,183,478,177,479,172,519,178"/>
+<area shape="rect" href="../../dd/d3e/namespaceanalyzer.html#a206c1a22a3e01e2fb263c42fccfc53e2" title=" " alt="" coords="276,215,481,240"/>
+<area shape="poly" title=" " alt="" coords="516,212,474,217,473,212,515,206"/>
+<area shape="poly" title=" " alt="" coords="418,121,404,114,379,111,357,113,344,117,338,124,338,132,332,132,333,122,341,113,356,107,379,105,406,108,421,116"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a86aa5d36a553620fba21f8345a1ced9b" title=" " alt="" coords="5,29,228,84"/>
+<area shape="poly" title=" " alt="" coords="303,129,227,98,197,87,199,82,229,93,305,124"/>
+<area shape="rect" href="../../d9/d31/namespaceanalyzer_1_1anonymous__namespace_02TestRunIndex_8cpp_03.html#a03fbec1fba7545bde7bccb36c15dae26" title="xunit.xml: &lt;testcase name=…&gt; holding &lt;failure message=…&gt; / &lt;error message=…&gt;." alt="" coords="17,132,216,187"/>
+<area shape="poly" title=" " alt="" coords="266,162,216,162,216,157,266,157"/>
+<area shape="poly" title=" " alt="" coords="160,18,145,11,117,8,93,10,78,15,71,21,71,29,66,29,66,19,75,10,92,5,117,3,146,6,163,14"/>
+<area shape="poly" title=" " alt="" coords="160,121,145,114,117,111,93,113,78,117,71,124,71,132,66,132,66,122,75,113,92,107,117,105,146,108,163,116"/>
+<area shape="rect" href="../../d1/d14/classui_1_1qt_1_1RunExplorerDialog.html#a691ed2a957c86264bdd29671610a628a" title="Scans folder in the background (a running scan is cancelled first)." alt="" coords="25,211,209,251"/>
+<area shape="poly" title=" " alt="" coords="262,232,209,233,209,227,262,226"/>
+</map>
+</div>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ad6f772cb0546635a3c47b9f3766033bf" name="ad6f772cb0546635a3c47b9f3766033bf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad6f772cb0546635a3c47b9f3766033bf">&#9670;&#160;</a></span>kActorWords</h2>
@@ -750,6 +1428,30 @@ Here is the caller graph for this function:</div>
 <div class="line">    <span class="stringliteral">&quot;function&quot;</span>, <span class="stringliteral">&quot;procedure&quot;</span>, <span class="stringliteral">&quot;routine&quot;</span>, <span class="stringliteral">&quot;handler&quot;</span></div>
 <div class="line">}</div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a14a2959357584625f2d531caded2d96e" name="a14a2959357584625f2d531caded2d96e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14a2959357584625f2d531caded2d96e">&#9670;&#160;</a></span>kMergedLogSuffix</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::string_view analyzer::kMergedLogSuffix = &quot;__merged_logs.txt&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>File-name suffix of a safeAPI merged test log inside a results folder. </p>
+
 </div>
 </div>
 <a id="a02fc1a5fe0105c4136ae914d78a75695" name="a02fc1a5fe0105c4136ae914d78a75695"></a>
