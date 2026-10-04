@@ -77,6 +77,9 @@ class DashboardPanel : public QWidget
 
     // UI components
     QString m_filePath;
+    /// Actor columns found by discovery; re-discovered only when the log size changes.
+    std::vector<std::string> m_actorFields;
+    std::size_t              m_actorFieldsEventCount {0};
     QLabel* m_fileNameLabel = nullptr;
     QLabel* m_fileFormatLabel = nullptr;
     QLabel* m_fileSizeLabel = nullptr;

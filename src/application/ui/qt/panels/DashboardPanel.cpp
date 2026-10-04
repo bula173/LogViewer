@@ -260,7 +260,13 @@ void DashboardPanel::UpdateFileInfo()
             std::string lower = key;
             std::transform(lower.begin(), lower.end(), lower.begin(),
                 [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-            if (lower.find("time") != std::string::npos || lower == "ts" || lower == "date")
+            // Time-like names only: "timestamp", "time", "ts", "date", "*_time", "*_timestamp".
+            const auto endsWith = [&lower](const char* suffix) {
+                const std::string suf = suffix;
+                return lower.size() >= suf.size() && lower.compare(lower.size() - suf.size(), suf.size(), suf) == 0;
+            };
+            if (lower == "timestamp" || lower == "time" || lower == "ts" || lower == "date"
+                || endsWith("_time") || endsWith("_timestamp"))
             {
                 timeKey = key;
                 break;
@@ -361,7 +367,13 @@ void DashboardPanel::UpdateTopActors()
     }
 
     std::map<QString, qint64> actorCounts;
-    const std::vector<std::string> actorFields = ResolveActorFields(*m_events);
+    // Discovery scans the whole log, so it runs once per log size, not per refresh.
+    if (m_actorFields.empty() || m_actorFieldsEventCount != m_events->Size())
+    {
+        m_actorFields = ResolveActorFields(*m_events);
+        m_actorFieldsEventCount = m_events->Size();
+    }
+    const std::vector<std::string>& actorFields = m_actorFields;
 
     // Count events by actor (thread-safe: cache size first)
     const size_t eventCount = m_events->Size();
@@ -376,11 +388,13 @@ void DashboardPanel::UpdateTopActors()
             const auto& event = m_events->GetEvent(i);
             // An event counts once per actor it names (sender and receiver
             // fields, comma lists split, placeholders such as "internal" skipped).
-            std::set<std::string> named;
+            // A handful of fields per event: a linear de-duplication is cheaper than a set.
+            std::vector<std::string> named;
             for (const auto& field : actorFields)
                 for (auto& name : analyzer::SplitActorList(event.findByKey(field)))
-                    if (!analyzer::IsPlaceholderActor(name))
-                        named.insert(std::move(name));
+                    if (!analyzer::IsPlaceholderActor(name)
+                        && std::find(named.begin(), named.end(), name) == named.end())
+                        named.push_back(std::move(name));
             for (const auto& name : named)
                 actorCounts[QString::fromStdString(name)]++;
         }

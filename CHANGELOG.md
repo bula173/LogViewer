@@ -7,6 +7,13 @@ All notable changes to LogViewer are documented here.
 ### Fixes
 
 - **Tabs menu** — hiding a content tab from View → Tabs hid whichever tab had been at that position when the menu was built, so after tabs were sorted or removed another tab disappeared. Each menu entry now follows its own tab.
+- **Follow-file with a sorted table** — appended events are merged into the existing sort order instead of re-sorting the whole log on every batch.
+- **Dashboard performance** — actor-column discovery runs once per log instead of on every refresh; the top-actors count no longer allocates a set per event.
+- **View → Tabs ticks** — the checkmarks are re-read from the real tab state whenever the menu opens (layouts and tab sorting changed visibility without updating them).
+- **Hidden columns keep their filter** — hiding a filtered column no longer deletes its filter; it is suspended while hidden and applies again when the column is shown. Only renamed/removed columns lose their filter.
+- **Portable mode on macOS** — never activates inside a `.app` bundle (writing there breaks the code signature).
+- **Item details** — a very long key is capped at 40 % of the panel width so values keep room to wrap.
+- **Dashboard time range** — only time-like columns (`timestamp`, `time`, `ts`, `date`, `*_time`, `*_timestamp`) are used, not any key containing "time".
 
 ### New features
 

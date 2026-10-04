@@ -50,6 +50,18 @@ TEST_F(PortableModeTest, MarkerInAnotherDirectoryIsIgnored)
     EXPECT_FALSE(IsPortable());
 }
 
+#ifdef __APPLE__
+TEST_F(PortableModeTest, AppBundleIsNeverPortable)
+{
+    const auto bundle = m_dir / "LogViewer.app" / "Contents" / "MacOS";
+    std::filesystem::create_directories(bundle);
+    OverrideExecutableDirForTesting(bundle);
+    CreateMarker();
+    std::ofstream(bundle / kMarkerFile).put('\n');
+    EXPECT_FALSE(IsPortable());
+}
+#endif
+
 TEST_F(PortableModeTest, ConfigLivesInTheDataFolderAndIsCreated)
 {
     CreateMarker();

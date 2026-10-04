@@ -137,6 +137,22 @@ TEST_F(ColumnFilterRobustnessTest, FilterOnAColumnThatDisappearsIsDropped)
     EXPECT_EQ(changed.count(), 1);
 }
 
+TEST_F(ColumnFilterRobustnessTest, FilterOfAHiddenColumnIsKeptAndReappliesWhenShownAgain)
+{
+    EventsTableModel model(m_events);
+    model.SetColumnFilter(1, Set({"ERROR"}));
+    ASSERT_EQ(model.rowCount(), 2);
+
+    config::GetConfig().GetMutableColumns() = {{"id", true, 50}, {"level", false, 80}, {"source", true, 80}};
+    model.RefreshColumns();
+    EXPECT_TRUE(model.HasAnyColumnFilter());   // kept, not silently dropped
+    EXPECT_EQ(model.rowCount(), 5);            // not applied while hidden
+
+    config::GetConfig().GetMutableColumns() = {{"id", true, 50}, {"level", true, 80}, {"source", true, 80}};
+    model.RefreshColumns();
+    EXPECT_EQ(model.rowCount(), 2);            // applied again once shown
+}
+
 TEST_F(ColumnFilterRobustnessTest, SortFollowsItsColumnWhenColumnsAreReordered)
 {
     EventsTableModel model(m_events);

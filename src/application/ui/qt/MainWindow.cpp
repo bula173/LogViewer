@@ -1197,6 +1197,20 @@ void MainWindow::SetupMenus()
         action->setToolTip(m_contentTabs->tabToolTip(i));
         utils::BindTabVisibilityAction(action, m_contentTabs, m_contentTabs->widget(i));
     }
+    // Layouts and tab sorting change visibility outside this menu; re-read the
+    // real state every time the menu opens so the ticks match the tabs.
+    connect(tabsMenu, &QMenu::aboutToShow, this, [this, tabsMenu]() {
+        if (!m_contentTabs)
+            return;
+        for (QAction* action : tabsMenu->actions()) {
+            for (int i = 0; i < m_contentTabs->count(); ++i) {
+                if (m_contentTabs->tabText(i) == action->text()) {
+                    action->setChecked(m_contentTabs->tabBar()->isTabVisible(i));
+                    break;
+                }
+            }
+        }
+    });
 
     viewMenu->addSeparator();
 

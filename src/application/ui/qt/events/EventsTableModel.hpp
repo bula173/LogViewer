@@ -10,6 +10,7 @@
 #include "utils/SearchEngine.hpp"
 
 #include <map>
+#include <set>
 #include <unordered_set>
 #include <vector>
 #include <unordered_map>
@@ -117,6 +118,26 @@ class EventsTableModel : public QAbstractTableModel
     void ApplyEffectiveFilter();
     void SortIndices(std::vector<unsigned long>& indices, const std::string& columnName,
         bool isMergeSource, Qt::SortOrder order) const;
+    /// Sort key of one row, computed once (see SortIndices / SortBefore).
+    struct SortKey
+    {
+        unsigned long index {0};
+        int           id {0};
+        bool          numeric {false};
+        bool          isInt {false};
+        long long     asInt {0};
+        double        asDouble {0.0};
+        QString       text;
+    };
+    SortKey MakeSortKey(unsigned long idx, const std::string& columnName, bool isMergeSource) const;
+    /// Three-way ascending comparison of two keys (ties broken by event id).
+    static int CompareSortKeys(const SortKey& a, const SortKey& b);
+    /// True if row @p a sorts before row @p b in the active sort.
+    bool SortBefore(unsigned long a, unsigned long b) const;
+    /// Slots rows appended since the last full sort into the sorted list
+    /// (O(k log k + n) instead of a full re-sort). Falls back to a full
+    /// re-filter when the sorted list does not cover the previous events.
+    void AppendSortedRows(std::size_t total);
     /// Drops column filters and the sort whose column is no longer visible
     /// (renamed / hidden in the column configuration). Returns true if a
     /// column filter was dropped.
@@ -139,7 +160,11 @@ class EventsTableModel : public QAbstractTableModel
     std::vector<unsigned long> m_baseFilteredIndices; ///< Rows chosen by the rest of the app
     bool m_baseFilterActive {false};
     std::map<std::string, ColumnFilter> m_columnFilters;
+    std::set<std::string> m_visibleFilterKeys; ///< Keys of the visible columns; only their filters apply
     bool          m_hasSort {false};
+    /// Events covered by m_filteredIndices when it is the complete sorted list
+    /// (no upstream or column filter); 0 when it is not such a list.
+    std::size_t   m_fullSortedCount {0};
     std::string   m_sortName;          ///< sort column by data name, so it survives column changes
     bool          m_sortMergeSource {false};
     Qt::SortOrder m_sortOrder {Qt::AscendingOrder};

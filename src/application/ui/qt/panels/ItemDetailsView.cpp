@@ -40,7 +40,7 @@ ItemDetailsView::ItemDetailsView(db::EventsContainer& events, QWidget* parent)
     // as wide as the longest unwrapped value, so nothing wrapped until the
     // panel was resized.)
     m_details->horizontalHeader()->setStretchLastSection(true);
-    m_details->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    m_details->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive); // width capped in DisplayEvent
     m_details->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     m_details->verticalHeader()->setVisible(false);
     m_details->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -279,6 +279,12 @@ void ItemDetailsView::DisplayEvent(int actualRow)
             populateRow(row++, key, value, true);
     }
 
+    // A very long key must not take the panel: the key column gets at most 40%
+    // of the viewport, the value column (stretched) takes the rest.
+    m_details->resizeColumnToContents(0);
+    const int maxKeyWidth = m_details->viewport()->width() * 2 / 5;
+    if (m_details->columnWidth(0) > maxKeyWidth)
+        m_details->setColumnWidth(0, maxKeyWidth);
     m_details->resizeRowsToContents(); // wrapped at the stretched value-column width
     util::Logger::Debug("[ItemDetails] Displayed event row {} ({} field(s){})",
         actualRow, regularItems.size(),

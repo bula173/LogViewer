@@ -63,6 +63,12 @@ bool IsPortable()
     const auto dir = ExecutableDir();
     if (dir.empty())
         return false;
+#ifdef __APPLE__
+    // Inside a .app bundle the data folder would sit in the signed bundle and
+    // every write would break the code signature. Portable mode is not offered there.
+    if (dir.generic_string().find(".app/Contents/") != std::string::npos)
+        return false;
+#endif
     std::error_code ec;
     return std::filesystem::exists(dir / kMarkerFile, ec);
 }
