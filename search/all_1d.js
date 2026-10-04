@@ -49,7 +49,7 @@ var searchData=
   ['the_20panel_46',['7.1 Opening the Panel',['../d6/dbf/md_docs_2USER__MANUAL.html#autotoc_md821',1,'']]],
   ['the_20plugin_47',['Building the Plugin',['../d8/d34/md_docs_2AI__PROVIDER__PLUGIN.html#autotoc_md76',1,'']]],
   ['the_20plugin_20lifecycle_48',['Understanding the Plugin Lifecycle',['../de/d35/md_docs_2SDK__GETTING__STARTED.html#autotoc_md699',1,'']]],
-  ['theme_49',['theme',['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a50c1920cc00b5b8ef9f7e6b3906a18f2',1,'ui::qt::utils::ThemeManager::theme() const'],['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a3d73bac8ac6bdb55135ab02782330130',1,'ui::qt::utils::ThemeManager::Theme']]],
+  ['theme_49',['theme',['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a3d73bac8ac6bdb55135ab02782330130',1,'ui::qt::utils::ThemeManager::Theme'],['../d0/db0/classui_1_1qt_1_1utils_1_1ThemeManager.html#a50c1920cc00b5b8ef9f7e6b3906a18f2',1,'ui::qt::utils::ThemeManager::theme() const']]],
   ['themecustomizationdialog_50',['themecustomizationdialog',['../d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html',1,'ui::qt::ThemeCustomizationDialog'],['../d4/d52/classui_1_1qt_1_1ThemeCustomizationDialog.html#a313df066b0225c8edf31a7bc7059cb67',1,'ui::qt::ThemeCustomizationDialog::ThemeCustomizationDialog()']]],
   ['themecustomizationdialog_2ecpp_51',['ThemeCustomizationDialog.cpp',['../d0/d26/ThemeCustomizationDialog_8cpp.html',1,'']]],
   ['themecustomizationdialog_2ehpp_52',['ThemeCustomizationDialog.hpp',['../d8/d2c/ThemeCustomizationDialog_8hpp.html',1,'']]],

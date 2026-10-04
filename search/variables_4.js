@@ -7,7 +7,7 @@ var searchData=
   ['errorcolor_4',['errorColor',['../dc/df2/structui_1_1qt_1_1utils_1_1ThemeManager_1_1ColorScheme.html#ac6e2a008ad6f2c8cb8518ead680975f2',1,'ui::qt::utils::ThemeManager::ColorScheme']]],
   ['errorcount_5',['errorcount',['../d8/d0d/structui_1_1qt_1_1ActorsPanel_1_1ActorData.html#a96aae381f76bd15f1fff2ba187372687',1,'ui::qt::ActorsPanel::ActorData::errorCount'],['../d1/d31/structui_1_1qt_1_1utils_1_1ReportGenerator_1_1ReportStatistics.html#aad098177c2bece98fa438017c8ebf552',1,'ui::qt::utils::ReportGenerator::ReportStatistics::errorCount']]],
   ['eventbatch_6',['eventBatch',['../de/d53/structparser_1_1ParserState.html#a284e91d89bcf9681823aed7d4e8e2a37',1,'parser::ParserState']]],
-  ['eventid_7',['eventid',['../de/d74/structmvc_1_1SearchResultRow.html#a98b01985af5c157f90b19f16905a2c29',1,'mvc::SearchResultRow::eventId'],['../de/d53/structparser_1_1ParserState.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState::eventId'],['../d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html#ad67c12c0b404b5f1d2129d3ad32617cf',1,'ui::qt::utils::EventTagManager::EventAnnotation::eventId']]],
+  ['eventid_7',['eventid',['../de/d74/structmvc_1_1SearchResultRow.html#a98b01985af5c157f90b19f16905a2c29',1,'mvc::SearchResultRow::eventId'],['../d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html#ad67c12c0b404b5f1d2129d3ad32617cf',1,'ui::qt::utils::EventTagManager::EventAnnotation::eventId'],['../de/d53/structparser_1_1ParserState.html#a0dd2c2afa7d74c166fb5471d883070db',1,'parser::ParserState::eventId']]],
   ['eventindex_8',['eventIndex',['../d1/da6/structanalyzer_1_1SequenceMessage.html#aca04ddc9eb7e297a8a247801efbcab28',1,'analyzer::SequenceMessage']]],
   ['eventindices_9',['eventIndices',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#a7da0c90aa1e8a3242d7b149541194e92',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
   ['eventitems_10',['eventItems',['../de/d53/structparser_1_1ParserState.html#aa6db194eb2cb9581ff34fc811a8b67f0',1,'parser::ParserState']]],
@@ -18,5 +18,6 @@ var searchData=
   ['exception_15',['exception',['../d7/d9e/structui_1_1qt_1_1SideBySidePanel_1_1LoadJob_1_1Observer.html#a6eacb4d8372d3d403640246db89d0dc1',1,'ui::qt::SideBySidePanel::LoadJob::Observer']]],
   ['exclude_16',['exclude',['../d0/d43/structui_1_1qt_1_1EventsTableModel_1_1ColumnFilter.html#ad3b316384d5db564c2a6a3a20fa7bf4d',1,'ui::qt::EventsTableModel::ColumnFilter']]],
   ['expanded_17',['expanded',['../df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html#ac03e620148035f6c979226a8355f5b75',1,'ui::qt::utils::EventGroupManager::EventGroup']]],
-  ['extractionpattern_18',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
+  ['ext_18',['ext',['../db/d5c/structui_1_1qt_1_1MainWindow_1_1FileTypeChoice.html#a18a709ae8e5033715b29b50e5201da14',1,'ui::qt::MainWindow::FileTypeChoice']]],
+  ['extractionpattern_19',['extractionPattern',['../d8/d76/structanalyzer_1_1ExchangePattern.html#a6c576a599be3e075d703c2bb8748119a',1,'analyzer::ExchangePattern']]]
 ];

@@ -1,5 +1,6 @@
 var classui_1_1qt_1_1MainWindow =
 [
+    [ "FileTypeChoice", "db/d5c/structui_1_1qt_1_1MainWindow_1_1FileTypeChoice.html", "db/d5c/structui_1_1qt_1_1MainWindow_1_1FileTypeChoice" ],
     [ "MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a9c375ae3c60dc7cfe7bc5f3c50ab43db", null ],
     [ "~MainWindow", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aca9e10934b2a084fcfa9e4dcd874678b", null ],
     [ "ActivateSideBySide", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ad4f711633124b2dfc6b1309276eab6f5", null ],
@@ -19,6 +20,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "dragEnterEvent", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a802d975b13ea0e462b29a1fd4153aa75", null ],
     [ "dropEvent", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ad372ea3ca18de3862e388f2c150e0096", null ],
     [ "eventFilter", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ac6cc1c3704ae412549e5ce31dabd9c01", null ],
+    [ "FileTypeChoices", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a247d6fbec919aac9351d50fc19d4b03d", null ],
     [ "GetRowsToExport", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aee6038a7bf3ba9b9fa5238374dd5f4b1", null ],
     [ "HandleDroppedFile", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ad1f7b94dd084cbf5622aca816132b069", null ],
     [ "InitializePresenter", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a49675c9000dedc574d6fd847eacf6c63", null ],
@@ -88,6 +90,7 @@ var classui_1_1qt_1_1MainWindow =
     [ "ShouldCheckForUpdates", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af7b6e8acbdbf33f4dfbeadaa2c815e8d", null ],
     [ "ShowError", "d4/dfa/classui_1_1qt_1_1MainWindow.html#af6f2aca904ff6652ce6e265f14314555", null ],
     [ "ShowTabContextMenu", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a3b092c9906635b4fd3e4ad0f42793e89", null ],
+    [ "StopTailing", "d4/dfa/classui_1_1qt_1_1MainWindow.html#ada3e7b256ccf1b7602ad0c883caa93cb", null ],
     [ "ToggleProgressVisibility", "d4/dfa/classui_1_1qt_1_1MainWindow.html#aac2910da54baa2889506b51142246c2f", null ],
     [ "TryAddPluginBottomPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a2cf7811c0ddaeb4a22b835b7adc456cb", null ],
     [ "TryAddPluginMainPanel", "d4/dfa/classui_1_1qt_1_1MainWindow.html#a7d6b361e1c5384b58355cb3e90f7eb9a", null ],

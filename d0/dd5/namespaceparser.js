@@ -8,6 +8,9 @@ var namespaceparser =
       [ "Trim", "d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#ac2123f85a6b830baba522a77180b62fd", null ],
       [ "kProgressBatchSize", "d9/d09/namespaceparser_1_1anonymous__namespace_02AscParser_8cpp_03.html#a8b719aaa14dbe54c54cf4866a19043c8", null ]
     ] ],
+    [ "anonymous_namespace{ParserFactory.cpp}", "d7/d86/namespaceparser_1_1anonymous__namespace_02ParserFactory_8cpp_03.html", [
+      [ "s_defaultsOnce", "d7/d86/namespaceparser_1_1anonymous__namespace_02ParserFactory_8cpp_03.html#a383d9dc0df32eac7b7a1b4886579da8f", null ]
+    ] ],
     [ "anonymous_namespace{SapiLogParser.cpp}", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html", [
       [ "LooksLikeIsoTimestamp", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a51d6c73bd7e23e4c1f8a2e2f2bc68283", null ],
       [ "ReadGroup", "d5/d38/namespaceparser_1_1anonymous__namespace_02SapiLogParser_8cpp_03.html#a9a5c0bc1e596c023737b9ab5f59cdc4a", null ],

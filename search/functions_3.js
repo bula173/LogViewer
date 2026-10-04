@@ -3,7 +3,7 @@ var searchData=
   ['dashboardpanel_0',['DashboardPanel',['../d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a680a88f0b29dfed0ea539a818ea9b7fc',1,'ui::qt::DashboardPanel']]],
   ['data_1',['data',['../d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a2676414d206c4976f0cee6dd27b01496',1,'ui::qt::EventsTableModel']]],
   ['datadir_2',['DataDir',['../d8/d0b/namespaceutil_1_1portable.html#a2e7e47b706576c3cd579d2348e957de7',1,'util::portable']]],
-  ['debug_3',['debug',['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()'],['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()']]],
+  ['debug_3',['debug',['../dd/d6b/classutil_1_1SpdLogger.html#a9e99dec7a22754f60f6fe5f56e1da968',1,'util::SpdLogger::debug()'],['../d2/d44/classutil_1_1Logger.html#adc5d0d890aa7e2891002cae35e5b2e8f',1,'util::Logger::Debug()'],['../d3/dc4/classutil_1_1ILogger.html#a93815f7defa3cc95ff1da24541ec4b2f',1,'util::ILogger::debug()']]],
   ['decode_4',['Decode',['../d4/d72/structui_1_1qt_1_1ActorKey.html#a096151ec96264829cee20153c2c4a4e8',1,'ui::qt::ActorKey']]],
   ['decodearg_5',['DecodeArg',['../d0/dd5/namespaceparser.html#ab92c1d5521bca63732d884cbe495f41f',1,'parser']]],
   ['decodeframe_6',['DecodeFrame',['../d8/d04/namespaceparser_1_1dbc.html#a83fdb618e738dda45a4fd29940ae5dab',1,'parser::dbc']]],

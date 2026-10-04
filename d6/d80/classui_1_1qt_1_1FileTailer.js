@@ -13,6 +13,7 @@ var classui_1_1qt_1_1FileTailer =
     [ "m_active", "d6/d80/classui_1_1qt_1_1FileTailer.html#ac7f6c64b11877e9e8c8b0ad885b1a4db", null ],
     [ "m_events", "d6/d80/classui_1_1qt_1_1FileTailer.html#a77115e4ea15af48cf23ee40483689ad2", null ],
     [ "m_lastOffset", "d6/d80/classui_1_1qt_1_1FileTailer.html#a4a6ef502839fc459b2d09b1bf81f861f", null ],
+    [ "m_lineBased", "d6/d80/classui_1_1qt_1_1FileTailer.html#a5cf035463a8dc2f6d26c8230a4f19362", null ],
     [ "m_observer", "d6/d80/classui_1_1qt_1_1FileTailer.html#af0616a203625d5ff827df56719ce86d9", null ],
     [ "m_parser", "d6/d80/classui_1_1qt_1_1FileTailer.html#a6ae26b5cb074aba9e18bd263e3f43814", null ],
     [ "m_path", "d6/d80/classui_1_1qt_1_1FileTailer.html#aafd5945cf3617308eb415d4af1fd4cdf", null ],

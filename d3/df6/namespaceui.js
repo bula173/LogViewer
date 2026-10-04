@@ -1,8 +1,6 @@
 var namespaceui =
 [
-    [ "anonymous_namespace{MainWindowPresenter.cpp}", "d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03.html", [
-      [ "kProgressYieldInterval", "d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03.html#ac3ed6e071f5f0fe2f82bb9366eccd306", null ]
-    ] ],
+    [ "anonymous_namespace{MainWindowPresenter.cpp}", "d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03.html", "d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03" ],
     [ "qt", "d6/d40/namespaceui_1_1qt.html", "d6/d40/namespaceui_1_1qt" ],
     [ "IErrorPresenter", "d0/d7f/classui_1_1IErrorPresenter.html", "d0/d7f/classui_1_1IErrorPresenter" ],
     [ "IEventDetailsView", "d9/df7/classui_1_1IEventDetailsView.html", "d9/df7/classui_1_1IEventDetailsView" ],

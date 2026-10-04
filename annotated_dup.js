@@ -111,6 +111,9 @@ var annotated_dup =
       [ "IService", "d2/d99/classservices_1_1IService.html", "d2/d99/classservices_1_1IService" ]
     ] ],
     [ "ui", "d3/df6/namespaceui.html", [
+      [ "anonymous_namespace{MainWindowPresenter.cpp}", "d1/d74/namespaceui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03.html", [
+        [ "ParsingStateGuard", "d9/d49/classui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03_1_1ParsingStateGuard.html", "d9/d49/classui_1_1anonymous__namespace_02MainWindowPresenter_8cpp_03_1_1ParsingStateGuard" ]
+      ] ],
       [ "qt", "d6/d40/namespaceui_1_1qt.html", [
         [ "anonymous_namespace{ActorsPanel.cpp}", "d1/dae/namespaceui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03.html", [
           [ "ActorTreeItem", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem.html", "d8/dc2/classui_1_1qt_1_1anonymous__namespace_02ActorsPanel_8cpp_03_1_1ActorTreeItem" ]

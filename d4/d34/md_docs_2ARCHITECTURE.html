@@ -551,7 +551,7 @@ Data Access</h2>
 <div class="fragment"><div class="line"><span class="keyword">class </span>EventsContainer {</div>
 <div class="line"><span class="keyword">private</span>:</div>
 <div class="line">    <span class="keyword">mutable</span> std::mutex m_mutex;</div>
-<div class="line">    std::vector&lt;LogEvent&gt; m_data;</div>
+<div class="line">    std::deque&lt;LogEvent&gt; m_data;  <span class="comment">// deque: appends never relocate stored events</span></div>
 <div class="line">    std::vector&lt;unsigned long&gt; m_filteredIndices;</div>
 <div class="line">    </div>
 <div class="line"><span class="keyword">public</span>:</div>

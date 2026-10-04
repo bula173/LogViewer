@@ -7,7 +7,7 @@ var classui_1_1MainWindowPresenter =
     [ "IsParsing", "d5/dc9/classui_1_1MainWindowPresenter.html#a947e18ac352cb60cea01e9fbfeed98e6", null ],
     [ "LoadLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#aef19a1d1a61f61089b2117a66b8c378d", null ],
     [ "LoadLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#a23b7dd46b83c6602fb0deffa349facc9", null ],
-    [ "MergeLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#a014ce7be296b7e79084d8450664c4e68", null ],
+    [ "MergeLogFile", "d5/dc9/classui_1_1MainWindowPresenter.html#a410c4fdbc87bd8df496f213e4ffd0538", null ],
     [ "NewEventBatchFound", "d5/dc9/classui_1_1MainWindowPresenter.html#a03f399ae7a5c5a63833caf1e31e5c69c", null ],
     [ "NewEventFound", "d5/dc9/classui_1_1MainWindowPresenter.html#a5e1ecebcaddb328e51b02118191e2ab6", null ],
     [ "PerformSearch", "d5/dc9/classui_1_1MainWindowPresenter.html#a644a24987d04832fe7398a41e1240649", null ],
