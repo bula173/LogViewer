@@ -5,6 +5,7 @@ var classui_1_1qt_1_1TimelineChartPanel =
     [ "DetectTimestampField", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#adaed4c5328926f6f102e774292248bdf", null ],
     [ "Refresh", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#aca4e61585211277593b76019c7e50db2", null ],
     [ "m_bucketEvents", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a7c845d54d5b452c4d2a203b0365020e2", null ],
+    [ "m_bucketFilter", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a6281e4ddf09e0e4f3fa466850d1824bf", null ],
     [ "m_bucketSpin", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#ac9ea59ee466b0766c5e7bc077946e4ee", null ],
     [ "m_chartView", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#af58a71682e77cbef91d3c14958a9bb5f", null ],
     [ "m_clearBtn", "d1/dc4/classui_1_1qt_1_1TimelineChartPanel.html#a9a64284fcbe46ce01c30bbcf80f75948", null ],

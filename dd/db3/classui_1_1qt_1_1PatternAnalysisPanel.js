@@ -19,6 +19,7 @@ var classui_1_1qt_1_1PatternAnalysisPanel =
     [ "m_ngramTable", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#adfadb1f64a80a9ca43eaea2f3d04ab08", null ],
     [ "m_ngramTopNSpin", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#af41a3b2bc0ce926ea6379666a1c502c6", null ],
     [ "m_tabs", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a6cbd617e7bbac5242dd1f296d84babdb", null ],
+    [ "m_templateFilter", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a18bfb14b75935615306c9285066c43c8", null ],
     [ "m_templateMatches", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a435b11b95be4c69f8abc5e1672265166", null ],
     [ "m_templateTable", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#ac2b5268bd3cf82923a18156f907fe78c", null ],
     [ "m_windowSpin", "dd/db3/classui_1_1qt_1_1PatternAnalysisPanel.html#a57821f9efa52299a75fddfb90ecb1a06", null ]

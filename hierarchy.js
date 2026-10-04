@@ -29,6 +29,7 @@ var hierarchy =
     [ "parser::dbc::DbcSignal", "d3/dc2/structparser_1_1dbc_1_1DbcSignal.html", null ],
     [ "plugin::PluginDependencyGraph::DependencyNode", "d9/d07/structplugin_1_1PluginDependencyGraph_1_1DependencyNode.html", null ],
     [ "ai::DirectionPattern", "d5/d23/structai_1_1DirectionPattern.html", null ],
+    [ "ui::qt::DrillDownFilter", "d1/d1e/classui_1_1qt_1_1DrillDownFilter.html", null ],
     [ "ui::qt::ShortcutManager::Entry", "d8/de5/structui_1_1qt_1_1ShortcutManager_1_1Entry.html", null ],
     [ "ui::qt::utils::EventTagManager::EventAnnotation", "d6/dac/structui_1_1qt_1_1utils_1_1EventTagManager_1_1EventAnnotation.html", null ],
     [ "ui::qt::utils::EventGroupManager::EventGroup", "df/d86/structui_1_1qt_1_1utils_1_1EventGroupManager_1_1EventGroup.html", null ],

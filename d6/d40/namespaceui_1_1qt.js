@@ -63,6 +63,9 @@ var namespaceui_1_1qt =
     [ "anonymous_namespace{ShortcutsDialog.cpp}", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html", [
       [ "CaptureShortcut", "d4/d6e/namespaceui_1_1qt_1_1anonymous__namespace_02ShortcutsDialog_8cpp_03.html#aefc30fa7503a19121e6907ccba2fb515", null ]
     ] ],
+    [ "anonymous_namespace{TimeRangeFilterPanel.cpp}", "df/d32/namespaceui_1_1qt_1_1anonymous__namespace_02TimeRangeFilterPanel_8cpp_03.html", [
+      [ "NormalizeTimestamp", "df/d32/namespaceui_1_1qt_1_1anonymous__namespace_02TimeRangeFilterPanel_8cpp_03.html#a25cf9b604ecc029b055d442f28cb12d6", null ]
+    ] ],
     [ "anonymous_namespace{TraceViewerPanel.cpp}", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03.html", "da/dee/namespaceui_1_1qt_1_1anonymous__namespace_02TraceViewerPanel_8cpp_03" ],
     [ "ExportManager", "dd/d0e/namespaceui_1_1qt_1_1ExportManager.html", "dd/d0e/namespaceui_1_1qt_1_1ExportManager" ],
     [ "panel_utils", "da/d7a/namespaceui_1_1qt_1_1panel__utils.html", [
@@ -90,6 +93,7 @@ var namespaceui_1_1qt =
     [ "ConfigEditorDialog", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog.html", "d5/db0/classui_1_1qt_1_1ConfigEditorDialog" ],
     [ "DashboardPanel", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html", "d2/d8a/classui_1_1qt_1_1DashboardPanel" ],
     [ "DisplayPreferencesPanel", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel.html", "dc/d61/classui_1_1qt_1_1DisplayPreferencesPanel" ],
+    [ "DrillDownFilter", "d1/d1e/classui_1_1qt_1_1DrillDownFilter.html", "d1/d1e/classui_1_1qt_1_1DrillDownFilter" ],
     [ "EventsTableModel", "d4/d7a/classui_1_1qt_1_1EventsTableModel.html", "d4/d7a/classui_1_1qt_1_1EventsTableModel" ],
     [ "EventsTableView", "d6/d26/classui_1_1qt_1_1EventsTableView.html", "d6/d26/classui_1_1qt_1_1EventsTableView" ],
     [ "ExportDialog", "d3/de3/classui_1_1qt_1_1ExportDialog.html", "d3/de3/classui_1_1qt_1_1ExportDialog" ],

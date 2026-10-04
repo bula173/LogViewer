@@ -157,7 +157,7 @@ Namespaces</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Panel for filtering events by a user-defined timestamp range. </p>
-<p>The panel occupies a tab in the Filters dock. The user selects a timestamp field (or types a custom one), optionally fills in ISO-format from/to bounds, and clicks <b>Apply</b>. The filter is evaluated by lexicographic string comparison — correct for any timestamp representation that sorts lexicographically (ISO 8601, epoch strings, etc.).</p>
+<p>The panel occupies a tab in the Filters dock. The user selects a timestamp field (or types a custom one), optionally fills in ISO-format from/to bounds, and clicks <b>Apply</b>. The filter is evaluated by lexicographic string comparison — correct for any timestamp representation that sorts lexicographically (ISO 8601, epoch strings, etc.). A 'T' and a space between date and time compare alike, and the "to" bound is inclusive at its own precision (a date covers that whole day, a time its fractions).</p>
 <p>The complete state can be serialised into a <code>TimeRangeFilterPanel::State</code> value and round-tripped through <code>FilterProfilesPanel</code> for save/restore.</p>
 <dl class="section user"><dt>Typical connections wired by MainWindow</dt><dd><div class="fragment"><div class="line">connect(m_timeRangePanel, &amp;TimeRangeFilterPanel::FilterApplied,</div>
 <div class="line">        m_actorsPanel, &amp;ActorsPanel::Refresh);</div>

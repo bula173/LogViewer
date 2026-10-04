@@ -11,7 +11,9 @@ var classui_1_1qt_1_1TraceViewerPanel =
     [ "m_eventsView", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a866b78c4ee495c56fa74f51bdb28583c", null ],
     [ "m_fieldCombo", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a9e04f25f56728a80f053dfded7d357ce", null ],
     [ "m_searchEdit", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a2fb2cf1b3d78b6c82cf49f112e65f9ea", null ],
+    [ "m_shownIndices", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#ad56d7045009d8a1995d3f6be2289987a", null ],
     [ "m_statusLabel", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a63ba8f17f565d91ab5a82127bfb5ad54", null ],
     [ "m_traceEvents", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a9fade9f1de92cb80686bd63d727605c8", null ],
+    [ "m_traceFilter", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#af6fbb96e9084e40c95afcb53ccc10561", null ],
     [ "m_tree", "dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#a45cb6d75d996a2fc159837fc7ad9b9e5", null ]
 ];

@@ -15,6 +15,7 @@ var classui_1_1qt_1_1SequenceDiagramPanel =
     [ "m_limitSpin", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ac2ed206ad79a3089ecdd719873a520db", null ],
     [ "m_pattern", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a0882343f46421e18ac47ca38bd2966dc", null ],
     [ "m_refreshBtn", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a646ed32344c1df47872f96504fe7b95f", null ],
+    [ "m_refreshPending", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ab64ae4156499db2a4137473c2099dbb9", null ],
     [ "m_scene", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a3a5528a847c316b6d752554c82a7b071", null ],
     [ "m_selfActor", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#ac8751437a1ebcbfc29a598c1b15e09ba", null ],
     [ "m_statusLabel", "d0/d36/classui_1_1qt_1_1SequenceDiagramPanel.html#a648320590e15574c33e2b1860630c7f0", null ],

@@ -18,6 +18,7 @@ var classui_1_1qt_1_1ActorsPanel =
     [ "ShowActorContextMenu", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a176fe1d52a365aea683a94fea1f73f99", null ],
     [ "ShowSequenceDiagram", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#af8d493a4011f1002e5b686d93a5af156", null ],
     [ "ViewShowsOwnFilter", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ab6484621d3c1e53e546a94c9321cace5", null ],
+    [ "ViewShowsOwnFilterOf", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a2d6deea9f1fe8e9a56fd4c1675646344", null ],
     [ "VisibleIndices", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a2b30c1b45eb48b2c1fbd38a23118c09a", null ],
     [ "m_cacheGeneration", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a8c7e976f47d9808dca2a207f7fad9d3d", null ],
     [ "m_definitions", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a31f002060ff2a70e3b377176e9828bd7", null ],
@@ -25,12 +26,15 @@ var classui_1_1qt_1_1ActorsPanel =
     [ "m_eventsView", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a7d5cd4a58deda0dc8890c75503ac9591", null ],
     [ "m_groupedCache", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a7cdd48b9036f4af89c20aa6bcb7a9b44", null ],
     [ "m_ignoreNextRefresh", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a9b31d67f0c9026a37c5a1e72db5769f8", null ],
+    [ "m_ownActorFilter", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#adc81f3bf65dc17ea461740374925abb4", null ],
     [ "m_ownFilter", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a278b63055c2ab3451b28886a68598cba", null ],
+    [ "m_ownFilterApplied", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a0686bc89fca39cc00acc074ffccd8e4a", null ],
     [ "m_ownFilterCleared", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a8f91f32702c87e7f862b262beed45cba", null ],
     [ "m_ownFilterGeneration", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae989821c3db6df73c87f816b22ebc87c", null ],
     [ "m_ownFilterSize", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae96619af8aad9350917c322368233c53", null ],
     [ "m_seqDiagBtn", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#ae96d1d5f544d51377c0d5f6ec11a2c37", null ],
     [ "m_statusLabel", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a1daf21eeaf70fe40c762bedd2af89c56", null ],
     [ "m_tree", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#aee382f48055181637715f11dcb0c27b3", null ],
-    [ "m_uncheckedActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a51c970a50f1c36617faeddcac54c7558", null ]
+    [ "m_uncheckedActors", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a51c970a50f1c36617faeddcac54c7558", null ],
+    [ "m_upstreamFilter", "d2/d40/classui_1_1qt_1_1ActorsPanel.html#a10d6f8c875f5bf1fed2a809116091b29", null ]
 ];

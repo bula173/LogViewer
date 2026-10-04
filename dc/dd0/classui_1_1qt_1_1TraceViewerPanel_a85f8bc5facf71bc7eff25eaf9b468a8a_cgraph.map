@@ -1,29 +1,41 @@
 <map id="ui::qt::TraceViewerPanel::RebuildTree" name="ui::qt::TraceViewerPanel::RebuildTree">
-<area shape="rect" id="Node000001" title="Rebuild the tree for the given correlation field." alt="" coords="5,149,183,189"/>
+<area shape="rect" id="Node000001" title="Rebuild the tree for the given correlation field." alt="" coords="5,235,183,275"/>
 <area shape="rect" id="Node000002" href="$dc/dd0/classui_1_1qt_1_1TraceViewerPanel.html#af20dd5cfbd571f51d3a5239099847f3d" title="Show/hide tree items that do (not) contain text." alt="" coords="231,5,409,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,147,164,102,229,55,241,49,244,53,232,60,167,106,117,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,233,120,196,148,148,185,98,229,55,237,50,240,54,232,59,189,102,152,151,125,198,106,235"/>
 <area shape="rect" id="Node000003" href="$d1/d00/classdb_1_1LogEvent.html#af4455982dc04b3468bacf909c46c60a7" title="Finds a value by its key in the event&#39;s items." alt="" coords="231,70,409,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,147,230,106,256,97,258,102,232,110,137,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="106,233,155,170,190,135,229,106,244,98,247,103,232,110,194,139,159,174,111,236"/>
 <area shape="rect" id="Node000004" href="$dd/dc2/classdb_1_1EventsContainer.html#a63a2760ee6e0f0e87789d049690dbe04" title="Retrieves an event by index." alt="" coords="243,120,397,160"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="183,155,230,149,230,154,183,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="123,232,172,201,229,170,244,163,247,168,232,174,175,206,126,237"/>
 <area shape="rect" id="Node000006" href="$d2/d44/classutil_1_1Logger.html#af0bb6dc60a9e76313f300067bc555f30" title=" " alt="" coords="256,185,384,210"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="183,178,243,185,242,190,183,183"/>
-<area shape="rect" id="Node000009" href="$da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ab2f966654f2a7f4a939fc64f9883f879" title=" " alt="" coords="251,235,389,275"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="148,187,232,219,254,227,252,232,230,224,146,192"/>
-<area shape="rect" id="Node000010" href="$da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ad5785d4af4328360ec0b8f49d3d5e6ca" title=" " alt="" coords="253,299,387,339"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="116,188,166,236,198,261,232,284,244,291,241,295,229,289,195,266,162,240,112,192"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="173,232,255,211,257,216,174,237"/>
+<area shape="rect" id="Node000009" href="$d1/d1e/classui_1_1qt_1_1DrillDownFilter.html#aeae9971d93af514e2047858dc648868e" title=" " alt="" coords="240,235,400,275"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="183,252,226,252,226,257,183,257"/>
+<area shape="rect" id="Node000013" href="$da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ab2f966654f2a7f4a939fc64f9883f879" title=" " alt="" coords="251,299,389,339"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="166,272,238,293,237,298,165,277"/>
+<area shape="rect" id="Node000014" href="$d1/d1e/classui_1_1qt_1_1DrillDownFilter.html#ab3da675ea052ff8887c08be9a1d7075c" title="Forgets the drill&#45;down (the filter was replaced by someone else)." alt="" coords="240,363,400,403"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="121,273,171,310,232,348,245,355,243,360,229,353,168,315,118,277"/>
+<area shape="rect" id="Node000015" href="$d1/d1e/classui_1_1qt_1_1DrillDownFilter.html#ab155b7f1d4112a4348079f18f56f86eb" title="The events the panel showed before the drill&#45;down." alt="" coords="240,427,400,467"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="110,273,158,341,193,379,232,413,241,418,238,422,229,417,189,383,154,344,105,276"/>
+<area shape="rect" id="Node000016" href="$da/d7a/namespaceui_1_1qt_1_1panel__utils.html#ad5785d4af4328360ec0b8f49d3d5e6ca" title=" " alt="" coords="253,491,387,531"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="105,274,122,316,149,371,186,427,208,453,232,477,242,484,239,488,229,481,204,457,181,430,144,373,117,318,100,276"/>
 <area shape="rect" id="Node000005" href="$dd/dc2/classdb_1_1EventsContainer.html#af160626d9ef4c844989ec5ba4140aef0" title="Gets an event by index." alt="" coords="471,120,625,160"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="397,137,458,137,458,143,397,143"/>
 <area shape="rect" id="Node000007" href="$d2/d44/classutil_1_1Logger.html#af971996414248dca43e9c1dcb9e0e887" title="Gets the current logger instance." alt="" coords="457,185,639,210"/>
 <area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="384,195,443,195,443,200,384,200"/>
 <area shape="rect" id="Node000008" href="$d2/d44/classutil_1_1Logger.html#a52f7bb6af253fffcfad9cb02f487d032" title="Initializes the logger with default configuration." alt="" coords="698,185,857,210"/>
 <area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="639,195,684,195,684,200,639,200"/>
-<area shape="rect" id="Node000011" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a409eade5a30a8decff92f33539f2e0e4" title=" " alt="" coords="461,283,635,323"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="388,311,447,307,447,312,388,317"/>
-<area shape="rect" id="Node000014" href="$dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="471,347,625,387"/>
-<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="388,330,458,345,457,350,387,335"/>
-<area shape="rect" id="Node000012" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a385ac9b0a8bc17b07dc7e3475b8e332b" title=" " alt="" coords="687,267,868,307"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="635,294,673,291,673,297,635,299"/>
-<area shape="rect" id="Node000013" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a860b41d15c88fe8820f216def1d8caec" title="True if a filter is active — distinguishes &quot;no filter&quot; from &quot;filter active, zero matches&quot;." alt="" coords="687,331,868,371"/>
-<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="636,318,674,326,673,332,634,323"/>
+<area shape="rect" id="Node000010" href="$dd/dc2/classdb_1_1EventsContainer.html#ae8c2cfbd2c6fe11ac3b9a400fa5dcda1" title="Counter bumped whenever existing indices stop referring to the same events: Clear() of a non&#45;empty co..." alt="" coords="471,235,625,275"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="400,252,458,252,458,257,400,257"/>
+<area shape="rect" id="Node000011" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#ac7470526e3d1dea8b6941693e1d53de0" title=" " alt="" coords="458,299,638,339"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="393,272,463,292,462,297,391,277"/>
+<area shape="rect" id="Node000012" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a6b720ad6b235acbbd850355f2e5cb645" title=" " alt="" coords="687,299,868,339"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="638,316,673,316,673,321,638,321"/>
+<area shape="rect" id="Node000017" href="$d6/d26/classui_1_1qt_1_1EventsTableView.html#a409eade5a30a8decff92f33539f2e0e4" title=" " alt="" coords="461,459,635,499"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="387,499,447,490,448,495,388,504"/>
+<area shape="rect" id="Node000020" href="$dd/dc2/classdb_1_1EventsContainer.html#a39449e4134af90a067e5e18d5a98e664" title="Gets the number of events in the container." alt="" coords="471,523,625,563"/>
+<area shape="poly" id="edge19_Node000016_Node000020" title=" " alt="" coords="388,517,458,527,457,533,387,523"/>
+<area shape="rect" id="Node000018" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a385ac9b0a8bc17b07dc7e3475b8e332b" title=" " alt="" coords="687,427,868,467"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="635,464,673,459,674,464,635,469"/>
+<area shape="rect" id="Node000019" href="$d4/d7a/classui_1_1qt_1_1EventsTableModel.html#a860b41d15c88fe8820f216def1d8caec" title="True if a filter is active — distinguishes &quot;no filter&quot; from &quot;filter active, zero matches&quot;." alt="" coords="687,491,868,531"/>
+<area shape="poly" id="edge18_Node000017_Node000019" title=" " alt="" coords="635,488,674,494,673,499,635,493"/>
 </map>

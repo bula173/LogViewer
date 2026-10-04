@@ -22,6 +22,7 @@ var classui_1_1qt_1_1DashboardPanel =
     [ "UpdateTopActors", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a771dc02f8e6d41c06c35a2bb1f5c94e6", null ],
     [ "m_actorFields", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a212a8c0b56e2abdc4fb2787a1fc351bb", null ],
     [ "m_actorFieldsEventCount", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#aad0d214cce1998ebe70d0882b842df8b", null ],
+    [ "m_actorFieldsGeneration", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ab31bd59e6c94db06032d1355f7ffc8de", null ],
     [ "m_bookmarkButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a8a6d2bed57633c0283abd34b563f0c04", null ],
     [ "m_events", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#a05eaf0e5c3e8204e496e9371659135c5", null ],
     [ "m_exportButton", "d2/d8a/classui_1_1qt_1_1DashboardPanel.html#ae71e3dcb1032dca7cb5853ccc5e17d26", null ],
