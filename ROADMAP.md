@@ -1,6 +1,6 @@
 # LogViewer Development Roadmap
 
-**Current Version:** 1.13.3 (Released 2026-09-21)  
+**Current Version:** 1.13.3 (Released 2026-10-04)  
 **Last Updated:** 2026-09-19
 
 ---
@@ -344,7 +344,7 @@ See `CHANGELOG.md` for the full, dated list of shipped changes per version.
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
-| 1.13.3 | 2026-09-21 | Portable mode + Windows portable zip, Node 24 GitHub Actions, CI warning cleanup |
+| 1.13.3 | 2026-10-04 | Portable mode + Windows portable zip, fix for empty Events tab, multi-agent code review fixes (parsers, event table, panels, config, plugins), Node 24 GitHub Actions |
 | 1.13.2 | 2026-09-21 | Actor discovery covers every column, dashboard shows real data, item-details wrapping |
 | 1.13.1 | 2026-09-21 | Audit follow-up: column-filter/sort correctness, sequence zoom kept while tailing, safeAPI BOM handling, release-notes/asset/signature checks in CI |
 | 1.13.0 | 2026-09-19 | Excel-style column filters, safeAPI merged-log parser, sequence diagram zoom/scroll and actor-only messages, `source` column fix |
