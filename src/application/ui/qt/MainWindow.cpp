@@ -1414,8 +1414,7 @@ void MainWindow::InitializePresenter(mvc::IController& controller,
 
         connect(m_bookmarksPanel, &BookmarksPanel::NavigateToEvent,
                 this, [this](int actualRow) {
-                    if (m_contentTabs)
-                        m_contentTabs->setCurrentIndex(0);
+                    ShowEventsTablePage(m_eventsStack, m_contentTabs);
                     m_eventsView->ScrollToActualRow(actualRow);
                 });
     }
@@ -1883,6 +1882,10 @@ void MainWindow::AutoSwitchViewForFile(const QString& filePath)
     if (!m_contentTabs || filePath.isEmpty())
         return;
 
+    // A normal load shows its rows in the events table, not in a previous
+    // side-by-side comparison.
+    ShowEventsTablePage(m_eventsStack);
+
     QFileInfo fileInfo(filePath);
     QString ext = fileInfo.suffix().toLower();
 
@@ -2052,6 +2055,7 @@ void MainWindow::HandleDroppedFile(const QString& path)
                     UpdateStatusText(mergingMsg.toStdString());
                     m_presenter->MergeLogFile(std::move(parser), filePath, existingAlias, newFileAlias);
                     m_presenter->SetItemDetailsVisible(true);
+                    ShowEventsTablePage(m_eventsStack);
                     const QString completeMsg = QString("Merge complete. Path: %1").arg(path);
                     UpdateStatusText(completeMsg.toStdString());
                     AddToRecentFiles(path);
@@ -2278,6 +2282,7 @@ void MainWindow::OnLoadDbcRequested()
                 StopTailing();
                 UpdateStatusText(tr("Reloading ASC with DBC signal names…").toStdString());
                 m_presenter->LoadLogFile(std::move(parser), ascPath);
+                ShowEventsTablePage(m_eventsStack);
             }
         }
         catch (const std::exception& ex)
@@ -2448,6 +2453,7 @@ void MainWindow::OnOpenSession()
             UpdateStatusText(tr("Loading %1 …").arg(QString::fromStdString(logFile)).toStdString());
             m_presenter->LoadLogFile(std::move(parser), fp);
             m_presenter->SetItemDetailsVisible(true);
+            ShowEventsTablePage(m_eventsStack);
             m_currentLogFilePath = QString::fromStdString(logFile);
             AddToRecentFiles(m_currentLogFilePath);
         }
@@ -2613,6 +2619,15 @@ void MainWindow::OnOpenAppLogRequested()
 void MainWindow::OnExitRequested()
 {
     close();
+}
+
+void MainWindow::ShowEventsTablePage(QStackedWidget* eventsStack, QTabWidget* tabs)
+{
+    if (!eventsStack)
+        return;
+    eventsStack->setCurrentIndex(0);
+    if (tabs)
+        tabs->setCurrentWidget(eventsStack);
 }
 
 void MainWindow::ActivateSideBySide()

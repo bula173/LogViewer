@@ -156,6 +156,9 @@ class MainWindow : public QMainWindow,
     };
     /// The formats offered by PromptForFileType().
     [[nodiscard]] static std::vector<FileTypeChoice> FileTypeChoices();
+    /// Shows the events table page (page 0) of the Events tab's stack instead
+    /// of the side-by-side page; with @p tabs also makes the Events tab current.
+    static void ShowEventsTablePage(QStackedWidget* eventsStack, QTabWidget* tabs = nullptr);
 
   private slots:
     void OnSearchRequested();
